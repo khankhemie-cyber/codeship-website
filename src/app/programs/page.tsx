@@ -106,7 +106,7 @@ export default function ProgramsPage() {
   return (
     <div className="bg-[#FAFAFA]">
       {/* Hero */}
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Programs for Every Child
@@ -141,8 +141,8 @@ export default function ProgramsPage() {
               </div>
               <div className="p-8 flex-1">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <h2 className="text-2xl font-bold text-[#0A2342]">{prog.title}</h2>
-                  <span className="text-xs bg-[#F5A623]/20 text-[#0A2342] font-semibold px-2 py-1 rounded">
+                  <h2 className="text-2xl font-bold text-[#3D4466]">{prog.title}</h2>
+                  <span className="text-xs bg-[#F5C518]/20 text-[#3D4466] font-semibold px-2 py-1 rounded">
                     {prog.age}
                   </span>
                   <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{prog.format}</span>
@@ -158,7 +158,7 @@ export default function ProgramsPage() {
                 </ul>
                 <Link
                   href={prog.href}
-                  className="bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
+                  className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
                 >
                   Learn More
                 </Link>
@@ -169,13 +169,13 @@ export default function ProgramsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-[#0A2342] text-center">
+      <section className="py-16 bg-[#3D4466] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Not Sure Which Program?</h2>
           <p className="text-gray-300 mb-8">Take our 2-minute program finder quiz to get a personalized recommendation.</p>
           <Link
             href="/program-finder"
-            className="bg-[#F5A623] text-[#0A2342] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
+            className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
           >
             Find My Program
           </Link>

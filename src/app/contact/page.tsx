@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Get in Touch</h1>
           <p className="text-gray-300 text-xl max-w-xl mx-auto">
@@ -25,37 +25,37 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white rounded-2xl shadow-md p-8">
-              <h2 className="text-2xl font-bold text-[#0A2342] mb-6">Send Us a Message</h2>
+              <h2 className="text-2xl font-bold text-[#3D4466] mb-6">Send Us a Message</h2>
               <ContactForm />
             </div>
 
             {/* Contact Info */}
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-[#0A2342] mb-6">Contact Information</h2>
+                <h2 className="text-2xl font-bold text-[#3D4466] mb-6">Contact Information</h2>
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#F5A623]/20 rounded-xl flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-[#F5C518]/20 rounded-xl flex items-center justify-center shrink-0">
                       <span className="text-lg">📧</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-[#0A2342]">Email</p>
-                      <p className="text-gray-600">hello@codeshipacademy.com</p>
+                      <p className="font-semibold text-[#3D4466]">Email</p>
+                      <p className="text-gray-600">admin@codeshipacademy.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#F5A623]/20 rounded-xl flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-[#F5C518]/20 rounded-xl flex items-center justify-center shrink-0">
                       <span className="text-lg">🏢</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-[#0A2342]">Headquarters</p>
+                      <p className="font-semibold text-[#3D4466]">Headquarters</p>
                       <p className="text-gray-600">Canada</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#0A2342] rounded-2xl p-6 text-white">
+              <div className="bg-[#3D4466] rounded-2xl p-6 text-white">
                 <h3 className="font-bold text-lg mb-3">Quick Links</h3>
                 <ul className="space-y-2">
                   {[
@@ -65,7 +65,7 @@ export default function ContactPage() {
                     { label: "Find a Location", href: "/locations" },
                   ].map((link) => (
                     <li key={link.href}>
-                      <a href={link.href} className="text-gray-300 hover:text-[#F5A623] transition-colors text-sm flex items-center gap-2">
+                      <a href={link.href} className="text-gray-300 hover:text-[#F5C518] transition-colors text-sm flex items-center gap-2">
                         <span>→</span> {link.label}
                       </a>
                     </li>
@@ -74,7 +74,7 @@ export default function ContactPage() {
               </div>
 
               <div className="bg-[#2ECC71]/10 rounded-2xl p-6">
-                <h3 className="font-bold text-[#0A2342] mb-2">Response Time</h3>
+                <h3 className="font-bold text-[#3D4466] mb-2">Response Time</h3>
                 <p className="text-gray-600 text-sm">
                   We aim to respond to all inquiries within 1–2 business days. For urgent program questions, please
                   contact your local CODEship location directly.

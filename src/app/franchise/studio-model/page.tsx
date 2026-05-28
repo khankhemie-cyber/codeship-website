@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function StudioModelPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Link href="/franchise" className="text-[#F5A623] text-sm font-semibold hover:underline mb-4 inline-block">
+          <Link href="/franchise" className="text-[#F5C518] text-sm font-semibold hover:underline mb-4 inline-block">
             ← Franchise Overview
           </Link>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Studio Learning Centre Model</h1>
@@ -21,7 +21,7 @@ export default function StudioModelPage() {
             Your own branded CODEship Academy studio — a dedicated community learning hub for coding, AI, STEM,
             birthday parties, and more.
           </p>
-          <div className="mt-6 inline-block bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl text-xl">
+          <div className="mt-6 inline-block bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl text-xl">
             Investment: $40K–$100K
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function StudioModelPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-2xl font-bold text-[#0A2342] mb-4">A Dedicated Home for Your Community</h2>
+              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">A Dedicated Home for Your Community</h2>
               <p className="text-gray-600 mb-4">
                 The Studio Learning Centre Model gives you a branded, permanent location in your community — a physical
                 home for CODEship programs that families can visit, parents can trust, and children can grow in.
@@ -41,7 +41,7 @@ export default function StudioModelPage() {
                 evening classes that are harder to run in community spaces. It also builds community visibility and
                 brand presence in your area.
               </p>
-              <h3 className="font-bold text-[#0A2342] mb-3">Programs Available in Studio</h3>
+              <h3 className="font-bold text-[#3D4466] mb-3">Programs Available in Studio</h3>
               <ul className="space-y-2 mb-6">
                 {["Weekly classes (all levels)", "Summer, March Break & PA Day camps", "Birthday parties", "After-school programs",
                   "AI & Robotics programs", "Evening workshops", "School partnership programs"].map((item) => (
@@ -53,7 +53,7 @@ export default function StudioModelPage() {
               </ul>
             </div>
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-[#0A2342] mb-4">Studio Model Features</h2>
+              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">Studio Model Features</h2>
               {[
                 { title: "Dedicated Branded Space", desc: "A fully branded CODEship Academy studio, designed to create an inspiring learning environment." },
                 { title: "Full Program Suite", desc: "Access to the complete CODEship program portfolio including birthday parties and evening events." },
@@ -62,7 +62,7 @@ export default function StudioModelPage() {
                 { title: "Comprehensive Support", desc: "Complete franchisor support: curriculum, marketing, training, technology, and ongoing coaching." },
               ].map((feature) => (
                 <div key={feature.title} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <h3 className="font-bold text-[#0A2342] mb-1">{feature.title}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-1">{feature.title}</h3>
                   <p className="text-gray-600 text-sm">{feature.desc}</p>
                 </div>
               ))}
@@ -71,14 +71,14 @@ export default function StudioModelPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-[#0A2342] text-center">
+      <section className="py-16 bg-[#3D4466] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Explore the Studio Model</h2>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/franchise#kit" className="bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
+            <Link href="/franchise#kit" className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
               Request Franchise Kit
             </Link>
-            <Link href="/franchise" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#0A2342] transition-colors">
+            <Link href="/franchise" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#3D4466] transition-colors">
               Compare Models
             </Link>
           </div>

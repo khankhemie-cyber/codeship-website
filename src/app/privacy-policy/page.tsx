@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-16">
+      <section className="bg-[#3D4466] py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold text-white mb-4">Privacy Policy</h1>
           <p className="text-gray-300">Last updated: January 2025</p>
@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm p-8 space-y-8 text-gray-700">
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">1. Information We Collect</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">1. Information We Collect</h2>
               <p className="mb-3">
                 CODEship Academy collects personal information that you voluntarily provide when you:
               </p>
@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">2. How We Use Your Information</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">2. How We Use Your Information</h2>
               <p className="text-sm mb-3">We use the information we collect to:</p>
               <ul className="list-disc list-inside space-y-1 text-sm ml-4">
                 <li>Respond to your inquiries and requests</li>
@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">3. Children&apos;s Privacy</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">3. Children&apos;s Privacy</h2>
               <p className="text-sm">
                 We take the privacy of children seriously. We do not knowingly collect personal information directly
                 from children under 13 without verifiable parental consent. Information about children enrolled in our
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">4. Information Sharing</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">4. Information Sharing</h2>
               <p className="text-sm">
                 We do not sell, trade, or rent your personal information to third parties. We may share information with
                 service providers who assist in our operations (such as email service providers), who are contractually
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">5. Cookies</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">5. Cookies</h2>
               <p className="text-sm">
                 Our website uses cookies to improve your experience. Cookies are small files placed on your device
                 that help us remember your preferences and understand how you use our site. You can control cookie
@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">6. Data Security</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">6. Data Security</h2>
               <p className="text-sm">
                 We implement reasonable security measures to protect your personal information. However, no internet
                 transmission is completely secure. We encourage you to use strong passwords and to be cautious about
@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">7. Your Rights</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">7. Your Rights</h2>
               <p className="text-sm mb-3">You have the right to:</p>
               <ul className="list-disc list-inside space-y-1 text-sm ml-4">
                 <li>Access the personal information we hold about you</li>
@@ -96,16 +96,16 @@ export default function PrivacyPolicyPage() {
                 <li>Withdraw consent to receive marketing communications</li>
               </ul>
               <p className="mt-3 text-sm">
-                To exercise these rights, please contact us at hello@codeshipacademy.com.
+                To exercise these rights, please contact us at admin@codeshipacademy.com.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0A2342] mb-3">8. Contact Us</h2>
+              <h2 className="text-xl font-bold text-[#3D4466] mb-3">8. Contact Us</h2>
               <p className="text-sm">
                 If you have questions about this privacy policy or our data practices, please contact us at:{" "}
-                <a href="mailto:hello@codeshipacademy.com" className="text-[#F5A623] hover:underline">
-                  hello@codeshipacademy.com
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#F5C518] hover:underline">
+                  admin@codeshipacademy.com
                 </a>
               </p>
             </div>

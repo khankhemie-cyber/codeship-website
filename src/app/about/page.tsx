@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">About CODEship Academy</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
@@ -25,7 +25,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
             <div>
-              <h2 className="text-3xl font-bold text-[#0A2342] mb-6">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-[#3D4466] mb-6">Our Mission</h2>
               <p className="text-gray-600 text-lg mb-4">
                 CODEship Academy&apos;s mission is to help every child discover their capacity to create — using digital
                 tools as a medium for imagination, problem-solving, and self-expression.
@@ -40,8 +40,8 @@ export default function AboutPage() {
                 teach is not how to code — it&apos;s how to have an idea, and the confidence to build it.
               </p>
             </div>
-            <div className="bg-[#0A2342] rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold text-[#F5A623] mb-6">Our Core Beliefs</h3>
+            <div className="bg-[#3D4466] rounded-2xl p-8 text-white">
+              <h3 className="text-2xl font-bold text-[#F5C518] mb-6">Our Core Beliefs</h3>
               <ul className="space-y-4">
                 {[
                   "Every child has ideas worth building.",
@@ -52,7 +52,7 @@ export default function AboutPage() {
                   "Community and school are where access begins.",
                 ].map((belief) => (
                   <li key={belief} className="flex items-start gap-3">
-                    <span className="text-[#F5A623] font-bold shrink-0">•</span>
+                    <span className="text-[#F5C518] font-bold shrink-0">•</span>
                     <p className="text-gray-300">{belief}</p>
                   </li>
                 ))}
@@ -61,7 +61,7 @@ export default function AboutPage() {
           </div>
 
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-[#0A2342] text-center mb-10">What Makes Us Different</h2>
+            <h2 className="text-3xl font-bold text-[#3D4466] text-center mb-10">What Makes Us Different</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 { title: "Clean, Inclusive Design", desc: "No dark aesthetics, no gamer culture, no belt systems. CODEship is bright, welcoming, and designed for every child — not a narrow archetype." },
@@ -72,7 +72,7 @@ export default function AboutPage() {
                 { title: "Future-Ready Curriculum", desc: "AI literacy, digital citizenship, and design thinking alongside coding — preparing children for a world we can only partially predict." },
               ].map((diff) => (
                 <div key={diff.title} className="bg-white rounded-2xl p-6 shadow-sm">
-                  <h3 className="font-bold text-[#0A2342] mb-2">{diff.title}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-2">{diff.title}</h3>
                   <p className="text-gray-600 text-sm">{diff.desc}</p>
                 </div>
               ))}
@@ -80,16 +80,16 @@ export default function AboutPage() {
           </div>
 
           <div className="text-center bg-[#2ECC71]/10 rounded-2xl p-10">
-            <h2 className="text-3xl font-bold text-[#0A2342] mb-4">&ldquo;Creativity Before Code&rdquo;</h2>
+            <h2 className="text-3xl font-bold text-[#3D4466] mb-4">&ldquo;Creativity Before Code&rdquo;</h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">
               This is more than a tagline. It&apos;s the principle that guides every curriculum decision we make, every
               program we design, and every class we run. Children build real ideas. That&apos;s what CODEship is for.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <Link href="/programs" className="bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
+              <Link href="/programs" className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
                 Explore Programs
               </Link>
-              <Link href="/contact" className="border-2 border-[#0A2342] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-[#0A2342] hover:text-white transition-colors">
+              <Link href="/contact" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
                 Get in Touch
               </Link>
             </div>

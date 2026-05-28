@@ -94,9 +94,9 @@ export default function CityPage({ params }: Props) {
       />
 
       <div className="bg-[#FAFAFA]">
-        <section className="bg-[#0A2342] py-20">
+        <section className="bg-[#3D4466] py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Link href="/locations" className="text-gray-400 hover:text-[#F5A623] text-sm transition-colors mb-4 inline-block">
+            <Link href="/locations" className="text-gray-400 hover:text-[#F5C518] text-sm transition-colors mb-4 inline-block">
               ← All Locations
             </Link>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
@@ -113,7 +113,7 @@ export default function CityPage({ params }: Props) {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
               <div>
-                <h2 className="text-2xl font-bold text-[#0A2342] mb-4">Programs in {cityName}</h2>
+                <h2 className="text-2xl font-bold text-[#3D4466] mb-4">Programs in {cityName}</h2>
                 <p className="text-gray-600 mb-6">
                   CODEship Academy serves the {cityName} community through multiple program formats — making quality
                   coding and STEM education accessible to more children and families.
@@ -130,7 +130,7 @@ export default function CityPage({ params }: Props) {
                     <Link key={prog.title} href={prog.href} className="flex items-start gap-3 bg-white rounded-xl p-4 hover:shadow-md transition-shadow border border-gray-100">
                       <span className="w-2 h-2 bg-[#2ECC71] rounded-full mt-1.5 shrink-0" />
                       <div>
-                        <p className="font-semibold text-[#0A2342] text-sm">{prog.title}</p>
+                        <p className="font-semibold text-[#3D4466] text-sm">{prog.title}</p>
                         <p className="text-gray-500 text-xs">{prog.desc}</p>
                       </div>
                     </Link>
@@ -147,25 +147,25 @@ export default function CityPage({ params }: Props) {
                 </div>
 
                 {/* School CTA */}
-                <div className="bg-[#0A2342] rounded-2xl p-6 text-white">
+                <div className="bg-[#3D4466] rounded-2xl p-6 text-white">
                   <h3 className="font-bold text-lg mb-2">Schools in {cityName}</h3>
                   <p className="text-gray-300 text-sm mb-4">
                     Interested in bringing CODEship programs to your school in {cityName}? We partner with schools
                     across the region.
                   </p>
-                  <Link href="/schools" className="bg-[#F5A623] text-[#0A2342] font-bold px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors inline-block text-sm">
+                  <Link href="/schools" className="bg-[#F5C518] text-[#3D4466] font-bold px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors inline-block text-sm">
                     School Partnership Info
                   </Link>
                 </div>
 
                 {/* Franchise CTA */}
                 <div className="bg-[#2ECC71]/10 rounded-2xl p-6">
-                  <h3 className="font-bold text-[#0A2342] mb-2">Franchise Opportunity in {cityName}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-2">Franchise Opportunity in {cityName}</h3>
                   <p className="text-gray-600 text-sm mb-4">
                     Interested in bringing CODEship Academy to {cityName} as a franchise owner? Contact us to learn
                     about territory availability.
                   </p>
-                  <Link href="/franchise" className="text-[#F5A623] font-semibold text-sm hover:underline">
+                  <Link href="/franchise" className="text-[#F5C518] font-semibold text-sm hover:underline">
                     Learn About Franchising →
                   </Link>
                   <p className="text-xs text-gray-400 mt-1">
@@ -176,7 +176,7 @@ export default function CityPage({ params }: Props) {
             </div>
 
             {/* FAQ */}
-            <h2 className="text-2xl font-bold text-[#0A2342] mb-6">{cityName} FAQ</h2>
+            <h2 className="text-2xl font-bold text-[#3D4466] mb-6">{cityName} FAQ</h2>
             <FAQAccordion faqs={localFaqs} />
           </div>
         </section>

@@ -60,15 +60,15 @@ export default function ArticlePage({ params }: Props) {
 
       <div className="bg-[#FAFAFA]">
         {/* Hero */}
-        <section className="bg-[#0A2342] py-16">
+        <section className="bg-[#3D4466] py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-4">
-              <Link href="/resources" className="text-gray-400 hover:text-[#F5A623] text-sm transition-colors">
+              <Link href="/resources" className="text-gray-400 hover:text-[#F5C518] text-sm transition-colors">
                 ← Resources
               </Link>
             </div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs bg-[#F5A623]/30 text-[#F5A623] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
+              <span className="text-xs bg-[#F5C518]/30 text-[#F5C518] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
                 {article.category}
               </span>
               <span className="text-gray-400 text-xs">{article.readTime} min read</span>
@@ -90,18 +90,18 @@ export default function ArticlePage({ params }: Props) {
 
             {article.faqs.length > 0 && (
               <div className="mt-12">
-                <h2 className="text-2xl font-bold text-[#0A2342] mb-6">Frequently Asked Questions</h2>
+                <h2 className="text-2xl font-bold text-[#3D4466] mb-6">Frequently Asked Questions</h2>
                 <FAQAccordion faqs={article.faqs} />
               </div>
             )}
 
             {/* CTA */}
-            <div className="mt-12 bg-[#0A2342] rounded-2xl p-8 text-center text-white">
+            <div className="mt-12 bg-[#3D4466] rounded-2xl p-8 text-center text-white">
               <h3 className="text-2xl font-bold mb-2">Ready to Explore CODEship Programs?</h3>
               <p className="text-gray-300 mb-6">Find the right program for your child in just 2 minutes.</p>
               <Link
                 href="/program-finder"
-                className="bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
+                className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
               >
                 Find a Program
               </Link>
@@ -112,7 +112,7 @@ export default function ArticlePage({ params }: Props) {
         {/* Related Articles */}
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#0A2342] mb-6">More Articles</h2>
+            <h2 className="text-2xl font-bold text-[#3D4466] mb-6">More Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {articles
                 .filter((a) => a.slug !== article.slug)
@@ -123,9 +123,9 @@ export default function ArticlePage({ params }: Props) {
                     href={`/resources/${related.slug}`}
                     className="bg-[#FAFAFA] rounded-xl p-4 hover:shadow-md transition-shadow border border-gray-100 block"
                   >
-                    <span className="text-xs text-[#F5A623] font-semibold uppercase">{related.category}</span>
-                    <h3 className="font-bold text-[#0A2342] mt-1 mb-2 text-sm leading-snug">{related.title}</h3>
-                    <span className="text-[#F5A623] text-xs font-semibold">Read more →</span>
+                    <span className="text-xs text-[#F5C518] font-semibold uppercase">{related.category}</span>
+                    <h3 className="font-bold text-[#3D4466] mt-1 mb-2 text-sm leading-snug">{related.title}</h3>
+                    <span className="text-[#F5C518] text-xs font-semibold">Read more →</span>
                   </Link>
                 ))}
             </div>

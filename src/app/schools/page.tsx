@@ -39,7 +39,7 @@ const schoolFaqs = [
 export default function SchoolsPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Partner With CODEship Academy
@@ -54,7 +54,7 @@ export default function SchoolsPage() {
       {/* Programs */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#0A2342] text-center mb-10">School Programs</h2>
+          <h2 className="text-3xl font-bold text-[#3D4466] text-center mb-10">School Programs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {[
               { title: "After-School Coding Club", desc: "Weekly after-school sessions running through the school year. Students build progressive projects in a structured program at your school." },
@@ -74,7 +74,7 @@ export default function SchoolsPage() {
           </div>
 
           {/* Benefits */}
-          <div className="bg-[#0A2342] rounded-2xl p-8 text-white mb-16">
+          <div className="bg-[#3D4466] rounded-2xl p-8 text-white mb-16">
             <h2 className="text-2xl font-bold mb-6 text-center">Benefits for Your School</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
@@ -89,7 +89,7 @@ export default function SchoolsPage() {
                 "After-school revenue opportunity for some partnership models",
               ].map((b) => (
                 <div key={b} className="flex items-start gap-2">
-                  <span className="text-[#F5A623] font-bold shrink-0">✓</span>
+                  <span className="text-[#F5C518] font-bold shrink-0">✓</span>
                   <p className="text-gray-300 text-sm">{b}</p>
                 </div>
               ))}
@@ -98,7 +98,7 @@ export default function SchoolsPage() {
 
           {/* How it works */}
           <div className="mb-16">
-            <h2 className="text-2xl font-bold text-[#0A2342] text-center mb-8">How It Works</h2>
+            <h2 className="text-2xl font-bold text-[#3D4466] text-center mb-8">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
                 { step: "1", title: "Get in Touch", desc: "Tell us about your school and what you're looking for." },
@@ -107,10 +107,10 @@ export default function SchoolsPage() {
                 { step: "4", title: "Kids Create", desc: "Students build real projects and leave with skills, confidence, and pride." },
               ].map((s) => (
                 <div key={s.step} className="text-center bg-white rounded-2xl p-5 shadow-sm">
-                  <div className="w-12 h-12 bg-[#F5A623] text-[#0A2342] rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-3">
+                  <div className="w-12 h-12 bg-[#F5C518] text-[#3D4466] rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-3">
                     {s.step}
                   </div>
-                  <h3 className="font-bold text-[#0A2342] mb-1">{s.title}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-1">{s.title}</h3>
                   <p className="text-gray-500 text-sm">{s.desc}</p>
                 </div>
               ))}
@@ -119,7 +119,7 @@ export default function SchoolsPage() {
 
           {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-[#0A2342] mb-6 text-center">Request School Partnership Information</h2>
+            <h2 className="text-2xl font-bold text-[#3D4466] mb-6 text-center">Request School Partnership Information</h2>
             <SchoolContactForm />
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function SchoolsPage() {
       {/* FAQ */}
       <section className="py-16 bg-[#FAFAFA]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#0A2342] text-center mb-8">School FAQ</h2>
+          <h2 className="text-3xl font-bold text-[#3D4466] text-center mb-8">School FAQ</h2>
           <FAQAccordion faqs={schoolFaqs} />
         </div>
       </section>

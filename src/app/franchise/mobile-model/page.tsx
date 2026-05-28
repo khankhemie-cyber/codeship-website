@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function MobileModelPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-20">
+      <section className="bg-[#3D4466] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Link href="/franchise" className="text-[#F5A623] text-sm font-semibold hover:underline mb-4 inline-block">
+          <Link href="/franchise" className="text-[#F5C518] text-sm font-semibold hover:underline mb-4 inline-block">
             ← Franchise Overview
           </Link>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Mobile Community Model</h1>
@@ -21,7 +21,7 @@ export default function MobileModelPage() {
             The lowest-investment path to owning a CODEship Academy franchise — built for community-first entrepreneurs
             who want to reach children where they already are.
           </p>
-          <div className="mt-6 inline-block bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl text-xl">
+          <div className="mt-6 inline-block bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl text-xl">
             Investment: $10K–$40K
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function MobileModelPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-2xl font-bold text-[#0A2342] mb-4">How the Mobile Model Works</h2>
+              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">How the Mobile Model Works</h2>
               <p className="text-gray-600 mb-4">
                 The Mobile Community Model delivers CODEship programs at community centres, libraries, schools,
                 recreation facilities, and partner spaces — without requiring a dedicated studio location.
@@ -41,7 +41,7 @@ export default function MobileModelPage() {
                 relationships with schools and community organizations, and want to build a business with lower overhead
                 and maximum flexibility.
               </p>
-              <h3 className="font-bold text-[#0A2342] mb-3">Ideal For</h3>
+              <h3 className="font-bold text-[#3D4466] mb-3">Ideal For</h3>
               <ul className="space-y-2 mb-6">
                 {["Former educators and school staff", "Community and recreation professionals", "Parents seeking purpose-driven entrepreneurship",
                   "Those wanting to start part-time", "Community organization leaders"].map((item) => (
@@ -53,7 +53,7 @@ export default function MobileModelPage() {
               </ul>
             </div>
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-[#0A2342] mb-4">Key Features</h2>
+              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">Key Features</h2>
               {[
                 { title: "Community-Based Delivery", desc: "Operate at schools, community centres, libraries, and partner locations. No studio lease required." },
                 { title: "School Partnership Focus", desc: "After-school clubs and workshops at local schools are the primary delivery channel." },
@@ -62,7 +62,7 @@ export default function MobileModelPage() {
                 { title: "Comprehensive Support", desc: "Full curriculum, training, marketing, and operational support from CODEship." },
               ].map((feature) => (
                 <div key={feature.title} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <h3 className="font-bold text-[#0A2342] mb-1">{feature.title}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-1">{feature.title}</h3>
                   <p className="text-gray-600 text-sm">{feature.desc}</p>
                 </div>
               ))}
@@ -71,14 +71,14 @@ export default function MobileModelPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-[#0A2342] text-center">
+      <section className="py-16 bg-[#3D4466] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Learn More?</h2>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/franchise#kit" className="bg-[#F5A623] text-[#0A2342] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
+            <Link href="/franchise#kit" className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
               Request Franchise Kit
             </Link>
-            <Link href="/franchise" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#0A2342] transition-colors">
+            <Link href="/franchise" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#3D4466] transition-colors">
               Compare Models
             </Link>
           </div>

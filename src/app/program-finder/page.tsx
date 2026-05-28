@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ProgramFinderPage() {
   return (
     <div className="bg-[#FAFAFA]">
-      <section className="bg-[#0A2342] py-16">
+      <section className="bg-[#3D4466] py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold text-white mb-4">Find the Right Program</h1>
           <p className="text-gray-300 text-lg">
