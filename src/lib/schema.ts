@@ -4,18 +4,22 @@ export function organizationSchema() {
     "@type": "Organization",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
-    logo: "https://www.codeshipacademy.com/logo.png",
+    logo: "https://www.codeshipacademy.com/logo.svg",
     description:
       "CODEship Academy offers children's coding, AI, and STEM education programs through weekly classes, camps, and school workshops.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Oshawa",
+      addressRegion: "Ontario",
+      addressCountry: "CA",
+    },
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
-      email: "hello@codeshipacademy.com",
+      email: "admin@codeshipacademy.com",
     },
     sameAs: [
-      "https://www.facebook.com/codeshipacademy",
       "https://www.instagram.com/codeshipacademy",
-      "https://www.linkedin.com/company/codeshipacademy",
     ],
   };
 }
