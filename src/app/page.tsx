@@ -4,8 +4,8 @@ import Link from "next/link";
 import FAQAccordion from "@/components/FAQAccordion";
 import NewsletterForm from "@/components/NewsletterForm";
 import ScrollReveal from "@/components/ScrollReveal";
+import TestimonialMarquee from "@/components/TestimonialMarquee";
 import { websiteSchema, organizationSchema, faqSchema } from "@/lib/schema";
-import { articles } from "@/data/articles";
 
 export const metadata: Metadata = {
   title: "CODEship Academy | Kids Coding, AI & STEM Programs",
@@ -81,7 +81,7 @@ const programs = [
       "Unique, screen-smart birthday celebrations where the whole group builds a game, animation, or app together.",
     age: "Ages 6–14",
     href: "/programs/birthday-parties",
-    image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
     imageAlt: "Children celebrating at coding birthday party",
   },
   {
@@ -95,44 +95,6 @@ const programs = [
   },
 ];
 
-const buildCards = [
-  {
-    title: "Games",
-    desc: "Design and code original games from the ground up.",
-    image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=400&q=80",
-    imageAlt: "Children building and playing digital games together",
-  },
-  {
-    title: "Apps",
-    desc: "Prototype and build real mobile app ideas.",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80",
-    imageAlt: "App development on laptop screen",
-  },
-  {
-    title: "Websites",
-    desc: "Create and publish websites using HTML, CSS, and more.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80",
-    imageAlt: "Students working on web development projects",
-  },
-  {
-    title: "AI Projects",
-    desc: "Build AI models and intelligent interactive experiences.",
-    image: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=400&q=80",
-    imageAlt: "AI and artificial intelligence exploration for kids",
-  },
-  {
-    title: "Animations",
-    desc: "Bring characters and stories to life with code.",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=400&q=80",
-    imageAlt: "Creative digital animation and art project",
-  },
-  {
-    title: "Stories",
-    desc: "Create interactive digital stories and choose-your-own adventures.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=80",
-    imageAlt: "Child presenting their digital storytelling project",
-  },
-];
 
 const differentiators = [
   {
@@ -144,7 +106,7 @@ const differentiators = [
   {
     title: "Real Project Building",
     desc: "Every child leaves with something they built — not a tutorial copy, but a genuine creation.",
-    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=300&q=80",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&q=80",
     imageAlt: "Children presenting their real projects",
   },
   {
@@ -173,47 +135,6 @@ const differentiators = [
   },
 ];
 
-const testimonials = [
-  {
-    quote:
-      "My daughter used to think coding wasn't for her. After two months at CODEship, she built her own game and presented it to our whole family. The confidence boost has been incredible.",
-    name: "Sarah M.",
-    role: "Parent of 10-year-old, Markham",
-  },
-  {
-    quote:
-      "We booked CODEship for a PA Day workshop and the kids were completely engaged the entire time. They left with real projects they built themselves. Our teachers were genuinely impressed.",
-    name: "Vice Principal",
-    role: "Elementary School, Mississauga",
-  },
-  {
-    quote:
-      "My son had his birthday party at CODEship and all the kids made their own mini games. Parents couldn't believe how much the kids accomplished in just a couple of hours.",
-    name: "Marcus T.",
-    role: "Parent of 9-year-old, Oshawa",
-  },
-  {
-    quote:
-      "As a teacher, I love how CODEship connects coding to real academic skills. My students came back from the workshop talking about logic, problem-solving, and sequencing — without realizing they were learning.",
-    name: "Ms. J. Kowalski",
-    role: "Grade 5 Teacher, Durham Region",
-  },
-  {
-    quote:
-      "My son is neurodivergent and has struggled in group settings. The CODEship instructors were patient, creative, and found ways to engage him that I've never seen before. He's now obsessed with building games.",
-    name: "Priya R.",
-    role: "Parent of 11-year-old, Brampton",
-  },
-  {
-    quote:
-      "What I appreciate most is that my kids aren't just watching screens — they're making things. There's a real difference in their confidence and the way they approach problems now.",
-    name: "David & Linda K.",
-    role: "Parents of two, Toronto",
-  },
-];
-
-const latestArticles = articles.slice(0, 3);
-
 export default function HomePage() {
   return (
     <>
@@ -241,10 +162,6 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 bg-[#F5C518]/20 border border-[#F5C518]/30 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 bg-[#F5C518] rounded-full animate-pulse" />
-              <span className="text-[#F5C518] text-sm font-semibold">Now enrolling in Oshawa & surrounding areas</span>
-            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
               Where Curiosity{" "}
               <span className="text-[#F5C518] relative">
@@ -291,7 +208,6 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            {/* Video placeholder block */}
             <div className="bg-[#3D4466]/60 backdrop-blur-sm border border-[#F5C518]/20 rounded-xl p-4 text-center">
               <div className="w-12 h-12 bg-[#F5C518] rounded-full flex items-center justify-center mx-auto mb-2">
                 <svg className="w-5 h-5 text-[#3D4466] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -299,7 +215,9 @@ export default function HomePage() {
                 </svg>
               </div>
               <p className="text-gray-300 text-xs">
-                <span className="text-[#F5C518] font-semibold">Video coming soon</span> — children presenting their digital projects
+                Follow us on{" "}
+                <a href="https://www.instagram.com/codeshipacademy" target="_blank" rel="noopener noreferrer" className="text-[#F5C518] font-semibold hover:underline">@codeshipacademy</a>
+                {" "}to see what our students are building
               </p>
             </div>
           </div>
@@ -322,46 +240,6 @@ export default function HomePage() {
                 <span className="w-2 h-2 bg-[#3D4466] rounded-full" />
                 {item}
               </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── What Can Your Child Build? ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <ScrollReveal>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#3D4466] mb-4">
-              What Can Your Child Build?
-            </h2>
-            <p className="text-gray-600 mb-12 max-w-2xl mx-auto text-lg">
-              At CODEship Academy, children don&apos;t follow templates — they build their own original creations from their own ideas.
-            </p>
-          </ScrollReveal>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {buildCards.map((card, i) => (
-              <ScrollReveal key={card.title} delay={i * 80}>
-                <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 card-hover group">
-                  <div className="relative h-40 overflow-hidden">
-                    <Image
-                      src={card.image}
-                      alt={card.imageAlt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, 33vw"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-[#3D4466]/40 group-hover:bg-[#3D4466]/20 transition-colors duration-300" />
-                    <span className="absolute bottom-2 left-3 text-white font-bold text-lg">{card.title}</span>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-gray-500 text-sm mb-3">{card.desc}</p>
-                    <Link href="/programs" className="text-[#F5C518] text-sm font-semibold hover:underline inline-flex items-center gap-1">
-                      Learn more <span>→</span>
-                    </Link>
-                  </div>
-                </div>
-              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -539,7 +417,7 @@ export default function HomePage() {
                     </div>
                     <p className="text-white font-semibold text-lg mb-1">See CODEship in Action</p>
                     <p className="text-gray-400 text-sm">
-                      Video coming soon — children building and presenting their real digital projects
+                      Watch students build, create, and present their own digital projects
                     </p>
                   </div>
                 </div>
@@ -642,131 +520,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <h2 className="text-3xl font-bold text-[#3D4466] text-center mb-4">
-              What Families Are Saying
-            </h2>
-            <p className="text-gray-500 text-center mb-12 max-w-2xl mx-auto">
-              Hear from the parents, teachers, and families who have experienced CODEship Academy firsthand.
-            </p>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <ScrollReveal key={i} delay={i * 80}>
-                <div className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 card-hover flex flex-col h-full">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, si) => (
-                      <svg key={si} className="w-4 h-4 text-[#F5C518]" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                    ))}
-                  </div>
-                  <div className="text-[#F5C518] text-4xl font-serif leading-none mb-3">&ldquo;</div>
-                  <p className="text-gray-600 text-sm leading-relaxed flex-1 mb-4">{t.quote}</p>
-                  <div className="border-t border-gray-100 pt-4">
-                    <p className="font-bold text-[#3D4466] text-sm">{t.name}</p>
-                    <p className="text-gray-400 text-xs">{t.role}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Franchise Teaser ── */}
-      <section className="py-20 bg-[#FAFAFA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <ScrollReveal delay={150}>
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&q=80"
-                  alt="Entrepreneurs and educators building a CODEship Academy franchise"
-                  fill
-                  className="object-cover"
-                  loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-[#3D4466]/40" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="bg-white/90 backdrop-blur rounded-xl p-4">
-                    <p className="text-[#3D4466] font-bold text-sm">Investment from $10K–$150K+</p>
-                    <p className="text-gray-500 text-xs">Three flexible franchise models available</p>
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal>
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#3D4466] mb-4">
-                  Bring CODEship Academy to Your Community
-                </h2>
-                <p className="text-gray-600 text-lg mb-4 leading-relaxed">
-                  CODEship Academy is expanding across Canada. Join a mission-driven franchise building the next generation
-                  of creators and problem-solvers in communities like yours.
-                </p>
-                <ul className="space-y-2 mb-6">
-                  {[
-                    "No technical background required",
-                    "Three flexible franchise models",
-                    "School & community partnership model",
-                    "Full training & operational support",
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-gray-600 text-sm">
-                      <span className="w-2 h-2 bg-[#F5C518] rounded-full shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/franchise"
-                  className="bg-[#3D4466] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#2a3052] transition-all duration-200 inline-block hover:-translate-y-0.5 shadow-lg"
-                >
-                  Learn About the Franchise Opportunity
-                </Link>
-                <p className="text-xs text-gray-400 mt-4">
-                  For informational purposes only. No franchise offering is made here. See franchise disclosure for details.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Resources Preview ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="text-3xl font-bold text-[#3D4466]">Latest from the Blog</h2>
-              <Link href="/resources" className="text-[#F5C518] font-semibold hover:underline">
-                View all articles →
-              </Link>
-            </div>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {latestArticles.map((article, i) => (
-              <ScrollReveal key={article.slug} delay={i * 100}>
-                <Link
-                  href={`/resources/${article.slug}`}
-                  className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 block card-hover"
-                >
-                  <span className="text-xs bg-[#F5C518]/20 text-[#3D4466] font-semibold px-2 py-1 rounded uppercase tracking-wide">
-                    {article.category}
-                  </span>
-                  <h3 className="font-bold text-[#3D4466] text-lg mt-3 mb-2 leading-snug">{article.title}</h3>
-                  <p className="text-gray-500 text-sm mb-3">{article.metaDescription.substring(0, 100)}...</p>
-                  <span className="text-[#F5C518] text-sm font-semibold inline-flex items-center gap-1">Read more <span>→</span></span>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── Testimonials (rolling marquee) ── */}
+      <TestimonialMarquee />
 
       {/* ── Newsletter ── */}
       <section className="py-16 bg-[#3D4466] relative overflow-hidden">

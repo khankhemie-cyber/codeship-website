@@ -15,7 +15,7 @@ export default function BirthdayPartiesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#F5A623] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            🎉 Coding Birthday Parties
+            Coding Birthday Parties
           </h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
             An unforgettable birthday experience where every child builds their own game, animation, or digital creation —
@@ -74,7 +74,7 @@ export default function BirthdayPartiesPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {["Game Design 🎮", "Animation ✨", "AI Art 🧠", "Web Design 🌐"].map((theme) => (
+            {["Game Design", "Animation", "AI Art", "Web Design"].map((theme) => (
               <div key={theme} className="bg-[#0A2342] text-white rounded-xl p-4 text-center font-semibold text-sm">
                 {theme}
               </div>

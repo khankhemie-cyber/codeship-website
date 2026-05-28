@@ -143,6 +143,20 @@
   animation: gradientShift 8s ease infinite;
 }
 
+/* Testimonial marquee */
+.marquee-track {
+  animation: marquee 40s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* Scroll reveal observer styles */
 .scroll-reveal {
   opacity: 0;

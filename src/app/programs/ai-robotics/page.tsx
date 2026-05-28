@@ -15,7 +15,7 @@ export default function AIRoboticsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#F5A623] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            🤖 AI &amp; Robotics Programs
+            AI &amp; Robotics Programs
           </h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
             Hands-on exploration of artificial intelligence and physical robotics through real project building, not

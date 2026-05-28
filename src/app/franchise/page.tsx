@@ -70,16 +70,16 @@ export default function FranchisePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { title: "Growing Market", icon: "📈", desc: "Parent demand for coding, AI, and STEM education for children is growing rapidly across Canada." },
-              { title: "Mission-Driven", icon: "🎯", desc: "Build a business that genuinely serves your community and shapes the next generation of creators." },
-              { title: "Flexible Models", icon: "🔄", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations." },
-              { title: "School Partnerships", icon: "🏫", desc: "Our school partnership model provides a built-in channel to your community's families." },
-              { title: "No Tech Required", icon: "👋", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support." },
-              { title: "Full System Support", icon: "🤝", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success." },
+              { title: "Growing Market", desc: "Parent demand for coding, AI, and STEM education for children is growing rapidly across Canada." },
+              { title: "Mission-Driven", desc: "Build a business that genuinely serves your community and shapes the next generation of creators." },
+              { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations." },
+              { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families." },
+              { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support." },
+              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success." },
             ].map((w) => (
-              <div key={w.title} className="bg-[#FAFAFA] rounded-2xl p-6 text-center">
-                <div className="text-4xl mb-3">{w.icon}</div>
-                <h3 className="font-bold text-[#0A2342] mb-2">{w.title}</h3>
+              <div key={w.title} className="bg-[#FAFAFA] rounded-2xl p-6">
+                <div className="w-3 h-3 bg-[#F5C518] rounded-full mb-4" />
+                <h3 className="font-bold text-[#3D4466] mb-2">{w.title}</h3>
                 <p className="text-gray-600 text-sm">{w.desc}</p>
               </div>
             ))}
@@ -214,18 +214,17 @@ export default function FranchisePage() {
           <h2 className="text-3xl font-bold text-[#0A2342] text-center mb-10">What&apos;s Included</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { icon: "📚", title: "Full Curriculum", desc: "Complete, age-graded curriculum across all programs." },
-              { icon: "🎓", title: "Initial Training", desc: "Comprehensive training on curriculum, operations, and business." },
-              { icon: "📣", title: "Marketing Support", desc: "Templates, brand assets, and digital marketing resources." },
-              { icon: "💻", title: "Technology Systems", desc: "Booking, operations, and communication platforms." },
-              { icon: "👥", title: "Instructor Training", desc: "Training and quality standards for your teaching team." },
-              { icon: "🤝", title: "Ongoing Coaching", desc: "Regular support calls, field visits, and performance reviews." },
-              { icon: "🌐", title: "Franchisee Network", desc: "Community of fellow franchisees for peer support and sharing." },
-              { icon: "🔄", title: "Curriculum Updates", desc: "Regular curriculum updates to stay current with technology trends." },
+              { title: "Full Curriculum", desc: "Complete, age-graded curriculum across all programs." },
+              { title: "Initial Training", desc: "Comprehensive training on curriculum, operations, and business." },
+              { title: "Marketing Support", desc: "Templates, brand assets, and digital marketing resources." },
+              { title: "Technology Systems", desc: "Booking, operations, and communication platforms." },
+              { title: "Instructor Training", desc: "Training and quality standards for your teaching team." },
+              { title: "Ongoing Coaching", desc: "Regular support calls, field visits, and performance reviews." },
+              { title: "Franchisee Network", desc: "Community of fellow franchisees for peer support and sharing." },
+              { title: "Curriculum Updates", desc: "Regular curriculum updates to stay current with technology trends." },
             ].map((item) => (
-              <div key={item.title} className="bg-white rounded-xl p-5 shadow-sm text-center">
-                <div className="text-3xl mb-2">{item.icon}</div>
-                <h3 className="font-bold text-[#0A2342] mb-1 text-sm">{item.title}</h3>
+              <div key={item.title} className="bg-white rounded-xl p-5 shadow-sm border-l-4 border-[#F5C518]">
+                <h3 className="font-bold text-[#3D4466] mb-1 text-sm">{item.title}</h3>
                 <p className="text-gray-500 text-xs">{item.desc}</p>
               </div>
             ))}

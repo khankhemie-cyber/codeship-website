@@ -57,17 +57,16 @@ export default function SchoolsPage() {
           <h2 className="text-3xl font-bold text-[#0A2342] text-center mb-10">School Programs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {[
-              { title: "After-School Coding Club", icon: "💻", desc: "Weekly after-school sessions running through the school year. Students build progressive projects in a structured program at your school." },
-              { title: "PA Day Workshops", icon: "📅", desc: "Full-day or half-day STEM workshops for PA days. Fully managed by CODEship instructors. All materials included." },
-              { title: "March Break Camp", icon: "🌱", desc: "Week-long camps hosted at your school during March Break. A valuable service for your school community." },
-              { title: "In-Class STEM Enrichment", icon: "🏫", desc: "Single or double period workshops that complement your classroom curriculum — curriculum-aligned and instructor-led." },
-              { title: "Summer Program", icon: "☀️", desc: "Summer coding camps hosted at your school, keeping your community connected through the break." },
-              { title: "STEM Showcase Days", icon: "🎤", desc: "Special event programs where students build a project and present it to classmates, teachers, or parents." },
+              { title: "After-School Coding Club", desc: "Weekly after-school sessions running through the school year. Students build progressive projects in a structured program at your school." },
+              { title: "PA Day Workshops", desc: "Full-day or half-day STEM workshops for PA days. Fully managed by CODEship instructors. All materials included." },
+              { title: "March Break Camp", desc: "Week-long camps hosted at your school during March Break. A valuable service for your school community." },
+              { title: "In-Class STEM Enrichment", desc: "Single or double period workshops that complement your classroom curriculum — curriculum-aligned and instructor-led." },
+              { title: "Summer Program", desc: "Summer coding camps hosted at your school, keeping your community connected through the break." },
+              { title: "STEM Showcase Days", desc: "Special event programs where students build a project and present it to classmates, teachers, or parents." },
             ].map((prog) => (
-              <div key={prog.title} className="bg-white rounded-2xl p-6 shadow-sm flex gap-4">
-                <span className="text-3xl shrink-0">{prog.icon}</span>
+              <div key={prog.title} className="bg-white rounded-2xl p-6 shadow-sm flex gap-4 border-l-4 border-[#F5C518]">
                 <div>
-                  <h3 className="font-bold text-[#0A2342] mb-1">{prog.title}</h3>
+                  <h3 className="font-bold text-[#3D4466] mb-1">{prog.title}</h3>
                   <p className="text-gray-600 text-sm">{prog.desc}</p>
                 </div>
               </div>

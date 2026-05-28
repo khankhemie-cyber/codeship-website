@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -24,7 +25,8 @@ const programs = [
       "Inclusive, encouraging environment",
       "Year-round enrollment available",
     ],
-    icon: "📅",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80",
+    imageAlt: "Children collaborating on coding projects in weekly class",
   },
   {
     title: "Summer & Holiday Camps",
@@ -41,7 +43,8 @@ const programs = [
       "Final project showcase",
       "Small group sizes",
     ],
-    icon: "🏕️",
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80",
+    imageAlt: "Diverse children learning together at summer coding camp",
   },
   {
     title: "School Workshops",
@@ -58,7 +61,8 @@ const programs = [
       "Curriculum-aligned content",
       "All equipment provided",
     ],
-    icon: "🏫",
+    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80",
+    imageAlt: "Students participating in school STEM workshop",
   },
   {
     title: "Birthday Parties",
@@ -75,7 +79,8 @@ const programs = [
       "All materials included",
       "Digital creation to take home",
     ],
-    icon: "🎉",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80",
+    imageAlt: "Children celebrating at a coding birthday party",
   },
   {
     title: "AI & Robotics",
@@ -92,7 +97,8 @@ const programs = [
       "Physical computing projects",
       "Integration with coding skills",
     ],
-    icon: "🤖",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=80",
+    imageAlt: "Child exploring robotics and AI technology",
   },
 ];
 
@@ -122,8 +128,16 @@ export default function ProgramsPage() {
                 i % 2 === 1 ? "md:flex-row-reverse" : ""
               }`}
             >
-              <div className="bg-[#0A2342] p-8 flex items-center justify-center md:w-48 shrink-0">
-                <span className="text-6xl">{prog.icon}</span>
+              <div className="relative md:w-48 shrink-0 h-48 md:h-auto">
+                <Image
+                  src={prog.image}
+                  alt={prog.imageAlt}
+                  fill
+                  className="object-cover"
+                  sizes="192px"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-[#3D4466]/40" />
               </div>
               <div className="p-8 flex-1">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
