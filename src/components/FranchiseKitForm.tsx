@@ -1,33 +1,17 @@
-"use client";
+import HubSpotForm from "@/components/HubSpotForm";
 
 export default function FranchiseKitForm() {
   return (
-    <form className="space-y-4 bg-white rounded-2xl p-8" onSubmit={(e) => e.preventDefault()}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-          <input type="text" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <input type="email" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">City / Region</label>
-          <input type="text" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-          <input type="tel" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]" />
-        </div>
-      </div>
-      <button type="submit" className="w-full bg-[#F5A623] text-[#0A2342] font-bold py-4 rounded-xl hover:bg-yellow-400 transition-colors">
-        Send Me the Franchise Kit
-      </button>
-      <p className="text-xs text-gray-500 text-center">
-        By submitting, you agree to receive information about CODEship Academy franchise opportunities.
-        This form does not constitute a franchise offering or commitment.
+    <div className="bg-white rounded-2xl p-8">
+      <HubSpotForm
+        formId="b63c5c03-e55e-4e57-9a03-cebebbb87b3c"
+        thankYouTitle="Your franchise kit is on its way!"
+        thankYouBody="Thank you for your interest in CODEship Academy. We'll send your franchise information kit to your inbox shortly. If you have questions in the meantime, you're welcome to book a Discovery Call — we'd love to connect."
+        thankYouCta={{ label: "Book a Discovery Call", href: "/contact" }}
+      />
+      <p className="text-xs text-gray-400 text-center mt-4">
+        Submitting this form does not constitute a franchise offering or commitment. Franchise offerings are made only through a Franchise Disclosure Document where required by law.
       </p>
-    </form>
+    </div>
   );
 }
