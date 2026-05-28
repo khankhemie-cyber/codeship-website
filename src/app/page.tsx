@@ -151,17 +151,29 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}
       />
 
-      {/* ── Hero ── */}
-      <section className="relative hero-gradient min-h-[640px] flex items-center overflow-hidden">
-        {/* Animated background particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-[10%] w-64 h-64 bg-[#F5C518]/5 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-[10%] w-96 h-96 bg-[#F5C518]/5 rounded-full blur-3xl animate-float animation-delay-300" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#3D4466]/30 rounded-full blur-3xl" />
-        </div>
+      {/* ── Hero (full-bleed video background) ── */}
+      <section className="relative min-h-[680px] flex items-center overflow-hidden">
+        {/* Background video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          aria-hidden="true"
+        >
+          <source
+            src="https://videos.pexels.com/video-files/7868164/7868164-hd_1920_1080_25fps.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="animate-fade-in-up">
+        {/* Dark gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#3D4466]/90 via-[#3D4466]/70 to-[#3D4466]/40" />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="max-w-2xl animate-fade-in-up">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
               Where Curiosity{" "}
               <span className="text-[#F5C518] relative">
@@ -169,11 +181,13 @@ export default function HomePage() {
                 <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#F5C518]/40 rounded" />
               </span>
             </h1>
-            <p className="text-lg text-gray-300 mb-8 max-w-xl leading-relaxed">
+            <p className="text-lg text-gray-200 mb-8 leading-relaxed">
               CODEship Academy helps children turn their ideas into real digital projects — building coding skills,
               confidence, creativity, and future-ready thinking through hands-on project-based learning.
             </p>
-            <p className="text-[#F5C518] font-bold text-lg mb-8 tracking-wide">DREAM. CODE. ACHIEVE.</p>
+            <p className="text-[#F5C518] font-bold text-lg mb-10 tracking-widest uppercase text-sm">
+              Dream. Code. Achieve.
+            </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/program-finder"
@@ -182,45 +196,28 @@ export default function HomePage() {
                 Find a Program
               </Link>
               <Link
-                href="/franchise"
-                className="border-2 border-white/60 text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#3D4466] transition-all duration-200 text-center text-lg backdrop-blur-sm"
+                href="/schools"
+                className="border-2 border-white/70 text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#3D4466] transition-all duration-200 text-center text-lg backdrop-blur-sm"
               >
-                Partner With Us
+                Book a School Workshop
               </Link>
             </div>
           </div>
+        </div>
 
-          {/* Hero image + video placeholder */}
-          <div className="animate-slide-in-right animation-delay-200 space-y-4">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
-              <Image
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80"
-                alt="Diverse children collaborating on digital projects at CODEship Academy"
-                width={800}
-                height={500}
-                className="w-full h-[320px] object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#3D4466]/60 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-semibold text-sm">
-                  Children building real projects — not just following tutorials.
-                </p>
-              </div>
-            </div>
-            <div className="bg-[#3D4466]/60 backdrop-blur-sm border border-[#F5C518]/20 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 bg-[#F5C518] rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg className="w-5 h-5 text-[#3D4466] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </div>
-              <p className="text-gray-300 text-xs">
-                Follow us on{" "}
-                <a href="https://www.instagram.com/codeshipacademy" target="_blank" rel="noopener noreferrer" className="text-[#F5C518] font-semibold hover:underline">@codeshipacademy</a>
-                {" "}to see what our students are building
-              </p>
-            </div>
-          </div>
+        {/* Bottom Instagram nudge */}
+        <div className="absolute bottom-6 right-6 z-10">
+          <a
+            href="https://www.instagram.com/codeshipacademy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-xs hover:bg-black/60 transition-colors"
+          >
+            <svg className="w-4 h-4 text-[#F5C518]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+            <span>@codeshipacademy</span>
+          </a>
         </div>
       </section>
 
