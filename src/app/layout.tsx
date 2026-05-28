@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   authors: [{ name: "CODEship Academy" }],
   creator: "CODEship Academy",
   metadataBase: new URL("https://www.codeshipacademy.com"),
+  icons: {
+    icon: "/logo-icon.svg",
+    apple: "/logo-icon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "en_CA",
