@@ -22,8 +22,8 @@ const testimonials = [
   {
     quote:
       "As a teacher, I love how CODEship connects coding to real academic skills. My students came back from the workshop talking about logic, problem-solving, and sequencing — without realizing they were learning.",
-    name: "Ms. J. Kowalski",
-    role: "Grade 5 Teacher, Durham Region",
+    name: "Grade 5 Teacher",
+    role: "Durham Region",
   },
   {
     quote:
