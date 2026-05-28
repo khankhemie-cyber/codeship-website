@@ -100,38 +100,26 @@ const differentiators = [
   {
     title: "Creativity-First Learning",
     desc: "Children bring their own ideas. We provide the tools, guidance, and environment to make them real.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&q=80",
-    imageAlt: "Children being creative with digital tools",
   },
   {
     title: "Real Project Building",
     desc: "Every child leaves with something they built — not a tutorial copy, but a genuine creation.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&q=80",
-    imageAlt: "Children presenting their real projects",
   },
   {
     title: "AI & Digital Skills",
     desc: "Beyond coding, children develop AI literacy and digital skills for an evolving world.",
-    image: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=300&q=80",
-    imageAlt: "AI and digital skills exploration",
   },
   {
     title: "Inclusive for All Learners",
     desc: "Our programs welcome children of all backgrounds, genders, abilities, and experience levels.",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300&q=80",
-    imageAlt: "Diverse and inclusive group of children learning together",
   },
   {
     title: "Academic Skill-Building",
     desc: "Coding naturally reinforces math, reading, and problem-solving skills children use in school.",
-    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=300&q=80",
-    imageAlt: "Children building academic skills through coding",
   },
   {
     title: "School & Community Model",
     desc: "We bring programs to schools and community spaces, making access easier for more families.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&q=80",
-    imageAlt: "School and community coding workshop",
   },
 ];
 
@@ -296,42 +284,35 @@ export default function HomePage() {
       </section>
 
       {/* ── Why CODEship is Different ── */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#3D4466] mb-4">
-                Why CODEship Academy Is Different
+            <div className="max-w-2xl mb-16">
+              <p className="text-[#F5C518] font-bold text-sm uppercase tracking-widest mb-3">
+                What Sets Us Apart
+              </p>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#3D4466] leading-tight mb-4">
+                More than coding.<br />More than robotics.
               </h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                We built CODEship Academy around a simple belief: when children are given the freedom to create —
+              <p className="text-gray-500 text-lg leading-relaxed">
+                CODEship Academy is built around a simple belief: when children are given the freedom to create —
                 not just follow instructions — they discover what they&apos;re truly capable of.
               </p>
             </div>
           </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
             {differentiators.map((d, i) => (
-              <ScrollReveal key={d.title} delay={i * 100}>
-                <div className="group bg-[#FAFAFA] rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 card-hover">
-                  <div className="relative h-36 overflow-hidden">
-                    <Image
-                      src={d.image}
-                      alt={d.imageAlt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-[#3D4466]/50" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <h3 className="font-bold text-white text-base">{d.title}</h3>
-                    </div>
+              <ScrollReveal key={d.title} delay={i * 80}>
+                <div className="group flex gap-5 py-7 border-b border-gray-100 last:border-0 hover:bg-[#FAFAFA] -mx-4 px-4 rounded-xl transition-colors duration-200">
+                  <div className="shrink-0 w-9 h-9 rounded-full bg-[#F5C518]/15 border border-[#F5C518]/40 flex items-center justify-center">
+                    <span className="text-[#3D4466] font-extrabold text-xs">{String(i + 1).padStart(2, "0")}</span>
                   </div>
-                  <div className="p-4">
-                    <div className="flex gap-3">
-                      <div className="w-3 h-3 bg-[#F5C518] rounded-full mt-1 shrink-0" />
-                      <p className="text-gray-600 text-sm">{d.desc}</p>
-                    </div>
+                  <div>
+                    <h3 className="font-bold text-[#3D4466] text-base mb-1 group-hover:text-[#F5C518] transition-colors duration-200">
+                      {d.title}
+                    </h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">{d.desc}</p>
                   </div>
                 </div>
               </ScrollReveal>
