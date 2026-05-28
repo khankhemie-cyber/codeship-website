@@ -35,7 +35,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt="CODEship Academy"
               width={44}
               height={44}

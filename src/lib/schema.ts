@@ -4,7 +4,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
-    logo: "https://www.codeshipacademy.com/logo.svg",
+    logo: "https://www.codeshipacademy.com/logo.png",
     description:
       "CODEship Academy offers children's coding, AI, and STEM education programs through weekly classes, camps, and school workshops.",
     address: {

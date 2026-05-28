@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   creator: "CODEship Academy",
   metadataBase: new URL("https://www.codeshipacademy.com"),
   icons: {
-    icon: "/logo-icon.svg",
-    apple: "/logo-icon.svg",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
     type: "website",

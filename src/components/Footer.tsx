@@ -10,7 +10,7 @@ export default function Footer() {
           <div>
             <Link href="/" className="inline-flex items-center space-x-3 mb-4">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt="CODEship Academy"
                 width={50}
                 height={50}
