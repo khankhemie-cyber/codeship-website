@@ -64,7 +64,7 @@ export default function SchoolWorkshopsPage() {
           <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Bring CODEship to Your School</h2>
           <p className="text-[#071B3B]/70 mb-6">We&apos;ll reach out to discuss the right program for your school community.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/contact" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
+            <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
               Register Now
             </Link>
             <Link href="/schools" className="border-2 border-[#071B3B] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-colors inline-block">

@@ -78,7 +78,7 @@ export default function WeeklyClassesPage() {
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Enroll?</h2>
           <p className="text-gray-300 mb-6">Find weekly classes near you and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/contact" className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
+            <Link href="/register" className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
               Register Now
             </Link>
             <Link href="/locations" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#071B3B] transition-colors">

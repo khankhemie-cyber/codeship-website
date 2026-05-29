@@ -158,7 +158,7 @@ export default function CityPage({ params }: Props) {
                   <p className="text-[#071B3B]/70 text-sm mb-4">
                     Get started with CODEship Academy in {cityName}. Contact us to check availability and register.
                   </p>
-                  <Link href="/contact" className="bg-[#071B3B] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] transition-colors inline-block text-sm">
+                  <Link href="/register" className="bg-[#071B3B] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] transition-colors inline-block text-sm">
                     Register Now
                   </Link>
                 </div>

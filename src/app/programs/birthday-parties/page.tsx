@@ -92,7 +92,7 @@ export default function BirthdayPartiesPage() {
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Book a Birthday Party</h2>
           <p className="text-[#071B3B]/70 mb-6">Contact us to check availability and book your CODEship birthday party.</p>
-          <Link href="/contact" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
+          <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
             Register Now
           </Link>
         </div>
