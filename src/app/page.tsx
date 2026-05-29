@@ -56,6 +56,7 @@ const programs = [
     href: "/programs/weekly-classes",
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
     imageAlt: "Children collaborating on coding projects in weekly class",
+    borderColour: "border-l-4 border-[#071B3B]",
   },
   {
     title: "Summer & Holiday Camps",
@@ -65,6 +66,7 @@ const programs = [
     href: "/programs/camps",
     image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80",
     imageAlt: "Diverse children learning together at summer coding camp",
+    borderColour: "border-l-4 border-[#E5A823]",
   },
   {
     title: "School Workshops",
@@ -74,6 +76,7 @@ const programs = [
     href: "/programs/school-workshops",
     image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80",
     imageAlt: "Students participating in school STEM workshop",
+    borderColour: "border-l-4 border-[#138A9A]",
   },
   {
     title: "Birthday Parties",
@@ -83,6 +86,7 @@ const programs = [
     href: "/programs/birthday-parties",
     image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
     imageAlt: "Children celebrating at coding birthday party",
+    borderColour: "border-l-4 border-[#6E43A8]",
   },
   {
     title: "AI & Robotics",
@@ -92,6 +96,7 @@ const programs = [
     href: "/programs/ai-robotics",
     image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80",
     imageAlt: "Child exploring robotics and AI technology",
+    borderColour: "border-l-4 border-[#138A9A]",
   },
 ];
 
@@ -244,7 +249,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((prog, i) => (
               <ScrollReveal key={prog.title} delay={i * 100}>
-                <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col card-hover group">
+                <div className={`bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col card-hover group ${prog.borderColour}`}>
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       src={prog.image}
@@ -305,8 +310,12 @@ export default function HomePage() {
             {differentiators.map((d, i) => (
               <ScrollReveal key={d.title} delay={i * 80}>
                 <div className="group flex gap-5 py-7 border-b border-gray-100 last:border-0 hover:bg-[#FAF8F4] -mx-4 px-4 rounded-xl transition-colors duration-200">
-                  <div className="shrink-0 w-9 h-9 rounded-full bg-[#E5A823]/15 border border-[#E5A823]/40 flex items-center justify-center">
-                    <span className="text-[#071B3B] font-extrabold text-xs">{String(i + 1).padStart(2, "0")}</span>
+                  <div className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center ${
+                    i % 3 === 0 ? "bg-[#E5A823] border border-[#E5A823]" :
+                    i % 3 === 1 ? "bg-[#138A9A] border border-[#138A9A]" :
+                    "bg-[#6E43A8] border border-[#6E43A8]"
+                  }`}>
+                    <span className={`font-extrabold text-xs ${i % 3 === 0 ? "text-[#071B3B]" : "text-white"}`}>{String(i + 1).padStart(2, "0")}</span>
                   </div>
                   <div>
                     <h3 className="font-bold text-[#071B3B] text-base mb-1 group-hover:text-[#E5A823] transition-colors duration-200">
@@ -353,7 +362,11 @@ export default function HomePage() {
               ].map((s, i) => (
                 <ScrollReveal key={s.step} delay={i * 150}>
                   <div className="flex gap-5 items-start group">
-                    <div className="w-14 h-14 bg-[#E5A823] text-[#071B3B] rounded-full flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-lg">
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-lg ${
+                      i === 0 ? "bg-[#E5A823] text-[#071B3B]" :
+                      i === 1 ? "bg-[#138A9A] text-white" :
+                      "bg-[#6E43A8] text-white"
+                    }`}>
                       {s.step}
                     </div>
                     <div className="flex-1">

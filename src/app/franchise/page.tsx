@@ -70,15 +70,15 @@ export default function FranchisePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { title: "Growing Market", desc: "Parent demand for coding, AI, and STEM education for children is growing rapidly across Canada." },
-              { title: "Mission-Driven", desc: "Build a business that genuinely serves your community and shapes the next generation of creators." },
-              { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations." },
-              { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families." },
-              { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support." },
-              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success." },
+              { title: "Growing Market", desc: "Parent demand for coding, AI, and STEM education for children is growing rapidly across Canada.", dot: "bg-[#E57A1F]" },
+              { title: "Mission-Driven", desc: "Build a business that genuinely serves your community and shapes the next generation of creators.", dot: "bg-[#071B3B]" },
+              { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations.", dot: "bg-[#138A9A]" },
+              { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families.", dot: "bg-[#138A9A]" },
+              { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support.", dot: "bg-[#6E43A8]" },
+              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success.", dot: "bg-[#E5A823]" },
             ].map((w) => (
               <div key={w.title} className="bg-[#FAF8F4] rounded-2xl p-6">
-                <div className="w-3 h-3 bg-[#E5A823] rounded-full mb-4" />
+                <div className={`w-3 h-3 ${w.dot} rounded-full mb-4`} />
                 <h3 className="font-bold text-[#071B3B] mb-2">{w.title}</h3>
                 <p className="text-gray-600 text-sm">{w.desc}</p>
               </div>

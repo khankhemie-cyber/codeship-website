@@ -16,6 +16,8 @@ const programs = [
     age: "Ages 5–16",
     duration: "60–90 min per session",
     format: "Ongoing weekly",
+    dotColour: "bg-[#071B3B]",
+    borderColour: "border-l-4 border-[#071B3B]",
     description:
       "Our flagship ongoing program. Children attend weekly sessions where they develop coding skills, digital creativity, and project-building confidence over time. Each child works at their own pace on personally meaningful projects.",
     highlights: [
@@ -34,6 +36,8 @@ const programs = [
     age: "Ages 6–14",
     duration: "Full-day or half-day",
     format: "Multi-day intensives",
+    dotColour: "bg-[#E5A823]",
+    borderColour: "border-l-4 border-[#E5A823]",
     description:
       "Immersive multi-day camp experiences where children build ambitious projects from start to finish. Available during summer, March Break, and PA Days. Week-long camps include a final project showcase.",
     highlights: [
@@ -52,6 +56,8 @@ const programs = [
     age: "All school ages",
     duration: "1 hour to full day",
     format: "In-school and after-school",
+    dotColour: "bg-[#138A9A]",
+    borderColour: "border-l-4 border-[#138A9A]",
     description:
       "Curriculum-aligned coding and STEM workshops brought directly to your school. From single-period enrichment sessions to full after-school clubs, CODEship works with schools to build lasting digital education partnerships.",
     highlights: [
@@ -70,6 +76,8 @@ const programs = [
     age: "Ages 6–14",
     duration: "2 hours",
     format: "Weekend bookings",
+    dotColour: "bg-[#6E43A8]",
+    borderColour: "border-l-4 border-[#6E43A8]",
     description:
       "A truly unique birthday experience where the whole group builds something together — a game, animation, or interactive story — guided by our instructors. Every child goes home with their own creation.",
     highlights: [
@@ -88,6 +96,8 @@ const programs = [
     age: "Ages 8–16",
     duration: "60–90 min per session",
     format: "Weekly or intensive",
+    dotColour: "bg-[#138A9A]",
+    borderColour: "border-l-4 border-[#138A9A]",
     description:
       "Explore the world of artificial intelligence and physical robotics through hands-on projects. Students build AI models, program robots, and explore how intelligent systems work — through real, creative project work.",
     highlights: [
@@ -126,7 +136,7 @@ export default function ProgramsPage() {
               key={prog.href}
               className={`bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row ${
                 i % 2 === 1 ? "md:flex-row-reverse" : ""
-              }`}
+              } ${prog.borderColour}`}
             >
               <div className="relative md:w-48 shrink-0 h-48 md:h-auto">
                 <Image
@@ -151,7 +161,7 @@ export default function ProgramsPage() {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-5">
                   {prog.highlights.map((h) => (
                     <li key={h} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-2 h-2 bg-[#138A9A] rounded-full shrink-0" />
+                      <span className={`w-2 h-2 ${prog.dotColour} rounded-full shrink-0`} />
                       {h}
                     </li>
                   ))}

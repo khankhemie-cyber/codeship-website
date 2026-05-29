@@ -45,14 +45,14 @@ export default function CampsPage() {
             <h2 className="text-2xl font-bold text-[#071B3B] mb-6">Camp Themes &amp; Tracks</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { theme: "Game Design Studio", desc: "Design, build, and play original games using visual and text-based coding tools." },
-                { theme: "Web Creators", desc: "Build and publish real websites using HTML, CSS, and JavaScript." },
-                { theme: "AI Explorers", desc: "Discover how AI works and build hands-on AI projects and experiments." },
-                { theme: "Robotics Challenge", desc: "Program robots to complete missions and engineering challenges." },
-                { theme: "App Builders", desc: "Prototype and build your own mobile app idea from concept to demo." },
-                { theme: "Digital Storytellers", desc: "Create interactive stories, animations, and digital narratives." },
+                { theme: "Game Design Studio", desc: "Design, build, and play original games using visual and text-based coding tools.", accent: "border-l-4 border-[#138A9A]" },
+                { theme: "Web Creators", desc: "Build and publish real websites using HTML, CSS, and JavaScript.", accent: "border-l-4 border-[#138A9A]" },
+                { theme: "AI Explorers", desc: "Discover how AI works and build hands-on AI projects and experiments.", accent: "border-l-4 border-[#138A9A]" },
+                { theme: "Robotics Challenge", desc: "Program robots to complete missions and engineering challenges.", accent: "border-l-4 border-[#138A9A]" },
+                { theme: "App Builders", desc: "Prototype and build your own mobile app idea from concept to demo.", accent: "border-l-4 border-[#6E43A8]" },
+                { theme: "Digital Storytellers", desc: "Create interactive stories, animations, and digital narratives.", accent: "border-l-4 border-[#6E43A8]" },
               ].map((t) => (
-                <div key={t.theme} className="bg-[#FAF8F4] rounded-xl p-4 border border-gray-100">
+                <div key={t.theme} className={`bg-[#FAF8F4] rounded-xl p-4 border border-gray-100 ${t.accent}`}>
                   <h3 className="font-bold text-[#071B3B] mb-1 text-sm">{t.theme}</h3>
                   <p className="text-gray-500 text-xs">{t.desc}</p>
                 </div>

@@ -33,6 +33,7 @@ export default function AIRoboticsPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
             <div>
+              <p className="text-[#138A9A] font-semibold text-sm mb-1 uppercase tracking-wide">Technology &amp; AI</p>
               <h2 className="text-2xl font-bold text-[#071B3B] mb-4">The AI Curriculum</h2>
               <p className="text-gray-600 mb-4">
                 Our AI program teaches children how artificial intelligence actually works — through hands-on projects
@@ -51,6 +52,7 @@ export default function AIRoboticsPage() {
               </ul>
             </div>
             <div>
+              <p className="text-[#6E43A8] font-semibold text-sm mb-1 uppercase tracking-wide">Creativity &amp; Engineering</p>
               <h2 className="text-2xl font-bold text-[#071B3B] mb-4">The Robotics Curriculum</h2>
               <p className="text-gray-600 mb-4">
                 Robotics at CODEship combines physical engineering with programming. Children assemble, program, and

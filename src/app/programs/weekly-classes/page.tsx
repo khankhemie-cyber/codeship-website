@@ -55,12 +55,12 @@ export default function WeeklyClassesPage() {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-[#071B3B] mb-4">Program Levels</h2>
               {[
-                { level: "Explorers", age: "Ages 5–7", desc: "Introduction to coding concepts through visual block programming, games, and creative activities. ScratchJr, unplugged activities." },
-                { level: "Builders", age: "Ages 7–10", desc: "Scratch, block-based coding, game design fundamentals, simple web projects, and introductory robotics." },
-                { level: "Creators", age: "Ages 10–13", desc: "Text-based coding (Python, HTML/CSS/JS), app development, advanced game design, AI introduction." },
-                { level: "Innovators", age: "Ages 13+", desc: "Advanced programming, full project development, AI and machine learning, portfolio building." },
+                { level: "Explorers", age: "Ages 5–7", desc: "Introduction to coding concepts through visual block programming, games, and creative activities. ScratchJr, unplugged activities.", borderColour: "border-l-4 border-[#E5A823]" },
+                { level: "Builders", age: "Ages 7–10", desc: "Scratch, block-based coding, game design fundamentals, simple web projects, and introductory robotics.", borderColour: "border-l-4 border-[#138A9A]" },
+                { level: "Creators", age: "Ages 10–13", desc: "Text-based coding (Python, HTML/CSS/JS), app development, advanced game design, AI introduction.", borderColour: "border-l-4 border-[#6E43A8]" },
+                { level: "Innovators", age: "Ages 13+", desc: "Advanced programming, full project development, AI and machine learning, portfolio building.", borderColour: "border-l-4 border-[#071B3B]" },
               ].map((lvl) => (
-                <div key={lvl.level} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div key={lvl.level} className={`bg-white rounded-xl p-5 shadow-sm border border-gray-100 ${lvl.borderColour}`}>
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-bold text-[#071B3B]">{lvl.level}</h3>
                     <span className="text-xs bg-[#E5A823]/20 text-[#071B3B] font-semibold px-2 py-0.5 rounded">{lvl.age}</span>
