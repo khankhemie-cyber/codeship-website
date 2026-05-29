@@ -139,11 +139,28 @@ export default function CityPage({ params }: Props) {
               </div>
 
               <div className="space-y-6">
-                {/* Map placeholder */}
-                <div className="bg-gray-200 rounded-2xl h-48 flex items-center justify-center">
-                  <p className="text-gray-500 text-sm italic text-center p-4">
-                    [Map placeholder — {cityName}, {province} location]
+                {/* Map embed */}
+                <div className="rounded-2xl overflow-hidden h-48 shadow-sm border border-gray-100">
+                  <iframe
+                    title={`Map of ${cityName}, ${province}`}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(cityName + ", " + province + ", Canada")}&output=embed&z=12`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+
+                {/* Register CTA */}
+                <div className="bg-[#F5C518] rounded-2xl p-6 text-center">
+                  <h3 className="font-bold text-[#3D4466] text-lg mb-2">Ready to Enroll?</h3>
+                  <p className="text-[#3D4466]/70 text-sm mb-4">
+                    Get started with CODEship Academy in {cityName}. Contact us to check availability and register.
                   </p>
+                  <Link href="/contact" className="bg-[#3D4466] text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-900 transition-colors inline-block text-sm">
+                    Register Now
+                  </Link>
                 </div>
 
                 {/* School CTA */}

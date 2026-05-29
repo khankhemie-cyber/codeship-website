@@ -76,13 +76,13 @@ export default function WeeklyClassesPage() {
       <section className="py-16 bg-[#3D4466] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Enroll?</h2>
-          <p className="text-gray-300 mb-6">Find weekly classes in a location near you.</p>
+          <p className="text-gray-300 mb-6">Find weekly classes near you and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/locations" className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors">
-              Find Locations
+            <Link href="/contact" className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-colors">
+              Register Now
             </Link>
-            <Link href="/contact" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#3D4466] transition-colors">
-              Contact Us
+            <Link href="/locations" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#3D4466] transition-colors">
+              Find a Location
             </Link>
           </div>
         </div>

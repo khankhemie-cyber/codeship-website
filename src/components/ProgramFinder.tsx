@@ -111,6 +111,12 @@ export default function ProgramFinder() {
         <p className="text-gray-600 mb-6 max-w-lg mx-auto">{rec.description}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
+            href="/contact"
+            className="bg-[#3D4466] text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-900 transition-colors"
+          >
+            Register Now
+          </Link>
+          <Link
             href={rec.href}
             className="bg-[#F5C518] text-[#3D4466] font-semibold px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors"
           >

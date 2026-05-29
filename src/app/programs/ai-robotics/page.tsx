@@ -83,13 +83,13 @@ export default function AIRoboticsPage() {
       <section className="py-16 bg-[#F5C518] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-[#3D4466] mb-4">Enroll in AI &amp; Robotics</h2>
-          <p className="text-[#3D4466]/70 mb-6">Find AI &amp; Robotics programs in your area.</p>
+          <p className="text-[#3D4466]/70 mb-6">Find AI &amp; Robotics programs in your area and register today.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/locations" className="bg-[#3D4466] text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-900 transition-colors">
-              Find a Location
+            <Link href="/contact" className="bg-[#3D4466] text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-900 transition-colors">
+              Register Now
             </Link>
-            <Link href="/contact" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
-              Contact Us
+            <Link href="/locations" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
+              Find a Location
             </Link>
           </div>
         </div>

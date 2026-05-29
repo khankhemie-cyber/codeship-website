@@ -67,11 +67,11 @@ export default function CampsPage() {
           <h2 className="text-3xl font-bold text-[#3D4466] mb-4">Register for a Camp</h2>
           <p className="text-[#3D4466]/70 mb-6">Find upcoming camp dates in your area and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/locations" className="bg-[#3D4466] text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-900 transition-colors">
-              Find a Location
+            <Link href="/contact" className="bg-[#3D4466] text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-900 transition-colors">
+              Register Now
             </Link>
-            <Link href="/contact" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
-              Contact Us
+            <Link href="/locations" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
+              Find a Location
             </Link>
           </div>
         </div>
