@@ -100,6 +100,7 @@ export default function FranchisePage() {
                 best: "Community-focused entrepreneurs",
                 href: "/franchise/mobile-model",
                 features: ["Community-based delivery", "No dedicated studio needed", "School partnerships", "Lowest entry investment", "Flexible schedule"],
+                topBorder: "border-t-4 border-[#138A9A]",
               },
               {
                 title: "Studio Learning Centre",
@@ -109,6 +110,7 @@ export default function FranchisePage() {
                 href: "/franchise/studio-model",
                 features: ["Branded dedicated studio", "Full program suite", "Birthday parties", "Community hub model", "Walk-in visibility"],
                 featured: true,
+                topBorder: "border-t-4 border-[#E5A823]",
               },
               {
                 title: "Regional Multi-Territory",
@@ -117,11 +119,12 @@ export default function FranchisePage() {
                 best: "Regional builders and investors",
                 href: "/franchise/regional-model",
                 features: ["Regional development rights", "Multiple territories", "Sub-franchisee support", "Strongest market position", "Scalable model"],
+                topBorder: "border-t-4 border-[#E57A1F]",
               },
             ].map((model) => (
               <div
                 key={model.title}
-                className={`rounded-2xl p-6 ${model.featured ? "bg-[#071B3B] text-white shadow-xl scale-105" : "bg-white shadow-md"}`}
+                className={`rounded-2xl p-6 ${model.featured ? "bg-[#071B3B] text-white shadow-xl scale-105" : "bg-white shadow-md"} ${model.topBorder}`}
               >
                 {model.featured && (
                   <div className="text-[#E5A823] text-xs font-bold uppercase tracking-wide mb-2">Most Popular</div>

@@ -64,14 +64,15 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">What Makes Us Different</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { title: "Clean, Inclusive Design", desc: "No dark aesthetics, no gamer culture, no belt systems. CODEship is bright, welcoming, and designed for every child — not a narrow archetype." },
-                { title: "Creativity-First Pedagogy", desc: "Children bring ideas. We provide tools, structure, and encouragement. Every project is genuinely theirs." },
-                { title: "Project-Based Learning", desc: "No tutorials. No templates. Real projects from original ideas — with all the struggle and satisfaction that comes with building something real." },
-                { title: "Community Model", desc: "Programs delivered at schools and community spaces make quality STEM education accessible to more families in more places." },
-                { title: "Academic Integration", desc: "Our programs reinforce the reading, math, and thinking skills children develop in school — coding becomes a bridge to academic success." },
-                { title: "Future-Ready Curriculum", desc: "AI literacy, digital citizenship, and design thinking alongside coding — preparing children for a world we can only partially predict." },
+                { title: "Clean, Inclusive Design", desc: "No dark aesthetics, no gamer culture, no belt systems. CODEship is bright, welcoming, and designed for every child — not a narrow archetype.", dot: "bg-[#E5A823]", border: "border-t-4 border-[#E5A823]" },
+                { title: "Creativity-First Pedagogy", desc: "Children bring ideas. We provide tools, structure, and encouragement. Every project is genuinely theirs.", dot: "bg-[#6E43A8]", border: "border-t-4 border-[#6E43A8]" },
+                { title: "Project-Based Learning", desc: "No tutorials. No templates. Real projects from original ideas — with all the struggle and satisfaction that comes with building something real.", dot: "bg-[#6E43A8]", border: "border-t-4 border-[#6E43A8]" },
+                { title: "Community Model", desc: "Programs delivered at schools and community spaces make quality STEM education accessible to more families in more places.", dot: "bg-[#071B3B]", border: "border-t-4 border-[#071B3B]" },
+                { title: "Academic Integration", desc: "Our programs reinforce the reading, math, and thinking skills children develop in school — coding becomes a bridge to academic success.", dot: "bg-[#138A9A]", border: "border-t-4 border-[#138A9A]" },
+                { title: "Future-Ready Curriculum", desc: "AI literacy, digital citizenship, and design thinking alongside coding — preparing children for a world we can only partially predict.", dot: "bg-[#138A9A]", border: "border-t-4 border-[#138A9A]" },
               ].map((diff) => (
-                <div key={diff.title} className="bg-white rounded-2xl p-6 shadow-sm">
+                <div key={diff.title} className={`bg-white rounded-2xl p-6 shadow-sm ${diff.border}`}>
+                  <div className={`w-2 h-2 ${diff.dot} rounded-full mb-3`} />
                   <h3 className="font-bold text-[#071B3B] mb-2">{diff.title}</h3>
                   <p className="text-gray-600 text-sm">{diff.desc}</p>
                 </div>

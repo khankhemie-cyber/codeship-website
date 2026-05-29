@@ -47,7 +47,7 @@ export default function Footer() {
 
           {/* Programs */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Programs</h3>
+            <h3 className="font-semibold text-[#138A9A] mb-4">Programs</h3>
             <ul className="space-y-2">
               <li><Link href="/programs/weekly-classes" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Weekly Classes</Link></li>
               <li><Link href="/programs/camps" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Camps</Link></li>
@@ -60,7 +60,7 @@ export default function Footer() {
 
           {/* Franchise */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Franchise</h3>
+            <h3 className="font-semibold text-[#E5A823] mb-4">Franchise</h3>
             <ul className="space-y-2">
               <li><Link href="/franchise" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Franchise Overview</Link></li>
               <li><Link href="/franchise/mobile-model" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Mobile Model</Link></li>
@@ -72,7 +72,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <h3 className="font-semibold text-[#6E43A8] mb-4">Company</h3>
             <ul className="space-y-2">
               <li><Link href="/about" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">About Us</Link></li>
               <li><Link href="/schools" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Schools</Link></li>

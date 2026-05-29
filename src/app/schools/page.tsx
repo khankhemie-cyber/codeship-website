@@ -57,14 +57,14 @@ export default function SchoolsPage() {
           <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">School Programs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {[
-              { title: "After-School Coding Club", desc: "Weekly after-school sessions running through the school year. Students build progressive projects in a structured program at your school." },
-              { title: "PA Day Workshops", desc: "Full-day or half-day STEM workshops for PA days. Fully managed by CODEship instructors. All materials included." },
-              { title: "March Break Camp", desc: "Week-long camps hosted at your school during March Break. A valuable service for your school community." },
-              { title: "In-Class STEM Enrichment", desc: "Single or double period workshops that complement your classroom curriculum — curriculum-aligned and instructor-led." },
-              { title: "Summer Program", desc: "Summer coding camps hosted at your school, keeping your community connected through the break." },
-              { title: "STEM Showcase Days", desc: "Special event programs where students build a project and present it to classmates, teachers, or parents." },
+              { title: "After-School Coding Club", desc: "Weekly after-school sessions running through the school year. Students build progressive projects in a structured program at your school.", border: "border-l-4 border-[#138A9A]" },
+              { title: "PA Day Workshops", desc: "Full-day or half-day STEM workshops for PA days. Fully managed by CODEship instructors. All materials included.", border: "border-l-4 border-[#E5A823]" },
+              { title: "March Break Camp", desc: "Week-long camps hosted at your school during March Break. A valuable service for your school community.", border: "border-l-4 border-[#6E43A8]" },
+              { title: "In-Class STEM Enrichment", desc: "Single or double period workshops that complement your classroom curriculum — curriculum-aligned and instructor-led.", border: "border-l-4 border-[#138A9A]" },
+              { title: "Summer Program", desc: "Summer coding camps hosted at your school, keeping your community connected through the break.", border: "border-l-4 border-[#E57A1F]" },
+              { title: "STEM Showcase Days", desc: "Special event programs where students build a project and present it to classmates, teachers, or parents.", border: "border-l-4 border-[#6E43A8]" },
             ].map((prog) => (
-              <div key={prog.title} className="bg-white rounded-2xl p-6 shadow-sm flex gap-4 border-l-4 border-[#E5A823]">
+              <div key={prog.title} className={`bg-white rounded-2xl p-6 shadow-sm flex gap-4 ${prog.border}`}>
                 <div>
                   <h3 className="font-bold text-[#071B3B] mb-1">{prog.title}</h3>
                   <p className="text-gray-600 text-sm">{prog.desc}</p>
