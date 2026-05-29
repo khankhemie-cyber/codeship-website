@@ -7,7 +7,7 @@ const steps = [
   {
     id: "budget",
     question: "What is your available investment budget?",
-    options: ["Under $20K", "$20K–$60K", "$60K–$150K", "$150K+"],
+    options: ["Under $20K", "$20K–$60K", "$60K–$100K", "$100K+"],
   },
   {
     id: "schedule",
@@ -41,7 +41,7 @@ function getRecommendation(answers: string[]): Recommendation {
   if (budget === "Under $20K" || budget === "$20K–$60K") {
     return {
       title: "Mobile Community Model",
-      investmentRange: "$10K–$40K",
+      investmentRange: "$10K–$18K",
       description:
         "The Mobile Model is our lowest-investment entry point. Operate classes, camps, and workshops at community centres, libraries, schools, and partner spaces — no dedicated studio required.",
       highlights: [
@@ -54,7 +54,7 @@ function getRecommendation(answers: string[]): Recommendation {
       href: "/franchise/mobile-model",
     };
   }
-  if (schedule === "Multi-location" || budget === "$150K+") {
+  if (schedule === "Multi-location" || budget === "$100K+") {
     return {
       title: "Regional Multi-Territory Model",
       investmentRange: "$100K–$150K+",
@@ -72,7 +72,7 @@ function getRecommendation(answers: string[]): Recommendation {
   }
   return {
     title: "Studio Learning Centre Model",
-    investmentRange: "$40K–$100K",
+    investmentRange: "$60K–$100K",
     description:
       "Open your own CODEship Academy studio — a branded, dedicated learning space for weekly classes, camps, birthday parties, and workshops. Build a community hub for young creators.",
     highlights: [

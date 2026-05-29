@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Studio Learning Centre Franchise Model | CODEship Academy",
   description:
-    "Open a CODEship Academy Studio Learning Centre — a dedicated branded space for coding, AI, and STEM education. Investment $40K–$100K.",
+    "Open a CODEship Academy Studio Learning Centre — a dedicated branded space for coding, AI, and STEM education. Investment $60K–$100K.",
   alternates: { canonical: "https://www.codeshipacademy.com/franchise/studio-model" },
 };
 
@@ -22,7 +22,7 @@ export default function StudioModelPage() {
             birthday parties, and more.
           </p>
           <div className="mt-6 inline-block bg-[#E5A823] text-[#071B3B] font-bold px-6 py-3 rounded-xl text-xl">
-            Investment: $40K–$100K
+            Investment: $60K–$100K
           </div>
         </div>
       </section>

@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Mobile Community Franchise Model | CODEship Academy",
   description:
-    "The CODEship Mobile Community Model — low-investment, community-based children's coding franchise from $10K–$40K. School-focused delivery.",
+    "The CODEship Mobile Community Model — low-investment, community-based children's coding franchise from $10K–$18K. School-focused delivery.",
   alternates: { canonical: "https://www.codeshipacademy.com/franchise/mobile-model" },
 };
 
@@ -22,7 +22,7 @@ export default function MobileModelPage() {
             who want to reach children where they already are.
           </p>
           <div className="mt-6 inline-block bg-[#E5A823] text-[#071B3B] font-bold px-6 py-3 rounded-xl text-xl">
-            Investment: $10K–$40K
+            Investment: $10K–$18K
           </div>
         </div>
       </section>

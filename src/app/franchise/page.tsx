@@ -95,7 +95,7 @@ export default function FranchisePage() {
             {[
               {
                 title: "Mobile Community Model",
-                investment: "$10K–$40K",
+                investment: "$10K–$18K",
                 schedule: "Part-time to full-time",
                 best: "Community-focused entrepreneurs",
                 href: "/franchise/mobile-model",
@@ -104,7 +104,7 @@ export default function FranchisePage() {
               },
               {
                 title: "Studio Learning Centre",
-                investment: "$40K–$100K",
+                investment: "$60K–$100K",
                 schedule: "Full-time operation",
                 best: "Education entrepreneurs building a hub",
                 href: "/franchise/studio-model",
@@ -167,7 +167,7 @@ export default function FranchisePage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {[
-                  ["Investment Range", "$10K–$40K", "$40K–$100K", "$100K–$150K+"],
+                  ["Investment Range", "$10K–$18K", "$60K–$100K", "$100K–$150K+"],
                   ["Dedicated Studio", "No", "Yes", "Yes"],
                   ["School Partnerships", "Primary", "Yes", "Yes"],
                   ["Birthday Parties", "Limited", "Yes", "Yes"],
