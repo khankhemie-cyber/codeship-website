@@ -13,8 +13,8 @@ const categories = ["All", "parent", "school", "franchise", "coding", "ai", "ste
 
 export default function ResourcesPage() {
   return (
-    <div className="bg-[#FAFAFA]">
-      <section className="bg-[#3D4466] py-20">
+    <div className="bg-[#FAF8F4]">
+      <section className="bg-[#071B3B] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Resources &amp; Blog</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
@@ -30,7 +30,7 @@ export default function ResourcesPage() {
             {categories.map((cat) => (
               <span
                 key={cat}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-600 capitalize cursor-pointer hover:border-[#F5C518] hover:text-[#3D4466] transition-colors"
+                className="px-4 py-2 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-600 capitalize cursor-pointer hover:border-[#E5A823] hover:text-[#071B3B] transition-colors"
               >
                 {cat}
               </span>
@@ -46,19 +46,19 @@ export default function ResourcesPage() {
               >
                 <div className="p-6 flex-1">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs bg-[#F5C518]/20 text-[#3D4466] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
+                    <span className="text-xs bg-[#E5A823]/20 text-[#071B3B] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
                       {article.category}
                     </span>
                     <span className="text-xs text-gray-400">{article.readTime} min read</span>
                   </div>
-                  <h2 className="font-bold text-[#3D4466] text-lg mb-3 leading-snug group-hover:text-[#F5C518] transition-colors">
+                  <h2 className="font-bold text-[#071B3B] text-lg mb-3 leading-snug group-hover:text-[#E5A823] transition-colors">
                     {article.title}
                   </h2>
                   <p className="text-gray-500 text-sm">{article.metaDescription}</p>
                 </div>
                 <div className="px-6 py-4 border-t border-gray-50 flex items-center justify-between">
                   <span className="text-xs text-gray-400">{article.publishDate}</span>
-                  <span className="text-[#F5C518] text-sm font-semibold">Read more →</span>
+                  <span className="text-[#E5A823] text-sm font-semibold">Read more →</span>
                 </div>
               </Link>
             ))}

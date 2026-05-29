@@ -42,10 +42,10 @@ export default function Navigation() {
               className="rounded-full"
             />
             <div className="hidden sm:flex flex-col leading-tight">
-              <span className="text-base font-extrabold text-[#3D4466] tracking-tight">
-                CODE<span className="text-[#F5C518]">ship</span>
+              <span className="text-base font-extrabold text-[#071B3B] tracking-tight">
+                CODE<span className="text-[#E5A823]">ship</span>
               </span>
-              <span className="text-xs font-semibold text-[#3D4466] -mt-0.5">Academy</span>
+              <span className="text-xs font-semibold text-[#071B3B] -mt-0.5">Academy</span>
             </div>
           </Link>
 
@@ -55,15 +55,15 @@ export default function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[#1A1A2E] hover:text-[#F5C518] font-medium transition-colors duration-200 text-sm relative group"
+                className="text-[#2E3440] hover:text-[#E5A823] font-medium transition-colors duration-200 text-sm relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#F5C518] transition-all duration-200 group-hover:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#E5A823] transition-all duration-200 group-hover:w-full" />
               </Link>
             ))}
             <Link
               href="/program-finder"
-              className="bg-[#F5C518] text-[#3D4466] font-bold px-4 py-2 rounded-lg hover:bg-yellow-400 transition-all duration-200 text-sm shadow-sm hover:shadow-md"
+              className="bg-[#E5A823] text-[#071B3B] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-sm shadow-sm hover:shadow-md"
             >
               Find a Program
             </Link>
@@ -71,7 +71,7 @@ export default function Navigation() {
 
           {/* Mobile hamburger */}
           <button
-            className="lg:hidden p-2 rounded-md text-[#3D4466]"
+            className="lg:hidden p-2 rounded-md text-[#071B3B]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -89,7 +89,7 @@ export default function Navigation() {
             <Link
               key={link.href}
               href={link.href}
-              className="block text-[#1A1A2E] hover:text-[#F5C518] font-medium py-2 border-b border-gray-50 transition-colors"
+              className="block text-[#2E3440] hover:text-[#E5A823] font-medium py-2 border-b border-gray-50 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {link.label}
@@ -97,7 +97,7 @@ export default function Navigation() {
           ))}
           <Link
             href="/program-finder"
-            className="block bg-[#F5C518] text-[#3D4466] font-bold px-4 py-3 rounded-lg text-center mt-4 hover:bg-yellow-400 transition-colors"
+            className="block bg-[#E5A823] text-[#071B3B] font-bold px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
             onClick={() => setIsOpen(false)}
           >
             Find a Program

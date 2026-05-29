@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function CampsPage() {
   return (
-    <div className="bg-[#FAFAFA]">
-      <section className="bg-[#3D4466] py-20">
+    <div className="bg-[#FAF8F4]">
+      <section className="bg-[#071B3B] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-[#F5C518] font-semibold mb-2">Programs</p>
+          <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Coding Camps &amp; Holiday Programs
           </h1>
@@ -34,7 +34,7 @@ export default function CampsPage() {
             ].map((camp) => (
               <div key={camp.title} className="bg-white rounded-2xl shadow-md p-6">
                 <div className="text-4xl mb-3">{camp.icon}</div>
-                <h2 className="font-bold text-[#3D4466] text-xl mb-1">{camp.title}</h2>
+                <h2 className="font-bold text-[#071B3B] text-xl mb-1">{camp.title}</h2>
                 <p className="text-xs text-gray-400 mb-3">{camp.dates} · {camp.duration}</p>
                 <p className="text-gray-600 text-sm">{camp.desc}</p>
               </div>
@@ -42,7 +42,7 @@ export default function CampsPage() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-[#3D4466] mb-6">Camp Themes &amp; Tracks</h2>
+            <h2 className="text-2xl font-bold text-[#071B3B] mb-6">Camp Themes &amp; Tracks</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { theme: "Game Design Studio", desc: "Design, build, and play original games using visual and text-based coding tools." },
@@ -52,8 +52,8 @@ export default function CampsPage() {
                 { theme: "App Builders", desc: "Prototype and build your own mobile app idea from concept to demo." },
                 { theme: "Digital Storytellers", desc: "Create interactive stories, animations, and digital narratives." },
               ].map((t) => (
-                <div key={t.theme} className="bg-[#FAFAFA] rounded-xl p-4 border border-gray-100">
-                  <h3 className="font-bold text-[#3D4466] mb-1 text-sm">{t.theme}</h3>
+                <div key={t.theme} className="bg-[#FAF8F4] rounded-xl p-4 border border-gray-100">
+                  <h3 className="font-bold text-[#071B3B] mb-1 text-sm">{t.theme}</h3>
                   <p className="text-gray-500 text-xs">{t.desc}</p>
                 </div>
               ))}
@@ -62,15 +62,15 @@ export default function CampsPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-[#F5C518]">
+      <section className="py-16 bg-[#E5A823]">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-[#3D4466] mb-4">Register for a Camp</h2>
-          <p className="text-[#3D4466]/70 mb-6">Find upcoming camp dates in your area and secure your child&apos;s spot.</p>
+          <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Register for a Camp</h2>
+          <p className="text-[#071B3B]/70 mb-6">Find upcoming camp dates in your area and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/contact" className="bg-[#3D4466] text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-900 transition-colors">
+            <Link href="/contact" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors">
               Register Now
             </Link>
-            <Link href="/locations" className="border-2 border-[#3D4466] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-colors">
+            <Link href="/locations" className="border-2 border-[#071B3B] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-colors">
               Find a Location
             </Link>
           </div>

@@ -157,35 +157,35 @@ export default function HomePage() {
         </video>
 
         {/* Dark gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#3D4466]/90 via-[#3D4466]/70 to-[#3D4466]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071B3B]/90 via-[#071B3B]/70 to-[#071B3B]/40" />
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-2xl animate-fade-in-up">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
               Where Curiosity{" "}
-              <span className="text-[#F5C518] relative">
+              <span className="text-[#E5A823] relative">
                 Becomes Creation
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#F5C518]/40 rounded" />
+                <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#E5A823]/40 rounded" />
               </span>
             </h1>
             <p className="text-lg text-gray-200 mb-8 leading-relaxed">
               CODEship Academy helps children turn their ideas into real digital projects — building coding skills,
               confidence, creativity, and future-ready thinking through hands-on project-based learning.
             </p>
-            <p className="text-[#F5C518] font-bold text-lg mb-10 tracking-widest uppercase text-sm">
+            <p className="text-[#E5A823] font-bold text-lg mb-10 tracking-widest uppercase text-sm">
               Dream. Code. Achieve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/program-finder"
-                className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-all duration-200 text-center text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all duration-200 text-center text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 Find a Program
               </Link>
               <Link
                 href="/schools"
-                className="border-2 border-white/70 text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#3D4466] transition-all duration-200 text-center text-lg backdrop-blur-sm"
+                className="border-2 border-white/70 text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#071B3B] transition-all duration-200 text-center text-lg backdrop-blur-sm"
               >
                 Book a School Workshop
               </Link>
@@ -201,7 +201,7 @@ export default function HomePage() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-xs hover:bg-black/60 transition-colors"
           >
-            <svg className="w-4 h-4 text-[#F5C518]" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#E5A823]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
             </svg>
             <span>@codeshipacademy</span>
@@ -210,7 +210,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Differentiator Strip ── */}
-      <section className="bg-[#F5C518] py-4 overflow-hidden">
+      <section className="bg-[#E5A823] py-4 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-6 lg:gap-10">
             {[
@@ -221,8 +221,8 @@ export default function HomePage() {
               "Academic Skills",
               "DREAM. CODE. ACHIEVE.",
             ].map((item) => (
-              <span key={item} className="font-bold text-[#3D4466] text-sm md:text-base flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#3D4466] rounded-full" />
+              <span key={item} className="font-bold text-[#071B3B] text-sm md:text-base flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#071B3B] rounded-full" />
                 {item}
               </span>
             ))}
@@ -231,11 +231,11 @@ export default function HomePage() {
       </section>
 
       {/* ── Programs ── */}
-      <section className="py-20 bg-[#FAFAFA]">
+      <section className="py-20 bg-[#FAF8F4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#3D4466] mb-4">Our Programs</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#071B3B] mb-4">Our Programs</h2>
               <p className="text-gray-600 text-lg max-w-2xl mx-auto">
                 From weekly after-school classes to immersive camps, we have a program for every child and every schedule.
               </p>
@@ -254,19 +254,19 @@ export default function HomePage() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#3D4466]/70 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#071B3B]/70 to-transparent" />
                     <div className="absolute bottom-3 left-4">
-                      <span className="text-xs bg-[#F5C518] text-[#3D4466] font-bold px-2 py-1 rounded">
+                      <span className="text-xs bg-[#E5A823] text-[#071B3B] font-bold px-2 py-1 rounded">
                         {prog.age}
                       </span>
                     </div>
                   </div>
                   <div className="p-6 flex flex-col flex-1">
-                    <h3 className="font-bold text-[#3D4466] text-xl mb-2">{prog.title}</h3>
+                    <h3 className="font-bold text-[#071B3B] text-xl mb-2">{prog.title}</h3>
                     <p className="text-gray-600 text-sm flex-1 mb-4">{prog.description}</p>
                     <Link
                       href={prog.href}
-                      className="bg-[#3D4466] text-white font-semibold px-4 py-2 rounded-lg text-center hover:bg-[#2a3052] transition-colors text-sm"
+                      className="bg-[#071B3B] text-white font-semibold px-4 py-2 rounded-lg text-center hover:bg-[#2a3052] transition-colors text-sm"
                     >
                       Learn More
                     </Link>
@@ -276,7 +276,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/programs" className="text-[#3D4466] font-semibold hover:text-[#F5C518] transition-colors">
+            <Link href="/programs" className="text-[#071B3B] font-semibold hover:text-[#E5A823] transition-colors">
               View all programs →
             </Link>
           </div>
@@ -284,14 +284,14 @@ export default function HomePage() {
       </section>
 
       {/* ── Why CODEship is Different ── */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#F1EEE8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="max-w-2xl mb-16">
-              <p className="text-[#F5C518] font-bold text-sm uppercase tracking-widest mb-3">
+              <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-3">
                 What Sets Us Apart
               </p>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-[#3D4466] leading-tight mb-4">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#071B3B] leading-tight mb-4">
                 More than coding.<br />More than robotics.
               </h2>
               <p className="text-gray-500 text-lg leading-relaxed">
@@ -304,12 +304,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
             {differentiators.map((d, i) => (
               <ScrollReveal key={d.title} delay={i * 80}>
-                <div className="group flex gap-5 py-7 border-b border-gray-100 last:border-0 hover:bg-[#FAFAFA] -mx-4 px-4 rounded-xl transition-colors duration-200">
-                  <div className="shrink-0 w-9 h-9 rounded-full bg-[#F5C518]/15 border border-[#F5C518]/40 flex items-center justify-center">
-                    <span className="text-[#3D4466] font-extrabold text-xs">{String(i + 1).padStart(2, "0")}</span>
+                <div className="group flex gap-5 py-7 border-b border-gray-100 last:border-0 hover:bg-[#FAF8F4] -mx-4 px-4 rounded-xl transition-colors duration-200">
+                  <div className="shrink-0 w-9 h-9 rounded-full bg-[#E5A823]/15 border border-[#E5A823]/40 flex items-center justify-center">
+                    <span className="text-[#071B3B] font-extrabold text-xs">{String(i + 1).padStart(2, "0")}</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#3D4466] text-base mb-1 group-hover:text-[#F5C518] transition-colors duration-200">
+                    <h3 className="font-bold text-[#071B3B] text-base mb-1 group-hover:text-[#E5A823] transition-colors duration-200">
                       {d.title}
                     </h3>
                     <p className="text-gray-500 text-sm leading-relaxed">{d.desc}</p>
@@ -322,7 +322,7 @@ export default function HomePage() {
       </section>
 
       {/* ── How CODEship Works + Video ── */}
-      <section className="py-20 bg-[#3D4466]">
+      <section className="py-20 bg-[#071B3B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-14">
@@ -353,14 +353,14 @@ export default function HomePage() {
               ].map((s, i) => (
                 <ScrollReveal key={s.step} delay={i * 150}>
                   <div className="flex gap-5 items-start group">
-                    <div className="w-14 h-14 bg-[#F5C518] text-[#3D4466] rounded-full flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-lg">
+                    <div className="w-14 h-14 bg-[#E5A823] text-[#071B3B] rounded-full flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-lg">
                       {s.step}
                     </div>
                     <div className="flex-1">
                       <h4 className="font-bold text-white text-lg mb-1">{s.label}</h4>
                       <p className="text-gray-300 text-sm">{s.desc}</p>
                     </div>
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 ring-2 ring-[#F5C518]/30">
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 ring-2 ring-[#E5A823]/30">
                       <Image
                         src={s.image}
                         alt={`Step ${s.step}: ${s.label}`}
@@ -377,7 +377,7 @@ export default function HomePage() {
 
             {/* Video placeholder */}
             <ScrollReveal delay={200}>
-              <div className="bg-[#2a3052] rounded-2xl overflow-hidden border border-[#F5C518]/20 shadow-2xl">
+              <div className="bg-[#2a3052] rounded-2xl overflow-hidden border border-[#E5A823]/20 shadow-2xl">
                 <div className="relative aspect-video bg-[#1e2240] flex items-center justify-center">
                   <Image
                     src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80"
@@ -388,8 +388,8 @@ export default function HomePage() {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                   <div className="relative z-10 text-center p-6">
-                    <div className="w-16 h-16 bg-[#F5C518] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-float">
-                      <svg className="w-7 h-7 text-[#3D4466] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <div className="w-16 h-16 bg-[#E5A823] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-float">
+                      <svg className="w-7 h-7 text-[#071B3B] ml-1" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
                     </div>
@@ -399,14 +399,14 @@ export default function HomePage() {
                     </p>
                   </div>
                 </div>
-                <div className="p-4 border-t border-[#F5C518]/10">
+                <div className="p-4 border-t border-[#E5A823]/10">
                   <p className="text-gray-400 text-xs text-center">
                     Follow us on{" "}
                     <a
                       href="https://www.instagram.com/codeshipacademy"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#F5C518] hover:underline font-semibold"
+                      className="text-[#E5A823] hover:underline font-semibold"
                     >
                       @codeshipacademy
                     </a>
@@ -420,10 +420,10 @@ export default function HomePage() {
       </section>
 
       {/* ── Age-Based Program Finder ── */}
-      <section className="py-16 bg-[#F5C518]/10">
+      <section className="py-16 bg-[#E5A823]/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-[#3D4466] mb-4">
+            <h2 className="text-3xl font-bold text-[#071B3B] mb-4">
               Find the Right Program for Your Child
             </h2>
             <p className="text-gray-600 mb-8">Select your child&apos;s age to explore recommended programs:</p>
@@ -432,7 +432,7 @@ export default function HomePage() {
                 <Link
                   key={age}
                   href="/program-finder"
-                  className="bg-white border-2 border-[#3D4466] text-[#3D4466] font-semibold px-6 py-3 rounded-xl hover:bg-[#3D4466] hover:text-white transition-all duration-200 card-hover"
+                  className="bg-white border-2 border-[#071B3B] text-[#071B3B] font-semibold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-all duration-200 card-hover"
                 >
                   {age}
                 </Link>
@@ -440,7 +440,7 @@ export default function HomePage() {
             </div>
             <p className="mt-6 text-sm text-gray-500">
               Not sure where to start?{" "}
-              <Link href="/program-finder" className="text-[#F5C518] font-semibold hover:underline">
+              <Link href="/program-finder" className="text-[#E5A823] font-semibold hover:underline">
                 Take our Program Finder quiz →
               </Link>
             </p>
@@ -449,10 +449,10 @@ export default function HomePage() {
       </section>
 
       {/* ── School Partnership CTA ── */}
-      <section className="py-20 bg-[#3D4466] relative overflow-hidden">
+      <section className="py-20 bg-[#071B3B] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#F5C518]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#F5C518]/5 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#E5A823]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#E5A823]/5 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -468,14 +468,14 @@ export default function HomePage() {
                 <ul className="space-y-2 mb-8">
                   {["After-school coding clubs", "PA Day workshops", "March Break programs", "In-school STEM workshops", "Curriculum enrichment"].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-gray-300 text-sm">
-                      <span className="w-2 h-2 bg-[#F5C518] rounded-full shrink-0" />
+                      <span className="w-2 h-2 bg-[#E5A823] rounded-full shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <Link
                   href="/schools"
-                  className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-all duration-200 inline-block text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                  className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all duration-200 inline-block text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
                   Request School Partnership Info
                 </Link>
@@ -491,7 +491,7 @@ export default function HomePage() {
                   loading="lazy"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-[#3D4466]/30" />
+                <div className="absolute inset-0 bg-[#071B3B]/30" />
               </div>
             </ScrollReveal>
           </div>
@@ -502,9 +502,9 @@ export default function HomePage() {
       <TestimonialMarquee />
 
       {/* ── Newsletter ── */}
-      <section className="py-16 bg-[#3D4466] relative overflow-hidden">
+      <section className="py-16 bg-[#071B3B] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#F5C518]/5 rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#E5A823]/5 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ScrollReveal>
@@ -519,10 +519,10 @@ export default function HomePage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-20 bg-[#FAFAFA]">
+      <section className="py-20 bg-[#FAF8F4]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-[#3D4466] text-center mb-10">
+            <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">
               Frequently Asked Questions
             </h2>
             <FAQAccordion faqs={homeFaqs} />

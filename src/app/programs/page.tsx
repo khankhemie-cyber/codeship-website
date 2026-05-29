@@ -104,9 +104,9 @@ const programs = [
 
 export default function ProgramsPage() {
   return (
-    <div className="bg-[#FAFAFA]">
+    <div className="bg-[#FAF8F4]">
       {/* Hero */}
-      <section className="bg-[#3D4466] py-20">
+      <section className="bg-[#071B3B] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Programs for Every Child
@@ -119,7 +119,7 @@ export default function ProgramsPage() {
       </section>
 
       {/* Programs List */}
-      <section className="py-20">
+      <section className="py-20 bg-[#F1EEE8]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {programs.map((prog, i) => (
             <div
@@ -137,12 +137,12 @@ export default function ProgramsPage() {
                   sizes="192px"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-[#3D4466]/40" />
+                <div className="absolute inset-0 bg-[#071B3B]/40" />
               </div>
               <div className="p-8 flex-1">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <h2 className="text-2xl font-bold text-[#3D4466]">{prog.title}</h2>
-                  <span className="text-xs bg-[#F5C518]/20 text-[#3D4466] font-semibold px-2 py-1 rounded">
+                  <h2 className="text-2xl font-bold text-[#071B3B]">{prog.title}</h2>
+                  <span className="text-xs bg-[#E5A823]/20 text-[#071B3B] font-semibold px-2 py-1 rounded">
                     {prog.age}
                   </span>
                   <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{prog.format}</span>
@@ -151,14 +151,14 @@ export default function ProgramsPage() {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-5">
                   {prog.highlights.map((h) => (
                     <li key={h} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-2 h-2 bg-[#2ECC71] rounded-full shrink-0" />
+                      <span className="w-2 h-2 bg-[#138A9A] rounded-full shrink-0" />
                       {h}
                     </li>
                   ))}
                 </ul>
                 <Link
                   href={prog.href}
-                  className="bg-[#F5C518] text-[#3D4466] font-bold px-6 py-3 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
+                  className="bg-[#E5A823] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
                 >
                   Learn More
                 </Link>
@@ -169,13 +169,13 @@ export default function ProgramsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-[#3D4466] text-center">
+      <section className="py-16 bg-[#071B3B] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Not Sure Which Program?</h2>
           <p className="text-gray-300 mb-8">Take our 2-minute program finder quiz to get a personalized recommendation.</p>
           <Link
             href="/program-finder"
-            className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-colors inline-block"
+            className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
           >
             Find My Program
           </Link>

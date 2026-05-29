@@ -112,13 +112,13 @@ export default function FranchiseSelector() {
     return (
       <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in-up">
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-[#2ECC71] rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[#138A9A] rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-[#3D4466] mb-1">Your Recommended Model:</h3>
-          <h4 className="text-xl font-semibold text-[#F5C518]">{rec.title}</h4>
+          <h3 className="text-2xl font-bold text-[#071B3B] mb-1">Your Recommended Model:</h3>
+          <h4 className="text-xl font-semibold text-[#E5A823]">{rec.title}</h4>
           <p className="text-sm text-gray-500 mt-1">Investment range: {rec.investmentRange}</p>
         </div>
 
@@ -127,7 +127,7 @@ export default function FranchiseSelector() {
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
           {rec.highlights.map((h) => (
             <li key={h} className="flex items-center gap-2 text-sm text-gray-700">
-              <span className="w-2 h-2 bg-[#2ECC71] rounded-full shrink-0" />
+              <span className="w-2 h-2 bg-[#138A9A] rounded-full shrink-0" />
               {h}
             </li>
           ))}
@@ -136,13 +136,13 @@ export default function FranchiseSelector() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href={rec.href}
-            className="bg-[#F5C518] text-[#3D4466] font-semibold px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors text-center"
+            className="bg-[#E5A823] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors text-center"
           >
             Learn More
           </Link>
           <Link
             href="/franchise#kit"
-            className="border-2 border-[#3D4466] text-[#3D4466] font-semibold px-6 py-3 rounded-lg hover:bg-[#3D4466] hover:text-white transition-colors text-center"
+            className="border-2 border-[#071B3B] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#071B3B] hover:text-white transition-colors text-center"
           >
             Request Franchise Kit
           </Link>
@@ -173,20 +173,20 @@ export default function FranchiseSelector() {
         </div>
         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#F5C518] rounded-full transition-all duration-500"
+            className="h-full bg-[#E5A823] rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
-      <h3 className="text-xl font-bold text-[#3D4466] mb-6 text-center">{step.question}</h3>
+      <h3 className="text-xl font-bold text-[#071B3B] mb-6 text-center">{step.question}</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {step.options.map((option) => (
           <button
             key={option}
             onClick={() => handleAnswer(option)}
-            className="p-4 text-left border-2 border-gray-200 rounded-xl hover:border-[#F5C518] hover:bg-amber-50 transition-all duration-200 font-medium text-[#1A1A2E]"
+            className="p-4 text-left border-2 border-gray-200 rounded-xl hover:border-[#E5A823] hover:bg-[#FAF8F4] transition-all duration-200 font-medium text-[#2E3440]"
           >
             {option}
           </button>

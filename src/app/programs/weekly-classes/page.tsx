@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function WeeklyClassesPage() {
   return (
-    <div className="bg-[#FAFAFA]">
-      <section className="bg-[#3D4466] py-20">
+    <div className="bg-[#FAF8F4]">
+      <section className="bg-[#071B3B] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-[#F5C518] font-semibold mb-2">Programs</p>
+          <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Weekly Coding &amp; STEM Classes</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
             Ongoing weekly classes where children build real projects, develop coding skills, and grow their creative
@@ -31,7 +31,7 @@ export default function WeeklyClassesPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">What Happens in a Weekly Class?</h2>
+              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">What Happens in a Weekly Class?</h2>
               <p className="text-gray-600 mb-4">
                 Every CODEship weekly class is structured around project-based learning. Children don&apos;t follow tutorials —
                 they bring their own ideas and build them into real digital projects with guidance from our instructors.
@@ -41,19 +41,19 @@ export default function WeeklyClassesPage() {
                 Children share progress with each other and receive feedback from instructors in a supportive, encouraging
                 environment.
               </p>
-              <h3 className="font-bold text-[#3D4466] mb-3">What Children Build</h3>
+              <h3 className="font-bold text-[#071B3B] mb-3">What Children Build</h3>
               <ul className="space-y-2 mb-6">
                 {["Original games and interactive experiences", "Websites and web apps", "Animations and digital stories",
                   "AI projects and experiments", "App prototypes", "Robotics and physical computing projects"].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-gray-600 text-sm">
-                    <span className="w-2 h-2 bg-[#2ECC71] rounded-full shrink-0" />
+                    <span className="w-2 h-2 bg-[#138A9A] rounded-full shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-[#3D4466] mb-4">Program Levels</h2>
+              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">Program Levels</h2>
               {[
                 { level: "Explorers", age: "Ages 5–7", desc: "Introduction to coding concepts through visual block programming, games, and creative activities. ScratchJr, unplugged activities." },
                 { level: "Builders", age: "Ages 7–10", desc: "Scratch, block-based coding, game design fundamentals, simple web projects, and introductory robotics." },
@@ -62,8 +62,8 @@ export default function WeeklyClassesPage() {
               ].map((lvl) => (
                 <div key={lvl.level} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-bold text-[#3D4466]">{lvl.level}</h3>
-                    <span className="text-xs bg-[#F5C518]/20 text-[#3D4466] font-semibold px-2 py-0.5 rounded">{lvl.age}</span>
+                    <h3 className="font-bold text-[#071B3B]">{lvl.level}</h3>
+                    <span className="text-xs bg-[#E5A823]/20 text-[#071B3B] font-semibold px-2 py-0.5 rounded">{lvl.age}</span>
                   </div>
                   <p className="text-gray-600 text-sm">{lvl.desc}</p>
                 </div>
@@ -73,15 +73,15 @@ export default function WeeklyClassesPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-[#3D4466] text-center">
+      <section className="py-16 bg-[#071B3B] text-center">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Enroll?</h2>
           <p className="text-gray-300 mb-6">Find weekly classes near you and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/contact" className="bg-[#F5C518] text-[#3D4466] font-bold px-8 py-4 rounded-xl hover:bg-yellow-400 transition-colors">
+            <Link href="/contact" className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
               Register Now
             </Link>
-            <Link href="/locations" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#3D4466] transition-colors">
+            <Link href="/locations" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#071B3B] transition-colors">
               Find a Location
             </Link>
           </div>

@@ -24,12 +24,12 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
         <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <button
             onClick={() => toggle(index)}
-            className="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-[#3D4466] hover:bg-gray-50 transition-colors"
+            className="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-[#071B3B] hover:bg-gray-50 transition-colors"
             aria-expanded={openIndex === index}
           >
             <span>{faq.question}</span>
             <span className={`ml-4 shrink-0 transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`}>
-              <svg className="w-5 h-5 text-[#F5C518]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 text-[#E5A823]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </span>
