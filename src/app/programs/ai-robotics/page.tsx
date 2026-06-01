@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AIRoboticsPage() {
   return (
     <div className="bg-[#FAF8F4]">
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
@@ -34,7 +34,7 @@ export default function AIRoboticsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
             <div>
               <p className="text-[#138A9A] font-semibold text-sm mb-1 uppercase tracking-wide">Technology &amp; AI</p>
-              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">The AI Curriculum</h2>
+              <h2 className="text-2xl font-bold text-[#001532] mb-4">The AI Curriculum</h2>
               <p className="text-gray-600 mb-4">
                 Our AI program teaches children how artificial intelligence actually works — through hands-on projects
                 they build themselves. From training simple image recognition models to building AI-powered applications,
@@ -53,7 +53,7 @@ export default function AIRoboticsPage() {
             </div>
             <div>
               <p className="text-[#6E43A8] font-semibold text-sm mb-1 uppercase tracking-wide">Creativity &amp; Engineering</p>
-              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">The Robotics Curriculum</h2>
+              <h2 className="text-2xl font-bold text-[#001532] mb-4">The Robotics Curriculum</h2>
               <p className="text-gray-600 mb-4">
                 Robotics at CODEship combines physical engineering with programming. Children assemble, program, and
                 test robots through progressively challenging missions that develop both technical skill and creative
@@ -71,7 +71,7 @@ export default function AIRoboticsPage() {
             </div>
           </div>
 
-          <div className="bg-[#071B3B] rounded-2xl p-8 text-white text-center border-l-4 border-[#138A9A]">
+          <div className="bg-[#001532] rounded-2xl p-8 text-white text-center border-l-4 border-[#138A9A]">
             <h2 className="text-2xl font-bold mb-4">Why <span className="text-[#138A9A]">AI Literacy</span> Matters Now</h2>
             <p className="text-gray-300 max-w-2xl mx-auto">
               Children who understand AI are better equipped to use it critically, create with it confidently, and
@@ -84,13 +84,13 @@ export default function AIRoboticsPage() {
 
       <section className="py-16 bg-[#E5A823] text-center">
         <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Enroll in AI &amp; Robotics</h2>
-          <p className="text-[#071B3B]/70 mb-6">Find AI &amp; Robotics programs in your area and register today.</p>
+          <h2 className="text-3xl font-bold text-[#001532] mb-4">Enroll in AI &amp; Robotics</h2>
+          <p className="text-[#001532]/70 mb-6">Find AI &amp; Robotics programs in your area and register today.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors">
+            <Link href="/register" className="bg-[#001532] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#001532] transition-colors">
               Register Now
             </Link>
-            <Link href="/locations" className="border-2 border-[#071B3B] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-colors">
+            <Link href="/locations" className="border-2 border-[#001532] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#001532] hover:text-white transition-colors">
               Find a Location
             </Link>
           </div>

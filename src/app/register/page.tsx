@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <div className="bg-[#FAF8F4]">
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Register Now
@@ -25,7 +25,7 @@ export default function RegisterPage() {
       <section className="py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-[#071B3B] mb-6 text-center">Program Registration</h2>
+            <h2 className="text-2xl font-bold text-[#001532] mb-6 text-center">Program Registration</h2>
             <RegistrationForm />
           </div>
         </div>

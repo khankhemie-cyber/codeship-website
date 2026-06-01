@@ -94,7 +94,7 @@ export default function CityPage({ params }: Props) {
       />
 
       <div className="bg-[#FAF8F4]">
-        <section className="bg-[#071B3B] py-20">
+        <section className="bg-[#001532] py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <Link href="/locations" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors mb-4 inline-block">
               ← All Locations
@@ -113,7 +113,7 @@ export default function CityPage({ params }: Props) {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
               <div>
-                <h2 className="text-2xl font-bold text-[#071B3B] mb-4">Programs in {cityName}</h2>
+                <h2 className="text-2xl font-bold text-[#001532] mb-4">Programs in {cityName}</h2>
                 <p className="text-gray-600 mb-6">
                   CODEship Academy serves the {cityName} community through multiple program formats — making quality
                   coding and STEM education accessible to more children and families.
@@ -130,7 +130,7 @@ export default function CityPage({ params }: Props) {
                     <Link key={prog.title} href={prog.href} className="flex items-start gap-3 bg-white rounded-xl p-4 hover:shadow-md transition-shadow border border-gray-100">
                       <span className="w-2 h-2 bg-[#138A9A] rounded-full mt-1.5 shrink-0" />
                       <div>
-                        <p className="font-semibold text-[#071B3B] text-sm">{prog.title}</p>
+                        <p className="font-semibold text-[#001532] text-sm">{prog.title}</p>
                         <p className="text-gray-500 text-xs">{prog.desc}</p>
                       </div>
                     </Link>
@@ -154,30 +154,30 @@ export default function CityPage({ params }: Props) {
 
                 {/* Register CTA */}
                 <div className="bg-[#E5A823] rounded-2xl p-6 text-center">
-                  <h3 className="font-bold text-[#071B3B] text-lg mb-2">Ready to Enroll?</h3>
-                  <p className="text-[#071B3B]/70 text-sm mb-4">
+                  <h3 className="font-bold text-[#001532] text-lg mb-2">Ready to Enroll?</h3>
+                  <p className="text-[#001532]/70 text-sm mb-4">
                     Get started with CODEship Academy in {cityName}. Contact us to check availability and register.
                   </p>
-                  <Link href="/register" className="bg-[#071B3B] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] transition-colors inline-block text-sm">
+                  <Link href="/register" className="bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#001532] transition-colors inline-block text-sm">
                     Register Now
                   </Link>
                 </div>
 
                 {/* School CTA */}
-                <div className="bg-[#071B3B] rounded-2xl p-6 text-white">
+                <div className="bg-[#001532] rounded-2xl p-6 text-white">
                   <h3 className="font-bold text-lg mb-2">Schools in {cityName}</h3>
                   <p className="text-gray-300 text-sm mb-4">
                     Interested in bringing CODEship programs to your school in {cityName}? We partner with schools
                     across the region.
                   </p>
-                  <Link href="/schools" className="bg-[#E5A823] text-[#071B3B] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-colors inline-block text-sm">
+                  <Link href="/schools" className="bg-[#E5A823] text-[#001532] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-colors inline-block text-sm">
                     School Partnership Info
                   </Link>
                 </div>
 
                 {/* Franchise CTA */}
                 <div className="bg-[#138A9A]/10 rounded-2xl p-6">
-                  <h3 className="font-bold text-[#071B3B] mb-2">Franchise Opportunity in {cityName}</h3>
+                  <h3 className="font-bold text-[#001532] mb-2">Franchise Opportunity in {cityName}</h3>
                   <p className="text-gray-600 text-sm mb-4">
                     Interested in bringing CODEship Academy to {cityName} as a franchise owner? Contact us to learn
                     about territory availability.
@@ -193,7 +193,7 @@ export default function CityPage({ params }: Props) {
             </div>
 
             {/* FAQ */}
-            <h2 className="text-2xl font-bold text-[#071B3B] mb-6">{cityName} FAQ</h2>
+            <h2 className="text-2xl font-bold text-[#001532] mb-6">{cityName} FAQ</h2>
             <FAQAccordion faqs={localFaqs} />
           </div>
         </section>
