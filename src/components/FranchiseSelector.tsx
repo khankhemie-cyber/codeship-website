@@ -117,7 +117,7 @@ export default function FranchiseSelector() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-[#071B3B] mb-1">Your Recommended Model:</h3>
+          <h3 className="text-2xl font-bold text-[#001532] mb-1">Your Recommended Model:</h3>
           <h4 className="text-xl font-semibold text-[#E5A823]">{rec.title}</h4>
           <p className="text-sm text-gray-500 mt-1">Investment range: {rec.investmentRange}</p>
         </div>
@@ -136,13 +136,13 @@ export default function FranchiseSelector() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href={rec.href}
-            className="bg-[#E5A823] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors text-center"
+            className="bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors text-center"
           >
             Learn More
           </Link>
           <Link
             href="/franchise#kit"
-            className="border-2 border-[#071B3B] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#071B3B] hover:text-white transition-colors text-center"
+            className="border-2 border-[#001532] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#001532] hover:text-white transition-colors text-center"
           >
             Request Franchise Kit
           </Link>
@@ -179,7 +179,7 @@ export default function FranchiseSelector() {
         </div>
       </div>
 
-      <h3 className="text-xl font-bold text-[#071B3B] mb-6 text-center">{step.question}</h3>
+      <h3 className="text-xl font-bold text-[#001532] mb-6 text-center">{step.question}</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {step.options.map((option) => (
