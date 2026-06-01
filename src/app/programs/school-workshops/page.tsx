@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function SchoolWorkshopsPage() {
   return (
     <div className="bg-[#FAF8F4]">
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">School Workshops &amp; Partnerships</h1>
@@ -32,13 +32,13 @@ export default function SchoolWorkshopsPage() {
               { title: "March Break & Summer Programs", desc: "Hosted at your school during school breaks — a fantastic resource for your school community and a service to working parents." },
             ].map((prog) => (
               <div key={prog.title} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="font-bold text-[#071B3B] text-lg mb-2">{prog.title}</h2>
+                <h2 className="font-bold text-[#001532] text-lg mb-2">{prog.title}</h2>
                 <p className="text-gray-600 text-sm">{prog.desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-[#071B3B] rounded-2xl p-8 text-white">
+          <div className="bg-[#001532] rounded-2xl p-8 text-white">
             <h2 className="text-2xl font-bold mb-6">Why Schools Partner with CODEship</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
@@ -61,13 +61,13 @@ export default function SchoolWorkshopsPage() {
 
       <section className="py-16 bg-[#E5A823] text-center">
         <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Bring CODEship to Your School</h2>
-          <p className="text-[#071B3B]/70 mb-6">We&apos;ll reach out to discuss the right program for your school community.</p>
+          <h2 className="text-3xl font-bold text-[#001532] mb-4">Bring CODEship to Your School</h2>
+          <p className="text-[#001532]/70 mb-6">We&apos;ll reach out to discuss the right program for your school community.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
+            <Link href="/register" className="bg-[#001532] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#001532] transition-colors inline-block">
               Register Now
             </Link>
-            <Link href="/schools" className="border-2 border-[#071B3B] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-colors inline-block">
+            <Link href="/schools" className="border-2 border-[#001532] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#001532] hover:text-white transition-colors inline-block">
               School Partnership Info
             </Link>
           </div>

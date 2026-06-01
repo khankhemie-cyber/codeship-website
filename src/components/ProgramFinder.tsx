@@ -106,25 +106,25 @@ export default function ProgramFinder() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-[#071B3B] mb-2">We recommend:</h3>
+        <h3 className="text-2xl font-bold text-[#001532] mb-2">We recommend:</h3>
         <h4 className="text-xl font-semibold text-[#E5A823] mb-4">{rec.title}</h4>
         <p className="text-gray-600 mb-6 max-w-lg mx-auto">{rec.description}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/register"
-            className="bg-[#071B3B] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#071B3B] transition-colors"
+            className="bg-[#001532] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#001532] transition-colors"
           >
             Register Now
           </Link>
           <Link
             href={rec.href}
-            className="bg-[#E5A823] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors"
+            className="bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors"
           >
             Learn More
           </Link>
           <button
             onClick={reset}
-            className="border-2 border-[#071B3B] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#071B3B] hover:text-white transition-colors"
+            className="border-2 border-[#001532] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#001532] hover:text-white transition-colors"
           >
             Start Over
           </button>
@@ -152,7 +152,7 @@ export default function ProgramFinder() {
         </div>
       </div>
 
-      <h3 className="text-xl font-bold text-[#071B3B] mb-6 text-center">{step.question}</h3>
+      <h3 className="text-xl font-bold text-[#001532] mb-6 text-center">{step.question}</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {step.options.map((option) => (

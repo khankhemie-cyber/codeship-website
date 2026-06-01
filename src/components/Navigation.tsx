@@ -33,20 +33,15 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png"
+              src="/logo-nav.png"
               alt="CODEship Academy"
-              width={44}
-              height={44}
-              className="rounded-full"
+              width={120}
+              height={120}
+              className="h-12 w-auto object-contain"
+              priority
             />
-            <div className="hidden sm:flex flex-col leading-tight">
-              <span className="text-base font-extrabold text-[#071B3B] tracking-tight">
-                CODE<span className="text-[#E5A823]">ship</span>
-              </span>
-              <span className="text-xs font-semibold text-[#071B3B] -mt-0.5">Academy</span>
-            </div>
           </Link>
 
           {/* Desktop Nav */}
@@ -63,7 +58,7 @@ export default function Navigation() {
             ))}
             <Link
               href="/program-finder"
-              className="bg-[#E5A823] text-[#071B3B] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-sm shadow-sm hover:shadow-md"
+              className="bg-[#E5A823] text-[#001532] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-sm shadow-sm hover:shadow-md"
             >
               Find a Program
             </Link>
@@ -71,7 +66,7 @@ export default function Navigation() {
 
           {/* Mobile hamburger */}
           <button
-            className="lg:hidden p-2 rounded-md text-[#071B3B]"
+            className="lg:hidden p-2 rounded-md text-[#001532]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -97,7 +92,7 @@ export default function Navigation() {
           ))}
           <Link
             href="/program-finder"
-            className="block bg-[#E5A823] text-[#071B3B] font-bold px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
+            className="block bg-[#E5A823] text-[#001532] font-bold px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
             onClick={() => setIsOpen(false)}
           >
             Find a Program

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CampsPage() {
   return (
     <div className="bg-[#FAF8F4]">
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
@@ -34,7 +34,7 @@ export default function CampsPage() {
             ].map((camp) => (
               <div key={camp.title} className="bg-white rounded-2xl shadow-md p-6">
                 <div className="text-4xl mb-3">{camp.icon}</div>
-                <h2 className="font-bold text-[#071B3B] text-xl mb-1">{camp.title}</h2>
+                <h2 className="font-bold text-[#001532] text-xl mb-1">{camp.title}</h2>
                 <p className="text-xs text-gray-400 mb-3">{camp.dates} · {camp.duration}</p>
                 <p className="text-gray-600 text-sm">{camp.desc}</p>
               </div>
@@ -42,7 +42,7 @@ export default function CampsPage() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-[#071B3B] mb-6">Camp Themes &amp; Tracks</h2>
+            <h2 className="text-2xl font-bold text-[#001532] mb-6">Camp Themes &amp; Tracks</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { theme: "Game Design Studio", desc: "Design, build, and play original games using visual and text-based coding tools.", accent: "border-l-4 border-[#138A9A]" },
@@ -53,7 +53,7 @@ export default function CampsPage() {
                 { theme: "Digital Storytellers", desc: "Create interactive stories, animations, and digital narratives.", accent: "border-l-4 border-[#6E43A8]" },
               ].map((t) => (
                 <div key={t.theme} className={`bg-[#FAF8F4] rounded-xl p-4 border border-gray-100 ${t.accent}`}>
-                  <h3 className="font-bold text-[#071B3B] mb-1 text-sm">{t.theme}</h3>
+                  <h3 className="font-bold text-[#001532] mb-1 text-sm">{t.theme}</h3>
                   <p className="text-gray-500 text-xs">{t.desc}</p>
                 </div>
               ))}
@@ -64,13 +64,13 @@ export default function CampsPage() {
 
       <section className="py-16 bg-[#E5A823]">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Register for a Camp</h2>
-          <p className="text-[#071B3B]/70 mb-6">Find upcoming camp dates in your area and secure your child&apos;s spot.</p>
+          <h2 className="text-3xl font-bold text-[#001532] mb-4">Register for a Camp</h2>
+          <p className="text-[#001532]/70 mb-6">Find upcoming camp dates in your area and secure your child&apos;s spot.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors">
+            <Link href="/register" className="bg-[#001532] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#001532] transition-colors">
               Register Now
             </Link>
-            <Link href="/locations" className="border-2 border-[#071B3B] text-[#071B3B] font-bold px-6 py-3 rounded-xl hover:bg-[#071B3B] hover:text-white transition-colors">
+            <Link href="/locations" className="border-2 border-[#001532] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#001532] hover:text-white transition-colors">
               Find a Location
             </Link>
           </div>

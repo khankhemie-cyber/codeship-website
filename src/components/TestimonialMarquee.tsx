@@ -46,7 +46,7 @@ export default function TestimonialMarquee() {
   return (
     <section className="py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-        <h2 className="text-3xl font-bold text-[#071B3B]">What Families Are Saying</h2>
+        <h2 className="text-3xl font-bold text-[#001532]">What Families Are Saying</h2>
       </div>
 
       <div className="relative">
@@ -69,7 +69,7 @@ export default function TestimonialMarquee() {
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-4">&ldquo;{t.quote}&rdquo;</p>
               <div className="border-t border-gray-100 pt-3">
-                <p className="font-bold text-[#071B3B] text-sm">{t.name}</p>
+                <p className="font-bold text-[#001532] text-sm">{t.name}</p>
                 <p className="text-gray-400 text-xs">{t.role}</p>
               </div>
             </div>

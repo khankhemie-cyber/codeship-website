@@ -38,7 +38,7 @@ export default function FranchisePage() {
   return (
     <div className="bg-[#FAF8F4]">
       {/* Hero */}
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Build the Future in Your Community
@@ -48,10 +48,10 @@ export default function FranchisePage() {
             building the next generation of creators, thinkers, and innovators.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="#kit" className="bg-[#E5A823] text-[#071B3B] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
+            <Link href="#kit" className="bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
               Request Franchise Kit
             </Link>
-            <Link href="#selector" className="border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#071B3B] transition-colors">
+            <Link href="#selector" className="border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#001532] transition-colors">
               Find Your Model
             </Link>
           </div>
@@ -62,7 +62,7 @@ export default function FranchisePage() {
       <section className="py-20 bg-[#F1EEE8]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Why CODEship Academy?</h2>
+            <h2 className="text-3xl font-bold text-[#001532] mb-4">Why CODEship Academy?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               A franchise opportunity built on a curriculum that children love, a model that serves communities, and a
               support structure designed to help you succeed.
@@ -71,7 +71,7 @@ export default function FranchisePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { title: "Growing Market", desc: "Parent demand for coding, AI, and STEM education for children is growing rapidly across Canada.", dot: "bg-[#E57A1F]" },
-              { title: "Mission-Driven", desc: "Build a business that genuinely serves your community and shapes the next generation of creators.", dot: "bg-[#071B3B]" },
+              { title: "Mission-Driven", desc: "Build a business that genuinely serves your community and shapes the next generation of creators.", dot: "bg-[#001532]" },
               { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations.", dot: "bg-[#138A9A]" },
               { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families.", dot: "bg-[#138A9A]" },
               { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support.", dot: "bg-[#6E43A8]" },
@@ -79,7 +79,7 @@ export default function FranchisePage() {
             ].map((w) => (
               <div key={w.title} className="bg-[#FAF8F4] rounded-2xl p-6">
                 <div className={`w-3 h-3 ${w.dot} rounded-full mb-4`} />
-                <h3 className="font-bold text-[#071B3B] mb-2">{w.title}</h3>
+                <h3 className="font-bold text-[#001532] mb-2">{w.title}</h3>
                 <p className="text-gray-600 text-sm">{w.desc}</p>
               </div>
             ))}
@@ -90,7 +90,7 @@ export default function FranchisePage() {
       {/* Three Models */}
       <section className="py-20 bg-[#FAF8F4]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">Three Franchise Models</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-10">Three Franchise Models</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {[
               {
@@ -124,12 +124,12 @@ export default function FranchisePage() {
             ].map((model) => (
               <div
                 key={model.title}
-                className={`rounded-2xl p-6 ${model.featured ? "bg-[#071B3B] text-white shadow-xl scale-105" : "bg-white shadow-md"} ${model.topBorder}`}
+                className={`rounded-2xl p-6 ${model.featured ? "bg-[#001532] text-white shadow-xl scale-105" : "bg-white shadow-md"} ${model.topBorder}`}
               >
                 {model.featured && (
                   <div className="text-[#E5A823] text-xs font-bold uppercase tracking-wide mb-2">Most Popular</div>
                 )}
-                <h3 className={`font-bold text-xl mb-1 ${model.featured ? "text-white" : "text-[#071B3B]"}`}>{model.title}</h3>
+                <h3 className={`font-bold text-xl mb-1 ${model.featured ? "text-white" : "text-[#001532]"}`}>{model.title}</h3>
                 <p className={`text-2xl font-bold mb-1 ${model.featured ? "text-[#E5A823]" : "text-[#E5A823]"}`}>{model.investment}</p>
                 <p className={`text-xs mb-4 ${model.featured ? "text-gray-400" : "text-gray-500"}`}>{model.schedule}</p>
                 <ul className="space-y-2 mb-6">
@@ -144,8 +144,8 @@ export default function FranchisePage() {
                   href={model.href}
                   className={`block text-center font-bold px-4 py-3 rounded-xl transition-colors ${
                     model.featured
-                      ? "bg-[#E5A823] text-[#071B3B] hover:bg-[#d4941f]"
-                      : "border-2 border-[#071B3B] text-[#071B3B] hover:bg-[#071B3B] hover:text-white"
+                      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
+                      : "border-2 border-[#001532] text-[#001532] hover:bg-[#001532] hover:text-white"
                   }`}
                 >
                   Learn More
@@ -157,7 +157,7 @@ export default function FranchisePage() {
           {/* Comparison table */}
           <div className="bg-white rounded-2xl shadow-md overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-[#071B3B] text-white">
+              <thead className="bg-[#001532] text-white">
                 <tr>
                   <th className="p-4 text-left">Feature</th>
                   <th className="p-4 text-center">Mobile</th>
@@ -177,7 +177,7 @@ export default function FranchisePage() {
                   ["Sub-Franchisees", "No", "No", "Yes"],
                 ].map(([feature, mobile, studio, regional]) => (
                   <tr key={feature} className="hover:bg-gray-50">
-                    <td className="p-4 font-medium text-[#071B3B]">{feature}</td>
+                    <td className="p-4 font-medium text-[#001532]">{feature}</td>
                     <td className="p-4 text-center text-gray-600">{mobile}</td>
                     <td className="p-4 text-center text-gray-600 bg-[#FAF8F4]">{studio}</td>
                     <td className="p-4 text-center text-gray-600">{regional}</td>
@@ -192,7 +192,7 @@ export default function FranchisePage() {
       {/* Ideal Partners */}
       <section className="py-20 bg-[#F1EEE8]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">Ideal Franchise Partners</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-10">Ideal Franchise Partners</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               "Former or current educators and school staff",
@@ -214,7 +214,7 @@ export default function FranchisePage() {
       {/* What's included */}
       <section className="py-20 bg-[#FAF8F4]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-10">What&apos;s Included</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-10">What&apos;s Included</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { title: "Full Curriculum", desc: "Complete, age-graded curriculum across all programs." },
@@ -227,7 +227,7 @@ export default function FranchisePage() {
               { title: "Curriculum Updates", desc: "Regular curriculum updates to stay current with technology trends." },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-xl p-5 shadow-sm border-l-4 border-[#E5A823]">
-                <h3 className="font-bold text-[#071B3B] mb-1 text-sm">{item.title}</h3>
+                <h3 className="font-bold text-[#001532] mb-1 text-sm">{item.title}</h3>
                 <p className="text-gray-500 text-xs">{item.desc}</p>
               </div>
             ))}
@@ -238,7 +238,7 @@ export default function FranchisePage() {
       {/* Revenue Streams */}
       <section className="py-16 bg-[#F1EEE8]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-4">Revenue Streams</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-4">Revenue Streams</h2>
           <p className="text-gray-500 text-center text-sm mb-8">
             CODEship Academy franchisees can access multiple revenue streams across the business. No projections or
             earnings representations are made or implied.
@@ -257,14 +257,14 @@ export default function FranchisePage() {
       {/* Franchise Selector */}
       <section className="py-20 bg-[#FAF8F4]" id="selector">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-4">Find Your Franchise Model</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-4">Find Your Franchise Model</h2>
           <p className="text-gray-600 text-center mb-8">Answer 4 questions to get a personalized recommendation.</p>
           <FranchiseSelector />
         </div>
       </section>
 
       {/* Franchise Kit Form */}
-      <section className="py-20 bg-[#071B3B]" id="kit">
+      <section className="py-20 bg-[#001532]" id="kit">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white text-center mb-4">Request Your Franchise Kit</h2>
           <p className="text-gray-300 text-center mb-8">
@@ -277,7 +277,7 @@ export default function FranchisePage() {
       {/* FAQ */}
       <section className="py-16 bg-[#FAF8F4]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-[#071B3B] text-center mb-8">Franchise FAQ</h2>
+          <h2 className="text-3xl font-bold text-[#001532] text-center mb-8">Franchise FAQ</h2>
           <FAQAccordion faqs={franchiseFaqs} />
           <p className="text-xs text-gray-400 text-center mt-6">
             This page is for informational purposes only and does not constitute a franchise offering. Franchise

@@ -63,7 +63,7 @@
   }
 
   .hero-gradient {
-    background: linear-gradient(135deg, #071B3B 0%, #2a3052 50%, #1e2240 100%);
+    background: linear-gradient(135deg, #001532 0%, #2a3052 50%, #1e2240 100%);
   }
 
   .shimmer {
@@ -172,7 +172,7 @@
 .article-content h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #071B3B;
+  color: #001532;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
@@ -180,7 +180,7 @@
 .article-content h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #071B3B;
+  color: #001532;
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
 }
@@ -202,7 +202,7 @@
 
 .article-content strong {
   font-weight: 600;
-  color: #071B3B;
+  color: #001532;
 }
 
 .article-content a {
@@ -212,19 +212,19 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-[#E5A823] text-[#071B3B] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors duration-200 inline-block;
+    @apply bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors duration-200 inline-block;
   }
 
   .btn-secondary {
-    @apply border-2 border-[#E5A823] text-[#E5A823] font-semibold px-6 py-3 rounded-lg hover:bg-[#E5A823] hover:text-[#071B3B] transition-colors duration-200 inline-block;
+    @apply border-2 border-[#E5A823] text-[#E5A823] font-semibold px-6 py-3 rounded-lg hover:bg-[#E5A823] hover:text-[#001532] transition-colors duration-200 inline-block;
   }
 
   .btn-outline-white {
-    @apply border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-[#071B3B] transition-colors duration-200 inline-block;
+    @apply border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-[#001532] transition-colors duration-200 inline-block;
   }
 
   .section-heading {
-    @apply text-3xl md:text-4xl font-bold text-[#071B3B] mb-4;
+    @apply text-3xl md:text-4xl font-bold text-[#001532] mb-4;
   }
 
   .section-subheading {
