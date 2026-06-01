@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   creator: "CODEship Academy",
   metadataBase: new URL("https://www.codeshipacademy.com"),
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo-nav.png",
+    apple: "/logo-nav.png",
   },
   openGraph: {
     type: "website",
@@ -36,10 +36,10 @@ export const metadata: Metadata = {
       "Where curiosity becomes creation. CODEship Academy helps children build real digital projects through hands-on project-based learning.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=80",
+        url: "/logo-banner.png",
         width: 1200,
         height: 630,
-        alt: "Children learning coding at CODEship Academy",
+        alt: "CODEship Academy — Dream. Code. Achieve.",
       },
     ],
   },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "CODEship Academy | Kids Coding, AI & STEM Programs",
     description:
       "Where curiosity becomes creation. CODEship Academy helps children build real digital projects.",
-    images: ["https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=80"],
+    images: ["/logo-banner.png"],
   },
   robots: {
     index: true,

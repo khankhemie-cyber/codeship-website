@@ -23,7 +23,7 @@ export default function CookieBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#071B3B] text-white p-4 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#001532] text-white p-4 shadow-lg">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-gray-200">
           We use cookies to improve your experience on our website. By continuing, you agree to our use of cookies.{" "}
@@ -40,7 +40,7 @@ export default function CookieBanner() {
           </button>
           <button
             onClick={accept}
-            className="text-sm px-4 py-2 bg-[#E5A823] text-[#071B3B] font-semibold rounded-lg hover:bg-[#d4941f] transition-colors"
+            className="text-sm px-4 py-2 bg-[#E5A823] text-[#001532] font-semibold rounded-lg hover:bg-[#d4941f] transition-colors"
           >
             Accept
           </button>

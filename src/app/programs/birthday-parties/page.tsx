@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function BirthdayPartiesPage() {
   return (
     <div className="bg-[#FAF8F4]">
-      <section className="bg-[#071B3B] py-20">
+      <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#E5A823] font-semibold mb-2">Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
@@ -33,7 +33,7 @@ export default function BirthdayPartiesPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
             <div>
-              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">How It Works</h2>
+              <h2 className="text-2xl font-bold text-[#001532] mb-4">How It Works</h2>
               <div className="space-y-5">
                 {[
                   { step: "1", title: "Choose a Theme", desc: "Pick a coding theme — Game Design, Animation, AI Art, or Web Design." },
@@ -41,11 +41,11 @@ export default function BirthdayPartiesPage() {
                   { step: "3", title: "Share & Celebrate", desc: "The last 30 minutes is for showing off creations, celebrating the birthday, and digital takeaways." },
                 ].map((s) => (
                   <div key={s.step} className="flex gap-4">
-                    <div className="w-10 h-10 bg-[#E5A823] text-[#071B3B] rounded-full flex items-center justify-center font-bold shrink-0">
+                    <div className="w-10 h-10 bg-[#E5A823] text-[#001532] rounded-full flex items-center justify-center font-bold shrink-0">
                       {s.step}
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#071B3B]">{s.title}</h3>
+                      <h3 className="font-bold text-[#001532]">{s.title}</h3>
                       <p className="text-gray-600 text-sm">{s.desc}</p>
                     </div>
                   </div>
@@ -53,7 +53,7 @@ export default function BirthdayPartiesPage() {
               </div>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-md">
-              <h2 className="text-2xl font-bold text-[#071B3B] mb-4">What&apos;s Included</h2>
+              <h2 className="text-2xl font-bold text-[#001532] mb-4">What&apos;s Included</h2>
               <ul className="space-y-3">
                 {[
                   "2 hours with a dedicated CODEship instructor",
@@ -75,7 +75,7 @@ export default function BirthdayPartiesPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
             {[
-              { label: "Game Design", bg: "bg-[#071B3B]" },
+              { label: "Game Design", bg: "bg-[#001532]" },
               { label: "Animation", bg: "bg-[#6E43A8]" },
               { label: "AI Art", bg: "bg-[#138A9A]" },
               { label: "Web Design", bg: "bg-[#E57A1F]" },
@@ -90,9 +90,9 @@ export default function BirthdayPartiesPage() {
 
       <section className="py-16 bg-[#E5A823] text-center">
         <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-[#071B3B] mb-4">Book a Birthday Party</h2>
-          <p className="text-[#071B3B]/70 mb-6">Contact us to check availability and book your CODEship birthday party.</p>
-          <Link href="/register" className="bg-[#071B3B] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#071B3B] transition-colors inline-block">
+          <h2 className="text-3xl font-bold text-[#001532] mb-4">Book a Birthday Party</h2>
+          <p className="text-[#001532]/70 mb-6">Contact us to check availability and book your CODEship birthday party.</p>
+          <Link href="/register" className="bg-[#001532] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#001532] transition-colors inline-block">
             Register Now
           </Link>
         </div>

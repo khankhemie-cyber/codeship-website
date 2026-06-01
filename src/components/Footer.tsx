@@ -3,25 +3,19 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#071B3B] text-white">
+    <footer className="bg-[#001532] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <Link href="/" className="inline-flex items-center space-x-3 mb-4">
+            <Link href="/" className="inline-block mb-4">
               <Image
-                src="/logo.png"
+                src="/logo-footer.png"
                 alt="CODEship Academy"
-                width={50}
-                height={50}
-                className="rounded-full"
+                width={140}
+                height={140}
+                className="h-24 w-auto object-contain"
               />
-              <div className="flex flex-col leading-tight">
-                <span className="text-lg font-extrabold text-white tracking-tight">
-                  CODE<span className="text-[#E5A823]">ship</span>
-                </span>
-                <span className="text-xs font-semibold text-gray-300 -mt-0.5">Academy</span>
-              </div>
             </Link>
             <p className="text-[#E5A823] text-sm font-bold mb-1">DREAM. CODE. ACHIEVE.</p>
             <p className="text-gray-300 text-xs mb-1">Future Skills Start Here.</p>
