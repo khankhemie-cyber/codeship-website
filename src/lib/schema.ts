@@ -4,7 +4,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
-    logo: "https://www.codeshipacademy.com/logo.png",
+    logo: "https://www.codeshipacademy.com/logo-nav.png",
     description:
       "CODEship Academy offers children's coding, AI, and STEM education programs through weekly classes, camps, and school workshops.",
     address: {
@@ -60,7 +60,7 @@ export function articleSchema(article: {
       name: "CODEship Academy",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.codeshipacademy.com/logo.png",
+        url: "https://www.codeshipacademy.com/logo-nav.png",
       },
     },
     url: `https://www.codeshipacademy.com/resources/${article.slug}`,
