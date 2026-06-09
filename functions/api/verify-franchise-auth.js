@@ -1,15 +1,11 @@
-interface Env {
-  [key: string]: string;
-}
-
-// Env var naming: FRANCHISE_PASSWORD_TOM_CHE for personKey "tom-che"
-function envKey(personKey: string): string {
+// Env var pattern: FRANCHISE_PASSWORD_TOM_CHE for personKey "tom-che"
+function envKey(personKey) {
   return "FRANCHISE_PASSWORD_" + personKey.toUpperCase().replace(/-/g, "_");
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export async function onRequestPost(context) {
   try {
-    const body = await context.request.json() as { password?: string; personKey?: string };
+    const body = await context.request.json();
     const { password, personKey } = body;
 
     if (!personKey || !password) {
@@ -18,7 +14,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     const secret = context.env[envKey(personKey)];
     if (!secret) {
-      return Response.json({ ok: false }, { status: 500 });
+      return Response.json({ ok: false, error: "not_configured" }, { status: 500 });
     }
 
     if (password === secret) {
@@ -26,11 +22,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     return Response.json({ ok: false }, { status: 401 });
-  } catch {
+  } catch (e) {
     return Response.json({ ok: false }, { status: 400 });
   }
-};
+}
 
-export const onRequestGet: PagesFunction = async () => {
+export async function onRequestGet() {
   return new Response("Method Not Allowed", { status: 405 });
-};
+}

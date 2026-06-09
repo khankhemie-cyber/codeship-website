@@ -44,7 +44,7 @@ export default function FranchiseGate({ personKey, children }: Props) {
       if (res.ok) {
         sessionStorage.setItem(storageKey, "true");
         setAuthed(true);
-      } else {
+      } else if (res.status === 401) {
         setError("Incorrect password. Please try again.");
         setShaking(true);
         setPassword("");
@@ -52,9 +52,17 @@ export default function FranchiseGate({ personKey, children }: Props) {
           setShaking(false);
           inputRef.current?.focus();
         }, 600);
+      } else if (res.status === 404) {
+        setError("Auth endpoint not found — please contact admin.");
+        setShaking(true);
+        setTimeout(() => setShaking(false), 600);
+      } else {
+        setError("Server error — the access password may not be configured yet.");
+        setShaking(true);
+        setTimeout(() => setShaking(false), 600);
       }
     } catch {
-      setError("Connection error. Please try again.");
+      setError("Could not reach the server. Please try again.");
       setShaking(true);
       setTimeout(() => setShaking(false), 600);
     }
