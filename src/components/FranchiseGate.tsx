@@ -8,19 +8,10 @@ const GOLD = "#F5A623";
 
 interface Props {
   personKey: string;
-  passwordHash: string;
   children: React.ReactNode;
 }
 
-async function sha256Hex(message: string): Promise<string> {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-  return Array.from(new Uint8Array(hashBuffer))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-export default function FranchiseGate({ personKey, passwordHash, children }: Props) {
+export default function FranchiseGate({ personKey, children }: Props) {
   const storageKey = `franchiseAuth_${personKey}`;
   const [authed, setAuthed] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -43,20 +34,37 @@ export default function FranchiseGate({ personKey, passwordHash, children }: Pro
     setLoading(true);
     setError("");
 
-    const salted = `cship-v1:${personKey}:${password}`;
-    const hash = await sha256Hex(salted);
+    try {
+      const res = await fetch("/api/verify-franchise-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, personKey }),
+      });
 
-    if (hash === passwordHash) {
-      sessionStorage.setItem(storageKey, "true");
-      setAuthed(true);
-    } else {
-      setError("Incorrect password. Please try again.");
+      if (res.ok) {
+        sessionStorage.setItem(storageKey, "true");
+        setAuthed(true);
+      } else if (res.status === 401) {
+        setError("Incorrect password. Please try again.");
+        setShaking(true);
+        setPassword("");
+        setTimeout(() => {
+          setShaking(false);
+          inputRef.current?.focus();
+        }, 600);
+      } else if (res.status === 404) {
+        setError("Auth endpoint not found — please contact admin.");
+        setShaking(true);
+        setTimeout(() => setShaking(false), 600);
+      } else {
+        setError("Server error — the access password may not be configured yet.");
+        setShaking(true);
+        setTimeout(() => setShaking(false), 600);
+      }
+    } catch {
+      setError("Could not reach the server. Please try again.");
       setShaking(true);
-      setPassword("");
-      setTimeout(() => {
-        setShaking(false);
-        inputRef.current?.focus();
-      }, 600);
+      setTimeout(() => setShaking(false), 600);
     }
 
     setLoading(false);

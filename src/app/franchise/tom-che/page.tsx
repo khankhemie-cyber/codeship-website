@@ -8,9 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default function TomChePage() {
-  const hash = process.env.NEXT_PUBLIC_FRANCHISE_HASH_TOM_CHE ?? "";
   return (
-    <FranchiseGate personKey="tom-che" passwordHash={hash}>
+    <FranchiseGate personKey="tom-che">
       <TomCheKit />
     </FranchiseGate>
   );
