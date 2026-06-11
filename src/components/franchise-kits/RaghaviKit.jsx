@@ -635,7 +635,7 @@ function PageNextSteps(){
 // ── SHELL ─────────────────────────────────────────────────────────────────────
 const PAGE_COMPONENTS=[PageCover,PageOpportunity,PageMarket,PageCompetitors,PageAudience,PageModels,PageInvestment,PagePrograms,PageCustom,PageNextSteps];
 
-export default function RaghaviKarthickKit(){
+export default function RaghaviKit(){
   const [page,setPage]=useState(0);
   const Page=PAGE_COMPONENTS[page];
   return(
