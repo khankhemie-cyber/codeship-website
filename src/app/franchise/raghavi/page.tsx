@@ -8,9 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default function RaghaviPage() {
-  const hash = process.env.NEXT_PUBLIC_FRANCHISE_HASH_RAGHAVI ?? "";
   return (
-    <FranchiseGate personKey="raghavi" passwordHash={hash}>
+    <FranchiseGate personKey="raghavi">
       <RaghaviKit />
     </FranchiseGate>
   );
