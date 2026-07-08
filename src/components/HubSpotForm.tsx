@@ -45,6 +45,9 @@ export default function HubSpotForm({
         d.id === formId
       ) {
         setSubmitted(true);
+        if (typeof window.fbq === "function") {
+          window.fbq("track", "Lead", { content_name: formId });
+        }
       }
     }
 
