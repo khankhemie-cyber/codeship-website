@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { articles } from "@/data/articles";
 import { PROGRAMS } from "@/data/programs";
+import { GUYANA_CAMPAIGNS } from "@/data/guyanaCampaigns";
 
 const cities = [
   "oshawa", "toronto", "mississauga", "brampton", "markham",
@@ -54,5 +55,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...articlePages, ...locationPages];
+  // Guyana online-course landing pages are SEO-indexed (unlike /lp/*, which
+  // is pure paid traffic and intentionally excluded from this sitemap).
+  const guyanaPages: MetadataRoute.Sitemap = GUYANA_CAMPAIGNS.map((c) => ({
+    url: `${BASE_URL}/gy/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages];
 }

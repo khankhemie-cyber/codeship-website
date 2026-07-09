@@ -9,8 +9,10 @@ import type { LocationSlug } from "@/lib/registration";
  */
 
 interface EventPayload {
-  program: ProgramSlug;
+  /** Optional — the Guyana pages (guyanaCampaigns.ts) have no K-8 program mapping and pass `page` instead. */
+  program?: ProgramSlug;
   location?: LocationSlug;
+  [key: string]: unknown;
 }
 
 function dispatch(eventName: string, payload: EventPayload) {
@@ -38,4 +40,16 @@ export function trackSelectLocation(payload: EventPayload) {
 
 export function trackRegisterClick(payload: EventPayload) {
   dispatch("register_click", payload);
+}
+
+export function trackLeadSubmit(payload: EventPayload) {
+  dispatch("lead_submit", payload);
+}
+
+export function trackSelectRegion(payload: EventPayload) {
+  dispatch("select_region", payload);
+}
+
+export function trackPriceView(payload: EventPayload) {
+  dispatch("price_view", payload);
 }

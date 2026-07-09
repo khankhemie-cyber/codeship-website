@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import CookieBanner from "@/components/CookieBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,12 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">
-        <Navigation />
-        <main className="pt-16">{children}</main>
-        <Footer />
-        <CookieBanner />
-      </body>
+      <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">{children}</body>
     </html>
   );
 }
