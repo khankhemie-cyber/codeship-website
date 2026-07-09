@@ -5,9 +5,21 @@ export interface Article {
   category: "parent" | "school" | "franchise" | "coding" | "ai" | "stem";
   readTime: number;
   publishDate: string;
+  /** Defaults to publishDate if omitted. Bump on any substantive content refresh. */
+  dateModified?: string;
+  /** Defaults to "CODEship Academy Team" if omitted. */
+  author?: string;
+  /** Topic cluster for internal-linking/E-E-A-T grouping, e.g. "parent-intent", "guyana-ngsa". */
+  cluster?: string;
+  /** The real search query this article targets, e.g. "what age should kids learn to code". */
+  targetQuery?: string;
+  /** Contextual internal links rendered at the end of the article, beyond the fixed program-finder CTA. */
+  internalLinks?: { label: string; href: string }[];
+  ogImage?: string;
+  /** Renders ItemList schema alongside Article + FAQPage for listicle articles. */
+  listItems?: { name: string; description?: string }[];
   content: string;
   faqs: { question: string; answer: string }[];
-  schema: Record<string, unknown>;
 }
 
 export const articles: Article[] = [
@@ -19,6 +31,14 @@ export const articles: Article[] = [
     category: "parent",
     readTime: 7,
     publishDate: "2025-01-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "coding for kids guide",
+    internalLinks: [
+      { label: "See the CODEship Journey", href: "/programs" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
     content: `
 <h2>What Is Coding for Kids?</h2>
 <p>When most parents hear "coding for kids," they imagine children hunched over keyboards typing cryptic symbols. The reality is far more exciting — and far more accessible — than that image suggests.</p>
@@ -86,13 +106,6 @@ export const articles: Article[] = [
       { question: "Do kids need a computer at home to benefit from coding programs?", answer: "No. A good coding program provides all the tools children need during class. While practice at home can be beneficial, it is not required." },
       { question: "Is coding for kids just about becoming a programmer?", answer: "Not at all. Coding develops critical thinking, creativity, and problem-solving skills that are valuable in every career and field." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What Is Coding for Kids? A Parent's Complete Guide",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-      publisher: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "why-kids-should-learn-ai-early",
@@ -162,12 +175,6 @@ export const articles: Article[] = [
       { question: "Do kids need to know math to learn AI?", answer: "Not at the introductory level. Children's AI programs use visual, hands-on approaches that don't require advanced mathematics." },
       { question: "Is AI education different from coding education?", answer: "They overlap significantly but are distinct. Coding is about giving computers instructions. AI education focuses on systems that learn from data. A good program covers both." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Why Kids Should Learn AI and Digital Skills Early",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-coding-helps-academic-skills",
@@ -229,12 +236,6 @@ export const articles: Article[] = [
       { question: "Will coding help my child's grades?", answer: "Many children show improved performance in math and reading after beginning coding programs. The skills are closely related and mutually reinforcing." },
       { question: "Does coding require strong math skills first?", answer: "No. In fact, coding often helps children develop mathematical intuition before they encounter those concepts formally in school." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How Coding Helps Kids Improve Reading, Logic, and Problem-Solving",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "best-stem-activities-for-kids-at-home",
@@ -295,12 +296,6 @@ export const articles: Article[] = [
       { question: "Do I need special materials for home STEM activities?", answer: "Most STEM activities use everyday household materials. Some projects benefit from inexpensive kits, but a huge range of activities requires nothing beyond what you have at home." },
       { question: "How much time should I spend on home STEM activities?", answer: "Even 20–30 minutes of focused STEM exploration a week makes a difference. Consistency matters more than duration." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Best STEM Activities for Kids at Home (All Ages)",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "project-based-learning-builds-confidence",
@@ -364,12 +359,6 @@ export const articles: Article[] = [
       { question: "How is PBL different from regular school projects?", answer: "Traditional school projects often have prescribed steps and one right answer. True PBL gives children genuine choice, extended time, and a real audience — creating much deeper ownership and learning." },
       { question: "Does PBL work for kids who struggle academically?", answer: "Often especially well. Children who find traditional academic formats challenging frequently thrive in PBL environments where there are multiple paths to success and where their individual strengths can shine." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How Project-Based Learning Helps Children Build Confidence",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "coding-vs-robotics-what-should-kids-learn-first",
@@ -441,12 +430,6 @@ export const articles: Article[] = [
       { question: "Is robotics or coding more valuable?", answer: "Both are valuable and complementary. Coding is more versatile across career fields; robotics adds physical engineering dimensions. The best programs include both." },
       { question: "Do kids need coding skills to do robotics?", answer: "Most introductory robotics kits have visual programming interfaces that require no prior coding experience. As children advance, stronger coding skills unlock more complex robot behaviours." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Coding vs. Robotics: What Should Kids Learn First?",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "after-school-coding-builds-teamwork",
@@ -506,12 +489,6 @@ export const articles: Article[] = [
       { question: "Are coding programs good for shy kids?", answer: "Yes — often particularly so. The structured, collaborative environment gives shy children a shared focus (the project) that makes social interaction less intimidating. Many shy children flourish in coding programs." },
       { question: "What if my child prefers to work alone?", answer: "Some children prefer solo coding, and that's valid. Good programs accommodate both solo and collaborative work, helping children experience the benefits of both approaches over time." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How After-School Coding Programs Help Kids Build Teamwork Skills",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "inclusive-stem-education",
@@ -566,12 +543,6 @@ export const articles: Article[] = [
       { question: "Are CODEship programs inclusive for girls?", answer: "Absolutely. CODEship Academy is designed to be fully inclusive and welcoming for all children. We actively work to ensure girls feel equally engaged, encouraged, and celebrated in all our programs." },
       { question: "Can children with learning differences succeed in coding programs?", answer: "Yes. Project-based coding programs are often particularly well-suited to children with different learning styles. The hands-on, creative, flexible nature of good coding programs accommodates a wide range of learners." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Inclusive STEM Education: Making Coding Accessible for Every Child",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-to-choose-best-coding-program",
@@ -653,12 +624,6 @@ export const articles: Article[] = [
       { question: "How much should a quality coding program cost?", answer: "Quality varies widely, but expect to pay $150–$400+ per month for weekly classes, and $300–$800+ for week-long camps. Very cheap programs often compromise on instructor quality or curriculum depth." },
       { question: "Is online coding education as good as in-person?", answer: "Online programs offer convenience and access, but in-person programs typically provide richer collaboration, hands-on experiences, and social connection. The best choice depends on your child's learning style and your family's situation." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How to Choose the Best Coding Program for Your Child",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "what-schools-look-for-in-stem-partner",
@@ -738,12 +703,6 @@ export const articles: Article[] = [
       { question: "How far in advance should schools book STEM workshop providers?", answer: "For the best availability and program customization, booking 2–3 months in advance is ideal. However, many providers can accommodate shorter timelines for standard programs." },
       { question: "What is a reasonable cost for a school STEM workshop?", answer: "Costs vary significantly by provider, program length, and group size. Day-long workshops typically range from $500–$2,000+ depending on participant numbers and materials." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What Schools Should Look for in a STEM Workshop Partner",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-to-start-childrens-education-business",
@@ -823,12 +782,6 @@ export const articles: Article[] = [
       { question: "How much does it cost to start a children's education business?", answer: "Costs vary enormously based on format and scale. A mobile, community-based program can start under $20,000. A dedicated studio location may require $60,000–$150,000 or more in startup costs." },
       { question: "Do I need a background in education to run a children's coding business?", answer: "A background in education is helpful but not strictly required. Strong curriculum, well-trained instructors, and a genuine commitment to learning quality matter more than the founder's personal educational background." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How to Start a Children's Education Business",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "what-to-know-before-opening-coding-franchise",
@@ -923,22 +876,25 @@ export const articles: Article[] = [
       { question: "What is a typical royalty rate for a coding franchise?", answer: "Royalty rates for children's education franchises typically range from 6–10% of gross revenue. CODEship Academy charges 6%, plus a 2% brand marketing contribution." },
       { question: "Do I need a background in coding to run a coding franchise?", answer: "No. While an interest in technology is helpful, most coding franchise systems — including CODEship Academy — are designed for franchisees who are community and business-focused, not necessarily technical experts." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What to Know Before Opening a Coding Franchise",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "why-parents-invest-in-future-ready-skills",
-    title: "Why Parents Are Investing in Future-Ready Skills for Their Children",
+    title: "The Future-Ready Skills K-8 Students Need in 2026",
     metaDescription:
-      "Parents are prioritizing future-ready skills like coding, AI literacy, and digital creation. Here's why — and what it means for children's education.",
+      "What future-ready actually means for K-8 students in 2026 — adaptability, digital fluency, and AI literacy — and how parents can build it through coding.",
     category: "parent",
-    readTime: 5,
+    readTime: 6,
     publishDate: "2025-05-01",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "future ready skills for kids",
+    internalLinks: [
+      { label: "Explore the CODEship Journey", href: "/programs" },
+      { label: "See the journey map", href: "/programs#journey" },
+    ],
     content: `
+<p><strong>Quick answer:</strong> In 2026, "future-ready" for a K-8 student means four things: adaptability, digital fluency, AI literacy, and creative problem-solving — developed together, not as separate subjects. Coding is one of the few activities that builds all four at once.</p>
 <h2>A Shift in How Parents Think About Education</h2>
 <p>Something significant has changed in how parents evaluate educational opportunities for their children. Where previous generations focused primarily on traditional academic achievement — grades, test scores, university admission — today's parents are increasingly thinking about whether their children are developing the skills needed to navigate and succeed in a rapidly changing world.</p>
 <p>This shift is not just philosophical. It's driven by what parents are seeing in the world around them: industries being transformed by AI, careers that didn't exist a decade ago becoming essential, and the growing realization that the skills that led to success in 1990 or even 2010 may not be sufficient for 2035.</p>
@@ -966,8 +922,9 @@ export const articles: Article[] = [
 </ul>
 <p>These thinking patterns are valuable across nearly every career path and life context — not just in technology.</p>
 
-<h2>The AI Factor</h2>
-<p>No discussion of future-ready skills in 2025 is complete without addressing artificial intelligence. AI is transforming virtually every industry and profession. Children who grow up with a working understanding of how AI works — what it can do, what its limitations are, how to use it effectively and ethically — will have a significant advantage over those who encounter it only as end users.</p>
+<h2>Why AI Literacy Is Now Part of "Future-Ready"</h2>
+<p>No discussion of future-ready skills in 2026 is complete without addressing artificial intelligence. AI is transforming virtually every industry and profession. Children who grow up with a working understanding of how AI works — what it can do, what its limitations are, how to use it effectively and ethically — will have a significant advantage over those who encounter it only as end users.</p>
+<p>This is no longer a fringe view. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD and European Commission are jointly developing an AI literacy framework</a> specifically for primary and secondary students, and <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> defines AI literacy for students in terms of knowledge, skills, and values — understanding, ethics, and human rights included, not just technical use.</p>
 <p>This doesn't mean all children need to become AI engineers. It means developing AI literacy: the ability to interact thoughtfully with AI systems, evaluate their outputs critically, and use them as powerful creative tools.</p>
 
 <h2>The Investment Question</h2>
@@ -993,13 +950,8 @@ export const articles: Article[] = [
     faqs: [
       { question: "Are future-ready skills more important than traditional academics?", answer: "They're complementary, not competing. The best educational approaches integrate future-ready skills into broader academic development. Coding, for example, directly reinforces mathematical and logical thinking." },
       { question: "What age should children start building future-ready skills?", answer: "The foundational thinking skills underlying future readiness can be developed from a very young age through play, problem-solving, and creative exploration. Formal coding and digital skills programs are typically appropriate starting at age 5–6." },
+      { question: "Is AI literacy really necessary for a K-8 student?", answer: "Major education bodies think so. Both the OECD and UNESCO published AI literacy frameworks for school-aged children, treating it as a core skill alongside reading and math, not an optional extra." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Why Parents Are Investing in Future-Ready Skills for Their Children",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "ai-for-kids-what-parents-need-to-know",
@@ -1065,12 +1017,6 @@ export const articles: Article[] = [
       { question: "Is AI education safe for young children?", answer: "With appropriate tools and guidance, yes. Quality AI education programs use child-safe platforms, address privacy and ethics, and are led by trained instructors experienced with children." },
       { question: "Will AI education help my child get into university?", answer: "AI literacy is increasingly valued in university admissions, particularly in STEM, business, and social science programs. More importantly, it develops critical thinking skills that support academic performance across all subjects." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "AI for Kids: What Parents Need to Know",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "from-idea-to-app-kids-build-digital-projects",
@@ -1149,12 +1095,317 @@ export const articles: Article[] = [
       { question: "How long does it take for a child to build their first app or game?", answer: "With good guidance, children can build a simple functional project in a single day-long session. More complex projects develop over weeks or months of weekly classes." },
       { question: "Can kids actually publish what they build?", answer: "Yes. Projects built in tools like Scratch can be immediately shared online. Web projects can be published for free. App projects can be demonstrated in person or shared digitally. The possibility of a real audience is part of what makes project-based learning so motivating." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "From Idea to App: How Kids Can Build Real Digital Projects",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
+  },
+  {
+    slug: "at-what-age-should-kids-start-learning-to-code",
+    title: "At What Age Should Kids Start Learning to Code?",
+    metaDescription:
+      "Experts generally point to ages 5-7 as the sweet spot for starting coding. Here's what the research says, and how to match the age to the right tools.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2023-05-10",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "what age should kids learn to code",
+    internalLinks: [
+      { label: "Explorers (K-1): visual block coding", href: "/programs/explorers" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Most children are ready for structured coding around age 5-7, starting with visual, block-based tools. Younger children (3-4) can build the underlying thinking skills through unplugged, screen-free activities first.</p>
+<h2>What Age Can a Child Start Coding?</h2>
+<p>There's no single "correct" age, but there is a consensus range. According to guidance summarized by <a href="https://www.raspberrypi.org/blog/what-age-can-a-child-start-coding/" target="_blank" rel="noopener noreferrer">the Raspberry Pi Foundation</a> and echoed across children's coding education research, most experts place the ideal starting window for structured, tool-based coding at ages 5-7 — with MIT's own ScratchJr recommended from age 5. Some children show interest in sequencing and patterns even earlier, at 3-4, but that's foundational thinking, not programming yet.</p>
+<h2>What Should a 4-6 Year Old Do Instead of "Real" Coding?</h2>
+<p>Before a child touches a keyboard, the most valuable coding preparation is unplugged: board games with rules, following multi-step instructions, sorting and pattern activities, and simple "if this, then that" thinking during play. These build the exact mental muscles coding requires — sequencing, logic, and debugging (noticing when something didn't work and trying again).</p>
+<h2>How the Right Tool Changes by Age</h2>
+<ul>
+<li><strong>Ages 5-7:</strong> Visual, drag-and-drop block coding (ScratchJr-style tools) — no typing or reading fluency required.</li>
+<li><strong>Ages 7-10:</strong> More advanced block coding and a first introduction to real markup (HTML/CSS) — children start building actual web pages.</li>
+<li><strong>Ages 10-13:</strong> Text-based coding, typically JavaScript — typing skills are usually solid enough by this point.</li>
+<li><strong>Ages 13+:</strong> Full text-based languages like Python, plus more complex concepts like AI and data.</li>
+</ul>
+<p>This is exactly the logic behind CODEship's K-8 progression: Explorers (K-1) starts with blocks, Builders (2-3) moves into HTML/CSS, Developers (4-5) writes JavaScript, and Engineers (6-8) works in Python.</p>
+<h2>Is It Ever Too Late to Start?</h2>
+<p>No. While early exposure helps normalize computational thinking, children who start coding at 10, 12, or even in their teens develop the same skills — often faster, since they can jump straight into text-based tools without needing the visual-block stepping stone.</p>
+    `,
+    faqs: [
+      { question: "What is the best age to start coding?", answer: "Most experts point to ages 5-7 for structured, tool-based coding, using visual block tools rather than typed code." },
+      { question: "Can a 3-year-old learn to code?", answer: "Not formally. But screen-free activities that build sequencing and pattern skills are a great foundation for later coding." },
+      { question: "Is it too late to start coding at age 12?", answer: "No. Older beginners often progress faster because they can start directly with text-based languages instead of visual blocks." },
+    ],
+  },
+  {
+    slug: "is-coding-good-for-kids-research",
+    title: "Is Coding Good for Kids? What the Research Says",
+    metaDescription:
+      "A look at what peer-reviewed research actually shows about coding's effect on children's problem-solving, computational thinking, and confidence.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2023-10-05",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "is coding good for kids",
+    internalLinks: [
+      { label: "About CODEship's approach", href: "/about" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Yes, based on the available research. Multiple peer-reviewed studies link structured coding education in children to measurable gains in computational thinking and problem-solving, alongside broader benefits in persistence and collaboration.</p>
+<h2>What Does the Research Actually Show?</h2>
+<p>A 2026 experimental study published in <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2026.1734482/full" target="_blank" rel="noopener noreferrer">Frontiers in Psychology</a> found that a structured coding curriculum for children aged 8-12 produced significantly better computational thinking and general problem-solving scores compared to a standard school curriculum over a 24-week period. Separate literature reviews on early coding tools (like ScratchJr and KIBO robots) found consistent gains in pattern recognition, algorithmic thinking, and problem-solving among young children.</p>
+<h2>Is It Just About Thinking Skills?</h2>
+<p>No — the research points to broader effects too. Studies reviewed in computational thinking literature note gains in communication, collaboration, and even socio-emotional development, since coding gives children a structured, low-stakes way to express ideas and handle failure (a bug is not a personal failure — it's information).</p>
+<h2>Does Coding Help With School Subjects?</h2>
+<p>Coding naturally overlaps with math (sequences, variables, logic) and with literacy (reading instructions, explaining a process). This is exactly why Ontario's math curriculum embeds coding directly into its Algebra strand rather than treating it as a separate subject — the connection to core academic thinking is already recognized by curriculum designers, not just researchers.</p>
+<h2>What Does "Good" Actually Look Like in Practice?</h2>
+<p>The research is consistent on one condition: quality matters. Programs that are project-based — where children build something of their own rather than copy a tutorial — show stronger outcomes than passive, follow-along formats. That's the difference between a child who can repeat steps and a child who can solve a new problem.</p>
+    `,
+    faqs: [
+      { question: "Is there real research behind coding for kids, or is it just marketing?", answer: "There is real, peer-reviewed research. Studies show measurable gains in computational thinking and problem-solving from structured coding programs." },
+      { question: "Does coding help kids in school subjects other than computer science?", answer: "Yes. Coding reinforces math (sequences, logic) and literacy (following and explaining instructions), which is why some provincial curricula embed it directly into math." },
+      { question: "Does the type of coding program matter for the benefits?", answer: "Yes. Project-based programs where children build their own ideas show stronger outcomes than tutorial-only formats." },
+    ],
+  },
+  {
+    slug: "screen-smart-not-screen-time-coding-for-kids",
+    title: "Screen-Smart, Not Screen-Time: Why Making Beats Watching",
+    metaDescription:
+      "Not all screen time is equal. Here's the real difference between passive screen time and active creation — and why it matters for your child's development.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2024-01-12",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "screen time coding kids",
+    internalLinks: [{ label: "About CODEship's approach", href: "/about" }],
+    content: `
+<p><strong>Quick answer:</strong> Screen time isn't one thing — passive consumption (watching videos, scrolling feeds) and active creation (coding, building, designing) affect children very differently. The goal isn't less screen time; it's smarter screen time.</p>
+<h2>Why "Screen Time" Is the Wrong Question</h2>
+<p>Parents often ask how many hours of screen time is acceptable, but that question treats all screen activity as equivalent. Watching a video and building a game are both "screen time," but they ask completely different things of a child's brain — one is receptive, the other is generative.</p>
+<h2>What Changes When a Child Creates Instead of Consumes?</h2>
+<ul>
+<li><strong>Agency:</strong> A child coding a game is making dozens of small decisions. A child watching a video is making none.</li>
+<li><strong>Problem-solving:</strong> Creation involves constant small failures (bugs, layout issues) that must be debugged — consumption involves none.</li>
+<li><strong>Ownership:</strong> A finished project belongs to the child in a way a watched video never can.</li>
+</ul>
+<h2>How to Tell the Difference in Practice</h2>
+<p>A simple test: ask what your child made during their screen time. If the answer is "nothing, I watched something," that's consumption. If the answer is "a game where the dog collects three keys," that's creation — and it's a fundamentally different developmental experience, even though both happened on a screen.</p>
+<h2>Where CODEship Fits</h2>
+<p>Every CODEship class is built around this distinction. Children don't follow along with a video — they build a game, a website, or an app from their own idea, with an instructor's support. The screen is a tool for making, not a substitute for it.</p>
+    `,
+    faqs: [
+      { question: "Is coding just more screen time?", answer: "It's screen time spent creating rather than consuming — a meaningfully different activity for a child's brain and development." },
+      { question: "How do I know if my child's screen time is 'active' or 'passive'?", answer: "Ask what they made. If there's a specific thing they built or changed, it's active. If they can only describe what they watched, it's passive." },
+    ],
+  },
+  {
+    slug: "block-coding-for-kids-visual-programming",
+    title: "Block Coding for Kids: How Visual Programming Builds Real Skills",
+    metaDescription:
+      "Block coding isn't a watered-down version of 'real' coding — it's how nearly every professional developer learned the underlying logic first. Here's how it works.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-02-14",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "block coding for kids",
+    internalLinks: [{ label: "Explorers (K-1): visual block coding", href: "/programs/explorers" }],
+    content: `
+<p><strong>Quick answer:</strong> Block coding uses draggable, puzzle-piece-shaped instructions instead of typed syntax, so young children can build real programs — sequences, loops, conditionals — without needing to read or type fluently first.</p>
+<h2>What Is Block Coding, Exactly?</h2>
+<p>In block-based tools, each "block" represents a coding instruction — move forward, repeat 3 times, if touching edge then bounce. Children snap blocks together like puzzle pieces to build a working program. There's no syntax to memorize and no missing semicolon to hunt for — the blocks only fit together in valid ways.</p>
+<h2>Is Block Coding "Real" Coding?</h2>
+<p>Yes. The blocks map directly onto real programming concepts — sequencing, loops, conditionals (if/then), variables, and events (when this happens, do that). A child who has built a working project in blocks has already used the same logical structures a professional developer uses in JavaScript or Python; only the notation is different.</p>
+<h2>What Do Kids Actually Build With Blocks?</h2>
+<p>In CODEship's Explorers level, block coding produces real, shareable projects — not exercises. Examples include My Helpful Robot (sequencing and direction), Kindness Cards (simple conditional logic), and a Recycling Sorter (decision-making). Each project is a complete, working thing a child can show off, not a fragment of a tutorial.</p>
+<h2>When Should a Child Move Beyond Blocks?</h2>
+<p>Most children are ready to start layering in text-based tools (like HTML/CSS) around ages 7-9, once reading and typing are comfortable — this is the shift from CODEship's Explorers level to Builders. There's no rush: staying in blocks longer never wastes time, since every concept learned there transfers directly.</p>
+    `,
+    faqs: [
+      { question: "Is block coding a lesser version of real coding?", answer: "No. It teaches the same core logic — sequencing, loops, conditionals — as text-based coding, just without needing typing or reading fluency first." },
+      { question: "What age is block coding appropriate for?", answer: "Roughly ages 5-9, though it's a valid and valuable tool at any age when introducing programming concepts for the first time." },
+      { question: "What comes after block coding?", answer: "Most children transition to text-based tools like HTML/CSS and eventually JavaScript or Python once they're comfortable with blocks and their typing/reading skills catch up." },
+    ],
+  },
+  {
+    slug: "how-kids-learn-html-css-grades-2-3",
+    title: "How Kids Learn HTML & CSS: A Grades 2-3 Roadmap",
+    metaDescription:
+      "HTML and CSS are a natural next step after block coding. Here's how children in grades 2-3 learn to structure and style their first real websites.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-04-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "html css for kids",
+    internalLinks: [{ label: "Builders (Grades 2-3): HTML & CSS", href: "/programs/builders" }],
+    content: `
+<p><strong>Quick answer:</strong> Children in grades 2-3 can learn real HTML (structure) and CSS (styling) by building actual web pages — starting with simple tagged text and progressing to multi-page, styled sites, typically over a semester.</p>
+<h2>Why HTML & CSS Is the Right Next Step After Blocks</h2>
+<p>HTML and CSS are markup and styling languages, not full programming languages — there's no complex logic to debug, just tags and properties to learn. That makes them an ideal bridge between visual block coding and "real" text-based programming: children start typing real code, but the stakes and complexity are gentler than a language like JavaScript.</p>
+<h2>What Does a Grades 2-3 Child Actually Learn?</h2>
+<ul>
+<li><strong>Tags and structure:</strong> How HTML tags give meaning and structure to a page (headings, paragraphs, lists).</li>
+<li><strong>CSS styling:</strong> How to control colour, spacing, and layout — turning plain text into something that looks designed.</li>
+<li><strong>Links and lists:</strong> Connecting pages together into a real, navigable website.</li>
+<li><strong>Writing for the web:</strong> Informational and persuasive writing suited to how people actually read online.</li>
+</ul>
+<h2>What Do They Build?</h2>
+<p>CODEship's Builders level moves through real projects: an "All About Me" page (structure basics), a Weather Helper (styling and lists), a Class Pet Care Guide (informational writing), and a Save the Bees awareness site (persuasive writing) — building to a capstone Community Helper Website that combines everything.</p>
+<h2>Do They Need to Type Well First?</h2>
+<p>Basic typing helps but isn't a prerequisite — most 7-9 year olds develop the needed typing comfort quickly once they're motivated by seeing their own words and styles show up on a real page.</p>
+    `,
+    faqs: [
+      { question: "Is HTML too advanced for a 7-year-old?", answer: "No. HTML tags are simple and forgiving, making them a gentle, motivating first step into real code for most 7-9 year olds." },
+      { question: "What's the difference between HTML and CSS?", answer: "HTML structures content (headings, paragraphs, lists). CSS styles it (colours, spacing, layout). Children typically learn both together." },
+      { question: "Will my child build a real website?", answer: "Yes — CODEship's Builders level culminates in a real, multi-page website children design and code themselves." },
+    ],
+  },
+  {
+    slug: "javascript-for-kids-projects-real-logic",
+    title: "JavaScript for Kids: Projects That Teach Real Logic",
+    metaDescription:
+      "JavaScript is where kids move from styling pages to making them do things. Here's how grades 4-5 students learn variables, functions, and real logic.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-06-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "javascript for kids",
+    internalLinks: [{ label: "Developers (Grades 4-5): JavaScript", href: "/programs/developers" }],
+    content: `
+<p><strong>Quick answer:</strong> JavaScript teaches kids to make web pages interactive — variables, functions, conditionals, and loops — through projects that solve problems they actually recognize, like timers, calculators, and quizzes.</p>
+<h2>Why JavaScript, and Why Now?</h2>
+<p>After HTML/CSS (structure and style), JavaScript is the natural next step: it's the language that makes a page do things — respond to clicks, calculate values, update content. For most children, that jump from "static page" to "the page reacts to me" is genuinely exciting, and it's also where real programming logic starts.</p>
+<h2>What Concepts Does JavaScript Teach?</h2>
+<ul>
+<li><strong>Variables:</strong> Storing and tracking information (a score, a timer, a name).</li>
+<li><strong>Functions:</strong> Reusable blocks of instructions.</li>
+<li><strong>Conditionals:</strong> Making decisions ("if the timer hits zero, show a message").</li>
+<li><strong>Events:</strong> Responding to what a user does (a click, a key press).</li>
+<li><strong>Arrays and loops:</strong> Working with lists of information efficiently.</li>
+</ul>
+<h2>What Real Problems Do Kids Solve?</h2>
+<p>CODEship's Developers level ties every concept to a tool a child might actually use: a Homework Timer & Focus Tool (variables, functions), a Healthy Snack Calculator (conditionals), a "Fact or Fake?" media-literacy quiz (arrays, loops), and Budget Buddy (loops, conditionals, financial literacy) — building to a capstone Problem-Solver App the child designs themselves.</p>
+<h2>Does JavaScript Also Teach Media and Money Skills?</h2>
+<p>Yes, deliberately. The Developers level pairs coding logic with media literacy (questioning sources, in the "Fact or Fake?" project) and financial literacy (in Budget Buddy) — so the same class period reinforces judgment skills that matter well beyond the screen.</p>
+    `,
+    faqs: [
+      { question: "Is JavaScript hard for a 9 or 10 year old?", answer: "It's more demanding than blocks or HTML/CSS, but very learnable at this age when introduced through real, motivating projects rather than abstract syntax drills." },
+      { question: "What will my child be able to build with JavaScript?", answer: "Interactive tools: timers, calculators, quizzes, and other small apps that respond to what the user does." },
+      { question: "Does this program also teach financial or media literacy?", answer: "Yes — CODEship's Developers level pairs JavaScript projects with financial literacy (Budget Buddy) and media literacy (a fact-checking quiz project)." },
+    ],
+  },
+  {
+    slug: "python-for-middle-schoolers-grades-6-8",
+    title: "Python for Middle Schoolers: A Grades 6-8 Starting Point",
+    metaDescription:
+      "Python is one of the most widely used languages in the world. Here's how grades 6-8 students start with real Python logic, data, and AI projects.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-09-16",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "python for kids",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Python's clean, readable syntax makes it a strong first text-based language for middle schoolers, especially once they've already learned coding logic through blocks, HTML/CSS, and JavaScript.</p>
+<h2>Why Python for This Age Group?</h2>
+<p>Python reads closer to plain English than most programming languages, which lowers the barrier for new text-based coders. It's also the language most commonly used in real-world AI and data work — so students who start with Python are learning the same tool used in the field, not a simplified "kids' version."</p>
+<h2>What Do Middle Schoolers Actually Learn?</h2>
+<ul>
+<li><strong>Python logic and data:</strong> Variables, data types, and control flow, applied to real problems.</li>
+<li><strong>Real cybersecurity:</strong> Practical concepts like password strength, not abstract theory.</li>
+<li><strong>Training an AI model:</strong> Building and evaluating a simple model, including its limitations.</li>
+<li><strong>Responsible AI:</strong> Bias and ethics — not just how AI works, but where it can go wrong.</li>
+</ul>
+<h2>What Do Students Build?</h2>
+<p>CODEship's Engineers level moves through a Password Strength Checker (Python logic + cybersecurity), Smart Sorting AI (training and evaluating a model, with a direct look at bias), and a Chatbot for Good and Data Detective project — building to a capstone Innovation Challenge, where students prototype and pitch a solution to a real-world (SDG-aligned) problem.</p>
+<h2>Does a Student Need Prior Coding Experience for Python?</h2>
+<p>It helps but isn't strictly required. Students coming from CODEship's earlier levels (blocks, HTML/CSS, JavaScript) already have the underlying logic; Python mainly changes the notation. Complete beginners can also start directly in Python at this age — it's designed to be beginner-friendly.</p>
+    `,
+    faqs: [
+      { question: "Is Python too advanced for a 12-year-old?", answer: "No. Python was designed to be readable and beginner-friendly, and it's a common first text-based language for this age group." },
+      { question: "Does learning Python at this age include AI?", answer: "Yes — CODEship's Engineers level includes training and evaluating a simple AI model, with an explicit focus on bias and ethics." },
+      { question: "What is the capstone project for this level?", answer: "An Innovation Challenge, where students build a prototype addressing a real-world problem (aligned to a UN Sustainable Development Goal) and pitch it." },
+    ],
+  },
+  {
+    slug: "teaching-kids-ai-responsibly",
+    title: "Teaching Kids AI Responsibly: Bias, Ethics & Hands-On Projects",
+    metaDescription:
+      "Teaching kids to use AI is not enough — they need to understand bias, ethics, and limitations too. Here's what responsible AI education actually looks like.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2025-02-04",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "teaching kids about ai",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Responsible AI education for kids means going beyond "how to use AI tools" to include how AI models are trained, where bias comes from, and how to evaluate an AI's output critically — not just accept it.</p>
+<h2>Why "Responsible" Is the Key Word</h2>
+<p>Most children already use AI tools daily, often without realizing it. Teaching AI responsibly means the difference between a child who treats AI as an infallible oracle and one who understands it as a tool built from data, with real limitations and real risk of bias. <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> explicitly frames this as knowledge, skills, <em>and values</em> — ethical awareness is treated as a core competency, not an add-on.</p>
+<h2>What Does Bias in AI Actually Mean for a Kid to Understand?</h2>
+<p>The clearest way to teach this is hands-on: when a student trains their own simple sorting model and sees it make a mistake because of how its training data was structured, the concept of bias stops being abstract. That's the design behind CODEship's Smart Sorting AI project — students see, first-hand, how a model inherits the patterns (and gaps) in the data it learned from.</p>
+<h2>What Does Responsible AI Education Include?</h2>
+<ul>
+<li><strong>Training and evaluating a model:</strong> Understanding how a model learns from data, not just using a finished one.</li>
+<li><strong>Bias and ethics:</strong> Recognizing that a model's outputs reflect its training data, and can be wrong or unfair.</li>
+<li><strong>Critical evaluation:</strong> Questioning AI outputs rather than accepting them automatically.</li>
+<li><strong>Real cybersecurity:</strong> Basic practices like password strength, tied to a broader sense of digital safety.</li>
+</ul>
+<h2>What Does This Look Like in a CODEship Class?</h2>
+<p>In CODEship's Engineers level, students build a Smart Sorting AI project specifically designed to surface bias and ethics questions, alongside a Chatbot for Good project that asks students to think about who an AI tool helps — and who it might not.</p>
+    `,
+    faqs: [
+      { question: "Isn't AI too complex a topic for middle schoolers?", answer: "Not when it's hands-on. Building and testing a simple model makes abstract concepts like bias concrete and understandable." },
+      { question: "What do major education bodies say about AI ethics for kids?", answer: "Both UNESCO and the OECD have published AI literacy frameworks for school-aged children that explicitly include ethics and values, not just technical skills." },
+      { question: "Does CODEship teach kids to build AI models, or just use them?", answer: "Both — students train and evaluate their own simple AI model, which is what makes concepts like bias tangible rather than theoretical." },
+    ],
+  },
+  {
+    slug: "cybersecurity-for-kids-passwords-privacy",
+    title: "Cybersecurity for Kids: Passwords, Privacy & Staying Safe",
+    metaDescription:
+      "Real cybersecurity skills for kids — not just 'don't talk to strangers online,' but practical concepts like password strength and digital privacy.",
+    category: "ai",
+    readTime: 5,
+    publishDate: "2025-03-18",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "cybersecurity for kids",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Practical cybersecurity for kids starts with understanding what makes a password strong, why privacy settings matter, and how to think critically about what they share online — ideally learned by building something, not just being told rules.</p>
+<h2>Why Cybersecurity Belongs in a Coding Program</h2>
+<p>Cybersecurity is often taught as a list of "don'ts" — don't share your password, don't click suspicious links. That's necessary but incomplete. Real understanding comes from seeing why those rules exist: what actually makes a password easy or hard to guess, how personal information gets used, and how digital systems can be misused.</p>
+<h2>What Does "Real" Cybersecurity Look Like for This Age?</h2>
+<ul>
+<li><strong>Password strength:</strong> Understanding what makes a password resistant to guessing — not just memorizing a rule about special characters.</li>
+<li><strong>Digital footprint:</strong> Understanding that what's shared online persists and can be seen by others.</li>
+<li><strong>Privacy basics:</strong> Recognizing what information is sensitive and why it matters who can see it.</li>
+<li><strong>Healthy skepticism:</strong> Questioning links, requests, and offers that seem designed to trick someone.</li>
+</ul>
+<h2>How CODEship Teaches This Hands-On</h2>
+<p>In CODEship's Engineers level, students build a Password Strength Checker — a real Python program that evaluates password strength using actual logic (length, character variety, common patterns). Building the checker themselves means students understand <em>why</em> a password is weak or strong, not just that it is.</p>
+<h2>How Early Should Digital Footprint Awareness Start?</h2>
+<p>Much earlier than middle school. CODEship introduces "kindness online and digital footprint" concepts as early as Explorers (K-1), scaled appropriately — the ideas build in complexity across all four program levels, from basic online kindness to practical cybersecurity engineering.</p>
+    `,
+    faqs: [
+      { question: "What cybersecurity skills should a middle schooler actually know?", answer: "Practical basics: what makes a password strong, how digital footprints work, and healthy skepticism toward suspicious links or requests." },
+      { question: "Does CODEship teach digital footprint awareness to younger kids too?", answer: "Yes — it starts as early as the Explorers level (K-1) in age-appropriate form and builds in complexity through each program level." },
+      { question: "How does building a password checker teach cybersecurity better than a lecture?", answer: "Writing the actual logic that scores password strength makes the 'why' concrete — students see directly which patterns make passwords weak." },
+    ],
   },
 ];
 
