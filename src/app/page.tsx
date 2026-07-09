@@ -5,6 +5,8 @@ import FAQAccordion from "@/components/FAQAccordion";
 import NewsletterForm from "@/components/NewsletterForm";
 import ScrollReveal from "@/components/ScrollReveal";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
+import JourneyMap from "@/components/JourneyMap";
+import AlignmentStrip from "@/components/AlignmentStrip";
 import { websiteSchema, organizationSchema, faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
@@ -235,8 +237,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Programs ── */}
+      {/* ── The CODEship Journey (K–8 grade-band programs) ── */}
       <section className="py-20 bg-[#FAF8F4]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <JourneyMap />
+          </ScrollReveal>
+          <ScrollReveal delay={100}>
+            <div className="mt-10">
+              <AlignmentStrip />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── Programs ── */}
+      <section className="py-20 bg-[#F1EEE8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="text-center mb-12">

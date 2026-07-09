@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PROGRAMS } from "@/data/programs";
 
 export const metadata: Metadata = {
   title: "Weekly Coding Classes for Kids | Ages 5–16",
@@ -53,20 +54,24 @@ export default function WeeklyClassesPage() {
               </ul>
             </div>
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-[#001532] mb-4">Program Levels</h2>
-              {[
-                { level: "Explorers", age: "Ages 5–7", desc: "Introduction to coding concepts through visual block programming, games, and creative activities. ScratchJr, unplugged activities.", borderColour: "border-l-4 border-[#E5A823]" },
-                { level: "Builders", age: "Ages 7–10", desc: "Scratch, block-based coding, game design fundamentals, simple web projects, and introductory robotics.", borderColour: "border-l-4 border-[#138A9A]" },
-                { level: "Creators", age: "Ages 10–13", desc: "Text-based coding (Python, HTML/CSS/JS), app development, advanced game design, AI introduction.", borderColour: "border-l-4 border-[#6E43A8]" },
-                { level: "Innovators", age: "Ages 13+", desc: "Advanced programming, full project development, AI and machine learning, portfolio building.", borderColour: "border-l-4 border-[#001532]" },
-              ].map((lvl) => (
-                <div key={lvl.level} className={`bg-white rounded-xl p-5 shadow-sm border border-gray-100 ${lvl.borderColour}`}>
+              <h2 className="text-2xl font-bold text-[#001532] mb-1">Program Levels</h2>
+              <p className="text-gray-500 text-sm mb-4">
+                The CODEship Journey: four connected levels from K to Grade 8, each 4 semesters + a capstone.
+              </p>
+              {PROGRAMS.map((prog) => (
+                <Link
+                  key={prog.slug}
+                  href={`/programs/${prog.slug}`}
+                  className="block bg-white rounded-xl p-5 shadow-sm border border-gray-100 border-l-4 hover:shadow-md transition-shadow"
+                  style={{ borderLeftColor: prog.accentColour }}
+                >
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-bold text-[#001532]">{lvl.level}</h3>
-                    <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-0.5 rounded">{lvl.age}</span>
+                    <h3 className="font-bold text-[#001532]">{prog.level}</h3>
+                    <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-0.5 rounded">{prog.gradeBand}</span>
                   </div>
-                  <p className="text-gray-600 text-sm">{lvl.desc}</p>
-                </div>
+                  <p className="text-[#E5A823] text-xs font-semibold mb-1.5">{prog.codingSpace}</p>
+                  <p className="text-gray-600 text-sm">{prog.outcome}</p>
+                </Link>
               ))}
             </div>
           </div>
