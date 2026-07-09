@@ -133,6 +133,61 @@ which campaign — swap in the real files before launch.
   English curriculum facts and needs a native French-speaker pass before it runs as a live ad
   destination (see the compliance checklist in `CAMPAIGN_KIT.md`).
 
+## Guyana online-course landing pages (`/gy/:slug`)
+
+Five landing pages for CODEship's Guyana **online-only** offering live at `/gy/online-coding-classes`,
+`/gy/math-english-coding`, `/gy/ngsa-digital-skills`, `/gy/computer-classes-for-kids`, and
+`/gy/online-stem-classes`. Data lives in `src/data/guyanaCampaigns.ts` (per-page headline/subhead/
+core-promise/meta copy, plus the shared page-anatomy content — parent problems, outcomes, projects,
+pricing, FAQ, regions) and `src/data/guyanaVariants.ts` (3 A/B headlines per page via `?v=1|2|3`).
+
+**Unlike `/lp/*`, these pages are meant to be found via organic search** — they carry real SEO
+metadata (no `noindex`), are included in `sitemap.ts`, and `robots.ts` does not disallow `/gy/`. They
+still share `/lp`'s nav isolation: no links from the main `Navigation`/`Footer`, and `src/app/gy/
+layout.tsx` renders only the shared `LPHeader` (logo → home) — never the main site nav.
+
+### Guyana is not a K-8 program
+
+The main site's registration (`buildRegistrationUrl`) is keyed to a specific program
+(explorers/builders/developers/engineers). Guyana registrations are a generic **online semester**
+with no such mapping, so they use their own builder:
+
+`buildGuyanaRegistrationUrl({ page, source?, medium?, campaign?, content?, term? })`
+(`src/lib/buildGuyanaRegistrationUrl.ts`) — appends UTMs to the same `REG_FORM_URL` (`/register`,
+the existing form) plus `country=guyana`, `location=online`, and `page`:
+
+| Param | Default | Values |
+|---|---|---|
+| `utm_source` | `meta` | `meta` \| `google` \| `whatsapp` \| `facebook` \| `instagram` |
+| `utm_medium` | `paid_social` | `paid_social` \| `cpc` \| `organic_social` \| `referral` |
+| `utm_campaign` | `guyana-online` | — |
+| `utm_content` | `guyana` | `georgetown` \| `east-bank-demerara` \| `east-coast-demerara` \| `berbice` \| `linden` \| `essequibo` \| `guyana` \| ... (see `GUYANA_REGIONS`) |
+| `utm_term` | derived from `page` | `online-coding` \| `math-english-coding` \| `ngsa-digital-skills` \| `computer-classes` \| `online-stem` |
+
+`GYView` reads any incoming `utm_*` from the URL and passes them straight through, falling back to
+these defaults for direct/testing traffic.
+
+### Pricing (authoritative — render exactly this)
+
+**GYD $20,000 per semester** (optionally broken down as **GYD $5,000 per session**, "depending on the
+semester schedule") — see `GUYANA_PRICING` in `guyanaCampaigns.ts`. No Canadian city schedule or
+in-person language appears anywhere on these pages; the trust line is explicitly "Online ·
+Small-group learning · Math, English, writing, coding, and computer skills."
+
+### Lead capture ("Get the Program Details")
+
+The secondary CTA is interest capture, not registration — a 6-field form (parent name, email,
+WhatsApp, child's age, community/region, main support needed) that calls `guyanaLeadCapture()`
+(`src/lib/leadCapture.ts`, a stub — wire to a real ESP/CRM) and fires `trackSelectRegion` /
+`trackLeadSubmit`.
+
+### Compliance language
+
+Only "supports NGSA skill-building" / "helps strengthen skills used in NGSA preparation" —
+**never** "guaranteed," "official NGSA program," "Ministry-approved," or "certified by the Ministry."
+The `/gy/ngsa-digital-skills` page's `complianceNote` field carries this explicitly, and
+`GUYANA_COMPLIANCE_DISCLAIMER` repeats a shorter version in `GYFooter` on every Guyana page.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
