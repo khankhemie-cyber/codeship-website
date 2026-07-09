@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact CODEship Academy",
   description:
     "Get in touch with CODEship Academy. Questions about programs, school partnerships, franchise opportunities, or general inquiries.",
-  alternates: { canonical: "https://www.codeshipacademy.com/contact" },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

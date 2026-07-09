@@ -3,13 +3,16 @@ import Link from "next/link";
 import FranchiseSelector from "@/components/FranchiseSelector";
 import FAQAccordion from "@/components/FAQAccordion";
 import FranchiseKitForm from "@/components/FranchiseKitForm";
+import { pageMetadata } from "@/lib/pageMetadata";
+import { faqSchema, breadcrumbSchema } from "@/lib/schema";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Franchise Opportunity | CODEship Academy",
   description:
     "Build the future in your community with a CODEship Academy franchise. Three flexible models from $10K–$150K+. No tech background required.",
-  alternates: { canonical: "https://www.codeshipacademy.com/franchise" },
-};
+  path: "/franchise",
+});
 
 const franchiseFaqs = [
   {
@@ -36,10 +39,24 @@ const franchiseFaqs = [
 
 export default function FranchisePage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(franchiseFaqs)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Franchise", href: "/franchise" }])),
+        }}
+      />
     <div className="bg-[#FAF8F4]">
       {/* Hero */}
       <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-4">
+            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Franchise", href: "/franchise" }]} />
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Build the Future in Your Community
           </h1>
@@ -287,5 +304,6 @@ export default function FranchisePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

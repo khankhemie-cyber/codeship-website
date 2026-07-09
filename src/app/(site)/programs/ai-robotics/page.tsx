@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI & Robotics Programs for Kids | Ages 8–16",
   description:
     "CODEship Academy's AI and robotics programs for children ages 8–16. Hands-on AI model building, robot programming, and real project creation.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs/ai-robotics" },
-};
+  path: "/programs/ai-robotics",
+});
 
 export default function AIRoboticsPage() {
   return (

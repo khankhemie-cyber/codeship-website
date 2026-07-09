@@ -7,14 +7,15 @@ import ScrollReveal from "@/components/ScrollReveal";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
 import JourneyMap from "@/components/JourneyMap";
 import AlignmentStrip from "@/components/AlignmentStrip";
-import { websiteSchema, organizationSchema, faqSchema } from "@/lib/schema";
+import { websiteSchema, faqSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "CODEship Academy | Kids Coding, AI & STEM Programs",
   description:
     "CODEship Academy helps children turn ideas into real digital projects — coding, AI, STEM, camps, and school workshops. Creativity before code.",
-  alternates: { canonical: "https://www.codeshipacademy.com" },
-};
+  path: "/",
+});
 
 const homeFaqs = [
   {
@@ -137,10 +138,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
-      />
+      {/* Organization schema now rendered sitewide by (site)/layout.tsx */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}

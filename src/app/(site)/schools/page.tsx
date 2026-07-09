@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import FAQAccordion from "@/components/FAQAccordion";
 import SchoolContactForm from "@/components/SchoolContactForm";
+import { pageMetadata } from "@/lib/pageMetadata";
+import { faqSchema, breadcrumbSchema } from "@/lib/schema";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "School Partnerships | STEM Programs for Schools",
   description:
     "Partner with CODEship Academy to bring coding, AI, and STEM enrichment to your school. After-school clubs, workshops, and camps for all ages.",
-  alternates: { canonical: "https://www.codeshipacademy.com/schools" },
-};
+  path: "/schools",
+});
 
 const schoolFaqs = [
   {
@@ -38,9 +41,23 @@ const schoolFaqs = [
 
 export default function SchoolsPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(schoolFaqs)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Schools", href: "/schools" }])),
+        }}
+      />
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-4">
+            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Schools", href: "/schools" }]} />
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Partner With CODEship Academy
           </h1>
@@ -133,5 +150,6 @@ export default function SchoolsPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

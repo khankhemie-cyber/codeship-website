@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About CODEship Academy | Our Mission & Story",
   description:
     "Learn about CODEship Academy — our mission, values, and why we believe creativity comes before code in children's education.",
-  alternates: { canonical: "https://www.codeshipacademy.com/about" },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

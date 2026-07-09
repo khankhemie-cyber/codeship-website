@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PROGRAMS } from "@/data/programs";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Weekly Coding Classes for Kids | Ages 5–16",
   description:
     "CODEship Academy's weekly coding and STEM classes for children ages 5–16. Project-based, ongoing, and inclusive. Find classes near you.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs/weekly-classes" },
-};
+  path: "/programs/weekly-classes",
+});
 
 export default function WeeklyClassesPage() {
   return (

@@ -3,13 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import JourneyMap from "@/components/JourneyMap";
 import AlignmentStrip from "@/components/AlignmentStrip";
+import { pageMetadata } from "@/lib/pageMetadata";
+import { breadcrumbSchema } from "@/lib/schema";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Programs | Kids Coding, AI & STEM Classes",
   description:
     "Explore CODEship Academy's full range of coding, AI, and STEM programs — weekly classes, camps, school workshops, birthday parties, and AI & robotics.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs" },
-};
+  path: "/programs",
+});
 
 const programs = [
   {
@@ -116,10 +119,20 @@ const programs = [
 
 export default function ProgramsPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Programs", href: "/programs" }])),
+        }}
+      />
     <div className="bg-[#FAF8F4]">
       {/* Hero */}
       <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-4">
+            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Programs", href: "/programs" }]} />
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Programs for Every Child
           </h1>
@@ -211,5 +224,6 @@ export default function ProgramsPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -58,21 +58,7 @@ See `AUDIENCE_MAP` in `campaign_kit.ts`. Summary:
 
 All four are eligible in all 5 in-person cities plus their online day.
 
-## 5. Lead magnets
-
-| Level | Asset (placeholder path — swap in the real PDF) | Language | Campaign |
-|---|---|---|---|
-| Explorers | `/downloads/explorers-sample-workbook-en.pdf` | EN | `/lp/explorers` |
-| Explorers (FR) | `/downloads/explorateurs-trousse-exemple-fr.pdf` | FR | `/lp/quebec-fr` |
-| Builders | `/downloads/builders-sample-workbook-en.pdf` | EN | `/lp/builders` |
-| Developers | `/downloads/developers-sample-workbook-en.pdf` | EN | `/lp/developers` |
-| Engineers | `/downloads/engineers-password-checker-workbook-en.pdf` | EN | `/lp/engineers` |
-
-The LP's "free sample kit" email capture (`SampleKitForm`) calls `leadCapture()` — wire
-the actual PDF delivery (autoresponder attachment, gated download link, etc.) to that
-stub once an ESP/CRM endpoint exists. See `src/lib/leadCapture.ts`.
-
-## 6. Landing page → registration routing
+## 5. Landing page → registration routing
 
 | Campaign | Landing page | Registers via |
 |---|---|---|
@@ -99,7 +85,7 @@ to `/register` and lets the existing HubSpot-backed form's own tracking pick the
 Every registration is attributable by **program × location** end-to-end, with no new
 backend — see `UTM_PLAN` in `campaign_kit.ts`.
 
-## 7. Compliance pass
+## 6. Compliance pass
 
 See `COMPLIANCE_CHECKLIST` in `campaign_kit.ts`. In short:
 
@@ -111,7 +97,7 @@ See `COMPLIANCE_CHECKLIST` in `campaign_kit.ts`. In short:
 - No earnings, outcome-guarantee, or unverifiable superlative claims.
 - French copy on `/lp/quebec-fr` needs a native-speaker review before launch.
 
-## 8. Tracking plan
+## 7. Tracking plan
 
 Events (fired by the LPs, mirroring the UTM attribution — see `TRACKING_EVENTS` in
 `campaign_kit.ts` and `src/lib/analytics.ts`):
@@ -121,7 +107,6 @@ Events (fired by the LPs, mirroring the UTM attribution — see `TRACKING_EVENTS
 | `program_view` | LP mounts | `{ program, location? }` |
 | `select_location` | visitor changes the location/schedule selector | `{ program, location }` |
 | `register_click` | visitor clicks any Register/Book-a-trial CTA | `{ program, location }` |
-| `lead_submit` | visitor submits the free-sample-kit email capture | `{ program, location?, email }` |
 
 Build the funnel report by joining these events (or the `utm_campaign`/`utm_content` on
 the resulting HubSpot contact) — grouped by **program** and **location/province** —

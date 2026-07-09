@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import ProgramFinder from "@/components/ProgramFinder";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Program Finder | Find the Right Coding Program for Your Child",
   description:
     "Answer 4 quick questions to find the best CODEship Academy program for your child based on age, experience, interests, and schedule.",
-  alternates: { canonical: "https://www.codeshipacademy.com/program-finder" },
-};
+  path: "/program-finder",
+});
 
 export default function ProgramFinderPage() {
   return (

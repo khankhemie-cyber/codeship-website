@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy | CODEship Academy",
   description: "CODEship Academy's privacy policy — how we collect, use, and protect your personal information.",
-  alternates: { canonical: "https://www.codeshipacademy.com/privacy-policy" },
-};
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   return (

@@ -37,7 +37,7 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
           <div
             className={`accordion-content ${openIndex === index ? "open" : ""}`}
           >
-            <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed">
+            <div className="faq-answer px-6 pb-5 text-gray-600 text-sm leading-relaxed">
               {faq.answer}
             </div>
           </div>

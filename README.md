@@ -29,6 +29,59 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## SEO & GEO (AI-search) foundation
+
+### Canonical host
+
+`https://www.codeshipacademy.com` is the single canonical host. Every page's `alternates.canonical`
+and `openGraph.url` are generated from this via `pageMetadata()` (`src/lib/pageMetadata.ts`) — every
+page now emits its **own** self-referential `og:title`/`og:description`/`og:url`/`twitter:*` instead
+of inheriting the root layout's homepage-only defaults (the previous bug: e.g. the Explorers page's
+`og:url` pointed at `/`). If `codeshipacademy.com` (no `www`) or any other host is still live and
+indexed, add a 301 from it to the `www` host at the DNS/hosting level — that's outside this repo.
+
+### Structured data (JSON-LD)
+
+`src/lib/schema.ts` exports one function per schema type — `organizationSchema` (rendered once,
+sitewide, by `(site)/layout.tsx`), `localBusinessSchema` (per official in-person city, with `geo` and
+`openingHours` only for the 5 real cities — Toronto, Vaughan, Oshawa, Calgary, Vancouver — not the
+broader 12-city browsing list), `courseSchema` (per `/programs/:slug`, with in-person + online
+`CourseInstance`s derived from `locations.ts`, no invented facts), `faqSchema`, `breadcrumbSchema`
+(paired with the visible `<Breadcrumbs>` component), `articleSchema` (now includes `dateModified` and
+an `authorName` override), `itemListSchema` (for future listicle articles), and `speakableSchema`
+(pairs with the `.faq-answer` CSS class every `FAQAccordion` answer already renders, for voice/AI
+extraction). Validate any page with Google's Rich Results Test after changes.
+
+### Crawl / index hygiene
+
+- `/lp/*` (paid-only landing pages): `noindex`, excluded from `sitemap.ts`, disallowed in `robots.ts`.
+- `/gy/*` (Guyana, SEO-relevant): indexable, included in `sitemap.ts`, **not** disallowed.
+- `/franchise/{ali-saad,jaspreet,raghavi,tom-che}` (private, password-gated kits): `noindex`,
+  disallowed — unchanged, pre-existing.
+- Everything else (programs, locations, resources/blog, schools, franchise overview): indexable.
+
+### AI-crawler policy
+
+`robots.ts` explicitly allows `GPTBot`, `PerplexityBot`, `Google-Extended`, and `CCBot` (same policy
+as the wildcard `*` rule — stated explicitly since some AI-discovery audits check for named
+user-agent rules specifically, not just the wildcard). `public/llms.txt` summarizes what CODEship is,
+its programs, locations, and key page URLs for the emerging llms.txt AI-discovery convention — keep
+it in sync when adding major new sections (e.g. new program levels, new countries).
+
+### Manual steps (require account access this repo doesn't have)
+
+These can't be done from code — whoever owns the relevant accounts needs to complete them:
+
+1. **Bing Webmaster Tools**: add `codeshipacademy.com` as a site, verify ownership, and submit
+   `https://www.codeshipacademy.com/sitemap.xml`. This matters because ChatGPT Search uses Bing's
+   index, not Google's.
+2. **Google Search Console**: same — verify the property and submit the sitemap there too.
+3. **GA4 custom channel group for AI referrals**: in GA4 → Admin → Data display → Channel groups,
+   create a custom channel (e.g. "AI Referral") matching source contains `chatgpt.com`, `perplexity.ai`,
+   `gemini.google.com`, `claude.ai`, or `copilot.microsoft.com`, so AI-driven traffic is measurable
+   separately from generic Referral/Organic Search.
+4. Re-submit the sitemap to both Bing and Google after each batch of new articles is published.
+
 ## The CODEship Journey: Programs, Locations & Registration
 
 The site's K–8 curriculum ("Explorers", "Builders", "Developers", "Engineers") is modeled as two typed
@@ -76,16 +129,17 @@ those values will prefill too. UTM parameters remain the durable source of truth
 ### Analytics
 
 `src/lib/analytics.ts` exports `trackView`, `trackSelectLocation`, `trackRegisterClick`, and
-`trackLeadSubmit` stubs, each called with `{ program, location? }` (plus whatever UTMs/email domain
-are relevant). They currently `console.debug` in development. To wire up real analytics, uncomment
-and fill in the `gtag`/`fbq` calls inside `dispatch()` in `src/lib/analytics.ts`.
+`trackPriceView` stubs, each called with `{ program, location? }` (or `{ page, country, location }`
+on the Guyana pages) plus whatever UTMs are relevant. They currently `console.debug` in development.
+To wire up real analytics, uncomment and fill in the `gtag`/`fbq` calls inside `dispatch()` in
+`src/lib/analytics.ts`.
 
 ## Paid-ad landing pages (`/lp/:slug`)
 
 Five standalone, conversion-focused landing pages for paid campaigns live at `/lp/explorers`,
 `/lp/builders`, `/lp/developers`, `/lp/engineers`, and `/lp/quebec-fr` (fully French). Each matches
-one ad's message, presents one program, and drives one action — register via the existing form, or
-grab a free sample kit. See `CAMPAIGN_KIT.md` for the full messaging/ad-copy/compliance kit.
+one ad's message, presents one program, and drives one action — register via the existing form.
+See `CAMPAIGN_KIT.md` for the full messaging/ad-copy/compliance kit.
 
 ### These pages are intentionally not part of the main site
 
@@ -105,8 +159,8 @@ grab a free sample kit. See `CAMPAIGN_KIT.md` for the full messaging/ad-copy/com
 - `src/data/variants.ts` — A/B variants (`?v=a` default, `?v=b`) for headline / hero image / CTA label
   only; facts, projects, and FAQ never change between variants.
 - `src/data/campaign_kit.ts` + `CAMPAIGN_KIT.md` — the broader ad-campaign kit (messaging pillars,
-  per-level × per-location ad copy sets, audience map, lead-magnet map, UTM plan, compliance
-  checklist) that the marketing team and ad platforms read from.
+  per-level × per-location ad copy sets, audience map, UTM plan, compliance checklist) that the
+  marketing team and ad platforms read from.
 
 ### Location targeting
 
@@ -114,14 +168,6 @@ Each LP reads `utm_content` (falling back to `?loc=`) from the incoming URL to d
 bar. If neither is present, the full 5-city + online selector shows expanded instead of collapsed.
 Whatever the visitor lands on or picks flows straight into the registration URL's `utm_content` —
 `src/components/lp/LPView.tsx` is the orchestrator; `LocationBar` is the selector itself.
-
-### Sample-kit lead capture
-
-The secondary CTA ("Get a free sample kit") is a single email field — the *only* form on an LP, and
-it is a lead magnet, not a registration. It calls `leadCapture()` (`src/lib/leadCapture.ts`), which is
-currently a stub that just logs in development. Wire it to your real ESP/CRM endpoint, and see
-`LEAD_MAGNETS` in `campaign_kit.ts` for which PDF (placeholder paths under `/downloads/`) maps to
-which campaign — swap in the real files before launch.
 
 ### Swapping in real assets before launch
 
@@ -161,7 +207,7 @@ the existing form) plus `country=guyana`, `location=online`, and `page`:
 | `utm_source` | `meta` | `meta` \| `google` \| `whatsapp` \| `facebook` \| `instagram` |
 | `utm_medium` | `paid_social` | `paid_social` \| `cpc` \| `organic_social` \| `referral` |
 | `utm_campaign` | `guyana-online` | — |
-| `utm_content` | `guyana` | `georgetown` \| `east-bank-demerara` \| `east-coast-demerara` \| `berbice` \| `linden` \| `essequibo` \| `guyana` \| ... (see `GUYANA_REGIONS`) |
+| `utm_content` | `guyana` | `georgetown` \| `east-bank-demerara` \| `east-coast-demerara` \| `berbice` \| `linden` \| `essequibo` \| `guyana` \| ... (any community slug) |
 | `utm_term` | derived from `page` | `online-coding` \| `math-english-coding` \| `ngsa-digital-skills` \| `computer-classes` \| `online-stem` |
 
 `GYView` reads any incoming `utm_*` from the URL and passes them straight through, falling back to
@@ -170,16 +216,13 @@ these defaults for direct/testing traffic.
 ### Pricing (authoritative — render exactly this)
 
 **GYD $20,000 per semester** (optionally broken down as **GYD $5,000 per session**, "depending on the
-semester schedule") — see `GUYANA_PRICING` in `guyanaCampaigns.ts`. No Canadian city schedule or
-in-person language appears anywhere on these pages; the trust line is explicitly "Online ·
-Small-group learning · Math, English, writing, coding, and computer skills."
+semester schedule"), with the next semester starting **September 1, 2026** (`NEXT_SEMESTER_START` in
+`src/data/programs.ts` — shared across the K-8 journey, `/lp/*`, and `/gy/*`) — see `GUYANA_PRICING`
+in `guyanaCampaigns.ts`. No Canadian city schedule or in-person language appears anywhere on these
+pages; the trust line is explicitly "Online · Small-group learning · Math, English, writing, coding,
+and computer skills."
 
-### Lead capture ("Get the Program Details")
-
-The secondary CTA is interest capture, not registration — a 6-field form (parent name, email,
-WhatsApp, child's age, community/region, main support needed) that calls `guyanaLeadCapture()`
-(`src/lib/leadCapture.ts`, a stub — wire to a real ESP/CRM) and fires `trackSelectRegion` /
-`trackLeadSubmit`.
+There is no secondary lead-capture form on these pages — every CTA goes straight to registration.
 
 ### Compliance language
 

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Camps | Summer, March Break & PA Day",
   description:
     "CODEship Academy coding and STEM camps for kids — summer camps, March Break camps, and PA Day workshops. Hands-on project-based learning.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs/camps" },
-};
+  path: "/programs/camps",
+});
 
 export default function CampsPage() {
   return (

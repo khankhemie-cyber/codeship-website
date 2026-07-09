@@ -11,9 +11,9 @@ import { buildRegistrationUrl, type LocationSlug } from "@/lib/registration";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
 import LocationBar from "./LocationBar";
 import StickyMobileCTA from "./StickyMobileCTA";
-import SampleKitForm from "./SampleKitForm";
 import FAQAccordion from "@/components/FAQAccordion";
 import LPFooter from "./LPFooter";
+import { NEXT_SEMESTER_START, NEXT_SEMESTER_START_FR } from "@/data/programs";
 
 const VALID_LOCATIONS = new Set<string>([...IN_PERSON.map((c) => c.toLowerCase()), "online"]);
 
@@ -29,13 +29,13 @@ const UI = {
       { title: "Inclusive by design", desc: "Accommodations are built into every class, for a range of learning styles and needs." },
     ],
     buildHeading: "What they'll build",
-    offerHeading: "Two easy ways to start",
+    offerHeading: "Ready to start?",
     faqHeading: "Common questions",
     finalHeading: "Dream. Code. Achieve.",
     finalSub: "Book a free trial class today — no long-term contract, just one class to see if it's the right fit.",
     complianceNote:
       "Curriculum alignment claims support and align with — not endorsed or approved by — any ministry of education.",
-    sampleKitDivider: "or",
+    semesterStart: `Next semester starts ${NEXT_SEMESTER_START}`,
   },
   fr: {
     scheduleHeading: "Emplacement et horaire",
@@ -48,13 +48,13 @@ const UI = {
       { title: "Conçu pour l'inclusion", desc: "Des mesures d'adaptation sont intégrées à chaque cours." },
     ],
     buildHeading: "Ce qu'ils vont construire",
-    offerHeading: "Deux façons simples de commencer",
+    offerHeading: "Prêt à commencer?",
     faqHeading: "Questions fréquentes",
     finalHeading: "Rêver. Coder. Réussir.",
     finalSub: "Réservez un cours d'essai gratuit dès aujourd'hui — sans contrat à long terme.",
     complianceNote:
       "Les mentions d'alignement au curriculum appuient et s'alignent avec — sans être endossées ou approuvées par — un ministère de l'Éducation.",
-    sampleKitDivider: "ou",
+    semesterStart: `La prochaine session débute le ${NEXT_SEMESTER_START_FR}`,
   },
 };
 
@@ -224,7 +224,8 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           </h2>
           <div className="bg-[#001532] rounded-xl p-6 text-center mb-4">
             <h3 className="text-white font-bold text-lg mb-1">{campaign.offerHeadline}</h3>
-            <p className="text-gray-300 text-sm mb-4">{campaign.offerBody}</p>
+            <p className="text-gray-300 text-sm mb-1">{campaign.offerBody}</p>
+            <p className="text-[#E5A823] text-xs font-semibold mb-4">{t.semesterStart}</p>
             <Link
               href={registrationUrl}
               onClick={handleRegisterClick}
@@ -233,8 +234,6 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
               {ctaLabel}
             </Link>
           </div>
-          <p className="text-center text-gray-400 text-xs mb-4 uppercase tracking-widest">{t.sampleKitDivider}</p>
-          <SampleKitForm program={campaign.program} location={location} utm={utmSnapshot} lang={campaign.lang} />
           {campaign.secondaryLink && (
             <p className="text-center text-sm mt-4">
               <Link

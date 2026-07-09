@@ -179,22 +179,6 @@ export const AUDIENCE_MAP: AudienceMapEntry[] = PROGRAMS.map((p) => ({
   onlineDay: ONLINE[p.slug].day,
 }));
 
-export interface LeadMagnetEntry {
-  program: ProgramSlug;
-  asset: string;
-  language: "EN" | "FR" | "EN/FR";
-  campaignSlug: string;
-}
-
-/** Sample-kit PDF → campaign map (Part B item 5). Asset filenames are placeholders — swap in the real PDFs. */
-export const LEAD_MAGNETS: LeadMagnetEntry[] = [
-  { program: "explorers", asset: "/downloads/explorers-sample-workbook-en.pdf", language: "EN", campaignSlug: "explorers" },
-  { program: "explorers", asset: "/downloads/explorateurs-trousse-exemple-fr.pdf", language: "FR", campaignSlug: "quebec-fr" },
-  { program: "builders", asset: "/downloads/builders-sample-workbook-en.pdf", language: "EN", campaignSlug: "builders" },
-  { program: "developers", asset: "/downloads/developers-sample-workbook-en.pdf", language: "EN", campaignSlug: "developers" },
-  { program: "engineers", asset: "/downloads/engineers-password-checker-workbook-en.pdf", language: "EN", campaignSlug: "engineers" },
-];
-
 export interface RoutingEntry {
   campaignSlug: string;
   landingPage: string;
@@ -220,7 +204,6 @@ export const TRACKING_EVENTS = [
   { name: "program_view", when: "LP mounts", payload: "{ program, location? }" },
   { name: "select_location", when: "visitor changes the location/schedule selector", payload: "{ program, location }" },
   { name: "register_click", when: "visitor clicks any Register/Book-a-trial CTA", payload: "{ program, location }" },
-  { name: "lead_submit", when: "visitor submits the free-sample-kit email capture", payload: "{ program, location?, email }" },
 ] as const;
 
 export interface ComplianceChecklistItem {

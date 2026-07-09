@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Birthday Parties | CODEship Academy",
   description:
     "Unique coding birthday parties for kids ages 6–14. Everyone builds a real game or animation together. Book a CODEship party today.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs/birthday-parties" },
-};
+  path: "/programs/birthday-parties",
+});
 
 export default function BirthdayPartiesPage() {
   return (

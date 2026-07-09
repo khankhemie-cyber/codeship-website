@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
+import { NEXT_SEMESTER_START } from "@/data/programs";
 import { IN_PERSON, ONLINE, IN_PERSON_SATURDAY_SCHEDULE, type InPersonCity } from "@/data/locations";
 import { buildRegistrationUrl, type LocationSlug } from "@/lib/registration";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
@@ -103,10 +104,14 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         {scheduleDetail}
       </div>
 
+      <p className="text-[#138A9A] text-xs font-semibold text-center mt-4">
+        Next semester starts {NEXT_SEMESTER_START}
+      </p>
+
       <Link
         href={registrationUrl}
         onClick={() => trackRegisterClick({ program: program.slug, location })}
-        className="mt-5 w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-flex items-center justify-center text-center"
+        className="mt-3 w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-flex items-center justify-center text-center"
       >
         Register for {program.level}
       </Link>

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { PROGRAMS, getProgram, PROGRAM_STRUCTURE, JOURNEY_ARC } from "@/data/programs";
-import { breadcrumbSchema } from "@/lib/schema";
+import { PROGRAMS, getProgram, PROGRAM_STRUCTURE, JOURNEY_ARC, type ProgramSlug } from "@/data/programs";
+import { IN_PERSON, IN_PERSON_SATURDAY_SCHEDULE, ONLINE } from "@/data/locations";
+import { breadcrumbSchema, courseSchema, faqSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/pageMetadata";
 import ProgramLocationSelector from "@/components/ProgramLocationSelector";
 import JourneyMap from "@/components/JourneyMap";
+import FAQAccordion from "@/components/FAQAccordion";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface Props {
   params: { slug: string };
@@ -14,14 +17,23 @@ export async function generateStaticParams() {
   return PROGRAMS.map((p) => ({ slug: p.slug }));
 }
 
+const PROGRAM_OG_IMAGE: Record<ProgramSlug, string> = {
+  explorers: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80",
+  builders: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&q=80",
+  developers: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&q=80",
+  engineers: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80",
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = getProgram(params.slug);
   if (!program) return {};
-  return {
+  return pageMetadata({
     title: `${program.level} (${program.gradeBand}) | ${program.codingSpace}`,
     description: `${program.level} — ${program.gradeBand}. ${program.outcome} ${PROGRAM_STRUCTURE.semesters} semesters, ~${PROGRAM_STRUCTURE.sessionsApprox} sessions, project-based. In-person in Toronto, Vaughan, Oshawa, Calgary & Vancouver, or online.`,
-    alternates: { canonical: `https://www.codeshipacademy.com/programs/${program.slug}` },
-  };
+    path: `/programs/${program.slug}`,
+    image: PROGRAM_OG_IMAGE[program.slug],
+    imageAlt: `${program.level} — CODEship Academy`,
+  });
 }
 
 const WEEK_STRUCTURE = [
@@ -54,12 +66,51 @@ const ALIGNMENT_COPY: Record<string, string> = {
     "Engineers' Grades 6–8 curriculum supports Ontario's coding and AI literacy expectations, maps to Alberta's Computer Science and CTF outcomes, and aligns with Québec's Cadre de référence de la compétence numérique (available in French).",
 };
 
+function programFaqs(program: ReturnType<typeof getProgram>) {
+  if (!program) return [];
+  const online = ONLINE[program.slug];
+  return [
+    {
+      question: `Is ${program.level} the right fit for my child?`,
+      answer: `${program.level} is built for ${program.gradeBand}. No prior coding experience is needed.`,
+    },
+    {
+      question: "Does my child need coding experience already?",
+      answer: "No. Every class starts from the basics and includes inclusive-design accommodations.",
+    },
+    {
+      question: "How long is the program?",
+      answer: `${PROGRAM_STRUCTURE.semesters} semesters, about ${PROGRAM_STRUCTURE.sessionsApprox} sessions total, plus a capstone project.`,
+    },
+    {
+      question: "Where and when does it run?",
+      answer: `In-person Saturdays in ${IN_PERSON.join(", ")}, or online ${online.day}s, ${online.window}.`,
+    },
+  ];
+}
+
 export default function ProgramPage({ params }: Props) {
   const program = getProgram(params.slug);
   if (!program) notFound();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            courseSchema(program, {
+              inPersonCities: [...IN_PERSON],
+              inPersonSchedule: IN_PERSON_SATURDAY_SCHEDULE[program.slug],
+              online: ONLINE[program.slug],
+            })
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(programFaqs(program))) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -77,9 +128,14 @@ export default function ProgramPage({ params }: Props) {
         {/* Header */}
         <section className="bg-[#001532] py-16 sm:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Link href="/programs" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors mb-4 inline-block">
-              ← All Programs
-            </Link>
+            <Breadcrumbs
+              className="mb-4"
+              items={[
+                { name: "Home", href: "/" },
+                { name: "Programs", href: "/programs" },
+                { name: program.level, href: `/programs/${program.slug}` },
+              ]}
+            />
             <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-2">
               {JOURNEY_ARC[program.slug]} · The CODEship Journey
             </p>
@@ -199,6 +255,12 @@ export default function ProgramPage({ params }: Props) {
                     Not endorsed or approved by any ministry of education.
                   </p>
                 </div>
+              </div>
+
+              {/* FAQ */}
+              <div>
+                <h2 className="text-2xl font-bold text-[#001532] mb-4">Common Questions</h2>
+                <FAQAccordion faqs={programFaqs(program)} />
               </div>
             </div>
 
