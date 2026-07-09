@@ -3,6 +3,10 @@ import RegistrationForm from "@/components/RegistrationForm";
 import { getProgram } from "@/data/programs";
 import { locationLabel, type LocationValue } from "@/data/locations";
 
+// Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
+// requires an explicit edge runtime for any non-static route.
+export const runtime = "edge";
+
 export const metadata: Metadata = {
   title: "Register | CODEship Academy",
   description:
