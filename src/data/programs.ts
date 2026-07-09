@@ -237,6 +237,10 @@ export const PROGRAM_STRUCTURE = {
   quizzesPerSemester: 2,
 };
 
+/** Next semester start date — applies to all programs (K-8 journey, paid LPs, and Guyana). */
+export const NEXT_SEMESTER_START = "September 1, 2026";
+export const NEXT_SEMESTER_START_FR = "1er septembre 2026";
+
 export const JOURNEY_ARC: Record<ProgramSlug, "Dream" | "Code" | "Achieve"> = {
   explorers: "Dream",
   builders: "Dream",

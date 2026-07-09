@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Regional Multi-Territory Franchise Model | CODEship Academy",
   description:
     "Own and develop a regional CODEship Academy territory. Multi-territory rights for regional operators. Investment $100K–$150K+.",
-  alternates: { canonical: "https://www.codeshipacademy.com/franchise/regional-model" },
-};
+  path: "/franchise/regional-model",
+});
 
 export default function RegionalModelPage() {
   return (

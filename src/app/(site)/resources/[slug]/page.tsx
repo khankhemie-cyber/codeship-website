@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { articles, articlesBySlug } from "@/data/articles";
 import { articleSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/pageMetadata";
 import FAQAccordion from "@/components/FAQAccordion";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface Props {
   params: { slug: string };
@@ -16,17 +18,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = articlesBySlug[params.slug];
   if (!article) return {};
-  return {
+  return pageMetadata({
     title: article.title,
     description: article.metaDescription,
-    alternates: { canonical: `https://www.codeshipacademy.com/resources/${article.slug}` },
-    openGraph: {
-      title: article.title,
-      description: article.metaDescription,
-      type: "article",
-      publishedTime: article.publishDate,
-    },
-  };
+    path: `/resources/${article.slug}`,
+    type: "article",
+    publishedTime: article.publishDate,
+  });
 }
 
 export default function ArticlePage({ params }: Props) {
@@ -62,11 +60,14 @@ export default function ArticlePage({ params }: Props) {
         {/* Hero */}
         <section className="bg-[#001532] py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-4">
-              <Link href="/resources" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">
-                ← Resources
-              </Link>
-            </div>
+            <Breadcrumbs
+              className="mb-4"
+              items={[
+                { name: "Home", href: "/" },
+                { name: "Resources", href: "/resources" },
+                { name: article.title, href: `/resources/${article.slug}` },
+              ]}
+            />
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xs bg-[#E5A823]/30 text-[#E5A823] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
                 {article.category}

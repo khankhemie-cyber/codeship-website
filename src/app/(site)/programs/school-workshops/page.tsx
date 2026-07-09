@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "School STEM Workshops | Coding Programs for Schools",
   description:
     "CODEship Academy brings coding, AI, and STEM workshops to schools. After-school clubs, PA Day programs, and in-class enrichment across Canada.",
-  alternates: { canonical: "https://www.codeshipacademy.com/programs/school-workshops" },
-};
+  path: "/programs/school-workshops",
+});
 
 export default function SchoolWorkshopsPage() {
   return (

@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import RegistrationForm from "@/components/RegistrationForm";
 import { getProgram } from "@/data/programs";
 import { locationLabel, type LocationValue } from "@/data/locations";
+import { pageMetadata } from "@/lib/pageMetadata";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
 export const runtime = "edge";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Register | CODEship Academy",
   description:
     "Register your child for CODEship Academy coding, AI, and STEM programs. Weekly classes, camps, school workshops, and more.",
-  alternates: { canonical: "https://www.codeshipacademy.com/register" },
-};
+  path: "/register",
+});
 
 interface Props {
   searchParams: { program?: string; location?: string };

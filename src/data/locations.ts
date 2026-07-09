@@ -6,6 +6,18 @@
 export const IN_PERSON = ["Toronto", "Vaughan", "Oshawa", "Calgary", "Vancouver"] as const;
 export type InPersonCity = (typeof IN_PERSON)[number];
 
+/** City-center coordinates (public geographic facts, not a claimed street address) for LocalBusiness geo. */
+export const IN_PERSON_CITY_GEO: Record<InPersonCity, { latitude: number; longitude: number }> = {
+  Toronto: { latitude: 43.6532, longitude: -79.3832 },
+  Vaughan: { latitude: 43.8361, longitude: -79.4983 },
+  Oshawa: { latitude: 43.8971, longitude: -78.8658 },
+  Calgary: { latitude: 51.0447, longitude: -114.0719 },
+  Vancouver: { latitude: 49.2827, longitude: -123.1207 },
+};
+
+/** All 5 in-person cities run every program on Saturdays, 9:00 AM-1:45 PM — see IN_PERSON_SATURDAY_AGENDA below. */
+export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-13:45"];
+
 export type ProgramSlug = "explorers" | "builders" | "developers" | "engineers";
 
 /** Online (virtual) weekly schedule — one 1-hour class per program, twice weekly by pair. */

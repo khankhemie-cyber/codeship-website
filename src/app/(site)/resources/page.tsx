@@ -1,21 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { articles } from "@/data/articles";
+import { pageMetadata } from "@/lib/pageMetadata";
+import { breadcrumbSchema } from "@/lib/schema";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Resources & Blog | Coding, AI & STEM for Kids",
   description:
     "Articles, guides, and resources for parents, schools, and educators about coding education, AI for kids, STEM learning, and more.",
-  alternates: { canonical: "https://www.codeshipacademy.com/resources" },
-};
+  path: "/resources",
+});
 
 const categories = ["All", "parent", "school", "franchise", "coding", "ai", "stem"] as const;
 
 export default function ResourcesPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Resources", href: "/resources" }])),
+        }}
+      />
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-4">
+            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Resources", href: "/resources" }]} />
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Resources &amp; Blog</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
             Articles, guides, and insights for parents, schools, and educators passionate about future-ready education.
@@ -66,5 +79,6 @@ export default function ResourcesPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

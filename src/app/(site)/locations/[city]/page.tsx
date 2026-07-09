@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
+import { localBusinessSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/pageMetadata";
+import { IN_PERSON, IN_PERSON_CITY_GEO, IN_PERSON_OPENING_HOURS, type InPersonCity } from "@/data/locations";
 import FAQAccordion from "@/components/FAQAccordion";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const cities = [
   "oshawa", "toronto", "mississauga", "brampton", "markham",
@@ -41,11 +44,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName = cityNames[params.city];
   if (!cityName) return {};
-  return {
+  return pageMetadata({
     title: `CODEship Academy ${cityName} | Kids Coding & STEM Programs`,
     description: `CODEship Academy in ${cityName} offers coding, AI, and STEM programs for children — weekly classes, camps, school workshops, and more.`,
-    alternates: { canonical: `https://www.codeshipacademy.com/locations/${params.city}` },
-  };
+    path: `/locations/${params.city}`,
+  });
 }
 
 export default function CityPage({ params }: Props) {
@@ -74,11 +77,16 @@ export default function CityPage({ params }: Props) {
     },
   ];
 
+  const isOfficialCity = (IN_PERSON as readonly string[]).includes(cityName);
+  const localBusinessOptions = isOfficialCity
+    ? { geo: IN_PERSON_CITY_GEO[cityName as InPersonCity], openingHours: IN_PERSON_OPENING_HOURS }
+    : undefined;
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(cityName)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(cityName, localBusinessOptions)) }}
       />
       <script
         type="application/ld+json"
@@ -92,13 +100,23 @@ export default function CityPage({ params }: Props) {
           ),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(localFaqs)) }}
+      />
 
       <div className="bg-[#FAF8F4]">
         <section className="bg-[#001532] py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Link href="/locations" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors mb-4 inline-block">
-              ← All Locations
-            </Link>
+            <div className="flex justify-center mb-4">
+              <Breadcrumbs
+                items={[
+                  { name: "Home", href: "/" },
+                  { name: "Locations", href: "/locations" },
+                  { name: cityName, href: `/locations/${citySlug}` },
+                ]}
+              />
+            </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
               CODEship Academy {cityName}
             </h1>

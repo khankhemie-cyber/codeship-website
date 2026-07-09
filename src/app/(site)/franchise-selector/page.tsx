@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import FranchiseSelector from "@/components/FranchiseSelector";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Franchise Model Selector | CODEship Academy",
   description:
     "Not sure which CODEship franchise model is right for you? Answer 4 questions and get a personalized recommendation.",
-  alternates: { canonical: "https://www.codeshipacademy.com/franchise-selector" },
-};
+  path: "/franchise-selector",
+});
 
 export default function FranchiseSelectorPage() {
   return (

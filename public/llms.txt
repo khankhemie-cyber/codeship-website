@@ -1,0 +1,51 @@
+# CODEship Academy
+
+> CODEship Academy is a Canadian children's coding, AI, and STEM education
+> company (operating since 2023). Its flagship offering is a K-8 progression
+> of four levels — Explorers (K-1, visual blocks), Builders (grades 2-3,
+> HTML/CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8,
+> Python + AI + cybersecurity) — each 4 semesters plus a capstone project.
+> Classes run in person on Saturdays in five Canadian cities (Toronto,
+> Vaughan, Oshawa, Calgary, Vancouver) or online (Tuesdays for Explorers/
+> Builders, Thursdays for Developers/Engineers, 4-6 PM ET). CODEship also
+> offers a separate online-only program for families in Guyana. Tagline:
+> "Dream. Code. Achieve." Curriculum alignment to provincial (Ontario, BC,
+> Alberta, Québec) and Guyana NGSA-related frameworks is described as
+> "aligned to / maps to / supports" — CODEship is not endorsed or approved
+> by any ministry of education.
+
+## Programs (Canada, K-8 journey)
+
+- [Explorers (K-1)](https://www.codeshipacademy.com/programs/explorers): visual block coding
+- [Builders (Grades 2-3)](https://www.codeshipacademy.com/programs/builders): HTML & CSS
+- [Developers (Grades 4-5)](https://www.codeshipacademy.com/programs/developers): JavaScript
+- [Engineers (Grades 6-8)](https://www.codeshipacademy.com/programs/engineers): Python, AI, cybersecurity
+- [Programs overview & journey map](https://www.codeshipacademy.com/programs)
+- [Weekly classes](https://www.codeshipacademy.com/programs/weekly-classes)
+- [Camps](https://www.codeshipacademy.com/programs/camps)
+- [School workshops](https://www.codeshipacademy.com/programs/school-workshops)
+- [AI & robotics](https://www.codeshipacademy.com/programs/ai-robotics)
+
+## Locations
+
+- [All locations](https://www.codeshipacademy.com/locations)
+- In-person Saturday classes: Toronto, Vaughan, Oshawa, Calgary, Vancouver
+- Online: Tuesdays (Explorers, Builders) and Thursdays (Developers, Engineers), 4-6 PM ET
+
+## Guyana (online-only)
+
+- [Online coding classes](https://www.codeshipacademy.com/gy/online-coding-classes)
+- [Math, English & coding](https://www.codeshipacademy.com/gy/math-english-coding)
+- [NGSA & digital skills](https://www.codeshipacademy.com/gy/ngsa-digital-skills)
+- [Computer classes for kids](https://www.codeshipacademy.com/gy/computer-classes-for-kids)
+- [Online STEM classes](https://www.codeshipacademy.com/gy/online-stem-classes)
+- Price: GYD $20,000 per semester. Online only — no in-person Guyana locations.
+
+## Other
+
+- [About](https://www.codeshipacademy.com/about)
+- [Schools & partnerships](https://www.codeshipacademy.com/schools)
+- [Franchise opportunities](https://www.codeshipacademy.com/franchise)
+- [Resources & articles](https://www.codeshipacademy.com/resources)
+- [Registration](https://www.codeshipacademy.com/register)
+- [Contact](https://www.codeshipacademy.com/contact)

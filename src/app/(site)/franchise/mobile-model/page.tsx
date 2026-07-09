@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Mobile Community Franchise Model | CODEship Academy",
   description:
     "The CODEship Mobile Community Model — low-investment, community-based children's coding franchise from $10K–$18K. School-focused delivery.",
-  alternates: { canonical: "https://www.codeshipacademy.com/franchise/mobile-model" },
-};
+  path: "/franchise/mobile-model",
+});
 
 export default function MobileModelPage() {
   return (

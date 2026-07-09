@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Studio Learning Centre Franchise Model | CODEship Academy",
   description:
     "Open a CODEship Academy Studio Learning Centre — a dedicated branded space for coding, AI, and STEM education. Investment $60K–$100K.",
-  alternates: { canonical: "https://www.codeshipacademy.com/franchise/studio-model" },
-};
+  path: "/franchise/studio-model",
+});
 
 export default function StudioModelPage() {
   return (

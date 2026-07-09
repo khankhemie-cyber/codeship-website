@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms of Service | CODEship Academy",
   description: "CODEship Academy's terms of service for website use, program enrollment, and franchise inquiries.",
-  alternates: { canonical: "https://www.codeshipacademy.com/terms" },
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

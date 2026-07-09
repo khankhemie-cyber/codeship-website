@@ -42,14 +42,6 @@ export function trackRegisterClick(payload: EventPayload) {
   dispatch("register_click", payload);
 }
 
-export function trackLeadSubmit(payload: EventPayload) {
-  dispatch("lead_submit", payload);
-}
-
-export function trackSelectRegion(payload: EventPayload) {
-  dispatch("select_region", payload);
-}
-
 export function trackPriceView(payload: EventPayload) {
   dispatch("price_view", payload);
 }

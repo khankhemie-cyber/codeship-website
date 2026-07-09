@@ -91,25 +91,6 @@ export function getGuyanaCampaign(slug: string): GuyanaCampaign | undefined {
 
 export const GUYANA_TRUST_LINE = "Online · Small-group learning · Math, English, writing, coding, and computer skills";
 
-export const GUYANA_PARENT_PROBLEMS: string[] = [
-  "My child needs more confidence with schoolwork.",
-  "My child uses devices but does not really understand technology.",
-  "My child needs stronger Math and English foundations.",
-  "My child needs better writing and explanation skills.",
-  "I want my child to learn useful skills for the future.",
-];
-
-export const GUYANA_LEARN_AREAS: string[] = [
-  "Coding basics",
-  "Math thinking",
-  "English comprehension",
-  "Writing and explanation",
-  "Computer literacy",
-  "Problem-solving",
-  "Digital creativity",
-  "Presentation confidence",
-];
-
 export const GUYANA_OUTCOME_BULLETS: string[] = [
   "Build a simple digital project",
   "Explain how their project works",
@@ -119,28 +100,6 @@ export const GUYANA_OUTCOME_BULLETS: string[] = [
   "Use computers and online tools with more confidence",
   "Present their work to a teacher, parent, or class group",
   "Understand how technology connects to real life",
-];
-
-export const GUYANA_PROGRAM_STRUCTURE_BULLETS: string[] = [
-  "Online classes only",
-  "Live instructor-led sessions",
-  "Beginner-friendly",
-  "Small-group format",
-  "GYD $20,000 per semester",
-  "Designed for children in Guyana",
-  "Suitable for children who are new to coding",
-];
-
-export const GUYANA_CURRICULUM_INTRO =
-  "CODEship combines coding with academic skill-building. Students are not only learning to click and type. They are learning how to think, explain, create, and solve problems.";
-
-export const GUYANA_CURRICULUM_PILLARS: { title: string; desc: string }[] = [
-  { title: "Math", desc: "Patterns, sequencing, logic, problem-solving" },
-  { title: "English", desc: "Reading instructions, understanding tasks, vocabulary" },
-  { title: "Writing", desc: "Explaining steps, reflecting on projects, presenting ideas" },
-  { title: "Computer sense", desc: "Typing, navigating tools, using digital platforms safely" },
-  { title: "Coding", desc: "Blocks, websites, JavaScript, Python, or age-appropriate tools" },
-  { title: "Confidence", desc: "Completing projects and showing their work" },
 ];
 
 export const GUYANA_PROJECTS_BY_AGE: { group: string; projects: string[] }[] = [
@@ -156,16 +115,6 @@ export const GUYANA_PROJECTS_BY_AGE: { group: string; projects: string[] }[] = [
     group: "For older students",
     projects: ["Budget Buddy", "Fact or Fake Quiz", "Password Strength Checker", "Data Detective", "Chatbot for Good"],
   },
-];
-
-export const GUYANA_WHY_CHOOSE: string[] = [
-  "Helps children build real projects",
-  "Strengthens school-related skills",
-  "Teaches technology in a structured way",
-  "Beginner-friendly and supportive",
-  "Helps children explain their thinking",
-  "Builds confidence beyond the classroom",
-  "Designed for children growing up in a digital world",
 ];
 
 export const GUYANA_PRICING = {
@@ -211,29 +160,5 @@ export const GUYANA_FAQ: GuyanaFAQItem[] = [
   },
 ];
 
-export const GUYANA_FINAL_CTA = {
-  headline: "Give your child skills they can use in school, online, and in the future.",
-  ctaLabel: "Register for Online Classes",
-};
-
 export const GUYANA_COMPLIANCE_DISCLAIMER =
   "CODEship is an online enrichment program. It supports school learning and NGSA skill-building — it is not an official NGSA program, is not Ministry-approved or endorsed, and does not guarantee grades or exam results.";
-
-/** Communities/regions offered in the lead-capture form's region field. */
-export const GUYANA_REGIONS: { value: string; label: string }[] = [
-  { value: "georgetown", label: "Georgetown" },
-  { value: "greater-georgetown", label: "Greater Georgetown" },
-  { value: "east-bank-demerara", label: "East Bank Demerara" },
-  { value: "east-coast-demerara", label: "East Coast Demerara" },
-  { value: "west-demerara", label: "West Demerara" },
-  { value: "linden", label: "Linden" },
-  { value: "berbice", label: "Berbice" },
-  { value: "new-amsterdam", label: "New Amsterdam" },
-  { value: "essequibo", label: "Essequibo" },
-  { value: "bartica", label: "Bartica" },
-  { value: "lethem", label: "Lethem" },
-  { value: "guyana", label: "Other / Guyana-wide" },
-];
-
-/** "Main support needed" options in the lead-capture form. */
-export const GUYANA_SUPPORT_NEEDED: string[] = ["Coding", "Math", "English", "Writing", "Computer Skills", "NGSA Support"];
