@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import RegistrationForm from "@/components/RegistrationForm";
+import { getProgram } from "@/data/programs";
+import { locationLabel, type LocationValue } from "@/data/locations";
+
+// Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
+// requires an explicit edge runtime for any non-static route.
+export const runtime = "edge";
 
 export const metadata: Metadata = {
   title: "Register | CODEship Academy",
@@ -8,7 +14,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.codeshipacademy.com/register" },
 };
 
-export default function RegisterPage() {
+interface Props {
+  searchParams: { program?: string; location?: string };
+}
+
+export default function RegisterPage({ searchParams }: Props) {
+  const program = searchParams.program ? getProgram(searchParams.program) : undefined;
+  const location = searchParams.location as LocationValue | undefined;
+
   return (
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
@@ -24,6 +37,14 @@ export default function RegisterPage() {
 
       <section className="py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          {program && (
+            <div className="bg-[#E5A823]/15 border border-[#E5A823]/40 rounded-2xl px-6 py-4 mb-6 text-center">
+              <p className="text-[#001532] text-sm">
+                Registering for <strong>{program.level}</strong> ({program.gradeBand})
+                {location && <> — {locationLabel(location)}</>}
+              </p>
+            </div>
+          )}
           <div className="bg-white rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-[#001532] mb-6 text-center">Program Registration</h2>
             <RegistrationForm />

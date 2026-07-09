@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import JourneyMap from "@/components/JourneyMap";
+import AlignmentStrip from "@/components/AlignmentStrip";
 
 export const metadata: Metadata = {
   title: "Programs | Kids Coding, AI & STEM Classes",
@@ -128,8 +130,25 @@ export default function ProgramsPage() {
         </div>
       </section>
 
+      {/* The CODEship Journey — K–8 grade-band programs */}
+      <section id="journey" className="py-20 bg-[#FAF8F4] scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <JourneyMap />
+          <div className="mt-10">
+            <AlignmentStrip />
+          </div>
+        </div>
+      </section>
+
       {/* Programs List */}
       <section className="py-20 bg-[#F1EEE8]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#001532] mb-4">Program Formats</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Every level of the CODEship Journey above is delivered through these formats — pick the schedule that
+            works for your family.
+          </p>
+        </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {programs.map((prog, i) => (
             <div

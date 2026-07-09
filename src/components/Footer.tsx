@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#001532] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div>
             <Link href="/" className="inline-block mb-4">
@@ -37,6 +37,18 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
+          </div>
+
+          {/* The Journey */}
+          <div>
+            <h3 className="font-semibold text-[#E5A823] mb-4">The CODEship Journey</h3>
+            <ul className="space-y-2">
+              <li><Link href="/programs#journey" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Journey Map</Link></li>
+              <li><Link href="/programs/explorers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Explorers (K–1)</Link></li>
+              <li><Link href="/programs/builders" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Builders (2–3)</Link></li>
+              <li><Link href="/programs/developers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Developers (4–5)</Link></li>
+              <li><Link href="/programs/engineers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Engineers (6–8)</Link></li>
+            </ul>
           </div>
 
           {/* Programs */}
