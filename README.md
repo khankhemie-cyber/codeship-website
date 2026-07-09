@@ -52,15 +52,20 @@ to the site's **existing** `/register` page, which embeds the existing HubSpot r
 `REG_FORM_URL` (`src/lib/registration.ts`) points at `/register`. If registration ever moves to an
 external form, update that one constant.
 
-`buildRegistrationUrl({ program, location })` appends UTM parameters to `REG_FORM_URL`:
+`buildRegistrationUrl({ program, location, source?, medium?, campaign?, content?, term? })` appends
+UTM parameters to `REG_FORM_URL`:
 
-| Param | Value | Purpose |
-|---|---|---|
-| `utm_source` | `website` | constant |
-| `utm_medium` | `registration` | constant |
-| `utm_campaign` | the program slug (`explorers`, `builders`, `developers`, `engineers`) | **program** attribution |
-| `utm_content` | the location slug (`toronto`, `vaughan`, `oshawa`, `calgary`, `vancouver`, `online`) | **location** attribution |
-| `utm_term` | `in-person` or `online-{day}-1600` | schedule slot |
+| Param | Default | Override source | Purpose |
+|---|---|---|---|
+| `utm_source` | `"website"` | `source` (paid LPs pass `"meta"` \| `"google"`) | traffic source |
+| `utm_medium` | `"registration"` | `medium` (paid LPs pass `"cpc"` \| `"paid_social"`) | traffic medium |
+| `utm_campaign` | the program slug | `campaign` | **program** attribution |
+| `utm_content` | the location slug | `content` | **location** attribution |
+| `utm_term` | `in-person` or `online-{day}-1600` | `term` | schedule slot |
+
+Main-site CTAs (Journey Map, `/programs/[slug]`) call it with just `{ program, location }` and get the
+original `website`/`registration` defaults. Paid landing pages (below) pass the ad platform's own
+`source`/`medium` so attribution reflects where the visitor actually came from.
 
 The HubSpot forms embed script executes on `/register`, so it reads the page's own URL — the UTM
 parameters above are picked up and attributed automatically with no backend changes. `program` and
@@ -70,9 +75,63 @@ those values will prefill too. UTM parameters remain the durable source of truth
 
 ### Analytics
 
-`src/lib/analytics.ts` exports `trackView`, `trackSelectLocation`, and `trackRegisterClick` stubs,
-each called with `{ program, location? }`. They currently `console.debug` in development. To wire up
-real analytics, uncomment and fill in the `gtag`/`fbq` calls inside `dispatch()`.
+`src/lib/analytics.ts` exports `trackView`, `trackSelectLocation`, `trackRegisterClick`, and
+`trackLeadSubmit` stubs, each called with `{ program, location? }` (plus whatever UTMs/email domain
+are relevant). They currently `console.debug` in development. To wire up real analytics, uncomment
+and fill in the `gtag`/`fbq` calls inside `dispatch()` in `src/lib/analytics.ts`.
+
+## Paid-ad landing pages (`/lp/:slug`)
+
+Five standalone, conversion-focused landing pages for paid campaigns live at `/lp/explorers`,
+`/lp/builders`, `/lp/developers`, `/lp/engineers`, and `/lp/quebec-fr` (fully French). Each matches
+one ad's message, presents one program, and drives one action — register via the existing form, or
+grab a free sample kit. See `CAMPAIGN_KIT.md` for the full messaging/ad-copy/compliance kit.
+
+### These pages are intentionally not part of the main site
+
+- **No nav, no footer links.** `src/app/lp/layout.tsx` replaces (does not extend) the main site's
+  `(site)` layout — it renders only `LPHeader` (logo → home, nothing else). The main `Navigation` and
+  `Footer` components never link to `/lp/*`, and `/lp/*` never appears in `sitemap.ts`.
+- **`noindex`.** Every `/lp/:slug` page sets `robots: { index: false, follow: false }`
+  (`src/app/lp/[slug]/page.tsx`), and `robots.ts` disallows `/lp/` for crawlers.
+- If you ever want an LP to be reachable from the main site or search, that's a deliberate
+  architecture change (move it into the `(site)` group, add a nav/footer link, drop `noindex`) — don't
+  do it by accident.
+
+### Data sources
+
+- `src/data/campaigns.ts` — one `Campaign` per LP: ad headline, subhead, real project titles, outcome
+  bullets, offer copy, FAQ, and the ad platform's default `source`/`medium`.
+- `src/data/variants.ts` — A/B variants (`?v=a` default, `?v=b`) for headline / hero image / CTA label
+  only; facts, projects, and FAQ never change between variants.
+- `src/data/campaign_kit.ts` + `CAMPAIGN_KIT.md` — the broader ad-campaign kit (messaging pillars,
+  per-level × per-location ad copy sets, audience map, lead-magnet map, UTM plan, compliance
+  checklist) that the marketing team and ad platforms read from.
+
+### Location targeting
+
+Each LP reads `utm_content` (falling back to `?loc=`) from the incoming URL to default the location
+bar. If neither is present, the full 5-city + online selector shows expanded instead of collapsed.
+Whatever the visitor lands on or picks flows straight into the registration URL's `utm_content` —
+`src/components/lp/LPView.tsx` is the orchestrator; `LocationBar` is the selector itself.
+
+### Sample-kit lead capture
+
+The secondary CTA ("Get a free sample kit") is a single email field — the *only* form on an LP, and
+it is a lead magnet, not a registration. It calls `leadCapture()` (`src/lib/leadCapture.ts`), which is
+currently a stub that just logs in development. Wire it to your real ESP/CRM endpoint, and see
+`LEAD_MAGNETS` in `campaign_kit.ts` for which PDF (placeholder paths under `/downloads/`) maps to
+which campaign — swap in the real files before launch.
+
+### Swapping in real assets before launch
+
+- **Testimonials**: `LPView`'s proof section renders an explicit "add a real testimonial here" slot —
+  no quotes or names were fabricated. Replace it with real, permissioned parent testimonials.
+- **Hero/OG images**: `variants.ts` (`heroImage`) and `campaigns.ts` (`ogImage`) currently point at the
+  same stock photography already used on the main site. Swap in campaign-specific assets per LP.
+- **French copy**: `/lp/quebec-fr`'s copy was drafted by direct translation of the authoritative
+  English curriculum facts and needs a native French-speaker pass before it runs as a live ad
+  destination (see the compliance checklist in `CAMPAIGN_KIT.md`).
 
 ## Deploy on Vercel
 

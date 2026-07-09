@@ -11,6 +11,7 @@ import type { LocationSlug } from "@/lib/registration";
 interface EventPayload {
   program: ProgramSlug;
   location?: LocationSlug;
+  [key: string]: unknown;
 }
 
 function dispatch(eventName: string, payload: EventPayload) {
@@ -38,4 +39,8 @@ export function trackSelectLocation(payload: EventPayload) {
 
 export function trackRegisterClick(payload: EventPayload) {
   dispatch("register_click", payload);
+}
+
+export function trackLeadSubmit(payload: EventPayload) {
+  dispatch("lead_submit", payload);
 }

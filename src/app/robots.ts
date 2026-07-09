@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/franchise/",
+      disallow: ["/franchise/", "/lp/"],
     },
     sitemap: "https://www.codeshipacademy.com/sitemap.xml",
   };
