@@ -2095,6 +2095,83 @@ export const articles: Article[] = [
       { question: "What should I ask a coding program about accommodations?", answer: "Ask specifically how they handle pacing differences and alternative ways to demonstrate understanding — vague answers are a warning sign." },
     ],
   },
+  {
+    slug: "ai-literacy-for-kids-2026",
+    title: "AI Literacy for Kids: What It Means and Why It Matters in 2026",
+    metaDescription:
+      "AI literacy for kids explained: what it actually means, why it's becoming a core skill alongside reading and math, and how children can build it in age-appropriate ways.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2026-03-01",
+    dateModified: "2026-03-01",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "ai literacy for kids",
+    internalLinks: [
+      { label: "Explore the Engineers program", href: "/programs/engineers" },
+      { label: "See the full CODEship journey", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> AI literacy for kids means understanding, at an age-appropriate level, how AI systems work, what they can and can't do well, and how to use them thoughtfully and ethically — it's becoming a foundational skill, not an optional extra.</p>
+<h2>What Does "AI Literacy" Actually Mean for a Child?</h2>
+<p>AI literacy isn't about children learning to build large language models. It's about developing a working understanding of AI as a category of technology: recognizing when they're interacting with AI, understanding that AI systems make predictions based on patterns in data (and can be wrong or biased), and knowing how to use AI tools as an aid to thinking rather than a replacement for it.</p>
+<p><a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework for Students</a> breaks this down into four dimensions: a human-centred mindset, ethics of AI, AI techniques and applications, and AI system design — with the explicit point that values and ethics matter as much as technical understanding.</p>
+<h2>Why This Is Becoming a Core Skill</h2>
+<p>AI tools are now embedded in search engines, writing assistants, photo apps, and games that most children already use. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD and European Commission's joint AI literacy framework</a> was developed specifically because policymakers recognized that young people are already encountering AI daily, whether or not schools are teaching them how it works. Understanding it is quickly becoming as foundational as understanding how to evaluate a website or a news source.</p>
+<h2>What Age-Appropriate AI Literacy Looks Like</h2>
+<ul>
+<li><strong>Younger children (K-3):</strong> Simple concepts — that AI follows patterns and rules, that it can make mistakes, and that a human is always responsible for checking its output.</li>
+<li><strong>Middle grades (4-5):</strong> Hands-on exposure to how AI tools respond to different inputs, and beginning discussions about fairness and bias in data.</li>
+<li><strong>Older students (6-8):</strong> More technical grounding — how machine learning models are trained, where cybersecurity and AI intersect, and practical experience using AI tools responsibly in real projects.</li>
+</ul>
+<h2>Where CODEship Fits In</h2>
+<p>The Engineers program (grades 6-8) is where CODEship introduces AI concepts directly, alongside Python and cybersecurity fundamentals, building on the logical-thinking foundation established in earlier levels. The goal is not to rush children toward advanced AI use, but to build genuine understanding at each stage so that AI literacy grows naturally alongside coding skill.</p>
+    `,
+    faqs: [
+      { question: "What is AI literacy for kids?", answer: "A working, age-appropriate understanding of how AI systems work, their limitations, and how to use them thoughtfully — not technical AI engineering skills." },
+      { question: "At what age should kids start learning about AI?", answer: "Simple concepts (AI follows patterns, can make mistakes, needs human oversight) can start early; more technical grounding typically fits best from upper elementary through middle school." },
+      { question: "Does CODEship teach AI literacy?", answer: "Yes — AI concepts are introduced in the Engineers program (grades 6-8), building on the coding foundation from earlier levels." },
+    ],
+  },
+  {
+    slug: "what-kids-should-learn-about-ai-before-high-school",
+    title: "What Kids Should Learn About AI Before High School",
+    metaDescription:
+      "What should kids understand about AI before starting high school? A practical, age-by-age look at AI literacy for K-8 students, grounded in real frameworks — not hype.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2026-03-15",
+    dateModified: "2026-03-15",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "what should kids learn about ai",
+    internalLinks: [
+      { label: "See the Engineers program", href: "/programs/engineers" },
+      { label: "Explore all CODEship programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Before high school, kids should understand what AI is (and isn't), how to evaluate AI-generated information critically, and how to use AI tools responsibly — built up gradually across the K-8 years rather than introduced all at once in grade 9.</p>
+<h2>Why Start Before High School?</h2>
+<p>By the time students reach high school, many are already using AI tools regularly for schoolwork, creative projects, and everyday questions. Waiting until high school to introduce any AI education means students form habits and assumptions about these tools — some accurate, some not — with no structured guidance. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD's AI literacy framework work</a> reflects a growing consensus that this foundation needs to start earlier, in primary and middle school.</p>
+<h2>The Core Concepts Worth Building Early</h2>
+<ul>
+<li><strong>How AI actually works, at a basic level:</strong> That AI systems find patterns in large amounts of data and use those patterns to make predictions — not that they "think" or "know" things the way people do.</li>
+<li><strong>Evaluating AI output critically:</strong> AI can produce confident-sounding answers that are wrong. Learning to double-check, question, and verify is a core habit to build before relying on these tools more heavily.</li>
+<li><strong>Understanding bias and fairness:</strong> AI systems reflect the data they're trained on, which can include real-world biases. <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> puts ethics on equal footing with technical skill for exactly this reason.</li>
+<li><strong>Basic cybersecurity awareness:</strong> Understanding what data an AI tool might collect and how to use these tools safely.</li>
+<li><strong>Using AI as a creative and learning tool:</strong> Rather than a shortcut around thinking, using AI to brainstorm, debug code, or explore ideas — while still doing the core thinking themselves.</li>
+</ul>
+<h2>How This Builds Across the K-8 Years</h2>
+<p>These concepts don't need to be taught in a single unit — they build naturally on top of coding and problem-solving skills developed from Explorers through Engineers. A student who has already learned to debug their own code, for instance, is well-positioned to understand why checking an AI's answer matters. By the Engineers level (grades 6-8), students are ready to engage with AI concepts more directly alongside Python and cybersecurity fundamentals.</p>
+<h2>What Parents Can Do Now</h2>
+<p>Parents don't need to wait for a formal program to start these conversations. Asking a child "how do you think it figured that out?" or "how would you check if that's right?" when they encounter an AI tool builds the same critical-thinking habits in an everyday way.</p>
+    `,
+    faqs: [
+      { question: "What's the most important thing kids should know about AI before high school?", answer: "That AI produces confident-sounding but sometimes wrong answers, and that checking and questioning its output is an essential habit — not an afterthought." },
+      { question: "Do kids need to code to understand AI?", answer: "It helps significantly. Coding builds the logical, step-by-step thinking that makes concepts like 'AI follows patterns in data' much easier to grasp concretely." },
+      { question: "When does CODEship introduce AI concepts?", answer: "In the Engineers program (grades 6-8), alongside Python and cybersecurity, building on the foundation from earlier levels." },
+    ],
+  },
 ];
 
 export const articlesBySlug = Object.fromEntries(articles.map((a) => [a.slug, a]));
