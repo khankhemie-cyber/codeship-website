@@ -5,9 +5,21 @@ export interface Article {
   category: "parent" | "school" | "franchise" | "coding" | "ai" | "stem";
   readTime: number;
   publishDate: string;
+  /** Defaults to publishDate if omitted. Bump on any substantive content refresh. */
+  dateModified?: string;
+  /** Defaults to "CODEship Academy Team" if omitted. */
+  author?: string;
+  /** Topic cluster for internal-linking/E-E-A-T grouping, e.g. "parent-intent", "guyana-ngsa". */
+  cluster?: string;
+  /** The real search query this article targets, e.g. "what age should kids learn to code". */
+  targetQuery?: string;
+  /** Contextual internal links rendered at the end of the article, beyond the fixed program-finder CTA. */
+  internalLinks?: { label: string; href: string }[];
+  ogImage?: string;
+  /** Renders ItemList schema alongside Article + FAQPage for listicle articles. */
+  listItems?: { name: string; description?: string }[];
   content: string;
   faqs: { question: string; answer: string }[];
-  schema: Record<string, unknown>;
 }
 
 export const articles: Article[] = [
@@ -19,6 +31,14 @@ export const articles: Article[] = [
     category: "parent",
     readTime: 7,
     publishDate: "2025-01-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "coding for kids guide",
+    internalLinks: [
+      { label: "See the CODEship Journey", href: "/programs" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
     content: `
 <h2>What Is Coding for Kids?</h2>
 <p>When most parents hear "coding for kids," they imagine children hunched over keyboards typing cryptic symbols. The reality is far more exciting — and far more accessible — than that image suggests.</p>
@@ -86,13 +106,6 @@ export const articles: Article[] = [
       { question: "Do kids need a computer at home to benefit from coding programs?", answer: "No. A good coding program provides all the tools children need during class. While practice at home can be beneficial, it is not required." },
       { question: "Is coding for kids just about becoming a programmer?", answer: "Not at all. Coding develops critical thinking, creativity, and problem-solving skills that are valuable in every career and field." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What Is Coding for Kids? A Parent's Complete Guide",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-      publisher: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "why-kids-should-learn-ai-early",
@@ -162,12 +175,6 @@ export const articles: Article[] = [
       { question: "Do kids need to know math to learn AI?", answer: "Not at the introductory level. Children's AI programs use visual, hands-on approaches that don't require advanced mathematics." },
       { question: "Is AI education different from coding education?", answer: "They overlap significantly but are distinct. Coding is about giving computers instructions. AI education focuses on systems that learn from data. A good program covers both." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Why Kids Should Learn AI and Digital Skills Early",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-coding-helps-academic-skills",
@@ -229,12 +236,6 @@ export const articles: Article[] = [
       { question: "Will coding help my child's grades?", answer: "Many children show improved performance in math and reading after beginning coding programs. The skills are closely related and mutually reinforcing." },
       { question: "Does coding require strong math skills first?", answer: "No. In fact, coding often helps children develop mathematical intuition before they encounter those concepts formally in school." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How Coding Helps Kids Improve Reading, Logic, and Problem-Solving",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "best-stem-activities-for-kids-at-home",
@@ -295,12 +296,6 @@ export const articles: Article[] = [
       { question: "Do I need special materials for home STEM activities?", answer: "Most STEM activities use everyday household materials. Some projects benefit from inexpensive kits, but a huge range of activities requires nothing beyond what you have at home." },
       { question: "How much time should I spend on home STEM activities?", answer: "Even 20–30 minutes of focused STEM exploration a week makes a difference. Consistency matters more than duration." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Best STEM Activities for Kids at Home (All Ages)",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "project-based-learning-builds-confidence",
@@ -364,12 +359,6 @@ export const articles: Article[] = [
       { question: "How is PBL different from regular school projects?", answer: "Traditional school projects often have prescribed steps and one right answer. True PBL gives children genuine choice, extended time, and a real audience — creating much deeper ownership and learning." },
       { question: "Does PBL work for kids who struggle academically?", answer: "Often especially well. Children who find traditional academic formats challenging frequently thrive in PBL environments where there are multiple paths to success and where their individual strengths can shine." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How Project-Based Learning Helps Children Build Confidence",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "coding-vs-robotics-what-should-kids-learn-first",
@@ -441,12 +430,6 @@ export const articles: Article[] = [
       { question: "Is robotics or coding more valuable?", answer: "Both are valuable and complementary. Coding is more versatile across career fields; robotics adds physical engineering dimensions. The best programs include both." },
       { question: "Do kids need coding skills to do robotics?", answer: "Most introductory robotics kits have visual programming interfaces that require no prior coding experience. As children advance, stronger coding skills unlock more complex robot behaviours." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Coding vs. Robotics: What Should Kids Learn First?",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "after-school-coding-builds-teamwork",
@@ -506,12 +489,6 @@ export const articles: Article[] = [
       { question: "Are coding programs good for shy kids?", answer: "Yes — often particularly so. The structured, collaborative environment gives shy children a shared focus (the project) that makes social interaction less intimidating. Many shy children flourish in coding programs." },
       { question: "What if my child prefers to work alone?", answer: "Some children prefer solo coding, and that's valid. Good programs accommodate both solo and collaborative work, helping children experience the benefits of both approaches over time." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How After-School Coding Programs Help Kids Build Teamwork Skills",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "inclusive-stem-education",
@@ -566,12 +543,6 @@ export const articles: Article[] = [
       { question: "Are CODEship programs inclusive for girls?", answer: "Absolutely. CODEship Academy is designed to be fully inclusive and welcoming for all children. We actively work to ensure girls feel equally engaged, encouraged, and celebrated in all our programs." },
       { question: "Can children with learning differences succeed in coding programs?", answer: "Yes. Project-based coding programs are often particularly well-suited to children with different learning styles. The hands-on, creative, flexible nature of good coding programs accommodates a wide range of learners." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Inclusive STEM Education: Making Coding Accessible for Every Child",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-to-choose-best-coding-program",
@@ -653,12 +624,6 @@ export const articles: Article[] = [
       { question: "How much should a quality coding program cost?", answer: "Quality varies widely, but expect to pay $150–$400+ per month for weekly classes, and $300–$800+ for week-long camps. Very cheap programs often compromise on instructor quality or curriculum depth." },
       { question: "Is online coding education as good as in-person?", answer: "Online programs offer convenience and access, but in-person programs typically provide richer collaboration, hands-on experiences, and social connection. The best choice depends on your child's learning style and your family's situation." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How to Choose the Best Coding Program for Your Child",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "what-schools-look-for-in-stem-partner",
@@ -738,12 +703,6 @@ export const articles: Article[] = [
       { question: "How far in advance should schools book STEM workshop providers?", answer: "For the best availability and program customization, booking 2–3 months in advance is ideal. However, many providers can accommodate shorter timelines for standard programs." },
       { question: "What is a reasonable cost for a school STEM workshop?", answer: "Costs vary significantly by provider, program length, and group size. Day-long workshops typically range from $500–$2,000+ depending on participant numbers and materials." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What Schools Should Look for in a STEM Workshop Partner",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "how-to-start-childrens-education-business",
@@ -823,12 +782,6 @@ export const articles: Article[] = [
       { question: "How much does it cost to start a children's education business?", answer: "Costs vary enormously based on format and scale. A mobile, community-based program can start under $20,000. A dedicated studio location may require $60,000–$150,000 or more in startup costs." },
       { question: "Do I need a background in education to run a children's coding business?", answer: "A background in education is helpful but not strictly required. Strong curriculum, well-trained instructors, and a genuine commitment to learning quality matter more than the founder's personal educational background." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How to Start a Children's Education Business",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "what-to-know-before-opening-coding-franchise",
@@ -923,22 +876,25 @@ export const articles: Article[] = [
       { question: "What is a typical royalty rate for a coding franchise?", answer: "Royalty rates for children's education franchises typically range from 6–10% of gross revenue. CODEship Academy charges 6%, plus a 2% brand marketing contribution." },
       { question: "Do I need a background in coding to run a coding franchise?", answer: "No. While an interest in technology is helpful, most coding franchise systems — including CODEship Academy — are designed for franchisees who are community and business-focused, not necessarily technical experts." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "What to Know Before Opening a Coding Franchise",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "why-parents-invest-in-future-ready-skills",
-    title: "Why Parents Are Investing in Future-Ready Skills for Their Children",
+    title: "The Future-Ready Skills K-8 Students Need in 2026",
     metaDescription:
-      "Parents are prioritizing future-ready skills like coding, AI literacy, and digital creation. Here's why — and what it means for children's education.",
+      "What future-ready actually means for K-8 students in 2026 — adaptability, digital fluency, and AI literacy — and how parents can build it through coding.",
     category: "parent",
-    readTime: 5,
+    readTime: 6,
     publishDate: "2025-05-01",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "future ready skills for kids",
+    internalLinks: [
+      { label: "Explore the CODEship Journey", href: "/programs" },
+      { label: "See the journey map", href: "/programs#journey" },
+    ],
     content: `
+<p><strong>Quick answer:</strong> In 2026, "future-ready" for a K-8 student means four things: adaptability, digital fluency, AI literacy, and creative problem-solving — developed together, not as separate subjects. Coding is one of the few activities that builds all four at once.</p>
 <h2>A Shift in How Parents Think About Education</h2>
 <p>Something significant has changed in how parents evaluate educational opportunities for their children. Where previous generations focused primarily on traditional academic achievement — grades, test scores, university admission — today's parents are increasingly thinking about whether their children are developing the skills needed to navigate and succeed in a rapidly changing world.</p>
 <p>This shift is not just philosophical. It's driven by what parents are seeing in the world around them: industries being transformed by AI, careers that didn't exist a decade ago becoming essential, and the growing realization that the skills that led to success in 1990 or even 2010 may not be sufficient for 2035.</p>
@@ -966,8 +922,9 @@ export const articles: Article[] = [
 </ul>
 <p>These thinking patterns are valuable across nearly every career path and life context — not just in technology.</p>
 
-<h2>The AI Factor</h2>
-<p>No discussion of future-ready skills in 2025 is complete without addressing artificial intelligence. AI is transforming virtually every industry and profession. Children who grow up with a working understanding of how AI works — what it can do, what its limitations are, how to use it effectively and ethically — will have a significant advantage over those who encounter it only as end users.</p>
+<h2>Why AI Literacy Is Now Part of "Future-Ready"</h2>
+<p>No discussion of future-ready skills in 2026 is complete without addressing artificial intelligence. AI is transforming virtually every industry and profession. Children who grow up with a working understanding of how AI works — what it can do, what its limitations are, how to use it effectively and ethically — will have a significant advantage over those who encounter it only as end users.</p>
+<p>This is no longer a fringe view. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD and European Commission are jointly developing an AI literacy framework</a> specifically for primary and secondary students, and <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> defines AI literacy for students in terms of knowledge, skills, and values — understanding, ethics, and human rights included, not just technical use.</p>
 <p>This doesn't mean all children need to become AI engineers. It means developing AI literacy: the ability to interact thoughtfully with AI systems, evaluate their outputs critically, and use them as powerful creative tools.</p>
 
 <h2>The Investment Question</h2>
@@ -993,13 +950,8 @@ export const articles: Article[] = [
     faqs: [
       { question: "Are future-ready skills more important than traditional academics?", answer: "They're complementary, not competing. The best educational approaches integrate future-ready skills into broader academic development. Coding, for example, directly reinforces mathematical and logical thinking." },
       { question: "What age should children start building future-ready skills?", answer: "The foundational thinking skills underlying future readiness can be developed from a very young age through play, problem-solving, and creative exploration. Formal coding and digital skills programs are typically appropriate starting at age 5–6." },
+      { question: "Is AI literacy really necessary for a K-8 student?", answer: "Major education bodies think so. Both the OECD and UNESCO published AI literacy frameworks for school-aged children, treating it as a core skill alongside reading and math, not an optional extra." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "Why Parents Are Investing in Future-Ready Skills for Their Children",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "ai-for-kids-what-parents-need-to-know",
@@ -1065,12 +1017,6 @@ export const articles: Article[] = [
       { question: "Is AI education safe for young children?", answer: "With appropriate tools and guidance, yes. Quality AI education programs use child-safe platforms, address privacy and ethics, and are led by trained instructors experienced with children." },
       { question: "Will AI education help my child get into university?", answer: "AI literacy is increasingly valued in university admissions, particularly in STEM, business, and social science programs. More importantly, it develops critical thinking skills that support academic performance across all subjects." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "AI for Kids: What Parents Need to Know",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
   },
   {
     slug: "from-idea-to-app-kids-build-digital-projects",
@@ -1149,12 +1095,1082 @@ export const articles: Article[] = [
       { question: "How long does it take for a child to build their first app or game?", answer: "With good guidance, children can build a simple functional project in a single day-long session. More complex projects develop over weeks or months of weekly classes." },
       { question: "Can kids actually publish what they build?", answer: "Yes. Projects built in tools like Scratch can be immediately shared online. Web projects can be published for free. App projects can be demonstrated in person or shared digitally. The possibility of a real audience is part of what makes project-based learning so motivating." },
     ],
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "From Idea to App: How Kids Can Build Real Digital Projects",
-      author: { "@type": "Organization", name: "CODEship Academy" },
-    },
+  },
+  {
+    slug: "at-what-age-should-kids-start-learning-to-code",
+    title: "At What Age Should Kids Start Learning to Code?",
+    metaDescription:
+      "Experts generally point to ages 5-7 as the sweet spot for starting coding. Here's what the research says, and how to match the age to the right tools.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2023-05-10",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "what age should kids learn to code",
+    internalLinks: [
+      { label: "Explorers (K-1): visual block coding", href: "/programs/explorers" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Most children are ready for structured coding around age 5-7, starting with visual, block-based tools. Younger children (3-4) can build the underlying thinking skills through unplugged, screen-free activities first.</p>
+<h2>What Age Can a Child Start Coding?</h2>
+<p>There's no single "correct" age, but there is a consensus range. According to guidance summarized by <a href="https://www.raspberrypi.org/blog/what-age-can-a-child-start-coding/" target="_blank" rel="noopener noreferrer">the Raspberry Pi Foundation</a> and echoed across children's coding education research, most experts place the ideal starting window for structured, tool-based coding at ages 5-7 — with MIT's own ScratchJr recommended from age 5. Some children show interest in sequencing and patterns even earlier, at 3-4, but that's foundational thinking, not programming yet.</p>
+<h2>What Should a 4-6 Year Old Do Instead of "Real" Coding?</h2>
+<p>Before a child touches a keyboard, the most valuable coding preparation is unplugged: board games with rules, following multi-step instructions, sorting and pattern activities, and simple "if this, then that" thinking during play. These build the exact mental muscles coding requires — sequencing, logic, and debugging (noticing when something didn't work and trying again).</p>
+<h2>How the Right Tool Changes by Age</h2>
+<ul>
+<li><strong>Ages 5-7:</strong> Visual, drag-and-drop block coding (ScratchJr-style tools) — no typing or reading fluency required.</li>
+<li><strong>Ages 7-10:</strong> More advanced block coding and a first introduction to real markup (HTML/CSS) — children start building actual web pages.</li>
+<li><strong>Ages 10-13:</strong> Text-based coding, typically JavaScript — typing skills are usually solid enough by this point.</li>
+<li><strong>Ages 13+:</strong> Full text-based languages like Python, plus more complex concepts like AI and data.</li>
+</ul>
+<p>This is exactly the logic behind CODEship's K-8 progression: Explorers (K-1) starts with blocks, Builders (2-3) moves into HTML/CSS, Developers (4-5) writes JavaScript, and Engineers (6-8) works in Python.</p>
+<h2>Is It Ever Too Late to Start?</h2>
+<p>No. While early exposure helps normalize computational thinking, children who start coding at 10, 12, or even in their teens develop the same skills — often faster, since they can jump straight into text-based tools without needing the visual-block stepping stone.</p>
+    `,
+    faqs: [
+      { question: "What is the best age to start coding?", answer: "Most experts point to ages 5-7 for structured, tool-based coding, using visual block tools rather than typed code." },
+      { question: "Can a 3-year-old learn to code?", answer: "Not formally. But screen-free activities that build sequencing and pattern skills are a great foundation for later coding." },
+      { question: "Is it too late to start coding at age 12?", answer: "No. Older beginners often progress faster because they can start directly with text-based languages instead of visual blocks." },
+    ],
+  },
+  {
+    slug: "is-coding-good-for-kids-research",
+    title: "Is Coding Good for Kids? What the Research Says",
+    metaDescription:
+      "A look at what peer-reviewed research actually shows about coding's effect on children's problem-solving, computational thinking, and confidence.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2023-10-05",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "is coding good for kids",
+    internalLinks: [
+      { label: "About CODEship's approach", href: "/about" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Yes, based on the available research. Multiple peer-reviewed studies link structured coding education in children to measurable gains in computational thinking and problem-solving, alongside broader benefits in persistence and collaboration.</p>
+<h2>What Does the Research Actually Show?</h2>
+<p>A 2026 experimental study published in <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2026.1734482/full" target="_blank" rel="noopener noreferrer">Frontiers in Psychology</a> found that a structured coding curriculum for children aged 8-12 produced significantly better computational thinking and general problem-solving scores compared to a standard school curriculum over a 24-week period. Separate literature reviews on early coding tools (like ScratchJr and KIBO robots) found consistent gains in pattern recognition, algorithmic thinking, and problem-solving among young children.</p>
+<h2>Is It Just About Thinking Skills?</h2>
+<p>No — the research points to broader effects too. Studies reviewed in computational thinking literature note gains in communication, collaboration, and even socio-emotional development, since coding gives children a structured, low-stakes way to express ideas and handle failure (a bug is not a personal failure — it's information).</p>
+<h2>Does Coding Help With School Subjects?</h2>
+<p>Coding naturally overlaps with math (sequences, variables, logic) and with literacy (reading instructions, explaining a process). This is exactly why Ontario's math curriculum embeds coding directly into its Algebra strand rather than treating it as a separate subject — the connection to core academic thinking is already recognized by curriculum designers, not just researchers.</p>
+<h2>What Does "Good" Actually Look Like in Practice?</h2>
+<p>The research is consistent on one condition: quality matters. Programs that are project-based — where children build something of their own rather than copy a tutorial — show stronger outcomes than passive, follow-along formats. That's the difference between a child who can repeat steps and a child who can solve a new problem.</p>
+    `,
+    faqs: [
+      { question: "Is there real research behind coding for kids, or is it just marketing?", answer: "There is real, peer-reviewed research. Studies show measurable gains in computational thinking and problem-solving from structured coding programs." },
+      { question: "Does coding help kids in school subjects other than computer science?", answer: "Yes. Coding reinforces math (sequences, logic) and literacy (following and explaining instructions), which is why some provincial curricula embed it directly into math." },
+      { question: "Does the type of coding program matter for the benefits?", answer: "Yes. Project-based programs where children build their own ideas show stronger outcomes than tutorial-only formats." },
+    ],
+  },
+  {
+    slug: "screen-smart-not-screen-time-coding-for-kids",
+    title: "Screen-Smart, Not Screen-Time: Why Making Beats Watching",
+    metaDescription:
+      "Not all screen time is equal. Here's the real difference between passive screen time and active creation — and why it matters for your child's development.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2024-01-12",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "parent-intent",
+    targetQuery: "screen time coding kids",
+    internalLinks: [{ label: "About CODEship's approach", href: "/about" }],
+    content: `
+<p><strong>Quick answer:</strong> Screen time isn't one thing — passive consumption (watching videos, scrolling feeds) and active creation (coding, building, designing) affect children very differently. The goal isn't less screen time; it's smarter screen time.</p>
+<h2>Why "Screen Time" Is the Wrong Question</h2>
+<p>Parents often ask how many hours of screen time is acceptable, but that question treats all screen activity as equivalent. Watching a video and building a game are both "screen time," but they ask completely different things of a child's brain — one is receptive, the other is generative.</p>
+<h2>What Changes When a Child Creates Instead of Consumes?</h2>
+<ul>
+<li><strong>Agency:</strong> A child coding a game is making dozens of small decisions. A child watching a video is making none.</li>
+<li><strong>Problem-solving:</strong> Creation involves constant small failures (bugs, layout issues) that must be debugged — consumption involves none.</li>
+<li><strong>Ownership:</strong> A finished project belongs to the child in a way a watched video never can.</li>
+</ul>
+<h2>How to Tell the Difference in Practice</h2>
+<p>A simple test: ask what your child made during their screen time. If the answer is "nothing, I watched something," that's consumption. If the answer is "a game where the dog collects three keys," that's creation — and it's a fundamentally different developmental experience, even though both happened on a screen.</p>
+<h2>Where CODEship Fits</h2>
+<p>Every CODEship class is built around this distinction. Children don't follow along with a video — they build a game, a website, or an app from their own idea, with an instructor's support. The screen is a tool for making, not a substitute for it.</p>
+    `,
+    faqs: [
+      { question: "Is coding just more screen time?", answer: "It's screen time spent creating rather than consuming — a meaningfully different activity for a child's brain and development." },
+      { question: "How do I know if my child's screen time is 'active' or 'passive'?", answer: "Ask what they made. If there's a specific thing they built or changed, it's active. If they can only describe what they watched, it's passive." },
+    ],
+  },
+  {
+    slug: "block-coding-for-kids-visual-programming",
+    title: "Block Coding for Kids: How Visual Programming Builds Real Skills",
+    metaDescription:
+      "Block coding isn't a watered-down version of 'real' coding — it's how nearly every professional developer learned the underlying logic first. Here's how it works.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-02-14",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "block coding for kids",
+    internalLinks: [{ label: "Explorers (K-1): visual block coding", href: "/programs/explorers" }],
+    content: `
+<p><strong>Quick answer:</strong> Block coding uses draggable, puzzle-piece-shaped instructions instead of typed syntax, so young children can build real programs — sequences, loops, conditionals — without needing to read or type fluently first.</p>
+<h2>What Is Block Coding, Exactly?</h2>
+<p>In block-based tools, each "block" represents a coding instruction — move forward, repeat 3 times, if touching edge then bounce. Children snap blocks together like puzzle pieces to build a working program. There's no syntax to memorize and no missing semicolon to hunt for — the blocks only fit together in valid ways.</p>
+<h2>Is Block Coding "Real" Coding?</h2>
+<p>Yes. The blocks map directly onto real programming concepts — sequencing, loops, conditionals (if/then), variables, and events (when this happens, do that). A child who has built a working project in blocks has already used the same logical structures a professional developer uses in JavaScript or Python; only the notation is different.</p>
+<h2>What Do Kids Actually Build With Blocks?</h2>
+<p>In CODEship's Explorers level, block coding produces real, shareable projects — not exercises. Examples include My Helpful Robot (sequencing and direction), Kindness Cards (simple conditional logic), and a Recycling Sorter (decision-making). Each project is a complete, working thing a child can show off, not a fragment of a tutorial.</p>
+<h2>When Should a Child Move Beyond Blocks?</h2>
+<p>Most children are ready to start layering in text-based tools (like HTML/CSS) around ages 7-9, once reading and typing are comfortable — this is the shift from CODEship's Explorers level to Builders. There's no rush: staying in blocks longer never wastes time, since every concept learned there transfers directly.</p>
+    `,
+    faqs: [
+      { question: "Is block coding a lesser version of real coding?", answer: "No. It teaches the same core logic — sequencing, loops, conditionals — as text-based coding, just without needing typing or reading fluency first." },
+      { question: "What age is block coding appropriate for?", answer: "Roughly ages 5-9, though it's a valid and valuable tool at any age when introducing programming concepts for the first time." },
+      { question: "What comes after block coding?", answer: "Most children transition to text-based tools like HTML/CSS and eventually JavaScript or Python once they're comfortable with blocks and their typing/reading skills catch up." },
+    ],
+  },
+  {
+    slug: "how-kids-learn-html-css-grades-2-3",
+    title: "How Kids Learn HTML & CSS: A Grades 2-3 Roadmap",
+    metaDescription:
+      "HTML and CSS are a natural next step after block coding. Here's how children in grades 2-3 learn to structure and style their first real websites.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-04-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "html css for kids",
+    internalLinks: [{ label: "Builders (Grades 2-3): HTML & CSS", href: "/programs/builders" }],
+    content: `
+<p><strong>Quick answer:</strong> Children in grades 2-3 can learn real HTML (structure) and CSS (styling) by building actual web pages — starting with simple tagged text and progressing to multi-page, styled sites, typically over a semester.</p>
+<h2>Why HTML & CSS Is the Right Next Step After Blocks</h2>
+<p>HTML and CSS are markup and styling languages, not full programming languages — there's no complex logic to debug, just tags and properties to learn. That makes them an ideal bridge between visual block coding and "real" text-based programming: children start typing real code, but the stakes and complexity are gentler than a language like JavaScript.</p>
+<h2>What Does a Grades 2-3 Child Actually Learn?</h2>
+<ul>
+<li><strong>Tags and structure:</strong> How HTML tags give meaning and structure to a page (headings, paragraphs, lists).</li>
+<li><strong>CSS styling:</strong> How to control colour, spacing, and layout — turning plain text into something that looks designed.</li>
+<li><strong>Links and lists:</strong> Connecting pages together into a real, navigable website.</li>
+<li><strong>Writing for the web:</strong> Informational and persuasive writing suited to how people actually read online.</li>
+</ul>
+<h2>What Do They Build?</h2>
+<p>CODEship's Builders level moves through real projects: an "All About Me" page (structure basics), a Weather Helper (styling and lists), a Class Pet Care Guide (informational writing), and a Save the Bees awareness site (persuasive writing) — building to a capstone Community Helper Website that combines everything.</p>
+<h2>Do They Need to Type Well First?</h2>
+<p>Basic typing helps but isn't a prerequisite — most 7-9 year olds develop the needed typing comfort quickly once they're motivated by seeing their own words and styles show up on a real page.</p>
+    `,
+    faqs: [
+      { question: "Is HTML too advanced for a 7-year-old?", answer: "No. HTML tags are simple and forgiving, making them a gentle, motivating first step into real code for most 7-9 year olds." },
+      { question: "What's the difference between HTML and CSS?", answer: "HTML structures content (headings, paragraphs, lists). CSS styles it (colours, spacing, layout). Children typically learn both together." },
+      { question: "Will my child build a real website?", answer: "Yes — CODEship's Builders level culminates in a real, multi-page website children design and code themselves." },
+    ],
+  },
+  {
+    slug: "javascript-for-kids-projects-real-logic",
+    title: "JavaScript for Kids: Projects That Teach Real Logic",
+    metaDescription:
+      "JavaScript is where kids move from styling pages to making them do things. Here's how grades 4-5 students learn variables, functions, and real logic.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-06-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "javascript for kids",
+    internalLinks: [{ label: "Developers (Grades 4-5): JavaScript", href: "/programs/developers" }],
+    content: `
+<p><strong>Quick answer:</strong> JavaScript teaches kids to make web pages interactive — variables, functions, conditionals, and loops — through projects that solve problems they actually recognize, like timers, calculators, and quizzes.</p>
+<h2>Why JavaScript, and Why Now?</h2>
+<p>After HTML/CSS (structure and style), JavaScript is the natural next step: it's the language that makes a page do things — respond to clicks, calculate values, update content. For most children, that jump from "static page" to "the page reacts to me" is genuinely exciting, and it's also where real programming logic starts.</p>
+<h2>What Concepts Does JavaScript Teach?</h2>
+<ul>
+<li><strong>Variables:</strong> Storing and tracking information (a score, a timer, a name).</li>
+<li><strong>Functions:</strong> Reusable blocks of instructions.</li>
+<li><strong>Conditionals:</strong> Making decisions ("if the timer hits zero, show a message").</li>
+<li><strong>Events:</strong> Responding to what a user does (a click, a key press).</li>
+<li><strong>Arrays and loops:</strong> Working with lists of information efficiently.</li>
+</ul>
+<h2>What Real Problems Do Kids Solve?</h2>
+<p>CODEship's Developers level ties every concept to a tool a child might actually use: a Homework Timer & Focus Tool (variables, functions), a Healthy Snack Calculator (conditionals), a "Fact or Fake?" media-literacy quiz (arrays, loops), and Budget Buddy (loops, conditionals, financial literacy) — building to a capstone Problem-Solver App the child designs themselves.</p>
+<h2>Does JavaScript Also Teach Media and Money Skills?</h2>
+<p>Yes, deliberately. The Developers level pairs coding logic with media literacy (questioning sources, in the "Fact or Fake?" project) and financial literacy (in Budget Buddy) — so the same class period reinforces judgment skills that matter well beyond the screen.</p>
+    `,
+    faqs: [
+      { question: "Is JavaScript hard for a 9 or 10 year old?", answer: "It's more demanding than blocks or HTML/CSS, but very learnable at this age when introduced through real, motivating projects rather than abstract syntax drills." },
+      { question: "What will my child be able to build with JavaScript?", answer: "Interactive tools: timers, calculators, quizzes, and other small apps that respond to what the user does." },
+      { question: "Does this program also teach financial or media literacy?", answer: "Yes — CODEship's Developers level pairs JavaScript projects with financial literacy (Budget Buddy) and media literacy (a fact-checking quiz project)." },
+    ],
+  },
+  {
+    slug: "python-for-middle-schoolers-grades-6-8",
+    title: "Python for Middle Schoolers: A Grades 6-8 Starting Point",
+    metaDescription:
+      "Python is one of the most widely used languages in the world. Here's how grades 6-8 students start with real Python logic, data, and AI projects.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2024-09-16",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "python for kids",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Python's clean, readable syntax makes it a strong first text-based language for middle schoolers, especially once they've already learned coding logic through blocks, HTML/CSS, and JavaScript.</p>
+<h2>Why Python for This Age Group?</h2>
+<p>Python reads closer to plain English than most programming languages, which lowers the barrier for new text-based coders. It's also the language most commonly used in real-world AI and data work — so students who start with Python are learning the same tool used in the field, not a simplified "kids' version."</p>
+<h2>What Do Middle Schoolers Actually Learn?</h2>
+<ul>
+<li><strong>Python logic and data:</strong> Variables, data types, and control flow, applied to real problems.</li>
+<li><strong>Real cybersecurity:</strong> Practical concepts like password strength, not abstract theory.</li>
+<li><strong>Training an AI model:</strong> Building and evaluating a simple model, including its limitations.</li>
+<li><strong>Responsible AI:</strong> Bias and ethics — not just how AI works, but where it can go wrong.</li>
+</ul>
+<h2>What Do Students Build?</h2>
+<p>CODEship's Engineers level moves through a Password Strength Checker (Python logic + cybersecurity), Smart Sorting AI (training and evaluating a model, with a direct look at bias), and a Chatbot for Good and Data Detective project — building to a capstone Innovation Challenge, where students prototype and pitch a solution to a real-world (SDG-aligned) problem.</p>
+<h2>Does a Student Need Prior Coding Experience for Python?</h2>
+<p>It helps but isn't strictly required. Students coming from CODEship's earlier levels (blocks, HTML/CSS, JavaScript) already have the underlying logic; Python mainly changes the notation. Complete beginners can also start directly in Python at this age — it's designed to be beginner-friendly.</p>
+    `,
+    faqs: [
+      { question: "Is Python too advanced for a 12-year-old?", answer: "No. Python was designed to be readable and beginner-friendly, and it's a common first text-based language for this age group." },
+      { question: "Does learning Python at this age include AI?", answer: "Yes — CODEship's Engineers level includes training and evaluating a simple AI model, with an explicit focus on bias and ethics." },
+      { question: "What is the capstone project for this level?", answer: "An Innovation Challenge, where students build a prototype addressing a real-world problem (aligned to a UN Sustainable Development Goal) and pitch it." },
+    ],
+  },
+  {
+    slug: "teaching-kids-ai-responsibly",
+    title: "Teaching Kids AI Responsibly: Bias, Ethics & Hands-On Projects",
+    metaDescription:
+      "Teaching kids to use AI is not enough — they need to understand bias, ethics, and limitations too. Here's what responsible AI education actually looks like.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2025-02-04",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "teaching kids about ai",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Responsible AI education for kids means going beyond "how to use AI tools" to include how AI models are trained, where bias comes from, and how to evaluate an AI's output critically — not just accept it.</p>
+<h2>Why "Responsible" Is the Key Word</h2>
+<p>Most children already use AI tools daily, often without realizing it. Teaching AI responsibly means the difference between a child who treats AI as an infallible oracle and one who understands it as a tool built from data, with real limitations and real risk of bias. <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> explicitly frames this as knowledge, skills, <em>and values</em> — ethical awareness is treated as a core competency, not an add-on.</p>
+<h2>What Does Bias in AI Actually Mean for a Kid to Understand?</h2>
+<p>The clearest way to teach this is hands-on: when a student trains their own simple sorting model and sees it make a mistake because of how its training data was structured, the concept of bias stops being abstract. That's the design behind CODEship's Smart Sorting AI project — students see, first-hand, how a model inherits the patterns (and gaps) in the data it learned from.</p>
+<h2>What Does Responsible AI Education Include?</h2>
+<ul>
+<li><strong>Training and evaluating a model:</strong> Understanding how a model learns from data, not just using a finished one.</li>
+<li><strong>Bias and ethics:</strong> Recognizing that a model's outputs reflect its training data, and can be wrong or unfair.</li>
+<li><strong>Critical evaluation:</strong> Questioning AI outputs rather than accepting them automatically.</li>
+<li><strong>Real cybersecurity:</strong> Basic practices like password strength, tied to a broader sense of digital safety.</li>
+</ul>
+<h2>What Does This Look Like in a CODEship Class?</h2>
+<p>In CODEship's Engineers level, students build a Smart Sorting AI project specifically designed to surface bias and ethics questions, alongside a Chatbot for Good project that asks students to think about who an AI tool helps — and who it might not.</p>
+    `,
+    faqs: [
+      { question: "Isn't AI too complex a topic for middle schoolers?", answer: "Not when it's hands-on. Building and testing a simple model makes abstract concepts like bias concrete and understandable." },
+      { question: "What do major education bodies say about AI ethics for kids?", answer: "Both UNESCO and the OECD have published AI literacy frameworks for school-aged children that explicitly include ethics and values, not just technical skills." },
+      { question: "Does CODEship teach kids to build AI models, or just use them?", answer: "Both — students train and evaluate their own simple AI model, which is what makes concepts like bias tangible rather than theoretical." },
+    ],
+  },
+  {
+    slug: "cybersecurity-for-kids-passwords-privacy",
+    title: "Cybersecurity for Kids: Passwords, Privacy & Staying Safe",
+    metaDescription:
+      "Real cybersecurity skills for kids — not just 'don't talk to strangers online,' but practical concepts like password strength and digital privacy.",
+    category: "ai",
+    readTime: 5,
+    publishDate: "2025-03-18",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "program-skill",
+    targetQuery: "cybersecurity for kids",
+    internalLinks: [{ label: "Engineers (Grades 6-8): Python + AI + Cybersecurity", href: "/programs/engineers" }],
+    content: `
+<p><strong>Quick answer:</strong> Practical cybersecurity for kids starts with understanding what makes a password strong, why privacy settings matter, and how to think critically about what they share online — ideally learned by building something, not just being told rules.</p>
+<h2>Why Cybersecurity Belongs in a Coding Program</h2>
+<p>Cybersecurity is often taught as a list of "don'ts" — don't share your password, don't click suspicious links. That's necessary but incomplete. Real understanding comes from seeing why those rules exist: what actually makes a password easy or hard to guess, how personal information gets used, and how digital systems can be misused.</p>
+<h2>What Does "Real" Cybersecurity Look Like for This Age?</h2>
+<ul>
+<li><strong>Password strength:</strong> Understanding what makes a password resistant to guessing — not just memorizing a rule about special characters.</li>
+<li><strong>Digital footprint:</strong> Understanding that what's shared online persists and can be seen by others.</li>
+<li><strong>Privacy basics:</strong> Recognizing what information is sensitive and why it matters who can see it.</li>
+<li><strong>Healthy skepticism:</strong> Questioning links, requests, and offers that seem designed to trick someone.</li>
+</ul>
+<h2>How CODEship Teaches This Hands-On</h2>
+<p>In CODEship's Engineers level, students build a Password Strength Checker — a real Python program that evaluates password strength using actual logic (length, character variety, common patterns). Building the checker themselves means students understand <em>why</em> a password is weak or strong, not just that it is.</p>
+<h2>How Early Should Digital Footprint Awareness Start?</h2>
+<p>Much earlier than middle school. CODEship introduces "kindness online and digital footprint" concepts as early as Explorers (K-1), scaled appropriately — the ideas build in complexity across all four program levels, from basic online kindness to practical cybersecurity engineering.</p>
+    `,
+    faqs: [
+      { question: "What cybersecurity skills should a middle schooler actually know?", answer: "Practical basics: what makes a password strong, how digital footprints work, and healthy skepticism toward suspicious links or requests." },
+      { question: "Does CODEship teach digital footprint awareness to younger kids too?", answer: "Yes — it starts as early as the Explorers level (K-1) in age-appropriate form and builds in complexity through each program level." },
+      { question: "How does building a password checker teach cybersecurity better than a lecture?", answer: "Writing the actual logic that scores password strength makes the 'why' concrete — students see directly which patterns make passwords weak." },
+    ],
+  },
+  {
+    slug: "ontario-curriculum-coding-math-strand-c3",
+    title: "How Coding Supports the Ontario Curriculum (Math Strand C3)",
+    metaDescription:
+      "Ontario's math curriculum embeds coding directly into the Algebra strand (C3). Here's what it actually requires by grade, and how after-school coding supports it.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2024-05-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "ontario coding curriculum",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> Ontario's 2020 math curriculum embeds coding directly into the Algebra strand as expectation C3, starting in Grade 1. It's not a separate subject — it's part of core math learning, and it grows more complex each year.</p>
+<h2>What Is Ontario's C3 Coding Strand?</h2>
+<p>Coding (C3) sits inside Ontario's elementary math curriculum under the Algebra strand, alongside patterning and algebraic reasoning. According to the <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics/grades/g4-math/strand-c/c3" target="_blank" rel="noopener noreferrer">official Ontario curriculum documents</a>, students begin creating and following sequential and repeating code as early as Grade 2, and by Grade 3, expectations include writing and executing code involving sequential, concurrent, and repeating events, plus reading and altering existing code.</p>
+<h2>Why Coding Lives Inside Math, Not as Its Own Subject</h2>
+<p>This is a deliberate design choice, not an oversight — coding concepts like sequences, variables, and repeating patterns map directly onto algebraic thinking. A child who can build a repeating pattern in code is practicing the same underlying logic as a child solving a patterning problem on paper.</p>
+<h2>How After-School Coding Supports This (Without Replacing School)</h2>
+<p>A structured after-school coding program is designed to <strong>support and align with</strong> what a child is already encountering in Ontario math class — reinforcing sequencing, logic, and pattern-based thinking through hands-on projects, rather than duplicating classroom worksheets. CODEship's Explorers and Builders levels, for example, build the same sequencing and conditional-logic skills the C3 strand describes, just through creative projects instead of a workbook page.</p>
+<h2>Does This Mean CODEship Is Endorsed by the Ministry of Education?</h2>
+<p>No. CODEship's curriculum is designed to align with and support these publicly available curriculum expectations — it is not endorsed, approved, or certified by the Ontario Ministry of Education or any school board. Parents should always confirm current expectations against the official curriculum documents.</p>
+    `,
+    faqs: [
+      { question: "Is coding a separate subject in Ontario schools?", answer: "No. It's embedded in the math curriculum under the Algebra strand (expectation C3), starting in Grade 1." },
+      { question: "What grade does 'real' coding start in Ontario?", answer: "Sequential and repeating code appears from Grade 2, with more complex concurrent-event code introduced by Grade 3." },
+      { question: "Is an after-school coding program endorsed by the Ministry of Education?", answer: "No program should claim that. The honest framing is that a program's curriculum can align with or support public curriculum expectations, not that it's ministry-endorsed." },
+    ],
+  },
+  {
+    slug: "bc-adst-curriculum-coding-guide",
+    title: "Coding and BC's ADST Curriculum: A Parent's Guide",
+    metaDescription:
+      "BC's Applied Design, Skills & Technologies (ADST) curriculum supports coding and computational thinking from kindergarten. Here's what it means for your child.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-04-03",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "bc adst coding",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> BC's Applied Design, Skills & Technologies (ADST) curriculum supports computational thinking and coding across K-12, though it doesn't prescribe specific grade-by-grade content for K-5 the way Ontario's math strand does — schools have flexibility in how they deliver it.</p>
+<h2>What Is ADST?</h2>
+<p>According to the <a href="https://curriculum.gov.bc.ca/curriculum/adst" target="_blank" rel="noopener noreferrer">official BC curriculum</a>, Applied Design, Skills, and Technologies is an experiential, hands-on area of learning that draws on design thinking, computational thinking, coding, and engineering challenges, alongside more traditional skill areas.</p>
+<h2>How Coding Fits Into ADST for Younger Grades</h2>
+<p>For Kindergarten through Grade 5, ADST doesn't specify fixed content — instead, it provides Big Ideas and Curricular Competencies that schools weave into other subject areas, giving teachers flexibility in exactly when and how coding and computational thinking are introduced. Many BC schools use tools like Scratch, ScratchJr, and Code.org as part of this cross-curricular approach.</p>
+<h2>What This Means for Parents</h2>
+<p>Because ADST implementation varies more by school than Ontario's fixed C3 strand does, the exact coding exposure your child gets in class can differ. A structured, project-based coding program can be a reliable way to ensure your child builds computational thinking skills consistently — supporting and aligning with ADST's goals regardless of how much coding their specific school emphasizes in a given year.</p>
+<h2>Compliance Note</h2>
+<p>A coding program's curriculum can be designed to align with and support ADST's goals for computational thinking and design skills. It is not endorsed, approved, or certified by the BC Ministry of Education or any school district.</p>
+    `,
+    faqs: [
+      { question: "Does every BC school teach the same amount of coding?", answer: "Not necessarily. ADST gives schools flexibility in how they deliver computational thinking content for K-5, so exposure can vary by school." },
+      { question: "What tools do BC schools typically use for coding under ADST?", answer: "Common tools include Scratch, ScratchJr, and Code.org, often woven into other subjects rather than taught as a stand-alone class." },
+      { question: "Is a coding program 'BC curriculum approved'?", answer: "No legitimate program should claim that. The accurate description is that a program's content can align with and support ADST's goals." },
+    ],
+  },
+  {
+    slug: "alberta-computer-science-curriculum-guide",
+    title: "Alberta's Computer Science Curriculum: What Parents Should Know",
+    metaDescription:
+      "Alberta's Career and Technology Foundations (CTF) curriculum introduces computing and coding from grade 5. Here's what it covers and how it connects to CS.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-05-06",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "alberta computer science curriculum kids",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> Alberta introduces computing and technology formally through Career and Technology Foundations (CTF) for grades 5-9, which includes a computing science occupational area, before students can specialize further in Career and Technology Studies (CTS) in high school.</p>
+<h2>What Is CTF?</h2>
+<p>According to <a href="https://education.alberta.ca/career-and-technology-foundations/" target="_blank" rel="noopener noreferrer">Alberta Education</a>, Career and Technology Foundations (CTF) is a curriculum for students in grades 5-9 organized around four central processes — plan, create, appraise, communicate — spanning multiple occupational clusters, including a Technology cluster that covers computing science.</p>
+<h2>How This Connects to Coding</h2>
+<p>CTF is intentionally broad and interdisciplinary, developing problem-solving, communication, and collaboration skills through hands-on, real-world challenges — computing and coding are one occupational area among several a student may encounter, not a guaranteed, dedicated coding class every year.</p>
+<h2>What This Means for a Grade 4-8 Family</h2>
+<p>Since CTF formally begins at grade 5 and computing science is one of several possible occupational areas, families who want consistent, structured coding exposure earlier — or a guarantee that their child builds real coding skills rather than sampling one of many CTF areas — often look to dedicated after-school programs to fill that gap.</p>
+<h2>Compliance Note</h2>
+<p>A coding program's curriculum can be designed to map to and support the computing-related outcomes within Alberta's CTF and broader K-12 goals. It is not endorsed, approved, or certified by Alberta Education or any school division.</p>
+    `,
+    faqs: [
+      { question: "At what grade does Alberta introduce computer science formally?", answer: "Career and Technology Foundations (CTF), which includes a computing science area, begins at grade 5." },
+      { question: "Is computing science guaranteed every year under CTF?", answer: "Not necessarily — computing is one of several occupational areas within CTF, so exposure can vary by school and year." },
+      { question: "Is a coding program approved by Alberta Education?", answer: "No legitimate program should claim that. The accurate description is that a program can map to and support relevant CTF outcomes." },
+    ],
+  },
+  {
+    slug: "codage-enfants-quebec-competence-numerique",
+    title: "Le codage et la compétence numérique au Québec (guide parent)",
+    metaDescription:
+      "Le Cadre de référence de la compétence numérique du Québec appuie l'apprentissage du codage à l'école. Voici ce que les parents doivent savoir.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-06-02",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "codage enfants québec",
+    internalLinks: [{ label: "Explorateurs (FR)", href: "/lp/quebec-fr" }],
+    content: `
+<p><strong>Réponse rapide :</strong> Le Cadre de référence de la compétence numérique du ministère de l'Éducation du Québec définit 12 dimensions de la compétence numérique, dont la pensée informatique et la programmation, applicables du préscolaire à l'éducation aux adultes.</p>
+<h2>Qu'est-ce que le Cadre de référence de la compétence numérique?</h2>
+<p>Créé par le ministère de l'Éducation en 2019 dans le cadre du Plan d'action numérique, ce cadre officiel définit la compétence numérique comme un ensemble d'habiletés nécessaires pour utiliser les technologies numériques de façon confiante, critique et créative. Selon <a href="https://www.quebec.ca/en/education/digital-technology/digital-competency-framework" target="_blank" rel="noopener noreferrer">le site officiel du gouvernement du Québec</a>, une mise à jour majeure a été publiée en 2026, tenant compte des développements récents, notamment l'essor de l'intelligence artificielle.</p>
+<h2>Où se situe le codage dans ce cadre?</h2>
+<p>La pensée informatique et la programmation figurent parmi les 12 dimensions du cadre. L'objectif n'est pas de former des programmeurs professionnels, mais de développer l'autonomie, la pensée critique et l'usage responsable des outils numériques — le codage étant un moyen concret d'atteindre ces objectifs.</p>
+<h2>Ce que cela signifie pour les familles</h2>
+<p>Un programme de codage bien conçu peut appuyer et s'aligner avec les objectifs du Cadre de référence, en particulier la dimension de la pensée informatique, tout en donnant à l'enfant des projets concrets et motivants à réaliser.</p>
+<h2>Note de conformité</h2>
+<p>Un programme de codage peut être conçu pour appuyer et s'aligner avec le Cadre de référence de la compétence numérique du Québec. Il n'est ni endossé, ni approuvé, ni certifié par le ministère de l'Éducation.</p>
+    `,
+    faqs: [
+      { question: "Le Cadre de référence de la compétence numérique inclut-il le codage?", answer: "Oui. La pensée informatique et la programmation figurent parmi les 12 dimensions du cadre." },
+      { question: "Ce cadre s'applique-t-il seulement au secondaire?", answer: "Non, il s'applique du préscolaire à l'éducation aux adultes, avec une progression adaptée à chaque niveau." },
+      { question: "Un programme de codage est-il approuvé par le ministère?", answer: "Non. Un programme peut appuyer et s'aligner avec le cadre, mais aucun programme privé n'est approuvé par le ministère." },
+    ],
+  },
+  {
+    slug: "kids-coding-classes-toronto",
+    title: "Kids Coding Classes in Toronto: A Parent's Guide",
+    metaDescription:
+      "Looking for kids coding classes in Toronto? Here's what to look for, what a typical Saturday program looks like, and how to get started.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2024-03-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding classes toronto",
+    internalLinks: [
+      { label: "CODEship in Toronto", href: "/locations/toronto" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Toronto families can access CODEship's full K-8 coding journey in person every Saturday, or online — with programs for every grade band from kindergarten through grade 8.</p>
+<h2>What's Available for Kids Coding Classes in Toronto?</h2>
+<p>Toronto is one of CODEship's five official in-person cities, running all four program levels — Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — every Saturday. Families who prefer a weekday online option can join the same curriculum through CODEship's online schedule instead.</p>
+<h2>What Should Toronto Parents Look for in a Coding Program?</h2>
+<ul>
+<li><strong>A real progression:</strong> Does the program build in complexity year over year, or repeat the same content?</li>
+<li><strong>Project-based learning:</strong> Are kids building their own ideas, or following identical tutorials?</li>
+<li><strong>Age-appropriate tools:</strong> Blocks for younger kids, text-based languages as they mature.</li>
+<li><strong>Inclusive design:</strong> A welcoming environment for all learning styles and backgrounds.</li>
+</ul>
+<h2>What Does a Saturday Look Like?</h2>
+<p>Each of CODEship's Toronto Saturday classes runs about 55 minutes, project-based throughout, with a instructor guiding kids from idea to a finished, working thing they built themselves.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship run in-person classes in Toronto?", answer: "Yes. Toronto is one of CODEship's five official in-person cities, with Saturday classes for all four K-8 program levels." },
+      { question: "Is there an online option for Toronto families who can't attend Saturdays?", answer: "Yes — the same curriculum is available online on weekday schedules." },
+    ],
+  },
+  {
+    slug: "coding-classes-for-kids-vaughan",
+    title: "Coding Classes for Kids in Vaughan",
+    metaDescription:
+      "Vaughan families: here's how to find real, project-based coding classes for kids, from kindergarten through grade 8.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-01-08",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "coding classes for kids vaughan",
+    internalLinks: [
+      { label: "CODEship in Vaughan", href: "/locations/vaughan" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Vaughan is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, plus an online option for families who prefer a weekday schedule.</p>
+<h2>Coding Classes for Kids in Vaughan: What's Available</h2>
+<p>Vaughan families have access to all four CODEship program levels in person: Explorers (K-1, visual blocks), Builders (grades 2-3, HTML & CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8, Python, AI, and cybersecurity) — each running every Saturday.</p>
+<h2>Why Project-Based Matters for Vaughan Families Choosing a Program</h2>
+<p>The biggest difference between coding programs isn't the tools they use — it's whether kids build their own projects or follow identical, copy-paste tutorials. Project-based programs produce kids who can solve new problems; tutorial-based programs produce kids who can repeat steps.</p>
+<h2>Getting Started</h2>
+<p>Families new to coding can use CODEship's program finder to match their child's age and interests to the right level, then register for the next Saturday semester in Vaughan or the equivalent online schedule.</p>
+    `,
+    faqs: [
+      { question: "What ages does CODEship serve in Vaughan?", answer: "Kindergarten through grade 8, across four program levels that build on each other." },
+      { question: "Does my child need prior coding experience to start in Vaughan?", answer: "No. Every level is designed to welcome complete beginners." },
+    ],
+  },
+  {
+    slug: "kids-coding-stem-oshawa-durham",
+    title: "Kids Coding & STEM in Oshawa / Durham Region",
+    metaDescription:
+      "Oshawa and Durham Region families: here's what a real, project-based K-8 coding and STEM program looks like, and how to get started.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2024-07-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding oshawa",
+    internalLinks: [
+      { label: "CODEship in Oshawa", href: "/locations/oshawa" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Oshawa is CODEship's headquarters city and one of five official in-person locations, running the full K-8 coding and STEM journey every Saturday.</p>
+<h2>Coding & STEM for Kids in Oshawa and Durham Region</h2>
+<p>Oshawa families have access to all four CODEship program levels — Explorers, Builders, Developers, and Engineers — covering visual blocks, HTML/CSS, JavaScript, and Python + AI + cybersecurity, in a natural progression from kindergarten through grade 8.</p>
+<h2>What Makes a Coding & STEM Program Worth the Drive?</h2>
+<p>For Durham Region families comparing options, the key differentiators are the same anywhere: a real multi-year progression (not a one-off workshop), project-based learning (kids build their own ideas), and an inclusive, welcoming environment regardless of prior experience.</p>
+<h2>Getting Started in Oshawa</h2>
+<p>Families can use the program finder to identify the right level by grade, then register for the next Saturday semester.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship run classes in Oshawa specifically?", answer: "Yes — Oshawa is one of CODEship's five official in-person cities and its headquarters location." },
+      { question: "What age range is covered in Oshawa?", answer: "Kindergarten through grade 8, across four progressive levels." },
+    ],
+  },
+  {
+    slug: "coding-classes-for-kids-calgary",
+    title: "Coding Classes for Kids in Calgary",
+    metaDescription:
+      "Calgary families: find real, project-based K-8 coding classes — from visual blocks for kindergarteners to Python and AI for middle schoolers.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-07-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "coding classes for kids calgary",
+    internalLinks: [
+      { label: "CODEship in Calgary", href: "/locations/calgary" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Calgary is one of CODEship's five official in-person cities, with in-person Saturday classes for all four K-8 program levels and an online option for families across Alberta.</p>
+<h2>Coding Classes for Kids in Calgary: What's Available</h2>
+<p>Calgary families can access CODEship's full K-8 progression in person: Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — each building on the last, from visual blocks through to Python, AI, and cybersecurity.</p>
+<h2>How This Connects to Alberta's Curriculum</h2>
+<p>CODEship's curriculum is designed to map to and support Alberta's Career and Technology Foundations (CTF) computing outcomes for grades 5-9, giving Calgary families a consistent, structured coding pathway alongside whatever their school offers.</p>
+<h2>Getting Started in Calgary</h2>
+<p>Use the program finder to match your child's age and interests to the right level, then register for the next Saturday semester in Calgary or the equivalent online schedule.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship offer in-person classes in Calgary?", answer: "Yes — Calgary is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "Does this align with Alberta's school curriculum?", answer: "The program is designed to map to and support relevant Alberta CTF computing outcomes — it is not endorsed or approved by Alberta Education." },
+    ],
+  },
+  {
+    slug: "kids-coding-classes-vancouver",
+    title: "Kids Coding Classes in Vancouver",
+    metaDescription:
+      "Vancouver families: here's what to expect from a real, project-based K-8 coding program, and how it connects to BC's ADST curriculum.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-08-05",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding classes vancouver",
+    internalLinks: [
+      { label: "CODEship in Vancouver", href: "/locations/vancouver" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Vancouver is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, with an online option for families across BC.</p>
+<h2>Kids Coding Classes in Vancouver: What's Available</h2>
+<p>Vancouver families can access all four CODEship program levels in person — Explorers, Builders, Developers, and Engineers — moving from visual block coding through HTML/CSS, JavaScript, and finally Python, AI, and cybersecurity by grade 8.</p>
+<h2>How This Connects to BC's ADST Curriculum</h2>
+<p>CODEship's curriculum is designed to align with and support BC's Applied Design, Skills & Technologies (ADST) goals for computational thinking, giving Vancouver families a consistent coding pathway regardless of how much coding their specific school covers in a given year.</p>
+<h2>Getting Started in Vancouver</h2>
+<p>Use the program finder to match your child's age to the right level, then register for the next Saturday semester in Vancouver or online.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship offer in-person classes in Vancouver?", answer: "Yes — Vancouver is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "How does this relate to BC's ADST curriculum?", answer: "The program is designed to align with and support ADST's computational thinking goals — it is not endorsed or approved by the BC Ministry of Education." },
+    ],
+  },
+  {
+    slug: "online-coding-classes-for-kids-canada",
+    title: "Online Coding Classes for Kids in Canada: How They Work",
+    metaDescription:
+      "Not near an in-person location? Here's how CODEship's online coding classes work for kids across Canada — schedule, format, and what to expect.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-09-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "online coding classes for kids canada",
+    internalLinks: [
+      { label: "Explore all programs", href: "/programs" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> CODEship's online classes run the same curriculum as the in-person program, live and instructor-led — Tuesdays for Explorers and Builders, Thursdays for Developers and Engineers, 4:00-6:00 PM ET, one hour per class.</p>
+<h2>How Do Online Coding Classes for Kids Actually Work?</h2>
+<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, one hour long, following the exact same project-based curriculum as the in-person Saturday classes. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to live near one of the five in-person cities.</p>
+<h2>What's the Online Schedule?</h2>
+<ul>
+<li><strong>Tuesdays, 4:00-6:00 PM ET:</strong> Explorers (K-1) and Builders (grades 2-3).</li>
+<li><strong>Thursdays, 4:00-6:00 PM ET:</strong> Developers (grades 4-5) and Engineers (grades 6-8).</li>
+</ul>
+<p>Each class is one hour, live, with real-time instructor support — the same quality of guidance a child would get in person, just from home.</p>
+<h2>Is Online as Effective as In-Person for Coding?</h2>
+<p>For project-based coding specifically, online classes work well because the "project" lives on a screen either way — a child building a website or a Python program does the same hands-on work whether they're sitting next to an instructor or connected live over video, with the instructor able to see their screen and guide them in real time.</p>
+<h2>Who Is Online Best For?</h2>
+<p>Families outside the five in-person cities, families who prefer a weekday schedule over Saturdays, and families who want the flexibility of joining from home.</p>
+    `,
+    faqs: [
+      { question: "Are CODEship's online classes live or pre-recorded?", answer: "Live and instructor-led — not pre-recorded videos." },
+      { question: "What is the online schedule?", answer: "Tuesdays 4-6 PM ET for Explorers and Builders; Thursdays 4-6 PM ET for Developers and Engineers. One hour per class." },
+      { question: "Can a family outside Canada join the online classes?", answer: "The program is designed for children in Canada, but the online format itself only requires a stable internet connection and the class's time zone (ET) to work." },
+    ],
+  },
+  {
+    slug: "online-coding-classes-guyana-parents-guide",
+    title: "Online Coding Classes for Kids in Guyana: A Parent's Guide",
+    metaDescription:
+      "A parent's guide to online coding classes for kids in Guyana — how they work, what's included, and how much they cost.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2024-08-13",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "online coding classes guyana kids",
+    internalLinks: [{ label: "Online Coding Classes for Kids in Guyana", href: "/gy/online-coding-classes" }],
+    content: `
+<p><strong>Quick answer:</strong> CODEship's online coding program for Guyana is a live, instructor-led enrichment course for GYD $20,000 per semester, open to children anywhere in Guyana — Georgetown, East Bank Demerara, East Coast Demerara, Berbice, Linden, Essequibo, and beyond.</p>
+<h2>How Do Online Coding Classes Work for Guyanese Families?</h2>
+<p>Because the classes are entirely online, location within Guyana doesn't matter — a child in Georgetown and a child in Bartica join the same live class. Sessions are instructor-led (not pre-recorded), project-based, and beginner-friendly, with no prior coding experience required.</p>
+<h2>What's Actually Included for GYD $20,000?</h2>
+<ul>
+<li>Live online instruction for a full semester</li>
+<li>Project-based learning — real digital projects, not worksheets</li>
+<li>Guided activities and semester outcomes your child can point to and explain</li>
+</ul>
+<p>Broken down, that works out to roughly GYD $5,000 per session, depending on the semester schedule.</p>
+<h2>Is This Just Coding, or Something Broader?</h2>
+<p>It's broader by design. Alongside coding, the program supports Math thinking, English comprehension, writing and explanation skills, and computer literacy — positioned as an enrichment program that supports school learning, not a replacement for it.</p>
+<h2>Getting Started</h2>
+<p>The next semester starts September 1, 2026. Families can register directly online for their child's spot.</p>
+    `,
+    faqs: [
+      { question: "Is this available outside Georgetown?", answer: "Yes — it's fully online, so children can join from anywhere in Guyana, including East Bank Demerara, East Coast Demerara, Berbice, Linden, and Essequibo." },
+      { question: "How much does a semester cost?", answer: "GYD $20,000 per semester, which works out to roughly GYD $5,000 per session depending on the schedule." },
+      { question: "Does my child need coding experience already?", answer: "No — the program is designed to be beginner-friendly." },
+    ],
+  },
+  {
+    slug: "ngsa-prep-digital-skills-guyana",
+    title: "NGSA Prep & Digital Skills: Building Future-Ready Guyanese Kids",
+    metaDescription:
+      "How digital skills and structured problem-solving practice can support the thinking skills used in NGSA preparation — without guaranteeing results.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2025-02-20",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "ngsa digital skills",
+    internalLinks: [{ label: "NGSA & Digital Skills Program", href: "/gy/ngsa-digital-skills" }],
+    content: `
+<p><strong>Quick answer:</strong> The National Grade Six Assessment (NGSA) tests Mathematics, English Language, Science, and Social Studies. Digital-skills programs can support the underlying thinking skills — breaking down problems, explaining reasoning clearly, structured logic — used across those subjects, but no enrichment program can guarantee exam results.</p>
+<h2>What Is the NGSA, Exactly?</h2>
+<p>According to <a href="https://education.gov.gy/web2/index.php/pri/ngsa" target="_blank" rel="noopener noreferrer">Guyana's Ministry of Education</a>, the National Grade Six Assessment is used to place students into secondary schools, testing four core subjects — Mathematics, English Language, Science, and Social Studies — through a combination of multiple-choice and essay-style papers, developed in collaboration with the Caribbean Examinations Council (CXC).</p>
+<h2>How Does Digital-Skills Learning Connect to NGSA Subjects?</h2>
+<p>Coding and computational thinking naturally reinforce skills tested across NGSA's core subjects:</p>
+<ul>
+<li><strong>Mathematics:</strong> Sequencing, logic, and pattern recognition — the same thinking used in coding.</li>
+<li><strong>English Language:</strong> Reading instructions carefully and explaining a process clearly, which coding projects require constantly.</li>
+<li><strong>Problem-solving generally:</strong> Breaking a big problem into smaller steps — a habit built directly through project-based coding.</li>
+</ul>
+<h2>What the Data Shows About NGSA Performance</h2>
+<p>Guyana's NGSA results have been improving nationally — <a href="https://dpi.gov.gy/govts-investments-hard-work-yield-high-results-at-ngsa-2025/" target="_blank" rel="noopener noreferrer">the Department of Public Information reported</a> the overall pass rate rose from 49% in 2024 to 63% in 2025, which the Ministry attributed to sustained investment in education. This reflects national trends, not the effect of any specific enrichment program.</p>
+<h2>What a Digital-Skills Program Can and Cannot Promise</h2>
+<p>An honest program supports NGSA skill-building and helps strengthen skills used in NGSA preparation — practicing structured thinking, breaking down word problems, and writing clearer explanations. It is not an official NGSA program, is not Ministry-approved or endorsed, and cannot guarantee grades or exam results. Be cautious of any program that claims otherwise.</p>
+    `,
+    faqs: [
+      { question: "What subjects does the NGSA actually test?", answer: "Mathematics, English Language, Science, and Social Studies, through a mix of multiple-choice and essay papers." },
+      { question: "Can a coding program guarantee better NGSA results?", answer: "No. A responsible program supports skill-building relevant to NGSA subjects; it cannot guarantee exam outcomes." },
+      { question: "Is a digital-skills enrichment program an official NGSA program?", answer: "No. It is not an official NGSA program and is not endorsed or approved by the Ministry of Education." },
+    ],
+  },
+  {
+    slug: "math-english-coding-guyana-online-learning",
+    title: "Math, English & Coding: Well-Rounded Online Learning for Guyanese Students",
+    metaDescription:
+      "How one online program combines Math thinking, English comprehension, and coding for Guyanese students — and why that combination matters.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-05-14",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "online math english coding guyana",
+    internalLinks: [{ label: "Math, English & Coding Program", href: "/gy/math-english-coding" }],
+    content: `
+<p><strong>Quick answer:</strong> A well-designed coding program doesn't isolate coding from academic skills — it uses coding projects as the vehicle for practicing Math reasoning, English comprehension, and writing, all in the same class.</p>
+<h2>Why Combine Math, English, and Coding?</h2>
+<p>These three areas reinforce each other more than parents often expect. A coding project requires reading instructions carefully (English comprehension), applying logical and sequential thinking (Math reasoning), and explaining what was built and why (writing). Separating them into isolated subjects misses how naturally they overlap.</p>
+<h2>What Does This Look Like in Practice?</h2>
+<ul>
+<li><strong>Math thinking:</strong> Patterns, sequencing, logic, and problem-solving through coding activities.</li>
+<li><strong>English comprehension:</strong> Reading task instructions and understanding what's being asked.</li>
+<li><strong>Writing:</strong> Explaining project steps and reflecting on what was built.</li>
+<li><strong>Computer sense:</strong> Typing, navigating tools, and using digital platforms safely.</li>
+</ul>
+<h2>Who Is This For?</h2>
+<p>Guyanese families looking for one online program that supports school learning broadly — not just a narrow coding class — while also building practical digital skills their child can use immediately.</p>
+<h2>What to Expect After a Semester</h2>
+<p>By the end of a semester, a student should be able to solve structured problems, write clearer explanations, build a simple digital project, and use computers with more confidence — outcomes that span academic and digital skills together, for GYD $20,000 per semester.</p>
+    `,
+    faqs: [
+      { question: "Is this just an English or Math tutoring program?", answer: "No — it combines Math thinking, English comprehension, writing, and coding in one program, not a single-subject tutor." },
+      { question: "Does my child need to be strong in Math or English already?", answer: "No prior strength is required. The program is designed to build these skills alongside coding, for beginners." },
+    ],
+  },
+  {
+    slug: "computer-classes-for-kids-guyana",
+    title: "Computer Classes for Kids in Guyana: From Confidence to Creation",
+    metaDescription:
+      "Computer literacy classes for Guyanese kids that go beyond typing and clicking — building real confidence with computers and basic coding.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2026-01-12",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "computer classes for kids guyana",
+    internalLinks: [{ label: "Computer Classes for Kids in Guyana", href: "/gy/computer-classes-for-kids" }],
+    content: `
+<p><strong>Quick answer:</strong> Real computer literacy for kids goes beyond knowing where the buttons are — it means understanding how digital tools work well enough to create with them, not just consume with them.</p>
+<h2>What Does "Computer Literacy" Actually Mean for a Child?</h2>
+<p>Many children today are fluent at swiping and tapping but have never typed a document, navigated a file system, or built anything digital themselves. Genuine computer literacy includes typing, navigating tools, using digital platforms safely, and — critically — creating, not just consuming.</p>
+<h2>From Confidence to Creation</h2>
+<p>The strongest computer literacy programs move a child from "I know how to use this app" to "I understand how this works and can build something with it." That shift — from user to creator — is where real confidence comes from.</p>
+<h2>What a Semester Looks Like</h2>
+<ul>
+<li>Using common digital tools more confidently</li>
+<li>Understanding basic coding concepts</li>
+<li>Creating a simple digital project from scratch</li>
+</ul>
+<h2>Who This Is For</h2>
+<p>Guyanese families whose child uses devices daily but hasn't yet had structured, guided practice actually building something with them — an online, beginner-friendly starting point.</p>
+    `,
+    faqs: [
+      { question: "My child already knows how to use a tablet — is this still useful?", answer: "Yes. Using an app and understanding how to build with a computer are different skills. This program focuses on the latter." },
+      { question: "Does my child need their own computer?", answer: "A computer or laptop with internet access is needed to join the live online classes." },
+    ],
+  },
+  {
+    slug: "stem-for-kids-guyana",
+    title: "STEM for Kids in Guyana: Why It Matters Now",
+    metaDescription:
+      "Why STEM skills matter for Guyanese kids today, and what a practical, project-based online STEM program actually looks like.",
+    category: "stem",
+    readTime: 5,
+    publishDate: "2026-02-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "stem classes guyana kids",
+    internalLinks: [{ label: "Online STEM Classes for Kids in Guyana", href: "/gy/online-stem-classes" }],
+    content: `
+<p><strong>Quick answer:</strong> STEM skills — coding, logical thinking, structured problem-solving — are increasingly relevant for Guyanese students as digital tools become part of more careers and everyday life, not just tech jobs.</p>
+<h2>Why STEM Matters for Guyanese Families Right Now</h2>
+<p>Digital tools now touch nearly every field — agriculture, healthcare, business, government services. A child who understands how technology works, rather than just how to use it, is better positioned for whatever field they eventually choose, tech or not.</p>
+<h2>What Does a Practical STEM Program Actually Teach?</h2>
+<ul>
+<li><strong>Coding:</strong> Real logic and problem-solving through building projects.</li>
+<li><strong>Math thinking:</strong> Patterns, sequencing, and structured reasoning.</li>
+<li><strong>Writing:</strong> Explaining a process and reflecting on a finished project.</li>
+<li><strong>Digital creativity:</strong> Building something original, not following a template.</li>
+</ul>
+<h2>What Should a Child Be Able to Do After a Semester?</h2>
+<p>Build a project, explain their process, solve problems step by step, and present what they created — practical outcomes rather than abstract theory.</p>
+<h2>Getting Started</h2>
+<p>CODEship's online STEM program for Guyana runs GYD $20,000 per semester, live and online, with the next semester starting September 1, 2026.</p>
+    `,
+    faqs: [
+      { question: "Is STEM only useful for kids who want a tech career?", answer: "No. STEM thinking skills — logic, problem-solving, structured reasoning — are valuable across virtually every field." },
+      { question: "What will my child actually build in a STEM class?", answer: "A real digital project they design themselves, then explain and present — not a worksheet or quiz." },
+    ],
+  },
+  {
+    slug: "best-coding-programs-for-kids-canada-2026",
+    title: "Best Coding Programs for Kids in Canada (2026)",
+    metaDescription:
+      "What to actually look for when evaluating coding programs for kids in Canada in 2026 — a practical checklist, not a sponsored ranking.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2026-01-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "best coding programs for kids canada",
+    internalLinks: [{ label: "Explore CODEship's programs", href: "/programs" }],
+    listItems: [
+      { name: "A real multi-year progression", description: "Does the program build in complexity year over year, from visual blocks to text-based languages?" },
+      { name: "Project-based learning", description: "Are kids building their own original projects, or following identical tutorials?" },
+      { name: "Age-appropriate tools", description: "Visual blocks for younger children, text-based languages introduced as reading/typing mature." },
+      { name: "Inclusive, accommodating design", description: "A welcoming environment with accommodations built in for different learning styles." },
+      { name: "Real assessment, not just attendance", description: "Some way of checking understanding — quizzes, project rubrics, or portfolio review." },
+      { name: "Transparent curriculum alignment claims", description: "Programs that say 'aligned to' or 'supports' provincial curricula — not 'endorsed' or 'approved by' a ministry." },
+      { name: "In-person and online options", description: "Flexibility to attend a physical location or join live online, depending on your family's needs." },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> The best coding program for your child in 2026 isn't the one with the flashiest marketing — it's the one with a real multi-year progression, project-based learning, and honest curriculum-alignment claims. Here's the practical checklist.</p>
+<h2>What Actually Separates a Good Coding Program From a Mediocre One?</h2>
+<p>With coding education now a crowded market across Canada, the marketing claims can start to blur together. The list below focuses on concrete, checkable criteria rather than vague promises.</p>
+<h2>The Checklist</h2>
+<ol>
+<li><strong>A real multi-year progression</strong> — from visual blocks (K-1) through HTML/CSS, JavaScript, and eventually Python, rather than repeating the same content each year.</li>
+<li><strong>Project-based learning</strong> — children building their own original ideas, not copy-paste tutorials.</li>
+<li><strong>Age-appropriate tools</strong> — matched to reading and typing ability, not just chronological age.</li>
+<li><strong>Inclusive, accommodating design</strong> — genuinely welcoming to different learning styles and backgrounds.</li>
+<li><strong>Real assessment</strong> — quizzes, project rubrics, or a capstone that shows what a child can actually do.</li>
+<li><strong>Transparent curriculum-alignment claims</strong> — "aligned to" or "supports" provincial curricula, never "endorsed" or "approved by" a ministry (no legitimate program can claim ministry approval).</li>
+<li><strong>In-person and online flexibility</strong> — options that fit your family's actual schedule and location.</li>
+</ol>
+<h2>Why This List, Not a Ranked "Top 10"</h2>
+<p>Ranked "best of" lists for children's programs are often sponsored or based on limited, non-comparable criteria between providers. A checklist you can apply to any program yourself is more useful — and more honest.</p>
+    `,
+    faqs: [
+      { question: "Is this list sponsored or ranked by paid placement?", answer: "No. It's a checklist of criteria to evaluate any program by, not a paid or ranked comparison." },
+      { question: "What's the single most important thing to check?", answer: "Whether children build their own original projects, or just follow identical tutorials — that distinction predicts most other quality differences." },
+    ],
+  },
+  {
+    slug: "visual-blocks-vs-text-code-when-to-switch",
+    title: "Visual Blocks vs. Text Code: When Should Kids Make the Leap?",
+    metaDescription:
+      "When is a child ready to move from block coding to typed, text-based languages? Here's how to tell, and why rushing it can backfire.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2025-10-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "scratch vs real coding kids",
+    internalLinks: [{ label: "Builders (Grades 2-3): HTML & CSS", href: "/programs/builders" }],
+    content: `
+<p><strong>Quick answer:</strong> Most children are ready to start layering in text-based code (starting with HTML/CSS) around ages 7-9, once reading and basic typing are comfortable — but staying longer in visual blocks never wastes time, since the underlying logic transfers directly.</p>
+<h2>What's the Actual Difference?</h2>
+<p>Visual block coding uses draggable, pre-shaped instructions — no syntax to memorize, no typos possible. Text-based coding requires typing exact syntax, where a single missing character breaks the program. The concepts (sequencing, loops, conditionals) are identical; only the notation changes.</p>
+<h2>Signs a Child Might Be Ready for Text-Based Code</h2>
+<ul>
+<li>Comfortable reading and typing without significant frustration</li>
+<li>Has built several complete projects in blocks and finds them easy</li>
+<li>Shows curiosity about "what's actually happening" underneath the blocks</li>
+</ul>
+<h2>Why Rushing the Switch Can Backfire</h2>
+<p>Moving to text-based code before typing and reading are comfortable adds a second layer of difficulty (syntax) on top of a child still learning the first (logic). This can turn a confident block coder into a frustrated typist, for no real benefit — the logic concepts are the same either way.</p>
+<h2>How CODEship Handles This Transition</h2>
+<p>CODEship's progression is built around this exact question: Explorers (K-1) stays entirely in visual blocks, Builders (grades 2-3) introduces real HTML/CSS as a gentler first step into typed code, and JavaScript doesn't appear until Developers (grades 4-5) — by which point most children have the typing and reading fluency to handle it comfortably.</p>
+    `,
+    faqs: [
+      { question: "Is my 6-year-old too young for text-based coding?", answer: "For most 6-year-olds, yes — visual blocks are a better fit until reading and typing are more comfortable, usually around age 7-9." },
+      { question: "Does staying in block coding longer put a child behind?", answer: "No. The underlying logic transfers directly to text-based languages later — there's no real cost to staying in blocks longer." },
+      { question: "What's a good first text-based language after blocks?", answer: "HTML/CSS is a gentler first step than a full programming language like JavaScript, since there's no complex logic to debug." },
+    ],
+  },
+  {
+    slug: "coding-camps-vs-weekly-classes",
+    title: "Coding Camps vs. Weekly Classes: Which Is Right for Your Child?",
+    metaDescription:
+      "Camps and weekly classes both teach coding, but they serve different goals. Here's how to decide which format fits your child and your schedule.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-11-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding camp vs classes kids",
+    internalLinks: [
+      { label: "Weekly Classes", href: "/programs/weekly-classes" },
+      { label: "Camps", href: "/programs/camps" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Weekly classes build skills gradually over a semester with a real long-term progression; camps deliver an intensive, immersive experience over a few days. Most families benefit from weekly classes as the core program, with camps as a supplement during school breaks.</p>
+<h2>What's the Real Difference?</h2>
+<p>Weekly classes meet consistently — typically 55 minutes to 90 minutes, once a week over a full semester — building skills incrementally with time to absorb each concept. Camps compress that same energy into consecutive full or half days, usually during summer or school breaks.</p>
+<h2>When Weekly Classes Make More Sense</h2>
+<ul>
+<li>Your goal is long-term, progressive skill-building (like CODEship's K-8 journey)</li>
+<li>Your child learns better with spaced-out practice rather than intense bursts</li>
+<li>You want consistent measurement of progress over a semester</li>
+</ul>
+<h2>When Camps Make More Sense</h2>
+<ul>
+<li>You have a school break (summer, March Break, a PA Day) to fill</li>
+<li>Your child wants an immersive, social, high-energy experience</li>
+<li>You're testing whether your child enjoys coding before committing to a semester</li>
+</ul>
+<h2>Can You Do Both?</h2>
+<p>Yes, and many families do — weekly classes as the core progression, with camps layered in during breaks for an extra immersive boost. The two formats complement rather than compete with each other.</p>
+    `,
+    faqs: [
+      { question: "Which format is better for a complete beginner?", answer: "Either works, but a camp can be a lower-commitment way to test interest before enrolling in a full semester of weekly classes." },
+      { question: "Do camps and weekly classes teach the same curriculum?", answer: "They can overlap, but weekly classes are built around a longer, progressive curriculum, while camps are typically theme-based and self-contained." },
+    ],
+  },
+  {
+    slug: "10-real-coding-projects-kids-build",
+    title: "10 Real Projects Kids Build When They Learn to Code",
+    metaDescription:
+      "From My Helpful Robot to an Innovation Challenge pitch — 10 real projects kids build across a K-8 coding journey, and what each one teaches.",
+    category: "coding",
+    readTime: 6,
+    publishDate: "2026-02-10",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding projects for kids",
+    internalLinks: [{ label: "See the full CODEship Journey", href: "/programs" }],
+    listItems: [
+      { name: "My Helpful Robot (Explorers)", description: "Sequencing and direction, built in visual blocks." },
+      { name: "Kindness Cards (Explorers)", description: "Simple conditional logic paired with kindness-online lessons." },
+      { name: "All About Me Page (Builders)", description: "First real HTML structure and tags." },
+      { name: "Weather Helper (Builders)", description: "CSS styling and lists applied to a real page." },
+      { name: "Community Helper Website (Builders capstone)", description: "A real, multi-page website designed and coded from scratch." },
+      { name: "Homework Timer & Focus Tool (Developers)", description: "JavaScript variables, functions, and events." },
+      { name: "Fact or Fake? Quiz (Developers)", description: "Arrays and loops paired with media-literacy skills." },
+      { name: "Password Strength Checker (Engineers)", description: "Real Python logic applied to practical cybersecurity." },
+      { name: "Smart Sorting AI (Engineers)", description: "Training and evaluating a simple AI model, including its bias." },
+      { name: "Innovation Challenge (Engineers capstone)", description: "A prototype addressing a real-world problem, pitched by the student." },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Real coding education produces real, finished things — not worksheets. Here are 10 projects spanning a K-8 coding journey, from a first robot in visual blocks to an AI-powered innovation pitch.</p>
+<h2>Why Look at Projects Instead of Curriculum Topics?</h2>
+<p>Topics like "sequencing" or "conditionals" are abstract. Projects make them concrete — and they're also the clearest way for a parent to judge whether a program is truly project-based or just tutorial-based. Ask any program: can I see examples of what kids actually built?</p>
+<h2>The 10 Projects</h2>
+<ol>
+<li><strong>My Helpful Robot (Explorers, K-1):</strong> A child's first program — giving a computer clear, sequenced instructions using visual blocks.</li>
+<li><strong>Kindness Cards (Explorers):</strong> Simple if-then logic, paired with an early lesson in kindness online.</li>
+<li><strong>All About Me Page (Builders, grades 2-3):</strong> First real HTML tags and structure.</li>
+<li><strong>Weather Helper (Builders):</strong> CSS styling and lists on a real, live page.</li>
+<li><strong>Community Helper Website (Builders capstone):</strong> A complete, multi-page website, designed and coded start to finish.</li>
+<li><strong>Homework Timer & Focus Tool (Developers, grades 4-5):</strong> Real JavaScript — variables, functions, and events.</li>
+<li><strong>Fact or Fake? Quiz (Developers):</strong> Arrays and loops, applied to a media-literacy problem.</li>
+<li><strong>Password Strength Checker (Engineers, grades 6-8):</strong> Python logic applied to real cybersecurity.</li>
+<li><strong>Smart Sorting AI (Engineers):</strong> Training and evaluating an AI model — including seeing its bias first-hand.</li>
+<li><strong>Innovation Challenge (Engineers capstone):</strong> A prototype and pitch addressing a real-world (SDG-aligned) problem.</li>
+</ol>
+<h2>What This Progression Actually Shows</h2>
+<p>Notice the arc: from following instructions (My Helpful Robot) to making decisions (Kindness Cards) to structuring information (Builders projects) to solving problems with logic (Developers) to responsibly building and evaluating AI (Engineers). Each project is a real capability, not a simulation of one.</p>
+    `,
+    faqs: [
+      { question: "Are these real, working projects or simplified demos?", answer: "Real, working projects — each one is a genuine, finished thing a child built and can show off, not a simplified simulation." },
+      { question: "Does a child need to complete all 10 to benefit?", answer: "No — this spans the full K-8 journey. A child joining at any level starts with the projects appropriate to their grade band." },
+    ],
+  },
+  {
+    slug: "coding-for-neurodivergent-kids-inclusive-approach",
+    title: "Coding for Neurodivergent Kids: An Inclusive Approach",
+    metaDescription:
+      "How inclusive-design coding programs support neurodivergent kids — flexible pacing, multiple ways to show understanding, and a welcoming environment.",
+    category: "stem",
+    readTime: 5,
+    publishDate: "2025-12-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding for neurodivergent kids",
+    internalLinks: [
+      { label: "About CODEship's approach", href: "/about" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Coding can be an especially strong fit for neurodivergent children — it's structured, logical, and offers clear, immediate feedback (the program runs or it doesn't) — but the program itself needs inclusive design to make that fit work in practice.</p>
+<h2>Why Coding Often Resonates With Neurodivergent Kids</h2>
+<p>Coding provides a clear, predictable structure and unambiguous feedback: a program either works as intended or it doesn't, and the reason is usually discoverable through logical troubleshooting rather than subjective judgment. For many neurodivergent children — including many autistic and ADHD learners — that clarity and predictability can be genuinely motivating, in contrast to more ambiguous, open-ended classroom tasks.</p>
+<h2>What "Inclusive by Design" Actually Requires</h2>
+<ul>
+<li><strong>Flexible pacing:</strong> Not every child moves through a project at the same speed, and that's fine.</li>
+<li><strong>Multiple ways to show understanding:</strong> A finished project, a verbal walkthrough, or a written explanation can all demonstrate the same learning.</li>
+<li><strong>Sensory-aware environment:</strong> Predictable routines and manageable sensory input, especially in in-person settings.</li>
+<li><strong>Warm, specific feedback:</strong> Focused on growth, not comparison to other students.</li>
+</ul>
+<h2>What This Looks Like in a CODEship Class</h2>
+<p>Inclusive-design accommodations are built into every CODEship class from the start — flexible pacing, multiple ways to demonstrate understanding, and support for a range of learning styles and needs, rather than a one-size-fits-all format retrofitted after the fact.</p>
+<h2>What to Ask Any Program</h2>
+<p>Parents of neurodivergent children should feel comfortable asking directly: how does the program accommodate different paces and processing styles? A program confident in its inclusive design will have a specific, concrete answer.</p>
+    `,
+    faqs: [
+      { question: "Is coding generally a good fit for neurodivergent children?", answer: "Often, yes — the clear structure and unambiguous feedback of coding can be especially motivating, though every child is different." },
+      { question: "What should I ask a coding program about accommodations?", answer: "Ask specifically how they handle pacing differences and alternative ways to demonstrate understanding — vague answers are a warning sign." },
+    ],
+  },
+  {
+    slug: "ai-literacy-for-kids-2026",
+    title: "AI Literacy for Kids: What It Means and Why It Matters in 2026",
+    metaDescription:
+      "AI literacy for kids explained: what it actually means, why it's becoming a core skill alongside reading and math, and how children can build it in age-appropriate ways.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2026-03-01",
+    dateModified: "2026-03-01",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "ai literacy for kids",
+    internalLinks: [
+      { label: "Explore the Engineers program", href: "/programs/engineers" },
+      { label: "See the full CODEship journey", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> AI literacy for kids means understanding, at an age-appropriate level, how AI systems work, what they can and can't do well, and how to use them thoughtfully and ethically — it's becoming a foundational skill, not an optional extra.</p>
+<h2>What Does "AI Literacy" Actually Mean for a Child?</h2>
+<p>AI literacy isn't about children learning to build large language models. It's about developing a working understanding of AI as a category of technology: recognizing when they're interacting with AI, understanding that AI systems make predictions based on patterns in data (and can be wrong or biased), and knowing how to use AI tools as an aid to thinking rather than a replacement for it.</p>
+<p><a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework for Students</a> breaks this down into four dimensions: a human-centred mindset, ethics of AI, AI techniques and applications, and AI system design — with the explicit point that values and ethics matter as much as technical understanding.</p>
+<h2>Why This Is Becoming a Core Skill</h2>
+<p>AI tools are now embedded in search engines, writing assistants, photo apps, and games that most children already use. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD and European Commission's joint AI literacy framework</a> was developed specifically because policymakers recognized that young people are already encountering AI daily, whether or not schools are teaching them how it works. Understanding it is quickly becoming as foundational as understanding how to evaluate a website or a news source.</p>
+<h2>What Age-Appropriate AI Literacy Looks Like</h2>
+<ul>
+<li><strong>Younger children (K-3):</strong> Simple concepts — that AI follows patterns and rules, that it can make mistakes, and that a human is always responsible for checking its output.</li>
+<li><strong>Middle grades (4-5):</strong> Hands-on exposure to how AI tools respond to different inputs, and beginning discussions about fairness and bias in data.</li>
+<li><strong>Older students (6-8):</strong> More technical grounding — how machine learning models are trained, where cybersecurity and AI intersect, and practical experience using AI tools responsibly in real projects.</li>
+</ul>
+<h2>Where CODEship Fits In</h2>
+<p>The Engineers program (grades 6-8) is where CODEship introduces AI concepts directly, alongside Python and cybersecurity fundamentals, building on the logical-thinking foundation established in earlier levels. The goal is not to rush children toward advanced AI use, but to build genuine understanding at each stage so that AI literacy grows naturally alongside coding skill.</p>
+    `,
+    faqs: [
+      { question: "What is AI literacy for kids?", answer: "A working, age-appropriate understanding of how AI systems work, their limitations, and how to use them thoughtfully — not technical AI engineering skills." },
+      { question: "At what age should kids start learning about AI?", answer: "Simple concepts (AI follows patterns, can make mistakes, needs human oversight) can start early; more technical grounding typically fits best from upper elementary through middle school." },
+      { question: "Does CODEship teach AI literacy?", answer: "Yes — AI concepts are introduced in the Engineers program (grades 6-8), building on the coding foundation from earlier levels." },
+    ],
+  },
+  {
+    slug: "what-kids-should-learn-about-ai-before-high-school",
+    title: "What Kids Should Learn About AI Before High School",
+    metaDescription:
+      "What should kids understand about AI before starting high school? A practical, age-by-age look at AI literacy for K-8 students, grounded in real frameworks — not hype.",
+    category: "ai",
+    readTime: 6,
+    publishDate: "2026-03-15",
+    dateModified: "2026-03-15",
+    author: "CODEship Academy Team",
+    cluster: "trends-2026",
+    targetQuery: "what should kids learn about ai",
+    internalLinks: [
+      { label: "See the Engineers program", href: "/programs/engineers" },
+      { label: "Explore all CODEship programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Before high school, kids should understand what AI is (and isn't), how to evaluate AI-generated information critically, and how to use AI tools responsibly — built up gradually across the K-8 years rather than introduced all at once in grade 9.</p>
+<h2>Why Start Before High School?</h2>
+<p>By the time students reach high school, many are already using AI tools regularly for schoolwork, creative projects, and everyday questions. Waiting until high school to introduce any AI education means students form habits and assumptions about these tools — some accurate, some not — with no structured guidance. <a href="https://oecdedutoday.com/new-ai-literacy-framework-to-equip-youth-in-an-age-of-ai/" target="_blank" rel="noopener noreferrer">The OECD's AI literacy framework work</a> reflects a growing consensus that this foundation needs to start earlier, in primary and middle school.</p>
+<h2>The Core Concepts Worth Building Early</h2>
+<ul>
+<li><strong>How AI actually works, at a basic level:</strong> That AI systems find patterns in large amounts of data and use those patterns to make predictions — not that they "think" or "know" things the way people do.</li>
+<li><strong>Evaluating AI output critically:</strong> AI can produce confident-sounding answers that are wrong. Learning to double-check, question, and verify is a core habit to build before relying on these tools more heavily.</li>
+<li><strong>Understanding bias and fairness:</strong> AI systems reflect the data they're trained on, which can include real-world biases. <a href="https://skoolofcode.us/blog/understanding-unescos-ai-competency-framework-a-guide-for-parents-and-teachers/" target="_blank" rel="noopener noreferrer">UNESCO's AI Competency Framework</a> puts ethics on equal footing with technical skill for exactly this reason.</li>
+<li><strong>Basic cybersecurity awareness:</strong> Understanding what data an AI tool might collect and how to use these tools safely.</li>
+<li><strong>Using AI as a creative and learning tool:</strong> Rather than a shortcut around thinking, using AI to brainstorm, debug code, or explore ideas — while still doing the core thinking themselves.</li>
+</ul>
+<h2>How This Builds Across the K-8 Years</h2>
+<p>These concepts don't need to be taught in a single unit — they build naturally on top of coding and problem-solving skills developed from Explorers through Engineers. A student who has already learned to debug their own code, for instance, is well-positioned to understand why checking an AI's answer matters. By the Engineers level (grades 6-8), students are ready to engage with AI concepts more directly alongside Python and cybersecurity fundamentals.</p>
+<h2>What Parents Can Do Now</h2>
+<p>Parents don't need to wait for a formal program to start these conversations. Asking a child "how do you think it figured that out?" or "how would you check if that's right?" when they encounter an AI tool builds the same critical-thinking habits in an everyday way.</p>
+    `,
+    faqs: [
+      { question: "What's the most important thing kids should know about AI before high school?", answer: "That AI produces confident-sounding but sometimes wrong answers, and that checking and questioning its output is an essential habit — not an afterthought." },
+      { question: "Do kids need to code to understand AI?", answer: "It helps significantly. Coding builds the logical, step-by-step thinking that makes concepts like 'AI follows patterns in data' much easier to grasp concretely." },
+      { question: "When does CODEship introduce AI concepts?", answer: "In the Engineers program (grades 6-8), alongside Python and cybersecurity, building on the foundation from earlier levels." },
+    ],
   },
 ];
 
