@@ -1719,6 +1719,382 @@ export const articles: Article[] = [
       { question: "Can a family outside Canada join the online classes?", answer: "The program is designed for children in Canada, but the online format itself only requires a stable internet connection and the class's time zone (ET) to work." },
     ],
   },
+  {
+    slug: "online-coding-classes-guyana-parents-guide",
+    title: "Online Coding Classes for Kids in Guyana: A Parent's Guide",
+    metaDescription:
+      "A parent's guide to online coding classes for kids in Guyana — how they work, what's included, and how much they cost.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2024-08-13",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "online coding classes guyana kids",
+    internalLinks: [{ label: "Online Coding Classes for Kids in Guyana", href: "/gy/online-coding-classes" }],
+    content: `
+<p><strong>Quick answer:</strong> CODEship's online coding program for Guyana is a live, instructor-led enrichment course for GYD $20,000 per semester, open to children anywhere in Guyana — Georgetown, East Bank Demerara, East Coast Demerara, Berbice, Linden, Essequibo, and beyond.</p>
+<h2>How Do Online Coding Classes Work for Guyanese Families?</h2>
+<p>Because the classes are entirely online, location within Guyana doesn't matter — a child in Georgetown and a child in Bartica join the same live class. Sessions are instructor-led (not pre-recorded), project-based, and beginner-friendly, with no prior coding experience required.</p>
+<h2>What's Actually Included for GYD $20,000?</h2>
+<ul>
+<li>Live online instruction for a full semester</li>
+<li>Project-based learning — real digital projects, not worksheets</li>
+<li>Guided activities and semester outcomes your child can point to and explain</li>
+</ul>
+<p>Broken down, that works out to roughly GYD $5,000 per session, depending on the semester schedule.</p>
+<h2>Is This Just Coding, or Something Broader?</h2>
+<p>It's broader by design. Alongside coding, the program supports Math thinking, English comprehension, writing and explanation skills, and computer literacy — positioned as an enrichment program that supports school learning, not a replacement for it.</p>
+<h2>Getting Started</h2>
+<p>The next semester starts September 1, 2026. Families can register directly online for their child's spot.</p>
+    `,
+    faqs: [
+      { question: "Is this available outside Georgetown?", answer: "Yes — it's fully online, so children can join from anywhere in Guyana, including East Bank Demerara, East Coast Demerara, Berbice, Linden, and Essequibo." },
+      { question: "How much does a semester cost?", answer: "GYD $20,000 per semester, which works out to roughly GYD $5,000 per session depending on the schedule." },
+      { question: "Does my child need coding experience already?", answer: "No — the program is designed to be beginner-friendly." },
+    ],
+  },
+  {
+    slug: "ngsa-prep-digital-skills-guyana",
+    title: "NGSA Prep & Digital Skills: Building Future-Ready Guyanese Kids",
+    metaDescription:
+      "How digital skills and structured problem-solving practice can support the thinking skills used in NGSA preparation — without guaranteeing results.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2025-02-20",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "ngsa digital skills",
+    internalLinks: [{ label: "NGSA & Digital Skills Program", href: "/gy/ngsa-digital-skills" }],
+    content: `
+<p><strong>Quick answer:</strong> The National Grade Six Assessment (NGSA) tests Mathematics, English Language, Science, and Social Studies. Digital-skills programs can support the underlying thinking skills — breaking down problems, explaining reasoning clearly, structured logic — used across those subjects, but no enrichment program can guarantee exam results.</p>
+<h2>What Is the NGSA, Exactly?</h2>
+<p>According to <a href="https://education.gov.gy/web2/index.php/pri/ngsa" target="_blank" rel="noopener noreferrer">Guyana's Ministry of Education</a>, the National Grade Six Assessment is used to place students into secondary schools, testing four core subjects — Mathematics, English Language, Science, and Social Studies — through a combination of multiple-choice and essay-style papers, developed in collaboration with the Caribbean Examinations Council (CXC).</p>
+<h2>How Does Digital-Skills Learning Connect to NGSA Subjects?</h2>
+<p>Coding and computational thinking naturally reinforce skills tested across NGSA's core subjects:</p>
+<ul>
+<li><strong>Mathematics:</strong> Sequencing, logic, and pattern recognition — the same thinking used in coding.</li>
+<li><strong>English Language:</strong> Reading instructions carefully and explaining a process clearly, which coding projects require constantly.</li>
+<li><strong>Problem-solving generally:</strong> Breaking a big problem into smaller steps — a habit built directly through project-based coding.</li>
+</ul>
+<h2>What the Data Shows About NGSA Performance</h2>
+<p>Guyana's NGSA results have been improving nationally — <a href="https://dpi.gov.gy/govts-investments-hard-work-yield-high-results-at-ngsa-2025/" target="_blank" rel="noopener noreferrer">the Department of Public Information reported</a> the overall pass rate rose from 49% in 2024 to 63% in 2025, which the Ministry attributed to sustained investment in education. This reflects national trends, not the effect of any specific enrichment program.</p>
+<h2>What a Digital-Skills Program Can and Cannot Promise</h2>
+<p>An honest program supports NGSA skill-building and helps strengthen skills used in NGSA preparation — practicing structured thinking, breaking down word problems, and writing clearer explanations. It is not an official NGSA program, is not Ministry-approved or endorsed, and cannot guarantee grades or exam results. Be cautious of any program that claims otherwise.</p>
+    `,
+    faqs: [
+      { question: "What subjects does the NGSA actually test?", answer: "Mathematics, English Language, Science, and Social Studies, through a mix of multiple-choice and essay papers." },
+      { question: "Can a coding program guarantee better NGSA results?", answer: "No. A responsible program supports skill-building relevant to NGSA subjects; it cannot guarantee exam outcomes." },
+      { question: "Is a digital-skills enrichment program an official NGSA program?", answer: "No. It is not an official NGSA program and is not endorsed or approved by the Ministry of Education." },
+    ],
+  },
+  {
+    slug: "math-english-coding-guyana-online-learning",
+    title: "Math, English & Coding: Well-Rounded Online Learning for Guyanese Students",
+    metaDescription:
+      "How one online program combines Math thinking, English comprehension, and coding for Guyanese students — and why that combination matters.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-05-14",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "online math english coding guyana",
+    internalLinks: [{ label: "Math, English & Coding Program", href: "/gy/math-english-coding" }],
+    content: `
+<p><strong>Quick answer:</strong> A well-designed coding program doesn't isolate coding from academic skills — it uses coding projects as the vehicle for practicing Math reasoning, English comprehension, and writing, all in the same class.</p>
+<h2>Why Combine Math, English, and Coding?</h2>
+<p>These three areas reinforce each other more than parents often expect. A coding project requires reading instructions carefully (English comprehension), applying logical and sequential thinking (Math reasoning), and explaining what was built and why (writing). Separating them into isolated subjects misses how naturally they overlap.</p>
+<h2>What Does This Look Like in Practice?</h2>
+<ul>
+<li><strong>Math thinking:</strong> Patterns, sequencing, logic, and problem-solving through coding activities.</li>
+<li><strong>English comprehension:</strong> Reading task instructions and understanding what's being asked.</li>
+<li><strong>Writing:</strong> Explaining project steps and reflecting on what was built.</li>
+<li><strong>Computer sense:</strong> Typing, navigating tools, and using digital platforms safely.</li>
+</ul>
+<h2>Who Is This For?</h2>
+<p>Guyanese families looking for one online program that supports school learning broadly — not just a narrow coding class — while also building practical digital skills their child can use immediately.</p>
+<h2>What to Expect After a Semester</h2>
+<p>By the end of a semester, a student should be able to solve structured problems, write clearer explanations, build a simple digital project, and use computers with more confidence — outcomes that span academic and digital skills together, for GYD $20,000 per semester.</p>
+    `,
+    faqs: [
+      { question: "Is this just an English or Math tutoring program?", answer: "No — it combines Math thinking, English comprehension, writing, and coding in one program, not a single-subject tutor." },
+      { question: "Does my child need to be strong in Math or English already?", answer: "No prior strength is required. The program is designed to build these skills alongside coding, for beginners." },
+    ],
+  },
+  {
+    slug: "computer-classes-for-kids-guyana",
+    title: "Computer Classes for Kids in Guyana: From Confidence to Creation",
+    metaDescription:
+      "Computer literacy classes for Guyanese kids that go beyond typing and clicking — building real confidence with computers and basic coding.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2026-01-12",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "computer classes for kids guyana",
+    internalLinks: [{ label: "Computer Classes for Kids in Guyana", href: "/gy/computer-classes-for-kids" }],
+    content: `
+<p><strong>Quick answer:</strong> Real computer literacy for kids goes beyond knowing where the buttons are — it means understanding how digital tools work well enough to create with them, not just consume with them.</p>
+<h2>What Does "Computer Literacy" Actually Mean for a Child?</h2>
+<p>Many children today are fluent at swiping and tapping but have never typed a document, navigated a file system, or built anything digital themselves. Genuine computer literacy includes typing, navigating tools, using digital platforms safely, and — critically — creating, not just consuming.</p>
+<h2>From Confidence to Creation</h2>
+<p>The strongest computer literacy programs move a child from "I know how to use this app" to "I understand how this works and can build something with it." That shift — from user to creator — is where real confidence comes from.</p>
+<h2>What a Semester Looks Like</h2>
+<ul>
+<li>Using common digital tools more confidently</li>
+<li>Understanding basic coding concepts</li>
+<li>Creating a simple digital project from scratch</li>
+</ul>
+<h2>Who This Is For</h2>
+<p>Guyanese families whose child uses devices daily but hasn't yet had structured, guided practice actually building something with them — an online, beginner-friendly starting point.</p>
+    `,
+    faqs: [
+      { question: "My child already knows how to use a tablet — is this still useful?", answer: "Yes. Using an app and understanding how to build with a computer are different skills. This program focuses on the latter." },
+      { question: "Does my child need their own computer?", answer: "A computer or laptop with internet access is needed to join the live online classes." },
+    ],
+  },
+  {
+    slug: "stem-for-kids-guyana",
+    title: "STEM for Kids in Guyana: Why It Matters Now",
+    metaDescription:
+      "Why STEM skills matter for Guyanese kids today, and what a practical, project-based online STEM program actually looks like.",
+    category: "stem",
+    readTime: 5,
+    publishDate: "2026-02-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "guyana-ngsa",
+    targetQuery: "stem classes guyana kids",
+    internalLinks: [{ label: "Online STEM Classes for Kids in Guyana", href: "/gy/online-stem-classes" }],
+    content: `
+<p><strong>Quick answer:</strong> STEM skills — coding, logical thinking, structured problem-solving — are increasingly relevant for Guyanese students as digital tools become part of more careers and everyday life, not just tech jobs.</p>
+<h2>Why STEM Matters for Guyanese Families Right Now</h2>
+<p>Digital tools now touch nearly every field — agriculture, healthcare, business, government services. A child who understands how technology works, rather than just how to use it, is better positioned for whatever field they eventually choose, tech or not.</p>
+<h2>What Does a Practical STEM Program Actually Teach?</h2>
+<ul>
+<li><strong>Coding:</strong> Real logic and problem-solving through building projects.</li>
+<li><strong>Math thinking:</strong> Patterns, sequencing, and structured reasoning.</li>
+<li><strong>Writing:</strong> Explaining a process and reflecting on a finished project.</li>
+<li><strong>Digital creativity:</strong> Building something original, not following a template.</li>
+</ul>
+<h2>What Should a Child Be Able to Do After a Semester?</h2>
+<p>Build a project, explain their process, solve problems step by step, and present what they created — practical outcomes rather than abstract theory.</p>
+<h2>Getting Started</h2>
+<p>CODEship's online STEM program for Guyana runs GYD $20,000 per semester, live and online, with the next semester starting September 1, 2026.</p>
+    `,
+    faqs: [
+      { question: "Is STEM only useful for kids who want a tech career?", answer: "No. STEM thinking skills — logic, problem-solving, structured reasoning — are valuable across virtually every field." },
+      { question: "What will my child actually build in a STEM class?", answer: "A real digital project they design themselves, then explain and present — not a worksheet or quiz." },
+    ],
+  },
+  {
+    slug: "best-coding-programs-for-kids-canada-2026",
+    title: "Best Coding Programs for Kids in Canada (2026)",
+    metaDescription:
+      "What to actually look for when evaluating coding programs for kids in Canada in 2026 — a practical checklist, not a sponsored ranking.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2026-01-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "best coding programs for kids canada",
+    internalLinks: [{ label: "Explore CODEship's programs", href: "/programs" }],
+    listItems: [
+      { name: "A real multi-year progression", description: "Does the program build in complexity year over year, from visual blocks to text-based languages?" },
+      { name: "Project-based learning", description: "Are kids building their own original projects, or following identical tutorials?" },
+      { name: "Age-appropriate tools", description: "Visual blocks for younger children, text-based languages introduced as reading/typing mature." },
+      { name: "Inclusive, accommodating design", description: "A welcoming environment with accommodations built in for different learning styles." },
+      { name: "Real assessment, not just attendance", description: "Some way of checking understanding — quizzes, project rubrics, or portfolio review." },
+      { name: "Transparent curriculum alignment claims", description: "Programs that say 'aligned to' or 'supports' provincial curricula — not 'endorsed' or 'approved by' a ministry." },
+      { name: "In-person and online options", description: "Flexibility to attend a physical location or join live online, depending on your family's needs." },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> The best coding program for your child in 2026 isn't the one with the flashiest marketing — it's the one with a real multi-year progression, project-based learning, and honest curriculum-alignment claims. Here's the practical checklist.</p>
+<h2>What Actually Separates a Good Coding Program From a Mediocre One?</h2>
+<p>With coding education now a crowded market across Canada, the marketing claims can start to blur together. The list below focuses on concrete, checkable criteria rather than vague promises.</p>
+<h2>The Checklist</h2>
+<ol>
+<li><strong>A real multi-year progression</strong> — from visual blocks (K-1) through HTML/CSS, JavaScript, and eventually Python, rather than repeating the same content each year.</li>
+<li><strong>Project-based learning</strong> — children building their own original ideas, not copy-paste tutorials.</li>
+<li><strong>Age-appropriate tools</strong> — matched to reading and typing ability, not just chronological age.</li>
+<li><strong>Inclusive, accommodating design</strong> — genuinely welcoming to different learning styles and backgrounds.</li>
+<li><strong>Real assessment</strong> — quizzes, project rubrics, or a capstone that shows what a child can actually do.</li>
+<li><strong>Transparent curriculum-alignment claims</strong> — "aligned to" or "supports" provincial curricula, never "endorsed" or "approved by" a ministry (no legitimate program can claim ministry approval).</li>
+<li><strong>In-person and online flexibility</strong> — options that fit your family's actual schedule and location.</li>
+</ol>
+<h2>Why This List, Not a Ranked "Top 10"</h2>
+<p>Ranked "best of" lists for children's programs are often sponsored or based on limited, non-comparable criteria between providers. A checklist you can apply to any program yourself is more useful — and more honest.</p>
+    `,
+    faqs: [
+      { question: "Is this list sponsored or ranked by paid placement?", answer: "No. It's a checklist of criteria to evaluate any program by, not a paid or ranked comparison." },
+      { question: "What's the single most important thing to check?", answer: "Whether children build their own original projects, or just follow identical tutorials — that distinction predicts most other quality differences." },
+    ],
+  },
+  {
+    slug: "visual-blocks-vs-text-code-when-to-switch",
+    title: "Visual Blocks vs. Text Code: When Should Kids Make the Leap?",
+    metaDescription:
+      "When is a child ready to move from block coding to typed, text-based languages? Here's how to tell, and why rushing it can backfire.",
+    category: "coding",
+    readTime: 5,
+    publishDate: "2025-10-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "scratch vs real coding kids",
+    internalLinks: [{ label: "Builders (Grades 2-3): HTML & CSS", href: "/programs/builders" }],
+    content: `
+<p><strong>Quick answer:</strong> Most children are ready to start layering in text-based code (starting with HTML/CSS) around ages 7-9, once reading and basic typing are comfortable — but staying longer in visual blocks never wastes time, since the underlying logic transfers directly.</p>
+<h2>What's the Actual Difference?</h2>
+<p>Visual block coding uses draggable, pre-shaped instructions — no syntax to memorize, no typos possible. Text-based coding requires typing exact syntax, where a single missing character breaks the program. The concepts (sequencing, loops, conditionals) are identical; only the notation changes.</p>
+<h2>Signs a Child Might Be Ready for Text-Based Code</h2>
+<ul>
+<li>Comfortable reading and typing without significant frustration</li>
+<li>Has built several complete projects in blocks and finds them easy</li>
+<li>Shows curiosity about "what's actually happening" underneath the blocks</li>
+</ul>
+<h2>Why Rushing the Switch Can Backfire</h2>
+<p>Moving to text-based code before typing and reading are comfortable adds a second layer of difficulty (syntax) on top of a child still learning the first (logic). This can turn a confident block coder into a frustrated typist, for no real benefit — the logic concepts are the same either way.</p>
+<h2>How CODEship Handles This Transition</h2>
+<p>CODEship's progression is built around this exact question: Explorers (K-1) stays entirely in visual blocks, Builders (grades 2-3) introduces real HTML/CSS as a gentler first step into typed code, and JavaScript doesn't appear until Developers (grades 4-5) — by which point most children have the typing and reading fluency to handle it comfortably.</p>
+    `,
+    faqs: [
+      { question: "Is my 6-year-old too young for text-based coding?", answer: "For most 6-year-olds, yes — visual blocks are a better fit until reading and typing are more comfortable, usually around age 7-9." },
+      { question: "Does staying in block coding longer put a child behind?", answer: "No. The underlying logic transfers directly to text-based languages later — there's no real cost to staying in blocks longer." },
+      { question: "What's a good first text-based language after blocks?", answer: "HTML/CSS is a gentler first step than a full programming language like JavaScript, since there's no complex logic to debug." },
+    ],
+  },
+  {
+    slug: "coding-camps-vs-weekly-classes",
+    title: "Coding Camps vs. Weekly Classes: Which Is Right for Your Child?",
+    metaDescription:
+      "Camps and weekly classes both teach coding, but they serve different goals. Here's how to decide which format fits your child and your schedule.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-11-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding camp vs classes kids",
+    internalLinks: [
+      { label: "Weekly Classes", href: "/programs/weekly-classes" },
+      { label: "Camps", href: "/programs/camps" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Weekly classes build skills gradually over a semester with a real long-term progression; camps deliver an intensive, immersive experience over a few days. Most families benefit from weekly classes as the core program, with camps as a supplement during school breaks.</p>
+<h2>What's the Real Difference?</h2>
+<p>Weekly classes meet consistently — typically 55 minutes to 90 minutes, once a week over a full semester — building skills incrementally with time to absorb each concept. Camps compress that same energy into consecutive full or half days, usually during summer or school breaks.</p>
+<h2>When Weekly Classes Make More Sense</h2>
+<ul>
+<li>Your goal is long-term, progressive skill-building (like CODEship's K-8 journey)</li>
+<li>Your child learns better with spaced-out practice rather than intense bursts</li>
+<li>You want consistent measurement of progress over a semester</li>
+</ul>
+<h2>When Camps Make More Sense</h2>
+<ul>
+<li>You have a school break (summer, March Break, a PA Day) to fill</li>
+<li>Your child wants an immersive, social, high-energy experience</li>
+<li>You're testing whether your child enjoys coding before committing to a semester</li>
+</ul>
+<h2>Can You Do Both?</h2>
+<p>Yes, and many families do — weekly classes as the core progression, with camps layered in during breaks for an extra immersive boost. The two formats complement rather than compete with each other.</p>
+    `,
+    faqs: [
+      { question: "Which format is better for a complete beginner?", answer: "Either works, but a camp can be a lower-commitment way to test interest before enrolling in a full semester of weekly classes." },
+      { question: "Do camps and weekly classes teach the same curriculum?", answer: "They can overlap, but weekly classes are built around a longer, progressive curriculum, while camps are typically theme-based and self-contained." },
+    ],
+  },
+  {
+    slug: "10-real-coding-projects-kids-build",
+    title: "10 Real Projects Kids Build When They Learn to Code",
+    metaDescription:
+      "From My Helpful Robot to an Innovation Challenge pitch — 10 real projects kids build across a K-8 coding journey, and what each one teaches.",
+    category: "coding",
+    readTime: 6,
+    publishDate: "2026-02-10",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding projects for kids",
+    internalLinks: [{ label: "See the full CODEship Journey", href: "/programs" }],
+    listItems: [
+      { name: "My Helpful Robot (Explorers)", description: "Sequencing and direction, built in visual blocks." },
+      { name: "Kindness Cards (Explorers)", description: "Simple conditional logic paired with kindness-online lessons." },
+      { name: "All About Me Page (Builders)", description: "First real HTML structure and tags." },
+      { name: "Weather Helper (Builders)", description: "CSS styling and lists applied to a real page." },
+      { name: "Community Helper Website (Builders capstone)", description: "A real, multi-page website designed and coded from scratch." },
+      { name: "Homework Timer & Focus Tool (Developers)", description: "JavaScript variables, functions, and events." },
+      { name: "Fact or Fake? Quiz (Developers)", description: "Arrays and loops paired with media-literacy skills." },
+      { name: "Password Strength Checker (Engineers)", description: "Real Python logic applied to practical cybersecurity." },
+      { name: "Smart Sorting AI (Engineers)", description: "Training and evaluating a simple AI model, including its bias." },
+      { name: "Innovation Challenge (Engineers capstone)", description: "A prototype addressing a real-world problem, pitched by the student." },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Real coding education produces real, finished things — not worksheets. Here are 10 projects spanning a K-8 coding journey, from a first robot in visual blocks to an AI-powered innovation pitch.</p>
+<h2>Why Look at Projects Instead of Curriculum Topics?</h2>
+<p>Topics like "sequencing" or "conditionals" are abstract. Projects make them concrete — and they're also the clearest way for a parent to judge whether a program is truly project-based or just tutorial-based. Ask any program: can I see examples of what kids actually built?</p>
+<h2>The 10 Projects</h2>
+<ol>
+<li><strong>My Helpful Robot (Explorers, K-1):</strong> A child's first program — giving a computer clear, sequenced instructions using visual blocks.</li>
+<li><strong>Kindness Cards (Explorers):</strong> Simple if-then logic, paired with an early lesson in kindness online.</li>
+<li><strong>All About Me Page (Builders, grades 2-3):</strong> First real HTML tags and structure.</li>
+<li><strong>Weather Helper (Builders):</strong> CSS styling and lists on a real, live page.</li>
+<li><strong>Community Helper Website (Builders capstone):</strong> A complete, multi-page website, designed and coded start to finish.</li>
+<li><strong>Homework Timer & Focus Tool (Developers, grades 4-5):</strong> Real JavaScript — variables, functions, and events.</li>
+<li><strong>Fact or Fake? Quiz (Developers):</strong> Arrays and loops, applied to a media-literacy problem.</li>
+<li><strong>Password Strength Checker (Engineers, grades 6-8):</strong> Python logic applied to real cybersecurity.</li>
+<li><strong>Smart Sorting AI (Engineers):</strong> Training and evaluating an AI model — including seeing its bias first-hand.</li>
+<li><strong>Innovation Challenge (Engineers capstone):</strong> A prototype and pitch addressing a real-world (SDG-aligned) problem.</li>
+</ol>
+<h2>What This Progression Actually Shows</h2>
+<p>Notice the arc: from following instructions (My Helpful Robot) to making decisions (Kindness Cards) to structuring information (Builders projects) to solving problems with logic (Developers) to responsibly building and evaluating AI (Engineers). Each project is a real capability, not a simulation of one.</p>
+    `,
+    faqs: [
+      { question: "Are these real, working projects or simplified demos?", answer: "Real, working projects — each one is a genuine, finished thing a child built and can show off, not a simplified simulation." },
+      { question: "Does a child need to complete all 10 to benefit?", answer: "No — this spans the full K-8 journey. A child joining at any level starts with the projects appropriate to their grade band." },
+    ],
+  },
+  {
+    slug: "coding-for-neurodivergent-kids-inclusive-approach",
+    title: "Coding for Neurodivergent Kids: An Inclusive Approach",
+    metaDescription:
+      "How inclusive-design coding programs support neurodivergent kids — flexible pacing, multiple ways to show understanding, and a welcoming environment.",
+    category: "stem",
+    readTime: 5,
+    publishDate: "2025-12-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "comparisons-listicles",
+    targetQuery: "coding for neurodivergent kids",
+    internalLinks: [
+      { label: "About CODEship's approach", href: "/about" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Coding can be an especially strong fit for neurodivergent children — it's structured, logical, and offers clear, immediate feedback (the program runs or it doesn't) — but the program itself needs inclusive design to make that fit work in practice.</p>
+<h2>Why Coding Often Resonates With Neurodivergent Kids</h2>
+<p>Coding provides a clear, predictable structure and unambiguous feedback: a program either works as intended or it doesn't, and the reason is usually discoverable through logical troubleshooting rather than subjective judgment. For many neurodivergent children — including many autistic and ADHD learners — that clarity and predictability can be genuinely motivating, in contrast to more ambiguous, open-ended classroom tasks.</p>
+<h2>What "Inclusive by Design" Actually Requires</h2>
+<ul>
+<li><strong>Flexible pacing:</strong> Not every child moves through a project at the same speed, and that's fine.</li>
+<li><strong>Multiple ways to show understanding:</strong> A finished project, a verbal walkthrough, or a written explanation can all demonstrate the same learning.</li>
+<li><strong>Sensory-aware environment:</strong> Predictable routines and manageable sensory input, especially in in-person settings.</li>
+<li><strong>Warm, specific feedback:</strong> Focused on growth, not comparison to other students.</li>
+</ul>
+<h2>What This Looks Like in a CODEship Class</h2>
+<p>Inclusive-design accommodations are built into every CODEship class from the start — flexible pacing, multiple ways to demonstrate understanding, and support for a range of learning styles and needs, rather than a one-size-fits-all format retrofitted after the fact.</p>
+<h2>What to Ask Any Program</h2>
+<p>Parents of neurodivergent children should feel comfortable asking directly: how does the program accommodate different paces and processing styles? A program confident in its inclusive design will have a specific, concrete answer.</p>
+    `,
+    faqs: [
+      { question: "Is coding generally a good fit for neurodivergent children?", answer: "Often, yes — the clear structure and unambiguous feedback of coding can be especially motivating, though every child is different." },
+      { question: "What should I ask a coding program about accommodations?", answer: "Ask specifically how they handle pacing differences and alternative ways to demonstrate understanding — vague answers are a warning sign." },
+    ],
+  },
 ];
 
 export const articlesBySlug = Object.fromEntries(articles.map((a) => [a.slug, a]));
