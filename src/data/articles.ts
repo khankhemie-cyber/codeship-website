@@ -1407,6 +1407,318 @@ export const articles: Article[] = [
       { question: "How does building a password checker teach cybersecurity better than a lecture?", answer: "Writing the actual logic that scores password strength makes the 'why' concrete — students see directly which patterns make passwords weak." },
     ],
   },
+  {
+    slug: "ontario-curriculum-coding-math-strand-c3",
+    title: "How Coding Supports the Ontario Curriculum (Math Strand C3)",
+    metaDescription:
+      "Ontario's math curriculum embeds coding directly into the Algebra strand (C3). Here's what it actually requires by grade, and how after-school coding supports it.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2024-05-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "ontario coding curriculum",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> Ontario's 2020 math curriculum embeds coding directly into the Algebra strand as expectation C3, starting in Grade 1. It's not a separate subject — it's part of core math learning, and it grows more complex each year.</p>
+<h2>What Is Ontario's C3 Coding Strand?</h2>
+<p>Coding (C3) sits inside Ontario's elementary math curriculum under the Algebra strand, alongside patterning and algebraic reasoning. According to the <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics/grades/g4-math/strand-c/c3" target="_blank" rel="noopener noreferrer">official Ontario curriculum documents</a>, students begin creating and following sequential and repeating code as early as Grade 2, and by Grade 3, expectations include writing and executing code involving sequential, concurrent, and repeating events, plus reading and altering existing code.</p>
+<h2>Why Coding Lives Inside Math, Not as Its Own Subject</h2>
+<p>This is a deliberate design choice, not an oversight — coding concepts like sequences, variables, and repeating patterns map directly onto algebraic thinking. A child who can build a repeating pattern in code is practicing the same underlying logic as a child solving a patterning problem on paper.</p>
+<h2>How After-School Coding Supports This (Without Replacing School)</h2>
+<p>A structured after-school coding program is designed to <strong>support and align with</strong> what a child is already encountering in Ontario math class — reinforcing sequencing, logic, and pattern-based thinking through hands-on projects, rather than duplicating classroom worksheets. CODEship's Explorers and Builders levels, for example, build the same sequencing and conditional-logic skills the C3 strand describes, just through creative projects instead of a workbook page.</p>
+<h2>Does This Mean CODEship Is Endorsed by the Ministry of Education?</h2>
+<p>No. CODEship's curriculum is designed to align with and support these publicly available curriculum expectations — it is not endorsed, approved, or certified by the Ontario Ministry of Education or any school board. Parents should always confirm current expectations against the official curriculum documents.</p>
+    `,
+    faqs: [
+      { question: "Is coding a separate subject in Ontario schools?", answer: "No. It's embedded in the math curriculum under the Algebra strand (expectation C3), starting in Grade 1." },
+      { question: "What grade does 'real' coding start in Ontario?", answer: "Sequential and repeating code appears from Grade 2, with more complex concurrent-event code introduced by Grade 3." },
+      { question: "Is an after-school coding program endorsed by the Ministry of Education?", answer: "No program should claim that. The honest framing is that a program's curriculum can align with or support public curriculum expectations, not that it's ministry-endorsed." },
+    ],
+  },
+  {
+    slug: "bc-adst-curriculum-coding-guide",
+    title: "Coding and BC's ADST Curriculum: A Parent's Guide",
+    metaDescription:
+      "BC's Applied Design, Skills & Technologies (ADST) curriculum supports coding and computational thinking from kindergarten. Here's what it means for your child.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-04-03",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "bc adst coding",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> BC's Applied Design, Skills & Technologies (ADST) curriculum supports computational thinking and coding across K-12, though it doesn't prescribe specific grade-by-grade content for K-5 the way Ontario's math strand does — schools have flexibility in how they deliver it.</p>
+<h2>What Is ADST?</h2>
+<p>According to the <a href="https://curriculum.gov.bc.ca/curriculum/adst" target="_blank" rel="noopener noreferrer">official BC curriculum</a>, Applied Design, Skills, and Technologies is an experiential, hands-on area of learning that draws on design thinking, computational thinking, coding, and engineering challenges, alongside more traditional skill areas.</p>
+<h2>How Coding Fits Into ADST for Younger Grades</h2>
+<p>For Kindergarten through Grade 5, ADST doesn't specify fixed content — instead, it provides Big Ideas and Curricular Competencies that schools weave into other subject areas, giving teachers flexibility in exactly when and how coding and computational thinking are introduced. Many BC schools use tools like Scratch, ScratchJr, and Code.org as part of this cross-curricular approach.</p>
+<h2>What This Means for Parents</h2>
+<p>Because ADST implementation varies more by school than Ontario's fixed C3 strand does, the exact coding exposure your child gets in class can differ. A structured, project-based coding program can be a reliable way to ensure your child builds computational thinking skills consistently — supporting and aligning with ADST's goals regardless of how much coding their specific school emphasizes in a given year.</p>
+<h2>Compliance Note</h2>
+<p>A coding program's curriculum can be designed to align with and support ADST's goals for computational thinking and design skills. It is not endorsed, approved, or certified by the BC Ministry of Education or any school district.</p>
+    `,
+    faqs: [
+      { question: "Does every BC school teach the same amount of coding?", answer: "Not necessarily. ADST gives schools flexibility in how they deliver computational thinking content for K-5, so exposure can vary by school." },
+      { question: "What tools do BC schools typically use for coding under ADST?", answer: "Common tools include Scratch, ScratchJr, and Code.org, often woven into other subjects rather than taught as a stand-alone class." },
+      { question: "Is a coding program 'BC curriculum approved'?", answer: "No legitimate program should claim that. The accurate description is that a program's content can align with and support ADST's goals." },
+    ],
+  },
+  {
+    slug: "alberta-computer-science-curriculum-guide",
+    title: "Alberta's Computer Science Curriculum: What Parents Should Know",
+    metaDescription:
+      "Alberta's Career and Technology Foundations (CTF) curriculum introduces computing and coding from grade 5. Here's what it covers and how it connects to CS.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-05-06",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "alberta computer science curriculum kids",
+    internalLinks: [{ label: "Explore all programs", href: "/programs" }],
+    content: `
+<p><strong>Quick answer:</strong> Alberta introduces computing and technology formally through Career and Technology Foundations (CTF) for grades 5-9, which includes a computing science occupational area, before students can specialize further in Career and Technology Studies (CTS) in high school.</p>
+<h2>What Is CTF?</h2>
+<p>According to <a href="https://education.alberta.ca/career-and-technology-foundations/" target="_blank" rel="noopener noreferrer">Alberta Education</a>, Career and Technology Foundations (CTF) is a curriculum for students in grades 5-9 organized around four central processes — plan, create, appraise, communicate — spanning multiple occupational clusters, including a Technology cluster that covers computing science.</p>
+<h2>How This Connects to Coding</h2>
+<p>CTF is intentionally broad and interdisciplinary, developing problem-solving, communication, and collaboration skills through hands-on, real-world challenges — computing and coding are one occupational area among several a student may encounter, not a guaranteed, dedicated coding class every year.</p>
+<h2>What This Means for a Grade 4-8 Family</h2>
+<p>Since CTF formally begins at grade 5 and computing science is one of several possible occupational areas, families who want consistent, structured coding exposure earlier — or a guarantee that their child builds real coding skills rather than sampling one of many CTF areas — often look to dedicated after-school programs to fill that gap.</p>
+<h2>Compliance Note</h2>
+<p>A coding program's curriculum can be designed to map to and support the computing-related outcomes within Alberta's CTF and broader K-12 goals. It is not endorsed, approved, or certified by Alberta Education or any school division.</p>
+    `,
+    faqs: [
+      { question: "At what grade does Alberta introduce computer science formally?", answer: "Career and Technology Foundations (CTF), which includes a computing science area, begins at grade 5." },
+      { question: "Is computing science guaranteed every year under CTF?", answer: "Not necessarily — computing is one of several occupational areas within CTF, so exposure can vary by school and year." },
+      { question: "Is a coding program approved by Alberta Education?", answer: "No legitimate program should claim that. The accurate description is that a program can map to and support relevant CTF outcomes." },
+    ],
+  },
+  {
+    slug: "codage-enfants-quebec-competence-numerique",
+    title: "Le codage et la compétence numérique au Québec (guide parent)",
+    metaDescription:
+      "Le Cadre de référence de la compétence numérique du Québec appuie l'apprentissage du codage à l'école. Voici ce que les parents doivent savoir.",
+    category: "school",
+    readTime: 5,
+    publishDate: "2025-06-02",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "curriculum-alignment",
+    targetQuery: "codage enfants québec",
+    internalLinks: [{ label: "Explorateurs (FR)", href: "/lp/quebec-fr" }],
+    content: `
+<p><strong>Réponse rapide :</strong> Le Cadre de référence de la compétence numérique du ministère de l'Éducation du Québec définit 12 dimensions de la compétence numérique, dont la pensée informatique et la programmation, applicables du préscolaire à l'éducation aux adultes.</p>
+<h2>Qu'est-ce que le Cadre de référence de la compétence numérique?</h2>
+<p>Créé par le ministère de l'Éducation en 2019 dans le cadre du Plan d'action numérique, ce cadre officiel définit la compétence numérique comme un ensemble d'habiletés nécessaires pour utiliser les technologies numériques de façon confiante, critique et créative. Selon <a href="https://www.quebec.ca/en/education/digital-technology/digital-competency-framework" target="_blank" rel="noopener noreferrer">le site officiel du gouvernement du Québec</a>, une mise à jour majeure a été publiée en 2026, tenant compte des développements récents, notamment l'essor de l'intelligence artificielle.</p>
+<h2>Où se situe le codage dans ce cadre?</h2>
+<p>La pensée informatique et la programmation figurent parmi les 12 dimensions du cadre. L'objectif n'est pas de former des programmeurs professionnels, mais de développer l'autonomie, la pensée critique et l'usage responsable des outils numériques — le codage étant un moyen concret d'atteindre ces objectifs.</p>
+<h2>Ce que cela signifie pour les familles</h2>
+<p>Un programme de codage bien conçu peut appuyer et s'aligner avec les objectifs du Cadre de référence, en particulier la dimension de la pensée informatique, tout en donnant à l'enfant des projets concrets et motivants à réaliser.</p>
+<h2>Note de conformité</h2>
+<p>Un programme de codage peut être conçu pour appuyer et s'aligner avec le Cadre de référence de la compétence numérique du Québec. Il n'est ni endossé, ni approuvé, ni certifié par le ministère de l'Éducation.</p>
+    `,
+    faqs: [
+      { question: "Le Cadre de référence de la compétence numérique inclut-il le codage?", answer: "Oui. La pensée informatique et la programmation figurent parmi les 12 dimensions du cadre." },
+      { question: "Ce cadre s'applique-t-il seulement au secondaire?", answer: "Non, il s'applique du préscolaire à l'éducation aux adultes, avec une progression adaptée à chaque niveau." },
+      { question: "Un programme de codage est-il approuvé par le ministère?", answer: "Non. Un programme peut appuyer et s'aligner avec le cadre, mais aucun programme privé n'est approuvé par le ministère." },
+    ],
+  },
+  {
+    slug: "kids-coding-classes-toronto",
+    title: "Kids Coding Classes in Toronto: A Parent's Guide",
+    metaDescription:
+      "Looking for kids coding classes in Toronto? Here's what to look for, what a typical Saturday program looks like, and how to get started.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2024-03-11",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding classes toronto",
+    internalLinks: [
+      { label: "CODEship in Toronto", href: "/locations/toronto" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Toronto families can access CODEship's full K-8 coding journey in person every Saturday, or online — with programs for every grade band from kindergarten through grade 8.</p>
+<h2>What's Available for Kids Coding Classes in Toronto?</h2>
+<p>Toronto is one of CODEship's five official in-person cities, running all four program levels — Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — every Saturday. Families who prefer a weekday online option can join the same curriculum through CODEship's online schedule instead.</p>
+<h2>What Should Toronto Parents Look for in a Coding Program?</h2>
+<ul>
+<li><strong>A real progression:</strong> Does the program build in complexity year over year, or repeat the same content?</li>
+<li><strong>Project-based learning:</strong> Are kids building their own ideas, or following identical tutorials?</li>
+<li><strong>Age-appropriate tools:</strong> Blocks for younger kids, text-based languages as they mature.</li>
+<li><strong>Inclusive design:</strong> A welcoming environment for all learning styles and backgrounds.</li>
+</ul>
+<h2>What Does a Saturday Look Like?</h2>
+<p>Each of CODEship's Toronto Saturday classes runs about 55 minutes, project-based throughout, with a instructor guiding kids from idea to a finished, working thing they built themselves.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship run in-person classes in Toronto?", answer: "Yes. Toronto is one of CODEship's five official in-person cities, with Saturday classes for all four K-8 program levels." },
+      { question: "Is there an online option for Toronto families who can't attend Saturdays?", answer: "Yes — the same curriculum is available online on weekday schedules." },
+    ],
+  },
+  {
+    slug: "coding-classes-for-kids-vaughan",
+    title: "Coding Classes for Kids in Vaughan",
+    metaDescription:
+      "Vaughan families: here's how to find real, project-based coding classes for kids, from kindergarten through grade 8.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-01-08",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "coding classes for kids vaughan",
+    internalLinks: [
+      { label: "CODEship in Vaughan", href: "/locations/vaughan" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Vaughan is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, plus an online option for families who prefer a weekday schedule.</p>
+<h2>Coding Classes for Kids in Vaughan: What's Available</h2>
+<p>Vaughan families have access to all four CODEship program levels in person: Explorers (K-1, visual blocks), Builders (grades 2-3, HTML & CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8, Python, AI, and cybersecurity) — each running every Saturday.</p>
+<h2>Why Project-Based Matters for Vaughan Families Choosing a Program</h2>
+<p>The biggest difference between coding programs isn't the tools they use — it's whether kids build their own projects or follow identical, copy-paste tutorials. Project-based programs produce kids who can solve new problems; tutorial-based programs produce kids who can repeat steps.</p>
+<h2>Getting Started</h2>
+<p>Families new to coding can use CODEship's program finder to match their child's age and interests to the right level, then register for the next Saturday semester in Vaughan or the equivalent online schedule.</p>
+    `,
+    faqs: [
+      { question: "What ages does CODEship serve in Vaughan?", answer: "Kindergarten through grade 8, across four program levels that build on each other." },
+      { question: "Does my child need prior coding experience to start in Vaughan?", answer: "No. Every level is designed to welcome complete beginners." },
+    ],
+  },
+  {
+    slug: "kids-coding-stem-oshawa-durham",
+    title: "Kids Coding & STEM in Oshawa / Durham Region",
+    metaDescription:
+      "Oshawa and Durham Region families: here's what a real, project-based K-8 coding and STEM program looks like, and how to get started.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2024-07-15",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding oshawa",
+    internalLinks: [
+      { label: "CODEship in Oshawa", href: "/locations/oshawa" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Oshawa is CODEship's headquarters city and one of five official in-person locations, running the full K-8 coding and STEM journey every Saturday.</p>
+<h2>Coding & STEM for Kids in Oshawa and Durham Region</h2>
+<p>Oshawa families have access to all four CODEship program levels — Explorers, Builders, Developers, and Engineers — covering visual blocks, HTML/CSS, JavaScript, and Python + AI + cybersecurity, in a natural progression from kindergarten through grade 8.</p>
+<h2>What Makes a Coding & STEM Program Worth the Drive?</h2>
+<p>For Durham Region families comparing options, the key differentiators are the same anywhere: a real multi-year progression (not a one-off workshop), project-based learning (kids build their own ideas), and an inclusive, welcoming environment regardless of prior experience.</p>
+<h2>Getting Started in Oshawa</h2>
+<p>Families can use the program finder to identify the right level by grade, then register for the next Saturday semester.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship run classes in Oshawa specifically?", answer: "Yes — Oshawa is one of CODEship's five official in-person cities and its headquarters location." },
+      { question: "What age range is covered in Oshawa?", answer: "Kindergarten through grade 8, across four progressive levels." },
+    ],
+  },
+  {
+    slug: "coding-classes-for-kids-calgary",
+    title: "Coding Classes for Kids in Calgary",
+    metaDescription:
+      "Calgary families: find real, project-based K-8 coding classes — from visual blocks for kindergarteners to Python and AI for middle schoolers.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-07-07",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "coding classes for kids calgary",
+    internalLinks: [
+      { label: "CODEship in Calgary", href: "/locations/calgary" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Calgary is one of CODEship's five official in-person cities, with in-person Saturday classes for all four K-8 program levels and an online option for families across Alberta.</p>
+<h2>Coding Classes for Kids in Calgary: What's Available</h2>
+<p>Calgary families can access CODEship's full K-8 progression in person: Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — each building on the last, from visual blocks through to Python, AI, and cybersecurity.</p>
+<h2>How This Connects to Alberta's Curriculum</h2>
+<p>CODEship's curriculum is designed to map to and support Alberta's Career and Technology Foundations (CTF) computing outcomes for grades 5-9, giving Calgary families a consistent, structured coding pathway alongside whatever their school offers.</p>
+<h2>Getting Started in Calgary</h2>
+<p>Use the program finder to match your child's age and interests to the right level, then register for the next Saturday semester in Calgary or the equivalent online schedule.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship offer in-person classes in Calgary?", answer: "Yes — Calgary is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "Does this align with Alberta's school curriculum?", answer: "The program is designed to map to and support relevant Alberta CTF computing outcomes — it is not endorsed or approved by Alberta Education." },
+    ],
+  },
+  {
+    slug: "kids-coding-classes-vancouver",
+    title: "Kids Coding Classes in Vancouver",
+    metaDescription:
+      "Vancouver families: here's what to expect from a real, project-based K-8 coding program, and how it connects to BC's ADST curriculum.",
+    category: "parent",
+    readTime: 4,
+    publishDate: "2025-08-05",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "kids coding classes vancouver",
+    internalLinks: [
+      { label: "CODEship in Vancouver", href: "/locations/vancouver" },
+      { label: "Explore all programs", href: "/programs" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> Vancouver is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, with an online option for families across BC.</p>
+<h2>Kids Coding Classes in Vancouver: What's Available</h2>
+<p>Vancouver families can access all four CODEship program levels in person — Explorers, Builders, Developers, and Engineers — moving from visual block coding through HTML/CSS, JavaScript, and finally Python, AI, and cybersecurity by grade 8.</p>
+<h2>How This Connects to BC's ADST Curriculum</h2>
+<p>CODEship's curriculum is designed to align with and support BC's Applied Design, Skills & Technologies (ADST) goals for computational thinking, giving Vancouver families a consistent coding pathway regardless of how much coding their specific school covers in a given year.</p>
+<h2>Getting Started in Vancouver</h2>
+<p>Use the program finder to match your child's age to the right level, then register for the next Saturday semester in Vancouver or online.</p>
+    `,
+    faqs: [
+      { question: "Does CODEship offer in-person classes in Vancouver?", answer: "Yes — Vancouver is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "How does this relate to BC's ADST curriculum?", answer: "The program is designed to align with and support ADST's computational thinking goals — it is not endorsed or approved by the BC Ministry of Education." },
+    ],
+  },
+  {
+    slug: "online-coding-classes-for-kids-canada",
+    title: "Online Coding Classes for Kids in Canada: How They Work",
+    metaDescription:
+      "Not near an in-person location? Here's how CODEship's online coding classes work for kids across Canada — schedule, format, and what to expect.",
+    category: "parent",
+    readTime: 5,
+    publishDate: "2025-09-09",
+    dateModified: "2026-07-09",
+    author: "CODEship Academy Team",
+    cluster: "local-canada",
+    targetQuery: "online coding classes for kids canada",
+    internalLinks: [
+      { label: "Explore all programs", href: "/programs" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
+    content: `
+<p><strong>Quick answer:</strong> CODEship's online classes run the same curriculum as the in-person program, live and instructor-led — Tuesdays for Explorers and Builders, Thursdays for Developers and Engineers, 4:00-6:00 PM ET, one hour per class.</p>
+<h2>How Do Online Coding Classes for Kids Actually Work?</h2>
+<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, one hour long, following the exact same project-based curriculum as the in-person Saturday classes. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to live near one of the five in-person cities.</p>
+<h2>What's the Online Schedule?</h2>
+<ul>
+<li><strong>Tuesdays, 4:00-6:00 PM ET:</strong> Explorers (K-1) and Builders (grades 2-3).</li>
+<li><strong>Thursdays, 4:00-6:00 PM ET:</strong> Developers (grades 4-5) and Engineers (grades 6-8).</li>
+</ul>
+<p>Each class is one hour, live, with real-time instructor support — the same quality of guidance a child would get in person, just from home.</p>
+<h2>Is Online as Effective as In-Person for Coding?</h2>
+<p>For project-based coding specifically, online classes work well because the "project" lives on a screen either way — a child building a website or a Python program does the same hands-on work whether they're sitting next to an instructor or connected live over video, with the instructor able to see their screen and guide them in real time.</p>
+<h2>Who Is Online Best For?</h2>
+<p>Families outside the five in-person cities, families who prefer a weekday schedule over Saturdays, and families who want the flexibility of joining from home.</p>
+    `,
+    faqs: [
+      { question: "Are CODEship's online classes live or pre-recorded?", answer: "Live and instructor-led — not pre-recorded videos." },
+      { question: "What is the online schedule?", answer: "Tuesdays 4-6 PM ET for Explorers and Builders; Thursdays 4-6 PM ET for Developers and Engineers. One hour per class." },
+      { question: "Can a family outside Canada join the online classes?", answer: "The program is designed for children in Canada, but the online format itself only requires a stable internet connection and the class's time zone (ET) to work." },
+    ],
+  },
 ];
 
 export const articlesBySlug = Object.fromEntries(articles.map((a) => [a.slug, a]));
