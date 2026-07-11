@@ -231,6 +231,91 @@ Only "supports NGSA skill-building" / "helps strengthen skills used in NGSA prep
 The `/gy/ngsa-digital-skills` page's `complianceNote` field carries this explicitly, and
 `GUYANA_COMPLIANCE_DISCLAIMER` repeats a shorter version in `GYFooter` on every Guyana page.
 
+## CODEship Academy learning platform (`/academy`)
+
+A separate, authenticated product surface from the marketing site above — the actual K–8 lesson
+engine (Phase 0 of the "adaptive learning platform" build). Isolated the same way `/lp` and `/gy`
+are: its own layout (`src/app/academy/layout.tsx`), never linked from the main `Navigation`/`Footer`.
+
+### Curriculum content — transcribed from the real Curriculum Guides, not invented
+
+`src/data/academy/curriculum/{explorers,builders,developers,engineers}.ts` hold every level's 20
+lessons (4 classes × 4 semesters + capstone), 4 projects + capstone project, theory units, and
+quizzes, transcribed from the attached `*_Curriculum_Guide.pdf` files. Run `npm run verify:academy`
+(the integrity gate) to check structural completeness — it fails the build on a missing field, a
+lesson count that doesn't match 20, a quiz with the wrong question count, or an unsolvable block
+puzzle.
+
+**Quiz question text**: only the Explorers guide (S1 Quiz 1/2, S2 Quiz 1) and the French
+`Explorateurs_Guide_Pedagogique.pdf` inline literal quiz wording — every other quiz's guide gives
+just the format (10 Q, formative + summative) and topic list, not the words themselves (the real
+wording lives in the separate Quiz Pack PDFs, which weren't transcribed). Those quizzes are marked
+`authored: true` in the data files: written to test the exact documented concepts/rubric criteria,
+in the same style as the verbatim ones. Swappable with verbatim Quiz Pack text later without a
+schema change.
+
+**French**: `src/data/academy/curriculum/explorers.fr.ts` is a real translation from the attached
+Trousse Explorateurs (`Explorateurs_Guide_Pedagogique.pdf`) — Québec-specific (Cadre de référence de
+la compétence numérique), not a direct translation of the English guide. It's the only level with a
+FR kit; `getLocalizedLevel()` merges it field-by-field over the English source, falling back to
+English for anything untranslated, and `npm run verify:academy` checks 100% lesson coverage. The
+`?lang=fr` query param switches locale on every academy content page.
+
+### Explorers block puzzles — solver-verified, not hand-typed
+
+`src/lib/academy/blocks/{interpreter,solver}.ts` — a small interpreter for the CODEship Blocks
+subset (trigger/motion/looks/sound/control blocks) and a real BFS solver. Every puzzle in
+`explorers.ts` is built through `makeBlockPuzzle()`, which runs the solver at module-load time — a
+puzzle's `par` (minimum block count) is therefore a proven fact, and an accidentally-unsolvable
+puzzle throws at build time instead of shipping broken. Builders/Developers/Engineers use real code
+sandboxes instead (`CodeSandbox.tsx`: sandboxed iframe for HTML/CSS and JavaScript, Pyodide loaded
+on demand for Python) — no block puzzles at those levels, matching what the guides describe.
+
+### Data model & auth
+
+`supabase/schema.sql` — content tables (read-only to any signed-in academy user) plus roster/progress
+tables with RLS on every table. Reuses PR #14's exact conventions: `src/lib/supabaseAdmin.ts`
+(`getSupabaseAdmin()`) and `src/lib/env.ts` (`getEnv()`, Cloudflare `getRequestContext().env` with a
+`process.env` fallback for `next dev`) — both features can share one Supabase project. New
+`NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY` client vars were added because Next.js
+requires that prefix for anything read in the browser; the brief's plain `SUPABASE_URL`/
+`SUPABASE_ANON_KEY` names are kept for the server-only service-role client, matching PR #14.
+
+Students never provide an email (COPPA/PIPEDA: no child PII beyond a teacher-set display name) —
+they use Supabase **anonymous sign-in**, linked to a roster row a teacher pre-creates via a class
+code + PIN (`src/app/api/academy/join/route.ts`, `.../roster/route.ts`). Teachers/parents/school
+admins sign in with an email magic link; those role rows are provisioned by CODEship staff, not
+self-serve, in this phase.
+
+**Capstone/semester gating is server-enforced**, not just UI-hidden: `project_submissions`,
+`quiz_results`, and `capstone_results` have no client insert/update RLS policy at all — they're only
+written by `POST /api/academy/progress` (grades quizzes server-side against the answer key) and
+`POST /api/academy/mark` (teacher-only; evaluates a capstone's rubric against its `pass_rule`). A
+student's own browser client can read these tables but cannot self-report a pass. See
+`src/lib/academy/gating.ts`.
+
+### Known gaps — flagged, not silently resolved
+
+- **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
+  written and type-checked but never run against real infrastructure — this session has no
+  `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`. Provision a project, apply the schema, then run the
+  seed script.
+- **Magic-link teacher/parent/admin accounts aren't self-serve.** Those three role tables need rows
+  created by whoever holds the service-role key (or a future admin UI) before someone can sign in as
+  that role — flagged in the login page's own copy rather than hidden.
+- **Builders/Developers/Engineers have no French kit** in what was provided — only Explorers does.
+  `getAvailableLocales()` correctly reflects this (no FR toggle on those levels) rather than showing
+  a broken/partial translation.
+- **Phase 1–4 not built yet**: the mastery-graph metadata (misconceptions, branches, provincial
+  tags), the "Coding in the Age of AI" strand, the `/api/tutor` AI tutor, and the `/api/coach/*`
+  teacher co-pilot are the next PRs in the sequence, each needing this Phase 0 schema as their
+  foundation plus (for tutor/coach) a real `ANTHROPIC_API_KEY`.
+- **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
+  no pagination, no bulk actions) — real but intentionally not pixel-final.
+- **Code sandboxes are real but unproctored**: nothing stops a student from writing something other
+  than the lesson's intended code in the JS/Python sandbox — grading is via the block-puzzle solver
+  (Explorers) or teacher rubric review (everyone else), not static analysis of submitted code.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
