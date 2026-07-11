@@ -13,7 +13,8 @@ import LocationBar from "./LocationBar";
 import StickyMobileCTA from "./StickyMobileCTA";
 import FAQAccordion from "@/components/FAQAccordion";
 import LPFooter from "./LPFooter";
-import { NEXT_SEMESTER_START, NEXT_SEMESTER_START_FR } from "@/data/programs";
+import { NEXT_SEMESTER_START, NEXT_SEMESTER_START_FR, getProgram } from "@/data/programs";
+import CheckoutButton from "@/components/CheckoutButton";
 
 const VALID_LOCATIONS = new Set<string>([...IN_PERSON.map((c) => c.toLowerCase()), "online"]);
 
@@ -226,13 +227,26 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
             <h3 className="text-white font-bold text-lg mb-1">{campaign.offerHeadline}</h3>
             <p className="text-gray-300 text-sm mb-1">{campaign.offerBody}</p>
             <p className="text-[#E5A823] text-xs font-semibold mb-4">{t.semesterStart}</p>
-            <Link
-              href={registrationUrl}
-              onClick={handleRegisterClick}
-              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors"
-            >
-              {ctaLabel}
-            </Link>
+            <div className="bg-white rounded-xl p-4 text-left max-w-sm mx-auto">
+              <CheckoutButton
+                program={campaign.program}
+                programLabel={getProgram(campaign.program)!.level}
+                location={location}
+                currency="cad"
+                lang={campaign.lang}
+                returnPath={`/lp/${campaign.slug}`}
+                utm={{ source: utmSource, medium: utmMedium, campaign: utmCampaign, content: location }}
+              />
+            </div>
+            <p className="mt-4">
+              <Link
+                href={registrationUrl}
+                onClick={handleRegisterClick}
+                className="text-gray-300 text-xs hover:text-[#E5A823] hover:underline"
+              >
+                {ctaLabel}
+              </Link>
+            </p>
           </div>
           {campaign.secondaryLink && (
             <p className="text-center text-sm mt-4">

@@ -231,6 +231,119 @@ Only "supports NGSA skill-building" / "helps strengthen skills used in NGSA prep
 The `/gy/ngsa-digital-skills` page's `complianceNote` field carries this explicitly, and
 `GUYANA_COMPLIANCE_DISCLAIMER` repeats a shorter version in `GYFooter` on every Guyana page.
 
+## Stripe checkout & refund policy
+
+One-time (per-term) payment via **Stripe Checkout (hosted)**, created by a server-only edge route —
+no Stripe secret ever reaches the client bundle. The client only ever receives a Checkout Session
+`url` and redirects to it (`window.location.href = url`); no `stripe-js` / Elements is loaded.
+
+### Env vars
+
+Set these as **Cloudflare Pages environment variables/secrets** in production/preview (read via
+`getRequestContext().env` in `src/lib/env.ts`, same pattern as the existing
+`FRANCHISE_PASSWORD_*` vars in `verify-franchise-auth`). For local `next dev`, put them in
+`.env.local` instead (see `.env.example`) — `getEnv()` falls back to `process.env` when there's no
+Cloudflare request context.
+
+| Var | Used by | Notes |
+|---|---|---|
+| `STRIPE_SECRET_KEY` | `create-checkout-session`, `stripe-webhook` | `sk_test_…` → `sk_live_…` at launch. Server-only. |
+| `STRIPE_WEBHOOK_SECRET` | `stripe-webhook` | `whsec_…`, created per-endpoint (Test and Live get different values) — see go-live checklist. |
+| `STRIPE_PUBLISHABLE_KEY` | *(reserved, unused today)* | `pk_test_…` → `pk_live_…`. The current flow is a pure server-redirect, so no client code reads this yet — kept here so a future Stripe.js/Elements embed doesn't need a new env var. |
+| `CURRENT_TERM` | `create-checkout-session` | e.g. `2026-Sept`. Single source of truth for the term stamped on every session/order — change this one value each term, no price or code edits. |
+| `SUPABASE_URL` | `stripe-webhook` | Project URL. |
+| `SUPABASE_SERVICE_ROLE_KEY` | `stripe-webhook` | Service-role key — server-only, never exposed client-side. Used to upsert `orders` / insert `payment_failures` (see `supabase/schema.sql`). |
+
+### Catalog — reference by lookup key only
+
+`src/data/catalog.ts` holds `PRICE_LOOKUP_KEYS` (one multi-currency Price per program, CAD default +
+USD via `currency_options`) and `PROGRAM_PRICING` (display-only mirror of the CAD/USD amounts, never
+sent to Stripe). No `price_...` ID is ever hardcoded — `create-checkout-session` resolves the Price
+at request time via `stripe.prices.list({ lookup_keys: [...] })`.
+
+| Program | Lookup key | CAD | USD |
+|---|---|---|---|
+| Explorers | `explorers_term_cad` | 175 | 135 |
+| Builders | `builders_term_cad` | 175 | 135 |
+| Developers | `developers_term_cad` | 199 | 156 |
+| Engineers | `engineers_term_cad` | 199 | 156 |
+
+**Currency:** `/programs/*` and `/lp/*` charge CAD; `/gy/*` would charge USD if/when it gets checkout
+(see "Known gaps" below). Checkout Sessions don't accept a top-level currency override for an
+existing Price, so when the requested currency isn't the Price's default, `create-checkout-session`
+reconstructs the line item from that Price's own `currency_options[currency]` (still resolved from
+the same lookup key — never a second hardcoded price).
+
+### Checkout flow
+
+`<CheckoutButton>` (`src/components/CheckoutButton.tsx`) renders a "Class minimum & refunds" summary,
+a **required** checkbox ("I have read and agree to the Class Minimum & Refund Policy and the Terms of
+Service") that gates the pay button, and posts `{ program, location, currency, policyAcceptedAt,
+returnPath, utm }` to `POST /api/create-checkout-session`. That route resolves the price by lookup
+key, sets `mode: 'payment'`, stamps `metadata` (`program, location, mode, term, utm_*,
+policy_version, policy_accepted_at`) on both the session and `payment_intent_data`, and returns the
+Checkout `url`. It's wired into `ProgramLocationSelector` (`/programs/:slug`, primary CTA) and
+`LPView` (`/lp/:slug`, inside the Offer panel) — both CAD. The existing HubSpot `/register` flow is
+left in place as a secondary "talk to us first" link everywhere `<CheckoutButton>` was added, so no
+existing lead-capture path was removed.
+
+### Webhook (`/api/stripe-webhook`)
+
+Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET` via `stripe.webhooks.constructEventAsync`
+(the async/Web-Crypto verifier — required on the edge runtime, where Node's `crypto` isn't
+available) against the **raw** request body. Handles:
+
+- `checkout.session.completed` → upsert into `orders` (Supabase), status `paid`.
+- `checkout.session.expired` → upsert status `expired`.
+- `charge.refunded` → update the matching order (`payment_intent_id`) to `refunded` /
+  `partially_refunded`, recording `refunded_amount`.
+- `payment_intent.payment_failed` → insert into `payment_failures` for follow-up.
+
+A processing error (e.g. Supabase is briefly down) returns 5xx so Stripe retries with backoff —
+the payment itself already succeeded or failed on Stripe's side regardless of whether our DB write
+lands the first time.
+
+### Refund policy pages
+
+`/policies/refund` (EN) and `/politiques/remboursement` (FR, required for Québec/Bill 96) — both
+footer-linked next to Terms of Service and Privacy Policy. `REFUND_POLICY_VERSION`
+(`src/data/catalog.ts`) is stamped into session metadata and the `orders` row at checkout time —
+bump it whenever the policy copy changes so past acceptances stay attributable to the wording the
+customer actually agreed to.
+
+### Known gaps / deliberately deferred
+
+- **`/gy/*` (Guyana) checkout was intentionally not wired up.** Those 5 pages advertise a flat
+  **GYD $20,000/semester** generic "online semester" (not tied to a specific
+  Explorers/Builders/Developers/Engineers grade band — see `guyanaCampaigns.ts`), while the Stripe
+  catalog only has USD prices *per program* (`$135`/`$156`). Charging one of those USD amounts on a
+  page advertising a GYD price would silently change what the visitor pays. Wiring this up needs a
+  product decision first — most likely adding a lightweight program/grade picker to the GY pages
+  (mirroring `ProgramLocationSelector`) so the right USD price can be resolved. See the comment atop
+  `src/components/gy/GYView.tsx`.
+- No confirmation-email content is defined in this repo — Stripe's own receipt email covers payment
+  confirmation today. If a branded confirmation email (with the policy version + a receipt link) is
+  needed, that's a Stripe Customer Email / Resend-or-similar integration on top of the
+  `checkout.session.completed` handler.
+
+### Go-live checklist
+
+1. **Rebuild the same catalog in Live mode** — 4 products, 4 multi-currency prices, **identical
+   lookup keys** (`*_term_cad`), CAD 175/175/199/199 + USD 135/135/156/156, tax-inclusive, `program`
+   metadata. Identical lookup keys mean go-live is a key swap, not a code change.
+2. **Swap env to Live:** `STRIPE_SECRET_KEY` → `sk_live_…` (and `STRIPE_PUBLISHABLE_KEY` →
+   `pk_live_…` if it's ever wired up client-side).
+3. **Create the Live webhook:** Stripe Dashboard → Developers → Webhooks → Add endpoint → your
+   deployed `/api/stripe-webhook` URL → select `checkout.session.completed`,
+   `checkout.session.expired`, `charge.refunded`, `payment_intent.payment_failed` → copy the new
+   `whsec_…` into `STRIPE_WEBHOOK_SECRET` (Live and Test have separate signing secrets).
+4. Confirm `/policies/refund`, `/politiques/remboursement`, `/terms`, and `/privacy-policy` are live
+   and footer-linked.
+5. **Validate on real rails cheaply:** create a temporary $1 Live price on any product, buy it with a
+   real card, confirm success + webhook + `orders` row + email, then refund it and confirm the
+   refund path updates the order. Archive the $1 price afterward.
+6. Go live — accept real registrations.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

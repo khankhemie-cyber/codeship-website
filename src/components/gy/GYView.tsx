@@ -18,6 +18,15 @@ const OUTCOME_HIGHLIGHTS = GUYANA_OUTCOME_BULLETS.slice(0, 5);
 const PROJECT_HIGHLIGHTS = GUYANA_PROJECTS_BY_AGE.flatMap((g) => g.projects.slice(0, 2));
 const FAQ_HIGHLIGHTS = GUYANA_FAQ.slice(0, 4);
 
+/**
+ * Stripe Checkout is intentionally NOT wired up on /gy pages: these are a
+ * generic "online semester" offer (GYD $20,000/semester) that isn't tied
+ * to one of the four grade-banded programs, while the Stripe catalog only
+ * has USD prices per program ($135/$156). Charging a per-program USD price
+ * here would silently change what visitors pay vs. the advertised GYD
+ * rate. Wiring this up needs a product decision first (e.g. adding a
+ * program/grade picker to these pages) — see README "Known gaps".
+ */
 export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
   const searchParams = useSearchParams();
 

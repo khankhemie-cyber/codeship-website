@@ -7,6 +7,7 @@ import { NEXT_SEMESTER_START } from "@/data/programs";
 import { IN_PERSON, ONLINE, IN_PERSON_SATURDAY_SCHEDULE, type InPersonCity } from "@/data/locations";
 import { buildRegistrationUrl, type LocationSlug } from "@/lib/registration";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
+import CheckoutButton from "@/components/CheckoutButton";
 
 interface ProgramLocationSelectorProps {
   program: Program;
@@ -108,13 +109,25 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         Next semester starts {NEXT_SEMESTER_START}
       </p>
 
-      <Link
-        href={registrationUrl}
-        onClick={() => trackRegisterClick({ program: program.slug, location })}
-        className="mt-3 w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-flex items-center justify-center text-center"
-      >
-        Register for {program.level}
-      </Link>
+      <div className="mt-3">
+        <CheckoutButton
+          program={program.slug}
+          programLabel={program.level}
+          location={location}
+          currency="cad"
+          returnPath={`/programs/${program.slug}`}
+        />
+      </div>
+
+      <p className="text-center text-xs mt-3">
+        <Link
+          href={registrationUrl}
+          onClick={() => trackRegisterClick({ program: program.slug, location })}
+          className="text-gray-500 hover:text-[#138A9A] hover:underline"
+        >
+          Prefer to talk to us first? Register without paying now
+        </Link>
+      </p>
 
       {/* Sticky mobile register bar, mirrors the same selection */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
