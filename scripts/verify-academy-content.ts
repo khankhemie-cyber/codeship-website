@@ -3,9 +3,10 @@
  * wired into CI alongside tsc/lint/build. Extended in Phase 1 to check the
  * mastery-graph fields: missing field, orphan prerequisite, prerequisite cycle,
  * unresolved provincial ref, and a capstone gate that wouldn't actually block
- * progression.
+ * progression. Extended in Phase 2 to check "Coding in the Age of AI" strand
+ * coverage (every level has a touchpoint; all five skills appear somewhere).
  */
-import { CURRICULUM_LEVELS, CURRICULUM_TRANSLATIONS } from "../src/data/academy/curriculum";
+import { CURRICULUM_LEVELS, CURRICULUM_TRANSLATIONS, type AiEraSkill } from "../src/data/academy/curriculum";
 
 let failures = 0;
 
@@ -203,11 +204,49 @@ for (const level of CURRICULUM_LEVELS) {
   }
 }
 
+// Phase 2: "Coding in the Age of AI" strand coverage — a level with zero
+// touchpoints, or a skill that's never taught anywhere, means the strand
+// isn't actually coherent across the curriculum (see docs/coding-in-the-age-of-ai-strand.md).
+const ALL_AI_ERA_SKILLS: AiEraSkill[] = [
+  "decomposition-as-spec",
+  "prompting",
+  "verifying-ai-output",
+  "spotting-confident-wrong-answers",
+  "iterating-with-a-collaborator",
+];
+const skillsCovered = new Set<AiEraSkill>();
+for (const level of CURRICULUM_LEVELS) {
+  const touchpoints = level.lessons.filter((l) => l.aiEra && l.aiEra.length > 0);
+  if (touchpoints.length === 0) {
+    fail(`[${level.level}] no "Coding in the Age of AI" touchpoint lesson — the strand isn't present at this level`);
+  }
+  for (const lesson of touchpoints) {
+    for (const extension of lesson.aiEra ?? []) {
+      if (!extension.activity || extension.activity.length < 10) {
+        fail(`[${level.level}] lesson ${lesson.id} has an aiEra entry with no real activity description`);
+      }
+      skillsCovered.add(extension.skill);
+    }
+  }
+}
+for (const skill of ALL_AI_ERA_SKILLS) {
+  if (!skillsCovered.has(skill)) {
+    fail(`"Coding in the Age of AI" skill "${skill}" is never taught anywhere in the curriculum`);
+  }
+}
+// Lesson count must not have changed — Phase 2 was scoped as weave-in, not add-to (confirmed with the user).
+for (const level of CURRICULUM_LEVELS) {
+  if (level.lessons.length !== 20) {
+    fail(`[${level.level}] lesson count changed to ${level.lessons.length} — Phase 2 was scoped as weave-in-only (20/level)`);
+  }
+}
+
 if (failures > 0) {
   console.error(`\n${failures} integrity failure(s).`);
   process.exit(1);
 } else {
   console.log(`✓ Academy content integrity OK — ${CURRICULUM_LEVELS.length} levels, ` +
     `${CURRICULUM_LEVELS.reduce((n, l) => n + l.lessons.length, 0)} lessons, ` +
-    `${CURRICULUM_LEVELS.reduce((n, l) => n + l.blockPuzzles.length, 0)} solver-verified block puzzles.`);
+    `${CURRICULUM_LEVELS.reduce((n, l) => n + l.blockPuzzles.length, 0)} solver-verified block puzzles, ` +
+    `${skillsCovered.size}/${ALL_AI_ERA_SKILLS.length} AI-era skills covered.`);
 }

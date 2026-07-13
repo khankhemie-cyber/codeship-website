@@ -110,6 +110,12 @@ alter table lessons add column if not exists mastery_rubric jsonb not null defau
 alter table lessons add column if not exists provincial_tags jsonb;                -- {ON:[],BC:[],AB:[],QC:[]}
 alter table lessons add column if not exists locales text[] not null default '{en}';
 
+-- ----------------------------------------------------------------------------
+-- Phase 2: "Coding in the Age of AI" strand — present only on the strand's
+-- touchpoint lessons (7 of 80), see docs/coding-in-the-age-of-ai-strand.md.
+-- ----------------------------------------------------------------------------
+alter table lessons add column if not exists ai_era jsonb not null default '[]'::jsonb; -- [{skill, activity}]
+
 -- ============================================================================
 -- ROSTER (schools / people)
 -- ============================================================================

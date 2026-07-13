@@ -57,6 +57,23 @@ export interface ProvincialTags {
   QC: string[];
 }
 
+/**
+ * The five "Coding in the Age of AI" skills (Phase 2) — computational thinking done
+ * *with* an AI collaborator, not despite one. See docs/coding-in-the-age-of-ai-strand.md.
+ */
+export type AiEraSkill =
+  | "decomposition-as-spec"
+  | "prompting"
+  | "verifying-ai-output"
+  | "spotting-confident-wrong-answers"
+  | "iterating-with-a-collaborator";
+
+export interface AiEraExtension {
+  skill: AiEraSkill;
+  /** A sandboxed, teacher-framed "check the machine's work" task — never a live/open AI chat. */
+  activity: string;
+}
+
 export interface Lesson {
   id: string;
   level: LevelSlug;
@@ -74,6 +91,8 @@ export interface Lesson {
   assess?: string;
   home?: string;
   accommodationNotes?: AccommodationNotes;
+  /** Present only on the strand's touchpoint lessons (Phase 2) — see docs/coding-in-the-age-of-ai-strand.md. */
+  aiEra?: AiEraExtension[];
 
   // --- Mastery graph (Phase 1) ---
   strand: Strand;

@@ -112,7 +112,10 @@ export const developers: RawLevelCurriculum = {
       warmUp: "'If it rains, then…'", teach: "if/else + ==",
       activity: "Score a correct answer.", practice: "Complete conditions.",
       reflect: "When does else run?", assess: "Write an equality test.",
-      accommodationNotes: { dyslexia: "Highlighted syntax." } },
+      accommodationNotes: { dyslexia: "Highlighted syntax." },
+      aiEra: [{ skill: "decomposition-as-spec", activity:
+        "Turn a fuzzy goal ('check if this is true') into concrete steps a checker could follow — same skill " +
+        "as writing the if/else condition, applied to specifying a task for a helper." }] },
     { id: "developers-s3-c2", level: "developers", semester: "3", classNumber: 2, orderIndex: 10, title: "Booleans",
       objective: "Use true/false.", align: "C3 boolean logic; Math logic",
       warmUp: "True/false statements.", teach: "Boolean variables.",
@@ -124,13 +127,21 @@ export const developers: RawLevelCurriculum = {
       warmUp: "Real vs fake headline.", teach: "Source-checking (stop, investigate the source).",
       activity: "Add a 'why check?' tip to the quiz.", practice: "Sort real/needs-checking.",
       reflect: "What made you doubt it?", assess: "Name two ways to verify.",
-      accommodationNotes: { anxiety: "No wrong takes, discuss." } },
+      accommodationNotes: { anxiety: "No wrong takes, discuss." },
+      aiEra: [{ skill: "verifying-ai-output", activity:
+        "Sandboxed, teacher-presented set of real vs. AI-generated headlines/images (pre-selected, no live " +
+        "generation tool). Class applies the same source-checking steps to AI-made content as to any other " +
+        "'needs-checking' example." }] },
     { id: "developers-s3-c4", level: "developers", semester: "3", classNumber: 4, orderIndex: 12, title: "Plan my quiz",
       objective: "Design the quiz.", align: "C3 arrays; Language",
       warmUp: "Pick a topic.", teach: "Questions array + if/else feedback.",
       activity: "Assemble it.", practice: "Planning sheet.",
       reflect: "Does it teach checking?", assess: "Outline your array.",
-      accommodationNotes: { gifted: "Add a difficulty level." } },
+      accommodationNotes: { gifted: "Add a difficulty level." },
+      aiEra: [{ skill: "iterating-with-a-collaborator", activity:
+        "Frame the first draft of the quiz as a starting point, not the final version — swap plans with a " +
+        "partner, get feedback, revise. A first result (from a person or a helper) is a draft to improve, not " +
+        "a finish line." }] },
 
     { id: "developers-s4-c1", level: "developers", semester: "4", classNumber: 1, orderIndex: 13, title: "Arrays",
       objective: "Build and read an array.", align: "C3 arrays/lists",
