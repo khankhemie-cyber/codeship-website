@@ -1,15 +1,12 @@
+import { callAnthropicTool, type AnthropicTool } from "../aiClient";
+
 export interface TutorResult {
   hintText: string;
   diagnosedMisconceptionId: string;
   escalationLevel: number;
 }
 
-const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
-const ANTHROPIC_VERSION = "2023-06-01";
-const DEFAULT_MODEL = "claude-haiku-4-5-20251001"; // fast/cheap — right fit for a real-time hint
-const TIMEOUT_MS = 8000;
-
-const PROVIDE_HINT_TOOL = {
+const PROVIDE_HINT_TOOL: AnthropicTool = {
   name: "provide_hint",
   description: "Return the diagnosed misconception and a single Socratic hint.",
   input_schema: {
@@ -24,10 +21,8 @@ const PROVIDE_HINT_TOOL = {
 };
 
 /**
- * Calls the Anthropic Messages API directly via fetch (edge-runtime-safe, no SDK
- * dependency) with tool-use forced so the response is always structured — no
- * fragile prompt-based JSON parsing. Throws on any failure; the route's caller
- * is responsible for falling back to a canned hint (see cannedHints.ts).
+ * Throws on any failure; the route's caller falls back to a canned hint
+ * (see cannedHints.ts) rather than surfacing the error to the student.
  */
 export async function callTutorModel(params: {
   apiKey: string;
@@ -35,50 +30,13 @@ export async function callTutorModel(params: {
   systemPrompt: string;
   userContent: string;
 }): Promise<TutorResult> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-  try {
-    const response = await fetch(ANTHROPIC_API_URL, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": params.apiKey,
-        "anthropic-version": ANTHROPIC_VERSION,
-      },
-      body: JSON.stringify({
-        model: params.model || DEFAULT_MODEL,
-        max_tokens: 500,
-        system: params.systemPrompt,
-        messages: [{ role: "user", content: params.userContent }],
-        tools: [PROVIDE_HINT_TOOL],
-        tool_choice: { type: "tool", name: "provide_hint" },
-      }),
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Anthropic API returned ${response.status}`);
-    }
-
-    const data = (await response.json()) as {
-      content: Array<{ type: string; input?: unknown }>;
-    };
-    const toolUse = data.content.find((block) => block.type === "tool_use");
-    if (!toolUse?.input) {
-      throw new Error("No tool_use block in Anthropic response");
-    }
-
-    const input = toolUse.input as Partial<TutorResult>;
-    if (!input.hintText || !input.diagnosedMisconceptionId || !input.escalationLevel) {
-      throw new Error("Malformed tutor tool response");
-    }
-    return {
-      hintText: input.hintText,
-      diagnosedMisconceptionId: input.diagnosedMisconceptionId,
-      escalationLevel: input.escalationLevel,
-    };
-  } finally {
-    clearTimeout(timeout);
+  const input = await callAnthropicTool({ ...params, tool: PROVIDE_HINT_TOOL });
+  if (!input.hintText || !input.diagnosedMisconceptionId || !input.escalationLevel) {
+    throw new Error("Malformed tutor tool response");
   }
+  return {
+    hintText: input.hintText as string,
+    diagnosedMisconceptionId: input.diagnosedMisconceptionId as string,
+    escalationLevel: input.escalationLevel as number,
+  };
 }

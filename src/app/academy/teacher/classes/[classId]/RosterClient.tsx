@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { getLocalizedLevel, type LevelSlug, type Semester } from "@/data/academy/curriculum";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { getAcademySession } from "@/lib/academy/session";
 
 interface ClassInfo {
   id: string;
@@ -16,6 +17,17 @@ interface StudentRow {
   id: string;
   display_name: string;
 }
+interface PlanResult {
+  talkingPoints: string[];
+  watchFor: string[];
+  groupingSuggestion: string;
+  fallback?: boolean;
+}
+interface SessionNoteRow {
+  id: string;
+  note: string;
+  created_at: string;
+}
 
 export default function RosterClient({ classId }: { classId: string }) {
   const [klass, setKlass] = useState<ClassInfo | null>(null);
@@ -25,6 +37,20 @@ export default function RosterClient({ classId }: { classId: string }) {
   const [projectStatus, setProjectStatus] = useState<Record<string, Record<string, string>>>({});
   const [quizPassed, setQuizPassed] = useState<Record<string, Record<string, boolean>>>({});
   const [busy, setBusy] = useState(false);
+  const [teacherId, setTeacherId] = useState<string | null>(null);
+  const [plan, setPlan] = useState<PlanResult | null>(null);
+  const [planLoading, setPlanLoading] = useState(false);
+  const [rawNote, setRawNote] = useState("");
+  const [polishedNote, setPolishedNote] = useState<{ text: string; fallback?: boolean } | null>(null);
+  const [noteBusy, setNoteBusy] = useState(false);
+  const [savedNotes, setSavedNotes] = useState<SessionNoteRow[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const session = await getAcademySession();
+      if (session?.role === "teacher") setTeacherId(session.id);
+    })();
+  }, []);
 
   const refresh = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
@@ -67,6 +93,13 @@ export default function RosterClient({ classId }: { classId: string }) {
       quizMap[row.student_id][row.quiz_id] = row.passed;
     }
     setQuizPassed(quizMap);
+
+    const { data: notes } = await supabase
+      .from("session_notes")
+      .select("id, note, created_at")
+      .eq("class_id", classId)
+      .order("created_at", { ascending: false });
+    setSavedNotes((notes as SessionNoteRow[] | null) ?? []);
   }, [classId]);
 
   useEffect(() => {
@@ -117,6 +150,56 @@ export default function RosterClient({ classId }: { classId: string }) {
     const supabase = getSupabaseBrowserClient();
     await supabase?.from("classes").update({ semester: next }).eq("id", klass.id);
     await refresh();
+  }
+
+  async function getPlan() {
+    const supabase = getSupabaseBrowserClient();
+    const {
+      data: { session },
+    } = (await supabase?.auth.getSession()) ?? { data: { session: null } };
+    if (!session) return;
+    setPlanLoading(true);
+    const response = await fetch("/api/coach/plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ classId }),
+    });
+    setPlanLoading(false);
+    if (response.ok) setPlan(await response.json());
+  }
+
+  async function polishNote() {
+    const supabase = getSupabaseBrowserClient();
+    const {
+      data: { session },
+    } = (await supabase?.auth.getSession()) ?? { data: { session: null } };
+    if (!session || !rawNote.trim()) return;
+    setNoteBusy(true);
+    const response = await fetch("/api/coach/note", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ classId, rawNote }),
+    });
+    setNoteBusy(false);
+    if (response.ok) {
+      const data = await response.json();
+      setPolishedNote({ text: data.polishedNote, fallback: data.fallback });
+    }
+  }
+
+  async function saveNote() {
+    if (!teacherId || !polishedNote?.text) return;
+    const supabase = getSupabaseBrowserClient();
+    setNoteBusy(true);
+    const { error } = await supabase
+      ?.from("session_notes")
+      .insert({ class_id: classId, teacher_id: teacherId, note: polishedNote.text }) ?? { error: null };
+    setNoteBusy(false);
+    if (!error) {
+      setRawNote("");
+      setPolishedNote(null);
+      await refresh();
+    }
   }
 
   if (!klass) return <p className="text-[#2E3440]">Loading…</p>;
@@ -222,6 +305,100 @@ export default function RosterClient({ classId }: { classId: string }) {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="mt-6 rounded-lg border border-[#138A9A]/30 bg-white p-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold text-[#001532]">Coach: prep briefing</h2>
+          <button
+            type="button"
+            onClick={getPlan}
+            disabled={planLoading}
+            className="rounded-md border border-[#E5A823] bg-[#FFF8E7] px-3 py-1 text-xs font-medium text-[#001532] hover:bg-[#E5A823]/30 disabled:opacity-60"
+          >
+            {planLoading ? "Thinking…" : "Get prep briefing"}
+          </button>
+        </div>
+        {plan && (
+          <div className="mt-3 space-y-3 text-sm text-[#2E3440]">
+            {plan.fallback && (
+              <p className="text-xs italic text-[#2E3440]/70">
+                No AI key configured — this briefing is derived directly from curriculum + mastery data.
+              </p>
+            )}
+            <div>
+              <h3 className="font-semibold text-[#001532]">Talking points</h3>
+              <ul className="ml-4 list-disc">
+                {plan.talkingPoints.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-[#001532]">Watch for</h3>
+              <ul className="ml-4 list-disc">
+                {plan.watchFor.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-[#001532]">Grouping suggestion</h3>
+              <p>{plan.groupingSuggestion}</p>
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section className="mt-6 rounded-lg border border-[#138A9A]/30 bg-white p-4">
+        <h2 className="font-semibold text-[#001532]">Session notes</h2>
+        <textarea
+          value={rawNote}
+          onChange={(e) => setRawNote(e.target.value)}
+          placeholder="Quick note about today's class…"
+          rows={3}
+          className="mt-2 w-full rounded-md border border-[#138A9A] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#138A9A]"
+        />
+        <div className="mt-2 flex gap-2">
+          <button
+            type="button"
+            onClick={polishNote}
+            disabled={noteBusy || !rawNote.trim()}
+            className="rounded-md border border-[#001532] px-3 py-1 text-xs font-medium text-[#001532] hover:bg-[#001532] hover:text-white disabled:opacity-60"
+          >
+            Polish note
+          </button>
+          {polishedNote && (
+            <button
+              type="button"
+              onClick={saveNote}
+              disabled={noteBusy || !teacherId}
+              className="rounded-md bg-[#001532] px-3 py-1 text-xs font-medium text-white hover:bg-[#0D1B2A] disabled:opacity-60"
+            >
+              Save note
+            </button>
+          )}
+        </div>
+        {polishedNote && (
+          <div className="mt-2 rounded-md bg-[#FFF8E7] p-3 text-sm text-[#001532]">
+            {polishedNote.fallback && (
+              <p className="mb-1 text-xs italic text-[#2E3440]/70">
+                No AI key configured — this is a plain cleanup, not AI-polished.
+              </p>
+            )}
+            {polishedNote.text}
+          </div>
+        )}
+        {savedNotes.length > 0 && (
+          <ul className="mt-4 space-y-2 text-sm text-[#2E3440]">
+            {savedNotes.map((n) => (
+              <li key={n.id} className="border-t border-[#138A9A]/10 pt-2">
+                <span className="text-xs text-[#2E3440]/70">{new Date(n.created_at).toLocaleDateString()}</span>
+                <p>{n.note}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="mt-6">
