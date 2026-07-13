@@ -32,7 +32,16 @@ function labelFor(instance: BlockInstance): string {
   return instance.arg ? `${base}: "${instance.arg}"` : base;
 }
 
-export default function BlockCanvas({ puzzle, onSolved }: { puzzle: BlockPuzzle; onSolved?: () => void }) {
+export default function BlockCanvas({
+  puzzle,
+  onSolved,
+  onAttempt,
+}: {
+  puzzle: BlockPuzzle;
+  onSolved?: () => void;
+  /** Fired on every "Run it" click — lets the parent track lesson-scoped attempt history for the tutor. */
+  onAttempt?: (programText: string, passed: boolean) => void;
+}) {
   const [program, setProgram] = useState<BlockInstance[]>(puzzle.starter ?? []);
   const [result, setResult] = useState<{ passed: boolean; reason?: string } | null>(null);
 
@@ -61,6 +70,7 @@ export default function BlockCanvas({ puzzle, onSolved }: { puzzle: BlockPuzzle;
   function check() {
     const outcome = verify(program, puzzle.goal);
     setResult(outcome);
+    onAttempt?.(program.map(labelFor).join(" → ") || "(empty program)", outcome.passed);
     if (outcome.passed) onSolved?.();
   }
 

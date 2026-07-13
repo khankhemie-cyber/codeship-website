@@ -29,7 +29,16 @@ const PYODIDE_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/
  * (Developers); Python runs client-side via Pyodide, loaded on demand from its
  * official CDN (Engineers) — no student code ever reaches a server.
  */
-export default function CodeSandbox({ language, starterCode }: { language: SandboxLanguage; starterCode?: string }) {
+export default function CodeSandbox({
+  language,
+  starterCode,
+  onRun,
+}: {
+  language: SandboxLanguage;
+  starterCode?: string;
+  /** Fired on every "Run" click with the current code — lets the parent track lesson-scoped attempt history for the tutor. */
+  onRun?: (code: string) => void;
+}) {
   const [code, setCode] = useState(starterCode ?? PLACEHOLDER[language]);
   const [output, setOutput] = useState<string>("");
   const [htmlPreviewSrc, setHtmlPreviewSrc] = useState<string | null>(null);
@@ -37,6 +46,7 @@ export default function CodeSandbox({ language, starterCode }: { language: Sandb
   const pyodideRef = useRef<Awaited<ReturnType<NonNullable<typeof window.loadPyodide>>> | null>(null);
 
   async function run() {
+    onRun?.(code);
     if (language === "html") {
       setHtmlPreviewSrc(code);
       return;

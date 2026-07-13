@@ -342,6 +342,35 @@ a different, separately-guardrailed surface (Phase 3's `/api/tutor`). `npm run v
 every level has at least one touchpoint, all 5 skills are covered somewhere, and the lesson count
 didn't change.
 
+### Misconception-aware AI tutor (Phase 3)
+
+`POST /api/tutor` (edge runtime) is a student-authenticated hint endpoint. Its request contract —
+`{ lessonId, locale, currentCode, attemptHistory }` — deliberately has **no free-text chat field at
+all**. That's not a prompt-level guardrail on top of an open chat; it's a structural one, because an
+open-ended conversation with a child can never start on a contract that has nowhere to put one. The
+response (`{ hintText, diagnosedMisconceptionId, escalationLevel }`) is forced via
+`tool_choice: { type: "tool", name: "provide_hint" }` on the Anthropic Messages API (called via raw
+`fetch`, no SDK dependency), so the model can't return anything but that shape.
+
+- **Auth**: same session-token pattern as `/api/academy/progress` — `Authorization: Bearer` header,
+  `getSupabaseAdmin().auth.getUser()`, then a `students` row lookup by `auth_user_id`. Returns
+  `missing_session`/`invalid_session`/`not_a_student` before touching the model. Verified without a
+  live Supabase project: a request with no `Authorization` header returns `401 {"error":
+  "missing_session"}` against the dev server.
+- **Locale-aware**: only responds in French if the specific lesson actually has FR content
+  (`lesson.locales.includes(locale)`); otherwise falls back to English rather than mixing a French UI
+  label onto untranslated English lesson text.
+- **Guardrails** (`src/lib/academy/tutor/prompt.ts`): reading level scaled to the student's age band,
+  stay strictly on this lesson, never hand over the literal answer, escalate hint specificity only
+  after repeated attempts (levels 1–3), pick `diagnosedMisconceptionId` only from the lesson's own
+  `misconceptions` list (or omit it), 1–3 sentences.
+- **Fallback, not failure**: no `ANTHROPIC_API_KEY`, a model error, or an 8-second timeout all fall
+  through to `getCannedHint()` — a real hint derived from the lesson's own `teach`/`objective`/
+  `assess` fields (localized), not a generic "try again" message. This is what makes the endpoint
+  fully testable without live credentials, and it's exercised by `npm run test:tutor` — 7 seeded
+  buggy-state fixtures across all 4 levels (including one French Explorers case), verified against the
+  fallback path now and re-runnable against the live model once a real key is set.
+
 ### Known gaps — flagged, not silently resolved
 
 - **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
@@ -358,8 +387,12 @@ didn't change.
 - **Provincial tags are validation drafts**, same caveat as the source crosswalk PDFs themselves —
   every cell needs checking against the current official provincial document before any public claim
   ("aligned to / maps to / supports" language only, never "endorsed"/"approved").
-- **Phase 3–4 not built yet**: the `/api/tutor` AI tutor and the `/api/coach/*` teacher co-pilot are
-  the next PRs in the sequence — both additionally need a real `ANTHROPIC_API_KEY`.
+- **`/api/tutor` not exercised against the live Anthropic API.** No `ANTHROPIC_API_KEY` this session —
+  auth-gating and the canned-hint fallback path are verified (`npm run test:tutor`, plus a manual curl
+  against the dev server confirming the 401 on a missing session), but the real-model path
+  (`callTutorModel()`, tool-forced JSON output) has only been exercised by TypeScript's type checker,
+  not a live call. Same fixtures re-run against the real model the moment a key is set.
+- **Phase 4 not built yet**: the `/api/coach/*` teacher co-pilot is the next PR in the sequence.
 - **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
   no pagination, no bulk actions) — real but intentionally not pixel-final.
 - **Code sandboxes are real but unproctored**: nothing stops a student from writing something other
