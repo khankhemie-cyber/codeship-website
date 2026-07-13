@@ -9,7 +9,8 @@
     "lint": "next lint",
     "seed:academy": "tsx scripts/seed-academy.ts",
     "verify:academy": "tsx scripts/verify-academy-content.ts",
-    "test:tutor": "tsx scripts/test-tutor-fixtures.ts"
+    "test:tutor": "tsx scripts/test-tutor-fixtures.ts",
+    "test:coach": "tsx scripts/test-coach-fixtures.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

@@ -371,6 +371,37 @@ response (`{ hintText, diagnosedMisconceptionId, escalationLevel }`) is forced v
   buggy-state fixtures across all 4 levels (including one French Explorers case), verified against the
   fallback path now and re-runnable against the live model once a real key is set.
 
+### Teacher co-pilot (Phase 4)
+
+Two teacher-authenticated edge routes, sharing the tutor's Anthropic transport
+(`src/lib/academy/aiClient.ts`, extracted from `tutor/anthropic.ts` in this
+phase so both consumers call one tool-forcing `fetch` helper instead of two
+near-identical copies):
+
+- **`POST /api/coach/plan`** — `{ classId }` → a prep briefing for the class's current semester
+  (`{ talkingPoints, watchFor, groupingSuggestion }`). Built from **class-wide aggregates only** —
+  per-lesson mastered/in-progress/not-started counts and summed `misconception_flags` counts. The
+  model is never given a student name or id, even though the teacher requesting the briefing already
+  has legitimate roster access to those names — a third-party API call is the wrong place for child
+  roster data when an aggregate answers the question just as well. Falls back to a plan derived
+  directly from curriculum + aggregate data (`getCannedPlan()`) on any error/timeout/missing key.
+- **`POST /api/coach/note`** — `{ classId, rawNote }` → `{ polishedNote }`, a grammar/structure cleanup
+  of a teacher's quick session note. Unlike the tutor, this route **does** accept freeform text, and
+  that's a deliberate, not overlooked, difference: a teacher jotting a colleague-facing note about
+  their own class is a fundamentally different risk profile from an open-ended chat surface handed to
+  a child — same reasoning schools already apply to existing (human-only) note-taking. The route only
+  transforms text; it never persists anything. Saving is a direct client-side `supabase.from(
+  "session_notes").insert(...)`, which was already possible before this phase (`schema.sql`'s
+  `teachers_write_session_notes` RLS policy predates Phase 4) but had no UI — this phase is what
+  actually uses that table. Falls back to trivial whitespace/capitalization cleanup, explicitly labeled
+  as non-AI in the UI, on any error/timeout/missing key.
+
+Both routes are wired into the teacher class page (`RosterClient.tsx`): a "Get prep briefing" button
+and a note composer with "Polish note" / "Save note". `npm run test:coach` exercises 3 plan fixtures
+(a trending-misconception class, a brand-new class, a fully-mastered class) and 3 note fixtures against
+the fallback path now, re-runnable against the live model once a key is set — same pattern as
+`npm run test:tutor`.
+
 ### Known gaps — flagged, not silently resolved
 
 - **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
@@ -387,17 +418,26 @@ response (`{ hintText, diagnosedMisconceptionId, escalationLevel }`) is forced v
 - **Provincial tags are validation drafts**, same caveat as the source crosswalk PDFs themselves —
   every cell needs checking against the current official provincial document before any public claim
   ("aligned to / maps to / supports" language only, never "endorsed"/"approved").
-- **`/api/tutor` not exercised against the live Anthropic API.** No `ANTHROPIC_API_KEY` this session —
-  auth-gating and the canned-hint fallback path are verified (`npm run test:tutor`, plus a manual curl
-  against the dev server confirming the 401 on a missing session), but the real-model path
-  (`callTutorModel()`, tool-forced JSON output) has only been exercised by TypeScript's type checker,
-  not a live call. Same fixtures re-run against the real model the moment a key is set.
-- **Phase 4 not built yet**: the `/api/coach/*` teacher co-pilot is the next PR in the sequence.
+- **`/api/tutor` and `/api/coach/*` not exercised against the live Anthropic API.** No
+  `ANTHROPIC_API_KEY` this session — auth-gating and every canned-fallback path are verified
+  (`npm run test:tutor`, `npm run test:coach`, plus manual curls against the dev server confirming the
+  401 on a missing session for all three routes), but the real-model paths (tool-forced JSON output)
+  have only been exercised by TypeScript's type checker, not a live call. Same fixtures re-run against
+  the real model the moment a key is set.
+- **This was the last planned build phase.** By explicit direction, the remaining work is the deferred
+  French-for-all-4-levels pass (see above) — no further phases are queued after that.
 - **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
   no pagination, no bulk actions) — real but intentionally not pixel-final.
 - **Code sandboxes are real but unproctored**: nothing stops a student from writing something other
   than the lesson's intended code in the JS/Python sandbox — grading is via the block-puzzle solver
   (Explorers) or teacher rubric review (everyone else), not static analysis of submitted code.
+- **`/api/coach/plan`'s aggregation reads `mastery_state.misconception_flags`, which nothing writes yet.**
+  The column exists (Phase 0 schema) and the tutor *diagnoses* a misconception per hint
+  (`diagnosedMisconceptionId`), but no route currently persists that diagnosis back onto the student's
+  `mastery_state` row — so `watchFor` will show real data once quizzes/projects flag misconceptions
+  through some future write path, but is empty today even on a live project. Flagged rather than wired
+  up silently, since deciding *when* a hint's diagnosis should count as a flag (one hint vs. a repeated
+  pattern) is a product judgment call, not a mechanical follow-on to this phase.
 
 ## Deploy on Vercel
 
