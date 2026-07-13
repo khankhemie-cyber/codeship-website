@@ -24,6 +24,29 @@ export interface AccommodationNotes {
 
 export type PassRule = { type: "min_points"; min: number; of: number } | { type: "all_criteria" };
 
+// Phase 1: mastery graph (mirrors src/data/academy/curriculum/types.ts — kept
+// independent since this file describes the Supabase wire shape, not app types).
+export type Strand = "programming" | "networks" | "data" | "society" | "design";
+export interface Misconception {
+  id: string;
+  name: string;
+  signal: string;
+}
+export interface LessonBranches {
+  stretch: string;
+  support: string;
+}
+export interface LessonRubricLevel {
+  level: "emerging" | "developing" | "secure";
+  criteria: string;
+}
+export interface ProvincialTags {
+  ON: string[];
+  BC: string[];
+  AB: string[];
+  QC: string[];
+}
+
 type TableDef<Row extends Record<string, unknown>> = {
   Row: Row;
   Insert: Partial<Row>;
@@ -66,6 +89,15 @@ export interface Database {
         assess: string | null;
         home: string | null;
         accommodation_notes: AccommodationNotes;
+        // Phase 1: mastery graph
+        strand: Strand | null;
+        capstone_gate: boolean;
+        prerequisites: string[];
+        misconceptions: Misconception[];
+        branches: LessonBranches | null;
+        mastery_rubric: LessonRubricLevel[];
+        provincial_tags: ProvincialTags | null;
+        locales: string[];
       }>;
       block_puzzles: TableDef<{
         id: string;

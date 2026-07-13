@@ -2,24 +2,25 @@ import { builders } from "./builders";
 import { developers } from "./developers";
 import { engineers } from "./engineers";
 import { explorers } from "./explorers";
-import { explorersFR } from "./explorers.fr";
-import type { LevelCurriculum, LevelSlug, LevelTranslation, Locale } from "./types";
+import { applyMasteryGraph } from "./masteryGraph";
+import { CURRICULUM_TRANSLATIONS } from "./translations";
+import type { LevelCurriculum, LevelSlug, Locale } from "./types";
 
 export const CURRICULUM: Record<LevelSlug, LevelCurriculum> = {
-  explorers,
-  builders,
-  developers,
-  engineers,
+  explorers: applyMasteryGraph(explorers),
+  builders: applyMasteryGraph(builders),
+  developers: applyMasteryGraph(developers),
+  engineers: applyMasteryGraph(engineers),
 };
 
-export const CURRICULUM_LEVELS: LevelCurriculum[] = [explorers, builders, developers, engineers].sort(
-  (a, b) => a.orderIndex - b.orderIndex
-);
+export const CURRICULUM_LEVELS: LevelCurriculum[] = [
+  CURRICULUM.explorers,
+  CURRICULUM.builders,
+  CURRICULUM.developers,
+  CURRICULUM.engineers,
+].sort((a, b) => a.orderIndex - b.orderIndex);
 
-/** Only levels with a real FR kit get an entry — currently just Explorers (Trousse Explorateurs). */
-export const CURRICULUM_TRANSLATIONS: Partial<Record<LevelSlug, Partial<Record<Locale, LevelTranslation>>>> = {
-  explorers: { fr: explorersFR },
-};
+export { CURRICULUM_TRANSLATIONS };
 
 export function getLevelCurriculum(level: LevelSlug): LevelCurriculum {
   return CURRICULUM[level];

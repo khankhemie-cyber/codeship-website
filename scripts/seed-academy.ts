@@ -61,6 +61,14 @@ async function main() {
         assess: l.assess ?? null,
         home: l.home ?? null,
         accommodation_notes: l.accommodationNotes ?? {},
+        strand: l.strand,
+        capstone_gate: l.capstoneGate,
+        prerequisites: l.prerequisites,
+        misconceptions: l.misconceptions,
+        branches: l.branches,
+        mastery_rubric: l.rubric,
+        provincial_tags: l.provincialTags,
+        locales: l.locales,
       }))
     );
     if (lessonsError) throw lessonsError;

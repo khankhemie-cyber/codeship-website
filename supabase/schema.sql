@@ -94,6 +94,22 @@ create table if not exists capstones (
   pass_rule jsonb not null                -- {"type":"min_points","min":4,"of":5} | {"type":"all_criteria"}
 );
 
+-- ----------------------------------------------------------------------------
+-- Phase 1: mastery-graph columns on `lessons`. A migration against the same
+-- table rather than a reshape — every column is additive and nullable/defaulted,
+-- so it's safe to run against a project that already has Phase 0's `lessons`
+-- rows seeded (re-running scripts/seed-academy.ts repopulates them via upsert).
+-- See src/data/academy/curriculum/masteryGraph.ts for how these are computed.
+-- ----------------------------------------------------------------------------
+alter table lessons add column if not exists strand text;                          -- programming|networks|data|society|design
+alter table lessons add column if not exists capstone_gate boolean not null default false;
+alter table lessons add column if not exists prerequisites text[] not null default '{}';
+alter table lessons add column if not exists misconceptions jsonb not null default '[]'::jsonb; -- [{id,name,signal}]
+alter table lessons add column if not exists branches jsonb;                       -- {stretch, support}
+alter table lessons add column if not exists mastery_rubric jsonb not null default '[]'::jsonb; -- [{level,criteria}] — distinct from projects.rubric
+alter table lessons add column if not exists provincial_tags jsonb;                -- {ON:[],BC:[],AB:[],QC:[]}
+alter table lessons add column if not exists locales text[] not null default '{en}';
+
 -- ============================================================================
 -- ROSTER (schools / people)
 -- ============================================================================

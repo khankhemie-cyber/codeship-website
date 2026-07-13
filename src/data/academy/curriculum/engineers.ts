@@ -1,7 +1,7 @@
-import type { LevelCurriculum } from "./types";
+import type { RawLevelCurriculum } from "./types";
 
 /** Transcribed from Engineers_Curriculum_Guide.pdf. Quizzes `authored: true` — see builders.ts header note. */
-export const engineers: LevelCurriculum = {
+export const engineers: RawLevelCurriculum = {
   level: "engineers",
   name: "Engineers",
   gradeBand: "Grades 6–8",
