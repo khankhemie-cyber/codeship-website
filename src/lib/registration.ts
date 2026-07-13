@@ -34,7 +34,9 @@ interface BuildRegistrationUrlArgs {
 }
 
 function defaultTerm(program: ProgramSlug, location: LocationSlug): string {
-  return location === "online" ? `online-${ONLINE[program].day.toLowerCase()}-1600` : "in-person";
+  return location === "online"
+    ? `online-${ONLINE[program].day.toLowerCase()}-${ONLINE[program].start24}`
+    : "in-person";
 }
 
 /**

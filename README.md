@@ -91,7 +91,8 @@ sources of truth:
   semesters + capstone, and per-level provincial alignment copy.
 - `src/data/locations.ts` — the 5 in-person cities (Toronto, Vaughan, Oshawa, Calgary, Vancouver),
   their shared Saturday schedule (9:00 AM–1:45 PM, 15-min transitions, one 35-min break — see
-  `IN_PERSON_SATURDAY_AGENDA`), and the online Tue/Thu 4–6 PM ET schedule.
+  `IN_PERSON_SATURDAY_AGENDA`), and the online schedule: Tuesdays 4:00–4:55 PM ET (Explorers) / 5:00–5:55
+  PM ET (Builders), Thursdays 4:00–4:55 PM ET (Developers) / 5:00–5:55 PM ET (Engineers) — see `ONLINE`.
 
 Both are consumed by `JourneyMap` (home page + `/programs#journey`), `ProgramLocationSelector`
 (the location/schedule picker on each `/programs/[slug]` page), and `AlignmentStrip`.
@@ -114,7 +115,7 @@ UTM parameters to `REG_FORM_URL`:
 | `utm_medium` | `"registration"` | `medium` (paid LPs pass `"cpc"` \| `"paid_social"`) | traffic medium |
 | `utm_campaign` | the program slug | `campaign` | **program** attribution |
 | `utm_content` | the location slug | `content` | **location** attribution |
-| `utm_term` | `in-person` or `online-{day}-1600` | `term` | schedule slot |
+| `utm_term` | `in-person` or `online-{day}-{start24}` | `term` | schedule slot |
 
 Main-site CTAs (Journey Map, `/programs/[slug]`) call it with just `{ program, location }` and get the
 original `website`/`registration` defaults. Paid landing pages (below) pass the ad platform's own
