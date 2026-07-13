@@ -256,10 +256,11 @@ schema change.
 
 **French**: `src/data/academy/curriculum/explorers.fr.ts` is a real translation from the attached
 Trousse Explorateurs (`Explorateurs_Guide_Pedagogique.pdf`) — Québec-specific (Cadre de référence de
-la compétence numérique), not a direct translation of the English guide. It's the only level with a
-FR kit; `getLocalizedLevel()` merges it field-by-field over the English source, falling back to
-English for anything untranslated, and `npm run verify:academy` checks 100% lesson coverage. The
-`?lang=fr` query param switches locale on every academy content page.
+la compétence numérique), not a direct translation of the English guide. `getLocalizedLevel()` merges
+any level's translation field-by-field over the English source, falling back to English for anything
+untranslated, and `npm run verify:academy` checks 100% lesson coverage. The `?lang=fr` query param
+switches locale on every academy content page. Builders/Developers/Engineers also have French now
+(Phase 5, see below) — but AI-translated and unreviewed, unlike Explorers' real kit.
 
 ### Explorers block puzzles — solver-verified, not hand-typed
 
@@ -402,6 +403,28 @@ and a note composer with "Polish note" / "Save note". `npm run test:coach` exerc
 the fallback path now, re-runnable against the live model once a key is set — same pattern as
 `npm run test:tutor`.
 
+### French across all 4 levels (Phase 5)
+
+Explorers' French comes from a real kit (the uploaded Trousse Explorateurs — Québec's own Cadre de
+référence de la compétence numérique, its own French project names and framing, not a translation of
+the English guide). Builders, Developers, and Engineers had **no French kit at all** in what was
+provided. By explicit user direction, this phase produces French for those three levels by AI
+translation from their English content (`builders.fr.ts`, `developers.fr.ts`, `engineers.fr.ts`),
+in the same Québécois-French register as `explorersFR`, **clearly disclosed as unreviewed** — each
+file's header comment says so, `CURRICULUM_TRANSLATIONS`'s comment says so, and this README says so.
+This is not presented as equivalent to a real kit; a native-speaker/curriculum review is a prerequisite
+before any French content ships to real students.
+
+Structurally, this phase only adds data — `getLocalizedLevel()`, `getAvailableLocales()`, the `?lang=fr`
+toggle, `LessonPlayer`, and `/api/tutor`'s locale handling were all already built (Phases 0 and 3) to
+merge in a `LevelTranslation` for any level; Builders/Developers/Engineers previously had no entry in
+`CURRICULUM_TRANSLATIONS` so `getAvailableLocales()` correctly showed English-only. Adding the three
+new translation files and registering them in `translations.ts` is the entire change — no route, gating,
+or auth logic was touched. `npm run verify:academy`'s existing stale-id/quiz-question-count check (added
+in Phase 1, not new to this phase) already validates every translation key against the real English ids
+and every quiz's question count — it caught nothing wrong, confirming the id/count contract with the
+English source was followed for all three new files.
+
 ### Known gaps — flagged, not silently resolved
 
 - **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
@@ -411,10 +434,13 @@ the fallback path now, re-runnable against the live model once a key is set — 
 - **Magic-link teacher/parent/admin accounts aren't self-serve.** Those three role tables need rows
   created by whoever holds the service-role key (or a future admin UI) before someone can sign in as
   that role — flagged in the login page's own copy rather than hidden.
-- **Builders/Developers/Engineers have no French kit** in what was provided — only Explorers does.
-  `getAvailableLocales()` correctly reflects this (no FR toggle on those levels) rather than showing
-  a broken/partial translation. **By explicit direction, a French pass across all 4 levels is planned
-  as its own step after Phase 4 completes** — not per-phase, so it isn't repeated 4 times.
+- **Builders/Developers/Engineers' French is AI-translated and unreviewed.** No French kit exists for
+  these three levels (unlike Explorers' real Trousse) — `builders.fr.ts`/`developers.fr.ts`/
+  `engineers.fr.ts` were produced by AI translation from the English content, by explicit user
+  direction, and have **not** been checked by a native speaker or a Québec curriculum specialist.
+  Every register/vocabulary choice (e.g. matching Explorers' Québécois French, translating "empreinte
+  numérique," "littératie financière," etc.) is a judgment call pending that review — flagged in each
+  file's header, in `translations.ts`, and here, not silently presented as kit-equivalent.
 - **Provincial tags are validation drafts**, same caveat as the source crosswalk PDFs themselves —
   every cell needs checking against the current official provincial document before any public claim
   ("aligned to / maps to / supports" language only, never "endorsed"/"approved").
@@ -424,8 +450,8 @@ the fallback path now, re-runnable against the live model once a key is set — 
   401 on a missing session for all three routes), but the real-model paths (tool-forced JSON output)
   have only been exercised by TypeScript's type checker, not a live call. Same fixtures re-run against
   the real model the moment a key is set.
-- **This was the last planned build phase.** By explicit direction, the remaining work is the deferred
-  French-for-all-4-levels pass (see above) — no further phases are queued after that.
+- **This is the last planned phase.** All 5 phases from the original build brief (0–4) plus the deferred
+  French pass (5) are now complete — no further phases are queued.
 - **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
   no pagination, no bulk actions) — real but intentionally not pixel-final.
 - **Code sandboxes are real but unproctored**: nothing stops a student from writing something other
