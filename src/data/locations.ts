@@ -20,12 +20,21 @@ export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-13:45"];
 
 export type ProgramSlug = "explorers" | "builders" | "developers" | "engineers";
 
-/** Online (virtual) weekly schedule — one 1-hour class per program, twice weekly by pair. */
-export const ONLINE: Record<ProgramSlug, { day: "Tuesday" | "Thursday"; window: string; length: string }> = {
-  explorers: { day: "Tuesday", window: "4:00–6:00 PM ET", length: "1 hr" },
-  builders: { day: "Tuesday", window: "4:00–6:00 PM ET", length: "1 hr" },
-  developers: { day: "Thursday", window: "4:00–6:00 PM ET", length: "1 hr" },
-  engineers: { day: "Thursday", window: "4:00–6:00 PM ET", length: "1 hr" },
+/**
+ * Online (virtual) weekly schedule — one 55-minute class per program, back-to-back
+ * by pair (Explorers/Builders on Tuesday, Developers/Engineers on Thursday, each
+ * pair younger-first). `start24` is the 24-hour ET start time, used only to build
+ * a stable registration UTM slot slug (see src/lib/registration.ts) — keep it in
+ * sync with `window` if the schedule changes again.
+ */
+export const ONLINE: Record<
+  ProgramSlug,
+  { day: "Tuesday" | "Thursday"; window: string; length: string; start24: string }
+> = {
+  explorers: { day: "Tuesday", window: "4:00–4:55 PM ET", length: "55 min", start24: "1600" },
+  builders: { day: "Tuesday", window: "5:00–5:55 PM ET", length: "55 min", start24: "1700" },
+  developers: { day: "Thursday", window: "4:00–4:55 PM ET", length: "55 min", start24: "1600" },
+  engineers: { day: "Thursday", window: "5:00–5:55 PM ET", length: "55 min", start24: "1700" },
 };
 
 /**

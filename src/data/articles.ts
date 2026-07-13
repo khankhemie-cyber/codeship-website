@@ -1699,15 +1699,17 @@ export const articles: Article[] = [
       { label: "Find your child's program", href: "/program-finder" },
     ],
     content: `
-<p><strong>Quick answer:</strong> CODEship's online classes run the same curriculum as the in-person program, live and instructor-led — Tuesdays for Explorers and Builders, Thursdays for Developers and Engineers, 4:00-6:00 PM ET, one hour per class.</p>
+<p><strong>Quick answer:</strong> CODEship's online classes run the same curriculum as the in-person program, live and instructor-led — Tuesdays for Explorers and Builders, Thursdays for Developers and Engineers, 55 minutes per class.</p>
 <h2>How Do Online Coding Classes for Kids Actually Work?</h2>
-<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, one hour long, following the exact same project-based curriculum as the in-person Saturday classes. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to live near one of the five in-person cities.</p>
+<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, 55 minutes long, following the exact same project-based curriculum as the in-person Saturday classes. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to live near one of the five in-person cities.</p>
 <h2>What's the Online Schedule?</h2>
 <ul>
-<li><strong>Tuesdays, 4:00-6:00 PM ET:</strong> Explorers (K-1) and Builders (grades 2-3).</li>
-<li><strong>Thursdays, 4:00-6:00 PM ET:</strong> Developers (grades 4-5) and Engineers (grades 6-8).</li>
+<li><strong>Tuesdays, 4:00-4:55 PM ET:</strong> Explorers (K-1).</li>
+<li><strong>Tuesdays, 5:00-5:55 PM ET:</strong> Builders (grades 2-3).</li>
+<li><strong>Thursdays, 4:00-4:55 PM ET:</strong> Developers (grades 4-5).</li>
+<li><strong>Thursdays, 5:00-5:55 PM ET:</strong> Engineers (grades 6-8).</li>
 </ul>
-<p>Each class is one hour, live, with real-time instructor support — the same quality of guidance a child would get in person, just from home.</p>
+<p>Each class is 55 minutes, live, with real-time instructor support — the same quality of guidance a child would get in person, just from home.</p>
 <h2>Is Online as Effective as In-Person for Coding?</h2>
 <p>For project-based coding specifically, online classes work well because the "project" lives on a screen either way — a child building a website or a Python program does the same hands-on work whether they're sitting next to an instructor or connected live over video, with the instructor able to see their screen and guide them in real time.</p>
 <h2>Who Is Online Best For?</h2>
