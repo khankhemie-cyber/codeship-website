@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import type { BlockPuzzle, Lesson, LevelSlug, Locale } from "@/data/academy/curriculum";
 import BlockCanvas from "./BlockCanvas";
 import CodeSandbox, { type SandboxLanguage } from "./CodeSandbox";
+import TutorHint from "./TutorHint";
 import { getAcademySession } from "@/lib/academy/session";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+
+const MAX_ATTEMPT_HISTORY = 5;
 
 const SANDBOX_LANGUAGE: Partial<Record<LevelSlug, SandboxLanguage>> = {
   builders: "html",
@@ -47,6 +50,8 @@ export default function LessonPlayer({
 }) {
   const [markedDone, setMarkedDone] = useState(false);
   const [canMark, setCanMark] = useState(false);
+  const [currentCode, setCurrentCode] = useState("");
+  const [attemptHistory, setAttemptHistory] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -71,6 +76,16 @@ export default function LessonPlayer({
 
   const sandboxLanguage = SANDBOX_LANGUAGE[level];
 
+  function recordAttempt(text: string) {
+    setCurrentCode(text);
+    setAttemptHistory((prev) => [...prev, text].slice(-MAX_ATTEMPT_HISTORY));
+  }
+
+  function handleBlockAttempt(programText: string, passed: boolean) {
+    setCurrentCode(programText);
+    if (!passed) setAttemptHistory((prev) => [...prev, programText].slice(-MAX_ATTEMPT_HISTORY));
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#001532]">{lesson.title}</h1>
@@ -93,9 +108,13 @@ export default function LessonPlayer({
       </dl>
 
       <div className="mt-6">
-        {puzzle && <BlockCanvas puzzle={puzzle} onSolved={markDone} />}
-        {!puzzle && sandboxLanguage && <CodeSandbox language={sandboxLanguage} />}
+        {puzzle && <BlockCanvas puzzle={puzzle} onSolved={markDone} onAttempt={handleBlockAttempt} />}
+        {!puzzle && sandboxLanguage && <CodeSandbox language={sandboxLanguage} onRun={recordAttempt} />}
       </div>
+
+      {canMark && (
+        <TutorHint lessonId={lesson.id} locale={locale} currentCode={currentCode} attemptHistory={attemptHistory} />
+      )}
 
       {canMark && !puzzle && (
         <button

@@ -71,7 +71,7 @@ export const engineers: RawLevelCurriculum = {
       objective: "Build strength tiers.", align: "C3 nested conditionals",
       warmUp: "Rank passwords.", teach: "elif chains.",
       activity: "Return strong/okay/weak.", practice: "Complete conditions.",
-      reflect: "Order of tests matters.", assess: "N/A",
+      reflect: "Order of tests matters.",
       accommodationNotes: { adhd: "One branch at a time.", gifted: "Add a symbol check." } },
     { id: "engineers-s1-c3", level: "engineers", semester: "1", classNumber: 3, orderIndex: 3, title: "Strong & safe",
       objective: "Reason about real security.", align: "Tech & Society cybersecurity",
@@ -96,7 +96,7 @@ export const engineers: RawLevelCurriculum = {
       objective: "Read model output.", align: "Math data; Tech & Society",
       warmUp: "Predict a guess.", teach: "Confidence scores.",
       activity: "Test new inputs.", practice: "Interpret results.",
-      reflect: "What if it's 50/50?", assess: "N/A",
+      reflect: "What if it's 50/50?",
       accommodationNotes: { anxiety: "Worked example.", gifted: "Add a third class." },
       aiEra: [{ skill: "spotting-confident-wrong-answers", activity:
         "Examine a pre-recorded case where the model returns a high confidence score for the wrong class. " +
@@ -135,7 +135,7 @@ export const engineers: RawLevelCurriculum = {
       objective: "Write clear prompts.", align: "Language; AI literacy",
       warmUp: "Fix a vague prompt.", teach: "Audience/length/focus.",
       activity: "Improve bot replies.", practice: "Rewrite prompts.",
-      reflect: "Why specificity helps.", assess: "N/A",
+      reflect: "Why specificity helps.",
       accommodationNotes: { anxiety: "Templates.", gifted: "Add tone control." },
       aiEra: [
         { skill: "prompting", activity: "Fix a vague prompt into a specific one — the lesson's own core activity, named explicitly as the prompting skill." },
@@ -160,7 +160,7 @@ export const engineers: RawLevelCurriculum = {
       objective: "Compute mean/max/min.", align: "Math data & probability",
       warmUp: "Estimate the average.", teach: "sum/len = mean.",
       activity: "Compute stats.", practice: "By hand + code.",
-      reflect: "Which stat answers the question?", assess: "N/A",
+      reflect: "Which stat answers the question?",
       accommodationNotes: { anxiety: "Worked example.", gifted: "Median." } },
     { id: "engineers-s4-c3", level: "engineers", semester: "4", classNumber: 3, orderIndex: 15, title: "Read a chart",
       objective: "Interpret and critique.", align: "Math data; Language critical thinking",
