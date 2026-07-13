@@ -1,5 +1,5 @@
 import { makeBlockPuzzle } from "./makeBlockPuzzle";
-import type { LevelCurriculum } from "./types";
+import type { RawLevelCurriculum } from "./types";
 
 /**
  * Transcribed from Explorers_Curriculum_Guide.pdf (the "Complete Teaching Document").
@@ -9,7 +9,7 @@ import type { LevelCurriculum } from "./types";
  * written to match the documented topics/answers in the same style as the verbatim
  * ones, per the agreed approach for levels without inline quiz text.
  */
-export const explorers: LevelCurriculum = {
+export const explorers: RawLevelCurriculum = {
   level: "explorers",
   name: "Explorers",
   gradeBand: "K–Grade 1",

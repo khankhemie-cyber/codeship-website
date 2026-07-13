@@ -1,4 +1,4 @@
-import type { LevelCurriculum } from "./types";
+import type { RawLevelCurriculum } from "./types";
 
 /**
  * Transcribed from Builders_Curriculum_Guide.pdf. This guide documents each quiz's
@@ -8,7 +8,7 @@ import type { LevelCurriculum } from "./types";
  * documents, in Explorers' question style. Swappable with the print Quiz Pack's
  * verbatim wording later if exact parity is needed.
  */
-export const builders: LevelCurriculum = {
+export const builders: RawLevelCurriculum = {
   level: "builders",
   name: "Builders",
   gradeBand: "Grades 2–3",

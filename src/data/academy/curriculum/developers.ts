@@ -1,7 +1,7 @@
-import type { LevelCurriculum } from "./types";
+import type { RawLevelCurriculum } from "./types";
 
 /** Transcribed from Developers_Curriculum_Guide.pdf. Quizzes `authored: true` — see builders.ts header note. */
-export const developers: LevelCurriculum = {
+export const developers: RawLevelCurriculum = {
   level: "developers",
   name: "Developers",
   gradeBand: "Grades 4–5",

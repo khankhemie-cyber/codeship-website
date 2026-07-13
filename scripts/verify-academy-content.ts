@@ -1,9 +1,9 @@
 /**
- * Integrity gate for the academy curriculum data (Phase 0 scope). Run via
- * `npm run verify:academy`, and wire into CI alongside tsc/lint/build.
- *
- * Phase 1 will extend this to check the mastery-graph fields (prerequisites,
- * cycles, provincial tag resolution) once those columns exist on `lessons`.
+ * Integrity gate for the academy curriculum data. Run via `npm run verify:academy`,
+ * wired into CI alongside tsc/lint/build. Extended in Phase 1 to check the
+ * mastery-graph fields: missing field, orphan prerequisite, prerequisite cycle,
+ * unresolved provincial ref, and a capstone gate that wouldn't actually block
+ * progression.
  */
 import { CURRICULUM_LEVELS, CURRICULUM_TRANSLATIONS } from "../src/data/academy/curriculum";
 
@@ -89,6 +89,61 @@ for (const level of CURRICULUM_LEVELS) {
       fail(`${prefix} capstone pass rule requires more points than the rubric has`);
     }
   }
+
+  // --- Phase 1: mastery-graph checks ---
+  for (const lesson of level.lessons) {
+    if (!lesson.strand) fail(`${prefix} lesson ${lesson.id} missing strand`);
+    if (lesson.misconceptions.length === 0) fail(`${prefix} lesson ${lesson.id} has no misconceptions mapped`);
+    if (!lesson.branches?.stretch || !lesson.branches?.support) {
+      fail(`${prefix} lesson ${lesson.id} missing a stretch or support branch`);
+    }
+    if (lesson.rubric.length === 0) fail(`${prefix} lesson ${lesson.id} has an empty rubric`);
+    if (!lesson.locales.includes("en")) fail(`${prefix} lesson ${lesson.id} locales must include "en"`);
+
+    const pt = lesson.provincialTags;
+    for (const province of ["ON", "BC", "AB", "QC"] as const) {
+      if (!pt || pt[province].length === 0) {
+        fail(`${prefix} lesson ${lesson.id} has an unresolved provincial ref for ${province}`);
+      }
+    }
+
+    // Orphan prerequisite: every prerequisite id must be a real lesson in this level.
+    for (const prereqId of lesson.prerequisites) {
+      if (!lessonIds.has(prereqId)) {
+        fail(`${prefix} lesson ${lesson.id} has an orphan prerequisite "${prereqId}"`);
+      }
+    }
+    // A capstone-semester lesson must actually have a prerequisite chain behind it —
+    // an unreachable/ungated capstone lesson wouldn't block anything.
+    if (lesson.capstoneGate && lesson.prerequisites.length === 0) {
+      fail(`${prefix} capstone-gate lesson ${lesson.id} has no prerequisites — the gate wouldn't block progression`);
+    }
+    if (!lesson.capstoneGate && lesson.semester === "capstone") {
+      fail(`${prefix} lesson ${lesson.id} is in the capstone semester but capstoneGate is false`);
+    }
+    if (lesson.capstoneGate && lesson.semester !== "capstone") {
+      fail(`${prefix} lesson ${lesson.id} has capstoneGate=true outside the capstone semester`);
+    }
+  }
+
+  // Prerequisite cycle detection (DFS over this level's lesson graph).
+  const lessonById = new Map(level.lessons.map((l) => [l.id, l]));
+  const WHITE = 0, GRAY = 1, BLACK = 2;
+  const color = new Map<string, number>(level.lessons.map((l) => [l.id, WHITE]));
+  const visit = (id: string, path: string[]): void => {
+    if (color.get(id) === BLACK) return;
+    if (color.get(id) === GRAY) {
+      fail(`${prefix} prerequisite cycle detected: ${[...path, id].join(" → ")}`);
+      return;
+    }
+    color.set(id, GRAY);
+    const lesson = lessonById.get(id);
+    for (const prereqId of lesson?.prerequisites ?? []) {
+      if (lessonById.has(prereqId)) visit(prereqId, [...path, id]);
+    }
+    color.set(id, BLACK);
+  };
+  for (const lesson of level.lessons) visit(lesson.id, []);
 }
 
 // Global uniqueness across all levels.

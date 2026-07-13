@@ -294,6 +294,36 @@ written by `POST /api/academy/progress` (grades quizzes server-side against the 
 student's own browser client can read these tables but cannot self-report a pass. See
 `src/lib/academy/gating.ts`.
 
+### Mastery graph (Phase 1)
+
+`src/data/academy/curriculum/masteryGraph.ts` adds `strand`, `capstoneGate`, `prerequisites`,
+`misconceptions`, `branches`, `rubric`, `provincialTags`, and `locales` to every lesson, per the
+brief's schema — as a companion layer merged on by `applyMasteryGraph()`, not by editing the 80
+Phase 0 lesson literals directly (a Phase 2 lesson addition doesn't have to touch this file's shape).
+What's hand-authored vs. computed, and why:
+
+- **`provincialTags`** — hand-authored per level × semester from the 4 crosswalk PDFs (`ON` from each
+  Curriculum Guide's own embedded Ontario alignment; `BC`/`AB`/`QC` from `Crosswalk_BC.pdf`/
+  `Crosswalk_AB.pdf`/`Crosswalk_QC.pdf`). The crosswalks map at semester granularity, so the 4 classes
+  in a semester share that semester's tags — that's the real granularity of the source documents, not
+  a shortcut.
+- **`strand`** — hand-assigned per level × semester, directly from each crosswalk's own
+  framework-dimension language for that semester (e.g. BC's "Computational thinking — data & models"
+  → `strand: "data"`).
+- **`misconceptions`** — hand-authored per lesson (80 total), since this is genuine pedagogical
+  content — a plausible common error for that lesson's specific concept — that can't be derived from
+  existing fields. Used later by the Phase 3 AI tutor to diagnose what a student is stuck on.
+- **`prerequisites`, `capstoneGate`, `branches`, `rubric`, `locales`** — computed from fields Phase 0
+  already has (`orderIndex` → a linear per-level prerequisite chain; `accommodationNotes.gifted`/
+  `dyslexia`/`anxiety`/`adhd` → stretch/support branches; `objective`/`assess` → a 3-level rubric;
+  `CURRICULUM_TRANSLATIONS` → locale coverage). Computing these instead of hand-typing 80 graph edges
+  is what makes "no orphan/cyclic prerequisite" a structural guarantee rather than something to
+  proofread.
+
+`npm run verify:academy` fails the build on a missing mastery-graph field, an orphan prerequisite, a
+prerequisite cycle (DFS-detected), an unresolved (empty) provincial ref, or a capstone-semester
+lesson whose gate wouldn't actually block progression (no prerequisite chain behind it).
+
 ### Known gaps — flagged, not silently resolved
 
 - **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
@@ -306,10 +336,12 @@ student's own browser client can read these tables but cannot self-report a pass
 - **Builders/Developers/Engineers have no French kit** in what was provided — only Explorers does.
   `getAvailableLocales()` correctly reflects this (no FR toggle on those levels) rather than showing
   a broken/partial translation.
-- **Phase 1–4 not built yet**: the mastery-graph metadata (misconceptions, branches, provincial
-  tags), the "Coding in the Age of AI" strand, the `/api/tutor` AI tutor, and the `/api/coach/*`
-  teacher co-pilot are the next PRs in the sequence, each needing this Phase 0 schema as their
-  foundation plus (for tutor/coach) a real `ANTHROPIC_API_KEY`.
+- **Provincial tags are validation drafts**, same caveat as the source crosswalk PDFs themselves —
+  every cell needs checking against the current official provincial document before any public claim
+  ("aligned to / maps to / supports" language only, never "endorsed"/"approved").
+- **Phase 2–4 not built yet**: the "Coding in the Age of AI" strand, the `/api/tutor` AI tutor, and
+  the `/api/coach/*` teacher co-pilot are the next PRs in the sequence — Phase 3/4 additionally need a
+  real `ANTHROPIC_API_KEY`.
 - **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
   no pagination, no bulk actions) — real but intentionally not pixel-final.
 - **Code sandboxes are real but unproctored**: nothing stops a student from writing something other

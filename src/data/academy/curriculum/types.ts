@@ -22,6 +22,41 @@ export interface TheoryUnit {
   bodyMd: string;
 }
 
+/** Pan-Canadian five-area spine every level's Curriculum Guide names as its cross-cutting strand. */
+export type Strand = "programming" | "networks" | "data" | "society" | "design";
+
+export interface Misconception {
+  id: string;
+  name: string;
+  /** What a teacher/tutor would observe that signals this misconception is present. */
+  signal: string;
+}
+
+export interface LessonBranches {
+  /** What a student who's ahead does next (gifted/2e extension from the guide). */
+  stretch: string;
+  /** What a student who's struggling does instead (an accommodation from the guide). */
+  support: string;
+}
+
+export interface LessonRubricLevel {
+  level: "emerging" | "developing" | "secure";
+  criteria: string;
+}
+
+/**
+ * Named provincial frameworks only — never a generic "province" tag. ON comes from
+ * each Curriculum Guide's own embedded Ontario alignment; BC/AB/QC come from the
+ * separate crosswalk PDFs. Compliance language is always "aligned to / maps to /
+ * supports" — never "endorsed"/"approved" — enforced in copy, not in this type.
+ */
+export interface ProvincialTags {
+  ON: string[];
+  BC: string[];
+  AB: string[];
+  QC: string[];
+}
+
 export interface Lesson {
   id: string;
   level: LevelSlug;
@@ -39,6 +74,18 @@ export interface Lesson {
   assess?: string;
   home?: string;
   accommodationNotes?: AccommodationNotes;
+
+  // --- Mastery graph (Phase 1) ---
+  strand: Strand;
+  /** True only for capstone-semester lessons — the level-up gate (see src/lib/academy/gating.ts). */
+  capstoneGate: boolean;
+  /** lessonIds that must be mastered first — a single linear chain per level, computed from orderIndex. */
+  prerequisites: string[];
+  misconceptions: Misconception[];
+  branches: LessonBranches;
+  rubric: LessonRubricLevel[];
+  provincialTags: ProvincialTags;
+  locales: Locale[];
 }
 
 export interface BlockGoal {
@@ -152,6 +199,21 @@ export interface LevelTranslation {
   /** Keyed by quiz id — questions in the same order as the English quiz they translate. */
   quizzes: Record<string, QuizQuestion[]>;
   capstone: { title: string; description: string; rubric: RubricCriterion[] };
+}
+
+/**
+ * A lesson as authored in the 4 curriculum data files — before Phase 1's
+ * mastery-graph fields are merged on by applyMasteryGraph(). Keeps the Phase 0
+ * lesson literals free of fields that are computed, not hand-typed, so a typo
+ * can't create an orphan/cyclic prerequisite (see masteryGraph.ts).
+ */
+export type RawLesson = Omit<
+  Lesson,
+  "strand" | "capstoneGate" | "prerequisites" | "misconceptions" | "branches" | "rubric" | "provincialTags" | "locales"
+>;
+
+export interface RawLevelCurriculum extends Omit<LevelCurriculum, "lessons"> {
+  lessons: RawLesson[];
 }
 
 export interface LevelCurriculum {
