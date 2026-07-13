@@ -47,6 +47,18 @@ export interface ProvincialTags {
   QC: string[];
 }
 
+// Phase 2: "Coding in the Age of AI" strand
+export type AiEraSkill =
+  | "decomposition-as-spec"
+  | "prompting"
+  | "verifying-ai-output"
+  | "spotting-confident-wrong-answers"
+  | "iterating-with-a-collaborator";
+export interface AiEraExtension {
+  skill: AiEraSkill;
+  activity: string;
+}
+
 type TableDef<Row extends Record<string, unknown>> = {
   Row: Row;
   Insert: Partial<Row>;
@@ -98,6 +110,8 @@ export interface Database {
         mastery_rubric: LessonRubricLevel[];
         provincial_tags: ProvincialTags | null;
         locales: string[];
+        // Phase 2: "Coding in the Age of AI" strand
+        ai_era: AiEraExtension[];
       }>;
       block_puzzles: TableDef<{
         id: string;

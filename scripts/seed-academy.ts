@@ -69,6 +69,7 @@ async function main() {
         mastery_rubric: l.rubric,
         provincial_tags: l.provincialTags,
         locales: l.locales,
+        ai_era: l.aiEra ?? [],
       }))
     );
     if (lessonsError) throw lessonsError;

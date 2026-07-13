@@ -135,6 +135,15 @@ export const explorers: RawLevelCurriculum = {
       assess: "Working robot + names one fix.",
       home: "Show family at next visit.",
       accommodationNotes: { asd: "Share to one partner.", anxiety: "Celebrate any fix." },
+      aiEra: [
+        {
+          skill: "spotting-confident-wrong-answers",
+          activity:
+            "Teacher-narrated puppet moment (unplugged, no live AI): a 'smart helper' puppet confidently says " +
+            "a triangle has 4 sides. Class checks its work together, just like checking the robot's bug — smart " +
+            "helpers can sound sure and still be wrong.",
+        },
+      ],
     },
 
     // Semester 2 — Kindness Cards

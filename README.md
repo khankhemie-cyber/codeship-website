@@ -324,6 +324,24 @@ What's hand-authored vs. computed, and why:
 prerequisite cycle (DFS-detected), an unresolved (empty) provincial ref, or a capstone-semester
 lesson whose gate wouldn't actually block progression (no prerequisite chain behind it).
 
+### "Coding in the Age of AI" strand (Phase 2)
+
+Five skills — decomposition as specification, prompting as precise instruction, verifying/critiquing
+AI output, spotting confident-but-wrong answers, iterating with a collaborator — woven into **7
+existing touchpoint lessons** across all 4 levels, not added as new lessons. Confirmed with the user
+before starting: every level is fixed at 20 lessons, a number already published on the marketing site
+(`PROGRAM_STRUCTURE.sessionsApprox`), so this phase extends lessons that already sit closest to each
+skill (e.g. Developers' S3 "Fact or Fake?" is already the guide's own "Exemplar semester" for
+AI/algorithm literacy; Engineers' S3-C3 already teaches prompt design directly) rather than inventing
+new curriculum. Full rationale, including why each specific lesson was chosen, in
+`docs/coding-in-the-age-of-ai-strand.md`.
+
+Every touchpoint is a **sandboxed, teacher-framed "check the machine's work" task** — a pre-written
+example the class examines together. None introduces a live, open-ended AI chat for children; that's
+a different, separately-guardrailed surface (Phase 3's `/api/tutor`). `npm run verify:academy` checks
+every level has at least one touchpoint, all 5 skills are covered somewhere, and the lesson count
+didn't change.
+
 ### Known gaps — flagged, not silently resolved
 
 - **Not seeded to a live Supabase project.** `supabase/schema.sql` and `npm run seed:academy` are
@@ -335,13 +353,13 @@ lesson whose gate wouldn't actually block progression (no prerequisite chain beh
   that role — flagged in the login page's own copy rather than hidden.
 - **Builders/Developers/Engineers have no French kit** in what was provided — only Explorers does.
   `getAvailableLocales()` correctly reflects this (no FR toggle on those levels) rather than showing
-  a broken/partial translation.
+  a broken/partial translation. **By explicit direction, a French pass across all 4 levels is planned
+  as its own step after Phase 4 completes** — not per-phase, so it isn't repeated 4 times.
 - **Provincial tags are validation drafts**, same caveat as the source crosswalk PDFs themselves —
   every cell needs checking against the current official provincial document before any public claim
   ("aligned to / maps to / supports" language only, never "endorsed"/"approved").
-- **Phase 2–4 not built yet**: the "Coding in the Age of AI" strand, the `/api/tutor` AI tutor, and
-  the `/api/coach/*` teacher co-pilot are the next PRs in the sequence — Phase 3/4 additionally need a
-  real `ANTHROPIC_API_KEY`.
+- **Phase 3–4 not built yet**: the `/api/tutor` AI tutor and the `/api/coach/*` teacher co-pilot are
+  the next PRs in the sequence — both additionally need a real `ANTHROPIC_API_KEY`.
 - **No production polish pass**: the teacher/parent/admin views are functional MVPs (a plain table,
   no pagination, no bulk actions) — real but intentionally not pixel-final.
 - **Code sandboxes are real but unproctored**: nothing stops a student from writing something other

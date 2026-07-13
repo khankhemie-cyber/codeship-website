@@ -122,6 +122,15 @@ export const builders: RawLevelCurriculum = {
       assess: "Exit — 'what comes first on your page?'",
       home: "Sketch a page about a hobby.",
       accommodationNotes: { anxiety: "Template provided." },
+      aiEra: [
+        {
+          skill: "decomposition-as-spec",
+          activity:
+            "Compare a vague instruction ('make a good page') to a precise one ('heading first, then two facts, " +
+            "then a picture'). Sandboxed, teacher-led: only the vague/precise wording is compared, no live helper " +
+            "involved — being exact is what makes instructions followable, for a page or for a helper.",
+        },
+      ],
     },
     {
       id: "builders-s1-c4",

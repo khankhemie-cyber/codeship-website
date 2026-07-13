@@ -97,7 +97,11 @@ export const engineers: RawLevelCurriculum = {
       warmUp: "Predict a guess.", teach: "Confidence scores.",
       activity: "Test new inputs.", practice: "Interpret results.",
       reflect: "What if it's 50/50?", assess: "N/A",
-      accommodationNotes: { anxiety: "Worked example.", gifted: "Add a third class." } },
+      accommodationNotes: { anxiety: "Worked example.", gifted: "Add a third class." },
+      aiEra: [{ skill: "spotting-confident-wrong-answers", activity:
+        "Examine a pre-recorded case where the model returns a high confidence score for the wrong class. " +
+        "Sounding sure (a high number) and being right are different things — the same check applies to any " +
+        "confident-sounding output, AI or otherwise." }] },
     { id: "engineers-s2-c3", level: "engineers", semester: "2", classNumber: 3, orderIndex: 7, title: "Spot the bias",
       objective: "Detect and fix bias.", align: "Tech & Society ethics",
       warmUp: "Unbalanced-data story.", teach: "Bias from data.",
@@ -116,7 +120,11 @@ export const engineers: RawLevelCurriculum = {
       warmUp: "Phonebook analogy.", teach: "{ } lookups.",
       activity: "Build a replies dict.", practice: "Read + add entries.",
       reflect: "Dict vs list?", assess: "Look up a value.",
-      accommodationNotes: { dyslexia: "Starter dict." } },
+      accommodationNotes: { dyslexia: "Starter dict." },
+      aiEra: [{ skill: "decomposition-as-spec", activity:
+        "An intents dictionary *is* a specification — each key names one thing the bot should recognize, each " +
+        "value is exactly how it should respond. Building the dict is the same skill as writing precise " +
+        "instructions for any collaborator." }] },
     { id: "engineers-s3-c2", level: "engineers", semester: "3", classNumber: 2, orderIndex: 10, title: "Intents & responses",
       objective: "Map messages to intents.", align: "Language; Tech & Society",
       warmUp: "Classify sample messages.", teach: "Intent → response; safe fallback.",
@@ -128,7 +136,13 @@ export const engineers: RawLevelCurriculum = {
       warmUp: "Fix a vague prompt.", teach: "Audience/length/focus.",
       activity: "Improve bot replies.", practice: "Rewrite prompts.",
       reflect: "Why specificity helps.", assess: "N/A",
-      accommodationNotes: { anxiety: "Templates.", gifted: "Add tone control." } },
+      accommodationNotes: { anxiety: "Templates.", gifted: "Add tone control." },
+      aiEra: [
+        { skill: "prompting", activity: "Fix a vague prompt into a specific one — the lesson's own core activity, named explicitly as the prompting skill." },
+        { skill: "iterating-with-a-collaborator", activity:
+          "Treat the first rewritten prompt as a draft: test it against the bot's replies, notice what's still " +
+          "unclear, rewrite again. The first prompt is rarely the last prompt." },
+      ] },
     { id: "engineers-s3-c4", level: "engineers", semester: "3", classNumber: 4, orderIndex: 12, title: "Plan for good",
       objective: "Design a responsible bot.", align: "Tech & Society ethics/privacy",
       warmUp: "'What should a bot never ask?'", teach: "Ethics/privacy checklist.",
