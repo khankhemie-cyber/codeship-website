@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { Program } from "@/data/programs";
-import { NEXT_SEMESTER_START } from "@/data/programs";
-import { IN_PERSON, ONLINE, IN_PERSON_SATURDAY_SCHEDULE, type InPersonCity } from "@/data/locations";
-import { buildRegistrationUrl, type LocationSlug } from "@/lib/registration";
+import { IN_PERSON, type InPersonCity } from "@/data/locations";
+import { getCorsizioUrl } from "@/config/corsizioEvents";
+import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
+import { withUtmParams } from "@/lib/corsizioLink";
+import type { LocationSlug } from "@/lib/registration";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
 
 interface ProgramLocationSelectorProps {
@@ -17,6 +19,7 @@ function cityToSlug(city: InPersonCity): LocationSlug {
 }
 
 export default function ProgramLocationSelector({ program }: ProgramLocationSelectorProps) {
+  const searchParams = useSearchParams();
   const [location, setLocation] = useState<LocationSlug>(cityToSlug(IN_PERSON[0]));
 
   useEffect(() => {
@@ -30,20 +33,44 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
     trackSelectLocation({ program: program.slug, location: value });
   };
 
-  const registrationUrl = buildRegistrationUrl({ program: program.slug, location });
-  const saturday = IN_PERSON_SATURDAY_SCHEDULE[program.slug];
-  const online = ONLINE[program.slug];
+  const schedule = CORSIZIO_SCHEDULE[program.slug];
+  const mode = location === "online" ? "online" : "inperson";
+  const modeSchedule = schedule[mode];
+
+  const corsizioBaseUrl = getCorsizioUrl(program.slug, location);
+  const registrationUrl = corsizioBaseUrl ? withUtmParams(corsizioBaseUrl, searchParams) : null;
+
+  const handleRegisterClick = () => trackRegisterClick({ program: program.slug, location });
 
   const scheduleDetail =
     location === "online"
-      ? `Online — ${online.day}s, ${online.window} (${online.length} class)`
-      : `${IN_PERSON.find((c) => cityToSlug(c) === location)} — Saturdays, ${saturday.start}–${saturday.end} (${saturday.length} class)`;
+      ? `Online — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`
+      : `${IN_PERSON.find((c) => cityToSlug(c) === location)} — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`;
+
+  const ctaLabel = registrationUrl ? `Register for ${program.level}` : "Registration opening soon";
+
+  const ctaClasses =
+    "mt-3 w-full font-bold px-6 py-3.5 rounded-xl transition-colors inline-flex items-center justify-center text-center " +
+    (registrationUrl
+      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
+      : "bg-gray-200 text-gray-500 cursor-not-allowed");
+
+  const mobileCtaClasses =
+    "block w-full font-bold px-6 py-3 rounded-xl text-center transition-colors " +
+    (registrationUrl
+      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
+      : "bg-gray-200 text-gray-500 cursor-not-allowed");
+
+  const ctaLinkProps = registrationUrl
+    ? { href: registrationUrl, target: "_blank", rel: "noopener noreferrer" as const, onClick: handleRegisterClick }
+    : { "aria-disabled": true as const };
 
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
       <h2 className="text-xl font-bold text-[#001532] mb-1">Choose a location & schedule</h2>
       <p className="text-gray-500 text-sm mb-5">
-        {program.level} runs every Saturday at all five in-person locations, or online {online.day}s.
+        {program.level} runs every {schedule.inperson.days.toLowerCase()} at all five in-person locations, or online{" "}
+        {schedule.online.days.toLowerCase()}.
       </p>
 
       <fieldset>
@@ -70,7 +97,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
                 <span>
                   <span className="block font-semibold text-[#001532] text-sm">{city}</span>
                   <span className="block text-gray-500 text-xs">
-                    Saturdays, {saturday.start}–{saturday.end}
+                    {schedule.inperson.days}, {schedule.inperson.time}
                   </span>
                 </span>
               </label>
@@ -92,7 +119,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
             <span>
               <span className="block font-semibold text-[#001532] text-sm">Online</span>
               <span className="block text-gray-500 text-xs">
-                {online.day}s, {online.window} ({online.length})
+                {schedule.online.days}, {schedule.online.time}
               </span>
             </span>
           </label>
@@ -104,27 +131,15 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         {scheduleDetail}
       </div>
 
-      <p className="text-[#138A9A] text-xs font-semibold text-center mt-4">
-        Next semester starts {NEXT_SEMESTER_START}
-      </p>
-
-      <Link
-        href={registrationUrl}
-        onClick={() => trackRegisterClick({ program: program.slug, location })}
-        className="mt-3 w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-flex items-center justify-center text-center"
-      >
-        Register for {program.level}
-      </Link>
+      <a {...ctaLinkProps} className={ctaClasses}>
+        {ctaLabel}
+      </a>
 
       {/* Sticky mobile register bar, mirrors the same selection */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
-        <Link
-          href={registrationUrl}
-          onClick={() => trackRegisterClick({ program: program.slug, location })}
-          className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
-        >
-          Register for {program.level}
-        </Link>
+        <a {...ctaLinkProps} className={mobileCtaClasses}>
+          {ctaLabel}
+        </a>
       </div>
       {/* Spacer so the sticky bar never covers page content on mobile */}
       <div className="md:hidden h-16" aria-hidden="true" />

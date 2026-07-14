@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import RegistrationForm from "@/components/RegistrationForm";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getProgram } from "@/data/programs";
-import { locationLabel, type LocationValue } from "@/data/locations";
+import { getCorsizioUrl } from "@/config/corsizioEvents";
 import { pageMetadata } from "@/lib/pageMetadata";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
@@ -11,45 +12,55 @@ export const runtime = "edge";
 export const metadata: Metadata = pageMetadata({
   title: "Register | CODEship Academy",
   description:
-    "Register your child for CODEship Academy coding, AI, and STEM programs. Weekly classes, camps, school workshops, and more.",
+    "Register your child for CODEship Academy coding, AI, and STEM programs. Registration and payment are handled by Corsizio.",
   path: "/register",
 });
 
 interface Props {
-  searchParams: { program?: string; location?: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
+/**
+ * Registration and payment now happen on Corsizio, not this site. Old
+ * "Register" links and bookmarks point here with ?program=&location=; if
+ * that combination resolves to a live Corsizio event, forward straight to
+ * it (carrying any utm_* through for attribution). Otherwise, show a
+ * fallback so visitors aren't dropped on a dead end.
+ */
 export default function RegisterPage({ searchParams }: Props) {
-  const program = searchParams.program ? getProgram(searchParams.program) : undefined;
-  const location = searchParams.location as LocationValue | undefined;
+  const programParam = typeof searchParams.program === "string" ? searchParams.program : undefined;
+  const locationParam = typeof searchParams.location === "string" ? searchParams.location : undefined;
+  const program = programParam ? getProgram(programParam) : undefined;
+
+  if (program && locationParam) {
+    const baseUrl = getCorsizioUrl(program.slug, locationParam);
+    if (baseUrl) {
+      const url = new URL(baseUrl);
+      for (const [key, value] of Object.entries(searchParams)) {
+        if (key.startsWith("utm_") && typeof value === "string") url.searchParams.set(key, value);
+      }
+      redirect(url.toString());
+    }
+  }
 
   return (
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            Register Now
-          </h1>
-          <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-            Complete the form below and a member of our team will be in touch to confirm your spot and answer any questions.
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Registration opening soon</h1>
+          <p className="text-gray-300 text-lg max-w-xl mx-auto">
+            We couldn&apos;t find that program and location. Pick a program below to see availability and register.
           </p>
         </div>
       </section>
-
-      <section className="py-20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          {program && (
-            <div className="bg-[#E5A823]/15 border border-[#E5A823]/40 rounded-2xl px-6 py-4 mb-6 text-center">
-              <p className="text-[#001532] text-sm">
-                Registering for <strong>{program.level}</strong> ({program.gradeBand})
-                {location && <> — {locationLabel(location)}</>}
-              </p>
-            </div>
-          )}
-          <div className="bg-white rounded-2xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-[#001532] mb-6 text-center">Program Registration</h2>
-            <RegistrationForm />
-          </div>
+      <section className="py-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Link
+            href="/programs"
+            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors"
+          >
+            See Programs
+          </Link>
         </div>
       </section>
     </div>

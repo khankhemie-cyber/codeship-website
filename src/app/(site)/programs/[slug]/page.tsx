@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { PROGRAMS, getProgram, PROGRAM_STRUCTURE, JOURNEY_ARC, type ProgramSlug } from "@/data/programs";
 import { IN_PERSON, IN_PERSON_SATURDAY_SCHEDULE, ONLINE } from "@/data/locations";
@@ -267,7 +268,9 @@ export default function ProgramPage({ params }: Props) {
             {/* Sidebar: location & schedule selector */}
             <div className="lg:col-span-1">
               <div className="lg:sticky lg:top-24">
-                <ProgramLocationSelector program={program} />
+                <Suspense fallback={<div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}>
+                  <ProgramLocationSelector program={program} />
+                </Suspense>
               </div>
             </div>
           </div>

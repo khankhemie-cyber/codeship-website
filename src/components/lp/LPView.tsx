@@ -7,13 +7,15 @@ import Link from "next/link";
 import type { Campaign } from "@/data/campaigns";
 import { getVariant } from "@/data/variants";
 import { IN_PERSON } from "@/data/locations";
-import { buildRegistrationUrl, type LocationSlug } from "@/lib/registration";
+import type { LocationSlug } from "@/lib/registration";
+import { getCorsizioUrl } from "@/config/corsizioEvents";
+import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
+import { withUtmParams } from "@/lib/corsizioLink";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
 import LocationBar from "./LocationBar";
 import StickyMobileCTA from "./StickyMobileCTA";
 import FAQAccordion from "@/components/FAQAccordion";
 import LPFooter from "./LPFooter";
-import { NEXT_SEMESTER_START, NEXT_SEMESTER_START_FR } from "@/data/programs";
 
 const VALID_LOCATIONS = new Set<string>([...IN_PERSON.map((c) => c.toLowerCase()), "online"]);
 
@@ -35,7 +37,7 @@ const UI = {
     finalSub: "Book a free trial class today — no long-term contract, just one class to see if it's the right fit.",
     complianceNote:
       "Curriculum alignment claims support and align with — not endorsed or approved by — any ministry of education.",
-    semesterStart: `Next semester starts ${NEXT_SEMESTER_START}`,
+    openingSoon: "Registration opening soon",
   },
   fr: {
     scheduleHeading: "Emplacement et horaire",
@@ -54,9 +56,23 @@ const UI = {
     finalSub: "Réservez un cours d'essai gratuit dès aujourd'hui — sans contrat à long terme.",
     complianceNote:
       "Les mentions d'alignement au curriculum appuient et s'alignent avec — sans être endossées ou approuvées par — un ministère de l'Éducation.",
-    semesterStart: `La prochaine session débute le ${NEXT_SEMESTER_START_FR}`,
+    openingSoon: "Inscription bientôt disponible",
   },
 };
+
+const FR_DAYS: Record<string, string> = { Saturdays: "Samedis", Tuesdays: "Mardis", Thursdays: "Jeudis" };
+
+type ScheduleSlot = { days: string; dates: string; time: string };
+
+/** Minimal-effort FR display of the (English-authored) Corsizio schedule facts — day names translated, dates/time lightly adapted. */
+function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
+  if (lang === "en") return schedule;
+  return {
+    days: FR_DAYS[schedule.days] ?? schedule.days,
+    dates: schedule.dates.replace("Sep", "sept."),
+    time: schedule.time.replace(" AM EDT", " HAE").replace(" PM EDT", " HAE"),
+  };
+}
 
 function toSlug(city: string): LocationSlug {
   return city.toLowerCase() as LocationSlug;
@@ -71,22 +87,19 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
 
   const [location, setLocation] = useState<LocationSlug>(locationFromUrl ?? toSlug(IN_PERSON[0]));
 
-  const utmSource = searchParams.get("utm_source") ?? campaign.defaultSource;
-  const utmMedium = searchParams.get("utm_medium") ?? campaign.defaultMedium;
-  const utmCampaign = searchParams.get("utm_campaign") ?? undefined;
-  const variantId = searchParams.get("v");
-  const variant = getVariant(campaign.slug, variantId);
-
   const utmSnapshot = useMemo(
     () => ({
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
+      utm_source: searchParams.get("utm_source") ?? campaign.defaultSource,
+      utm_medium: searchParams.get("utm_medium") ?? campaign.defaultMedium,
+      utm_campaign: searchParams.get("utm_campaign") ?? undefined,
       utm_content: searchParams.get("utm_content") ?? undefined,
       utm_term: searchParams.get("utm_term") ?? undefined,
     }),
-    [utmSource, utmMedium, utmCampaign, searchParams]
+    [searchParams, campaign.defaultSource, campaign.defaultMedium]
   );
+
+  const variantId = searchParams.get("v");
+  const variant = getVariant(campaign.slug, variantId);
 
   useEffect(() => {
     trackView({ program: campaign.program, location, ...utmSnapshot });
@@ -104,13 +117,20 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
     };
   }, [campaign.lang]);
 
-  const registrationUrl = buildRegistrationUrl({
-    program: campaign.program,
-    location,
-    source: utmSource,
-    medium: utmMedium,
-    campaign: utmCampaign,
-  });
+  const mode = location === "online" ? "online" : "inperson";
+  const modeSchedule = localizeSchedule(CORSIZIO_SCHEDULE[campaign.program][mode], campaign.lang);
+  const scheduleLine =
+    campaign.lang === "fr"
+      ? `Prochain cours : ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`
+      : `Next class: ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`;
+
+  const corsizioBaseUrl = getCorsizioUrl(campaign.program, location);
+  const registrationUrl = corsizioBaseUrl ? withUtmParams(corsizioBaseUrl, searchParams) : null;
+
+  const secondaryCorsizioUrl = campaign.secondaryLink
+    ? getCorsizioUrl(campaign.secondaryLink.program, "online")
+    : null;
+  const secondaryUrl = secondaryCorsizioUrl ? withUtmParams(secondaryCorsizioUrl, searchParams) : null;
 
   const handleLocationChange = (value: LocationSlug) => {
     setLocation(value);
@@ -122,7 +142,14 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
   };
 
   const headline = variant.headline ?? campaign.adHeadline;
-  const ctaLabel = variant.ctaLabel;
+  const ctaLabel = registrationUrl ? variant.ctaLabel : t.openingSoon;
+
+  const ctaClasses = (base: string) =>
+    registrationUrl ? base : base.replace("bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]", "bg-gray-300 text-gray-500 cursor-not-allowed");
+
+  const ctaProps = registrationUrl
+    ? { href: registrationUrl, target: "_blank" as const, rel: "noopener noreferrer" as const, onClick: handleRegisterClick }
+    : { "aria-disabled": true as const };
 
   return (
     <div className="bg-[#FAF8F4]">
@@ -134,13 +161,14 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">{headline}</h1>
           <p className="text-gray-300 text-lg mb-7 leading-relaxed">{campaign.subhead}</p>
-          <Link
-            href={registrationUrl}
-            onClick={handleRegisterClick}
-            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
+          <a
+            {...ctaProps}
+            className={ctaClasses(
+              "inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
+            )}
           >
             {ctaLabel}
-          </Link>
+          </a>
           <p className="text-gray-400 text-xs mt-5">{campaign.trustLine}</p>
           <div className="relative w-full max-w-md mx-auto aspect-video rounded-2xl overflow-hidden mt-8 ring-2 ring-[#E5A823]/20">
             <Image
@@ -225,26 +253,17 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <div className="bg-[#001532] rounded-xl p-6 text-center mb-4">
             <h3 className="text-white font-bold text-lg mb-1">{campaign.offerHeadline}</h3>
             <p className="text-gray-300 text-sm mb-1">{campaign.offerBody}</p>
-            <p className="text-[#E5A823] text-xs font-semibold mb-4">{t.semesterStart}</p>
-            <Link
-              href={registrationUrl}
-              onClick={handleRegisterClick}
-              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors"
+            <p className="text-[#E5A823] text-xs font-semibold mb-4">{scheduleLine}</p>
+            <a
+              {...ctaProps}
+              className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors")}
             >
               {ctaLabel}
-            </Link>
+            </a>
           </div>
-          {campaign.secondaryLink && (
+          {campaign.secondaryLink && secondaryUrl && (
             <p className="text-center text-sm mt-4">
-              <Link
-                href={buildRegistrationUrl({
-                  program: campaign.secondaryLink.program,
-                  location: "online",
-                  source: utmSource,
-                  medium: utmMedium,
-                })}
-                className="text-[#E5A823] font-semibold hover:underline"
-              >
+              <Link href={secondaryUrl} target="_blank" rel="noopener noreferrer" className="text-[#E5A823] font-semibold hover:underline">
                 {campaign.secondaryLink.label}
               </Link>
             </p>
@@ -265,13 +284,12 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
         <div className="max-w-xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{t.finalHeading}</h2>
           <p className="text-gray-300 mb-6 text-sm">{t.finalSub}</p>
-          <Link
-            href={registrationUrl}
-            onClick={handleRegisterClick}
-            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
+          <a
+            {...ctaProps}
+            className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg")}
           >
             {ctaLabel}
-          </Link>
+          </a>
         </div>
       </section>
 
