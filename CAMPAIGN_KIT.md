@@ -109,7 +109,7 @@ Events (fired by the LPs, mirroring the UTM attribution — see `TRACKING_EVENTS
 |---|---|---|
 | `program_view` | LP mounts | `{ program, location? }` |
 | `select_location` | visitor changes the location/schedule selector | `{ program, location }` |
-| `register_click` | visitor clicks any Register/Book-a-trial CTA | `{ program, location }` |
+| `register_click` | visitor clicks any Register CTA | `{ program, location }` |
 
 Build the funnel report by joining these events (or the `utm_campaign`/`utm_content`
 carried onto the resulting Corsizio registration) — grouped by **program** and

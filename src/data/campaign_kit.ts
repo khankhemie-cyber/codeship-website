@@ -96,22 +96,22 @@ function buildAdCopySet(program: ProgramSlug, location: LocationKey): AdCopySet 
     ],
     primaryTexts: [
       `${campaign.subhead} ${schedule}.`,
-      `${p.outcome} Book a free trial class ${where}.`,
+      `${p.outcome} Register ${where} today.`,
     ],
     descriptions: [
       `${p.level} (${p.gradeBand}): ${p.codingSpace}. ${PROGRAM_STRUCTURE.semesters} semesters + capstone, ~${PROGRAM_STRUCTURE.sessionsApprox} sessions.`,
       `${schedule}. Project-based, inclusive by design. No experience needed.`,
-      `Free trial class, no long-term contract. Register in minutes.`,
+      `Register online in minutes. Seats are limited each semester.`,
     ],
     sitelinks: [
       { text: "See the full curriculum", description: `${PROGRAM_STRUCTURE.semesters} semesters, real projects, one capstone.` },
       { text: "Free sample kit", description: "Download a free sample lesson before you book." },
       { text: "Locations & schedule", description: "5 Canadian cities, Saturdays, or online." },
-      { text: "Book a free trial", description: "No long-term contract required." },
+      { text: "Register now", description: "Seats are limited each semester." },
     ],
     metaPrimaryTexts: [
-      `${campaign.adHeadline} ${p.outcome} ${schedule}. Book a free trial class today.`,
-      `Real projects, not worksheets: ${campaign.projects.slice(0, 3).join(", ")}. ${schedule}. Free trial class — no contract.`,
+      `${campaign.adHeadline} ${p.outcome} ${schedule}. Register today.`,
+      `Real projects, not worksheets: ${campaign.projects.slice(0, 3).join(", ")}. ${schedule}. Register online — seats are limited.`,
     ],
   };
 }
@@ -136,22 +136,22 @@ export const QUEBEC_FR_AD_COPY: AdCopySet = {
   ],
   primaryTexts: [
     "La Trousse Explorateurs, entièrement en français. En ligne les mardis, 16h–18h HE.",
-    "Donnez à votre enfant sa première expérience de codage, en français. Cours d'essai gratuit.",
+    "Donnez à votre enfant sa première expérience de codage, en français. Inscrivez-vous dès aujourd'hui.",
   ],
   descriptions: [
     "Explorateurs (maternelle-1re année) : blocs visuels. 4 sessions + projet final, environ 20 rencontres.",
     "En ligne, mardis 16h–18h HE. Apprentissage par projet, conçu pour l'inclusion.",
-    "Cours d'essai gratuit, sans contrat à long terme. Inscrivez-vous en quelques minutes.",
+    "Inscrivez-vous en ligne en quelques minutes. Places limitées à chaque session.",
   ],
   sitelinks: [
     { text: "Voir le programme complet", description: "4 sessions, projets réels, un projet final." },
     { text: "Trousse d'exemples gratuite", description: "Téléchargez une leçon d'exemple avant de réserver." },
     { text: "Horaires", description: "En ligne les mardis, 16h–18h HE." },
-    { text: "Réservez un cours d'essai", description: "Aucun contrat à long terme requis." },
+    { text: "Inscrivez-vous", description: "Places limitées à chaque session." },
   ],
   metaPrimaryTexts: [
-    "Le codage pour les jeunes, en français. La Trousse Explorateurs, en ligne les mardis. Réservez un cours d'essai gratuit.",
-    "Des projets réels, pas des feuilles d'exercices : Mon robot serviable, Cartes de gentillesse, Trieur de recyclage. Cours d'essai gratuit — sans contrat.",
+    "Le codage pour les jeunes, en français. La Trousse Explorateurs, en ligne les mardis. Inscrivez-vous dès aujourd'hui.",
+    "Des projets réels, pas des feuilles d'exercices : Mon robot serviable, Cartes de gentillesse, Trieur de recyclage. Inscrivez-vous en ligne — places limitées.",
   ],
 };
 
@@ -203,7 +203,7 @@ export const UTM_PLAN = {
 export const TRACKING_EVENTS = [
   { name: "program_view", when: "LP mounts", payload: "{ program, location? }" },
   { name: "select_location", when: "visitor changes the location/schedule selector", payload: "{ program, location }" },
-  { name: "register_click", when: "visitor clicks any Register/Book-a-trial CTA", payload: "{ program, location }" },
+  { name: "register_click", when: "visitor clicks any Register CTA", payload: "{ program, location }" },
 ] as const;
 
 export interface ComplianceChecklistItem {

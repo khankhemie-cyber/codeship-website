@@ -38,7 +38,7 @@ export const CORSIZIO_EVENTS = {
     vancouver: E + "6a555b236905bd52ffefbd20",
     online: E + "6a555c906905bd52fff03923",
   },
-}; // All CAD. USD markets (Guyana) use a SEPARATE Corsizio account — see corsizioEventsUsd.js.
+}; // All CAD. Guyana (GYD) registrations stay on the existing HubSpot form — see buildGuyanaRegistrationUrl.ts — not Corsizio.
 // For a direct-to-form flow, swap /event/ for /register/ in E.
 
 export function getCorsizioUrl(program, location) {

@@ -2,11 +2,18 @@
 
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import type { GuyanaCampaign } from "@/data/guyanaCampaigns";
-import { GUYANA_TRUST_LINE, GUYANA_OUTCOME_BULLETS, GUYANA_PROJECTS_BY_AGE, GUYANA_PRICING, GUYANA_FAQ } from "@/data/guyanaCampaigns";
+import {
+  GUYANA_TRUST_LINE,
+  GUYANA_OUTCOME_BULLETS,
+  GUYANA_PROJECTS_BY_AGE,
+  GUYANA_PRICING,
+  GUYANA_FAQ,
+  GUYANA_NEXT_SEMESTER_START,
+} from "@/data/guyanaCampaigns";
 import { getGuyanaHeadline } from "@/data/guyanaVariants";
-import { getCorsizioUrlUsd } from "@/config/corsizioEventsUsd";
-import { withUtmParams } from "@/lib/corsizioLink";
+import { buildGuyanaRegistrationUrl } from "@/lib/buildGuyanaRegistrationUrl";
 import { trackView, trackRegisterClick, trackPriceView } from "@/lib/analytics";
 import FAQAccordion from "@/components/FAQAccordion";
 import StickyMobileCTA from "@/components/lp/StickyMobileCTA";
@@ -41,17 +48,16 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // USD Corsizio account doesn't exist yet — see src/config/corsizioEventsUsd.js.
-  const corsizioBaseUrl = getCorsizioUrlUsd("online");
-  const registrationUrl = corsizioBaseUrl ? withUtmParams(corsizioBaseUrl, searchParams) : null;
-  const ctaLabel = registrationUrl ? "Register for Online Classes" : "Registration opening soon";
+  const registrationUrl = buildGuyanaRegistrationUrl({
+    page: campaign.slug,
+    source: utmSource,
+    medium: utmMedium,
+    campaign: utmCampaign,
+    content: utmContent,
+    term: utmTerm,
+  });
 
-  const ctaProps = registrationUrl
-    ? { href: registrationUrl, target: "_blank" as const, rel: "noopener noreferrer" as const, onClick: () => trackRegisterClick(eventBase) }
-    : { "aria-disabled": true as const };
-
-  const ctaClasses = (base: string) =>
-    registrationUrl ? base : base.replace("bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]", "bg-gray-300 text-gray-500 cursor-not-allowed");
+  const handleRegisterClick = () => trackRegisterClick(eventBase);
 
   const headline = getGuyanaHeadline(campaign.slug, variantParam);
 
@@ -67,15 +73,17 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
             <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
               GYD $20,000 per semester
             </span>
+            <span className="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full">
+              Next semester starts {GUYANA_NEXT_SEMESTER_START}
+            </span>
           </div>
-          <a
-            {...ctaProps}
-            className={ctaClasses(
-              "inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
-            )}
+          <Link
+            href={registrationUrl}
+            onClick={handleRegisterClick}
+            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
           >
-            {ctaLabel}
-          </a>
+            Register for Online Classes
+          </Link>
           <p className="text-gray-400 text-xs mt-5">{GUYANA_TRUST_LINE}</p>
         </div>
       </section>
@@ -128,12 +136,14 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
             <h3 className="text-white font-bold text-xl mb-1">{GUYANA_PRICING.semesterFeeLabel}</h3>
             <p className="text-gray-300 text-sm mb-1">{GUYANA_PRICING.includesLine}</p>
             <p className="text-gray-400 text-xs mb-1">{GUYANA_PRICING.perSessionLine}</p>
-            <a
-              {...ctaProps}
-              className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors")}
+            <p className="text-[#E5A823] text-xs font-semibold mb-4">Next semester starts {GUYANA_NEXT_SEMESTER_START}</p>
+            <Link
+              href={registrationUrl}
+              onClick={handleRegisterClick}
+              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors"
             >
-              {registrationUrl ? GUYANA_PRICING.ctaLabel : "Registration opening soon"}
-            </a>
+              {GUYANA_PRICING.ctaLabel}
+            </Link>
           </div>
         </section>
 
@@ -152,19 +162,20 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
             Give your child skills they can use in school, online, and in the future.
           </h2>
-          <a
-            {...ctaProps}
-            className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg")}
+          <Link
+            href={registrationUrl}
+            onClick={handleRegisterClick}
+            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
           >
-            {ctaLabel}
-          </a>
+            Register for Online Classes
+          </Link>
           <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
         </div>
       </section>
 
       <GYFooter />
 
-      <StickyMobileCTA href={registrationUrl} label={ctaLabel} onClick={() => trackRegisterClick(eventBase)} />
+      <StickyMobileCTA href={registrationUrl} label="Register for Online Classes" onClick={handleRegisterClick} />
       <div className="md:hidden h-16" aria-hidden="true" />
     </div>
   );

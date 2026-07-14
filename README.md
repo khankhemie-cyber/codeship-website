@@ -97,11 +97,12 @@ sources of truth:
 Both are consumed by `JourneyMap` (home page + `/programs#journey`), `ProgramLocationSelector`
 (the location/schedule picker on each `/programs/[slug]` page), and `AlignmentStrip`.
 
-### Registration & payment — Corsizio
+### Registration & payment — Corsizio (Canada) + HubSpot (Guyana)
 
-Registration, payment, seat caps, waitlists, receipts, and refunds are all handled by **Corsizio**,
-not this website. This site's only job is to send families to the correct Corsizio event and show the
-correct schedule. There is no on-site checkout and no HubSpot registration form anymore.
+Canadian program registration, payment, seat caps, waitlists, receipts, and refunds are all handled by
+**Corsizio**, not this website. This site's job for those pages is to send families to the correct
+Corsizio event and show the correct schedule. Guyana keeps the original HubSpot lead-capture form —
+see the [Guyana section](#guyana-online-course-landing-pages-gyslug) below for why.
 
 - `src/config/corsizioEvents.js` — the single source of truth mapping `{ program, location }` to a
   Corsizio event URL (CAD, one account for all 5 in-person cities + online). `getCorsizioUrl(program,
@@ -110,9 +111,6 @@ correct schedule. There is no on-site checkout and no HubSpot registration form 
   (`CORSIZIO_SCHEDULE[program].inperson` / `.online`), shown next to the CTA on `/programs/[slug]` and
   `/lp/:slug` so visitors always see the right schedule for the mode they picked — online classes run
   on different days/dates than in-person and must never show the in-person Saturday dates.
-- `src/config/corsizioEventsUsd.js` — a stub for the (not-yet-created) separate USD Corsizio account
-  Guyana markets need, since Corsizio is one-currency-per-account. Every value is `null` until that
-  account exists, so `/gy/:slug` CTAs show "Registration opening soon" in the meantime.
 - `src/lib/corsizioLink.ts` — `withUtmParams(baseUrl, searchParams)` appends any `utm_*` params found
   on the current page's URL onto the outgoing Corsizio link, so ad/campaign attribution survives the
   hand-off.
@@ -122,9 +120,11 @@ the CTA the same way: `getCorsizioUrl(program, location)` → append UTMs → op
 program+location has no Corsizio URL yet, the CTA is disabled and reads "Registration opening soon"
 instead of linking anywhere.
 
-`/register` is kept only as a redirect for old bookmarked/emailed links: it reads `?program=&location=`,
-resolves the matching Corsizio URL, and forwards there (carrying `utm_*` through). If it can't resolve
-a match, it shows a fallback pointing back to `/programs`.
+`/register` serves two purposes: for CAD requests (`?program=&location=`) it resolves the matching
+Corsizio URL and forwards there (carrying `utm_*` through) — kept for old bookmarked/emailed links. For
+Guyana requests (`?country=guyana`, built by `buildGuyanaRegistrationUrl`) it renders the HubSpot
+`RegistrationForm` instead, unchanged from before the Corsizio migration. Anything else falls back to a
+page pointing back to `/programs`.
 
 ### Analytics
 
@@ -192,30 +192,41 @@ metadata (no `noindex`), are included in `sitemap.ts`, and `robots.ts` does not 
 still share `/lp`'s nav isolation: no links from the main `Navigation`/`Footer`, and `src/app/gy/
 layout.tsx` renders only the shared `LPHeader` (logo → home) — never the main site nav.
 
-### Guyana is not a K-8 program, and parks on a USD placeholder for now
+### Guyana is not a K-8 program, and stays on the HubSpot form
 
 The main site's CAD registration (`src/config/corsizioEvents.js`) is keyed to a specific program
 (explorers/builders/developers/engineers) × Canadian location. Guyana registrations are a generic
-**online semester** priced in USD, and Corsizio is one-currency-per-account — so Guyana needs its own,
-separate Corsizio account, which doesn't exist yet.
+**online semester** priced in GYD, and Corsizio is one-currency-per-account, so a CAD-account Corsizio
+event was never the right fit here. Guyana CTAs stay on the original HubSpot lead-capture form instead
+of moving to Corsizio.
 
-Until it does, every `/gy/:slug` CTA is disabled and reads "Registration opening soon" —
-`GYView` resolves the CTA via `getCorsizioUrlUsd("online")` (`src/config/corsizioEventsUsd.js`), which
-currently returns `null` for every value. Once the USD account and its Corsizio event exist, fill in
-the real event URL in `corsizioEventsUsd.js` and the CTA activates automatically — no other code
-changes needed.
+`GYView` builds its CTA with `buildGuyanaRegistrationUrl({ page, source?, medium?, campaign?, content?,
+term? })` (`src/lib/buildGuyanaRegistrationUrl.ts`), which appends UTMs plus `country=guyana`,
+`location=online`, and `page` onto `/register`. `/register` detects `country=guyana` and renders
+`RegistrationForm` (the same `HubSpotForm` embed used before the Corsizio migration) instead of
+attempting a Corsizio redirect.
+
+| Param | Default | Values |
+|---|---|---|
+| `utm_source` | `meta` | `meta` \| `google` \| `whatsapp` \| `facebook` \| `instagram` |
+| `utm_medium` | `paid_social` | `paid_social` \| `cpc` \| `organic_social` \| `referral` |
+| `utm_campaign` | `guyana-online` | — |
+| `utm_content` | `guyana` | `georgetown` \| `east-bank-demerara` \| `east-coast-demerara` \| `berbice` \| `linden` \| `essequibo` \| `guyana` \| ... (any community slug) |
+| `utm_term` | derived from `page` | `online-coding` \| `math-english-coding` \| `ngsa-digital-skills` \| `computer-classes` \| `online-stem` |
+
+`GYView` reads any incoming `utm_*` from the URL and passes them straight through, falling back to
+these defaults for direct/testing traffic.
 
 ### Pricing (authoritative — render exactly this)
 
 **GYD $20,000 per semester** (optionally broken down as **GYD $5,000 per session**, "depending on the
-semester schedule") — see `GUYANA_PRICING` in `guyanaCampaigns.ts`. No Canadian city schedule or
-in-person language appears anywhere on these pages; the trust line is explicitly "Online ·
-Small-group learning · Math, English, writing, coding, and computer skills." Since registration is
-"opening soon" until the USD Corsizio account exists, these pages don't state a specific semester
-start date.
+semester schedule"), with the next semester starting **September 1, 2026**
+(`GUYANA_NEXT_SEMESTER_START` in `src/data/guyanaCampaigns.ts` — Guyana-specific, independent of the
+Canadian `CORSIZIO_SCHEDULE`) — see `GUYANA_PRICING` in `guyanaCampaigns.ts`. No Canadian city schedule
+or in-person language appears anywhere on these pages; the trust line is explicitly "Online ·
+Small-group learning · Math, English, writing, coding, and computer skills."
 
-There is no secondary lead-capture form on these pages — every CTA goes straight to registration
-(once the USD Corsizio account is live).
+There is no secondary lead-capture form on these pages — every CTA goes straight to registration.
 
 ### Compliance language
 

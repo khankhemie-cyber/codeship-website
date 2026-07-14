@@ -24,7 +24,6 @@ const UI = {
     scheduleHeading: "Location & schedule",
     outcomeHeading: "What your child will build",
     proofHeading: "What makes CODEship different",
-    proofSub: "Add a real parent testimonial here before this page goes live.",
     diff: [
       { title: "Project-based", desc: "Every session ends with real progress on a real project — not a worksheet." },
       { title: "Capstone-gated", desc: "Each level ends with a capstone project that shows what your child can really do." },
@@ -34,7 +33,7 @@ const UI = {
     offerHeading: "Ready to start?",
     faqHeading: "Common questions",
     finalHeading: "Dream. Code. Achieve.",
-    finalSub: "Book a free trial class today — no long-term contract, just one class to see if it's the right fit.",
+    finalSub: "Register today — classes run in 5 Canadian cities and online.",
     complianceNote:
       "Curriculum alignment claims support and align with — not endorsed or approved by — any ministry of education.",
     openingSoon: "Registration opening soon",
@@ -43,7 +42,6 @@ const UI = {
     scheduleHeading: "Emplacement et horaire",
     outcomeHeading: "Ce que votre enfant va construire",
     proofHeading: "Ce qui distingue CODEship",
-    proofSub: "Ajoutez ici un vrai témoignage de parent avant la mise en ligne.",
     diff: [
       { title: "Apprentissage par projet", desc: "Chaque cours se termine par un vrai progrès sur un vrai projet — jamais une feuille d'exercices." },
       { title: "Projet final requis", desc: "Chaque niveau se termine par un projet final qui démontre ce que votre enfant peut vraiment faire." },
@@ -53,7 +51,7 @@ const UI = {
     offerHeading: "Prêt à commencer?",
     faqHeading: "Questions fréquentes",
     finalHeading: "Rêver. Coder. Réussir.",
-    finalSub: "Réservez un cours d'essai gratuit dès aujourd'hui — sans contrat à long terme.",
+    finalSub: "Inscrivez-vous dès aujourd'hui — en ligne partout au Québec.",
     complianceNote:
       "Les mentions d'alignement au curriculum appuient et s'alignent avec — sans être endossées ou approuvées par — un ministère de l'Éducation.",
     openingSoon: "Inscription bientôt disponible",
@@ -217,9 +215,6 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <h2 id="proof-heading" className="text-2xl font-bold text-[#001532] mb-5 text-center">
             {t.proofHeading}
           </h2>
-          <div className="bg-white rounded-xl border border-dashed border-gray-300 p-5 mb-5 text-center">
-            <p className="text-gray-400 text-sm italic">{t.proofSub}</p>
-          </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {t.diff.map((d) => (
               <div key={d.title} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
