@@ -62,15 +62,17 @@ All four are eligible in all 5 in-person cities plus their online day.
 
 | Campaign | Landing page | Registers via |
 |---|---|---|
-| explorers | `/lp/explorers` | `/register` (existing form) |
-| builders | `/lp/builders` | `/register` (existing form) |
-| developers | `/lp/developers` | `/register` (existing form) |
-| engineers | `/lp/engineers` | `/register` (existing form) |
-| quebec-fr | `/lp/quebec-fr` | `/register` (existing form) |
+| explorers | `/lp/explorers` | Corsizio (per location, see `corsizioEvents.js`) |
+| builders | `/lp/builders` | Corsizio (per location, see `corsizioEvents.js`) |
+| developers | `/lp/developers` | Corsizio (per location, see `corsizioEvents.js`) |
+| engineers | `/lp/engineers` | Corsizio (per location, see `corsizioEvents.js`) |
+| quebec-fr | `/lp/quebec-fr` | Corsizio (online only) |
 
-**No new registration form was built** for either the main site or these paid LPs.
-Every CTA calls `buildRegistrationUrl()` (`src/lib/registration.ts`), which appends UTMs
-to `/register` and lets the existing HubSpot-backed form's own tracking pick them up.
+Registration and payment happen entirely on Corsizio. Every CTA resolves
+`getCorsizioUrl(program, location)` (`src/config/corsizioEvents.js`) and opens that
+event directly, with any incoming `utm_*` params appended via `withUtmParams()`
+(`src/lib/corsizioLink.ts`). If a program+location isn't live on Corsizio yet, the CTA
+is disabled and reads "Registration opening soon."
 
 ### UTM plan
 
@@ -80,10 +82,11 @@ to `/register` and lets the existing HubSpot-backed form's own tracking pick the
 | `utm_medium` | `cpc` \| `paid_social` |
 | `utm_campaign` | program slug (`explorers` \| `builders` \| `developers` \| `engineers`) |
 | `utm_content` | location slug (`toronto` \| `vaughan` \| `oshawa` \| `calgary` \| `vancouver` \| `online`) |
-| `utm_term` | `in-person` \| `online-{day}-1600` |
+| `utm_term` | ad-set specific; whatever's on the incoming URL is passed through as-is |
 
-Every registration is attributable by **program × location** end-to-end, with no new
-backend — see `UTM_PLAN` in `campaign_kit.ts`.
+Every registration is attributable by **program × location** end-to-end — the LP just
+forwards whatever `utm_*` params it received onto the Corsizio link; see `UTM_PLAN` in
+`campaign_kit.ts`.
 
 ## 6. Compliance pass
 
@@ -108,6 +111,6 @@ Events (fired by the LPs, mirroring the UTM attribution — see `TRACKING_EVENTS
 | `select_location` | visitor changes the location/schedule selector | `{ program, location }` |
 | `register_click` | visitor clicks any Register/Book-a-trial CTA | `{ program, location }` |
 
-Build the funnel report by joining these events (or the `utm_campaign`/`utm_content` on
-the resulting HubSpot contact) — grouped by **program** and **location/province** —
-once GA4/Meta Pixel are wired (see README.md).
+Build the funnel report by joining these events (or the `utm_campaign`/`utm_content`
+carried onto the resulting Corsizio registration) — grouped by **program** and
+**location/province** — once GA4/Meta Pixel are wired (see README.md).

@@ -185,11 +185,11 @@ export interface RoutingEntry {
   registersVia: string;
 }
 
-/** Ad set → landing page → existing registration form routing map. */
+/** Ad set → landing page → Corsizio registration routing map. */
 export const LP_ROUTING: RoutingEntry[] = CAMPAIGNS.map((c) => ({
   campaignSlug: c.slug,
   landingPage: `/lp/${c.slug}`,
-  registersVia: "/register (existing HubSpot-backed program registration form)",
+  registersVia: "Corsizio (see src/config/corsizioEvents.js — one event per program x location)",
 }));
 
 export const UTM_PLAN = {
@@ -197,7 +197,7 @@ export const UTM_PLAN = {
   utm_medium: "cpc | paid_social",
   utm_campaign: "program slug (explorers | builders | developers | engineers)",
   utm_content: "location slug (toronto | vaughan | oshawa | calgary | vancouver | online)",
-  utm_term: "in-person | online-{day}-1600",
+  utm_term: "ad-set specific; passed through as-is onto the Corsizio link",
 } as const;
 
 export const TRACKING_EVENTS = [
