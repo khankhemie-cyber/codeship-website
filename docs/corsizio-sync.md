@@ -58,8 +58,8 @@ One row per registration:
   lookup table mapping Corsizio event ID → `{ program, location, mode }`
   mirroring that config — keep the two in sync by hand until/unless this
   becomes code.
-- Guyana (`/gy/:slug`) registrations use a separate, not-yet-created USD
-  Corsizio account (see `src/config/corsizioEventsUsd.js`) and are out of
-  scope for this sync until that account exists.
+- Guyana (`/gy/:slug`) registrations stay on the existing HubSpot
+  lead-capture form (not Corsizio) and are out of scope for this sync —
+  they'd need a separate HubSpot → Supabase path if that's ever wanted.
 - No PII beyond what's listed above should be synced without a separate
   privacy review.
