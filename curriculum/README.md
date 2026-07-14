@@ -40,13 +40,13 @@ Every program folder contains: `master-curriculum-manual` (MCM) · `teacher-manu
 
 ## Publishing standards applied
 
-All 43 documents follow one system (CSA-STD-PUB): unified document IDs and version numbering; identical volume structure per program; one session-formatting standard (55 min: Warm-up 5 → Teach 10 → Build 30 → Reflect 10); one quiz standard (5 items, 10 min, sessions x.3/x.5); one rubric system (Emerging → Developing → Proficient → Extending across Concept & creativity / Technical skill / Process & problem-solving / Communication & sharing); five standard callout types; fixed brand phrases and terminology; alignment disclaimers wherever alignment is claimed; black-and-white photocopy-safe print rules.
+All 41 documents follow one system (CSA-STD-PUB): unified document IDs and version numbering; identical volume structure per program; one session-formatting standard (55 min: Warm-up 5 → Teach 10 → Build 30 → Reflect 10); one quiz standard (5 items, 10 min, sessions x.3/x.5); one rubric system (Emerging → Developing → Proficient → Extending across Concept & creativity / Technical skill / Process & problem-solving / Communication & sharing); five standard callout types; fixed brand phrases and terminology; alignment disclaimers wherever alignment is claimed; black-and-white photocopy-safe print rules.
 
 ## Version control log
 
 | Date | Version | Change | Documents |
 |------|---------|--------|-----------|
-| 2026-07-14 | 1.0 | Initial publication of the complete library: shared standards (4), Explorers set (8), Builders set (8), Developers set (8), Engineers set (8), French plan + 2 FR volumes (3), audit report (1), this index (1) | 43 documents |
+| 2026-07-14 | 1.0 | Initial publication of the complete library: shared standards (4), Explorers set (8), Builders set (8), Developers set (8), Engineers set (8), French plan + 2 FR volumes (3), audit report (1), this index (1) | 41 documents |
 
 **Open work (scheduled, not yet published):** Phase-1 French completion — full Explorateurs FR set + Ingénieurs FR teacher set (spec: CSA-STD-FR §1) · resolution of audit items U-1 to U-6 (→ reports/executive-curriculum-audit.md §7).
 

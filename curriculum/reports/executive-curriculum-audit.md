@@ -96,7 +96,7 @@ R-1 through R-6 (§2), plus: quiz format standardization across ages (picture-ba
 
 ## 8. Quality assurance record
 
-Each volume was reviewed against the CSA-STD-PUB checklist from the perspectives required by the project charter (curriculum reviewer, publisher, teacher, parent, student, franchise operator, QA, production editor). Verified across all 43 documents: session math (5+5 per semester ×4 +2 capstone = 22; quizzes at x.3/x.5 = 8), timing sums (5+10+30+10 = 55), rubric structure identical K–8, terminology per STD-PUB §9, cross-reference IDs resolve, every public promise traceable to a library location, alignment disclaimers present wherever alignment is claimed, safety rails present in all Engineers volumes, FR terminology matches the binding glossary.
+Each volume was reviewed against the CSA-STD-PUB checklist from the perspectives required by the project charter (curriculum reviewer, publisher, teacher, parent, student, franchise operator, QA, production editor). Verified across all 41 documents: session math (5+5 per semester ×4 +2 capstone = 22; quizzes at x.3/x.5 = 8), timing sums (5+10+30+10 = 55), rubric structure identical K–8, terminology per STD-PUB §9, cross-reference IDs resolve, every public promise traceable to a library location, alignment disclaimers present wherever alignment is claimed, safety rails present in all Engineers volumes, FR terminology matches the binding glossary.
 
 ## 9. Revision history
 
