@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { getLocationOptions, type ProgramSlug } from "@/data/locations";
+import { IN_PERSON, type ProgramSlug } from "@/data/locations";
+import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
 import type { LocationSlug } from "@/lib/registration";
 
 interface LocationBarProps {
@@ -30,11 +31,28 @@ function toSlug(city: string): LocationSlug {
   return city.toLowerCase() as LocationSlug;
 }
 
+interface LocationOption {
+  value: LocationSlug;
+  label: string;
+}
+
+function buildOptions(program: ProgramSlug): LocationOption[] {
+  const schedule = CORSIZIO_SCHEDULE[program];
+  const inPerson: LocationOption[] = IN_PERSON.map((city) => ({
+    value: toSlug(city),
+    label: `${city} — ${schedule.inperson.days}, ${schedule.inperson.dates}, ${schedule.inperson.time}`,
+  }));
+  return [
+    ...inPerson,
+    { value: "online", label: `Online — ${schedule.online.days}, ${schedule.online.dates}, ${schedule.online.time}` },
+  ];
+}
+
 export default function LocationBar({ program, value, onChange, defaulted, lang = "en" }: LocationBarProps) {
   const [expanded, setExpanded] = useState(!defaulted);
   const t = COPY[lang];
-  const options = getLocationOptions(program);
-  const selectedLabel = options.find((o) => (o.type === "online" ? "online" : toSlug(o.city)) === value)?.label;
+  const options = buildOptions(program);
+  const selectedLabel = options.find((o) => o.value === value)?.label;
 
   if (!expanded) {
     return (
@@ -60,11 +78,10 @@ export default function LocationBar({ program, value, onChange, defaulted, lang 
         <legend className="text-sm font-semibold text-[#001532] mb-3">{t.heading}</legend>
         <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {options.map((opt) => {
-            const optValue: LocationSlug = opt.type === "online" ? "online" : toSlug(opt.city);
-            const checked = value === optValue;
+            const checked = value === opt.value;
             return (
               <label
-                key={optValue}
+                key={opt.value}
                 className={`flex items-center gap-2.5 rounded-lg border-2 px-3 py-2.5 cursor-pointer text-sm transition-colors ${
                   checked ? "border-[#E5A823] bg-[#E5A823]/10" : "border-gray-200 hover:border-gray-300"
                 }`}
@@ -74,7 +91,7 @@ export default function LocationBar({ program, value, onChange, defaulted, lang 
                   name={`lp-location-${program}`}
                   checked={checked}
                   onChange={() => {
-                    onChange(optValue);
+                    onChange(opt.value);
                     setExpanded(false);
                   }}
                   className="accent-[#E5A823] w-4 h-4 shrink-0"

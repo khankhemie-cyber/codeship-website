@@ -23,9 +23,8 @@ export type ProgramSlug = "explorers" | "builders" | "developers" | "engineers";
 /**
  * Online (virtual) weekly schedule — one 55-minute class per program, back-to-back
  * by pair (Explorers/Builders on Tuesday, Developers/Engineers on Thursday, each
- * pair younger-first). `start24` is the 24-hour ET start time, used only to build
- * a stable registration UTM slot slug (see src/lib/registration.ts) — keep it in
- * sync with `window` if the schedule changes again.
+ * pair younger-first). Registration/checkout dates and times now live in
+ * src/config/corsizioSchedule.js — keep the two in sync if the schedule changes.
  */
 export const ONLINE: Record<
   ProgramSlug,
@@ -68,29 +67,3 @@ export const IN_PERSON_SATURDAY_AGENDA: Array<
   { type: "class", program: "engineers", start: "12:50 PM", end: "1:45 PM" },
 ];
 
-export type LocationOption =
-  | { type: "in-person"; city: InPersonCity; label: string }
-  | { type: "online"; label: string };
-
-/** Every program's selectable options = the 5 in-person cities (Saturdays) plus Online on that program's day. */
-export function getLocationOptions(program: ProgramSlug): LocationOption[] {
-  const schedule = IN_PERSON_SATURDAY_SCHEDULE[program];
-  const inPerson: LocationOption[] = IN_PERSON.map((city) => ({
-    type: "in-person",
-    city,
-    label: `${city} — Saturdays, ${schedule.start}–${schedule.end}`,
-  }));
-  const online: LocationOption = {
-    type: "online",
-    label: `Online — ${ONLINE[program].day}s, ${ONLINE[program].window}`,
-  };
-  return [...inPerson, online];
-}
-
-export type LocationValue = Lowercase<InPersonCity> | "online";
-
-export function locationLabel(value: LocationValue): string {
-  if (value === "online") return "Online";
-  const city = IN_PERSON.find((c) => c.toLowerCase() === value);
-  return city ?? value;
-}
