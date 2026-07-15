@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { articles } from "@/data/articles";
 import { PROGRAMS } from "@/data/programs";
 import { GUYANA_CAMPAIGNS } from "@/data/guyanaCampaigns";
+import { TRINIDAD_CAMPAIGNS } from "@/data/trinidadCampaigns";
 
 const cities = [
   "oshawa", "toronto", "mississauga", "brampton", "markham",
@@ -66,5 +67,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages];
+  // Trinidad and Tobago online-cohort landing pages — SEO-indexed like /gy.
+  // Clean routes only; the paid-only ?lead_submitted=1 and ?v= variants are
+  // deliberately excluded.
+  const trinidadPages: MetadataRoute.Sitemap = TRINIDAD_CAMPAIGNS.map((c) => ({
+    url: `${BASE_URL}/tt/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages, ...trinidadPages];
 }
