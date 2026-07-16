@@ -38,6 +38,12 @@ Every program folder contains: `master-curriculum-manual` (MCM) · `teacher-manu
 |----------|----|
 | [Executive Curriculum Audit & Reconciliation Report](reports/executive-curriculum-audit.md) — sources of truth, reconciliation decisions, completeness audit, website alignment, modernization summary, resolved/unresolved issues | CSA-RPT-AUDIT-EN-v1.0 |
 
+### Print edition (`print/`)
+| Document | ID |
+|----------|----|
+| [Print-Readiness & Asset Verification Report](print/print-readiness-report.md) | CSA-RPT-PRINT-EN-v1.0 |
+| `print/CODEship_K8_Curriculum_EN_Print_Ready_v1.0/` — the verified 64-PDF English print kit (4 programs × 16 documents) + vendor spec sheet + checksummed manifest. **For classroom-delivery structure (classes per semester, quiz format), the print kit is authoritative**; the markdown manuals reconcile to it in v1.1 (audit item R-7). | — |
+
 ## Publishing standards applied
 
 All 41 documents follow one system (CSA-STD-PUB): unified document IDs and version numbering; identical volume structure per program; one session-formatting standard (55 min: Warm-up 5 → Teach 10 → Build 30 → Reflect 10); one quiz standard (5 items, 10 min, sessions x.3/x.5); one rubric system (Emerging → Developing → Proficient → Extending across Concept & creativity / Technical skill / Process & problem-solving / Communication & sharing); five standard callout types; fixed brand phrases and terminology; alignment disclaimers wherever alignment is claimed; black-and-white photocopy-safe print rules.
@@ -47,6 +53,7 @@ All 41 documents follow one system (CSA-STD-PUB): unified document IDs and versi
 | Date | Version | Change | Documents |
 |------|---------|--------|-----------|
 | 2026-07-14 | 1.0 | Initial publication of the complete library: shared standards (4), Explorers set (8), Builders set (8), Developers set (8), Engineers set (8), French plan + 2 FR volumes (3), audit report (1), this index (1) | 41 documents |
+| 2026-07-15 | 1.0 (print) | English Print Edition verified and added: 64-PDF kit (Explorers Curriculum Guide rebuilt to series standard; metadata stamped; fonts/page-boxes/content verified), vendor spec sheet, checksummed manifest, print-readiness report. Audit U-1 resolved; R-7 (session/quiz structural reconciliation) opened for v1.1 | +67 files |
 
 **Open work (scheduled, not yet published):** Phase-1 French completion — full Explorateurs FR set + Ingénieurs FR teacher set (spec: CSA-STD-FR §1) · resolution of audit items U-1 to U-6 (→ reports/executive-curriculum-audit.md §7).
 
