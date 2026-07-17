@@ -3,7 +3,8 @@ import { pageMetadata } from "@/lib/pageMetadata";
 
 export const metadata: Metadata = pageMetadata({
   title: "Refund Policy | CODEship Academy",
-  description: "CODEship Academy's refund policy for program registrations processed through Corsizio.",
+  description:
+    "CODEship Academy's refund policy: full refunds up to 7 days before the first class, no refunds after that, and no makeup classes for missed sessions.",
   path: "/policies/refund",
 });
 
@@ -30,47 +31,79 @@ export default function RefundPolicyPage() {
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">2. Requesting a Refund</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">2. Full Refunds — Up to 7 Days Before the First Class</h2>
               <p>
-                To request a refund or cancellation, email{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
-                  admin@codeshipacademy.com
-                </a>{" "}
-                with your registration details, or reply to the confirmation email you received from Corsizio.
-                Approved refunds are issued back to the original payment method through Corsizio.
+                All CODEship Academy programs are <strong>fully refundable up to 7 days before the first
+                scheduled class</strong> of the semester you registered for. Cancel within this window and you
+                will receive a 100% refund of the program fee — no cancellation fees and no questions asked.
+              </p>
+              <p className="mt-3">
+                Approved refunds are issued to the original payment method through Corsizio. Please allow
+                5–10 business days for the refund to appear on your statement, depending on your bank or card
+                issuer.
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">3. Refund Windows</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">3. Cancellations Within 7 Days of the First Class</h2>
               <p>
-                The specific refund window for a given class (for example, how many days before the first
-                session a full or partial refund is available) is shown at checkout and confirmed in your
-                Corsizio registration email. Please refer to that confirmation for the exact terms that apply
-                to your registration.
+                Cancellations made <strong>less than 7 days before the first scheduled class</strong>, or after
+                the program has started, are <strong>not eligible for a refund</strong>. Our semesters run for
+                just 4 weeks, and instructor staffing, class sizes, and seat allocations are finalized in the
+                week leading up to the first class — a late cancellation means a seat another student could
+                have taken goes unused.
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">4. Missed Classes & Withdrawal</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">4. Missed Classes — No Makeup Classes</h2>
               <p>
-                If your child needs to withdraw from a program after it has started, or misses individual
-                sessions, contact us at{" "}
+                There are <strong>no makeup classes</strong> for missed sessions in any program. A missed class
+                is treated as a <strong>no-show</strong> and is not eligible for a refund, credit, transfer, or
+                replacement session. Because each semester is only 4 weeks long, every session builds directly
+                on the one before it, and our instructors and class schedules are committed for the full
+                semester in advance.
+              </p>
+              <p className="mt-3">
+                If your child misses a class, contact us at{" "}
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
-                and we&apos;ll work with you on next steps, consistent with the terms confirmed at
-                registration.
+                and we&apos;ll share what was covered so they can catch up before the next session.
               </p>
             </div>
             <div>
               <h2 className="text-xl font-bold text-[#001532] mb-3">5. Program Changes or Cancellations by CODEship</h2>
               <p>
-                If CODEship Academy cancels a class or program (for example, due to insufficient enrollment),
-                registered families will be offered a full refund or the option to transfer to another
-                available class or location.
+                If CODEship Academy cancels a class or program (for example, due to insufficient enrollment or
+                instructor availability), registered families will receive a <strong>full refund</strong> — including
+                for classes already underway, on a prorated basis for the sessions not delivered — or the option
+                to transfer to another available class or location at no charge. If we reschedule a program and
+                the new time doesn&apos;t work for your family, you may request a full refund before the first
+                rescheduled class.
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">6. Questions</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">6. How to Request a Refund</h2>
+              <p>
+                To cancel a registration or request a refund, email{" "}
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                  admin@codeshipacademy.com
+                </a>{" "}
+                with your registration details, or reply to the confirmation email you received from Corsizio.
+                Your cancellation date is the date we receive your request, and we will confirm receipt and the
+                outcome of your request in writing.
+              </p>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">7. Your Consumer Rights</h2>
+              <p>
+                This policy is applied consistently and in good faith for all families. Nothing in this policy
+                limits any non-waivable rights you may have under applicable consumer protection legislation in
+                your province or territory of residence in Canada (or other applicable law), including rights
+                relating to services that are not delivered as agreed.
+              </p>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">8. Questions</h2>
               <p>
                 Questions about this refund policy or an existing registration should be directed to:{" "}
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
