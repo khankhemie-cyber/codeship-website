@@ -1,2 +1,5 @@
 /franchise/*
   X-Robots-Tag: noindex, nofollow, noarchive
+
+/emails/*
+  X-Robots-Tag: noindex, nofollow, noarchive
