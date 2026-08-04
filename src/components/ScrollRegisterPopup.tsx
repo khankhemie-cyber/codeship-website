@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const DISMISS_KEY = "codeship-register-popup-dismissed";
+const SCROLL_THRESHOLD = 0.3; // show once 30% of the page has been scrolled…
+const TIME_FALLBACK_MS = 12000; // …or after 12s, whichever comes first.
 
 interface ScrollRegisterPopupProps {
   city?: string | null;
@@ -11,8 +13,9 @@ interface ScrollRegisterPopupProps {
 
 /**
  * A dismissible registration nudge that slides in after the visitor scrolls
- * ~40% of the page. Dismissed state is kept per browser session, and the
- * entrance animation is skipped for visitors who prefer reduced motion.
+ * ~30% of the page, with a 12s time fallback so it still appears on short
+ * sessions. Dismissed state is kept per browser session, and the entrance
+ * animation is skipped for visitors who prefer reduced motion.
  */
 export default function ScrollRegisterPopup({ city }: ScrollRegisterPopupProps) {
   const [visible, setVisible] = useState(false);
@@ -24,18 +27,29 @@ export default function ScrollRegisterPopup({ city }: ScrollRegisterPopupProps) 
 
     setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      setVisible(true);
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(timer);
+    };
+
     const onScroll = () => {
       const scrolled = window.scrollY + window.innerHeight;
       const total = document.documentElement.scrollHeight;
-      if (total > 0 && scrolled / total >= 0.4) {
-        setVisible(true);
-        window.removeEventListener("scroll", onScroll);
-      }
+      if (total > 0 && scrolled / total >= SCROLL_THRESHOLD) show();
     };
 
+    const timer = setTimeout(show, TIME_FALLBACK_MS);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll(); // In case the page is already scrolled past the threshold.
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(timer);
+    };
   }, []);
 
   const dismiss = () => {
@@ -57,7 +71,7 @@ export default function ScrollRegisterPopup({ city }: ScrollRegisterPopupProps) 
     <div
       role="dialog"
       aria-label="Register for CODEship Academy"
-      className={`fixed bottom-4 right-4 z-50 max-w-sm w-[calc(100%-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 ${
+      className={`fixed bottom-4 right-4 z-[60] max-w-sm w-[calc(100%-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 ${
         reduceMotion ? "" : "animate-fade-in-up"
       }`}
     >
@@ -80,7 +94,7 @@ export default function ScrollRegisterPopup({ city }: ScrollRegisterPopupProps) 
         onClick={dismiss}
         className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
       >
-        See programs & register
+        See programs &amp; register
       </Link>
     </div>
   );
