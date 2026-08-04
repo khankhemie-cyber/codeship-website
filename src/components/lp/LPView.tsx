@@ -8,9 +8,8 @@ import type { Campaign } from "@/data/campaigns";
 import { getVariant } from "@/data/variants";
 import { IN_PERSON } from "@/data/locations";
 import type { LocationSlug } from "@/lib/registration";
-import { getCorsizioUrl } from "@/config/corsizioEvents";
-import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
-import { withUtmParams } from "@/lib/corsizioLink";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { PROGRAM_LINKS } from "@/lib/payment-links";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
 import LocationBar from "./LocationBar";
 import StickyMobileCTA from "./StickyMobileCTA";
@@ -62,7 +61,7 @@ const FR_DAYS: Record<string, string> = { Saturdays: "Samedis", Tuesdays: "Mardi
 
 type ScheduleSlot = { days: string; dates: string; time: string };
 
-/** Minimal-effort FR display of the (English-authored) Corsizio schedule facts — day names translated, dates/time lightly adapted. */
+/** Minimal-effort FR display of the (English-authored) class schedule facts — day names translated, dates/time lightly adapted. */
 function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
   if (lang === "en") return schedule;
   return {
@@ -116,19 +115,16 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
   }, [campaign.lang]);
 
   const mode = location === "online" ? "online" : "inperson";
-  const modeSchedule = localizeSchedule(CORSIZIO_SCHEDULE[campaign.program][mode], campaign.lang);
+  const modeSchedule = localizeSchedule(CLASS_SCHEDULE[campaign.program][mode], campaign.lang);
   const scheduleLine =
     campaign.lang === "fr"
       ? `Prochain cours : ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`
       : `Next class: ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`;
 
-  const corsizioBaseUrl = getCorsizioUrl(campaign.program, location);
-  const registrationUrl = corsizioBaseUrl ? withUtmParams(corsizioBaseUrl, searchParams) : null;
+  // Checkout is a Stripe Payment Link per program — location is informational only.
+  const registrationUrl = PROGRAM_LINKS[campaign.program].url;
 
-  const secondaryCorsizioUrl = campaign.secondaryLink
-    ? getCorsizioUrl(campaign.secondaryLink.program, "online")
-    : null;
-  const secondaryUrl = secondaryCorsizioUrl ? withUtmParams(secondaryCorsizioUrl, searchParams) : null;
+  const secondaryUrl = campaign.secondaryLink ? PROGRAM_LINKS[campaign.secondaryLink.program].url : null;
 
   const handleLocationChange = (value: LocationSlug) => {
     setLocation(value);
@@ -140,14 +136,17 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
   };
 
   const headline = variant.headline ?? campaign.adHeadline;
-  const ctaLabel = registrationUrl ? variant.ctaLabel : t.openingSoon;
+  const ctaLabel = variant.ctaLabel;
 
-  const ctaClasses = (base: string) =>
-    registrationUrl ? base : base.replace("bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]", "bg-gray-300 text-gray-500 cursor-not-allowed");
+  // Stripe checkout is always available — no "opening soon" disabled state.
+  const ctaClasses = (base: string) => base;
 
-  const ctaProps = registrationUrl
-    ? { href: registrationUrl, target: "_blank" as const, rel: "noopener noreferrer" as const, onClick: handleRegisterClick }
-    : { "aria-disabled": true as const };
+  const ctaProps = {
+    href: registrationUrl,
+    target: "_blank" as const,
+    rel: "noopener noreferrer" as const,
+    onClick: handleRegisterClick,
+  };
 
   return (
     <div className="bg-[#FAF8F4]">

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Analytics from "@/components/Analytics";
+import CookieBanner from "@/components/CookieBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,8 +16,15 @@ export const metadata: Metadata = {
     template: "%s | CODEship Academy",
   },
   description:
-    "CODEship Academy offers children's coding, AI, and STEM programs through weekly classes, camps, and school workshops. Creativity before code.",
-  keywords: ["kids coding", "STEM education", "children AI programs", "coding camps", "school workshops"],
+    "Live online coding classes for kids in Canada — coding, AI, and STEM for ages 4–16 through weekly classes, camps, and school workshops. Creativity before code.",
+  keywords: [
+    "coding classes for kids",
+    "kids coding classes online",
+    "coding for kids Canada",
+    "STEM programs for schools",
+    "AI classes for kids",
+    "kids coding camps",
+  ],
   authors: [{ name: "CODEship Academy" }],
   creator: "CODEship Academy",
   metadataBase: new URL("https://www.codeshipacademy.com"),
@@ -56,7 +65,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">{children}</body>
+      <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">
+        {children}
+        <CookieBanner />
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -1,10 +1,10 @@
 /**
- * Mode-correct class schedule per program, read alongside corsizioEvents.js.
- * Online classes do NOT start Sept 5 and are NOT on Saturdays — in-person
- * runs Saturdays Sep 5-26, online runs Tuesdays (Explorers/Builders) or
- * Thursdays (Developers/Engineers) starting Sep 1 / Sep 3.
+ * Mode-correct class schedule per program (informational display only).
+ * In-person runs Saturdays; online runs Tuesdays (Explorers/Builders) or
+ * Thursdays (Developers/Engineers). Checkout is handled by Stripe Payment
+ * Links (see src/lib/payment-links.ts), not by these dates.
  */
-export const CORSIZIO_SCHEDULE = {
+export const CLASS_SCHEDULE = {
   explorers: {
     inperson: { days: "Saturdays", dates: "Sep 5, 12, 19, 26, 2026", time: "9:00–10:00 AM EDT" },
     online: { days: "Tuesdays", dates: "Sep 1, 8, 15, 22, 2026", time: "4:00–5:00 PM EDT" },

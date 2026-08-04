@@ -2,11 +2,10 @@ import type { GuyanaPageSlug } from "@/data/guyanaCampaigns";
 
 /**
  * Guyana registrations stay on the existing HubSpot lead-capture form
- * (embedded on /register) rather than Corsizio — Guyana prices in GYD and
- * there's no Corsizio account for that market. Guyana registrations are a
- * generic "online semester" — not tied to a specific K-8 program slug (see
- * corsizioEvents.js's per-program CAD map for the Canadian in-person/online
- * flow) — so this builds its own UTM shape onto /register.
+ * (embedded on /register) — Guyana prices in GYD. Guyana registrations are a
+ * generic "online semester" — not tied to a specific K-8 program slug (the
+ * Canadian flow checks out per-program via Stripe on /register/[program]) —
+ * so this builds its own UTM shape onto /register.
  */
 const TERM_BY_PAGE: Record<GuyanaPageSlug, string> = {
   "online-coding-classes": "online-coding",

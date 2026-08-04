@@ -185,11 +185,11 @@ export interface RoutingEntry {
   registersVia: string;
 }
 
-/** Ad set → landing page → Corsizio registration routing map. */
+/** Ad set → landing page → Stripe registration routing map. */
 export const LP_ROUTING: RoutingEntry[] = CAMPAIGNS.map((c) => ({
   campaignSlug: c.slug,
   landingPage: `/lp/${c.slug}`,
-  registersVia: "Corsizio (see src/config/corsizioEvents.js — one event per program x location)",
+  registersVia: "Stripe Payment Link (see src/lib/payment-links.ts — one link per program)",
 }));
 
 export const UTM_PLAN = {
@@ -197,7 +197,7 @@ export const UTM_PLAN = {
   utm_medium: "cpc | paid_social",
   utm_campaign: "program slug (explorers | builders | developers | engineers)",
   utm_content: "location slug (toronto | vaughan | oshawa | calgary | vancouver | online)",
-  utm_term: "ad-set specific; passed through as-is onto the Corsizio link",
+  utm_term: "ad-set specific; passed through as-is for attribution",
 } as const;
 
 export const TRACKING_EVENTS = [
