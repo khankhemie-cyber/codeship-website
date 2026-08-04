@@ -5,6 +5,7 @@ import RegistrationForm from "@/components/RegistrationForm";
 import { getProgram } from "@/data/programs";
 import { getCorsizioUrl } from "@/config/corsizioEvents";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel } from "@/lib/payment-links";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -106,21 +107,46 @@ export default function RegisterPage({ searchParams }: Props) {
   return (
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Registration opening soon</h1>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Register for a program</h1>
           <p className="text-gray-300 text-lg max-w-xl mx-auto">
-            We couldn&apos;t find that program and location. Pick a program below to see availability and register.
+            Choose your child&apos;s level below to see the course details and secure their spot.
           </p>
         </div>
       </section>
       <section className="py-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Link
-            href="/programs"
-            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors"
-          >
-            See Programs
-          </Link>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {PROGRAM_ORDER.map((level) => {
+              const config = PROGRAM_LINKS[level];
+              return (
+                <Link
+                  key={level}
+                  href={`/register/${level}`}
+                  className="block bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center justify-between gap-3 mb-2">
+                    <h2 className="text-xl font-bold text-[#001532]">{config.label}</h2>
+                    <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-0.5 rounded whitespace-nowrap">
+                      {ageLabel(level, false)}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">{config.summary}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#001532]">CAD ${config.priceCad}/semester</span>
+                    <span className="text-[#E5A823] font-semibold text-sm">Details &amp; register →</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          <p className="text-center text-gray-500 text-sm mt-8">
+            Looking for camps, school workshops, or a location near you?{" "}
+            <Link href="/programs" className="text-[#138A9A] font-semibold underline">
+              See all programs
+            </Link>
+            .
+          </p>
         </div>
       </section>
     </div>
