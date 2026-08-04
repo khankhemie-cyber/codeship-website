@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { PROGRAM_LINKS, type ProgramLevel } from "@/lib/payment-links";
 
 const steps = [
   {
@@ -30,6 +31,16 @@ interface Recommendation {
   title: string;
   description: string;
   href: string;
+  /** When set, the primary CTA registers directly on the per-program page. */
+  level?: ProgramLevel;
+}
+
+/** Map the finder's age buckets onto the four program levels. */
+function ageToLevel(age: string): ProgramLevel {
+  if (age === "4–6 years") return "explorers";
+  if (age === "7–9 years") return "builders";
+  if (age === "10–12 years") return "developers";
+  return "engineers"; // 13+ years
 }
 
 function getRecommendation(answers: string[]): Recommendation {
@@ -38,10 +49,10 @@ function getRecommendation(answers: string[]): Recommendation {
 
   if (age === "4–6 years") {
     return {
-      title: "Creative Starters Weekly Class",
-      description:
-        "Our introductory program for young learners aged 4–6. Using visual block coding and hands-on projects, children explore storytelling, patterns, and creativity in a safe, playful environment.",
-      href: "/programs/weekly-classes",
+      title: "Explorers Weekly Class",
+      description: PROGRAM_LINKS.explorers.summary,
+      href: "/programs/explorers",
+      level: "explorers",
     };
   }
   if (format === "Camp") {
@@ -68,11 +79,12 @@ function getRecommendation(answers: string[]): Recommendation {
       href: "/programs/ai-robotics",
     };
   }
+  const level = ageToLevel(age);
   return {
-    title: "Weekly Coding & STEM Classes",
-    description:
-      "Our flagship weekly classes meet your child where they are and take them further — building projects they're proud of, skills that last, and confidence that carries into school and beyond.",
-    href: "/programs/weekly-classes",
+    title: `${PROGRAM_LINKS[level].label} Weekly Classes`,
+    description: PROGRAM_LINKS[level].summary,
+    href: `/programs/${level}`,
+    level,
   };
 }
 
@@ -110,12 +122,14 @@ export default function ProgramFinder() {
         <h4 className="text-xl font-semibold text-[#E5A823] mb-4">{rec.title}</h4>
         <p className="text-gray-600 mb-6 max-w-lg mx-auto">{rec.description}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/register"
-            className="bg-[#001532] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#001532] transition-colors"
-          >
-            Register Now
-          </Link>
+          {rec.level && (
+            <Link
+              href={`/register/${rec.level}`}
+              className="bg-[#001532] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#00306b] transition-colors"
+            >
+              Register Now
+            </Link>
+          )}
           <Link
             href={rec.href}
             className="bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors"

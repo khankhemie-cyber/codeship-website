@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { articles } from "@/data/articles";
 import { PROGRAMS } from "@/data/programs";
+import { PROGRAM_ORDER } from "@/lib/payment-links";
 import { GUYANA_CAMPAIGNS } from "@/data/guyanaCampaigns";
 import { TRINIDAD_CAMPAIGNS } from "@/data/trinidadCampaigns";
 
@@ -27,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     })),
     { url: `${BASE_URL}/register`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
+    ...PROGRAM_ORDER.map((level) => ({
+      url: `${BASE_URL}/register/${level}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
     { url: `${BASE_URL}/schools`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/franchise`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/franchise/mobile-model`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
