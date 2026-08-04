@@ -8,9 +8,9 @@ import { breadcrumbSchema } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Programs | Kids Coding, AI & STEM Classes",
+  title: "Coding Classes for Kids — Programs by Age | CODEship Academy",
   description:
-    "Explore CODEship Academy's full range of coding, AI, and STEM programs — weekly classes, camps, school workshops, birthday parties, and AI & robotics.",
+    "Kids coding classes online and in Canada for ages 4–16: weekly classes, camps, school workshops, and AI & robotics. Project-based, small-group. Register from CAD $175/semester.",
   path: "/programs",
 });
 

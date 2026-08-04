@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import RegistrationForm from "@/components/RegistrationForm";
-import { getProgram } from "@/data/programs";
-import { getCorsizioUrl } from "@/config/corsizioEvents";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel } from "@/lib/payment-links";
+import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -14,7 +12,7 @@ export const runtime = "edge";
 export const metadata: Metadata = pageMetadata({
   title: "Register | CODEship Academy",
   description:
-    "Register your child for CODEship Academy coding, AI, and STEM programs. Canadian programs register through Corsizio; Guyana and Trinidad and Tobago registrations use the website form.",
+    "Register your child for CODEship Academy coding, AI, and STEM programs. Canadian programs checkout securely with Stripe; Guyana and Trinidad and Tobago registrations use the website form.",
   path: "/register",
 });
 
@@ -23,30 +21,21 @@ interface Props {
 }
 
 /**
- * Canadian (CAD) program registrations happen on Corsizio, not this site.
- * Old "Register" links and bookmarks point here with ?program=&location=;
- * if that combination resolves to a live Corsizio event, forward straight
- * to it (carrying any utm_* through for attribution).
+ * Canadian (CAD) program registrations checkout via Stripe on the per-program
+ * pages (/register/[program]). Old "Register" links and bookmarks point here
+ * with ?program=&location=; if the program resolves, forward to its Stripe
+ * registration page.
  *
  * Guyana registrations (?country=guyana, built by buildGuyanaRegistrationUrl)
  * and Trinidad and Tobago registrations (?country=trinidad-tobago, built by
  * buildTrinidadRegistrationUrl) stay on the existing HubSpot lead-capture
- * form embedded below — neither market has a Corsizio account.
+ * form embedded below.
  */
 export default function RegisterPage({ searchParams }: Props) {
   const programParam = typeof searchParams.program === "string" ? searchParams.program : undefined;
-  const locationParam = typeof searchParams.location === "string" ? searchParams.location : undefined;
-  const program = programParam ? getProgram(programParam) : undefined;
 
-  if (program && locationParam) {
-    const baseUrl = getCorsizioUrl(program.slug, locationParam);
-    if (baseUrl) {
-      const url = new URL(baseUrl);
-      for (const [key, value] of Object.entries(searchParams)) {
-        if (key.startsWith("utm_") && typeof value === "string") url.searchParams.set(key, value);
-      }
-      redirect(url.toString());
-    }
+  if (programParam && isProgramLevel(programParam)) {
+    redirect(`/register/${programParam}`);
   }
 
   const isGuyana = searchParams.country === "guyana";

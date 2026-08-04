@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import type { Program } from "@/data/programs";
 import { IN_PERSON, type InPersonCity } from "@/data/locations";
-import { getCorsizioUrl } from "@/config/corsizioEvents";
-import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
-import { withUtmParams } from "@/lib/corsizioLink";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
 import type { LocationSlug } from "@/lib/registration";
+import { EnrollButton } from "@/components/EnrollButton";
+import { PROGRAM_LINKS, type ProgramLevel } from "@/lib/payment-links";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
 
 interface ProgramLocationSelectorProps {
@@ -19,7 +18,8 @@ function cityToSlug(city: InPersonCity): LocationSlug {
 }
 
 export default function ProgramLocationSelector({ program }: ProgramLocationSelectorProps) {
-  const searchParams = useSearchParams();
+  const level = program.slug as ProgramLevel;
+  const config = PROGRAM_LINKS[level];
   const [location, setLocation] = useState<LocationSlug>(cityToSlug(IN_PERSON[0]));
 
   useEffect(() => {
@@ -33,12 +33,9 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
     trackSelectLocation({ program: program.slug, location: value });
   };
 
-  const schedule = CORSIZIO_SCHEDULE[program.slug];
+  const schedule = CLASS_SCHEDULE[program.slug];
   const mode = location === "online" ? "online" : "inperson";
   const modeSchedule = schedule[mode];
-
-  const corsizioBaseUrl = getCorsizioUrl(program.slug, location);
-  const registrationUrl = corsizioBaseUrl ? withUtmParams(corsizioBaseUrl, searchParams) : null;
 
   const handleRegisterClick = () => trackRegisterClick({ program: program.slug, location });
 
@@ -47,26 +44,12 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
       ? `Online — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`
       : `${IN_PERSON.find((c) => cityToSlug(c) === location)} — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`;
 
-  const ctaLabel = registrationUrl ? `Register for ${program.level}` : "Registration opening soon";
-
-  const ctaClasses =
-    "mt-3 w-full font-bold px-6 py-3.5 rounded-xl transition-colors inline-flex items-center justify-center text-center " +
-    (registrationUrl
-      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
-      : "bg-gray-200 text-gray-500 cursor-not-allowed");
-
-  const mobileCtaClasses =
-    "block w-full font-bold px-6 py-3 rounded-xl text-center transition-colors " +
-    (registrationUrl
-      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
-      : "bg-gray-200 text-gray-500 cursor-not-allowed");
-
-  const ctaLinkProps = registrationUrl
-    ? { href: registrationUrl, target: "_blank", rel: "noopener noreferrer" as const, onClick: handleRegisterClick }
-    : { "aria-disabled": true as const };
-
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+      <div className="flex items-baseline gap-1 mb-1">
+        <span className="text-2xl font-extrabold text-[#001532]">CAD ${config.priceCad}</span>
+        <span className="text-gray-500 text-sm">/ semester</span>
+      </div>
       <h2 className="text-xl font-bold text-[#001532] mb-1">Choose a location & schedule</h2>
       <p className="text-gray-500 text-sm mb-5">
         {program.level} runs every {schedule.inperson.days.toLowerCase()} at all five in-person locations, or online{" "}
@@ -131,15 +114,14 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         {scheduleDetail}
       </div>
 
-      <a {...ctaLinkProps} className={ctaClasses}>
-        {ctaLabel}
-      </a>
+      <div className="mt-3">
+        <EnrollButton program={level} label={`Register for ${program.level}`} onClick={handleRegisterClick} />
+      </div>
+      <p className="text-gray-400 text-xs mt-2 text-center">Secure checkout powered by Stripe.</p>
 
-      {/* Sticky mobile register bar, mirrors the same selection */}
+      {/* Sticky mobile register bar */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
-        <a {...ctaLinkProps} className={mobileCtaClasses}>
-          {ctaLabel}
-        </a>
+        <EnrollButton program={level} label={`Register for ${program.level}`} onClick={handleRegisterClick} />
       </div>
       {/* Spacer so the sticky bar never covers page content on mobile */}
       <div className="md:hidden h-16" aria-hidden="true" />

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IN_PERSON, type ProgramSlug } from "@/data/locations";
-import { CORSIZIO_SCHEDULE } from "@/config/corsizioSchedule";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
 import type { LocationSlug } from "@/lib/registration";
 
 interface LocationBarProps {
@@ -37,7 +37,7 @@ interface LocationOption {
 }
 
 function buildOptions(program: ProgramSlug): LocationOption[] {
-  const schedule = CORSIZIO_SCHEDULE[program];
+  const schedule = CLASS_SCHEDULE[program];
   const inPerson: LocationOption[] = IN_PERSON.map((city) => ({
     value: toSlug(city),
     label: `${city} — ${schedule.inperson.days}, ${schedule.inperson.dates}, ${schedule.inperson.time}`,

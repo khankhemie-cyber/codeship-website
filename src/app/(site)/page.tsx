@@ -9,11 +9,17 @@ import JourneyMap from "@/components/JourneyMap";
 import AlignmentStrip from "@/components/AlignmentStrip";
 import { websiteSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { getVisitorGeo } from "@/lib/geo";
+import ScrollRegisterPopup from "@/components/ScrollRegisterPopup";
+
+// Reading Cloudflare geo headers for the city callout opts this route into
+// dynamic rendering; next-on-pages requires an explicit edge runtime for that.
+export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
-  title: "CODEship Academy | Kids Coding, AI & STEM Programs",
+  title: "Kids Coding Classes Online in Canada | CODEship Academy",
   description:
-    "CODEship Academy helps children turn ideas into real digital projects — coding, AI, STEM, camps, and school workshops. Creativity before code.",
+    "Live online coding, AI & STEM classes for kids ages 4–16 across Canada. Small-group, project-based lessons. Register today — from CAD $175/semester.",
   path: "/",
 });
 
@@ -131,7 +137,9 @@ const differentiators = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { city } = await getVisitorGeo();
+
   return (
     <>
       <script
@@ -143,6 +151,14 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}
       />
+
+      {/* City-aware enrolment callout — online classes, localized to the visitor's city (Canada only). */}
+      <Link
+        href="/register"
+        className="block bg-[#E5A823] text-[#001532] text-center text-sm font-semibold px-4 py-2.5 hover:bg-[#d4941f] transition-colors"
+      >
+        🚀 Live online classes — now enrolling{city ? ` in ${city}` : " across Canada"}. Register today →
+      </Link>
 
       {/* ── Hero (full-bleed video background) ── */}
       <section className="relative min-h-[680px] flex items-center overflow-hidden">
@@ -556,6 +572,8 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <ScrollRegisterPopup city={city} />
     </>
   );
 }

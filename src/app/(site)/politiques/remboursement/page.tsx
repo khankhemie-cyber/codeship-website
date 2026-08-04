@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BASE_URL, DEFAULT_OG_IMAGE } from "@/lib/pageMetadata";
 
 const TITLE = "Politique de remboursement | CODEship Academy";
-const DESCRIPTION = "La politique de remboursement de CODEship Academy pour les inscriptions traitées par Corsizio.";
+const DESCRIPTION = "La politique de remboursement de CODEship Academy pour les inscriptions traitées par Stripe.";
 const PATH = "/politiques/remboursement";
 
 export const metadata: Metadata = {
@@ -42,11 +42,10 @@ export default function PolitiqueRemboursementPage() {
             <div>
               <h2 className="text-xl font-bold text-[#001532] mb-3">1. Inscription et paiement</h2>
               <p>
-                L&apos;inscription et le paiement des programmes de CODEship Academy sont traités par{" "}
-                <strong>Corsizio</strong>, notre partenaire d&apos;inscription et de paiement — et non
-                directement sur ce site Web. Lors de votre inscription à un cours, Corsizio perçoit le
-                paiement et vous envoie votre confirmation et votre reçu. Corsizio gère également les places
-                disponibles et les listes d&apos;attente pour chaque cours.
+                L&apos;inscription et le paiement des programmes de CODEship Academy sont traités de façon
+                sécurisée par <strong>Stripe</strong>, notre processeur de paiement. Lors de votre inscription
+                à un cours, Stripe perçoit le paiement et vous envoie votre reçu par courriel. CODEship Academy
+                gère les places disponibles pour chaque cours.
               </p>
             </div>
             <div>
@@ -56,9 +55,9 @@ export default function PolitiqueRemboursementPage() {
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
-                avec les détails de votre inscription, ou répondez au courriel de confirmation reçu de
-                Corsizio. Les remboursements approuvés sont versés au mode de paiement original par
-                l&apos;entremise de Corsizio.
+                avec les détails de votre inscription, ou répondez au reçu de paiement Stripe que vous avez
+                reçu. Les remboursements approuvés sont versés au mode de paiement original par
+                l&apos;entremise de Stripe.
               </p>
             </div>
             <div>
@@ -66,7 +65,7 @@ export default function PolitiqueRemboursementPage() {
               <p>
                 Le délai de remboursement précis pour un cours donné (par exemple, le nombre de jours avant
                 la première séance pour un remboursement complet ou partiel) est indiqué au moment du
-                paiement sur Corsizio et confirmé dans votre courriel d&apos;inscription. Veuillez vous
+                paiement et confirmé dans votre courriel d&apos;inscription. Veuillez vous
                 référer à cette confirmation pour connaître les conditions exactes applicables à votre
                 inscription.
               </p>

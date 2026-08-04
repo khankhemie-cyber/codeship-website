@@ -24,10 +24,9 @@ export default function RefundPolicyPage() {
             <div>
               <h2 className="text-xl font-bold text-[#001532] mb-3">1. Registration & Payment</h2>
               <p>
-                Registration and payment for CODEship Academy programs are processed by{" "}
-                <strong>Corsizio</strong>, our registration and payment partner — not directly on this website.
-                When you register for a class, Corsizio collects payment and sends your confirmation and
-                receipt. Corsizio also manages seat availability and waitlists for each class.
+                Registration and payment for CODEship Academy programs are processed securely by{" "}
+                <strong>Stripe</strong>, our payment processor. When you register for a class, Stripe collects
+                payment and emails your receipt. CODEship Academy manages seat availability for each class.
               </p>
             </div>
             <div>
@@ -38,7 +37,7 @@ export default function RefundPolicyPage() {
                 will receive a 100% refund of the program fee — no cancellation fees and no questions asked.
               </p>
               <p className="mt-3">
-                Approved refunds are issued to the original payment method through Corsizio. Please allow
+                Approved refunds are issued to the original payment method through Stripe. Please allow
                 5–10 business days for the refund to appear on your statement, depending on your bank or card
                 issuer.
               </p>
@@ -88,7 +87,7 @@ export default function RefundPolicyPage() {
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
-                with your registration details, or reply to the confirmation email you received from Corsizio.
+                with your registration details, or reply to the Stripe payment receipt you received.
                 Your cancellation date is the date we receive your request, and we will confirm receipt and the
                 outcome of your request in writing.
               </p>

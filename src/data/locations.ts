@@ -23,8 +23,8 @@ export type ProgramSlug = "explorers" | "builders" | "developers" | "engineers";
 /**
  * Online (virtual) weekly schedule — one 55-minute class per program, back-to-back
  * by pair (Explorers/Builders on Tuesday, Developers/Engineers on Thursday, each
- * pair younger-first). Registration/checkout dates and times now live in
- * src/config/corsizioSchedule.js — keep the two in sync if the schedule changes.
+ * pair younger-first). Display dates and times live in
+ * src/config/classSchedule.js — keep the two in sync if the schedule changes.
  */
 export const ONLINE: Record<
   ProgramSlug,

@@ -2,8 +2,7 @@ import type { TrinidadPageSlug } from "@/data/trinidadCampaigns";
 
 /**
  * Trinidad and Tobago registrations stay on the existing HubSpot lead-capture
- * form (embedded on /register) rather than Corsizio — Trinidad prices in TTD
- * and there's no Corsizio account for that market. Like Guyana
+ * form (embedded on /register) — Trinidad prices in TTD. Like Guyana
  * (buildGuyanaRegistrationUrl.ts), Trinidad registrations are a generic
  * online cohort — not tied to a specific K-8 program slug — so this builds
  * its own UTM shape onto /register.

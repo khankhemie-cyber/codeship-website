@@ -18,11 +18,15 @@ interface EventPayload {
 function dispatch(eventName: string, payload: EventPayload) {
   if (typeof window === "undefined") return;
 
-  // GA4, once wired:
-  // window.gtag?.("event", eventName, payload);
-
-  // Meta Pixel, once wired:
-  // window.fbq?.("trackCustom", eventName, payload);
+  // GA4 / Meta Pixel are loaded only after analytics consent (see
+  // components/Analytics.tsx). These globals are absent until then, so the
+  // optional calls simply no-op when the visitor hasn't opted in.
+  const w = window as typeof window & {
+    gtag?: (...args: unknown[]) => void;
+    fbq?: (...args: unknown[]) => void;
+  };
+  w.gtag?.("event", eventName, payload);
+  w.fbq?.("trackCustom", eventName, payload);
 
   if (process.env.NODE_ENV === "development") {
     // eslint-disable-next-line no-console
