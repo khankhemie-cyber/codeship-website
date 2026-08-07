@@ -157,7 +157,7 @@ export default async function HomePage() {
         href="/register"
         className="block bg-[#E5A823] text-[#001532] text-center text-sm font-semibold px-4 py-2.5 hover:bg-[#d4941f] transition-colors"
       >
-        🚀 Live online classes — now enrolling{city ? ` in ${city}` : " across Canada"}. Register today →
+        Live online classes — now enrolling{city ? ` in ${city}` : " across Canada"}. Register today →
       </Link>
 
       {/* ── Hero (full-bleed video background) ── */}
