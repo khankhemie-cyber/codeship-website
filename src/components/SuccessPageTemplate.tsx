@@ -128,15 +128,31 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
             </p>
           </div>
 
-          {/* What happens next — PLACEHOLDER, do not publish until confirmed (see spec §6) */}
-          <div className="bg-[#F5C518]/10 rounded-2xl border border-[#F5C518]/40 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-[#0D1B2A] mb-2">What happens next</h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {/* TODO(owner): Replace before this page goes live via Stripe. When will families get a
-                  welcome/access email, and from what address? Is there anything to do before class 1
-                  (platform login, materials needed)? */}
-              [PLACEHOLDER: When will they get a welcome/access email, and from what address? Is there anything to
-              do before class 1 — platform login, materials needed? Fill in before this goes live.]
+          {/* What happens next */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-[#0D1B2A] mb-3">What happens next</h2>
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              There&apos;s nothing else you need to do right now. About one week before the first class, we&apos;ll
+              email you everything your child needs to get started:
+            </p>
+            <ul className="space-y-2 mb-4">
+              {["Class log-in instructions", "Their digital workbook", "The complete class schedule"].map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-gray-700 text-sm">
+                  <svg
+                    className="w-5 h-5 text-[#2E8C8C] shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Keep an eye on your inbox as the start date approaches — and check your spam folder just in case.
             </p>
           </div>
 
