@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import RegistrationForm from "@/components/RegistrationForm";
+import { CouponCallout } from "@/components/CouponCallout";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
+import { PROGRAM_LINKS, PROGRAM_ORDER, REGISTRATION_COUPON, ageLabel, isProgramLevel } from "@/lib/payment-links";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -101,6 +102,14 @@ export default function RegisterPage({ searchParams }: Props) {
           <p className="text-gray-300 text-lg max-w-xl mx-auto">
             Choose your child&apos;s level below to see the course details and secure their spot.
           </p>
+          <p className="mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-[#E5A823]/15 px-4 py-2 text-sm text-white">
+            <span className="font-semibold">Limited time: {REGISTRATION_COUPON.discountLabel} your registration.</span>
+            <span>
+              Use code{" "}
+              <span className="font-mono font-bold tracking-wide text-[#E5A823]">{REGISTRATION_COUPON.code}</span> at
+              checkout.
+            </span>
+          </p>
         </div>
       </section>
       <section className="py-16">
@@ -124,6 +133,9 @@ export default function RegisterPage({ searchParams }: Props) {
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-[#001532]">CAD ${config.priceCad}/semester</span>
                     <span className="text-[#E5A823] font-semibold text-sm">Details &amp; register →</span>
+                  </div>
+                  <div className="mt-3">
+                    <CouponCallout variant="inline" />
                   </div>
                 </Link>
               );

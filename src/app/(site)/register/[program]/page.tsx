@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EnrollButton } from "@/components/EnrollButton";
+import { CouponCallout } from "@/components/CouponCallout";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { breadcrumbSchema } from "@/lib/schema";
 import { pageMetadata, BASE_URL } from "@/lib/pageMetadata";
-import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
+import { PROGRAM_LINKS, PROGRAM_ORDER, REGISTRATION_COUPON, ageLabel, isProgramLevel } from "@/lib/payment-links";
 
 interface Props {
   params: { program: string };
@@ -92,6 +93,10 @@ export default function ProgramRegisterPage({ params }: Props) {
               <span className="bg-[#E5A823] text-[#001532] px-3 py-1.5 rounded-full text-sm font-bold">
                 CAD ${c.priceCad}/semester
               </span>
+              <span className="bg-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                Use code <span className="font-mono font-bold tracking-wide">{REGISTRATION_COUPON.code}</span> for{" "}
+                {REGISTRATION_COUPON.discountLabel}
+              </span>
             </div>
           </div>
         </section>
@@ -167,9 +172,12 @@ export default function ProgramRegisterPage({ params }: Props) {
                     <span className="text-gray-500 text-sm">/ semester</span>
                   </div>
                   <p className="text-gray-500 text-sm mb-5">Secure checkout powered by Stripe.</p>
+                  <CouponCallout className="mb-5" />
                   <EnrollButton program={program} label={`Register for ${c.label}`} />
                   <p className="text-gray-400 text-xs mt-3 text-center">
-                    You&apos;ll add your child&apos;s details at checkout.
+                    You&apos;ll add your child&apos;s details at checkout. Apply code{" "}
+                    <span className="font-mono font-semibold text-gray-500">{REGISTRATION_COUPON.code}</span> to save{" "}
+                    {REGISTRATION_COUPON.discountLabel}.
                   </p>
                 </div>
               </div>
