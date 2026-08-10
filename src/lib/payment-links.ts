@@ -1,5 +1,16 @@
 export type ProgramLevel = "explorers" | "builders" | "developers" | "engineers";
 
+/**
+ * Limited-time launch promotion. Customers enter this code at Stripe checkout to
+ * redeem a one-time 50% discount on their registration. Surfaced next to every
+ * price on the registration flow and in the site-wide exit-intent banner.
+ */
+export const REGISTRATION_COUPON = {
+  code: "S7BPKEWT",
+  discountLabel: "50% off",
+  description: "one-time 50% off your registration",
+} as const;
+
 export interface ProgramConfig {
   order: number;
   label: string;
