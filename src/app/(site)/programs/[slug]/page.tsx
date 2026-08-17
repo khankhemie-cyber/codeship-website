@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!program) return {};
   return pageMetadata({
     title: `${program.level} (${program.gradeBand}) | ${program.codingSpace}`,
-    description: `${program.level} — ${program.gradeBand}. ${program.outcome} ${PROGRAM_STRUCTURE.semesters} semesters, ~${PROGRAM_STRUCTURE.sessionsApprox} sessions, project-based. In-person in Toronto, Vaughan, Oshawa, Calgary & Vancouver, or online.`,
+    description: `${program.level} — ${program.gradeBand}. ${program.outcome} Flat CAD $129/semester (8 weekly classes), project-based. In-person in Oshawa (Durham Region) or online across Canada.`,
     path: `/programs/${program.slug}`,
     image: PROGRAM_OG_IMAGE[program.slug],
     imageAlt: `${program.level} — CODEship Academy`,
@@ -80,12 +80,12 @@ function programFaqs(program: ReturnType<typeof getProgram>) {
       answer: "No. Every class starts from the basics and includes inclusive-design accommodations.",
     },
     {
-      question: "How long is the program?",
-      answer: `${PROGRAM_STRUCTURE.semesters} semesters, about ${PROGRAM_STRUCTURE.sessionsApprox} sessions total, plus a capstone project.`,
+      question: "How much does it cost and how long is a semester?",
+      answer: `Every CODEship program is a flat CAD $129 per semester — 8 weekly classes, one class a week. The full ${program.level} journey runs across ${PROGRAM_STRUCTURE.semesters} semesters plus a capstone project.`,
     },
     {
-      question: "Where and when does it run?",
-      answer: `In-person Saturdays in ${IN_PERSON.join(", ")}, or online ${online.day}s, ${online.window}.`,
+      question: "Where and when does it run — in-person or online?",
+      answer: `${program.level} runs in-person on Saturdays in Oshawa (serving families across Durham Region), or online ${online.day}s, ${online.window}. Online is open to families in any city. In-person classes in our other cities are on a waitlist — join it on that city's location page, or register online today.`,
     },
   ];
 }

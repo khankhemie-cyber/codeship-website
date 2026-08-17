@@ -47,7 +47,7 @@ export default function RefundPolicyPage() {
               <p>
                 Cancellations made <strong>less than 7 days before the first scheduled class</strong>, or after
                 the program has started, are <strong>not eligible for a refund</strong>. Our semesters run for
-                just 4 weeks, and instructor staffing, class sizes, and seat allocations are finalized in the
+                8 weeks, and instructor staffing, class sizes, and seat allocations are finalized in the
                 week leading up to the first class — a late cancellation means a seat another student could
                 have taken goes unused.
               </p>
@@ -57,7 +57,7 @@ export default function RefundPolicyPage() {
               <p>
                 There are <strong>no makeup classes</strong> for missed sessions in any program. A missed class
                 is treated as a <strong>no-show</strong> and is not eligible for a refund, credit, transfer, or
-                replacement session. Because each semester is only 4 weeks long, every session builds directly
+                replacement session. Because each semester is 8 weeks long, every session builds directly
                 on the one before it, and our instructors and class schedules are committed for the full
                 semester in advance.
               </p>

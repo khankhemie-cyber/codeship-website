@@ -3,84 +3,78 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { localBusinessSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { IN_PERSON, IN_PERSON_CITY_GEO, IN_PERSON_OPENING_HOURS, type InPersonCity } from "@/data/locations";
+import {
+  IN_PERSON_CITY_GEO,
+  IN_PERSON_OPENING_HOURS,
+  LOCATIONS,
+  LOCATIONS_BY_SLUG,
+  DURHAM_SERVICE_AREA,
+  type InPersonCity,
+} from "@/data/locations";
 import FAQAccordion from "@/components/FAQAccordion";
 import Breadcrumbs from "@/components/Breadcrumbs";
-
-const cities = [
-  "oshawa", "toronto", "mississauga", "brampton", "markham",
-  "scarborough", "vaughan", "milton", "calgary", "edmonton", "vancouver", "surrey",
-];
-
-const cityNames: Record<string, string> = {
-  oshawa: "Oshawa",
-  toronto: "Toronto",
-  mississauga: "Mississauga",
-  brampton: "Brampton",
-  markham: "Markham",
-  scarborough: "Scarborough",
-  vaughan: "Vaughan",
-  milton: "Milton",
-  calgary: "Calgary",
-  edmonton: "Edmonton",
-  vancouver: "Vancouver",
-  surrey: "Surrey",
-};
-
-const cityProvinces: Record<string, string> = {
-  oshawa: "ON", toronto: "ON", mississauga: "ON", brampton: "ON",
-  markham: "ON", scarborough: "ON", vaughan: "ON", milton: "ON",
-  calgary: "AB", edmonton: "AB", vancouver: "BC", surrey: "BC",
-};
 
 interface Props {
   params: { city: string };
 }
 
-export async function generateStaticParams() {
-  return cities.map((city) => ({ city }));
+export function generateStaticParams() {
+  return LOCATIONS.map((l) => ({ city: l.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const cityName = cityNames[params.city];
-  if (!cityName) return {};
+  const location = LOCATIONS_BY_SLUG[params.city];
+  if (!location) return {};
+  const isOpen = location.inPerson === "open";
+  const description = isOpen
+    ? `Kids coding, AI & STEM programs in ${location.name} (Durham Region) — in-person on Saturdays and live online. K–8, flat CAD $129/semester. Register today.`
+    : `Live online kids coding, AI & STEM classes for families in ${location.name} — open now, flat CAD $129/semester. In-person classes are coming to ${location.name}; join the waitlist to be first in line.`;
   return pageMetadata({
-    title: `CODEship Academy ${cityName} | Kids Coding & STEM Programs`,
-    description: `CODEship Academy in ${cityName} offers coding, AI, and STEM programs for children — weekly classes, camps, school workshops, and more.`,
+    title: `CODEship Academy ${location.name} | Kids Coding, AI & STEM (K–8)`,
+    description,
     path: `/locations/${params.city}`,
   });
 }
 
 export default function CityPage({ params }: Props) {
-  const citySlug = params.city;
-  if (!cities.includes(citySlug)) notFound();
+  const location = LOCATIONS_BY_SLUG[params.city];
+  if (!location) notFound();
 
-  const cityName = cityNames[citySlug];
-  const province = cityProvinces[citySlug];
+  const cityName = location.name;
+  const province = location.province;
+  const citySlug = location.slug;
+  const isOpen = location.inPerson === "open";
 
   const localFaqs = [
     {
+      question: `Can my child join CODEship in ${cityName} in-person or online?`,
+      answer: isOpen
+        ? `Both. ${cityName} is our in-person home base — coding, AI, and STEM classes run on Saturdays — and every program is also available live online. Each program is a flat CAD $129 per semester (8 weekly classes).`
+        : `Online classes are open to ${cityName} families right now — every program runs live online for a flat CAD $129 per semester (8 weekly classes). In-person classes in ${cityName} are on the way; join the waitlist to be first in line when a local cohort opens.`,
+    },
+    {
       question: `What CODEship programs are available in ${cityName}?`,
-      answer: `CODEship Academy in ${cityName} offers weekly classes, summer camps, March Break and PA Day workshops, school partnership programs, and birthday parties. Contact us for current availability.`,
+      answer: `Families in ${cityName} can enrol in the full K–8 journey — Explorers, Builders, Developers and Engineers — along with camps, school workshops, birthday parties, and AI & robotics.`,
     },
     {
       question: `How do I enroll my child in ${cityName}?`,
-      answer: `Contact us directly to learn about current enrollment opportunities in ${cityName}. Our team will match your child with the right program based on age, experience, and interest.`,
+      answer: isOpen
+        ? `Register online in a few minutes and pick in-person (Oshawa, Saturdays) or online at checkout. Our team will confirm placement and share next steps.`
+        : `Register online today for any program, or join the in-person waitlist for ${cityName}. Our admissions team will contact waitlisted families as soon as a local in-person cohort is scheduled.`,
     },
     {
       question: `Does CODEship partner with schools in ${cityName}?`,
       answer: `Yes. We work with schools in and around ${cityName} to deliver after-school clubs, PA Day programs, and in-class STEM enrichment. School administrators can request information through our school partnerships page.`,
     },
-    {
-      question: `Is there a franchise opportunity in ${cityName}?`,
-      answer: `We may have franchise opportunities available in the ${cityName} area. Contact us for current territory availability.`,
-    },
   ];
 
-  const isOfficialCity = (IN_PERSON as readonly string[]).includes(cityName);
-  const localBusinessOptions = isOfficialCity
-    ? { geo: IN_PERSON_CITY_GEO[cityName as InPersonCity], openingHours: IN_PERSON_OPENING_HOURS }
-    : undefined;
+  const localBusinessOptions = isOpen
+    ? {
+        geo: IN_PERSON_CITY_GEO[cityName as InPersonCity],
+        openingHours: IN_PERSON_OPENING_HOURS,
+        areaServed: [...DURHAM_SERVICE_AREA],
+      }
+    : { areaServed: [cityName] };
 
   return (
     <>
@@ -117,12 +111,24 @@ export default function CityPage({ params }: Props) {
                 ]}
               />
             </div>
+            <div className="flex justify-center mb-4">
+              {isOpen ? (
+                <span className="text-xs font-bold uppercase tracking-widest bg-[#138A9A] text-white px-3 py-1 rounded-full">
+                  In-Person Open · Online Open
+                </span>
+              ) : (
+                <span className="text-xs font-bold uppercase tracking-widest bg-[#E5A823] text-[#001532] px-3 py-1 rounded-full">
+                  In-Person: Waitlist · Online: Open
+                </span>
+              )}
+            </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
               CODEship Academy {cityName}
             </h1>
             <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-              Coding, AI, and STEM programs for children in {cityName}, {province} — building future creators
-              through hands-on project-based learning.
+              {isOpen
+                ? `Coding, AI, and STEM programs for children in ${cityName}, ${province} — in-person on Saturdays and live online, serving families across Durham Region.`
+                : `Live online coding, AI, and STEM programs for children in ${cityName}, ${province} — open now. In-person classes are coming to ${cityName}; join the waitlist to be first in line.`}
             </p>
           </div>
         </section>
@@ -134,7 +140,7 @@ export default function CityPage({ params }: Props) {
                 <h2 className="text-2xl font-bold text-[#001532] mb-4">Programs in {cityName}</h2>
                 <p className="text-gray-600 mb-6">
                   CODEship Academy serves the {cityName} community through multiple program formats — making quality
-                  coding and STEM education accessible to more children and families.
+                  coding, AI, and STEM education accessible to more children and families, in-person and online.
                 </p>
                 <div className="space-y-3">
                   {[
@@ -170,16 +176,41 @@ export default function CityPage({ params }: Props) {
                   />
                 </div>
 
-                {/* Register CTA */}
-                <div className="bg-[#E5A823] rounded-2xl p-6 text-center">
-                  <h3 className="font-bold text-[#001532] text-lg mb-2">Ready to Enroll?</h3>
-                  <p className="text-[#001532]/70 text-sm mb-4">
-                    Get started with CODEship Academy in {cityName}. Contact us to check availability and register.
-                  </p>
-                  <Link href="/register" className="bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#001532] transition-colors inline-block text-sm">
-                    Register Now
-                  </Link>
-                </div>
+                {/* Register / Waitlist CTA */}
+                {isOpen ? (
+                  <div className="bg-[#E5A823] rounded-2xl p-6 text-center">
+                    <h3 className="font-bold text-[#001532] text-lg mb-2">Ready to Enroll?</h3>
+                    <p className="text-[#001532]/70 text-sm mb-4">
+                      In-person classes in {cityName} are open for registration — pick in-person or online at checkout.
+                      Flat CAD $129/semester.
+                    </p>
+                    <Link href="/register" className="bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#00306b] transition-colors inline-block text-sm">
+                      Register Now
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="bg-[#E5A823] rounded-2xl p-6 text-center">
+                    <h3 className="font-bold text-[#001532] text-lg mb-2">In-Person Is Coming to {cityName}</h3>
+                    <p className="text-[#001532]/80 text-sm mb-4">
+                      We&apos;re building in-person classes in {cityName} — join the waitlist to be first in line, or
+                      register online today.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Link
+                        href={`/waitlist?city=${encodeURIComponent(cityName)}`}
+                        className="bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#00306b] transition-colors inline-block text-sm"
+                      >
+                        Join the Waitlist
+                      </Link>
+                      <Link
+                        href="/register"
+                        className="bg-white text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors inline-block text-sm border border-[#001532]/20"
+                      >
+                        Register Online
+                      </Link>
+                    </div>
+                  </div>
+                )}
 
                 {/* School CTA */}
                 <div className="bg-[#001532] rounded-2xl p-6 text-white">
@@ -209,6 +240,23 @@ export default function CityPage({ params }: Props) {
                 </div>
               </div>
             </div>
+
+            {/* Durham Region service-area note — anchored on Oshawa */}
+            {isOpen && (
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-16">
+                <h2 className="text-2xl font-bold text-[#001532] mb-3">Serving Families Across Durham Region</h2>
+                <p className="text-gray-600 leading-relaxed mb-3">
+                  Our Oshawa home base welcomes families from across Durham Region. Whether you&apos;re in Oshawa,
+                  Whitby, Courtice, Bowmanville, or Clarington, your child can join our Saturday in-person coding, AI,
+                  and STEM classes — or attend live online from home. CODEship Academy is Durham Region&apos;s K–8
+                  destination for creative, project-based coding, AI, and STEM education.
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  Every program is a flat CAD $129 per semester — 8 weekly classes, one class a week — with the same
+                  price whether your child attends in-person in Oshawa or online.
+                </p>
+              </div>
+            )}
 
             {/* FAQ */}
             <h2 className="text-2xl font-bold text-[#001532] mb-6">{cityName} FAQ</h2>

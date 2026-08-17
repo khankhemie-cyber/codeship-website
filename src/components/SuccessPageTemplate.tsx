@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { PROGRAM_LINKS, ageLabel, type ProgramLevel } from "@/lib/payment-links";
 import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASSES_PER_SEMESTER } from "@/config/offering";
 
 /**
  * Per-program Semester 1 content for the post-payment page. Project names and
@@ -99,7 +100,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
               <div className="flex justify-between sm:block border-b border-gray-100 pb-2 sm:border-0 sm:pb-0">
                 <dt className="text-gray-500">Format</dt>
-                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">4 weekly online classes</dd>
+                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">{CLASSES_PER_SEMESTER} weekly online classes</dd>
               </div>
               <div className="flex justify-between sm:block border-b border-gray-100 pb-2 sm:border-0 sm:pb-0">
                 <dt className="text-gray-500">Day</dt>
@@ -121,9 +122,9 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
             <h2 className="text-xl font-bold text-[#0D1B2A] mb-1">What your child will build</h2>
             <p className="text-[#3A5B9E] text-sm font-semibold mb-4">{content.framing}</p>
             <p className="text-gray-600 text-sm leading-relaxed">
-              Over 4 hands-on classes, your child will work toward a real project:{" "}
-              <span className="font-semibold text-[#0D1B2A]">{content.project}</span>. Along the way there are 2
-              short quizzes to check understanding, and a theory component that connects what they&apos;re building
+              Over {CLASSES_PER_SEMESTER} hands-on classes, your child will work toward a real project:{" "}
+              <span className="font-semibold text-[#0D1B2A]">{content.project}</span>. Along the way there are short
+              quizzes to check understanding, and a theory component that connects what they&apos;re building
               to bigger ideas in computing.
             </p>
           </div>

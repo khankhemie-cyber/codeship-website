@@ -1,18 +1,27 @@
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "EducationalOrganization",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
     logo: "https://www.codeshipacademy.com/logo-nav.png",
     description:
-      "CODEship Academy offers children's coding, AI, and STEM education programs through weekly classes, camps, and school workshops.",
+      "CODEship Academy offers K–8 coding, AI, and STEM programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Oshawa",
       addressRegion: "Ontario",
       addressCountry: "CA",
     },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Durham Region" },
+      { "@type": "City", name: "Oshawa" },
+      { "@type": "City", name: "Whitby" },
+      { "@type": "City", name: "Courtice" },
+      { "@type": "City", name: "Bowmanville" },
+      { "@type": "City", name: "Clarington" },
+      { "@type": "Country", name: "Canada" },
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
@@ -25,9 +34,9 @@ export function organizationSchema() {
 }
 
 interface LocalBusinessOptions {
-  /** City-center coordinates — only pass for the 5 official in-person program cities. */
+  /** City-center coordinates — only pass for the open in-person city (Oshawa). */
   geo?: { latitude: number; longitude: number };
-  /** e.g. ["Saturday 09:00-13:45"] — only pass where CODEship actually runs in-person classes. */
+  /** e.g. ["Saturday 09:00-13:45"] — only pass where CODEship actually runs in-person classes (Oshawa). */
   openingHours?: string[];
   areaServed?: string[];
 }

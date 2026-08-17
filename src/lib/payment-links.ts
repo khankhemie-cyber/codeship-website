@@ -1,15 +1,6 @@
-export type ProgramLevel = "explorers" | "builders" | "developers" | "engineers";
+import { FLAT_PRICE_CAD } from "@/config/offering";
 
-/**
- * Limited-time launch promotion. Customers enter this code at Stripe checkout to
- * redeem a one-time 50% discount on their registration. Surfaced next to every
- * price on the registration flow and in the site-wide exit-intent banner.
- */
-export const REGISTRATION_COUPON = {
-  code: "S7BPKEWT",
-  discountLabel: "50% off",
-  description: "one-time 50% off your registration",
-} as const;
+export type ProgramLevel = "explorers" | "builders" | "developers" | "engineers";
 
 export interface ProgramConfig {
   order: number;
@@ -31,8 +22,17 @@ export interface ProgramConfig {
 
 /**
  * Single source of truth for the four CODEship program levels' Stripe Payment
- * Links, prices, and age bands. These links, prices, and ages are the real,
- * live products — do not guess or change them without confirming with the owner.
+ * Links, prices, and age bands. These links and ages are the real, live
+ * products — do not guess or change them without confirming with the owner.
+ *
+ * Price is a single flat rate for every program (see FLAT_PRICE_CAD in
+ * src/config/offering.ts); each level's `priceCad` points at that constant so
+ * pricing changes are a one-line edit.
+ *
+ * Each Stripe link is wired to both (a) Oshawa in-person registration and
+ * (b) online registration for that program from any city — the two paths that
+ * sell a real seat. In-person in the other 11 cities is waitlist-only and does
+ * not use these links.
  *
  * Note: the numeric age bands here (4–6 / 7–9 / 9–11 / 11–14) are the Stripe
  * product ages the customer actually pays for. The grade bands match the
@@ -47,7 +47,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     ageMax: 6,
     gradesEn: "K–1",
     gradesFr: "M–1re",
-    priceCad: 175,
+    priceCad: FLAT_PRICE_CAD,
     techEn: "Scratch Jr, digital literacy, creative problem-solving",
     techFr: "Scratch Jr, littératie numérique, résolution créative",
     projectsEn: "Interactive stories and simple games",
@@ -60,7 +60,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Grow confidence and independence with technology",
       "Create and share a first interactive project",
     ],
-    url: "https://buy.stripe.com/00wbIV4Abdo1dbz7TKdAk09",
+    url: "https://buy.stripe.com/cNi8wJ2s3gAd9Znei8dAk0j",
   },
   builders: {
     order: 2,
@@ -70,7 +70,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     ageMax: 9,
     gradesEn: "Grades 2–3",
     gradesFr: "2e–3e année",
-    priceCad: 175,
+    priceCad: FLAT_PRICE_CAD,
     techEn: "Scratch, HTML, CSS, problem-solving, teamwork",
     techFr: "Scratch, HTML, CSS, résolution de problèmes, travail d'équipe",
     projectsEn: "Web pages and classroom challenge sites",
@@ -83,7 +83,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Debug independently and iterate on their work",
       "Collaborate with peers on team challenges",
     ],
-    url: "https://buy.stripe.com/7sY8wJ6Ij6ZD6Nb7TKdAk0b",
+    url: "https://buy.stripe.com/4gM5kxgiT97L4F34HydAk0h",
   },
   developers: {
     order: 3,
@@ -93,7 +93,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     ageMax: 11,
     gradesEn: "Grades 4–5",
     gradesFr: "4e–5e année",
-    priceCad: 199,
+    priceCad: FLAT_PRICE_CAD,
     techEn: "JavaScript, Python, AI learning foundations",
     techFr: "JavaScript, Python, bases de l'IA",
     projectsEn: "Apps, bots, and data storytelling",
@@ -106,7 +106,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Understand the foundations of AI and how data drives it",
       "Present and explain their own technical projects",
     ],
-    url: "https://buy.stripe.com/4gM4gtc2D2JnefD0ridAk0a",
+    url: "https://buy.stripe.com/cNi6oB9Uves52wVgqgdAk0i",
   },
   engineers: {
     order: 4,
@@ -116,7 +116,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     ageMax: 16,
     gradesEn: "Grades 6–8",
     gradesFr: "6e–8e année",
-    priceCad: 199,
+    priceCad: FLAT_PRICE_CAD,
     techEn: "Advanced JS/Python, app development, product design",
     techFr: "JS/Python avancé, développement d'apps, conception produit",
     projectsEn: "Community impact solutions",
@@ -129,7 +129,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Apply AI/ML concepts to a project that matters to them",
       "Lead a build and explore tech career pathways",
     ],
-    url: "https://buy.stripe.com/14AfZbc2D1Fjc7vfmcdAk08",
+    url: "https://buy.stripe.com/cNidR3eaL0Bfb3r3DudAk0k",
   },
 };
 
