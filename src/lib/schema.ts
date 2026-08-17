@@ -34,9 +34,9 @@ export function organizationSchema() {
 }
 
 interface LocalBusinessOptions {
-  /** City-center coordinates — only pass for the 5 official in-person program cities. */
+  /** City-center coordinates — only pass for the open in-person city (Oshawa). */
   geo?: { latitude: number; longitude: number };
-  /** e.g. ["Saturday 09:00-13:45"] — only pass where CODEship actually runs in-person classes. */
+  /** e.g. ["Saturday 09:00-13:45"] — only pass where CODEship actually runs in-person classes (Oshawa). */
   openingHours?: string[];
   areaServed?: string[];
 }

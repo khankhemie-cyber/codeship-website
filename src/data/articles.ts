@@ -1544,9 +1544,9 @@ export const articles: Article[] = [
       { label: "Explore all programs", href: "/programs" },
     ],
     content: `
-<p><strong>Quick answer:</strong> Toronto families can access CODEship's full K-8 coding journey in person every Saturday, or online — with programs for every grade band from kindergarten through grade 8.</p>
+<p><strong>Quick answer:</strong> Toronto families can join CODEship's full K-8 coding journey live online today. In-person classes are on a waitlist in Toronto — CODEship currently runs in-person classes in Oshawa — so you can register online now or join the Toronto waitlist to be first in line.</p>
 <h2>What's Available for Kids Coding Classes in Toronto?</h2>
-<p>Toronto is one of CODEship's five official in-person cities, running all four program levels — Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — every Saturday. Families who prefer a weekday online option can join the same curriculum through CODEship's online schedule instead.</p>
+<p>Online classes are open to Toronto families right now, covering all four program levels — Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8). CODEship's in-person Saturday classes run in Oshawa, and in-person classes in Toronto are being built — join the waitlist and you'll be contacted as soon as a local cohort opens. Every program is a flat CAD $129 per semester (8 weekly classes), the same price online or in-person.</p>
 <h2>What Should Toronto Parents Look for in a Coding Program?</h2>
 <ul>
 <li><strong>A real progression:</strong> Does the program build in complexity year over year, or repeat the same content?</li>
@@ -1554,12 +1554,12 @@ export const articles: Article[] = [
 <li><strong>Age-appropriate tools:</strong> Blocks for younger kids, text-based languages as they mature.</li>
 <li><strong>Inclusive design:</strong> A welcoming environment for all learning styles and backgrounds.</li>
 </ul>
-<h2>What Does a Saturday Look Like?</h2>
-<p>Each of CODEship's Toronto Saturday classes runs about 55 minutes, project-based throughout, with a instructor guiding kids from idea to a finished, working thing they built themselves.</p>
+<h2>What Does an Online Class Look Like?</h2>
+<p>Each of CODEship's live online classes runs about 55 minutes, project-based throughout, with an instructor guiding kids from idea to a finished, working thing they built themselves — the same curriculum as the in-person Oshawa classes.</p>
     `,
     faqs: [
-      { question: "Does CODEship run in-person classes in Toronto?", answer: "Yes. Toronto is one of CODEship's five official in-person cities, with Saturday classes for all four K-8 program levels." },
-      { question: "Is there an online option for Toronto families who can't attend Saturdays?", answer: "Yes — the same curriculum is available online on weekday schedules." },
+      { question: "Does CODEship run in-person classes in Toronto?", answer: "In-person classes in Toronto are on a waitlist for now; CODEship's in-person classes currently run in Oshawa. Online classes are open to Toronto families today, and you can join the Toronto in-person waitlist to be first in line." },
+      { question: "Is there an online option for Toronto families?", answer: "Yes — the full K-8 curriculum is available live online, open to Toronto families now, at a flat CAD $129 per semester." },
     ],
   },
   {
@@ -1579,17 +1579,17 @@ export const articles: Article[] = [
       { label: "Explore all programs", href: "/programs" },
     ],
     content: `
-<p><strong>Quick answer:</strong> Vaughan is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, plus an online option for families who prefer a weekday schedule.</p>
+<p><strong>Quick answer:</strong> Vaughan families can join the full K-8 coding journey live online today. In-person classes in Vaughan are on a waitlist — CODEship currently runs in-person classes in Oshawa — so you can register online now or join the Vaughan waitlist to be first in line.</p>
 <h2>Coding Classes for Kids in Vaughan: What's Available</h2>
-<p>Vaughan families have access to all four CODEship program levels in person: Explorers (K-1, visual blocks), Builders (grades 2-3, HTML & CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8, Python, AI, and cybersecurity) — each running every Saturday.</p>
+<p>Online classes are open to Vaughan families right now, covering all four CODEship program levels: Explorers (K-1, visual blocks), Builders (grades 2-3, HTML & CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8, Python, AI, and cybersecurity). In-person Saturday classes run in Oshawa; in-person classes in Vaughan are being built, and joining the waitlist puts you first in line when a local cohort opens. Every program is a flat CAD $129 per semester (8 weekly classes), online or in-person.</p>
 <h2>Why Project-Based Matters for Vaughan Families Choosing a Program</h2>
 <p>The biggest difference between coding programs isn't the tools they use — it's whether kids build their own projects or follow identical, copy-paste tutorials. Project-based programs produce kids who can solve new problems; tutorial-based programs produce kids who can repeat steps.</p>
 <h2>Getting Started</h2>
-<p>Families new to coding can use CODEship's program finder to match their child's age and interests to the right level, then register for the next Saturday semester in Vaughan or the equivalent online schedule.</p>
+<p>Families new to coding can use CODEship's program finder to match their child's age and interests to the right level, then register for the next online semester or join the Vaughan in-person waitlist.</p>
     `,
     faqs: [
-      { question: "What ages does CODEship serve in Vaughan?", answer: "Kindergarten through grade 8, across four program levels that build on each other." },
-      { question: "Does my child need prior coding experience to start in Vaughan?", answer: "No. Every level is designed to welcome complete beginners." },
+      { question: "What ages does CODEship serve in Vaughan?", answer: "Kindergarten through grade 8, across four program levels that build on each other, available live online to Vaughan families now." },
+      { question: "Does CODEship run in-person classes in Vaughan?", answer: "In-person classes in Vaughan are on a waitlist for now; CODEship's in-person classes currently run in Oshawa. Online is open to Vaughan families today." },
     ],
   },
   {
@@ -1609,17 +1609,17 @@ export const articles: Article[] = [
       { label: "Explore all programs", href: "/programs" },
     ],
     content: `
-<p><strong>Quick answer:</strong> Oshawa is CODEship's headquarters city and one of five official in-person locations, running the full K-8 coding and STEM journey every Saturday.</p>
+<p><strong>Quick answer:</strong> Oshawa is CODEship's headquarters and its in-person home, running the full K-8 coding and STEM journey every Saturday and serving families across Durham Region — including Whitby, Courtice, Bowmanville, and Clarington — plus live online classes for those who prefer to attend from home.</p>
 <h2>Coding & STEM for Kids in Oshawa and Durham Region</h2>
-<p>Oshawa families have access to all four CODEship program levels — Explorers, Builders, Developers, and Engineers — covering visual blocks, HTML/CSS, JavaScript, and Python + AI + cybersecurity, in a natural progression from kindergarten through grade 8.</p>
+<p>Oshawa families have access to all four CODEship program levels — Explorers, Builders, Developers, and Engineers — covering visual blocks, HTML/CSS, JavaScript, and Python + AI + cybersecurity, in a natural progression from kindergarten through grade 8. CODEship also offers K-8 math and reading tutoring alongside the coding programs. Every program is a flat CAD $129 per semester (8 weekly classes), the same in-person or online.</p>
 <h2>What Makes a Coding & STEM Program Worth the Drive?</h2>
-<p>For Durham Region families comparing options, the key differentiators are the same anywhere: a real multi-year progression (not a one-off workshop), project-based learning (kids build their own ideas), and an inclusive, welcoming environment regardless of prior experience.</p>
+<p>For Durham Region families comparing options, the key differentiators are the same anywhere: a real multi-year progression (not a one-off workshop), project-based learning (kids build their own ideas), and an inclusive, welcoming environment regardless of prior experience. Families across Whitby, Courtice, Bowmanville, and Clarington travel to the Oshawa Saturday classes, or join the same curriculum live online.</p>
 <h2>Getting Started in Oshawa</h2>
-<p>Families can use the program finder to identify the right level by grade, then register for the next Saturday semester.</p>
+<p>Families can use the program finder to identify the right level by grade, then register for the next Saturday semester in Oshawa or online.</p>
     `,
     faqs: [
-      { question: "Does CODEship run classes in Oshawa specifically?", answer: "Yes — Oshawa is one of CODEship's five official in-person cities and its headquarters location." },
-      { question: "What age range is covered in Oshawa?", answer: "Kindergarten through grade 8, across four progressive levels." },
+      { question: "Does CODEship run classes in Oshawa specifically?", answer: "Yes — Oshawa is CODEship's in-person home and headquarters, running Saturday classes for the full K-8 journey and serving families across Durham Region, including Whitby, Courtice, Bowmanville, and Clarington." },
+      { question: "What age range is covered in Oshawa?", answer: "Kindergarten through grade 8, across four progressive coding levels, plus K-8 math and reading tutoring." },
     ],
   },
   {
@@ -1639,16 +1639,16 @@ export const articles: Article[] = [
       { label: "Explore all programs", href: "/programs" },
     ],
     content: `
-<p><strong>Quick answer:</strong> Calgary is one of CODEship's five official in-person cities, with in-person Saturday classes for all four K-8 program levels and an online option for families across Alberta.</p>
+<p><strong>Quick answer:</strong> Calgary families can join CODEship's full K-8 coding journey live online today. In-person classes in Calgary are on a waitlist — CODEship currently runs in-person classes in Oshawa — so you can register online now or join the Calgary waitlist to be first in line.</p>
 <h2>Coding Classes for Kids in Calgary: What's Available</h2>
-<p>Calgary families can access CODEship's full K-8 progression in person: Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — each building on the last, from visual blocks through to Python, AI, and cybersecurity.</p>
+<p>Online classes are open to Calgary families right now, covering CODEship's full K-8 progression: Explorers (K-1), Builders (grades 2-3), Developers (grades 4-5), and Engineers (grades 6-8) — each building on the last, from visual blocks through to Python, AI, and cybersecurity. In-person Saturday classes run in Oshawa; in-person classes in Calgary are being built, and the waitlist puts you first in line when a local cohort opens. Every program is a flat CAD $129 per semester (8 weekly classes), online or in-person.</p>
 <h2>How This Connects to Alberta's Curriculum</h2>
 <p>CODEship's curriculum is designed to map to and support Alberta's Career and Technology Foundations (CTF) computing outcomes for grades 5-9, giving Calgary families a consistent, structured coding pathway alongside whatever their school offers.</p>
 <h2>Getting Started in Calgary</h2>
-<p>Use the program finder to match your child's age and interests to the right level, then register for the next Saturday semester in Calgary or the equivalent online schedule.</p>
+<p>Use the program finder to match your child's age and interests to the right level, then register for the next online semester or join the Calgary in-person waitlist.</p>
     `,
     faqs: [
-      { question: "Does CODEship offer in-person classes in Calgary?", answer: "Yes — Calgary is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "Does CODEship offer in-person classes in Calgary?", answer: "In-person classes in Calgary are on a waitlist for now; CODEship's in-person classes currently run in Oshawa. Online classes are open to Calgary families today." },
       { question: "Does this align with Alberta's school curriculum?", answer: "The program is designed to map to and support relevant Alberta CTF computing outcomes — it is not endorsed or approved by Alberta Education." },
     ],
   },
@@ -1669,16 +1669,16 @@ export const articles: Article[] = [
       { label: "Explore all programs", href: "/programs" },
     ],
     content: `
-<p><strong>Quick answer:</strong> Vancouver is one of CODEship's five official in-person cities, offering the full K-8 coding journey every Saturday, with an online option for families across BC.</p>
+<p><strong>Quick answer:</strong> Vancouver families can join the full K-8 coding journey live online today. In-person classes in Vancouver are on a waitlist — CODEship currently runs in-person classes in Oshawa — so you can register online now or join the Vancouver waitlist to be first in line.</p>
 <h2>Kids Coding Classes in Vancouver: What's Available</h2>
-<p>Vancouver families can access all four CODEship program levels in person — Explorers, Builders, Developers, and Engineers — moving from visual block coding through HTML/CSS, JavaScript, and finally Python, AI, and cybersecurity by grade 8.</p>
+<p>Online classes are open to Vancouver families right now, covering all four CODEship program levels — Explorers, Builders, Developers, and Engineers — moving from visual block coding through HTML/CSS, JavaScript, and finally Python, AI, and cybersecurity by grade 8. In-person Saturday classes run in Oshawa; in-person classes in Vancouver are being built, and the waitlist puts you first in line when a local cohort opens. Every program is a flat CAD $129 per semester (8 weekly classes), online or in-person.</p>
 <h2>How This Connects to BC's ADST Curriculum</h2>
 <p>CODEship's curriculum is designed to align with and support BC's Applied Design, Skills & Technologies (ADST) goals for computational thinking, giving Vancouver families a consistent coding pathway regardless of how much coding their specific school covers in a given year.</p>
 <h2>Getting Started in Vancouver</h2>
-<p>Use the program finder to match your child's age to the right level, then register for the next Saturday semester in Vancouver or online.</p>
+<p>Use the program finder to match your child's age to the right level, then register for the next online semester or join the Vancouver in-person waitlist.</p>
     `,
     faqs: [
-      { question: "Does CODEship offer in-person classes in Vancouver?", answer: "Yes — Vancouver is one of five official in-person cities, with Saturday classes for all four program levels." },
+      { question: "Does CODEship offer in-person classes in Vancouver?", answer: "In-person classes in Vancouver are on a waitlist for now; CODEship's in-person classes currently run in Oshawa. Online classes are open to Vancouver families today." },
       { question: "How does this relate to BC's ADST curriculum?", answer: "The program is designed to align with and support ADST's computational thinking goals — it is not endorsed or approved by the BC Ministry of Education." },
     ],
   },
@@ -1701,7 +1701,7 @@ export const articles: Article[] = [
     content: `
 <p><strong>Quick answer:</strong> CODEship's online classes run the same curriculum as the in-person program, live and instructor-led — Tuesdays for Explorers and Builders, Thursdays for Developers and Engineers, 55 minutes per class.</p>
 <h2>How Do Online Coding Classes for Kids Actually Work?</h2>
-<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, 55 minutes long, following the exact same project-based curriculum as the in-person Saturday classes. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to live near one of the five in-person cities.</p>
+<p>CODEship's online classes are not pre-recorded videos — they're live, instructor-led sessions, 55 minutes long, following the exact same project-based curriculum as the in-person Saturday classes in Oshawa. A child anywhere in Canada (or beyond) can join the same K-8 journey without needing to travel to Oshawa for in-person classes.</p>
 <h2>What's the Online Schedule?</h2>
 <ul>
 <li><strong>Tuesdays, 4:00-4:55 PM ET:</strong> Explorers (K-1).</li>
@@ -1713,7 +1713,7 @@ export const articles: Article[] = [
 <h2>Is Online as Effective as In-Person for Coding?</h2>
 <p>For project-based coding specifically, online classes work well because the "project" lives on a screen either way — a child building a website or a Python program does the same hands-on work whether they're sitting next to an instructor or connected live over video, with the instructor able to see their screen and guide them in real time.</p>
 <h2>Who Is Online Best For?</h2>
-<p>Families outside the five in-person cities, families who prefer a weekday schedule over Saturdays, and families who want the flexibility of joining from home.</p>
+<p>Families outside Oshawa who can't attend the in-person Saturday classes, families who prefer a weekday schedule over Saturdays, and families who want the flexibility of joining from home.</p>
     `,
     faqs: [
       { question: "Are CODEship's online classes live or pre-recorded?", answer: "Live and instructor-led — not pre-recorded videos." },
