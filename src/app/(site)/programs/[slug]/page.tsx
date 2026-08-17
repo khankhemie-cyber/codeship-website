@@ -6,6 +6,7 @@ import { IN_PERSON, IN_PERSON_SATURDAY_SCHEDULE, ONLINE } from "@/data/locations
 import { breadcrumbSchema, courseSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
 import ProgramLocationSelector from "@/components/ProgramLocationSelector";
+import ClassScheduleCard from "@/components/ClassScheduleCard";
 import JourneyMap from "@/components/JourneyMap";
 import FAQAccordion from "@/components/FAQAccordion";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -157,6 +158,9 @@ export default function ProgramPage({ params }: Props) {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main column */}
             <div className="lg:col-span-2 space-y-14">
+              {/* Class dates & times — both formats, always visible */}
+              <ClassScheduleCard program={program.slug} />
+
               {/* Semester breakdown */}
               <div>
                 <h2 className="text-2xl font-bold text-[#001532] mb-1">Semester by Semester</h2>

@@ -5,6 +5,7 @@ import RegistrationForm from "@/components/RegistrationForm";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL, SEMESTER_WEEKS } from "@/config/offering";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -111,6 +112,7 @@ export default function RegisterPage({ searchParams }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {PROGRAM_ORDER.map((level) => {
               const config = PROGRAM_LINKS[level];
+              const sched = CLASS_SCHEDULE[level];
               return (
                 <Link
                   key={level}
@@ -124,6 +126,24 @@ export default function RegisterPage({ searchParams }: Props) {
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm mb-4">{config.summary}</p>
+                  <div className="mb-4 rounded-xl bg-[#FAF8F4] border border-gray-100 p-3 space-y-1.5">
+                    <div className="flex items-start gap-2 text-xs text-[#001532]">
+                      <span className="mt-1.5 h-2 w-2 rounded-full bg-[#138A9A] shrink-0" />
+                      <span>
+                        <span className="font-semibold">In-person (Oshawa):</span> {sched.inperson.days}, {sched.inperson.time}
+                        {" · "}
+                        {sched.inperson.dates}
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2 text-xs text-[#001532]">
+                      <span className="mt-1.5 h-2 w-2 rounded-full bg-[#E5A823] shrink-0" />
+                      <span>
+                        <span className="font-semibold">Online:</span> {sched.online.days}, {sched.online.time}
+                        {" · "}
+                        {sched.online.dates}
+                      </span>
+                    </div>
+                  </div>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-[#001532]">CAD ${config.priceCad}/semester</span>
                     <span className="text-[#E5A823] font-semibold text-sm">Details &amp; register →</span>
