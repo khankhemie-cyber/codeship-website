@@ -17,8 +17,8 @@ const steps = [
   },
   {
     id: "interest",
-    question: "What does your child enjoy most?",
-    options: ["Games", "Apps & Websites", "AI & Tech", "Robotics", "Animation", "Problem-Solving"],
+    question: "What does your child enjoy most — or need most help with?",
+    options: ["Games", "Apps & Websites", "AI & Tech", "Robotics", "Animation", "Math help", "Reading & writing"],
   },
   {
     id: "format",
@@ -45,7 +45,26 @@ function ageToLevel(age: string): ProgramLevel {
 
 function getRecommendation(answers: string[]): Recommendation {
   const age = answers[0];
+  const interest = answers[2];
   const format = answers[3];
+
+  // Academic tutoring wins whenever a parent explicitly picks it, at any age.
+  if (interest === "Math help") {
+    return {
+      title: "Math Tutoring (K–8)",
+      description:
+        "Focused K–8 math support — from number sense to pre-algebra — taught the same creative, confidence-building way as our coding classes. Flat CAD $129/semester, in-person in Oshawa or online.",
+      href: "/programs/math-tutoring",
+    };
+  }
+  if (interest === "Reading & writing") {
+    return {
+      title: "English & Reading Tutoring (K–8)",
+      description:
+        "K–8 reading and writing support — phonics and fluency through comprehension and essays — building strong, confident communicators. Flat CAD $129/semester, in-person in Oshawa or online.",
+      href: "/programs/reading-tutoring",
+    };
+  }
 
   if (age === "4–6 years") {
     return {

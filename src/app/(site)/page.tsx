@@ -54,6 +54,21 @@ const homeFaqs = [
     answer:
       "Yes! CODEship Academy offers after-school clubs, PA Day workshops, March Break camps, and in-school STEM workshops for schools and school boards across Canada. Contact us to learn more.",
   },
+  {
+    question: "Do you offer math and reading tutoring?",
+    answer:
+      "Yes. Alongside our coding and AI programs, CODEship Academy now offers K–8 Math Tutoring and English & Reading Tutoring. Both run the same 8-week weekly format at the same flat CAD $129 per semester, in-person in Oshawa or live online.",
+  },
+  {
+    question: "Can my child do both coding and tutoring?",
+    answer:
+      "Absolutely — many families pair them. Coding builds creative problem-solving while math and reading tutoring reinforce core academic skills. Each is a separate flat CAD $129 semester and can be taken in-person in Oshawa or online.",
+  },
+  {
+    question: "Is tutoring available online?",
+    answer:
+      "Yes. Both Math Tutoring and English & Reading Tutoring are offered in-person in Oshawa and live online, so families anywhere in Canada can join at the same price.",
+  },
 ];
 
 const programs = [
@@ -107,6 +122,26 @@ const programs = [
     imageAlt: "Child exploring robotics and AI technology",
     borderColour: "border-l-4 border-[#138A9A]",
   },
+  {
+    title: "Math Tutoring",
+    description:
+      "We also now offer K–8 math tutoring — number sense to pre-algebra — taught the same creative, confidence-building way as our coding classes.",
+    age: "Grades K–8",
+    href: "/programs/math-tutoring",
+    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80",
+    imageAlt: "Child working through math problems with a tutor",
+    borderColour: "border-l-4 border-[#3A5B9E]",
+  },
+  {
+    title: "English & Reading Tutoring",
+    description:
+      "New K–8 reading and writing support — phonics and fluency to comprehension and essays — building strong, confident communicators.",
+    age: "Grades K–8",
+    href: "/programs/reading-tutoring",
+    image: "https://images.unsplash.com/photo-1503945438517-f65904a52ce6?w=600&q=80",
+    imageAlt: "Child reading a book with a tutor",
+    borderColour: "border-l-4 border-[#6E43A8]",
+  },
 ];
 
 
@@ -129,7 +164,7 @@ const differentiators = [
   },
   {
     title: "Academic Skill-Building",
-    desc: "Coding naturally reinforces math, reading, and problem-solving skills children use in school.",
+    desc: "Coding naturally reinforces math, reading, and problem-solving — and we now also offer dedicated K–8 math and reading tutoring for families who want focused academic support.",
   },
   {
     title: "School & Community Model",

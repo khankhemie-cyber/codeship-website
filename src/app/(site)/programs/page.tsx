@@ -6,6 +6,7 @@ import AlignmentStrip from "@/components/AlignmentStrip";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { breadcrumbSchema } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { TUTORING } from "@/data/tutoring";
 
 export const metadata: Metadata = pageMetadata({
   title: "Coding Classes for Kids — Programs by Age | CODEship Academy",
@@ -205,6 +206,41 @@ export default function ProgramsPage() {
                   Learn More
                 </Link>
               </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Math & Reading Tutoring */}
+      <section id="tutoring" className="py-20 bg-[#FAF8F4] scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+          <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-2">Academic Skill-Building</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#001532] mb-4">Math &amp; Reading Tutoring</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            We also now offer dedicated K–8 tutoring alongside our coding and AI programs — same 8-week weekly format,
+            same flat CAD $129/semester, in-person in Oshawa or online.
+          </p>
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {TUTORING.map((t) => (
+            <div
+              key={t.slug}
+              className="bg-white rounded-2xl shadow-md p-8 border-l-4"
+              style={{ borderLeftColor: t.accentColour }}
+            >
+              <div className="flex flex-wrap items-center gap-3 mb-3">
+                <h3 className="text-2xl font-bold text-[#001532]">{t.label}</h3>
+                <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-1 rounded">
+                  Grades {t.gradeBand}
+                </span>
+              </div>
+              <p className="text-gray-600 mb-5">{t.summary}</p>
+              <Link
+                href={`/programs/${t.slug}`}
+                className="bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
+              >
+                Learn More
+              </Link>
             </div>
           ))}
         </div>
