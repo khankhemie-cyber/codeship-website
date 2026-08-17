@@ -19,7 +19,7 @@ export const runtime = "edge";
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Classes Online in Canada | CODEship Academy",
   description:
-    "Live online coding, AI & STEM classes for kids ages 4–16 across Canada. Small-group, project-based lessons. Register today — from CAD $175/semester.",
+    "Live online coding, AI & STEM classes for kids ages 4–16 across Canada. Small-group, project-based lessons. Flat CAD $129/semester (8 weekly classes).",
   path: "/",
 });
 

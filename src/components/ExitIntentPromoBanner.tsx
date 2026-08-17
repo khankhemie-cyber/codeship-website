@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { REGISTRATION_COUPON } from "@/lib/payment-links";
 
 const DISMISS_KEY = "codeship-exit-promo-dismissed";
 const MIN_ON_PAGE_MS = 4000; // Don't fire in the first few seconds on the page.
 
 /**
- * A site-wide exit-intent modal advertising the launch promo. On desktop it
- * fires when the cursor leaves through the top of the viewport (heading for the
- * tab bar / back button). On touch devices, where there is no cursor to track,
- * it falls back to a fast upward scroll after the visitor has scrolled down.
- * Shown at most once per browser session; skipped for reduced-motion users only
- * for the entrance animation, not the content.
+ * A site-wide exit-intent modal that nudges undecided visitors toward the
+ * Program Finder. On desktop it fires when the cursor leaves through the top of
+ * the viewport (heading for the tab bar / back button). On touch devices, where
+ * there is no cursor to track, it falls back to a fast upward scroll after the
+ * visitor has scrolled down. Shown at most once per browser session; the
+ * entrance animation (not the content) is skipped for reduced-motion users.
+ *
+ * This is a wayfinding nudge, not a promotion — no price, discount, or
+ * "limited time" framing.
  */
 export default function ExitIntentPromoBanner() {
   const [visible, setVisible] = useState(false);
@@ -81,7 +83,7 @@ export default function ExitIntentPromoBanner() {
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
       role="dialog"
       aria-modal="true"
-      aria-label="Registration promotion"
+      aria-label="Find the right program"
       onClick={dismiss}
     >
       <div
@@ -100,30 +102,24 @@ export default function ExitIntentPromoBanner() {
           </svg>
         </button>
 
-        <p className="text-xs font-bold uppercase tracking-widest text-[#E5A823]">Wait — don&apos;t miss this</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#E5A823]">Before you go</p>
         <h2 className="mt-2 text-3xl font-extrabold text-[#001532]">
-          Get {REGISTRATION_COUPON.discountLabel} your registration
+          Find the right program for your child
         </h2>
         <p className="mt-3 text-gray-600">
-          A one-time launch offer for CODEship Academy coding programs. Apply your promo code at checkout to save.
+          Answer a few quick questions about your child&apos;s age and interests, and we&apos;ll point you to the
+          coding, AI, math, or reading program that fits — in-person in Oshawa or online anywhere.
         </p>
 
-        <div className="mt-6 rounded-xl border border-dashed border-[#E5A823] bg-[#E5A823]/10 p-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#b8850f]">Your promo code</p>
-          <p className="mt-1 select-all font-mono text-2xl font-extrabold tracking-widest text-[#001532]">
-            {REGISTRATION_COUPON.code}
-          </p>
-        </div>
-
         <Link
-          href="/register"
+          href="/program-finder"
           onClick={dismiss}
           className="mt-6 block w-full rounded-xl bg-[#E5A823] px-6 py-4 text-center font-bold text-[#001532] transition-colors hover:bg-[#d4941f]"
         >
-          Register now &amp; redeem {REGISTRATION_COUPON.discountLabel}
+          Take the Program Finder
         </Link>
         <button onClick={dismiss} className="mt-3 text-sm text-gray-400 underline hover:text-gray-600">
-          No thanks, maybe later
+          No thanks, keep browsing
         </button>
       </div>
     </div>

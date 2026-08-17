@@ -10,7 +10,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 export const metadata: Metadata = pageMetadata({
   title: "Coding Classes for Kids — Programs by Age | CODEship Academy",
   description:
-    "Kids coding classes online and in Canada for ages 4–16: weekly classes, camps, school workshops, and AI & robotics. Project-based, small-group. Register from CAD $175/semester.",
+    "Kids coding classes online and in Canada for ages 4–16: weekly classes, camps, school workshops, and AI & robotics. Project-based, small-group. Flat CAD $129/semester (8 weekly classes).",
   path: "/programs",
 });
 

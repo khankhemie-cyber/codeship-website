@@ -24,8 +24,9 @@ export interface Program {
 
 /**
  * Authoritative curriculum facts for the four CODEship programs.
- * Every program: 4 semesters + a capstone, ~20 sessions, 8 quizzes,
- * project-based, with inclusive-design accommodations built in.
+ * Every program: 4 semesters + a capstone. Each semester is 8 weekly classes
+ * (see SEMESTER_WEEKS in src/config/offering.ts), so ~32 sessions across the
+ * journey, project-based, with inclusive-design accommodations built in.
  */
 export const PROGRAMS: Program[] = [
   {
@@ -232,7 +233,8 @@ export function getProgram(slug: string): Program | undefined {
 /** Shared facts about every program's structure, for display without repeating literals. */
 export const PROGRAM_STRUCTURE = {
   semesters: 4,
-  sessionsApprox: 20,
+  weeksPerSemester: 8,
+  sessionsApprox: 32,
   quizzes: 8,
   quizzesPerSemester: 2,
 };
