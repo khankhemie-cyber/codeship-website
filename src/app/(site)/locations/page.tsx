@@ -8,7 +8,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 export const metadata: Metadata = pageMetadata({
   title: "CODEship Academy Locations — In-Person in Oshawa & Online Across Canada",
   description:
-    "In-person kids coding, AI, math and reading programs in Oshawa (Durham Region), plus live online classes across Canada. Toronto, Mississauga, Calgary, Vancouver and more — join the in-person waitlist or start online today.",
+    "In-person kids coding, AI & STEM programs in Oshawa (Durham Region), plus live online classes across Canada. Toronto, Mississauga, Calgary, Vancouver and more — join the in-person waitlist or start online today.",
   path: "/locations",
 });
 
@@ -46,9 +46,9 @@ export default function LocationsPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Find a Location</h1>
             <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-              In-person coding, AI, math and reading classes are open for registration in Oshawa, serving families
-              across Durham Region. Live online classes are open everywhere — and in-person is coming to 11 more cities,
-              where you can join the waitlist now.
+              In-person coding, AI, and STEM classes are open for registration in Oshawa, serving families across
+              Durham Region. Live online classes are open everywhere — and in-person is coming to 11 more cities, where
+              you can join the waitlist now.
             </p>
           </div>
         </section>

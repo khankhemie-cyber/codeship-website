@@ -27,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!location) return {};
   const isOpen = location.inPerson === "open";
   const description = isOpen
-    ? `Kids coding, AI, math and reading programs in ${location.name} (Durham Region) — in-person on Saturdays and live online. K–8, flat CAD $129/semester. Register today.`
-    : `Live online kids coding, AI, math and reading classes for families in ${location.name} — open now, flat CAD $129/semester. In-person classes are coming to ${location.name}; join the waitlist to be first in line.`;
+    ? `Kids coding, AI & STEM programs in ${location.name} (Durham Region) — in-person on Saturdays and live online. K–8, flat CAD $129/semester. Register today.`
+    : `Live online kids coding, AI & STEM classes for families in ${location.name} — open now, flat CAD $129/semester. In-person classes are coming to ${location.name}; join the waitlist to be first in line.`;
   return pageMetadata({
-    title: `CODEship Academy ${location.name} | Kids Coding, AI, Math & Reading (K–8)`,
+    title: `CODEship Academy ${location.name} | Kids Coding, AI & STEM (K–8)`,
     description,
     path: `/locations/${params.city}`,
   });
@@ -49,12 +49,12 @@ export default function CityPage({ params }: Props) {
     {
       question: `Can my child join CODEship in ${cityName} in-person or online?`,
       answer: isOpen
-        ? `Both. ${cityName} is our in-person home base — coding, AI, math and reading classes run on Saturdays — and every program is also available live online. Each program is a flat CAD $129 per semester (8 weekly classes).`
+        ? `Both. ${cityName} is our in-person home base — coding, AI, and STEM classes run on Saturdays — and every program is also available live online. Each program is a flat CAD $129 per semester (8 weekly classes).`
         : `Online classes are open to ${cityName} families right now — every program runs live online for a flat CAD $129 per semester (8 weekly classes). In-person classes in ${cityName} are on the way; join the waitlist to be first in line when a local cohort opens.`,
     },
     {
       question: `What CODEship programs are available in ${cityName}?`,
-      answer: `Families in ${cityName} can enrol in the full K–8 journey — Explorers, Builders, Developers and Engineers — plus Math Tutoring and English & Reading Tutoring, along with camps, school workshops, and birthday parties.`,
+      answer: `Families in ${cityName} can enrol in the full K–8 journey — Explorers, Builders, Developers and Engineers — along with camps, school workshops, birthday parties, and AI & robotics.`,
     },
     {
       question: `How do I enroll my child in ${cityName}?`,
@@ -127,8 +127,8 @@ export default function CityPage({ params }: Props) {
             </h1>
             <p className="text-gray-300 text-xl max-w-2xl mx-auto">
               {isOpen
-                ? `Coding, AI, math and reading programs for children in ${cityName}, ${province} — in-person on Saturdays and live online, serving families across Durham Region.`
-                : `Live online coding, AI, math and reading programs for children in ${cityName}, ${province} — open now. In-person classes are coming to ${cityName}; join the waitlist to be first in line.`}
+                ? `Coding, AI, and STEM programs for children in ${cityName}, ${province} — in-person on Saturdays and live online, serving families across Durham Region.`
+                : `Live online coding, AI, and STEM programs for children in ${cityName}, ${province} — open now. In-person classes are coming to ${cityName}; join the waitlist to be first in line.`}
             </p>
           </div>
         </section>
@@ -140,15 +140,15 @@ export default function CityPage({ params }: Props) {
                 <h2 className="text-2xl font-bold text-[#001532] mb-4">Programs in {cityName}</h2>
                 <p className="text-gray-600 mb-6">
                   CODEship Academy serves the {cityName} community through multiple program formats — making quality
-                  coding, AI, and academic skill-building accessible to more children and families, in-person and online.
+                  coding, AI, and STEM education accessible to more children and families, in-person and online.
                 </p>
                 <div className="space-y-3">
                   {[
                     { title: "Weekly Classes", desc: "Ongoing weekly sessions for all experience levels, ages 5–16.", href: "/programs/weekly-classes" },
-                    { title: "Math Tutoring", desc: "K–8 math support, same 8-week weekly format.", href: "/programs/math-tutoring" },
-                    { title: "English & Reading Tutoring", desc: "K–8 reading and writing support.", href: "/programs/reading-tutoring" },
                     { title: "Summer Camps", desc: "Immersive week-long camps during the summer.", href: "/programs/camps" },
+                    { title: "March Break & PA Day", desc: "Full-day workshops during school breaks.", href: "/programs/camps" },
                     { title: "School Workshops", desc: "After-school clubs and in-school enrichment.", href: "/programs/school-workshops" },
+                    { title: "Birthday Parties", desc: "Unique coding birthday party experiences.", href: "/programs/birthday-parties" },
                     { title: "AI & Robotics", desc: "Hands-on AI and robotics programs for ages 8–16.", href: "/programs/ai-robotics" },
                   ].map((prog) => (
                     <Link key={prog.title} href={prog.href} className="flex items-start gap-3 bg-white rounded-xl p-4 hover:shadow-md transition-shadow border border-gray-100">
@@ -197,7 +197,7 @@ export default function CityPage({ params }: Props) {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Link
-                        href={`/waitlist?city=${encodeURIComponent(cityName)}&status=waitlist&format=in-person`}
+                        href={`/waitlist?city=${encodeURIComponent(cityName)}`}
                         className="bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#00306b] transition-colors inline-block text-sm"
                       >
                         Join the Waitlist
@@ -248,8 +248,8 @@ export default function CityPage({ params }: Props) {
                 <p className="text-gray-600 leading-relaxed mb-3">
                   Our Oshawa home base welcomes families from across Durham Region. Whether you&apos;re in Oshawa,
                   Whitby, Courtice, Bowmanville, or Clarington, your child can join our Saturday in-person coding, AI,
-                  math, and reading classes — or attend live online from home. CODEship Academy is Durham Region&apos;s
-                  K–8 destination for creative, project-based coding and academic skill-building.
+                  and STEM classes — or attend live online from home. CODEship Academy is Durham Region&apos;s K–8
+                  destination for creative, project-based coding, AI, and STEM education.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
                   Every program is a flat CAD $129 per semester — 8 weekly classes, one class a week — with the same

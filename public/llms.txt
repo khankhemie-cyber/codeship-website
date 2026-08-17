@@ -6,9 +6,8 @@
 > four coding levels — Explorers (K-1, visual blocks), Builders (grades 2-3,
 > HTML/CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8,
 > Python + AI + cybersecurity) — each 4 semesters plus a capstone project.
-> CODEship also offers K-8 Math Tutoring and English & Reading Tutoring
-> alongside the coding programs. Every program is a flat CAD $129 per semester
-> (8 weekly classes, one class per week). Classes run in person on Saturdays in
+> Every program is a flat CAD $129 per semester (8 weekly classes, one class
+> per week). Classes run in person on Saturdays in
 > Oshawa (serving Oshawa, Whitby, Courtice, Bowmanville, and Clarington), or
 > live online across Canada (Tuesdays for Explorers/Builders, Thursdays for
 > Developers/Engineers, 4-6 PM ET). In-person classes in Toronto, Mississauga,
@@ -26,8 +25,6 @@
 - [Builders (Grades 2-3)](https://www.codeshipacademy.com/programs/builders): HTML & CSS
 - [Developers (Grades 4-5)](https://www.codeshipacademy.com/programs/developers): JavaScript
 - [Engineers (Grades 6-8)](https://www.codeshipacademy.com/programs/engineers): Python, AI, cybersecurity
-- [Math Tutoring (K-8)](https://www.codeshipacademy.com/programs/math-tutoring): number sense to pre-algebra
-- [English & Reading Tutoring (K-8)](https://www.codeshipacademy.com/programs/reading-tutoring): phonics to essays
 - [Programs overview & journey map](https://www.codeshipacademy.com/programs)
 - [Weekly classes](https://www.codeshipacademy.com/programs/weekly-classes)
 - [Camps](https://www.codeshipacademy.com/programs/camps)

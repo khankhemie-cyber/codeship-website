@@ -3,7 +3,6 @@ import Link from "next/link";
 import RegistrationForm from "@/components/RegistrationForm";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { LOCATIONS } from "@/data/locations";
-import { TUTORING } from "@/data/tutoring";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -30,60 +29,8 @@ function resolveCity(searchParams: Props["searchParams"]): string | null {
   return match ? match.name : null;
 }
 
-/** Resolve a clean, display-safe program name (must match a real tutoring offering). */
-function resolveProgram(searchParams: Props["searchParams"]): string | null {
-  const raw = typeof searchParams.program === "string" ? searchParams.program : undefined;
-  if (!raw) return null;
-  const match = TUTORING.find((t) => t.label.toLowerCase() === raw.toLowerCase());
-  return match ? match.label : null;
-}
-
 export default function WaitlistPage({ searchParams }: Props) {
   const city = resolveCity(searchParams);
-  const program = resolveProgram(searchParams);
-
-  // Tutoring interest list (payment links pending) reads differently from an
-  // in-person city waitlist, but both use the same lead form and funnel.
-  if (program) {
-    return (
-      <div className="bg-[#FAF8F4]">
-        <section className="bg-[#001532] py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest bg-[#E5A823] text-[#001532] px-3 py-1 rounded-full mb-4">
-              Interest List
-            </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-              Be First to Know: {program}
-            </h1>
-            <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-              {program} enrollment opens soon — a flat CAD $129/semester, in-person in Oshawa or online. Add your family
-              to the interest list and we&apos;ll email you the moment registration goes live.
-            </p>
-          </div>
-        </section>
-
-        <section className="py-20">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl shadow-md p-8">
-              <h2 className="text-2xl font-bold text-[#001532] mb-2 text-center">{program} Interest List</h2>
-              <p className="text-gray-500 text-sm mb-6 text-center">
-                Joining doesn&apos;t enrol your child or charge you anything — it just puts you first in line when
-                enrollment opens.
-              </p>
-              <RegistrationForm />
-            </div>
-            <p className="text-center text-gray-500 text-sm mt-6">
-              Coding classes are open now.{" "}
-              <Link href="/register" className="text-[#138A9A] font-semibold underline">
-                Register for a coding program
-              </Link>
-              .
-            </p>
-          </div>
-        </section>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-[#FAF8F4]">

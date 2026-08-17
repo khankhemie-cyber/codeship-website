@@ -12,19 +12,19 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "CODEship Academy | Kids Coding, AI, Math & Reading — Oshawa & Online",
+    default: "CODEship Academy | Kids Coding, AI & STEM — Oshawa & Online",
     template: "%s | CODEship Academy",
   },
   description:
-    "K–8 coding, AI, math and reading programs in Oshawa and across Durham Region, plus live online classes across Canada. Small-group and project-based — a strong back-to-school choice. Creativity before code.",
+    "K–8 coding, AI & STEM programs in Oshawa and across Durham Region, plus live online classes across Canada. Small-group and project-based — a strong back-to-school choice. Creativity before code.",
   keywords: [
     "kids coding Oshawa",
     "coding classes Durham Region",
     "kids coding classes online Canada",
     "K-8 coding and AI",
-    "math tutoring Oshawa",
-    "reading tutoring Durham Region",
+    "kids STEM programs Oshawa",
     "back to school kids programs Durham",
+    "AI classes for kids",
     "STEM programs for schools",
   ],
   authors: [{ name: "CODEship Academy" }],
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "https://www.codeshipacademy.com",
     siteName: "CODEship Academy",
-    title: "CODEship Academy | Kids Coding, AI, Math & Reading — Oshawa & Online",
+    title: "CODEship Academy | Kids Coding, AI & STEM — Oshawa & Online",
     description:
-      "Where curiosity becomes creation. K–8 coding, AI, math and reading in Oshawa and across Durham Region, plus live online classes across Canada.",
+      "Where curiosity becomes creation. K–8 coding, AI & STEM in Oshawa and across Durham Region, plus live online classes across Canada.",
     images: [
       {
         url: "/logo-banner.png",

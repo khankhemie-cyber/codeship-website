@@ -21,8 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/programs/school-workshops`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/programs/birthday-parties`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/programs/ai-robotics`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/programs/math-tutoring`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/programs/reading-tutoring`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     ...PROGRAMS.map((p) => ({
       url: `${BASE_URL}/programs/${p.slug}`,
       lastModified: new Date(),

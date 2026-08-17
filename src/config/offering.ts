@@ -1,8 +1,8 @@
 /**
  * Single source of truth for CODEship's standing price and semester length.
- * One flat price and one schedule apply to every offering — the four coding
- * programs and the two tutoring offerings, in-person or online, in every city.
- * Change these constants once and every price/schedule mention updates.
+ * One flat price and one schedule apply to every offering — all four coding
+ * programs, in-person or online, in every city. Change these constants once and
+ * every price/schedule mention updates.
  *
  * This is the standing price, not a promotion — no countdown or "limited time"
  * framing should ever wrap it.

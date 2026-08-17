@@ -6,7 +6,7 @@ export function organizationSchema() {
     url: "https://www.codeshipacademy.com",
     logo: "https://www.codeshipacademy.com/logo-nav.png",
     description:
-      "CODEship Academy offers K–8 coding, AI, math and reading programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
+      "CODEship Academy offers K–8 coding, AI, and STEM programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Oshawa",
