@@ -1,18 +1,27 @@
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "EducationalOrganization",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
     logo: "https://www.codeshipacademy.com/logo-nav.png",
     description:
-      "CODEship Academy offers children's coding, AI, and STEM education programs through weekly classes, camps, and school workshops.",
+      "CODEship Academy offers K–8 coding, AI, math and reading programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Oshawa",
       addressRegion: "Ontario",
       addressCountry: "CA",
     },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Durham Region" },
+      { "@type": "City", name: "Oshawa" },
+      { "@type": "City", name: "Whitby" },
+      { "@type": "City", name: "Courtice" },
+      { "@type": "City", name: "Bowmanville" },
+      { "@type": "City", name: "Clarington" },
+      { "@type": "Country", name: "Canada" },
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",

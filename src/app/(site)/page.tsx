@@ -17,9 +17,9 @@ import ScrollRegisterPopup from "@/components/ScrollRegisterPopup";
 export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Kids Coding Classes Online in Canada | CODEship Academy",
+  title: "Kids Coding, AI, Math & Reading — Oshawa & Online | CODEship Academy",
   description:
-    "Live online coding, AI & STEM classes for kids ages 4–16 across Canada. Small-group, project-based lessons. Flat CAD $129/semester (8 weekly classes).",
+    "K–8 coding, AI, math and reading for kids — in-person in Oshawa (Durham Region) and live online across Canada. Small-group, project-based, a great back-to-school pick. Flat CAD $129/semester (8 weekly classes).",
   path: "/",
 });
 
@@ -192,7 +192,7 @@ export default async function HomePage() {
         href="/register"
         className="block bg-[#E5A823] text-[#001532] text-center text-sm font-semibold px-4 py-2.5 hover:bg-[#d4941f] transition-colors"
       >
-        Live online classes — now enrolling{city ? ` in ${city}` : " across Canada"}. Register today →
+        Now enrolling for back to school — in-person in Oshawa{city && city !== "Oshawa" ? ` (online in ${city})` : " (Durham Region) and online across Canada"}. Register today →
       </Link>
 
       {/* ── Hero (full-bleed video background) ── */}
@@ -227,7 +227,9 @@ export default async function HomePage() {
             </h1>
             <p className="text-lg text-gray-200 mb-8 leading-relaxed">
               CODEship Academy helps children turn their ideas into real digital projects — building coding skills,
-              confidence, creativity, and future-ready thinking through hands-on project-based learning.
+              confidence, creativity, and future-ready thinking through hands-on project-based learning. We serve K–8
+              families in-person in Oshawa and across Durham Region, and live online across Canada — and now also offer
+              math and reading tutoring.
             </p>
             <p className="text-[#E5A823] font-bold text-lg mb-10 tracking-widest uppercase text-sm">
               Dream. Code. Achieve.
