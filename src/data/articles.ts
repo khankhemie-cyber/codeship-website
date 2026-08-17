@@ -2174,6 +2174,117 @@ export const articles: Article[] = [
       { question: "When does CODEship introduce AI concepts?", answer: "In the Engineers program (grades 6-8), alongside Python and cybersecurity, building on the foundation from earlier levels." },
     ],
   },
+  {
+    slug: "back-to-school-activities-durham-region-2026",
+    title: "Back-to-School Activities for Kids in Durham Region: A 2026 Parent's Guide",
+    metaDescription:
+      "A 2026 guide to back-to-school activities for kids across Durham Region — Oshawa, Whitby, Courtice, Bowmanville, and Clarington. Coding, tutoring, sports, and how to choose.",
+    category: "parent",
+    readTime: 8,
+    publishDate: "2026-07-15",
+    dateModified: "2026-07-15",
+    author: "CODEship Academy Team",
+    cluster: "durham-back-to-school",
+    targetQuery: "back to school activities for kids Durham Region",
+    internalLinks: [
+      { label: "See CODEship programs in Oshawa", href: "/locations/oshawa" },
+      { label: "Find your child's program", href: "/program-finder" },
+    ],
+    content: `
+<h2>Planning a Strong Back-to-School Season in Durham Region</h2>
+<p>Every summer, parents across Durham Region start thinking about the same question: what will the school year look like beyond the classroom? Whether you're in Oshawa, Whitby, Courtice, Bowmanville, or Clarington, the fall is when routines reset — and the after-school activities you choose now shape your child's whole year.</p>
+<p>This guide walks through how to plan a balanced, enriching back-to-school season for kids in Durham Region in 2026, from academics to activity, and how to pick programs that actually fit your family.</p>
+
+<h2>Start With Balance, Not Just a Schedule</h2>
+<p>A good back-to-school plan balances four things: physical activity, social connection, academic support, and creative growth. It's tempting to fill the calendar, but children thrive when a few well-chosen activities each serve a clear purpose. One sport, one creative or academic program, and unstructured downtime is often a healthier mix than five packed afternoons.</p>
+
+<h2>Activity and Sport Across Durham</h2>
+<p>Durham Region has strong municipal recreation programs. Oshawa, Whitby, and Clarington all run community centre swimming, skating, gymnastics, and seasonal sports leagues, and registration typically opens in late summer. Booking early matters — the most popular time slots fill quickly once school is back in session.</p>
+
+<h2>Academic Support and Enrichment</h2>
+<p>Fall is the right time to get ahead of academic challenges rather than react to them mid-year. If your child struggled with math or reading last year, starting focused support in September — before gaps widen — makes a measurable difference. Look for small-group or individualized programs that meet your child at their level rather than pushing a fixed curriculum.</p>
+<p>Creative-technical enrichment is worth considering too. Coding, AI literacy, and STEM programs build problem-solving and persistence that transfer directly to schoolwork. At <a href="/locations/oshawa">CODEship Academy in Oshawa</a>, for example, children across Durham Region join K–8 <a href="/programs">coding and AI programs</a> as well as <a href="/programs/math-tutoring">math</a> and <a href="/programs/reading-tutoring">reading tutoring</a> — in-person on Saturdays or live online — so families in Whitby, Courtice, Bowmanville, and Clarington can take part without a long weekday commute.</p>
+
+<h2>In-Person or Online?</h2>
+<p>Post-pandemic, many Durham families have found that a mix works best. In-person programs offer social connection and hands-on energy; online programs remove the drive and open up more scheduling options. The best programs now offer both at the same price, letting you switch as your fall routine settles.</p>
+
+<h2>A Simple Way to Choose</h2>
+<p>When comparing back-to-school activities, ask four questions: Does it fit our weekly rhythm? Does it meet my child where they are? Is the group size small enough for real attention? And will my child actually look forward to it? An activity your child is excited about is one they'll stick with — and consistency is where the real growth happens.</p>
+<p>However you build your fall, the goal is the same: a school year where your child is supported, active, and genuinely engaged. Start planning in July, book early, and leave a little room to breathe.</p>
+    `,
+    faqs: [
+      {
+        question: "When should I register for back-to-school activities in Durham Region?",
+        answer:
+          "Aim for July or early August. Municipal recreation programs in Oshawa, Whitby, and Clarington and popular enrichment programs fill their best time slots quickly once school resumes, so registering before September gives you the most choice.",
+      },
+      {
+        question: "Are there coding and tutoring programs for kids in Durham Region?",
+        answer:
+          "Yes. CODEship Academy offers K–8 coding, AI, math, and reading programs in-person in Oshawa — serving families across Durham Region including Whitby, Courtice, Bowmanville, and Clarington — and live online across Canada.",
+      },
+      {
+        question: "How many activities should my child do after school?",
+        answer:
+          "For most children, a balanced mix of one sport, one creative or academic program, and unstructured downtime works better than an over-packed schedule. Quality and consistency matter more than quantity.",
+      },
+    ],
+  },
+  {
+    slug: "why-durham-parents-choose-codeship-back-to-school-2026",
+    title: "Why Durham Region Parents Are Choosing CODEship Academy This Back-to-School Season",
+    metaDescription:
+      "This back-to-school season, Durham Region families are choosing CODEship Academy for K–8 coding, AI, math, and reading — in-person in Oshawa or online, flat CAD $129/semester.",
+    category: "parent",
+    readTime: 6,
+    publishDate: "2026-08-12",
+    dateModified: "2026-08-12",
+    author: "CODEship Academy Team",
+    cluster: "durham-back-to-school",
+    targetQuery: "kids coding and tutoring Durham Region back to school",
+    internalLinks: [
+      { label: "Register for a program", href: "/register" },
+      { label: "CODEship Academy in Oshawa", href: "/locations/oshawa" },
+      { label: "Math Tutoring (K–8)", href: "/programs/math-tutoring" },
+      { label: "English & Reading Tutoring (K–8)", href: "/programs/reading-tutoring" },
+    ],
+    content: `
+<h2>One Place for Coding, AI, Math, and Reading</h2>
+<p>As the 2026 school year approaches, more Durham Region parents are consolidating their children's enrichment and academic support in one place. CODEship Academy now offers K–8 coding and AI programs alongside dedicated <a href="/programs/math-tutoring">math tutoring</a> and <a href="/programs/reading-tutoring">English &amp; reading tutoring</a> — so a family in Oshawa, Whitby, Courtice, Bowmanville, or Clarington can cover creative-technical growth and core academic skills without juggling three different providers.</p>
+
+<h2>In-Person in Oshawa, or Online Anywhere</h2>
+<p>CODEship's home base in Oshawa runs in-person classes on Saturdays, welcoming families from across Durham Region. Every program is also available live online, at the same price, for families who prefer to attend from home or live a little further out. You choose the format that fits your fall routine — and you can start with one and switch if your schedule changes.</p>
+
+<h2>Simple, Flat Pricing</h2>
+<p>There's one price for every program: a flat CAD $129 per semester, which is 8 weekly classes — one class a week. That's the same whether your child takes Explorers-level coding, Engineers-level Python and AI, math tutoring, or reading tutoring, and the same whether they attend in-person in Oshawa or online. No per-level or per-format surprises.</p>
+
+<h2>Why Back-to-School Is the Right Time to Start</h2>
+<p>September resets your child's routine, which makes it the easiest moment to add a new weekly rhythm. Starting academic support at the beginning of the year — rather than after a struggle appears mid-term — helps children stay ahead instead of catching up. And because CODEship classes are project-based and small-group, children build confidence and momentum in the same weeks their school year is finding its footing.</p>
+
+<h2>Creativity First, Skills That Transfer</h2>
+<p>CODEship keeps creativity at the centre: children build their own games, apps, websites, and AI projects rather than following tutorials. That approach builds the persistence, logical thinking, and communication skills that carry directly into school — and the math and reading tutoring reinforce those same academic foundations more directly. Coding and AI remain the heart of what we do; tutoring simply gives Durham families a way to bring more of their child's learning under one roof.</p>
+
+<h2>Getting Started</h2>
+<p>Enrolling takes a few minutes. Choose your child's program, pick in-person (Oshawa) or online, and you're set for the semester. Families can <a href="/register">register online today</a>, or learn more about programs at <a href="/locations/oshawa">CODEship Academy in Oshawa</a>. This back-to-school season, Durham Region parents are choosing one program that grows both creators and strong students — at a single, honest price.</p>
+    `,
+    faqs: [
+      {
+        question: "What does CODEship Academy offer for back-to-school in Durham Region?",
+        answer:
+          "K–8 coding and AI programs plus Math Tutoring and English & Reading Tutoring, available in-person in Oshawa (serving all of Durham Region) or live online across Canada.",
+      },
+      {
+        question: "How much does CODEship cost?",
+        answer:
+          "Every program is a flat CAD $129 per semester — 8 weekly classes, one class per week — the same price for coding, AI, and tutoring, and the same whether your child attends in-person in Oshawa or online.",
+      },
+      {
+        question: "Can my child take both coding and tutoring?",
+        answer:
+          "Yes. Many Durham families pair a coding or AI program with math or reading tutoring. Each is a separate flat CAD $129 semester and can be taken in-person in Oshawa or online.",
+      },
+    ],
+  },
 ];
 
 export const articlesBySlug = Object.fromEntries(articles.map((a) => [a.slug, a]));
