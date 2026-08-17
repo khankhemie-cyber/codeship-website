@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PROGRAMS } from "@/data/programs";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
 import { pageMetadata } from "@/lib/pageMetadata";
 
 export const metadata: Metadata = pageMetadata({
@@ -71,7 +72,17 @@ export default function WeeklyClassesPage() {
                     <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-0.5 rounded">{prog.gradeBand}</span>
                   </div>
                   <p className="text-[#E5A823] text-xs font-semibold mb-1.5">{prog.codingSpace}</p>
-                  <p className="text-gray-600 text-sm">{prog.outcome}</p>
+                  <p className="text-gray-600 text-sm mb-3">{prog.outcome}</p>
+                  <div className="border-t border-gray-100 pt-3 space-y-1 text-xs text-gray-600">
+                    <p>
+                      <span className="font-semibold text-[#001532]">In-person (Oshawa):</span>{" "}
+                      {CLASS_SCHEDULE[prog.slug].inperson.days}, {CLASS_SCHEDULE[prog.slug].inperson.time}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-[#001532]">Online:</span>{" "}
+                      {CLASS_SCHEDULE[prog.slug].online.days}, {CLASS_SCHEDULE[prog.slug].online.time}
+                    </p>
+                  </div>
                 </Link>
               ))}
             </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EnrollButton } from "@/components/EnrollButton";
+import ClassScheduleCard from "@/components/ClassScheduleCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { breadcrumbSchema } from "@/lib/schema";
 import { pageMetadata, BASE_URL } from "@/lib/pageMetadata";
@@ -124,6 +125,9 @@ export default function ProgramRegisterPage({ params }: Props) {
                   ))}
                 </ul>
               </div>
+
+              {/* Class dates & times — both formats, always visible */}
+              <ClassScheduleCard program={program} />
 
               {/* Technologies & projects */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
