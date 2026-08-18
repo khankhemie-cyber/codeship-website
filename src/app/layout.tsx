@@ -10,6 +10,8 @@ const inter = Inter({
   display: "swap",
 });
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-83QR0ML32G";
+
 export const metadata: Metadata = {
   title: {
     default: "CODEship Academy | Kids Coding, AI & STEM — Oshawa & Online",
@@ -67,6 +69,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        {/* Google tag (gtag.js) — rendered server-side into the HTML so it is
+            present on first load and detectable by Tag Assistant / GTM. Google
+            Consent Mode v2 defaults storage to "denied"; the client-side
+            Analytics component flips it to "granted" once the visitor accepts
+            all cookies via the banner. */}
+        {GA_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  analytics_storage: 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied'
+});
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`,
+              }}
+            />
+          </>
+        )}
+      </head>
       <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">
         {children}
         <CookieBanner />
