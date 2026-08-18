@@ -8,27 +8,48 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-83QR0ML32G";
 const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
 /**
- * Loads Meta Pixel and GA4 ONLY after the visitor has consented to all
- * cookies. Nothing is injected until consent is "all"; when the cookie
- * banner writes that choice it fires CONSENT_EVENT and the tags load
- * immediately, no page reload. If the env IDs aren't set, nothing loads.
+ * Loads GA4 on every page via Google Consent Mode v2. The gtag.js tag is
+ * always present (so Tag Assistant / GTM can detect it and pageviews are
+ * measured), but analytics_storage and ad_storage default to "denied" —
+ * no analytics cookies are written until the visitor accepts all cookies.
+ * When the cookie banner writes that choice it fires CONSENT_EVENT and we
+ * update consent to "granted" with no page reload.
+ *
+ * The Meta Pixel stays fully consent-gated: it is only injected after the
+ * visitor has opted into all cookies.
  */
 export default function Analytics() {
-  const [enabled, setEnabled] = useState(false);
+  const [fbEnabled, setFbEnabled] = useState(false);
 
   useEffect(() => {
-    if (hasAnalyticsConsent()) setEnabled(true);
+    const grantGa = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const w = window as any;
+      if (typeof w.gtag !== "function") return;
+      w.gtag("consent", "update", {
+        analytics_storage: "granted",
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+      });
+    };
+
+    if (hasAnalyticsConsent()) {
+      grantGa();
+      setFbEnabled(true);
+    }
 
     const onConsentChange = (e: Event) => {
       const value = (e as CustomEvent<ConsentValue>).detail;
-      if (value === "all") setEnabled(true);
+      if (value === "all") {
+        grantGa();
+        setFbEnabled(true);
+      }
     };
 
     window.addEventListener(CONSENT_EVENT, onConsentChange);
     return () => window.removeEventListener(CONSENT_EVENT, onConsentChange);
   }, []);
-
-  if (!enabled) return null;
 
   return (
     <>
@@ -41,13 +62,19 @@ export default function Analytics() {
           <Script id="ga4-init" strategy="afterInteractive">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  analytics_storage: 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied'
+});
 gtag('js', new Date());
 gtag('config', '${GA_ID}');`}
           </Script>
         </>
       )}
 
-      {FB_PIXEL_ID && (
+      {FB_PIXEL_ID && fbEnabled && (
         <Script id="fb-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
