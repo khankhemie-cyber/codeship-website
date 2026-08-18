@@ -4,19 +4,17 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 import { CONSENT_EVENT, hasAnalyticsConsent, type ConsentValue } from "@/lib/consent";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-83QR0ML32G";
 const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
 /**
- * Loads GA4 on every page via Google Consent Mode v2. The gtag.js tag is
- * always present (so Tag Assistant / GTM can detect it and pageviews are
- * measured), but analytics_storage and ad_storage default to "denied" —
- * no analytics cookies are written until the visitor accepts all cookies.
- * When the cookie banner writes that choice it fires CONSENT_EVENT and we
- * update consent to "granted" with no page reload.
+ * GA4 itself is loaded server-side in the root layout (`src/app/layout.tsx`)
+ * via Google Consent Mode v2, so the tag is present on first load and
+ * detectable by Tag Assistant / GTM. This component's only jobs are:
  *
- * The Meta Pixel stays fully consent-gated: it is only injected after the
- * visitor has opted into all cookies.
+ *  1. Flip GA consent from "denied" to "granted" once the visitor accepts all
+ *     cookies (existing cookie banner fires CONSENT_EVENT), with no reload.
+ *  2. Load the Meta Pixel, which stays fully consent-gated — injected only
+ *     after the visitor has opted into all cookies.
  */
 export default function Analytics() {
   const [fbEnabled, setFbEnabled] = useState(false);
@@ -51,32 +49,11 @@ export default function Analytics() {
     return () => window.removeEventListener(CONSENT_EVENT, onConsentChange);
   }, []);
 
-  return (
-    <>
-      {GA_ID && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga4-init" strategy="afterInteractive">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('consent', 'default', {
-  analytics_storage: 'denied',
-  ad_storage: 'denied',
-  ad_user_data: 'denied',
-  ad_personalization: 'denied'
-});
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
-          </Script>
-        </>
-      )}
+  if (!FB_PIXEL_ID || !fbEnabled) return null;
 
-      {FB_PIXEL_ID && fbEnabled && (
-        <Script id="fb-pixel" strategy="afterInteractive">
-          {`!function(f,b,e,v,n,t,s)
+  return (
+    <Script id="fb-pixel" strategy="afterInteractive">
+      {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -86,8 +63,6 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '${FB_PIXEL_ID}');
 fbq('track', 'PageView');`}
-        </Script>
-      )}
-    </>
+    </Script>
   );
 }
