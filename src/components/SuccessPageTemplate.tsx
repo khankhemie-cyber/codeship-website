@@ -36,7 +36,7 @@ interface SuccessPageTemplateProps {
 export default function SuccessPageTemplate({ program }: SuccessPageTemplateProps) {
   const config = PROGRAM_LINKS[program];
   const content = SUCCESS_CONTENT[program];
-  const schedule = CLASS_SCHEDULE[program].online;
+  const schedule = CLASS_SCHEDULE[program];
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -90,31 +90,63 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               {ageLabel(program, false)}
             </span>
             <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 rounded-xl text-sm font-semibold">
-              Online
+              In-Person &amp; Online
             </span>
           </div>
 
-          {/* Class schedule card */}
+          {/* Class schedule card — both formats, so families see the option they chose */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-[#0D1B2A] mb-4">Your class schedule</h2>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
-              <div className="flex justify-between sm:block border-b border-gray-100 pb-2 sm:border-0 sm:pb-0">
-                <dt className="text-gray-500">Format</dt>
-                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">{CLASSES_PER_SEMESTER} weekly online classes</dd>
+            <h2 className="text-xl font-bold text-[#0D1B2A] mb-1">Your class schedule</h2>
+            <p className="text-gray-500 text-sm mb-5">
+              {CLASSES_PER_SEMESTER} weekly classes. Below are both formats — attend the one you chose at checkout.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* In-person */}
+              <div className="rounded-xl border border-gray-100 bg-[#FAF8F4] p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#2E8C8C]" />
+                  <h3 className="font-bold text-[#0D1B2A]">In-Person — Oshawa</h3>
+                </div>
+                <dl className="space-y-2 text-sm">
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Day</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.inperson.days}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Time</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.inperson.time}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Dates</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.inperson.dates}</dd>
+                  </div>
+                </dl>
+                <p className="mt-3 text-xs text-gray-500">21 Simcoe St South, Oshawa — serving families across Durham Region.</p>
               </div>
-              <div className="flex justify-between sm:block border-b border-gray-100 pb-2 sm:border-0 sm:pb-0">
-                <dt className="text-gray-500">Day</dt>
-                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">{schedule.days}</dd>
+
+              {/* Online */}
+              <div className="rounded-xl border border-gray-100 bg-[#FAF8F4] p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F5C518]" />
+                  <h3 className="font-bold text-[#0D1B2A]">Online — anywhere</h3>
+                </div>
+                <dl className="space-y-2 text-sm">
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Day</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.online.days}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Time</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.online.time}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-gray-500">Dates</dt>
+                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.online.dates}</dd>
+                  </div>
+                </dl>
+                <p className="mt-3 text-xs text-gray-500">Live, instructor-led — open to every city.</p>
               </div>
-              <div className="flex justify-between sm:block border-b border-gray-100 pb-2 sm:border-0 sm:pb-0">
-                <dt className="text-gray-500">Class time</dt>
-                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">{schedule.time}</dd>
-              </div>
-              <div className="flex justify-between sm:block">
-                <dt className="text-gray-500">Class dates</dt>
-                <dd className="font-semibold text-[#0D1B2A] sm:mt-0.5">{schedule.dates}</dd>
-              </div>
-            </dl>
+            </div>
           </div>
 
           {/* Semester 1 overview card */}
@@ -137,7 +169,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               email you everything your child needs to get started:
             </p>
             <ul className="space-y-2 mb-4">
-              {["Class log-in instructions", "Their digital workbook", "The complete class schedule"].map((item) => (
+              {["Class log-in details (online) or location directions (in-person)", "Their digital workbook", "The complete class schedule"].map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-gray-700 text-sm">
                   <svg
                     className="w-5 h-5 text-[#2E8C8C] shrink-0 mt-0.5"
