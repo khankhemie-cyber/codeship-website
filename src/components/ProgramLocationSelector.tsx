@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Program } from "@/data/programs";
-import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASS_SCHEDULE, startsSummary } from "@/config/classSchedule";
 import { SEMESTER_SHAPE_LABEL, SEMESTER_WEEKS } from "@/config/offering";
 import type { LocationSlug } from "@/lib/registration";
 import { EnrollButton } from "@/components/EnrollButton";
@@ -48,8 +48,8 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
 
   const scheduleDetail =
     format === "online"
-      ? `Online — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`
-      : `Oshawa (in-person) — ${modeSchedule.days}, ${modeSchedule.dates}, ${modeSchedule.time}`;
+      ? `Online — ${modeSchedule.days} ${modeSchedule.time}, ${startsSummary(modeSchedule)}`
+      : `Oshawa (in-person) — ${modeSchedule.days} ${modeSchedule.time}, ${startsSummary(modeSchedule)}`;
 
   const options: { value: Format; title: string; sub: string }[] = [
     {

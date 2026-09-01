@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IN_PERSON, type ProgramSlug } from "@/data/locations";
-import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASS_SCHEDULE, startsSummary } from "@/config/classSchedule";
 import type { LocationSlug } from "@/lib/registration";
 
 interface LocationBarProps {
@@ -40,11 +40,14 @@ function buildOptions(program: ProgramSlug): LocationOption[] {
   const schedule = CLASS_SCHEDULE[program];
   const inPerson: LocationOption[] = IN_PERSON.map((city) => ({
     value: toSlug(city),
-    label: `${city} — ${schedule.inperson.days}, ${schedule.inperson.dates}, ${schedule.inperson.time}`,
+    label: `${city} — ${schedule.inperson.days} ${schedule.inperson.time}, ${startsSummary(schedule.inperson)}`,
   }));
   return [
     ...inPerson,
-    { value: "online", label: `Online — ${schedule.online.days}, ${schedule.online.dates}, ${schedule.online.time}` },
+    {
+      value: "online",
+      label: `Online — ${schedule.online.days} ${schedule.online.time}, ${startsSummary(schedule.online)}`,
+    },
   ];
 }
 

@@ -1,4 +1,4 @@
-import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 import { CLASSES_PER_SEMESTER, SEMESTER_WEEKS } from "@/config/offering";
 import type { ProgramSlug } from "@/data/locations";
 
@@ -9,10 +9,16 @@ interface ClassScheduleCardProps {
   className?: string;
 }
 
+interface FormatSchedule {
+  days: string;
+  time: string;
+  starts: Record<string, string>;
+}
+
 interface RowProps {
   label: string;
   accent: string;
-  schedule: { days: string; dates: string; time: string };
+  schedule: FormatSchedule;
   note: string;
 }
 
@@ -32,11 +38,18 @@ function ScheduleRow({ label, accent, schedule, note }: RowProps) {
           <dt className="text-gray-500">Time</dt>
           <dd className="font-semibold text-[#001532] text-right">{schedule.time}</dd>
         </div>
-        <div className="flex justify-between gap-4">
-          <dt className="text-gray-500">Dates</dt>
-          <dd className="font-semibold text-[#001532] text-right">{schedule.dates}</dd>
-        </div>
       </dl>
+      <div className="mt-3 border-t border-gray-100 pt-3">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Choose your start</p>
+        <dl className="space-y-2 text-sm">
+          {START_OPTIONS.map((opt) => (
+            <div key={opt.key} className="flex justify-between gap-4">
+              <dt className="text-gray-500">{opt.label}</dt>
+              <dd className="font-semibold text-[#001532] text-right">{schedule.starts[opt.key]}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
       <p className="mt-3 text-xs text-gray-500">{note}</p>
     </div>
   );
@@ -55,8 +68,9 @@ export default function ClassScheduleCard({ program, heading = "Class dates & ti
     <div className={className}>
       <h2 className="text-2xl font-bold text-[#001532] mb-1">{heading}</h2>
       <p className="text-gray-500 text-sm mb-5">
-        {CLASSES_PER_SEMESTER} weekly classes — one class a week for {SEMESTER_WEEKS} weeks. Pick the format that fits
-        your family at checkout.
+        {CLASSES_PER_SEMESTER} weekly classes — one class a week for {SEMESTER_WEEKS} weeks. Pick your format and start
+        month at checkout; every start keeps the same day and time. Dates already skip our no-class weeks and the winter
+        break.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <ScheduleRow
