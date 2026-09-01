@@ -5,7 +5,7 @@ import RegistrationForm from "@/components/RegistrationForm";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL, SEMESTER_WEEKS } from "@/config/offering";
-import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASS_SCHEDULE, startsSummary } from "@/config/classSchedule";
 
 // Reading searchParams makes this route dynamic; Cloudflare Pages (next-on-pages)
 // requires an explicit edge runtime for any non-static route.
@@ -132,7 +132,7 @@ export default function RegisterPage({ searchParams }: Props) {
                       <span>
                         <span className="font-semibold">In-person (Oshawa):</span> {sched.inperson.days}, {sched.inperson.time}
                         {" · "}
-                        {sched.inperson.dates}
+                        {startsSummary(sched.inperson)}
                       </span>
                     </div>
                     <div className="flex items-start gap-2 text-xs text-[#001532]">
@@ -140,7 +140,7 @@ export default function RegisterPage({ searchParams }: Props) {
                       <span>
                         <span className="font-semibold">Online:</span> {sched.online.days}, {sched.online.time}
                         {" · "}
-                        {sched.online.dates}
+                        {startsSummary(sched.online)}
                       </span>
                     </div>
                   </div>

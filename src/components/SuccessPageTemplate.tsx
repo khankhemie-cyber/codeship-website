@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { PROGRAM_LINKS, ageLabel, type ProgramLevel } from "@/lib/payment-links";
-import { CLASS_SCHEDULE } from "@/config/classSchedule";
+import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 import { CLASSES_PER_SEMESTER } from "@/config/offering";
 
 /**
@@ -116,10 +116,14 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
                     <dt className="text-gray-500">Time</dt>
                     <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.inperson.time}</dd>
                   </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-gray-500">Dates</dt>
-                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.inperson.dates}</dd>
-                  </div>
+                  {START_OPTIONS.map((opt) => (
+                    <div key={opt.key} className="flex justify-between gap-4">
+                      <dt className="text-gray-500">{opt.label}</dt>
+                      <dd className="font-semibold text-[#0D1B2A] text-right">
+                        {schedule.inperson.starts[opt.key as keyof typeof schedule.inperson.starts]}
+                      </dd>
+                    </div>
+                  ))}
                 </dl>
                 <p className="mt-3 text-xs text-gray-500">21 Simcoe St South, Oshawa — serving families across Durham Region.</p>
               </div>
@@ -139,10 +143,14 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
                     <dt className="text-gray-500">Time</dt>
                     <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.online.time}</dd>
                   </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-gray-500">Dates</dt>
-                    <dd className="font-semibold text-[#0D1B2A] text-right">{schedule.online.dates}</dd>
-                  </div>
+                  {START_OPTIONS.map((opt) => (
+                    <div key={opt.key} className="flex justify-between gap-4">
+                      <dt className="text-gray-500">{opt.label}</dt>
+                      <dd className="font-semibold text-[#0D1B2A] text-right">
+                        {schedule.online.starts[opt.key as keyof typeof schedule.online.starts]}
+                      </dd>
+                    </div>
+                  ))}
                 </dl>
                 <p className="mt-3 text-xs text-gray-500">Live, instructor-led — open to every city.</p>
               </div>

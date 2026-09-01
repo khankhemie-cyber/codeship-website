@@ -59,15 +59,21 @@ const UI = {
 
 const FR_DAYS: Record<string, string> = { Saturdays: "Samedis", Tuesdays: "Mardis", Thursdays: "Jeudis" };
 
-type ScheduleSlot = { days: string; dates: string; time: string };
+type ScheduleSlot = { days: string; time: string; starts: Record<string, string> };
 
-/** Minimal-effort FR display of the (English-authored) class schedule facts — day names translated, dates/time lightly adapted. */
+/**
+ * Minimal-effort FR display of the (English-authored) class schedule facts —
+ * day names translated, dates/time lightly adapted. Families now pick one of
+ * three start months at checkout; this teaser line shows the soonest
+ * (September) start's dates.
+ */
 function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
-  if (lang === "en") return schedule;
+  const dates = schedule.starts.september;
+  if (lang === "en") return { days: schedule.days, time: schedule.time, dates };
   return {
     days: FR_DAYS[schedule.days] ?? schedule.days,
-    dates: schedule.dates.replace("Sep", "sept."),
-    time: schedule.time.replace(" AM EDT", " HAE").replace(" PM EDT", " HAE"),
+    dates: dates.replace("Weekly,", "chaque semaine,").replace("Sep", "sept.").replace("Nov", "nov."),
+    time: schedule.time.replace(" AM ET", " HE").replace(" PM ET", " HE"),
   };
 }
 
