@@ -220,7 +220,7 @@ these defaults for direct/testing traffic.
 ### Pricing (authoritative — render exactly this)
 
 **GYD $20,000 per semester** (optionally broken down as **GYD $5,000 per session**, "depending on the
-semester schedule"), with the next semester starting **September 1, 2026**
+semester schedule"), with the next semester starting **the week of September 14, 2026**
 (`GUYANA_NEXT_SEMESTER_START` in `src/data/guyanaCampaigns.ts` — Guyana-specific, independent of the
 Canadian `CORSIZIO_SCHEDULE`) — see `GUYANA_PRICING` in `guyanaCampaigns.ts`. No Canadian city schedule
 or in-person language appears anywhere on these pages; the trust line is explicitly "Online ·

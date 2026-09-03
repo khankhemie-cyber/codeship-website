@@ -90,7 +90,7 @@ export function getGuyanaCampaign(slug: string): GuyanaCampaign | undefined {
 /** Shared page-anatomy content — identical across all 5 pages per the brief. */
 
 /** Guyana's own semester calendar — independent of the Canadian schedule in classSchedule.js. */
-export const GUYANA_NEXT_SEMESTER_START = "September 1, 2026";
+export const GUYANA_NEXT_SEMESTER_START = "the week of September 14, 2026";
 
 export const GUYANA_TRUST_LINE = "Online · Small-group learning · Math, English, writing, coding, and computer skills";
 

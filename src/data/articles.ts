@@ -1748,7 +1748,7 @@ export const articles: Article[] = [
 <h2>Is This Just Coding, or Something Broader?</h2>
 <p>It's broader by design. Alongside coding, the program supports Math thinking, English comprehension, writing and explanation skills, and computer literacy — positioned as an enrichment program that supports school learning, not a replacement for it.</p>
 <h2>Getting Started</h2>
-<p>The next semester starts September 1, 2026. Families can register directly online for their child's spot.</p>
+<p>The next semester starts the week of September 14, 2026. Families can register directly online for their child's spot.</p>
     `,
     faqs: [
       { question: "Is this available outside Georgetown?", answer: "Yes — it's fully online, so children can join from anywhere in Guyana, including East Bank Demerara, East Coast Demerara, Berbice, Linden, and Essequibo." },
@@ -1885,7 +1885,7 @@ export const articles: Article[] = [
 <h2>What Should a Child Be Able to Do After a Semester?</h2>
 <p>Build a project, explain their process, solve problems step by step, and present what they created — practical outcomes rather than abstract theory.</p>
 <h2>Getting Started</h2>
-<p>CODEship's online STEM program for Guyana runs GYD $20,000 per semester, live and online, with the next semester starting September 1, 2026.</p>
+<p>CODEship's online STEM program for Guyana runs GYD $20,000 per semester, live and online, with the next semester starting the week of September 14, 2026.</p>
     `,
     faqs: [
       { question: "Is STEM only useful for kids who want a tech career?", answer: "No. STEM thinking skills — logic, problem-solving, structured reasoning — are valuable across virtually every field." },

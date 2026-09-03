@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import type { TrinidadCampaign } from "@/data/trinidadCampaigns";
 import {
   TRINIDAD_TRUST_LINE,
@@ -12,12 +11,12 @@ import {
   TRINIDAD_PROGRAMME_FEE,
   TRINIDAD_NEXT_COHORT_START,
   TRINIDAD_LEAD_SUBMITTED_MESSAGE,
+  TRINIDAD_STRIPE_LINKS,
 } from "@/data/trinidadCampaigns";
+import type { ProgramLevel } from "@/lib/payment-links";
 import { getTrinidadHeadline } from "@/data/trinidadVariants";
-import { buildTrinidadRegistrationUrl } from "@/lib/buildTrinidadRegistrationUrl";
 import { trackView, trackRegisterClick, trackPriceView } from "@/lib/analytics";
 import FAQAccordion from "@/components/FAQAccordion";
-import StickyMobileCTA from "@/components/lp/StickyMobileCTA";
 import TTFooter from "./TTFooter";
 
 export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
@@ -33,12 +32,16 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
   // already registered, so the page confirms instead of asking again.
   const leadSubmitted = searchParams.get("lead_submitted") === "1";
 
-  const utmSnapshot = useMemo(
-    () => ({ utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign, utm_content: utmContent, utm_term: utmTerm }),
-    [utmSource, utmMedium, utmCampaign, utmContent, utmTerm]
-  );
-
-  const eventBase = { page: campaign.slug, country: "trinidad-tobago" as const, location: "online" as const, ...utmSnapshot };
+  const eventBase = {
+    page: campaign.slug,
+    country: "trinidad-tobago" as const,
+    location: "online" as const,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+    utm_campaign: utmCampaign,
+    utm_content: utmContent,
+    utm_term: utmTerm,
+  };
 
   useEffect(() => {
     trackView(eventBase);
@@ -47,16 +50,12 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const registrationUrl = buildTrinidadRegistrationUrl({
-    page: campaign.slug,
-    source: utmSource,
-    medium: utmMedium,
-    campaign: utmCampaign,
-    content: utmContent,
-    term: utmTerm,
-  });
-
-  const handleRegisterClick = () => trackRegisterClick(eventBase);
+  // Registration is a per-level Stripe checkout (see TRINIDAD_STRIPE_LINKS).
+  // The hero and final CTAs scroll to the #register block where the parent
+  // picks their child's level; each level button links straight to its TT
+  // Stripe Payment Link. register_click fires with the chosen level.
+  const handleRegisterClick = (level: ProgramLevel) => () =>
+    trackRegisterClick({ ...eventBase, program: level });
 
   const headline = getTrinidadHeadline(campaign.slug, variantParam);
 
@@ -93,13 +92,12 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               View Programme Details
             </a>
           ) : (
-            <Link
-              href={registrationUrl}
-              onClick={handleRegisterClick}
+            <a
+              href="#register"
               className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
             >
               Register for the Next Online Cohort
-            </Link>
+            </a>
           )}
           <p className="text-gray-400 text-xs mt-5">{TRINIDAD_TRUST_LINE}</p>
         </div>
@@ -161,8 +159,8 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           </ol>
         </section>
 
-        {/* Pricing */}
-        <section aria-labelledby="pricing-heading">
+        {/* Pricing & registration */}
+        <section id="register" aria-labelledby="pricing-heading" className="scroll-mt-6">
           <h2 id="pricing-heading" className="text-2xl font-bold text-[#001532] mb-5 text-center">
             {TRINIDAD_PRICING.heading}
           </h2>
@@ -183,13 +181,38 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                 Your registration request has already been received — no further sign-up is needed.
               </p>
             ) : (
-              <Link
-                href={registrationUrl}
-                onClick={handleRegisterClick}
-                className="inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors"
-              >
-                {TRINIDAD_PRICING.ctaLabel}
-              </Link>
+              <>
+                <p className="text-white text-sm font-semibold mb-1">Choose your child&apos;s level to register</p>
+                <p className="text-gray-400 text-xs mb-4">
+                  Same {TRINIDAD_PROGRAMME_FEE} four-week programme — pick the grade band that fits your child to complete
+                  registration and secure their place.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-md mx-auto text-left">
+                  {TRINIDAD_STRIPE_LINKS.map((opt) => (
+                    <a
+                      key={opt.level}
+                      href={opt.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={handleRegisterClick(opt.level)}
+                      className="flex flex-col rounded-xl bg-[#E5A823] px-4 py-3 text-[#001532] hover:bg-[#d4941f] transition-colors"
+                    >
+                      <span className="text-base font-bold leading-tight">{opt.label}</span>
+                      <span className="text-[11px] font-semibold opacity-75">
+                        {opt.grades} · {opt.ages}
+                      </span>
+                      <span className="text-[11px] font-semibold mt-1.5">
+                        {opt.days} · {opt.time}
+                      </span>
+                      <span className="text-[11px] opacity-80">{opt.dates}</span>
+                    </a>
+                  ))}
+                </div>
+                <p className="text-gray-400 text-[11px] mt-4">
+                  Class times align with our online groups and are shown in Eastern Time (ET) — the same local clock time in
+                  Trinidad and Tobago during this September–October cohort.
+                </p>
+              </>
             )}
           </div>
         </section>
@@ -214,13 +237,12 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               {TRINIDAD_LEAD_SUBMITTED_MESSAGE}
             </p>
           ) : (
-            <Link
-              href={registrationUrl}
-              onClick={handleRegisterClick}
+            <a
+              href="#register"
               className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
             >
               Register for the Next Online Cohort
-            </Link>
+            </a>
           )}
           <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
         </div>
@@ -238,7 +260,14 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           </a>
         </div>
       ) : (
-        <StickyMobileCTA href={registrationUrl} label="Register for the Next Online Cohort" onClick={handleRegisterClick} />
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
+          <a
+            href="#register"
+            className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
+          >
+            Register for the Next Online Cohort
+          </a>
+        </div>
       )}
       <div className="md:hidden h-16" aria-hidden="true" />
     </div>
