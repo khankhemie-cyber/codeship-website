@@ -7,6 +7,8 @@
  * page carries its own outcome bullets and project examples.
  */
 
+import type { ProgramLevel } from "@/lib/payment-links";
+
 export type TrinidadPageSlug =
   | "online-coding-classes"
   | "math-language-arts-coding"
@@ -30,7 +32,54 @@ export interface TrinidadCampaign {
 /** Shared programme constants — update once, reflected on every /tt page. */
 export const TRINIDAD_PROGRAMME_FEE = "TT$600";
 export const TRINIDAD_PER_CLASS_FEE = "TT$150";
-export const TRINIDAD_NEXT_COHORT_START = "September 1, 2026";
+export const TRINIDAD_NEXT_COHORT_START = "the week of September 14, 2026";
+
+/**
+ * Trinidad and Tobago Stripe Payment Links, per age-level. Every /tt page sells
+ * the same four-week cohort, but checkout is placed by the child's grade band —
+ * so each page offers all four options and routes the parent to the matching
+ * TTD payment link below. These are the real, live TT products; do not guess or
+ * change them without confirming with the owner. (Separate from the Canadian CAD
+ * links in payment-links.ts — same grade bands, different Stripe products.)
+ */
+export interface TrinidadLevelOption {
+  level: ProgramLevel;
+  label: string;
+  grades: string;
+  ages: string;
+  url: string;
+}
+
+export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
+  {
+    level: "explorers",
+    label: "Explorers",
+    grades: "K–1",
+    ages: "Ages 4–6",
+    url: "https://buy.stripe.com/4gM6oB6Ij6ZD1sR1vmdAk06",
+  },
+  {
+    level: "builders",
+    label: "Builders",
+    grades: "Grades 2–3",
+    ages: "Ages 7–9",
+    url: "https://buy.stripe.com/5kQfZb9Uv0Bf5J78XOdAk03",
+  },
+  {
+    level: "developers",
+    label: "Developers",
+    grades: "Grades 4–5",
+    ages: "Ages 9–11",
+    url: "https://buy.stripe.com/6oU8wJgiT2JnfjH0ridAk05",
+  },
+  {
+    level: "engineers",
+    label: "Engineers",
+    grades: "Grades 6–8",
+    ages: "Ages 12–16",
+    url: "https://buy.stripe.com/7sY7sFaYz6ZDb3r6PGdAk07",
+  },
+];
 
 export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
   {
