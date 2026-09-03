@@ -187,7 +187,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                   Same {TRINIDAD_PROGRAMME_FEE} four-week programme — pick the grade band that fits your child to complete
                   registration and secure their place.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-md mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-md mx-auto text-left">
                   {TRINIDAD_STRIPE_LINKS.map((opt) => (
                     <a
                       key={opt.level}
@@ -195,15 +195,23 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={handleRegisterClick(opt.level)}
-                      className="flex flex-col items-center justify-center rounded-xl bg-[#E5A823] px-4 py-3 text-[#001532] font-bold hover:bg-[#d4941f] transition-colors"
+                      className="flex flex-col rounded-xl bg-[#E5A823] px-4 py-3 text-[#001532] hover:bg-[#d4941f] transition-colors"
                     >
-                      <span className="text-base leading-tight">{opt.label}</span>
+                      <span className="text-base font-bold leading-tight">{opt.label}</span>
                       <span className="text-[11px] font-semibold opacity-75">
                         {opt.grades} · {opt.ages}
                       </span>
+                      <span className="text-[11px] font-semibold mt-1.5">
+                        {opt.days} · {opt.time}
+                      </span>
+                      <span className="text-[11px] opacity-80">{opt.dates}</span>
                     </a>
                   ))}
                 </div>
+                <p className="text-gray-400 text-[11px] mt-4">
+                  Class times align with our online groups and are shown in Eastern Time (ET) — the same local clock time in
+                  Trinidad and Tobago during this September–October cohort.
+                </p>
               </>
             )}
           </div>

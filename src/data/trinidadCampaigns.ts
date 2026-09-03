@@ -8,6 +8,7 @@
  */
 
 import type { ProgramLevel } from "@/lib/payment-links";
+import { CLASS_SCHEDULE } from "@/config/classSchedule";
 
 export type TrinidadPageSlug =
   | "online-coding-classes"
@@ -41,14 +42,31 @@ export const TRINIDAD_NEXT_COHORT_START = "the week of September 14, 2026";
  * TTD payment link below. These are the real, live TT products; do not guess or
  * change them without confirming with the owner. (Separate from the Canadian CAD
  * links in payment-links.ts — same grade bands, different Stripe products.)
+ *
+ * Day and time mirror the Canadian online groups (CLASS_SCHEDULE[...].online in
+ * classSchedule.js) so TT and the Canadian online cohort run the same weekly
+ * slot — the only difference is length (TT/GY are 4 weeks, Canadian is 8). The
+ * times are labelled ET; Trinidad and Tobago is UTC−4 year-round and US Eastern
+ * stays on EDT (UTC−4) until Nov 1, 2026, so across the whole Sep 15 – Oct 8
+ * cohort the ET time shown is also the local TT clock time.
  */
 export interface TrinidadLevelOption {
   level: ProgramLevel;
   label: string;
   grades: string;
   ages: string;
+  /** Weekly class day — sourced from the Canadian online group so they align. */
+  days: string;
+  /** Weekly class time (ET; equals TT local time during the cohort). */
+  time: string;
+  /** The four weekly session dates for the 4-week TT/GY cohort. */
+  dates: string;
   url: string;
 }
+
+/** The four weekly sessions, by class day, aligned to the week-of-Sep-14 start. */
+const TT_TUESDAY_DATES = "Sep 15, 22, 29 & Oct 6";
+const TT_THURSDAY_DATES = "Sep 17, 24, Oct 1 & 8";
 
 export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
   {
@@ -56,6 +74,9 @@ export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
     label: "Explorers",
     grades: "K–1",
     ages: "Ages 4–6",
+    days: CLASS_SCHEDULE.explorers.online.days,
+    time: CLASS_SCHEDULE.explorers.online.time,
+    dates: TT_TUESDAY_DATES,
     url: "https://buy.stripe.com/4gM6oB6Ij6ZD1sR1vmdAk06",
   },
   {
@@ -63,6 +84,9 @@ export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
     label: "Builders",
     grades: "Grades 2–3",
     ages: "Ages 7–9",
+    days: CLASS_SCHEDULE.builders.online.days,
+    time: CLASS_SCHEDULE.builders.online.time,
+    dates: TT_TUESDAY_DATES,
     url: "https://buy.stripe.com/5kQfZb9Uv0Bf5J78XOdAk03",
   },
   {
@@ -70,6 +94,9 @@ export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
     label: "Developers",
     grades: "Grades 4–5",
     ages: "Ages 9–11",
+    days: CLASS_SCHEDULE.developers.online.days,
+    time: CLASS_SCHEDULE.developers.online.time,
+    dates: TT_THURSDAY_DATES,
     url: "https://buy.stripe.com/6oU8wJgiT2JnfjH0ridAk05",
   },
   {
@@ -77,6 +104,9 @@ export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
     label: "Engineers",
     grades: "Grades 6–8",
     ages: "Ages 12–16",
+    days: CLASS_SCHEDULE.engineers.online.days,
+    time: CLASS_SCHEDULE.engineers.online.time,
+    dates: TT_THURSDAY_DATES,
     url: "https://buy.stripe.com/7sY7sFaYz6ZDb3r6PGdAk07",
   },
 ];
