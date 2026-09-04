@@ -74,15 +74,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // Trinidad and Tobago online-cohort landing pages — SEO-indexed like /gy.
-  // Clean routes only; the paid-only ?lead_submitted=1 and ?v= variants are
-  // deliberately excluded.
-  const trinidadPages: MetadataRoute.Sitemap = TRINIDAD_CAMPAIGNS.map((c) => ({
-    url: `${BASE_URL}/tt/${c.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  // Trinidad and Tobago online program pages — SEO-indexed like /gy. The /tt
+  // index plus the four grade-band program pages (Explorers/Builders/
+  // Developers/Engineers). Clean routes only; the paid-only ?lead_submitted=1
+  // and ?v= variants are deliberately excluded.
+  const trinidadPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/tt`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.9 },
+    ...TRINIDAD_CAMPAIGNS.map((c) => ({
+      url: `${BASE_URL}/tt/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+  ];
 
   return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages, ...trinidadPages];
 }

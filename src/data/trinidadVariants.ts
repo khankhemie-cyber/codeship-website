@@ -1,35 +1,30 @@
 import type { TrinidadPageSlug } from "./trinidadCampaigns";
 
 /**
- * 3 approved headline variants per page, selected via ?v=1|2|3 (defaults to
- * 1 — the campaign's own headline). Only the headline changes between
- * variants; price, programme length and outcomes stay identical.
+ * 3 approved headline variants per program, selected via ?v=1|2|3 (defaults to
+ * 1 — the campaign's own headline). Only the headline changes between variants;
+ * price, programme length and outcomes stay identical.
  */
 export const TRINIDAD_HEADLINE_VARIANTS: Record<TrinidadPageSlug, [string, string, string]> = {
-  "online-coding-classes": [
-    "Online Coding Classes for Kids in Trinidad and Tobago",
-    "Help Your Child Learn Coding From Home",
+  explorers: [
+    "Explorers: Online Coding for Ages 4–6 in Trinidad and Tobago",
+    "Your Child's First Real Coding Class — Ages 4–6",
     "Turn Screen Time Into Real Technology Skills",
   ],
-  "math-language-arts-coding": [
-    "Mathematics, Language Arts, Creative Writing and Coding for Kids",
-    "Build Stronger School and Digital Skills",
-    "School Skills Meet Technology Skills",
+  builders: [
+    "Builders: Coding & Web Projects for Ages 7–9 in Trinidad and Tobago",
+    "Your Child Builds Their First Real Website — Ages 7–9",
+    "Coding, Web Building and Problem-Solving for Kids",
   ],
-  "sea-digital-skills": [
-    "Build Stronger Thinking Skills Before Secondary School",
-    "Support Mathematics, Language Arts, Writing and Digital Confidence",
-    "Online Skill-Building for Primary-School Children",
+  developers: [
+    "Developers: Real Code for Ages 9–11 in Trinidad and Tobago",
+    "Real Code That Solves Real Problems — Ages 9–11",
+    "JavaScript, Python and the Foundations of AI",
   ],
-  "computer-classes-for-kids": [
-    "Computer Classes for Children in Trinidad and Tobago",
-    "Help Your Child Become More Confident With Computers",
-    "Practical Computer and Coding Skills for Kids",
-  ],
-  "online-stem-classes": [
-    "Online STEM Classes for Kids in Trinidad and Tobago",
-    "Help Your Child Build Skills for a Digital Future",
-    "Build, Solve, Explain and Create",
+  engineers: [
+    "Engineers: Build AI Responsibly, Ages 12–16 in Trinidad and Tobago",
+    "Your Teen Can Build AI — Responsibly, Ages 12–16",
+    "Advanced Coding, App Building and AI for Teens",
   ],
 };
 

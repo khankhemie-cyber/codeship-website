@@ -1,33 +1,42 @@
 /**
- * CODEship Trinidad and Tobago — online-only landing pages. Single source of
- * truth for the 5 /tt/:slug pages. Like the Guyana set (guyanaCampaigns.ts),
- * these are separate from the K-8 program taxonomy (programs.ts) — Trinidad
- * registrations are a generic four-week online cohort, not tied to a specific
- * Explorers/Builders/Developers/Engineers level. Unlike Guyana, each Trinidad
- * page carries its own outcome bullets and project examples.
+ * CODEship Trinidad and Tobago — online program landing pages. Single source of
+ * truth for the four /tt/:slug program pages. Unlike the earlier marketing-angle
+ * pages, TT is now organized by the same four grade-band programs as Canada
+ * (Explorers / Builders / Developers / Engineers), each with its own schedule
+ * and its own TTD Stripe checkout so a parent registers and pays in one step.
+ *
+ * Prices are in TTD (TT$600 flat, four weeks). Day and time mirror the Canadian
+ * online groups (CLASS_SCHEDULE[...].online in classSchedule.js) so TT and the
+ * Canadian online cohort run the same weekly slot — the only difference is
+ * length (TT is 4 weeks, Canadian is 8).
  */
 
 import type { ProgramLevel } from "@/lib/payment-links";
 import { CLASS_SCHEDULE } from "@/config/classSchedule";
 
-export type TrinidadPageSlug =
-  | "online-coding-classes"
-  | "math-language-arts-coding"
-  | "sea-digital-skills"
-  | "computer-classes-for-kids"
-  | "online-stem-classes";
+/** The /tt page slugs are the four program levels. */
+export type TrinidadPageSlug = ProgramLevel;
 
 export interface TrinidadCampaign {
   slug: TrinidadPageSlug;
+  label: string;
+  grades: string;
+  ages: string;
   headline: string;
   subhead: string;
   corePromise: string;
   outcomeBullets: string[];
   projectExamples: string[];
+  /** Weekly class day — sourced from the Canadian online group so they align. */
+  days: string;
+  /** Weekly class time (ET; equals TT local time during the cohort). */
+  time: string;
+  /** The four weekly session dates for the 4-week TT cohort. */
+  dates: string;
+  /** The program's real, live TTD Stripe Payment Link. */
+  stripeUrl: string;
   metaTitle: string;
   metaDescription: string;
-  /** Only set for the SEA page — approved phrasing, never "guaranteed" or "official". */
-  complianceNote?: string;
 }
 
 /** Shared programme constants — update once, reflected on every /tt page. */
@@ -35,214 +44,142 @@ export const TRINIDAD_PROGRAMME_FEE = "TT$600";
 export const TRINIDAD_PER_CLASS_FEE = "TT$150";
 export const TRINIDAD_NEXT_COHORT_START = "the week of September 14, 2026";
 
-/**
- * Trinidad and Tobago Stripe Payment Links, per age-level. Every /tt page sells
- * the same four-week cohort, but checkout is placed by the child's grade band —
- * so each page offers all four options and routes the parent to the matching
- * TTD payment link below. These are the real, live TT products; do not guess or
- * change them without confirming with the owner. (Separate from the Canadian CAD
- * links in payment-links.ts — same grade bands, different Stripe products.)
- *
- * Day and time mirror the Canadian online groups (CLASS_SCHEDULE[...].online in
- * classSchedule.js) so TT and the Canadian online cohort run the same weekly
- * slot — the only difference is length (TT/GY are 4 weeks, Canadian is 8). The
- * times are labelled ET; Trinidad and Tobago is UTC−4 year-round and US Eastern
- * stays on EDT (UTC−4) until Nov 1, 2026, so across the whole Sep 15 – Oct 8
- * cohort the ET time shown is also the local TT clock time.
- */
-export interface TrinidadLevelOption {
-  level: ProgramLevel;
-  label: string;
-  grades: string;
-  ages: string;
-  /** Weekly class day — sourced from the Canadian online group so they align. */
-  days: string;
-  /** Weekly class time (ET; equals TT local time during the cohort). */
-  time: string;
-  /** The four weekly session dates for the 4-week TT/GY cohort. */
-  dates: string;
-  url: string;
-}
-
 /** The four weekly sessions, by class day, aligned to the week-of-Sep-14 start. */
 const TT_TUESDAY_DATES = "Sep 15, 22, 29 & Oct 6";
 const TT_THURSDAY_DATES = "Sep 17, 24, Oct 1 & 8";
 
-export const TRINIDAD_STRIPE_LINKS: TrinidadLevelOption[] = [
+export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
   {
-    level: "explorers",
+    slug: "explorers",
     label: "Explorers",
     grades: "K–1",
     ages: "Ages 4–6",
-    days: CLASS_SCHEDULE.explorers.online.days,
-    time: CLASS_SCHEDULE.explorers.online.time,
-    dates: TT_TUESDAY_DATES,
-    url: "https://buy.stripe.com/4gM6oB6Ij6ZD1sR1vmdAk06",
-  },
-  {
-    level: "builders",
-    label: "Builders",
-    grades: "Grades 2–3",
-    ages: "Ages 7–9",
-    days: CLASS_SCHEDULE.builders.online.days,
-    time: CLASS_SCHEDULE.builders.online.time,
-    dates: TT_TUESDAY_DATES,
-    url: "https://buy.stripe.com/5kQfZb9Uv0Bf5J78XOdAk03",
-  },
-  {
-    level: "developers",
-    label: "Developers",
-    grades: "Grades 4–5",
-    ages: "Ages 9–11",
-    days: CLASS_SCHEDULE.developers.online.days,
-    time: CLASS_SCHEDULE.developers.online.time,
-    dates: TT_THURSDAY_DATES,
-    url: "https://buy.stripe.com/6oU8wJgiT2JnfjH0ridAk05",
-  },
-  {
-    level: "engineers",
-    label: "Engineers",
-    grades: "Grades 6–8",
-    ages: "Ages 12–16",
-    days: CLASS_SCHEDULE.engineers.online.days,
-    time: CLASS_SCHEDULE.engineers.online.time,
-    dates: TT_THURSDAY_DATES,
-    url: "https://buy.stripe.com/7sY7sFaYz6ZDb3r6PGdAk07",
-  },
-];
-
-export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
-  {
-    slug: "online-coding-classes",
-    headline: "Online Coding Classes for Kids in Trinidad and Tobago",
+    headline: "Explorers: Online Coding for Ages 4–6 in Trinidad and Tobago",
     subhead:
-      "Help your child move from simply using technology to building with it through live, beginner-friendly online classes.",
+      "A playful first step into coding, where young learners build confidence with technology through stories, games and creative challenges.",
     corePromise:
-      "After four weeks, students should be able to use beginner coding concepts, complete an age-appropriate digital project and explain how their project works.",
+      "After four weeks, your child should be able to give a computer clear step-by-step instructions and build and explain a simple interactive project.",
     outcomeBullets: [
+      "Understand core coding ideas like sequencing and logic",
       "Follow clear step-by-step digital instructions",
-      "Use beginner-friendly coding concepts",
       "Build a simple interactive project",
-      "Explain the logic behind their work",
-      "Use computers and technology with greater confidence",
+      "Explain the thinking behind their work",
+      "Grow confidence and independence with technology",
     ],
     projectExamples: [
       "My Helpful Robot",
       "Interactive Story",
       "Quiz Game",
-      "Simple Webpage",
       "Pattern Builder",
+      "Simple Animation",
       "Digital Kindness Card",
     ],
-    metaTitle: "Online Coding Classes for Kids in Trinidad and Tobago | CODEship",
+    days: CLASS_SCHEDULE.explorers.online.days,
+    time: CLASS_SCHEDULE.explorers.online.time,
+    dates: TT_TUESDAY_DATES,
+    stripeUrl: "https://buy.stripe.com/4gM6oB6Ij6ZD1sR1vmdAk06",
+    metaTitle: "Explorers — Online Coding for Ages 4–6 in Trinidad and Tobago | CODEship",
     metaDescription:
-      "Live online coding classes for children across Trinidad and Tobago. Build coding, computer confidence and problem-solving skills through practical projects. Four weeks for TT$600.",
+      "Live online coding classes for children ages 4–6 (K–1) across Trinidad and Tobago. A playful first step into coding through stories, games and creative projects. Four weeks for TT$600.",
   },
   {
-    slug: "math-language-arts-coding",
-    headline: "Mathematics, Language Arts, Creative Writing and Coding for Kids",
+    slug: "builders",
+    label: "Builders",
+    grades: "Grades 2–3",
+    ages: "Ages 7–9",
+    headline: "Builders: Coding & Web Projects for Ages 7–9 in Trinidad and Tobago",
     subhead:
-      "A practical online programme that connects important school skills with coding, computer confidence and project-based learning.",
+      "Learners deepen their coding skills and start building for the web, turning their own ideas into working pages and games.",
     corePromise:
-      "After four weeks, students should be able to break down structured problems, follow written instructions, explain their thinking more clearly and apply those skills in a digital project.",
+      "After four weeks, your child should be able to plan, build and explain a real digital project and debug it independently.",
     outcomeBullets: [
-      "Break larger problems into manageable steps",
-      "Strengthen Mathematics reasoning through patterns and logic",
+      "Build fluency in block coding and the basics of HTML & CSS",
+      "Plan, prototype and finish a real digital project",
+      "Debug independently and iterate on their work",
       "Read and follow instructions more carefully",
-      "Write clearer project explanations",
-      "Apply academic skills while creating with technology",
+      "Collaborate with peers on team challenges",
     ],
     projectExamples: [
-      "Mathematics Quiz Game",
-      "Interactive Story Project",
-      "Homework Timer",
+      "Multi-Page Website",
+      "Classroom Challenge Site",
+      "Interactive Quiz Game",
       "Shape and Pattern Builder",
       "Community Helper Webpage",
       "Weather Helper",
     ],
-    metaTitle: "Mathematics, Language Arts, Writing and Coding for Kids in Trinidad",
+    days: CLASS_SCHEDULE.builders.online.days,
+    time: CLASS_SCHEDULE.builders.online.time,
+    dates: TT_TUESDAY_DATES,
+    stripeUrl: "https://buy.stripe.com/5kQfZb9Uv0Bf5J78XOdAk03",
+    metaTitle: "Builders — Coding & Web Projects for Ages 7–9 in Trinidad and Tobago | CODEship",
     metaDescription:
-      "Online enrichment combining Mathematics, Language Arts, Creative Writing, coding and computer skills for children across Trinidad and Tobago. Four weeks for TT$600.",
+      "Live online coding classes for children ages 7–9 (Grades 2–3) across Trinidad and Tobago. Build real web pages and games with block coding, HTML and CSS. Four weeks for TT$600.",
   },
   {
-    slug: "sea-digital-skills",
-    headline: "Build Stronger Thinking Skills Before Secondary School",
+    slug: "developers",
+    label: "Developers",
+    grades: "Grades 4–5",
+    ages: "Ages 9–11",
+    headline: "Developers: Real Code for Ages 9–11 in Trinidad and Tobago",
     subhead:
-      "Live online enrichment supporting Mathematics, Language Arts, Creative Writing, problem-solving and digital confidence.",
+      "The move into real programming languages — learners write JavaScript and Python and get their first hands-on look at how AI works.",
     corePromise:
-      "After four weeks, students should be better able to break down word problems, explain their thinking, write clearer responses and complete beginner-friendly digital activities.",
+      "After four weeks, your child should be able to write simple real code, build an interactive app or bot and present how it works.",
     outcomeBullets: [
-      "Break down multi-step questions",
-      "Identify important information in written tasks",
-      "Explain problem-solving steps",
-      "Write clearer structured responses",
-      "Build confidence using digital tools",
+      "Write real code in JavaScript and Python",
+      "Build interactive apps and simple bots",
+      "Break larger problems into manageable steps",
+      "Understand the foundations of how data drives AI",
+      "Present and explain their own technical projects",
     ],
     projectExamples: [
-      "Word-Problem Challenge",
-      "Fact or Opinion Quiz",
-      "Story Planner",
-      "Mathematics Logic Game",
-      "Digital Study Helper",
-      "Community Information Project",
-    ],
-    metaTitle: "SEA Skill-Building and Digital Skills for Kids in Trinidad and Tobago",
-    metaDescription:
-      "Online enrichment supporting Mathematics, Language Arts, Creative Writing, problem-solving and computer confidence before secondary school.",
-    complianceNote:
-      "CODEship supports skill-building in Mathematics, Language Arts, Creative Writing, problem-solving and digital confidence. It is an independent enrichment programme. It is not an official SEA programme, is not Ministry-approved or endorsed, and does not guarantee examination results or secondary-school placement.",
-  },
-  {
-    slug: "computer-classes-for-kids",
-    headline: "Computer Classes for Children in Trinidad and Tobago",
-    subhead:
-      "Help your child develop practical computer skills, coding basics, digital confidence and safer, more productive technology habits.",
-    corePromise:
-      "After four weeks, students should be able to use common digital tools more confidently, understand beginner coding concepts and complete a simple digital project.",
-    outcomeBullets: [
-      "Navigate age-appropriate digital tools",
-      "Use the keyboard and mouse more confidently",
-      "Organize simple digital work",
-      "Understand introductory coding concepts",
-      "Create and explain a digital project",
-    ],
-    projectExamples: [
-      "My First Digital Story",
-      "File and Folder Challenge",
-      "Online Safety Poster",
-      "Simple Quiz",
-      "Digital Kindness Card",
-      "All About Me Webpage",
-    ],
-    metaTitle: "Computer Classes for Children in Trinidad and Tobago | CODEship",
-    metaDescription:
-      "Live online computer classes for kids across Trinidad and Tobago. Build practical computer confidence, coding basics and problem-solving skills. Four weeks for TT$600.",
-  },
-  {
-    slug: "online-stem-classes",
-    headline: "Online STEM Classes for Kids in Trinidad and Tobago",
-    subhead:
-      "Help your child build, solve, explain and create through coding, Mathematics thinking, writing and practical digital projects.",
-    corePromise:
-      "After four weeks, students should be able to complete an age-appropriate project, explain their process, solve problems step by step and present what they created.",
-    outcomeBullets: [
-      "Use logical steps to solve a challenge",
-      "Connect Mathematics thinking with project activities",
-      "Build a practical digital project",
-      "Record and explain decisions",
-      "Present completed work with greater confidence",
-    ],
-    projectExamples: [
-      "Weather Helper",
-      "Interactive Science Quiz",
+      "Interactive App",
+      "Simple Chatbot",
       "Data Detective",
-      "Recycling Sorter",
+      "Mathematics Logic Game",
       "Budget Buddy",
       "Community Problem Solver",
     ],
-    metaTitle: "Online STEM Classes for Kids in Trinidad and Tobago | CODEship",
+    days: CLASS_SCHEDULE.developers.online.days,
+    time: CLASS_SCHEDULE.developers.online.time,
+    dates: TT_THURSDAY_DATES,
+    stripeUrl: "https://buy.stripe.com/6oU8wJgiT2JnfjH0ridAk05",
+    metaTitle: "Developers — Real Code for Ages 9–11 in Trinidad and Tobago | CODEship",
     metaDescription:
-      "Live online STEM classes combining coding, Mathematics, writing, logic and digital creativity for children across Trinidad and Tobago. Four weeks for TT$600.",
+      "Live online coding classes for children ages 9–11 (Grades 4–5) across Trinidad and Tobago. Write real JavaScript and Python and explore the foundations of AI. Four weeks for TT$600.",
+  },
+  {
+    slug: "engineers",
+    label: "Engineers",
+    grades: "Grades 6–8",
+    ages: "Ages 12–16",
+    headline: "Engineers: Build AI Responsibly, Ages 12–16 in Trinidad and Tobago",
+    subhead:
+      "Advanced building for teens — full applications, product design and AI, aimed at real projects and post-secondary readiness.",
+    corePromise:
+      "After four weeks, your teen should be able to design a more sophisticated application, apply AI concepts responsibly and pitch their solution.",
+    outcomeBullets: [
+      "Work across multiple languages and modern tools",
+      "Design and ship a more sophisticated application",
+      "Apply AI concepts to a project that matters to them",
+      "Consider ethics and responsibility in their build",
+      "Lead a build and explore tech career pathways",
+    ],
+    projectExamples: [
+      "Full Application Build",
+      "AI-Assisted Tool",
+      "Community Impact Solution",
+      "Data Dashboard",
+      "Product Pitch",
+      "Automation Helper",
+    ],
+    days: CLASS_SCHEDULE.engineers.online.days,
+    time: CLASS_SCHEDULE.engineers.online.time,
+    dates: TT_THURSDAY_DATES,
+    stripeUrl: "https://buy.stripe.com/7sY7sFaYz6ZDb3r6PGdAk07",
+    metaTitle: "Engineers — Build AI Responsibly, Ages 12–16 in Trinidad and Tobago | CODEship",
+    metaDescription:
+      "Live online coding classes for teens ages 12–16 (Grades 6–8) across Trinidad and Tobago. Build full applications and apply AI responsibly. Four weeks for TT$600.",
   },
 ];
 
@@ -250,7 +187,7 @@ export function getTrinidadCampaign(slug: string): TrinidadCampaign | undefined 
   return TRINIDAD_CAMPAIGNS.find((c) => c.slug === slug);
 }
 
-/** Shared page-anatomy content — identical across all 5 pages per the brief. */
+/** Shared page-anatomy content — identical across all program pages. */
 
 export const TRINIDAD_TRUST_LINE =
   "Live online classes · Small-group learning · Beginner-friendly · Available across Trinidad and Tobago";
@@ -275,8 +212,8 @@ export const TRINIDAD_PRICING = {
     "Academic and problem-solving skill-building",
     "End-of-programme outcomes",
   ],
-  ctaLabel: "Register for the Next Online Cohort",
-  startDateLine: `Next cohort begins ${TRINIDAD_NEXT_COHORT_START}.`,
+  ctaLabel: "Register & Pay",
+  startDateLine: `Next online cohort begins ${TRINIDAD_NEXT_COHORT_START}.`,
 };
 
 export interface TrinidadFAQItem {
@@ -292,7 +229,12 @@ export const TRINIDAD_FAQ: TrinidadFAQItem[] = [
   },
   {
     question: "Does my child need coding experience?",
-    answer: "No. The programme is designed to be beginner-friendly.",
+    answer: "No. Every program is designed to be beginner-friendly at its grade band.",
+  },
+  {
+    question: "How do I choose the right program?",
+    answer:
+      "Programs are grouped by grade band — Explorers (K–1), Builders (Grades 2–3), Developers (Grades 4–5) and Engineers (Grades 6–8). Choose the one that matches your child's grade. If you're unsure, email admin@codeshipacademy.com and our team will help.",
   },
   {
     question: "Is the programme available in Tobago?",
@@ -300,19 +242,14 @@ export const TRINIDAD_FAQ: TrinidadFAQItem[] = [
       "Yes. Classes are online, so children can participate from Trinidad or Tobago with a suitable computer and reliable internet connection.",
   },
   {
-    question: "Does this replace school or private lessons?",
-    answer:
-      "No. CODEship is an enrichment programme that supports school-related skills while helping children develop practical technology and problem-solving abilities.",
-  },
-  {
     question: "How much does the programme cost?",
     answer:
       "The four-week programme costs TT$600, which works out to TT$150 per live class.",
   },
   {
-    question: "What will my child complete?",
+    question: "How do I register?",
     answer:
-      "Your child will work toward an age-appropriate digital project and practise explaining the steps, decisions and skills used to create it.",
+      "Choose your child's program, review the schedule and complete registration and payment securely online. Our team will then confirm class placement and next steps.",
   },
 ];
 

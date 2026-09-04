@@ -11,9 +11,7 @@ import {
   TRINIDAD_PROGRAMME_FEE,
   TRINIDAD_NEXT_COHORT_START,
   TRINIDAD_LEAD_SUBMITTED_MESSAGE,
-  TRINIDAD_STRIPE_LINKS,
 } from "@/data/trinidadCampaigns";
-import type { ProgramLevel } from "@/lib/payment-links";
 import { getTrinidadHeadline } from "@/data/trinidadVariants";
 import { trackView, trackRegisterClick, trackPriceView } from "@/lib/analytics";
 import FAQAccordion from "@/components/FAQAccordion";
@@ -34,6 +32,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
 
   const eventBase = {
     page: campaign.slug,
+    program: campaign.slug,
     country: "trinidad-tobago" as const,
     location: "online" as const,
     utm_source: utmSource,
@@ -50,14 +49,19 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Registration is a per-level Stripe checkout (see TRINIDAD_STRIPE_LINKS).
-  // The hero and final CTAs scroll to the #register block where the parent
-  // picks their child's level; each level button links straight to its TT
-  // Stripe Payment Link. register_click fires with the chosen level.
-  const handleRegisterClick = (level: ProgramLevel) => () =>
-    trackRegisterClick({ ...eventBase, program: level });
+  // Registration and payment happen directly on this program's TT Stripe
+  // Payment Link — every CTA points at it and fires register_click.
+  const handleRegisterClick = () => trackRegisterClick(eventBase);
 
   const headline = getTrinidadHeadline(campaign.slug, variantParam);
+
+  // Shared props for the direct-to-Stripe registration button.
+  const registerButtonProps = {
+    href: campaign.stripeUrl,
+    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    onClick: handleRegisterClick,
+  };
 
   return (
     <div className="bg-[#FAF8F4]">
@@ -78,10 +82,10 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           <p className="text-gray-300 text-lg mb-5 leading-relaxed">{campaign.subhead}</p>
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
             <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
-              {TRINIDAD_PROGRAMME_FEE} · Four-week programme
+              {campaign.label} · {campaign.grades} · {campaign.ages}
             </span>
             <span className="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full">
-              Next online cohort begins {TRINIDAD_NEXT_COHORT_START}
+              {TRINIDAD_PROGRAMME_FEE} · Four-week programme
             </span>
           </div>
           {leadSubmitted ? (
@@ -93,13 +97,16 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
             </a>
           ) : (
             <a
-              href="#register"
+              {...registerButtonProps}
               className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
             >
-              Register for the Next Online Cohort
+              Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
             </a>
           )}
-          <p className="text-gray-400 text-xs mt-5">{TRINIDAD_TRUST_LINE}</p>
+          <p className="text-gray-300 text-sm mt-4">
+            {campaign.days} · {campaign.time} &nbsp;|&nbsp; Begins {TRINIDAD_NEXT_COHORT_START}
+          </p>
+          <p className="text-gray-400 text-xs mt-4">{TRINIDAD_TRUST_LINE}</p>
         </div>
       </section>
 
@@ -120,11 +127,6 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               </li>
             ))}
           </ul>
-          {campaign.complianceNote && (
-            <p className="text-gray-500 text-xs mt-4 bg-white border border-dashed border-gray-300 rounded-lg p-3">
-              {campaign.complianceNote}
-            </p>
-          )}
         </section>
 
         {/* Page-specific project examples */}
@@ -159,11 +161,40 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           </ol>
         </section>
 
-        {/* Pricing & registration */}
-        <section id="register" aria-labelledby="pricing-heading" className="scroll-mt-6">
-          <h2 id="pricing-heading" className="text-2xl font-bold text-[#001532] mb-5 text-center">
-            {TRINIDAD_PRICING.heading}
+        {/* Schedule, pricing & registration */}
+        <section id="register" aria-labelledby="register-heading" className="scroll-mt-6">
+          <h2 id="register-heading" className="text-2xl font-bold text-[#001532] mb-5 text-center">
+            Schedule &amp; Registration
           </h2>
+
+          {/* Schedule card */}
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-4">
+            <p className="text-[#138A9A] text-xs font-bold uppercase tracking-wide mb-2">Your Class Schedule</p>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              <div className="flex justify-between sm:block">
+                <dt className="text-gray-500">Program</dt>
+                <dd className="text-[#001532] font-semibold">{campaign.label} · {campaign.grades} ({campaign.ages})</dd>
+              </div>
+              <div className="flex justify-between sm:block">
+                <dt className="text-gray-500">Day &amp; time</dt>
+                <dd className="text-[#001532] font-semibold">{campaign.days} · {campaign.time}</dd>
+              </div>
+              <div className="flex justify-between sm:block">
+                <dt className="text-gray-500">Class dates</dt>
+                <dd className="text-[#001532] font-semibold">{campaign.dates}</dd>
+              </div>
+              <div className="flex justify-between sm:block">
+                <dt className="text-gray-500">Format</dt>
+                <dd className="text-[#001532] font-semibold">Live online · four weeks</dd>
+              </div>
+            </dl>
+            <p className="text-gray-400 text-[11px] mt-3">
+              Times align with our online groups and are shown in Eastern Time (ET) — the same local clock time in Trinidad
+              and Tobago during this September–October cohort.
+            </p>
+          </div>
+
+          {/* Price + direct Stripe checkout */}
           <div className="bg-[#001532] rounded-xl p-6 text-center">
             <p className="text-white font-extrabold text-4xl mb-1">{TRINIDAD_PRICING.primaryPrice}</p>
             <p className="text-gray-300 text-sm mb-4">{TRINIDAD_PRICING.supportingPrice}</p>
@@ -182,35 +213,14 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               </p>
             ) : (
               <>
-                <p className="text-white text-sm font-semibold mb-1">Choose your child&apos;s level to register</p>
-                <p className="text-gray-400 text-xs mb-4">
-                  Same {TRINIDAD_PROGRAMME_FEE} four-week programme — pick the grade band that fits your child to complete
-                  registration and secure their place.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-md mx-auto text-left">
-                  {TRINIDAD_STRIPE_LINKS.map((opt) => (
-                    <a
-                      key={opt.level}
-                      href={opt.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={handleRegisterClick(opt.level)}
-                      className="flex flex-col rounded-xl bg-[#E5A823] px-4 py-3 text-[#001532] hover:bg-[#d4941f] transition-colors"
-                    >
-                      <span className="text-base font-bold leading-tight">{opt.label}</span>
-                      <span className="text-[11px] font-semibold opacity-75">
-                        {opt.grades} · {opt.ages}
-                      </span>
-                      <span className="text-[11px] font-semibold mt-1.5">
-                        {opt.days} · {opt.time}
-                      </span>
-                      <span className="text-[11px] opacity-80">{opt.dates}</span>
-                    </a>
-                  ))}
-                </div>
-                <p className="text-gray-400 text-[11px] mt-4">
-                  Class times align with our online groups and are shown in Eastern Time (ET) — the same local clock time in
-                  Trinidad and Tobago during this September–October cohort.
+                <a
+                  {...registerButtonProps}
+                  className="inline-block w-full sm:w-auto bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
+                >
+                  {TRINIDAD_PRICING.ctaLabel} — Secure Checkout
+                </a>
+                <p className="text-gray-400 text-[11px] mt-3">
+                  You&apos;ll complete registration and payment securely. Our team then confirms class placement and next steps.
                 </p>
               </>
             )}
@@ -238,10 +248,10 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
             </p>
           ) : (
             <a
-              href="#register"
+              {...registerButtonProps}
               className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
             >
-              Register for the Next Online Cohort
+              Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
             </a>
           )}
           <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
@@ -262,10 +272,10 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
       ) : (
         <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
           <a
-            href="#register"
+            {...registerButtonProps}
             className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
           >
-            Register for the Next Online Cohort
+            Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
           </a>
         </div>
       )}

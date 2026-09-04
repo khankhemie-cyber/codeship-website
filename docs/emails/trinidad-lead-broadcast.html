@@ -1,0 +1,193 @@
+<!--
+  CODEship Trinidad & Tobago — send-ready broadcast email to ALL TT leads.
+
+  One email serves every lead: it lists the four online programs (by grade band —
+  Explorers, Builders, Developers, Engineers), and each card links to that
+  program's /tt page — where the class schedule and the Stripe payment link live
+  — so the lead picks their program, sees the schedule, and completes
+  registration and payment there. Logos are the real site assets referenced by
+  absolute URL (logo-footer.png = white-on-dark for the navy header;
+  logo-nav.png = the dark logo for the light footer).
+
+  Paste-ready for HubSpot / any ESP. Table layout + inline styles for broad
+  email-client support. Replace {{ first_name }} and {{ unsubscribe_link }} with
+  your ESP's merge fields before sending.
+
+  Subject line options:
+    1. Choose your child's online program — Trinidad & Tobago
+    2. Pick a program and complete your CODEship registration
+    3. 4 live online programs for your child — pick one to register
+  Preview text: Live, beginner-friendly online classes across Trinidad & Tobago —
+  pick your child's program by grade, see the schedule, and register.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0;padding:0;background-color:#f4f6fb;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+        <!-- Header (navy) with the real white-on-dark logo -->
+        <tr>
+          <td style="background-color:#001532;padding:28px 32px;text-align:center;">
+            <img src="https://www.codeshipacademy.com/logo-footer.png" alt="CODEship Academy" height="52" style="height:52px;width:auto;display:inline-block;border:0;outline:none;text-decoration:none;">
+            <div style="color:#E5A823;font-size:12px;font-weight:700;letter-spacing:2px;margin-top:14px;">DREAM. CODE. ACHIEVE.</div>
+            <div style="color:#8fb4ff;font-size:13px;margin-top:6px;">Live online classes for kids across Trinidad &amp; Tobago</div>
+          </td>
+        </tr>
+
+        <!-- Intro -->
+        <tr>
+          <td style="padding:32px 32px 8px 32px;">
+            <h1 style="margin:0 0 16px 0;font-size:24px;line-height:1.3;color:#001532;">Choose your child's program &amp; register</h1>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#334155;">Hi {{ first_name }},</p>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#334155;">
+              Thank you for your interest in CODEship. We run <strong>live, beginner-friendly online classes</strong> that help children across Trinidad and Tobago move from simply using technology to building with it.
+            </p>
+            <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;color:#334155;">
+              Our programs are grouped by grade band. <strong>Pick the one that matches your child</strong> and tap its button to see the class schedule and complete registration.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Explorers -->
+        <tr>
+          <td style="padding:16px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;">
+              <tr>
+                <td style="padding:20px 22px;">
+                  <div style="font-size:17px;font-weight:700;color:#001532;">Explorers <span style="font-size:13px;font-weight:600;color:#138A9A;">· K–1 · Ages 4–6</span></div>
+                  <div style="font-size:14px;line-height:1.55;color:#475569;margin:8px 0 6px 0;">
+                    A playful first step into coding — your child builds a simple interactive project and learns to explain how it works.
+                  </div>
+                  <div style="font-size:13px;color:#001532;font-weight:600;margin:0 0 14px 0;">Tuesdays · 4:00–5:00 PM ET &nbsp;·&nbsp; Sep 15, 22, 29 &amp; Oct 6</div>
+                  <a href="https://www.codeshipacademy.com/tt/explorers?utm_source=email&amp;utm_medium=email&amp;utm_campaign=trinidad-lead-broadcast&amp;utm_content=explorers"
+                     style="display:inline-block;background-color:#E5A823;color:#001532;text-decoration:none;font-size:14px;font-weight:700;padding:11px 22px;border-radius:8px;">
+                    View Schedule &amp; Register &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Builders -->
+        <tr>
+          <td style="padding:16px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;">
+              <tr>
+                <td style="padding:20px 22px;">
+                  <div style="font-size:17px;font-weight:700;color:#001532;">Builders <span style="font-size:13px;font-weight:600;color:#138A9A;">· Grades 2–3 · Ages 7–9</span></div>
+                  <div style="font-size:14px;line-height:1.55;color:#475569;margin:8px 0 6px 0;">
+                    Learners start building for the web, turning their own ideas into working pages and games with block coding, HTML and CSS.
+                  </div>
+                  <div style="font-size:13px;color:#001532;font-weight:600;margin:0 0 14px 0;">Tuesdays · 5:00–5:55 PM ET &nbsp;·&nbsp; Sep 15, 22, 29 &amp; Oct 6</div>
+                  <a href="https://www.codeshipacademy.com/tt/builders?utm_source=email&amp;utm_medium=email&amp;utm_campaign=trinidad-lead-broadcast&amp;utm_content=builders"
+                     style="display:inline-block;background-color:#E5A823;color:#001532;text-decoration:none;font-size:14px;font-weight:700;padding:11px 22px;border-radius:8px;">
+                    View Schedule &amp; Register &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Developers -->
+        <tr>
+          <td style="padding:16px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;">
+              <tr>
+                <td style="padding:20px 22px;">
+                  <div style="font-size:17px;font-weight:700;color:#001532;">Developers <span style="font-size:13px;font-weight:600;color:#138A9A;">· Grades 4–5 · Ages 9–11</span></div>
+                  <div style="font-size:14px;line-height:1.55;color:#475569;margin:8px 0 6px 0;">
+                    The move into real programming — learners write JavaScript and Python and get their first hands-on look at how AI works.
+                  </div>
+                  <div style="font-size:13px;color:#001532;font-weight:600;margin:0 0 14px 0;">Thursdays · 4:00–4:55 PM ET &nbsp;·&nbsp; Sep 17, 24, Oct 1 &amp; 8</div>
+                  <a href="https://www.codeshipacademy.com/tt/developers?utm_source=email&amp;utm_medium=email&amp;utm_campaign=trinidad-lead-broadcast&amp;utm_content=developers"
+                     style="display:inline-block;background-color:#E5A823;color:#001532;text-decoration:none;font-size:14px;font-weight:700;padding:11px 22px;border-radius:8px;">
+                    View Schedule &amp; Register &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Engineers -->
+        <tr>
+          <td style="padding:16px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;">
+              <tr>
+                <td style="padding:20px 22px;">
+                  <div style="font-size:17px;font-weight:700;color:#001532;">Engineers <span style="font-size:13px;font-weight:600;color:#138A9A;">· Grades 6–8 · Ages 12–16</span></div>
+                  <div style="font-size:14px;line-height:1.55;color:#475569;margin:8px 0 6px 0;">
+                    Advanced building for teens — full applications, product design and AI, aimed at real projects and post-secondary readiness.
+                  </div>
+                  <div style="font-size:13px;color:#001532;font-weight:600;margin:0 0 14px 0;">Thursdays · 5:00–5:55 PM ET &nbsp;·&nbsp; Sep 17, 24, Oct 1 &amp; 8</div>
+                  <a href="https://www.codeshipacademy.com/tt/engineers?utm_source=email&amp;utm_medium=email&amp;utm_campaign=trinidad-lead-broadcast&amp;utm_content=engineers"
+                     style="display:inline-block;background-color:#E5A823;color:#001532;text-decoration:none;font-size:14px;font-weight:700;padding:11px 22px;border-radius:8px;">
+                    View Schedule &amp; Register &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Not sure which? -->
+        <tr>
+          <td style="padding:20px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6fb;border-radius:10px;">
+              <tr>
+                <td style="padding:16px 22px;font-size:14px;line-height:1.6;color:#334155;text-align:center;">
+                  Not sure which program fits? <a href="https://www.codeshipacademy.com/tt?utm_source=email&amp;utm_medium=email&amp;utm_campaign=trinidad-lead-broadcast&amp;utm_content=all-programs" style="color:#138A9A;font-weight:700;">See all four programs &rarr;</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Programme facts -->
+        <tr>
+          <td style="padding:20px 32px 8px 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6fb;border-radius:10px;">
+              <tr>
+                <td style="padding:18px 22px;font-size:14px;line-height:1.7;color:#334155;">
+                  <strong style="color:#001532;">Every program includes:</strong><br>
+                  &bull; Four live, instructor-led online classes (one per week)<br>
+                  &bull; Small-group, beginner-friendly learning<br>
+                  &bull; A practical digital project your child builds and keeps<br>
+                  &bull; <strong>TT$600 for the four-week program</strong> (TT$150 per live class)<br>
+                  &bull; Next online cohort begins <strong>the week of September 14, 2026</strong>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Help line -->
+        <tr>
+          <td style="padding:18px 32px 8px 32px;">
+            <p style="margin:0;font-size:14px;line-height:1.6;color:#475569;">
+              Questions? Just reply to this email or write to
+              <a href="mailto:admin@codeshipacademy.com" style="color:#138A9A;">admin@codeshipacademy.com</a> and our team will help.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 32px 32px 32px;border-top:1px solid #e2e8f0;text-align:center;">
+            <img src="https://www.codeshipacademy.com/logo-nav.png" alt="CODEship Academy" height="40" style="height:40px;width:auto;display:inline-block;border:0;outline:none;text-decoration:none;margin-bottom:12px;">
+            <p style="margin:0 0 8px 0;font-size:12px;line-height:1.6;color:#94a3b8;">
+              CODEship is an independent online enrichment program for children across Trinidad and Tobago. It supports school-related skills — it is not an official SEA program, is not Ministry-approved or endorsed, and does not guarantee grades, examination results or secondary-school placement. A laptop or desktop computer and an internet connection are required.
+            </p>
+            <p style="margin:0;font-size:12px;line-height:1.6;color:#94a3b8;">
+              CODEship Academy &bull; <a href="https://www.codeshipacademy.com" style="color:#64748b;">www.codeshipacademy.com</a><br>
+              You are receiving this because you enquired about CODEship classes. <a href="{{ unsubscribe_link }}" style="color:#64748b;">Unsubscribe</a>.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
