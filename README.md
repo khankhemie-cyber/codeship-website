@@ -90,7 +90,8 @@ sources of truth:
 - `src/data/programs.ts` — curriculum facts per level: grade band, coding space, outcome, the 4
   semesters + capstone, and per-level provincial alignment copy.
 - `src/data/locations.ts` — the 5 in-person cities (Toronto, Vaughan, Oshawa, Calgary, Vancouver),
-  their shared Saturday schedule (9:00 AM–1:45 PM, 15-min transitions, one 35-min break — see
+  the Oshawa venue (`IN_PERSON_VENUE` — Core21, 21 Simcoe St South), the Saturday schedule
+  (Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM — see
   `IN_PERSON_SATURDAY_AGENDA`), and the online schedule: Tuesdays 4:00–4:55 PM ET (Explorers) / 5:00–5:55
   PM ET (Builders), Thursdays 4:00–4:55 PM ET (Developers) / 5:00–5:55 PM ET (Engineers) — see `ONLINE`.
 

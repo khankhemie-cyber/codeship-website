@@ -17,8 +17,19 @@ export const IN_PERSON_CITY_GEO: Record<InPersonCity, { latitude: number; longit
   Oshawa: { latitude: 43.8971, longitude: -78.8658 },
 };
 
-/** Oshawa runs every program on Saturdays, 9:00 AM–1:45 PM — see IN_PERSON_SATURDAY_AGENDA below. */
-export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-13:45"];
+/** Where the Oshawa in-person Saturday classes run. Render these exactly — do not restate the address inline. */
+export const IN_PERSON_VENUE = {
+  building: "Core21",
+  street: "21 Simcoe St South",
+  city: "Oshawa",
+  region: "ON",
+  /** e.g. "Core21, 21 Simcoe St South, Oshawa" */
+  full: "Core21, 21 Simcoe St South, Oshawa",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Core21%2C+21+Simcoe+St+S%2C+Oshawa%2C+ON",
+} as const;
+
+/** Oshawa runs every program on Saturdays, 9:00 AM–12:30 PM — see IN_PERSON_SATURDAY_AGENDA below. */
+export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-12:30"];
 
 export type LocationStatus = "open" | "waitlist";
 
@@ -80,20 +91,18 @@ export const ONLINE: Record<
 };
 
 /**
- * In-person Saturday schedule, run at the Oshawa location.
- * Every Saturday, Oshawa runs all 4 programs back-to-back, 9:00 AM–1:45 PM, with
- * 15-minute transitions between classes and one 35-minute break after the 2nd
- * class. Classes run in grade order (youngest to oldest) so families can drop
- * off / pick up in one visit.
+ * In-person Saturday schedule, run at the Oshawa location (Core21, 21 Simcoe St South).
+ * Explorers and Builders run at the same time, 9:00–10:00 AM; Developers and
+ * Engineers run together, 11:30 AM–12:30 PM.
  */
 export const IN_PERSON_SATURDAY_SCHEDULE: Record<
   ProgramSlug,
   { start: string; end: string; length: string }
 > = {
-  explorers: { start: "9:00 AM", end: "9:55 AM", length: "55 min" },
-  builders: { start: "10:10 AM", end: "11:05 AM", length: "55 min" },
-  developers: { start: "11:40 AM", end: "12:35 PM", length: "55 min" },
-  engineers: { start: "12:50 PM", end: "1:45 PM", length: "55 min" },
+  explorers: { start: "9:00 AM", end: "10:00 AM", length: "60 min" },
+  builders: { start: "9:00 AM", end: "10:00 AM", length: "60 min" },
+  developers: { start: "11:30 AM", end: "12:30 PM", length: "60 min" },
+  engineers: { start: "11:30 AM", end: "12:30 PM", length: "60 min" },
 };
 
 /** The full Saturday agenda at the Oshawa location, in run order. */
@@ -101,11 +110,9 @@ export const IN_PERSON_SATURDAY_AGENDA: Array<
   | { type: "class"; program: ProgramSlug; start: string; end: string }
   | { type: "transition" | "break"; start: string; end: string; length: string }
 > = [
-  { type: "class", program: "explorers", start: "9:00 AM", end: "9:55 AM" },
-  { type: "transition", start: "9:55 AM", end: "10:10 AM", length: "15 min" },
-  { type: "class", program: "builders", start: "10:10 AM", end: "11:05 AM" },
-  { type: "break", start: "11:05 AM", end: "11:40 AM", length: "35 min" },
-  { type: "class", program: "developers", start: "11:40 AM", end: "12:35 PM" },
-  { type: "transition", start: "12:35 PM", end: "12:50 PM", length: "15 min" },
-  { type: "class", program: "engineers", start: "12:50 PM", end: "1:45 PM" },
+  { type: "class", program: "explorers", start: "9:00 AM", end: "10:00 AM" },
+  { type: "class", program: "builders", start: "9:00 AM", end: "10:00 AM" },
+  { type: "break", start: "10:00 AM", end: "11:30 AM", length: "90 min" },
+  { type: "class", program: "developers", start: "11:30 AM", end: "12:30 PM" },
+  { type: "class", program: "engineers", start: "11:30 AM", end: "12:30 PM" },
 ];

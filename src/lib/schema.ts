@@ -9,6 +9,7 @@ export function organizationSchema() {
       "CODEship Academy offers K–8 coding, AI, and STEM programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "21 Simcoe St South",
       addressLocality: "Oshawa",
       addressRegion: "Ontario",
       addressCountry: "CA",
@@ -36,8 +37,10 @@ export function organizationSchema() {
 interface LocalBusinessOptions {
   /** City-center coordinates — only pass for the open in-person city (Oshawa). */
   geo?: { latitude: number; longitude: number };
-  /** e.g. ["Saturday 09:00-13:45"] — only pass where CODEship actually runs in-person classes (Oshawa). */
+  /** e.g. ["Sa 09:00-12:30"] — only pass where CODEship actually runs in-person classes (Oshawa). */
   openingHours?: string[];
+  /** Only for the open in-person venue (Oshawa). */
+  streetAddress?: string;
   areaServed?: string[];
 }
 
@@ -49,6 +52,7 @@ export function localBusinessSchema(city: string, options: LocalBusinessOptions 
     description: `CODEship Academy in ${city} offers coding, AI, and STEM programs for children.`,
     address: {
       "@type": "PostalAddress",
+      ...(options.streetAddress ? { streetAddress: options.streetAddress } : {}),
       addressLocality: city,
       addressCountry: "CA",
     },

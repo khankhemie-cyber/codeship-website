@@ -6,6 +6,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import {
   IN_PERSON_CITY_GEO,
   IN_PERSON_OPENING_HOURS,
+  IN_PERSON_VENUE,
   LOCATIONS,
   LOCATIONS_BY_SLUG,
   DURHAM_SERVICE_AREA,
@@ -59,7 +60,7 @@ export default function CityPage({ params }: Props) {
     {
       question: `How do I enroll my child in ${cityName}?`,
       answer: isOpen
-        ? `Register online in a few minutes and pick in-person (Oshawa, Saturdays) or online at checkout. Our team will confirm placement and share next steps.`
+        ? `Register online in a few minutes and pick in-person (Saturdays at ${IN_PERSON_VENUE.full}) or online at checkout. Our team will confirm placement and share next steps.`
         : `Register online today for any program, or join the in-person waitlist for ${cityName}. Our admissions team will contact waitlisted families as soon as a local in-person cohort is scheduled.`,
     },
     {
@@ -72,6 +73,7 @@ export default function CityPage({ params }: Props) {
     ? {
         geo: IN_PERSON_CITY_GEO[cityName as InPersonCity],
         openingHours: IN_PERSON_OPENING_HOURS,
+        streetAddress: IN_PERSON_VENUE.street,
         areaServed: [...DURHAM_SERVICE_AREA],
       }
     : { areaServed: [cityName] };
@@ -127,7 +129,7 @@ export default function CityPage({ params }: Props) {
             </h1>
             <p className="text-gray-300 text-xl max-w-2xl mx-auto">
               {isOpen
-                ? `Coding, AI, and STEM programs for children in ${cityName}, ${province} — in-person on Saturdays and live online, serving families across Durham Region.`
+                ? `Coding, AI, and STEM programs for children in ${cityName}, ${province} — in-person on Saturdays at ${IN_PERSON_VENUE.building}, ${IN_PERSON_VENUE.street}, and live online, serving families across Durham Region.`
                 : `Live online coding, AI, and STEM programs for children in ${cityName}, ${province} — open now. In-person classes are coming to ${cityName}; join the waitlist to be first in line.`}
             </p>
           </div>
@@ -166,8 +168,8 @@ export default function CityPage({ params }: Props) {
                 {/* Map embed */}
                 <div className="rounded-2xl overflow-hidden h-48 shadow-sm border border-gray-100">
                   <iframe
-                    title={`Map of ${cityName}, ${province}`}
-                    src={`https://maps.google.com/maps?q=${encodeURIComponent(cityName + ", " + province + ", Canada")}&output=embed&z=12`}
+                    title={isOpen ? `Map of ${IN_PERSON_VENUE.full}` : `Map of ${cityName}, ${province}`}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(isOpen ? `${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city}, ON, Canada` : cityName + ", " + province + ", Canada")}&output=embed&z=${isOpen ? 16 : 12}`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -248,7 +250,7 @@ export default function CityPage({ params }: Props) {
                 <p className="text-gray-600 leading-relaxed mb-3">
                   Our Oshawa home base welcomes families from across Durham Region. Whether you&apos;re in Oshawa,
                   Whitby, Courtice, Bowmanville, or Clarington, your child can join our Saturday in-person coding, AI,
-                  and STEM classes — or attend live online from home. CODEship Academy is Durham Region&apos;s K–8
+                  and STEM classes at {IN_PERSON_VENUE.full} (in the {IN_PERSON_VENUE.building} building) — or attend live online from home. CODEship Academy is Durham Region&apos;s K–8
                   destination for creative, project-based coding, AI, and STEM education.
                 </p>
                 <p className="text-gray-600 leading-relaxed">

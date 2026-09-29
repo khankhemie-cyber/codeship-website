@@ -5,6 +5,7 @@ import type { Program } from "@/data/programs";
 import { CLASS_SCHEDULE, startsSummary } from "@/config/classSchedule";
 import { SEMESTER_SHAPE_LABEL, SEMESTER_WEEKS } from "@/config/offering";
 import type { LocationSlug } from "@/lib/registration";
+import { IN_PERSON_VENUE } from "@/data/locations";
 import { EnrollButton } from "@/components/EnrollButton";
 import { PROGRAM_LINKS, type ProgramLevel } from "@/lib/payment-links";
 import { trackView, trackSelectLocation, trackRegisterClick } from "@/lib/analytics";
@@ -49,13 +50,13 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
   const scheduleDetail =
     format === "online"
       ? `Online — ${modeSchedule.days} ${modeSchedule.time}, ${startsSummary(modeSchedule)}`
-      : `Oshawa (in-person) — ${modeSchedule.days} ${modeSchedule.time}, ${startsSummary(modeSchedule)}`;
+      : `${IN_PERSON_VENUE.full} (in-person) — ${modeSchedule.days} ${modeSchedule.time}, ${startsSummary(modeSchedule)}`;
 
   const options: { value: Format; title: string; sub: string }[] = [
     {
       value: "inperson",
       title: "In-Person — Oshawa",
-      sub: `${schedule.inperson.days}, ${schedule.inperson.time}`,
+      sub: `${schedule.inperson.days}, ${schedule.inperson.time} · ${IN_PERSON_VENUE.building}, ${IN_PERSON_VENUE.street}`,
     },
     {
       value: "online",

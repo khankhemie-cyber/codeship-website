@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { IN_PERSON_VENUE } from "@/data/locations";
 
 export default function Footer() {
   return (
@@ -19,7 +20,7 @@ export default function Footer() {
             </Link>
             <p className="text-[#E5A823] text-sm font-bold mb-1">DREAM. CODE. ACHIEVE.</p>
             <p className="text-gray-300 text-xs mb-1">Future Skills Start Here.</p>
-            <p className="text-gray-400 text-xs mb-2">Headquartered in Oshawa, Ontario, Canada.</p>
+            <p className="text-gray-400 text-xs mb-2">Saturday classes: {IN_PERSON_VENUE.full}, Ontario.</p>
             <a href="mailto:admin@codeshipacademy.com" className="text-gray-300 hover:text-[#E5A823] text-xs transition-colors">
               admin@codeshipacademy.com
             </a>

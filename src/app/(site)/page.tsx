@@ -11,6 +11,10 @@ import { websiteSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { getVisitorGeo } from "@/lib/geo";
 import ScrollRegisterPopup from "@/components/ScrollRegisterPopup";
+import { PROGRAMS } from "@/data/programs";
+import { IN_PERSON_VENUE, IN_PERSON_SATURDAY_SCHEDULE } from "@/data/locations";
+import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
+import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
 
 // Reading Cloudflare geo headers for the city callout opts this route into
 // dynamic rendering; next-on-pages requires an explicit edge runtime for that.
@@ -19,11 +23,26 @@ export const runtime = "edge";
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding, AI & STEM — Oshawa & Online | CODEship Academy",
   description:
-    "K–8 coding, AI & STEM for kids — in-person in Oshawa (Durham Region) and live online across Canada. Small-group, project-based, a great back-to-school pick. Flat CAD $129/semester (8 weekly classes).",
+    "K–8 coding, AI & STEM for kids — in-person in Oshawa (Durham Region) and live online across Canada. Small-group, project-based, a great Saturdays at Core21, 21 Simcoe St South, Oshawa. Booking October & November semesters. Flat CAD $129/semester (8 weekly classes).",
   path: "/",
 });
 
 const homeFaqs = [
+  {
+    question: "Where are the in-person classes?",
+    answer:
+      "In-person Saturday classes are at 21 Simcoe St South, Oshawa, in the Core21 building. We serve families across Durham Region — Oshawa, Whitby, Courtice, Bowmanville, and Clarington.",
+  },
+  {
+    question: "What are the Saturday class times?",
+    answer:
+      "Explorers (K–Grade 1) and Builders (Grades 2–3) run 9:00–10:00 AM. Developers (Grades 4–5) and Engineers (Grades 6–8) run 11:30 AM–12:30 PM.",
+  },
+  {
+    question: "Which semesters can I book?",
+    answer:
+      "The October semester (Oct 3 – Nov 28, 2026) and the November semester (Nov 7, 2026 – Jan 9, 2027) are open for booking. Each is 8 weekly Saturday classes for a flat CAD $129.",
+  },
   {
     question: "What is CODEship Academy?",
     answer:
@@ -56,59 +75,29 @@ const homeFaqs = [
   },
 ];
 
-const programs = [
-  {
-    title: "Weekly Classes",
-    description:
-      "Ongoing weekly sessions where children build real projects, develop coding skills, and grow their creative confidence over time.",
-    age: "Ages 5–16",
-    href: "/programs/weekly-classes",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
-    imageAlt: "Children collaborating on coding projects in weekly class",
-    borderColour: "border-l-4 border-[#001532]",
-  },
-  {
-    title: "Summer & Holiday Camps",
-    description:
-      "Immersive multi-day camp experiences where kids build ambitious projects, make friends, and discover their potential as creators.",
-    age: "Ages 6–14",
-    href: "/programs/camps",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80",
-    imageAlt: "Diverse children learning together at summer coding camp",
-    borderColour: "border-l-4 border-[#E5A823]",
-  },
-  {
-    title: "School Workshops",
-    description:
-      "Curriculum-aligned in-school and after-school STEM workshops brought directly to your school community.",
-    age: "All ages",
-    href: "/programs/school-workshops",
-    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80",
-    imageAlt: "Students participating in school STEM workshop",
-    borderColour: "border-l-4 border-[#138A9A]",
-  },
-  {
-    title: "Birthday Parties",
-    description:
-      "Unique, screen-smart birthday celebrations where the whole group builds a game, animation, or app together.",
-    age: "Ages 6–14",
-    href: "/programs/birthday-parties",
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
-    imageAlt: "Children celebrating at coding birthday party",
-    borderColour: "border-l-4 border-[#6E43A8]",
-  },
-  {
-    title: "AI & Robotics",
-    description:
-      "Hands-on exploration of artificial intelligence concepts, machine learning, and physical robotics — taught through real projects.",
-    age: "Ages 8–16",
-    href: "/programs/ai-robotics",
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80",
-    imageAlt: "Child exploring robotics and AI technology",
-    borderColour: "border-l-4 border-[#138A9A]",
-  },
-];
+/** "Weekly, Oct 3 – Nov 28, 2026" -> "Oct 3 – Nov 28, 2026" */
+function rangeOnly(range: string) {
+  return range.replace(/^Weekly,\s*/, "");
+}
 
+/** The open semesters (in-person dates are the same for every level). */
+const SEMESTERS = START_OPTIONS.map((opt) => ({
+  key: opt.key,
+  label: opt.label.replace(" semester", ""),
+  dates: rangeOnly(CLASS_SCHEDULE.explorers.inperson.starts[opt.key as "october" | "november"]),
+}));
+
+/** Saturday time slots with the levels that share each one, in run order. */
+const SATURDAY_SLOTS = PROGRAMS.reduce<{ time: string; programs: typeof PROGRAMS }[]>((slots, p) => {
+  const { start, end } = IN_PERSON_SATURDAY_SCHEDULE[p.slug];
+  const time = `${start.replace(":00", "")} – ${end.replace(":00", "")}`;
+  const slot = slots.find((s) => s.time === time);
+  if (slot) slot.programs.push(p);
+  else slots.push({ time, programs: [p] });
+  return slots;
+}, []);
+
+const LEVEL_ACCENT = ["border-[#E5A823]", "border-[#138A9A]", "border-[#6E43A8]", "border-[#001532]"];
 
 const differentiators = [
   {
@@ -152,23 +141,24 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}
       />
 
-      {/* City-aware enrolment callout — online classes, localized to the visitor's city (Canada only). */}
+      {/* Booking callout — what's open right now and where. */}
       <Link
-        href="/register"
+        href="#book"
         className="block bg-[#E5A823] text-[#001532] text-center text-sm font-semibold px-4 py-2.5 hover:bg-[#d4941f] transition-colors"
       >
-        Now enrolling for back to school — in-person in Oshawa{city && city !== "Oshawa" ? ` (online in ${city})` : " (Durham Region) and online across Canada"}. Register today →
+        Now booking: October &amp; November semesters
+        <span className="hidden sm:inline"> · Saturdays at {IN_PERSON_VENUE.full}</span>
+        {city && city !== "Oshawa" ? ` · live online in ${city} too` : ""} · Book now →
       </Link>
 
-      {/* ── Hero (full-bleed video background) ── */}
-      <section className="relative min-h-[680px] flex items-center overflow-hidden">
-        {/* Background video */}
+      {/* ── Hero: headline + "Now booking" card, all above the fold ── */}
+      <section className="relative overflow-hidden bg-[#001532]">
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
           aria-hidden="true"
         >
           <source
@@ -176,77 +166,197 @@ export default async function HomePage() {
             type="video/mp4"
           />
         </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#001532]/95 via-[#001532]/85 to-[#001532]/60" />
 
-        {/* Dark gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#001532]/90 via-[#001532]/70 to-[#001532]/40" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 items-center">
+            {/* Left (top): who, what, where */}
+            <div className="animate-fade-in-up lg:col-start-1 lg:row-start-1 lg:self-end">
+              <p className="text-[#E5A823] font-bold text-xs sm:text-sm uppercase tracking-widest mb-3">
+                Kids coding, AI &amp; STEM · Kindergarten to Grade 8
+              </p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+                Saturday coding classes in{" "}
+                <span className="text-[#E5A823]">Oshawa</span>
+              </h1>
 
-        {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="max-w-2xl animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-              Where Curiosity{" "}
-              <span className="text-[#E5A823] relative">
-                Becomes Creation
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#E5A823]/40 rounded" />
-              </span>
-            </h1>
-            <p className="text-lg text-gray-200 mb-8 leading-relaxed">
-              CODEship Academy helps children turn their ideas into real digital projects — building coding skills,
-              confidence, creativity, and future-ready thinking through hands-on project-based learning. We serve K–8
-              families in-person in Oshawa and across Durham Region, and live online across Canada.
-            </p>
-            <p className="text-[#E5A823] font-bold text-lg mb-10 tracking-widest uppercase text-sm">
-              Dream. Code. Achieve.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/program-finder"
-                className="bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all duration-200 text-center text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              {/* Location */}
+              <a
+                href={IN_PERSON_VENUE.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-start gap-3 bg-white/10 border border-white/20 rounded-2xl p-4 hover:bg-white/15 transition-colors"
               >
-                Find a Program
-              </Link>
-              <Link
-                href="/schools"
-                className="border-2 border-white/70 text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#001532] transition-all duration-200 text-center text-lg backdrop-blur-sm"
-              >
-                Book a School Workshop
-              </Link>
+                <span className="shrink-0 w-10 h-10 rounded-full bg-[#E5A823] flex items-center justify-center">
+                  <svg className="w-5 h-5 text-[#001532]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
+                  </svg>
+                </span>
+                <span>
+                  <span className="block text-white font-bold">
+                    {IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city}
+                  </span>
+                  <span className="block text-gray-300 text-sm">
+                    In the {IN_PERSON_VENUE.building} building · Saturdays ·{" "}
+                    <span className="text-[#E5A823] font-semibold group-hover:underline">Get directions →</span>
+                  </span>
+                </span>
+              </a>
+            </div>
+
+            {/* Right: exactly what's open for booking (directly under the address on mobile) */}
+            <div className="bg-white rounded-3xl shadow-2xl p-5 sm:p-7 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#001532]">Now booking</h2>
+                <span className="text-xs font-bold uppercase tracking-wide bg-[#138A9A]/10 text-[#138A9A] px-3 py-1 rounded-full">
+                  In-person · Oshawa
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-5">
+                {SEMESTERS.map((sem) => (
+                  <div key={sem.key} className="rounded-2xl border-2 border-[#E5A823] bg-[#E5A823]/10 p-3 sm:p-4">
+                    <p className="font-extrabold text-[#001532] text-base sm:text-lg leading-tight">{sem.label}</p>
+                    <p className="text-[#001532] text-xs sm:text-sm mt-1 font-medium">{sem.dates}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
+                Saturday class times · {IN_PERSON_VENUE.building}
+              </p>
+              <div className="divide-y divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden">
+                {SATURDAY_SLOTS.map((slot) => (
+                  <div key={slot.time} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4">
+                    <p className="font-extrabold text-[#001532] sm:w-40 shrink-0">{slot.time}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {slot.programs.map((p) => (
+                        <Link
+                          key={p.slug}
+                          href={`/register/${p.slug}`}
+                          className="inline-flex items-baseline gap-1.5 rounded-lg bg-[#001532] text-white px-3 py-1.5 text-sm font-semibold hover:bg-[#138A9A] transition-colors"
+                        >
+                          {p.level}
+                          <span className="text-[11px] font-normal text-gray-300">{p.gradeBand}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-gray-500 mt-4">
+                {PRICE_LABEL} · {SEMESTER_SHAPE_LABEL}. Can&apos;t make Saturdays?{" "}
+                <Link href="/register" className="text-[#138A9A] font-semibold hover:underline">
+                  Live online weekday classes
+                </Link>{" "}
+                run the same semesters.
+              </p>
+            </div>
+
+            {/* Left (bottom): why + actions */}
+            <div className="lg:col-start-1 lg:row-start-2 lg:self-start">
+              <p className="text-base sm:text-lg text-gray-200 mb-5 leading-relaxed">
+                Where curiosity becomes creation. Your child builds real games, websites and AI projects from their own
+                ideas — in small, friendly groups. No experience needed.
+              </p>
+
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-200 mb-6">
+                {[`${PRICE_LABEL} per semester`, SEMESTER_SHAPE_LABEL, "Beginners welcome"].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <svg className="w-4 h-4 text-[#E5A823]" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="#book"
+                  className="bg-[#E5A823] text-[#001532] font-bold px-7 py-3.5 rounded-xl hover:bg-[#d4941f] transition-all duration-200 text-center text-lg shadow-lg hover:-translate-y-0.5"
+                >
+                  Book a Semester
+                </Link>
+                <Link
+                  href="/program-finder"
+                  className="border-2 border-white/70 text-white font-bold px-7 py-3.5 rounded-xl hover:bg-white hover:text-[#001532] transition-all duration-200 text-center text-lg"
+                >
+                  Which level is right?
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom Instagram nudge */}
-        <div className="absolute bottom-6 right-6 z-10">
-          <a
-            href="https://www.instagram.com/codeshipacademy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-xs hover:bg-black/60 transition-colors"
-          >
-            <svg className="w-4 h-4 text-[#E5A823]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-            </svg>
-            <span>@codeshipacademy</span>
-          </a>
-        </div>
       </section>
 
-      {/* ── Differentiator Strip ── */}
-      <section className="bg-[#E5A823] py-4 overflow-hidden">
+      {/* ── Book: one card per level, with its time and both open semesters ── */}
+      <section id="book" className="py-16 bg-[#FAF8F4] scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-6 lg:gap-10">
+          <div className="text-center mb-10">
+            <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-2">Book in 3 minutes</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#001532] mb-3">Pick your child&apos;s grade</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Every class runs Saturdays at {IN_PERSON_VENUE.full}. Choose the October or November semester at
+              checkout.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {PROGRAMS.map((p, i) => {
+              const sched = CLASS_SCHEDULE[p.slug].inperson;
+              return (
+                <ScrollReveal key={p.slug} delay={i * 80}>
+                  <div className={`h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 ${LEVEL_ACCENT[i]} p-6 flex flex-col`}>
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400">{p.gradeBand}</p>
+                    <h3 className="text-2xl font-extrabold text-[#001532] mt-1">{p.level}</h3>
+                    <p className="text-sm text-gray-600 mt-1 mb-4">{p.codingSpace}</p>
+                    <dl className="text-sm space-y-2 mb-5 flex-1">
+                      <div>
+                        <dt className="text-gray-400 text-xs">Saturdays</dt>
+                        <dd className="font-bold text-[#001532]">{sched.time.replace(" ET", "")}</dd>
+                      </div>
+                      {SEMESTERS.map((sem) => (
+                        <div key={sem.key}>
+                          <dt className="text-gray-400 text-xs">{sem.label}</dt>
+                          <dd className="font-semibold text-[#001532]">{rangeOnly(sched.starts[sem.key as "october" | "november"])}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <Link
+                      href={`/register/${p.slug}`}
+                      className="bg-[#E5A823] text-[#001532] font-bold px-4 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
+                    >
+                      Book {p.level}
+                    </Link>
+                    <Link
+                      href={`/programs/${p.slug}`}
+                      className="text-center text-sm text-[#001532] font-semibold mt-3 hover:text-[#138A9A]"
+                    >
+                      What they&apos;ll learn →
+                    </Link>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+
+          {/* Quick links for everything else parents look for */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              "Creativity First",
-              "Real Projects",
-              "AI & Coding",
-              "Inclusive Learning",
-              "Academic Skills",
-              "DREAM. CODE. ACHIEVE.",
+              { label: "Online classes", sub: "Live, weekday evenings", href: "/register" },
+              { label: "Camps", sub: "Summer, March Break, PA Days", href: "/programs/camps" },
+              { label: "Birthday parties", sub: "Build a game together", href: "/programs/birthday-parties" },
+              { label: "For schools", sub: "Clubs & workshops", href: "/schools" },
             ].map((item) => (
-              <span key={item} className="font-bold text-[#001532] text-sm md:text-base flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#001532] rounded-full" />
-                {item}
-              </span>
+              <Link
+                key={item.label}
+                href={item.href}
+                className="group bg-white border border-gray-200 rounded-xl px-4 py-3 hover:border-[#E5A823] hover:shadow-md transition-all"
+              >
+                <span className="block font-bold text-[#001532] group-hover:text-[#138A9A]">{item.label} →</span>
+                <span className="block text-xs text-gray-500">{item.sub}</span>
+              </Link>
             ))}
           </div>
         </div>
@@ -263,59 +373,6 @@ export default async function HomePage() {
               <AlignmentStrip />
             </div>
           </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ── Programs ── */}
-      <section className="py-20 bg-[#F1EEE8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#001532] mb-4">Our Programs</h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                From weekly after-school classes to immersive camps, we have a program for every child and every schedule.
-              </p>
-            </div>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programs.map((prog, i) => (
-              <ScrollReveal key={prog.title} delay={i * 100}>
-                <div className={`bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col card-hover group ${prog.borderColour}`}>
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={prog.image}
-                      alt={prog.imageAlt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#001532]/70 to-transparent" />
-                    <div className="absolute bottom-3 left-4">
-                      <span className="text-xs bg-[#E5A823] text-[#001532] font-bold px-2 py-1 rounded">
-                        {prog.age}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="font-bold text-[#001532] text-xl mb-2">{prog.title}</h3>
-                    <p className="text-gray-600 text-sm flex-1 mb-4">{prog.description}</p>
-                    <Link
-                      href={prog.href}
-                      className="bg-[#001532] text-white font-semibold px-4 py-2 rounded-lg text-center hover:bg-[#2a3052] transition-colors text-sm"
-                    >
-                      Learn More
-                    </Link>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/programs" className="text-[#001532] font-semibold hover:text-[#E5A823] transition-colors">
-              View all programs →
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -460,35 +517,6 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
           </div>
-        </div>
-      </section>
-
-      {/* ── Age-Based Program Finder ── */}
-      <section className="py-16 bg-[#E5A823]/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <ScrollReveal>
-            <h2 className="text-3xl font-bold text-[#001532] mb-4">
-              Find the Right Program for Your Child
-            </h2>
-            <p className="text-gray-600 mb-8">Select your child&apos;s age to explore recommended programs:</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {["Ages 4–6", "Ages 7–9", "Ages 10–12", "Ages 13+"].map((age) => (
-                <Link
-                  key={age}
-                  href="/program-finder"
-                  className="bg-white border-2 border-[#001532] text-[#001532] font-semibold px-6 py-3 rounded-xl hover:bg-[#001532] hover:text-white transition-all duration-200 card-hover"
-                >
-                  {age}
-                </Link>
-              ))}
-            </div>
-            <p className="mt-6 text-sm text-gray-500">
-              Not sure where to start?{" "}
-              <Link href="/program-finder" className="text-[#E5A823] font-semibold hover:underline">
-                Take our Program Finder quiz →
-              </Link>
-            </p>
-          </ScrollReveal>
         </div>
       </section>
 

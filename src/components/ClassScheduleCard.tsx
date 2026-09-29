@@ -1,6 +1,6 @@
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 import { CLASSES_PER_SEMESTER, SEMESTER_WEEKS } from "@/config/offering";
-import type { ProgramSlug } from "@/data/locations";
+import { IN_PERSON_VENUE, type ProgramSlug } from "@/data/locations";
 
 interface ClassScheduleCardProps {
   program: ProgramSlug;
@@ -68,16 +68,15 @@ export default function ClassScheduleCard({ program, heading = "Class dates & ti
     <div className={className}>
       <h2 className="text-2xl font-bold text-[#001532] mb-1">{heading}</h2>
       <p className="text-gray-500 text-sm mb-5">
-        {CLASSES_PER_SEMESTER} weekly classes — one class a week for {SEMESTER_WEEKS} weeks. Pick your format and start
-        month at checkout; every start keeps the same day and time. Dates already skip our no-class weeks and the winter
-        break.
+        {CLASSES_PER_SEMESTER} weekly classes — one class a week for {SEMESTER_WEEKS} weeks. Book the October or November
+        semester at checkout; both keep the same day and time. Dates already skip our no-class weeks and the winter break.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <ScheduleRow
           label="In-Person — Oshawa"
           accent="#138A9A"
           schedule={schedule.inperson}
-          note="Serving families across Durham Region."
+          note={`${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city} — in the ${IN_PERSON_VENUE.building} building. Serving families across Durham Region.`}
         />
         <ScheduleRow
           label="Online — anywhere"
