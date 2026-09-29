@@ -1,5 +1,5 @@
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
-import { CLASSES_PER_SEMESTER, SEMESTER_WEEKS } from "@/config/offering";
+import { CLASSES_PER_SEMESTER } from "@/config/offering";
 import { IN_PERSON_VENUE, type ProgramSlug } from "@/data/locations";
 
 interface ClassScheduleCardProps {
@@ -24,33 +24,23 @@ interface RowProps {
 
 function ScheduleRow({ label, accent, schedule, note }: RowProps) {
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: accent }} />
-        <h3 className="font-bold text-[#001532]">{label}</h3>
+    <div className="rounded-2xl border border-gray-200 bg-white p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: accent }} />
+        <h3 className="text-xl font-bold text-[#001532]">{label}</h3>
       </div>
-      <dl className="space-y-2 text-sm">
-        <div className="flex justify-between gap-4">
-          <dt className="text-gray-500">Day</dt>
-          <dd className="font-semibold text-[#001532] text-right">{schedule.days}</dd>
-        </div>
-        <div className="flex justify-between gap-4">
-          <dt className="text-gray-500">Time</dt>
-          <dd className="font-semibold text-[#001532] text-right">{schedule.time}</dd>
-        </div>
+      <p className="text-lg font-bold text-[#001532]">
+        {schedule.days}, {schedule.time.replace(" ET", "")}
+      </p>
+      <dl className="mt-4 space-y-3 border-t border-gray-100 pt-4">
+        {START_OPTIONS.map((opt) => (
+          <div key={opt.key}>
+            <dt className="text-sm text-gray-500">{opt.label}</dt>
+            <dd className="text-base font-semibold text-[#001532]">{schedule.starts[opt.key].replace(/^Weekly,\s*/, "")}</dd>
+          </div>
+        ))}
       </dl>
-      <div className="mt-3 border-t border-gray-100 pt-3">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Choose your start</p>
-        <dl className="space-y-2 text-sm">
-          {START_OPTIONS.map((opt) => (
-            <div key={opt.key} className="flex justify-between gap-4">
-              <dt className="text-gray-500">{opt.label}</dt>
-              <dd className="font-semibold text-[#001532] text-right">{schedule.starts[opt.key]}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-      <p className="mt-3 text-xs text-gray-500">{note}</p>
+      <p className="mt-4 text-base text-gray-600">{note}</p>
     </div>
   );
 }
@@ -61,29 +51,23 @@ function ScheduleRow({ label, accent, schedule, note }: RowProps) {
  * source of truth in src/config/classSchedule.js so dates stay consistent
  * everywhere they appear.
  */
-export default function ClassScheduleCard({ program, heading = "Class dates & times", className = "" }: ClassScheduleCardProps) {
+export default function ClassScheduleCard({ program, heading = "Dates and times", className = "" }: ClassScheduleCardProps) {
   const schedule = CLASS_SCHEDULE[program];
 
   return (
     <div className={className}>
-      <h2 className="text-2xl font-bold text-[#001532] mb-1">{heading}</h2>
-      <p className="text-gray-500 text-sm mb-5">
-        {CLASSES_PER_SEMESTER} weekly classes — one class a week for {SEMESTER_WEEKS} weeks. Book the October or November
-        semester at checkout; both keep the same day and time. Dates already skip our no-class weeks and the winter break.
+      <h2 className="text-3xl font-extrabold text-[#001532]">{heading}</h2>
+      <p className="text-lg text-gray-600 mt-2 mb-6">
+        {CLASSES_PER_SEMESTER} weekly classes per semester. Choose your semester at checkout.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <ScheduleRow
-          label="In-Person — Oshawa"
+          label="In person"
           accent="#138A9A"
           schedule={schedule.inperson}
-          note={`${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city} — in the ${IN_PERSON_VENUE.building} building. Serving families across Durham Region.`}
+          note={`${IN_PERSON_VENUE.building}, ${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city}`}
         />
-        <ScheduleRow
-          label="Online — anywhere"
-          accent="#E5A823"
-          schedule={schedule.online}
-          note="Live, instructor-led — open to every city."
-        />
+        <ScheduleRow label="Online" accent="#E5A823" schedule={schedule.online} note="Live with an instructor. Eastern Time." />
       </div>
     </div>
   );

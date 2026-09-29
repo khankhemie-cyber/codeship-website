@@ -1,3 +1,6 @@
+import { FLAT_PRICE_CAD } from "@/config/offering";
+import { IN_PERSON_VENUE } from "@/data/locations";
+
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
@@ -6,7 +9,7 @@ export function organizationSchema() {
     url: "https://www.codeshipacademy.com",
     logo: "https://www.codeshipacademy.com/logo-nav.png",
     description:
-      "CODEship Academy offers K–8 coding, AI, and STEM programs — in-person in Oshawa (serving Durham Region) and live online across Canada — through weekly classes, camps, and school workshops.",
+      "CODEship Academy teaches coding, AI and STEM to kids in K–Grade 8. Classes run Saturdays at Core21, 21 Simcoe St South, Oshawa, and live online across Canada.",
     address: {
       "@type": "PostalAddress",
       streetAddress: "21 Simcoe St South",
@@ -137,8 +140,13 @@ export function courseSchema(program: CourseProgram, source: CourseInstanceSourc
     courseMode: "Blended",
     location: {
       "@type": "Place",
-      name: city,
-      address: { "@type": "PostalAddress", addressLocality: city, addressCountry: "CA" },
+      name: city === IN_PERSON_VENUE.city ? IN_PERSON_VENUE.building : city,
+      address: {
+        "@type": "PostalAddress",
+        ...(city === IN_PERSON_VENUE.city ? { streetAddress: IN_PERSON_VENUE.street } : {}),
+        addressLocality: city,
+        addressCountry: "CA",
+      },
     },
     courseSchedule: {
       "@type": "Schedule",
@@ -176,6 +184,14 @@ export function courseSchema(program: CourseProgram, source: CourseInstanceSourc
     teaches: program.codingSpace,
     audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: program.gradeBand },
     hasCourseInstance: [...inPersonInstances, onlineInstance],
+    offers: {
+      "@type": "Offer",
+      price: FLAT_PRICE_CAD,
+      priceCurrency: "CAD",
+      category: "Tuition per 8-week semester",
+      availability: "https://schema.org/InStock",
+      url: `https://www.codeshipacademy.com/register/${program.slug}`,
+    },
     url: `https://www.codeshipacademy.com/programs/${program.slug}`,
   };
 }

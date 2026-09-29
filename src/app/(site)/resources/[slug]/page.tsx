@@ -92,17 +92,14 @@ export default function ArticlePage({ params }: Props) {
                 { name: article.title, href: `/resources/${article.slug}` },
               ]}
             />
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="text-xs bg-[#E5A823]/30 text-[#E5A823] font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
-                {article.category}
-              </span>
-              <span className="text-gray-400 text-xs">{article.readTime} min read</span>
-              <span className="text-gray-500 text-xs">By {article.author ?? "CODEship Academy Team"}</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-3">
+            <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-3">
+              {article.category} · {article.readTime} min read
+            </p>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
               {article.title}
             </h1>
-            <p className="text-gray-400 text-xs">
+            <p className="text-gray-300 text-base">
+              By {article.author ?? "CODEship Academy Team"} ·
               Published {article.publishDate}
               {article.dateModified && article.dateModified !== article.publishDate && (
                 <> · Last updated {article.dateModified}</>
@@ -115,7 +112,7 @@ export default function ArticlePage({ params }: Props) {
         <section className="py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-              className="article-content max-w-none text-gray-700"
+              className="article-content max-w-none text-lg text-gray-700"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
 
@@ -132,7 +129,7 @@ export default function ArticlePage({ params }: Props) {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-sm text-[#138A9A] font-semibold hover:underline"
+                    className="text-base text-[#0f6f7c] font-semibold hover:underline"
                   >
                     {link.label} →
                   </Link>
@@ -142,13 +139,13 @@ export default function ArticlePage({ params }: Props) {
 
             {/* CTA */}
             <div className="mt-12 bg-[#001532] rounded-2xl p-8 text-center text-white">
-              <h3 className="text-2xl font-bold mb-2">Ready to Explore CODEship Programs?</h3>
-              <p className="text-gray-300 mb-6">Find the right program for your child in just 2 minutes.</p>
+              <h3 className="text-2xl sm:text-3xl font-extrabold mb-3">Saturday coding classes in Oshawa</h3>
+              <p className="text-lg text-gray-200 mb-6">October and November semesters are open for K–Grade 8.</p>
               <Link
-                href="/program-finder"
-                className="bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
+                href="/#book"
+                className="bg-[#E5A823] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
               >
-                Find a Program
+                Book a Semester
               </Link>
             </div>
           </div>
@@ -163,11 +160,11 @@ export default function ArticlePage({ params }: Props) {
                 <Link
                   key={r.slug}
                   href={`/resources/${r.slug}`}
-                  className="bg-[#FAF8F4] rounded-xl p-4 hover:shadow-md transition-shadow border border-gray-100 block"
+                  className="bg-[#FAF8F4] rounded-2xl p-6 hover:shadow-md transition-shadow border border-gray-100 block"
                 >
-                  <span className="text-xs text-[#E5A823] font-semibold uppercase">{r.category}</span>
-                  <h3 className="font-bold text-[#001532] mt-1 mb-2 text-sm leading-snug">{r.title}</h3>
-                  <span className="text-[#E5A823] text-xs font-semibold">Read more →</span>
+                  <span className="text-sm text-[#0f6f7c] font-bold uppercase tracking-widest">{r.category}</span>
+                  <h3 className="font-bold text-[#001532] mt-2 mb-3 text-lg leading-snug">{r.title}</h3>
+                  <span className="text-[#001532] text-base font-bold">Read →</span>
                 </Link>
               ))}
             </div>

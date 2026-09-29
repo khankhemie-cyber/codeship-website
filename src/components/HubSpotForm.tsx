@@ -70,7 +70,7 @@ export default function HubSpotForm({
             {thankYouCta.label}
           </Link>
         )}
-        <p className="text-xs text-gray-400 mt-6">
+        <p className="text-base text-gray-500 mt-6">
           Questions? Email us at{" "}
           <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
             admin@codeshipacademy.com

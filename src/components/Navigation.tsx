@@ -6,10 +6,8 @@ import Image from "next/image";
 
 const navLinks = [
   { href: "/programs", label: "Programs" },
-  { href: "/schools", label: "Schools" },
-  { href: "/franchise", label: "Franchise" },
-  { href: "/resources", label: "Resources" },
-  { href: "/locations", label: "Locations" },
+  { href: "/locations/oshawa", label: "Location" },
+  { href: "/schools", label: "For Schools" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -45,22 +43,22 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[#2E3440] hover:text-[#E5A823] font-medium transition-colors duration-200 text-sm relative group"
+                className="text-[#001532] hover:text-[#E5A823] font-semibold transition-colors duration-200 text-base relative group"
               >
                 {link.label}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#E5A823] transition-all duration-200 group-hover:w-full" />
               </Link>
             ))}
             <Link
-              href="/program-finder"
-              className="bg-[#E5A823] text-[#001532] font-bold px-4 py-2 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-sm shadow-sm hover:shadow-md"
+              href="/#book"
+              className="bg-[#E5A823] text-[#001532] font-bold px-5 py-2.5 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-base shadow-sm hover:shadow-md"
             >
-              Find a Program
+              Book Now
             </Link>
           </div>
 
@@ -69,6 +67,7 @@ export default function Navigation() {
             className="lg:hidden p-2 rounded-md text-[#001532]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
           >
             <div className={`w-6 h-0.5 bg-current transition-all duration-300 ${isOpen ? "rotate-45 translate-y-2" : "mb-1.5"}`}></div>
             <div className={`w-6 h-0.5 bg-current transition-all duration-300 ${isOpen ? "opacity-0" : "mb-1.5"}`}></div>
@@ -84,18 +83,18 @@ export default function Navigation() {
             <Link
               key={link.href}
               href={link.href}
-              className="block text-[#2E3440] hover:text-[#E5A823] font-medium py-2 border-b border-gray-50 transition-colors"
+              className="block text-[#001532] hover:text-[#E5A823] font-semibold text-lg py-3 border-b border-gray-100 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {link.label}
             </Link>
           ))}
           <Link
-            href="/program-finder"
-            className="block bg-[#E5A823] text-[#001532] font-bold px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
+            href="/#book"
+            className="block bg-[#E5A823] text-[#001532] font-bold text-lg px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
             onClick={() => setIsOpen(false)}
           >
-            Find a Program
+            Book Now
           </Link>
         </div>
       </div>

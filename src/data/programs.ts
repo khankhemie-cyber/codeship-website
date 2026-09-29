@@ -37,7 +37,7 @@ export const PROGRAMS: Program[] = [
     accentColour: "#E5A823",
     outcome: "Gives a computer clear instructions and builds a simple interactive app.",
     summary:
-      "Explorers introduces the youngest learners to computational thinking through visual block coding — sequencing, triggers, and simple logic — alongside early lessons in kindness online.",
+      "A playful first step into coding. Kids snap together visual blocks to make characters move, talk and react.",
     learns: [
       "Sequencing",
       "Triggers & events",
@@ -85,7 +85,7 @@ export const PROGRAMS: Program[] = [
     accentColour: "#138A9A",
     outcome: "Builds and styles a real multi-page website.",
     summary:
-      "Builders move from blocks to real code, learning HTML structure and CSS styling while developing informational and persuasive writing skills for the web.",
+      "Kids move from blocks to real code. They build and style their own websites with HTML and CSS.",
     learns: [
       "Tags",
       "Structure",
@@ -134,7 +134,7 @@ export const PROGRAMS: Program[] = [
     accentColour: "#3A5B9E",
     outcome: "Builds interactive tools that solve real problems.",
     summary:
-      "Developers write real JavaScript — variables, functions, conditionals, and loops — while building tools that solve everyday problems and learning media and financial literacy.",
+      "Kids write real JavaScript. They build interactive tools that solve everyday problems.",
     learns: [
       "Variables",
       "Functions",
@@ -184,7 +184,7 @@ export const PROGRAMS: Program[] = [
     accentColour: "#0D1B2A",
     outcome: "Codes in Python, trains an AI responsibly, and pitches a real tech solution.",
     summary:
-      "Engineers write Python, train and evaluate their own AI models with an eye on bias and ethics, analyze real data, and learn practical cybersecurity — culminating in a pitched prototype.",
+      "Kids code in Python, train their own AI models and learn online safety. They finish by pitching a real prototype.",
     learns: [
       "Python logic & data",
       "Training & evaluating an AI model",

@@ -126,7 +126,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
                     </div>
                   ))}
                 </dl>
-                <p className="mt-3 text-xs text-gray-500">{IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city} — in the {IN_PERSON_VENUE.building} building. Serving families across Durham Region.</p>
+                <p className="mt-3 text-base text-gray-600">{IN_PERSON_VENUE.building}, {IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city}</p>
               </div>
 
               {/* Online */}
@@ -153,7 +153,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
                     </div>
                   ))}
                 </dl>
-                <p className="mt-3 text-xs text-gray-500">Live, instructor-led — open to every city.</p>
+                <p className="mt-3 text-base text-gray-600">Live with an instructor. Eastern Time.</p>
               </div>
             </div>
           </div>

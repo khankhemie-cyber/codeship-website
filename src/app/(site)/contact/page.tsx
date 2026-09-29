@@ -1,90 +1,72 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
+import { PageHero, Section } from "@/components/ui/Page";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { IN_PERSON_VENUE } from "@/data/locations";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact CODEship Academy",
-  description:
-    "Get in touch with CODEship Academy. Questions about programs, school partnerships, franchise opportunities, or general inquiries.",
+  title: "Contact Us — Oshawa",
+  description: `Questions about classes, camps, parties or schools? Email admin@codeshipacademy.com or visit us at ${IN_PERSON_VENUE.full}.`,
   path: "/contact",
 });
 
 export default function ContactPage() {
   return (
-    <div className="bg-[#FAF8F4]">
-      <section className="bg-[#001532] py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Get in Touch</h1>
-          <p className="text-gray-300 text-xl max-w-xl mx-auto">
-            Questions about programs, school partnerships, or franchise opportunities? We&apos;d love to hear from you.
-          </p>
-        </div>
-      </section>
+    <>
+      <PageHero eyebrow="Contact" title="We're happy to help" lead="Send a message and we will reply within 1–2 business days." />
 
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-white rounded-2xl shadow-md p-8">
-              <h2 className="text-2xl font-bold text-[#001532] mb-6">Send Us a Message</h2>
-              <ContactForm />
+      <Section>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+          <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-8">
+            <h2 className="text-2xl font-extrabold text-[#001532] mb-6">Send a message</h2>
+            <ContactForm />
+          </div>
+
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Email</h2>
+              <a href="mailto:admin@codeshipacademy.com" className="block text-xl font-bold text-[#001532] mt-2 hover:text-[#138A9A]">
+                admin@codeshipacademy.com
+              </a>
             </div>
-
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-6">Contact Information</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#E5A823]/20 rounded-xl flex items-center justify-center shrink-0">
-                      <span className="text-lg">📧</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#001532]">Email</p>
-                      <p className="text-gray-600">admin@codeshipacademy.com</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#E5A823]/20 rounded-xl flex items-center justify-center shrink-0">
-                      <span className="text-lg">🏢</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#001532]">Headquarters</p>
-                      <p className="text-gray-600">Canada</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#001532] rounded-2xl p-6 text-white">
-                <h3 className="font-bold text-lg mb-3">Quick Links</h3>
-                <ul className="space-y-2">
-                  {[
-                    { label: "Find a Program", href: "/program-finder" },
-                    { label: "School Partnerships", href: "/schools" },
-                    { label: "Franchise Information", href: "/franchise" },
-                    { label: "Find a Location", href: "/locations" },
-                  ].map((link) => (
-                    <li key={link.href}>
-                      <a href={link.href} className="text-gray-300 hover:text-[#E5A823] transition-colors text-sm flex items-center gap-2">
-                        <span>→</span> {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="bg-[#138A9A]/10 rounded-2xl p-6">
-                <h3 className="font-bold text-[#001532] mb-2">Response Time</h3>
-                <p className="text-gray-600 text-sm">
-                  We aim to respond to all inquiries within 1–2 business days. For urgent program questions, please
-                  contact your local CODEship location directly.
-                </p>
-              </div>
+            <div>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Saturday classes</h2>
+              <address className="not-italic text-xl font-bold text-[#001532] mt-2 leading-snug">
+                {IN_PERSON_VENUE.building}
+                <br />
+                {IN_PERSON_VENUE.street}
+                <br />
+                {IN_PERSON_VENUE.city}, Ontario
+              </address>
+              <a
+                href={IN_PERSON_VENUE.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-2 text-lg font-semibold text-[#0f6f7c] underline underline-offset-2"
+              >
+                Get directions
+              </a>
+            </div>
+            <div>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Quick links</h2>
+              <ul className="mt-3 space-y-2">
+                {[
+                  { label: "Book a class", href: "/#book" },
+                  { label: "Find the right level", href: "/program-finder" },
+                  { label: "For schools", href: "/schools" },
+                ].map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-lg font-semibold text-[#001532] hover:text-[#138A9A]">
+                      {l.label} →
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </Section>
+    </>
   );
 }

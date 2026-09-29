@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | CODEship Academy",
   },
   description:
-    "K–8 coding, AI & STEM programs in Oshawa and across Durham Region, plus live online classes across Canada. Small-group and project-based — a strong back-to-school choice. Creativity before code.",
+    "Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa. Live online classes across Canada. CAD $129 for 8 weekly classes.",
   keywords: [
     "kids coding Oshawa",
     "coding classes Durham Region",
