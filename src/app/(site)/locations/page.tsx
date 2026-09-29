@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
-import { IN_PERSON, IN_PERSON_CITY_GEO, IN_PERSON_OPENING_HOURS, LOCATIONS, DURHAM_SERVICE_AREA } from "@/data/locations";
+import { IN_PERSON, IN_PERSON_CITY_GEO, IN_PERSON_OPENING_HOURS, IN_PERSON_VENUE, LOCATIONS, DURHAM_SERVICE_AREA } from "@/data/locations";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = pageMetadata({
@@ -25,6 +25,7 @@ export default function LocationsPage() {
               localBusinessSchema(city, {
                 geo: IN_PERSON_CITY_GEO[city],
                 openingHours: IN_PERSON_OPENING_HOURS,
+                streetAddress: IN_PERSON_VENUE.street,
                 areaServed: [...DURHAM_SERVICE_AREA],
               })
             ),

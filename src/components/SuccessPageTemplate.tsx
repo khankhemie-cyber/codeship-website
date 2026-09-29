@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { PROGRAM_LINKS, ageLabel, type ProgramLevel } from "@/lib/payment-links";
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
+import { IN_PERSON_VENUE } from "@/data/locations";
 import { CLASSES_PER_SEMESTER } from "@/config/offering";
 
 /**
@@ -125,7 +126,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
                     </div>
                   ))}
                 </dl>
-                <p className="mt-3 text-xs text-gray-500">21 Simcoe St South, Oshawa — serving families across Durham Region.</p>
+                <p className="mt-3 text-xs text-gray-500">{IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city} — in the {IN_PERSON_VENUE.building} building. Serving families across Durham Region.</p>
               </div>
 
               {/* Online */}

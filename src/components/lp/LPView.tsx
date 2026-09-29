@@ -64,15 +64,15 @@ type ScheduleSlot = { days: string; time: string; starts: Record<string, string>
 /**
  * Minimal-effort FR display of the (English-authored) class schedule facts —
  * day names translated, dates/time lightly adapted. Families now pick one of
- * three start months at checkout; this teaser line shows the soonest
- * (September) start's dates.
+ * an open start month at checkout; this teaser line shows the soonest
+ * open (October) start's dates.
  */
 function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
-  const dates = schedule.starts.september;
+  const dates = schedule.starts.october;
   if (lang === "en") return { days: schedule.days, time: schedule.time, dates };
   return {
     days: FR_DAYS[schedule.days] ?? schedule.days,
-    dates: dates.replace("Weekly,", "chaque semaine,").replace("Sep", "sept.").replace("Nov", "nov."),
+    dates: dates.replace("Weekly,", "chaque semaine,").replace("Oct", "oct.").replace("Nov", "nov.").replace("Dec", "déc."),
     time: schedule.time.replace(" AM ET", " HE").replace(" PM ET", " HE"),
   };
 }

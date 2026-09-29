@@ -4,8 +4,9 @@
  * In-person runs Saturdays; online runs Tuesdays (Explorers/Builders) or
  * Thursdays (Developers/Engineers).
  *
- * Families choose one of three start dates at checkout — September, October,
- * or November — all at the same weekly day and time. A single Stripe Payment
+ * Families choose one of two open semesters at checkout — October or
+ * November — both at the same weekly day and time. (The September semester is
+ * already underway and no longer bookable.) A single Stripe Payment
  * Link (see src/lib/payment-links.ts) serves every start; the desired start is
  * confirmed by a question on the Stripe checkout, so no per-start links exist.
  *
@@ -16,11 +17,10 @@
  * ranges are labelled ET rather than a single offset.
  */
 
-/** The three enrollment starts, in display order. */
+/** The enrollment starts open for booking, in display order. */
 export const START_OPTIONS = [
-  { key: "september", label: "September start" },
-  { key: "october", label: "October start" },
-  { key: "november", label: "November start" },
+  { key: "october", label: "October semester" },
+  { key: "november", label: "November semester" },
 ];
 
 /**
@@ -34,13 +34,11 @@ export function startDate(rangeString) {
 }
 
 /**
- * Compact one-line summary of the three starts for a format slot, e.g.
- * "starts Sep 19, Oct 3 or Nov 7".
+ * Compact one-line summary of the open starts for a format slot, e.g.
+ * "starts Oct 3 or Nov 7".
  */
 export function startsSummary(slot) {
-  return `starts ${startDate(slot.starts.september)}, ${startDate(slot.starts.october)} or ${startDate(
-    slot.starts.november
-  )}`;
+  return `starts ${startDate(slot.starts.october)} or ${startDate(slot.starts.november)}`;
 }
 
 export const CLASS_SCHEDULE = {
@@ -49,7 +47,6 @@ export const CLASS_SCHEDULE = {
       days: "Saturdays",
       time: "9:00–10:00 AM ET",
       starts: {
-        september: "Weekly, Sep 19 – Nov 14, 2026",
         october: "Weekly, Oct 3 – Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 – Jan 9, 2027",
       },
@@ -58,7 +55,6 @@ export const CLASS_SCHEDULE = {
       days: "Tuesdays",
       time: "4:00–5:00 PM ET",
       starts: {
-        september: "Weekly, Sep 15 – Nov 10, 2026",
         october: "Weekly, Oct 6 – Dec 1, 2026",
         november: "Weekly, Nov 3, 2026 – Jan 5, 2027",
       },
@@ -67,9 +63,8 @@ export const CLASS_SCHEDULE = {
   builders: {
     inperson: {
       days: "Saturdays",
-      time: "10:10–11:05 AM ET",
+      time: "9:00–10:00 AM ET",
       starts: {
-        september: "Weekly, Sep 19 – Nov 14, 2026",
         october: "Weekly, Oct 3 – Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 – Jan 9, 2027",
       },
@@ -78,7 +73,6 @@ export const CLASS_SCHEDULE = {
       days: "Tuesdays",
       time: "5:00–5:55 PM ET",
       starts: {
-        september: "Weekly, Sep 15 – Nov 10, 2026",
         october: "Weekly, Oct 6 – Dec 1, 2026",
         november: "Weekly, Nov 3, 2026 – Jan 5, 2027",
       },
@@ -87,9 +81,8 @@ export const CLASS_SCHEDULE = {
   developers: {
     inperson: {
       days: "Saturdays",
-      time: "11:40 AM–12:35 PM ET",
+      time: "11:30 AM–12:30 PM ET",
       starts: {
-        september: "Weekly, Sep 19 – Nov 14, 2026",
         october: "Weekly, Oct 3 – Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 – Jan 9, 2027",
       },
@@ -98,7 +91,6 @@ export const CLASS_SCHEDULE = {
       days: "Thursdays",
       time: "4:00–4:55 PM ET",
       starts: {
-        september: "Weekly, Sep 17 – Nov 12, 2026",
         october: "Weekly, Oct 1 – Nov 26, 2026",
         november: "Weekly, Nov 5, 2026 – Jan 7, 2027",
       },
@@ -107,9 +99,8 @@ export const CLASS_SCHEDULE = {
   engineers: {
     inperson: {
       days: "Saturdays",
-      time: "12:50–1:45 PM ET",
+      time: "11:30 AM–12:30 PM ET",
       starts: {
-        september: "Weekly, Sep 19 – Nov 14, 2026",
         october: "Weekly, Oct 3 – Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 – Jan 9, 2027",
       },
@@ -118,7 +109,6 @@ export const CLASS_SCHEDULE = {
       days: "Thursdays",
       time: "5:00–5:55 PM ET",
       starts: {
-        september: "Weekly, Sep 17 – Nov 12, 2026",
         october: "Weekly, Oct 1 – Nov 26, 2026",
         november: "Weekly, Nov 5, 2026 – Jan 7, 2027",
       },
