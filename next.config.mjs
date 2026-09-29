@@ -26,11 +26,16 @@ const nextConfig = {
       "computer-classes-for-kids",
       "online-stem-classes",
     ];
-    return retiredTrinidadSlugs.map((slug) => ({
-      source: `/tt/${slug}`,
-      destination: "/tt",
-      permanent: true,
-    }));
+    return [
+      ...retiredTrinidadSlugs.map((slug) => ({
+        source: `/tt/${slug}`,
+        destination: "/tt",
+        permanent: true,
+      })),
+      // Merged into their main pages during the 2026 site cleanup.
+      { source: "/programs/weekly-classes", destination: "/programs", permanent: true },
+      { source: "/programs/school-workshops", destination: "/schools", permanent: true },
+    ];
   },
 };
 

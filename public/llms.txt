@@ -7,8 +7,11 @@
 > HTML/CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8,
 > Python + AI + cybersecurity) — each 4 semesters plus a capstone project.
 > Every program is a flat CAD $129 per semester (8 weekly classes, one class
-> per week). Classes run in person on Saturdays in
-> Oshawa (serving Oshawa, Whitby, Courtice, Bowmanville, and Clarington), or
+> per week). Classes run in person on Saturdays at Core21, 21 Simcoe St
+> South, Oshawa (serving Oshawa, Whitby, Courtice, Bowmanville, and
+> Clarington). Explorers and Builders meet 9:00-10:00 AM; Developers and
+> Engineers meet 11:30 AM-12:30 PM. The October 2026 semester (Oct 3 - Nov 28)
+> and November 2026 semester (Nov 7 - Jan 9, 2027) are open for booking. Or
 > live online across Canada (Tuesdays for Explorers/Builders, Thursdays for
 > Developers/Engineers, 4-6 PM ET). In-person classes in Toronto, Mississauga,
 > Brampton, Markham, Scarborough, Vaughan, Milton, Calgary, Edmonton,
@@ -25,16 +28,17 @@
 - [Builders (Grades 2-3)](https://www.codeshipacademy.com/programs/builders): HTML & CSS
 - [Developers (Grades 4-5)](https://www.codeshipacademy.com/programs/developers): JavaScript
 - [Engineers (Grades 6-8)](https://www.codeshipacademy.com/programs/engineers): Python, AI, cybersecurity
-- [Programs overview & journey map](https://www.codeshipacademy.com/programs)
-- [Weekly classes](https://www.codeshipacademy.com/programs/weekly-classes)
+- [Programs overview](https://www.codeshipacademy.com/programs)
+- [Book a class](https://www.codeshipacademy.com/register)
 - [Camps](https://www.codeshipacademy.com/programs/camps)
-- [School workshops](https://www.codeshipacademy.com/programs/school-workshops)
+- [Birthday parties](https://www.codeshipacademy.com/programs/birthday-parties)
 - [AI & robotics](https://www.codeshipacademy.com/programs/ai-robotics)
 - Price: flat CAD $129 per semester (8 weekly classes) for every program, in-person or online.
 
 ## Locations
 
 - [All locations](https://www.codeshipacademy.com/locations)
+- [Oshawa (in person)](https://www.codeshipacademy.com/locations/oshawa)
 - In-person Saturday classes: Core21, 21 Simcoe St South, Oshawa — Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM; booking October & November 2026 semesters (serving Durham Region — Oshawa, Whitby, Courtice, Bowmanville, Clarington)
 - In-person waitlist (online open): Toronto, Mississauga, Brampton, Markham, Scarborough, Vaughan, Milton, Calgary, Edmonton, Vancouver, Surrey
 - Online: open across Canada — Tuesdays (Explorers, Builders) and Thursdays (Developers, Engineers), 4-6 PM ET
@@ -51,7 +55,7 @@
 ## Other
 
 - [About](https://www.codeshipacademy.com/about)
-- [Schools & partnerships](https://www.codeshipacademy.com/schools)
+- [Schools & partnerships](https://www.codeshipacademy.com/schools) (after-school clubs, PA Day and in-class workshops)
 - [Franchise opportunities](https://www.codeshipacademy.com/franchise)
 - [Resources & articles](https://www.codeshipacademy.com/resources)
 - [Registration](https://www.codeshipacademy.com/register)

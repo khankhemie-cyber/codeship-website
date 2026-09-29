@@ -4,7 +4,8 @@ import Link from "next/link";
 import RegistrationForm from "@/components/RegistrationForm";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { PROGRAM_LINKS, PROGRAM_ORDER, ageLabel, isProgramLevel } from "@/lib/payment-links";
-import { PRICE_LABEL, SEMESTER_SHAPE_LABEL, SEMESTER_WEEKS } from "@/config/offering";
+import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
+import { PageHero, Section } from "@/components/ui/Page";
 import { CLASS_SCHEDULE, startsSummary } from "@/config/classSchedule";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
@@ -13,9 +14,9 @@ import { IN_PERSON_VENUE } from "@/data/locations";
 export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Register | CODEship Academy",
+  title: "Book a Kids Coding Class | CODEship Academy",
   description:
-    "Register your child for CODEship Academy coding, AI, and STEM programs. Canadian programs checkout securely with Stripe; Guyana and Trinidad and Tobago registrations use the website form.",
+    "Book a CODEship coding class for K–Grade 8. Saturdays at Core21 in Oshawa or live online. CAD $129 for 8 weekly classes.",
   path: "/register",
 });
 
@@ -97,71 +98,52 @@ export default function RegisterPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="bg-[#FAF8F4]">
-      <section className="bg-[#001532] py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Register for a program</h1>
-          <p className="text-gray-300 text-lg max-w-xl mx-auto">
-            Choose your child&apos;s level below to see the course details and secure their spot. Every program is a
-            flat {PRICE_LABEL} for {SEMESTER_SHAPE_LABEL} — one class a week for {SEMESTER_WEEKS} weeks, in-person in
-            Oshawa or online anywhere.
-          </p>
+    <>
+      <PageHero
+        eyebrow="Book a class"
+        title="Choose your child's level"
+        lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}. Pick in person or online at checkout.`}
+      />
+      <Section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {PROGRAM_ORDER.map((level) => {
+            const config = PROGRAM_LINKS[level];
+            const sched = CLASS_SCHEDULE[level];
+            return (
+              <Link
+                key={level}
+                href={`/register/${level}`}
+                className="group block bg-white rounded-2xl p-7 shadow-sm border border-gray-200 hover:border-[#E5A823] hover:shadow-lg transition-all"
+              >
+                <p className="text-sm font-bold uppercase tracking-widest text-gray-500">{ageLabel(level, false)}</p>
+                <h2 className="text-2xl font-extrabold text-[#001532] mt-1">{config.label}</h2>
+                <p className="text-lg text-gray-600 mt-2">{config.summary}</p>
+                <dl className="mt-5 space-y-3 border-t border-gray-100 pt-5">
+                  <div>
+                    <dt className="text-sm text-gray-500">In person · {IN_PERSON_VENUE.building}, Oshawa</dt>
+                    <dd className="text-base font-semibold text-[#001532]">
+                      {sched.inperson.days}, {sched.inperson.time.replace(" ET", "")} · {startsSummary(sched.inperson)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm text-gray-500">Online</dt>
+                    <dd className="text-base font-semibold text-[#001532]">
+                      {sched.online.days}, {sched.online.time} · {startsSummary(sched.online)}
+                    </dd>
+                  </div>
+                </dl>
+                <p className="mt-6 text-lg font-bold text-[#001532] group-hover:text-[#138A9A]">Book {config.label} →</p>
+              </Link>
+            );
+          })}
         </div>
-      </section>
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PROGRAM_ORDER.map((level) => {
-              const config = PROGRAM_LINKS[level];
-              const sched = CLASS_SCHEDULE[level];
-              return (
-                <Link
-                  key={level}
-                  href={`/register/${level}`}
-                  className="block bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between gap-3 mb-2">
-                    <h2 className="text-xl font-bold text-[#001532]">{config.label}</h2>
-                    <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-0.5 rounded whitespace-nowrap">
-                      {ageLabel(level, false)}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-4">{config.summary}</p>
-                  <div className="mb-4 rounded-xl bg-[#FAF8F4] border border-gray-100 p-3 space-y-1.5">
-                    <div className="flex items-start gap-2 text-xs text-[#001532]">
-                      <span className="mt-1.5 h-2 w-2 rounded-full bg-[#138A9A] shrink-0" />
-                      <span>
-                        <span className="font-semibold">In-person ({IN_PERSON_VENUE.building}, {IN_PERSON_VENUE.street}, Oshawa):</span> {sched.inperson.days}, {sched.inperson.time}
-                        {" · "}
-                        {startsSummary(sched.inperson)}
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2 text-xs text-[#001532]">
-                      <span className="mt-1.5 h-2 w-2 rounded-full bg-[#E5A823] shrink-0" />
-                      <span>
-                        <span className="font-semibold">Online:</span> {sched.online.days}, {sched.online.time}
-                        {" · "}
-                        {startsSummary(sched.online)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#001532]">CAD ${config.priceCad}/semester</span>
-                    <span className="text-[#E5A823] font-semibold text-sm">Details &amp; register →</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-          <p className="text-center text-gray-500 text-sm mt-8">
-            Looking for camps, school workshops, or a location near you?{" "}
-            <Link href="/programs" className="text-[#138A9A] font-semibold underline">
-              See all programs
-            </Link>
-            .
-          </p>
-        </div>
-      </section>
-    </div>
+        <p className="text-lg text-gray-600 mt-10 text-center">
+          Not sure which level?{" "}
+          <Link href="/program-finder" className="font-semibold text-[#0f6f7c] underline underline-offset-2">
+            Take the quick quiz
+          </Link>
+        </p>
+      </Section>
+    </>
   );
 }

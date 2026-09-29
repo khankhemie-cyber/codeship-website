@@ -1,119 +1,59 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import JourneyMap from "@/components/JourneyMap";
-import AlignmentStrip from "@/components/AlignmentStrip";
+import GradeCards from "@/components/booking/GradeCards";
+import { PageHero, Section, SectionHeader, BookingBand } from "@/components/ui/Page";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { breadcrumbSchema } from "@/lib/schema";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import { PROGRAM_STRUCTURE } from "@/data/programs";
+import { SEMESTER_WEEKS } from "@/config/offering";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Coding Classes for Kids — Programs by Age | CODEship Academy",
+  title: "Kids Coding Programs by Grade (K–8) | CODEship Academy",
   description:
-    "Kids coding classes online and in Canada for ages 4–16: weekly classes, camps, school workshops, and AI & robotics. Project-based, small-group. Flat CAD $129/semester (8 weekly classes).",
+    "Four coding levels for Kindergarten to Grade 8: Explorers, Builders, Developers and Engineers. Saturdays in Oshawa or live online. CAD $129 per 8-week semester.",
   path: "/programs",
 });
 
-const programs = [
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Programs", href: "/programs" },
+];
+
+const pathFacts = [
+  { value: `${SEMESTER_WEEKS}`, label: "classes per semester" },
+  { value: `${PROGRAM_STRUCTURE.semesters}`, label: "semesters per level" },
+  { value: "1", label: "capstone project to move up" },
+];
+
+const more = [
   {
-    title: "Weekly Classes",
-    href: "/programs/weekly-classes",
-    age: "Ages 5–16",
-    duration: "60–90 min per session",
-    format: "Ongoing weekly",
-    dotColour: "bg-[#001532]",
-    borderColour: "border-l-4 border-[#001532]",
-    description:
-      "Our flagship ongoing program. Children attend weekly sessions where they develop coding skills, digital creativity, and project-building confidence over time. Each child works at their own pace on personally meaningful projects.",
-    highlights: [
-      "Beginner to advanced pathways",
-      "Visual and text-based coding",
-      "Games, apps, websites, and more",
-      "Inclusive, encouraging environment",
-      "Year-round enrollment available",
-    ],
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80",
-    imageAlt: "Children collaborating on coding projects in weekly class",
-  },
-  {
-    title: "Summer & Holiday Camps",
+    title: "Camps",
+    desc: "Summer, March Break and PA Day camps.",
     href: "/programs/camps",
-    age: "Ages 6–14",
-    duration: "Full-day or half-day",
-    format: "Multi-day intensives",
-    dotColour: "bg-[#E5A823]",
-    borderColour: "border-l-4 border-[#E5A823]",
-    description:
-      "Immersive multi-day camp experiences where children build ambitious projects from start to finish. Available during summer, March Break, and PA Days. Week-long camps include a final project showcase.",
-    highlights: [
-      "Summer, March Break & PA Day options",
-      "Theme-based camps (Games, AI, Web, etc.)",
-      "Full-day and half-day formats",
-      "Final project showcase",
-      "Small group sizes",
-    ],
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80",
-    imageAlt: "Diverse children learning together at summer coding camp",
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80",
+    alt: "Children working together at a coding camp",
   },
   {
-    title: "School Workshops",
-    href: "/programs/school-workshops",
-    age: "All school ages",
-    duration: "1 hour to full day",
-    format: "In-school and after-school",
-    dotColour: "bg-[#138A9A]",
-    borderColour: "border-l-4 border-[#138A9A]",
-    description:
-      "Curriculum-aligned coding and STEM workshops brought directly to your school. From single-period enrichment sessions to full after-school clubs, CODEship works with schools to build lasting digital education partnerships.",
-    highlights: [
-      "After-school coding clubs",
-      "PA Day and March Break programs",
-      "In-class STEM enrichment",
-      "Curriculum-aligned content",
-      "All equipment provided",
-    ],
-    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80",
-    imageAlt: "Students participating in school STEM workshop",
-  },
-  {
-    title: "Birthday Parties",
+    title: "Birthday parties",
+    desc: "Two hours. Every guest builds a game.",
     href: "/programs/birthday-parties",
-    age: "Ages 6–14",
-    duration: "2 hours",
-    format: "Weekend bookings",
-    dotColour: "bg-[#6E43A8]",
-    borderColour: "border-l-4 border-[#6E43A8]",
-    description:
-      "A truly unique birthday experience where the whole group builds something together — a game, animation, or interactive story — guided by our instructors. Every child goes home with their own creation.",
-    highlights: [
-      "2-hour hands-on coding party",
-      "Choose your theme: Games, AI, Animation",
-      "Up to 12 participants",
-      "All materials included",
-      "Digital creation to take home",
-    ],
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80",
-    imageAlt: "Children celebrating at a coding birthday party",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
+    alt: "Children celebrating at a coding birthday party",
   },
   {
-    title: "AI & Robotics",
+    title: "AI & robotics",
+    desc: "Hands-on AI and robot projects for ages 8–16.",
     href: "/programs/ai-robotics",
-    age: "Ages 8–16",
-    duration: "60–90 min per session",
-    format: "Weekly or intensive",
-    dotColour: "bg-[#138A9A]",
-    borderColour: "border-l-4 border-[#138A9A]",
-    description:
-      "Explore the world of artificial intelligence and physical robotics through hands-on projects. Students build AI models, program robots, and explore how intelligent systems work — through real, creative project work.",
-    highlights: [
-      "Hands-on AI model building",
-      "Robot programming challenges",
-      "AI ethics and critical thinking",
-      "Physical computing projects",
-      "Integration with coding skills",
-    ],
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=80",
-    imageAlt: "Child exploring robotics and AI technology",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80",
+    alt: "A child programming a robot",
+  },
+  {
+    title: "For schools",
+    desc: "Clubs, workshops and PA Day programs.",
+    href: "/schools",
+    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80",
+    alt: "Students in a school coding workshop",
   },
 ];
 
@@ -122,108 +62,55 @@ export default function ProgramsPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Programs", href: "/programs" }])),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(crumbs)) }}
       />
-    <div className="bg-[#FAF8F4]">
-      {/* Hero */}
-      <section className="bg-[#001532] py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center mb-4">
-            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Programs", href: "/programs" }]} />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            Programs for Every Child
-          </h1>
-          <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-            From weekly after-school classes to immersive camps and school workshops, CODEship Academy has a program
-            that fits your child, your schedule, and your community.
-          </p>
-        </div>
-      </section>
 
-      {/* The CODEship Journey — K–8 grade-band programs */}
-      <section id="journey" className="py-20 bg-[#FAF8F4] scroll-mt-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <JourneyMap />
-          <div className="mt-10">
-            <AlignmentStrip />
-          </div>
-        </div>
-      </section>
+      <PageHero
+        crumbs={crumbs}
+        eyebrow="Programs"
+        title="Coding classes for every grade"
+        lead="Four levels take your child from Kindergarten to Grade 8. Each level builds on the last."
+      />
 
-      {/* Programs List */}
-      <section className="py-20 bg-[#F1EEE8]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#001532] mb-4">Program Formats</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Every level of the CODEship Journey above is delivered through these formats — pick the schedule that
-            works for your family.
-          </p>
-        </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          {programs.map((prog, i) => (
-            <div
-              key={prog.href}
-              className={`bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row ${
-                i % 2 === 1 ? "md:flex-row-reverse" : ""
-              } ${prog.borderColour}`}
-            >
-              <div className="relative md:w-48 shrink-0 h-48 md:h-auto">
-                <Image
-                  src={prog.image}
-                  alt={prog.imageAlt}
-                  fill
-                  className="object-cover"
-                  sizes="192px"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-[#001532]/40" />
-              </div>
-              <div className="p-8 flex-1">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <h2 className="text-2xl font-bold text-[#001532]">{prog.title}</h2>
-                  <span className="text-xs bg-[#E5A823]/20 text-[#001532] font-semibold px-2 py-1 rounded">
-                    {prog.age}
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{prog.format}</span>
-                </div>
-                <p className="text-gray-600 mb-4">{prog.description}</p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-5">
-                  {prog.highlights.map((h) => (
-                    <li key={h} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className={`w-2 h-2 ${prog.dotColour} rounded-full shrink-0`} />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={prog.href}
-                  className="bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
-                >
-                  Learn More
-                </Link>
-              </div>
+      <Section id="journey">
+        <SectionHeader eyebrow="Weekly classes" title="Choose by school grade" />
+        <GradeCards />
+      </Section>
+
+      <Section tone="white">
+        <SectionHeader center title="How each level works" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {pathFacts.map((f) => (
+            <div key={f.label} className="rounded-2xl bg-[#FAF8F4] p-8 text-center">
+              <p className="text-5xl font-extrabold text-[#E5A823]">{f.value}</p>
+              <p className="text-lg font-semibold text-[#001532] mt-2">{f.label}</p>
             </div>
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* CTA */}
-      <section className="py-16 bg-[#001532] text-center">
-        <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-white mb-4">Not Sure Which Program?</h2>
-          <p className="text-gray-300 mb-8">Take our 2-minute program finder quiz to get a personalized recommendation.</p>
-          <Link
-            href="/program-finder"
-            className="bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
-          >
-            Find My Program
-          </Link>
+      <Section tone="sand">
+        <SectionHeader eyebrow="Also available" title="More ways to learn" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {more.map((m) => (
+            <Link
+              key={m.href}
+              href={m.href}
+              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow"
+            >
+              <div className="relative h-40">
+                <Image src={m.image} alt={m.alt} fill className="object-cover" sizes="(max-width: 640px) 100vw, 25vw" />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-extrabold text-[#001532] group-hover:text-[#138A9A]">{m.title} →</h3>
+                <p className="text-base text-gray-600 mt-2">{m.desc}</p>
+              </div>
+            </Link>
+          ))}
         </div>
-      </section>
-    </div>
+      </Section>
+
+      <BookingBand />
     </>
   );
 }

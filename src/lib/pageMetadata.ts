@@ -37,9 +37,13 @@ export function pageMetadata({
   noindex = false,
 }: PageMetadataArgs): Metadata {
   const url = `${BASE_URL}${path}`;
+  // The root layout's title template appends " | CODEship Academy"; strip it
+  // here so page titles never repeat the brand. Social titles keep it.
+  const baseTitle = title.replace(/\s*\|\s*CODEship Academy$/, "");
+  const fullTitle = `${baseTitle} | CODEship Academy`;
 
   return {
-    title,
+    title: baseTitle,
     description,
     alternates: { canonical: url },
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
@@ -48,15 +52,15 @@ export function pageMetadata({
       locale: "en_CA",
       url,
       siteName: "CODEship Academy",
-      title,
+      title: fullTitle,
       description,
-      images: [{ url: image, width: 1200, height: 630, alt: imageAlt ?? title }],
+      images: [{ url: image, width: 1200, height: 630, alt: imageAlt ?? fullTitle }],
       ...(type === "article" && publishedTime ? { publishedTime } : {}),
       ...(type === "article" && modifiedTime ? { modifiedTime } : {}),
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: fullTitle,
       description,
       images: [image],
     },

@@ -2,20 +2,34 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { localBusinessSchema, breadcrumbSchema } from "@/lib/schema";
-import { IN_PERSON, IN_PERSON_CITY_GEO, IN_PERSON_OPENING_HOURS, IN_PERSON_VENUE, LOCATIONS, DURHAM_SERVICE_AREA } from "@/data/locations";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import {
+  IN_PERSON,
+  IN_PERSON_CITY_GEO,
+  IN_PERSON_OPENING_HOURS,
+  IN_PERSON_VENUE,
+  LOCATIONS,
+  DURHAM_SERVICE_AREA,
+} from "@/data/locations";
+import { PageHero, Section, SectionHeader, ButtonLink } from "@/components/ui/Page";
+import { saturdayTime } from "@/lib/booking";
 
 export const metadata: Metadata = pageMetadata({
-  title: "CODEship Academy Locations — In-Person in Oshawa & Online Across Canada",
+  title: "Locations — Oshawa In Person & Online Across Canada | CODEship Academy",
   description:
-    "In-person kids coding, AI & STEM programs in Oshawa (Durham Region), plus live online classes across Canada. Toronto, Mississauga, Calgary, Vancouver and more — join the in-person waitlist or start online today.",
+    "In-person kids coding classes at Core21, 21 Simcoe St South, Oshawa. Live online classes across Canada. In-person waitlists open in 11 more cities.",
   path: "/locations",
 });
 
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Locations", href: "/locations" },
+];
+
 export default function LocationsPage() {
+  const waitlistCities = LOCATIONS.filter((l) => l.inPerson === "waitlist");
+
   return (
     <>
-      {/* LocalBusiness schema — the open in-person city only (Oshawa), serving Durham Region. */}
       {IN_PERSON.map((city) => (
         <script
           key={city}
@@ -32,82 +46,60 @@ export default function LocationsPage() {
           }}
         />
       ))}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema([{ name: "Home", href: "/" }, { name: "Locations", href: "/locations" }])),
-        }}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(crumbs)) }} />
+
+      <PageHero
+        crumbs={crumbs}
+        eyebrow="Locations"
+        title="In person in Oshawa. Online everywhere."
+        lead="Saturday classes run at Core21 in Oshawa. Families anywhere in Canada can join online."
       />
 
-      <div className="bg-[#FAF8F4]">
-        <section className="bg-[#001532] py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="flex justify-center mb-4">
-              <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Locations", href: "/locations" }]} />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Find a Location</h1>
-            <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-              In-person coding, AI, and STEM classes are open for registration in Oshawa, serving families across
-              Durham Region. Live online classes are open everywhere — and in-person is coming to 11 more cities, where
-              you can join the waitlist now.
-            </p>
+      <Section>
+        <div className="bg-white rounded-3xl shadow-sm p-8 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-4 border-[#138A9A]">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">Open for booking</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001532] mt-2">Oshawa</h2>
+            <address className="not-italic text-xl text-gray-700 mt-4 leading-snug">
+              {IN_PERSON_VENUE.building}
+              <br />
+              {IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city}
+            </address>
           </div>
-        </section>
-
-        <section className="py-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-              {LOCATIONS.map((city) => {
-                const isOpen = city.inPerson === "open";
-                return (
-                  <Link
-                    key={city.slug}
-                    href={`/locations/${city.slug}`}
-                    className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow border border-gray-100 group flex items-center justify-between gap-3"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h2 className="font-bold text-[#001532] text-lg group-hover:text-[#E5A823] transition-colors">
-                          {city.name}
-                        </h2>
-                        {isOpen ? (
-                          <span className="text-[10px] font-bold uppercase tracking-wide bg-[#138A9A]/15 text-[#0f6f7c] px-2 py-0.5 rounded-full">
-                            In-Person Open
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-bold uppercase tracking-wide bg-[#E5A823]/20 text-[#8a6410] px-2 py-0.5 rounded-full">
-                            In-Person: Waitlist
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-gray-400 text-sm mt-0.5">
-                        {city.province} · Online open
-                      </p>
-                    </div>
-                    <span className="text-[#E5A823] text-xl shrink-0">→</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <div className="bg-[#001532] rounded-2xl p-8 text-center text-white">
-              <h2 className="text-2xl font-bold mb-3">Don&apos;t See Your City?</h2>
-              <p className="text-gray-300 mb-6">
-                CODEship Academy is expanding across Canada. Inquire about bringing programs to your community — or learn
-                about franchise opportunities.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href="/contact" className="bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors">
-                  Contact Us
-                </Link>
-                <Link href="/franchise" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#001532] transition-colors">
-                  Franchise Opportunity
-                </Link>
-              </div>
+          <div>
+            <ul className="space-y-2 text-lg text-[#001532]">
+              <li>
+                <span className="font-bold">Explorers &amp; Builders:</span> {saturdayTime("explorers")}
+              </li>
+              <li>
+                <span className="font-bold">Developers &amp; Engineers:</span> {saturdayTime("developers")}
+              </li>
+            </ul>
+            <div className="mt-6">
+              <ButtonLink href="/locations/oshawa">See Oshawa Classes</ButtonLink>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </Section>
+
+      <Section tone="white">
+        <SectionHeader
+          title="Other cities"
+          lead="Online classes are open in every city. Join a waitlist to hear when in-person classes open."
+        />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {waitlistCities.map((city) => (
+            <Link
+              key={city.slug}
+              href={`/locations/${city.slug}`}
+              className="group bg-[#FAF8F4] rounded-2xl p-5 border border-gray-200 hover:border-[#E5A823] hover:shadow-md transition-all"
+            >
+              <p className="text-xl font-bold text-[#001532] group-hover:text-[#138A9A]">{city.name}</p>
+              <p className="text-base text-gray-600 mt-1">{city.province} · Online open</p>
+            </Link>
+          ))}
+        </div>
+      </Section>
     </>
   );
 }

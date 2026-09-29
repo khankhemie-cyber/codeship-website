@@ -2,106 +2,105 @@ import Link from "next/link";
 import Image from "next/image";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
+const COLUMNS = [
+  {
+    title: "Classes",
+    links: [
+      { href: "/programs/explorers", label: "Explorers · K–Grade 1" },
+      { href: "/programs/builders", label: "Builders · Grades 2–3" },
+      { href: "/programs/developers", label: "Developers · Grades 4–5" },
+      { href: "/programs/engineers", label: "Engineers · Grades 6–8" },
+      { href: "/register", label: "Online classes" },
+    ],
+  },
+  {
+    title: "More",
+    links: [
+      { href: "/programs/camps", label: "Camps" },
+      { href: "/programs/birthday-parties", label: "Birthday parties" },
+      { href: "/schools", label: "For schools" },
+      { href: "/resources", label: "Parent resources" },
+      { href: "/franchise", label: "Franchise" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About us" },
+      { href: "/locations", label: "Locations" },
+      { href: "/contact", label: "Contact" },
+      { href: "/policies/refund", label: "Refund policy" },
+      { href: "/privacy-policy", label: "Privacy" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-[#001532] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand + visit */}
           <div>
-            <Link href="/" className="inline-block mb-4">
+            <Link href="/" className="inline-block mb-5">
               <Image
                 src="/logo-footer.png"
                 alt="CODEship Academy"
                 width={140}
                 height={140}
-                className="h-24 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </Link>
-            <p className="text-[#E5A823] text-sm font-bold mb-1">DREAM. CODE. ACHIEVE.</p>
-            <p className="text-gray-300 text-xs mb-1">Future Skills Start Here.</p>
-            <p className="text-gray-400 text-xs mb-2">Saturday classes: {IN_PERSON_VENUE.full}, Ontario.</p>
-            <a href="mailto:admin@codeshipacademy.com" className="text-gray-300 hover:text-[#E5A823] text-xs transition-colors">
+            <p className="text-[#E5A823] font-bold tracking-widest text-sm mb-4">DREAM. CODE. ACHIEVE.</p>
+            <address className="not-italic text-base text-gray-300 leading-relaxed">
+              {IN_PERSON_VENUE.building}
+              <br />
+              {IN_PERSON_VENUE.street}
+              <br />
+              {IN_PERSON_VENUE.city}, Ontario
+            </address>
+            <a
+              href="mailto:admin@codeshipacademy.com"
+              className="block mt-3 text-base text-gray-300 hover:text-[#E5A823] transition-colors"
+            >
               admin@codeshipacademy.com
             </a>
-            {/* Social — Instagram only */}
-            <div className="flex space-x-4 mt-4">
-              <a
-                href="https://www.instagram.com/codeshipacademy"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow CODEship Academy on Instagram"
-                className="text-gray-400 hover:text-[#E5A823] transition-colors"
-              >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-                </svg>
-              </a>
+            <a
+              href="https://www.instagram.com/codeshipacademy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 text-base text-gray-300 hover:text-[#E5A823] transition-colors"
+            >
+              Instagram @codeshipacademy
+            </a>
+          </div>
+
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <h3 className="font-bold text-white text-lg mb-4">{col.title}</h3>
+              <ul className="space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-base text-gray-300 hover:text-[#E5A823] transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-
-          {/* The Journey */}
-          <div>
-            <h3 className="font-semibold text-[#E5A823] mb-4">The CODEship Journey</h3>
-            <ul className="space-y-2">
-              <li><Link href="/programs#journey" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Journey Map</Link></li>
-              <li><Link href="/programs/explorers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Explorers (K–1)</Link></li>
-              <li><Link href="/programs/builders" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Builders (2–3)</Link></li>
-              <li><Link href="/programs/developers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Developers (4–5)</Link></li>
-              <li><Link href="/programs/engineers" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Engineers (6–8)</Link></li>
-            </ul>
-          </div>
-
-          {/* Programs */}
-          <div>
-            <h3 className="font-semibold text-[#138A9A] mb-4">Programs</h3>
-            <ul className="space-y-2">
-              <li><Link href="/programs/weekly-classes" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Weekly Classes</Link></li>
-              <li><Link href="/programs/camps" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Camps</Link></li>
-              <li><Link href="/programs/school-workshops" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">School Workshops</Link></li>
-              <li><Link href="/programs/birthday-parties" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Birthday Parties</Link></li>
-              <li><Link href="/programs/ai-robotics" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">AI &amp; Robotics</Link></li>
-              <li><Link href="/program-finder" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Program Finder</Link></li>
-            </ul>
-          </div>
-
-          {/* Franchise */}
-          <div>
-            <h3 className="font-semibold text-[#E5A823] mb-4">Franchise</h3>
-            <ul className="space-y-2">
-              <li><Link href="/franchise" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Franchise Overview</Link></li>
-              <li><Link href="/franchise/mobile-model" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Mobile Model</Link></li>
-              <li><Link href="/franchise/studio-model" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Studio Model</Link></li>
-              <li><Link href="/franchise/regional-model" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Regional Model</Link></li>
-              <li><Link href="/franchise-selector" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Franchise Selector</Link></li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="font-semibold text-[#6E43A8] mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li><Link href="/about" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">About Us</Link></li>
-              <li><Link href="/schools" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Schools</Link></li>
-              <li><Link href="/locations" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Locations</Link></li>
-              <li><Link href="/resources" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Resources</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Contact</Link></li>
-              <li><Link href="/privacy-policy" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Terms of Service</Link></li>
-              <li><Link href="/policies/refund" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Refund Policy</Link></li>
-              <li><Link href="/politiques/remboursement" className="text-gray-400 hover:text-[#E5A823] text-sm transition-colors">Politique de remboursement</Link></li>
-            </ul>
-          </div>
+          ))}
         </div>
 
-        <div className="border-t border-gray-600 mt-10 pt-8">
-          <p className="text-gray-400 text-xs mb-3 text-center">
-            &copy; {new Date().getFullYear()} CODEship Academy. All rights reserved. Headquartered in Oshawa, Ontario, Canada.
+        <div className="border-t border-white/15 mt-12 pt-8 text-center">
+          <p className="text-sm text-gray-400">
+            &copy; {new Date().getFullYear()} CODEship Academy · Oshawa, Ontario ·{" "}
+            <Link href="/politiques/remboursement" className="hover:text-[#E5A823]">
+              Politique de remboursement
+            </Link>
           </p>
-          <p className="text-gray-500 text-xs text-center max-w-3xl mx-auto">
-            This website is for informational purposes only and does not constitute a franchise offering.
-            Franchise offerings are made only through a Franchise Disclosure Document where required by law.
-            No earnings claims are made or implied. Individual results will vary.
+          <p className="text-sm text-gray-500 mt-2">
+            Franchise information is not an offering. Offerings are made only by disclosure document.
           </p>
         </div>
       </div>

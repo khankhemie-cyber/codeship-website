@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { PROGRAMS, getProgram, PROGRAM_STRUCTURE, JOURNEY_ARC, type ProgramSlug } from "@/data/programs";
-import { IN_PERSON, IN_PERSON_SATURDAY_SCHEDULE, ONLINE } from "@/data/locations";
+import { PROGRAMS, getProgram, PROGRAM_STRUCTURE, type ProgramSlug } from "@/data/programs";
+import { IN_PERSON, IN_PERSON_SATURDAY_SCHEDULE, IN_PERSON_VENUE, ONLINE } from "@/data/locations";
 import { breadcrumbSchema, courseSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
 import ProgramLocationSelector from "@/components/ProgramLocationSelector";
 import ClassScheduleCard from "@/components/ClassScheduleCard";
-import JourneyMap from "@/components/JourneyMap";
 import FAQAccordion from "@/components/FAQAccordion";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Link from "next/link";
+import { PageHero, Section, SectionHeader } from "@/components/ui/Page";
+import { saturdayTime } from "@/lib/booking";
+import { PRICE_LABEL } from "@/config/offering";
 
 interface Props {
   params: { slug: string };
@@ -30,63 +32,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = getProgram(params.slug);
   if (!program) return {};
   return pageMetadata({
-    title: `${program.level} (${program.gradeBand}) | ${program.codingSpace}`,
-    description: `${program.level} — ${program.gradeBand}. ${program.outcome} Flat CAD $129/semester (8 weekly classes), project-based. In-person in Oshawa (Durham Region) or online across Canada.`,
+    title: `${program.level} Coding Classes (${program.gradeBand}) — Oshawa & Online`,
+    description: `${program.level} coding classes for ${program.gradeBand}. ${program.outcome} Saturdays at Core21 in Oshawa or online. CAD $129 per 8-week semester.`,
     path: `/programs/${program.slug}`,
     image: PROGRAM_OG_IMAGE[program.slug],
     imageAlt: `${program.level} — CODEship Academy`,
   });
 }
 
-const WEEK_STRUCTURE = [
-  {
-    step: "Warm-up",
-    desc: "A quick activity that reviews last session's ideas and gets everyone thinking in code.",
-  },
-  {
-    step: "Teach",
-    desc: "Instructors introduce the session's concept through a short, hands-on demonstration.",
-  },
-  {
-    step: "Build",
-    desc: "The bulk of class time — students apply what they've learned to their own project, with instructor support.",
-  },
-  {
-    step: "Reflect",
-    desc: "Students share progress, get warm feedback, and set a goal for next session.",
-  },
-];
-
-const ALIGNMENT_COPY: Record<string, string> = {
-  explorers:
-    "Explorers' K–1 curriculum is designed to support Ontario's early digital literacy expectations and maps to the foundational strand of BC's Applied Design, Skills & Technologies (ADST) curriculum.",
-  builders:
-    "Builders' Grades 2–3 curriculum is designed to support Ontario's coding expectations and aligns with BC's ADST curriculum and Alberta's Computer Science outcomes for the primary grades.",
-  developers:
-    "Developers' Grades 4–5 curriculum maps to Ontario's coding and financial literacy expectations and aligns with Alberta's Computer Science and CTF outcomes.",
-  engineers:
-    "Engineers' Grades 6–8 curriculum supports Ontario's coding and AI literacy expectations, maps to Alberta's Computer Science and CTF outcomes, and aligns with Québec's Cadre de référence de la compétence numérique (available in French).",
+const ALIGNMENT_COPY: Record<ProgramSlug, string> = {
+  explorers: "It supports Ontario's early digital literacy expectations. It also maps to BC's ADST curriculum.",
+  builders: "It supports Ontario's coding expectations. It also aligns with BC's ADST and Alberta's Computer Science outcomes.",
+  developers: "It supports Ontario's coding and financial literacy expectations. It also aligns with Alberta's Computer Science outcomes.",
+  engineers: "It supports Ontario's coding and AI literacy expectations. It also aligns with Alberta's Computer Science outcomes.",
 };
 
-function programFaqs(program: ReturnType<typeof getProgram>) {
-  if (!program) return [];
+function programFaqs(program: NonNullable<ReturnType<typeof getProgram>>) {
   const online = ONLINE[program.slug];
   return [
     {
-      question: `Is ${program.level} the right fit for my child?`,
-      answer: `${program.level} is built for ${program.gradeBand}. No prior coding experience is needed.`,
+      question: `Who is ${program.level} for?`,
+      answer: `${program.level} is for children in ${program.gradeBand}. No coding experience is needed.`,
     },
     {
-      question: "Does my child need coding experience already?",
-      answer: "No. Every class starts from the basics and includes inclusive-design accommodations.",
+      question: "When and where are classes?",
+      answer: `In person on Saturdays, ${saturdayTime(program.slug)}, at ${IN_PERSON_VENUE.full}. Online classes run ${online.day}s, ${online.window}.`,
     },
     {
-      question: "How much does it cost and how long is a semester?",
-      answer: `Every CODEship program is a flat CAD $129 per semester — 8 weekly classes, one class a week. The full ${program.level} journey runs across ${PROGRAM_STRUCTURE.semesters} semesters plus a capstone project.`,
+      question: "How much does it cost?",
+      answer: `${PRICE_LABEL} per semester. Each semester has 8 weekly classes.`,
     },
     {
-      question: "Where and when does it run — in-person or online?",
-      answer: `${program.level} runs in-person on Saturdays in Oshawa (serving families across Durham Region), or online ${online.day}s, ${online.window}. Online is open to families in any city. In-person classes in our other cities are on a waitlist — join it on that city's location page, or register online today.`,
+      question: `How long is ${program.level}?`,
+      answer: `The full level is ${PROGRAM_STRUCTURE.semesters} semesters plus a capstone project. You can book one semester at a time.`,
+    },
+    {
+      question: "How is progress measured?",
+      answer: `Short quizzes check key ideas. Each project gets clear, kind feedback from the instructor.`,
+    },
+    {
+      question: "Can you support my child's learning needs?",
+      answer: "Yes. Pacing is flexible and there are many ways to show learning. Tell us what your child needs before the first class.",
+    },
+    {
+      question: "Does it follow the school curriculum?",
+      answer: `${ALIGNMENT_COPY[program.slug]} It is not endorsed by any ministry of education.`,
     },
   ];
 }
@@ -94,6 +84,15 @@ function programFaqs(program: ReturnType<typeof getProgram>) {
 export default function ProgramPage({ params }: Props) {
   const program = getProgram(params.slug);
   if (!program) notFound();
+
+  const index = PROGRAMS.findIndex((p) => p.slug === program.slug);
+  const next = PROGRAMS[index + 1];
+  const crumbs = [
+    { name: "Home", href: "/" },
+    { name: "Programs", href: "/programs" },
+    { name: program.level, href: `/programs/${program.slug}` },
+  ];
+  const faqs = programFaqs(program);
 
   return (
     <>
@@ -109,184 +108,76 @@ export default function ProgramPage({ params }: Props) {
           ),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(programFaqs(program))) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbSchema([
-              { name: "Home", href: "/" },
-              { name: "Programs", href: "/programs" },
-              { name: program.level, href: `/programs/${program.slug}` },
-            ])
-          ),
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faqs)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(crumbs)) }} />
 
-      <div className="bg-[#FAF8F4]">
-        {/* Header */}
-        <section className="bg-[#001532] py-16 sm:py-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Breadcrumbs
-              className="mb-4"
-              items={[
-                { name: "Home", href: "/" },
-                { name: "Programs", href: "/programs" },
-                { name: program.level, href: `/programs/${program.slug}` },
-              ]}
-            />
-            <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-2">
-              {JOURNEY_ARC[program.slug]} · The CODEship Journey
-            </p>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{program.level}</h1>
-            <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">{program.summary}</p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              <span className="bg-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium">{program.gradeBand}</span>
-              <span className="bg-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium">{program.codingSpace}</span>
-              <span className="bg-[#E5A823] text-[#001532] px-3 py-1.5 rounded-full text-sm font-bold">
-                {PROGRAM_STRUCTURE.semesters} semesters + capstone
-              </span>
+      <PageHero crumbs={crumbs} eyebrow={program.gradeBand} title={program.level} lead={program.summary}>
+        <div className="flex flex-wrap gap-3">
+          {[program.codingSpace, `Saturdays ${saturdayTime(program.slug)}`, `${PRICE_LABEL} / semester`].map((chip) => (
+            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2 rounded-full">
+              {chip}
+            </span>
+          ))}
+        </div>
+      </PageHero>
+
+      <Section>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2 space-y-16">
+            {/* What they build */}
+            <div>
+              <SectionHeader eyebrow="The level" title="What your child will build" lead={program.outcome} />
+              <ol className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {program.semesters.map((sem) => (
+                  <li
+                    key={sem.number}
+                    className="bg-white rounded-2xl p-6 border-l-4 shadow-sm"
+                    style={{ borderLeftColor: program.accentColour }}
+                  >
+                    <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Semester {sem.number}</p>
+                    <h3 className="text-xl font-bold text-[#001532] mt-1">{sem.project}</h3>
+                    <p className="text-base text-gray-600 mt-2">{sem.bigIdea}</p>
+                  </li>
+                ))}
+                <li className="sm:col-span-2 bg-[#001532] rounded-2xl p-6 text-white">
+                  <p className="text-sm font-bold uppercase tracking-widest text-[#E5A823]">Capstone</p>
+                  <h3 className="text-xl font-bold mt-1">{program.capstone.title}</h3>
+                  <p className="text-base text-gray-300 mt-2">{program.capstone.description}</p>
+                </li>
+              </ol>
             </div>
-            <p className="text-white font-semibold text-lg mt-6 max-w-2xl">{program.outcome}</p>
-          </div>
-        </section>
 
-        <section className="py-16 sm:py-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Main column */}
-            <div className="lg:col-span-2 space-y-14">
-              {/* Class dates & times — both formats, always visible */}
-              <ClassScheduleCard program={program.slug} />
+            <ClassScheduleCard program={program.slug} />
 
-              {/* Semester breakdown */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-1">Semester by Semester</h2>
-                <p className="text-gray-500 text-sm mb-6">
-                  {PROGRAM_STRUCTURE.semesters} semesters, ~{PROGRAM_STRUCTURE.sessionsApprox} sessions total, each building toward the capstone.
+            <div>
+              <SectionHeader title="Common questions" />
+              <FAQAccordion faqs={faqs} />
+            </div>
+
+            {next && (
+              <Link
+                href={`/programs/${next.slug}`}
+                className="block rounded-2xl bg-white border border-gray-200 p-6 hover:border-[#E5A823] hover:shadow-md transition-all"
+              >
+                <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Next level</p>
+                <p className="text-2xl font-extrabold text-[#001532] mt-1">
+                  {next.level} · {next.gradeBand} →
                 </p>
-                <div className="space-y-4">
-                  {program.semesters.map((sem) => (
-                    <div key={sem.number} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 border-l-4" style={{ borderLeftColor: program.accentColour }}>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span
-                          className="flex items-center justify-center w-7 h-7 rounded-full text-white font-bold text-xs shrink-0"
-                          style={{ backgroundColor: program.accentColour }}
-                        >
-                          {sem.number}
-                        </span>
-                        <h3 className="font-bold text-[#001532]">{sem.project}</h3>
-                      </div>
-                      <p className="text-gray-600 text-sm mb-2">{sem.bigIdea}</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {sem.learn.map((skill) => (
-                          <span key={skill} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Capstone */}
-                  <div className="bg-[#001532] rounded-xl p-5 text-white">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#E5A823] text-[#001532] font-bold text-xs shrink-0">
-                        ★
-                      </span>
-                      <h3 className="font-bold">Capstone: {program.capstone.title}</h3>
-                    </div>
-                    <p className="text-gray-300 text-sm">{program.capstone.description}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* A week in the program */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-6">A Week in {program.level}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {WEEK_STRUCTURE.map((w, i) => (
-                    <div key={w.step} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                      <span className="text-xs font-bold text-[#E5A823] uppercase tracking-widest">Step {i + 1}</span>
-                      <h3 className="font-bold text-[#001532] mt-1 mb-1.5">{w.step}</h3>
-                      <p className="text-gray-600 text-sm">{w.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Assessment */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-4">Assessment</h2>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-3">
-                  <p className="text-gray-600 text-sm">
-                    <strong className="text-[#001532]">
-                      {PROGRAM_STRUCTURE.quizzesPerSemester} quizzes per semester ({PROGRAM_STRUCTURE.quizzes} total)
-                    </strong>{" "}
-                    check understanding of key concepts along the way.
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    <strong className="text-[#001532]">A project rubric</strong> evaluates each semester&apos;s build —
-                    not just whether it works, but the thinking behind it.
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    <strong className="text-[#001532]">Warm, specific feedback</strong> from instructors after every
-                    project, focused on growth and encouragement.
-                  </p>
-                </div>
-              </div>
-
-              {/* Accommodations */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-4">Accommodations</h2>
-                <div className="bg-[#138A9A]/10 rounded-xl p-6 border border-[#138A9A]/20">
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    Inclusive-design accommodations are built into every {program.level} class — flexible pacing,
-                    multiple ways to show understanding, and support for a range of learning styles and needs. Let us
-                    know about any specific accommodations your child needs, and our team will work with you before
-                    the first session.
-                  </p>
-                </div>
-              </div>
-
-              {/* Alignment note */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-4">Curriculum Alignment</h2>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <p className="text-gray-600 text-sm leading-relaxed">{ALIGNMENT_COPY[program.slug]}</p>
-                  <p className="text-gray-400 text-xs mt-3">
-                    Not endorsed or approved by any ministry of education.
-                  </p>
-                </div>
-              </div>
-
-              {/* FAQ */}
-              <div>
-                <h2 className="text-2xl font-bold text-[#001532] mb-4">Common Questions</h2>
-                <FAQAccordion faqs={programFaqs(program)} />
-              </div>
-            </div>
-
-            {/* Sidebar: location & schedule selector */}
-            <div className="lg:col-span-1">
-              <div className="lg:sticky lg:top-24">
-                <Suspense fallback={<div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}>
-                  <ProgramLocationSelector program={program} />
-                </Suspense>
-              </div>
-            </div>
+              </Link>
+            )}
           </div>
-        </section>
 
-        {/* Journey context */}
-        <section className="pb-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <JourneyMap currentSlug={program.slug} />
-          </div>
-        </section>
-      </div>
+          <aside className="lg:col-span-1">
+            <div className="lg:sticky lg:top-24">
+              <Suspense
+                fallback={<div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}
+              >
+                <ProgramLocationSelector program={program} />
+              </Suspense>
+            </div>
+          </aside>
+        </div>
+      </Section>
     </>
   );
 }

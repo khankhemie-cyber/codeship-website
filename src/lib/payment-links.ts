@@ -53,7 +53,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     projectsEn: "Interactive stories and simple games",
     projectsFr: "Histoires interactives et mini-jeux",
     summary:
-      "A playful first step into coding, where young learners build confidence with technology through stories, games, and creative challenges.",
+      "A playful first step into coding through stories and simple games.",
     outcomes: [
       "Understand core coding ideas like sequencing and logic",
       "Build early problem-solving and computational thinking",
@@ -76,7 +76,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     projectsEn: "Web pages and classroom challenge sites",
     projectsFr: "Sites web et défis de classe",
     summary:
-      "Learners deepen their coding skills and start building for the web, turning their own ideas into working pages and games.",
+      "Kids start building for the web and turn their ideas into real pages.",
     outcomes: [
       "Build fluency in Scratch and the basics of HTML & CSS",
       "Plan, prototype, and finish a real digital project",
@@ -99,7 +99,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     projectsEn: "Apps, bots, and data storytelling",
     projectsFr: "Applications, robots logiciels, narration de données",
     summary:
-      "The move into real programming languages — learners write JavaScript and Python and get their first hands-on look at how AI works.",
+      "Kids write real JavaScript and get a first hands-on look at AI.",
     outcomes: [
       "Write real code in JavaScript and Python",
       "Build interactive apps and simple bots",
@@ -122,7 +122,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
     projectsEn: "Community impact solutions",
     projectsFr: "Solutions d'impact communautaire",
     summary:
-      "Advanced building for teens — full applications, product design, and AI, aimed at real projects and post-secondary readiness.",
+      "Kids code in Python, build with AI and pitch a real project.",
     outcomes: [
       "Work across multiple languages and modern frameworks",
       "Design and ship a more sophisticated application",
