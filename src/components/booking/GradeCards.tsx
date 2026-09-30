@@ -34,7 +34,7 @@ export default function GradeCards() {
 
           <Link
             href={`/register/${p.slug}`}
-            className="bg-[#E5A823] text-[#001532] text-lg font-bold px-4 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
+            className="bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 rounded-xl text-center hover:bg-[#E6C51E] transition-colors"
           >
             Book {p.level}
           </Link>

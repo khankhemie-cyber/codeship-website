@@ -14,7 +14,7 @@ export default function RegionalModelPage() {
     <div className="bg-[#FAF8F4]">
       <section className="bg-[#001532] py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Link href="/franchise" className="text-[#E5A823] text-sm font-semibold hover:underline mb-4 inline-block">
+          <Link href="/franchise" className="text-[#F4D734] text-sm font-semibold hover:underline mb-4 inline-block">
             ← Franchise Overview
           </Link>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Regional Multi-Territory Model</h1>
@@ -22,7 +22,7 @@ export default function RegionalModelPage() {
             Own and develop an entire region. The Regional Model gives you the rights to build multiple CODEship
             Academy locations and support sub-franchisees across your territory.
           </p>
-          <div className="mt-6 inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-xl">
+          <div className="mt-6 inline-block bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-xl">
             Investment: $100K–$150K+
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function RegionalModelPage() {
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Explore Regional Development</h2>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/franchise#kit" className="bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors">
+            <Link href="/franchise#kit" className="bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#E6C51E] transition-colors">
               Request Franchise Kit
             </Link>
             <Link href="/contact" className="border-2 border-white text-white font-bold px-6 py-3 rounded-xl hover:bg-white hover:text-[#001532] transition-colors">

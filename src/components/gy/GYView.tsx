@@ -66,11 +66,11 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
       {/* Hero */}
       <section className="bg-[#001532] py-14 sm:py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">{headline}</h1>
           <p className="text-gray-300 text-lg mb-5 leading-relaxed">{campaign.subhead}</p>
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
+            <span className="inline-block bg-[#F4D734] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
               GYD $20,000 per semester
             </span>
             <span className="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full">
@@ -80,7 +80,7 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
           <Link
             href={registrationUrl}
             onClick={handleRegisterClick}
-            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
+            className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-all text-lg shadow-lg"
           >
             Register for Online Classes
           </Link>
@@ -98,7 +98,7 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
           <ul className="space-y-2.5">
             {OUTCOME_HIGHLIGHTS.map((b) => (
               <li key={b} className="flex items-start gap-3 bg-white rounded-xl p-3.5 shadow-sm border border-gray-100">
-                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#E5A823] text-[#001532] font-bold text-[10px] shrink-0 mt-0.5">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#F4D734] text-[#001532] font-bold text-[10px] shrink-0 mt-0.5">
                   ✓
                 </span>
                 <span className="text-[#001532] text-sm">{b}</span>
@@ -136,11 +136,11 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
             <h3 className="text-white font-bold text-xl mb-1">{GUYANA_PRICING.semesterFeeLabel}</h3>
             <p className="text-gray-300 text-sm mb-1">{GUYANA_PRICING.includesLine}</p>
             <p className="text-gray-400 text-xs mb-1">{GUYANA_PRICING.perSessionLine}</p>
-            <p className="text-[#E5A823] text-xs font-semibold mb-4">Next semester starts {GUYANA_NEXT_SEMESTER_START}</p>
+            <p className="text-[#F4D734] text-xs font-semibold mb-4">Next semester starts {GUYANA_NEXT_SEMESTER_START}</p>
             <Link
               href={registrationUrl}
               onClick={handleRegisterClick}
-              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors"
+              className="inline-block bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#E6C51E] transition-colors"
             >
               {GUYANA_PRICING.ctaLabel}
             </Link>
@@ -165,11 +165,11 @@ export default function GYView({ campaign }: { campaign: GuyanaCampaign }) {
           <Link
             href={registrationUrl}
             onClick={handleRegisterClick}
-            className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
+            className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg"
           >
             Register for Online Classes
           </Link>
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
         </div>
       </section>
 

@@ -140,7 +140,7 @@ export default function ProgramPage({ params }: Props) {
                   </li>
                 ))}
                 <li className="sm:col-span-2 bg-[#001532] rounded-2xl p-6 text-white">
-                  <p className="text-sm font-bold uppercase tracking-widest text-[#E5A823]">Capstone</p>
+                  <p className="text-sm font-bold uppercase tracking-widest text-[#F4D734]">Capstone</p>
                   <h3 className="text-xl font-bold mt-1">{program.capstone.title}</h3>
                   <p className="text-base text-gray-300 mt-2">{program.capstone.description}</p>
                 </li>
@@ -157,7 +157,7 @@ export default function ProgramPage({ params }: Props) {
             {next && (
               <Link
                 href={`/programs/${next.slug}`}
-                className="block rounded-2xl bg-white border border-gray-200 p-6 hover:border-[#E5A823] hover:shadow-md transition-all"
+                className="block rounded-2xl bg-white border border-gray-200 p-6 hover:border-[#F4D734] hover:shadow-md transition-all"
               >
                 <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Next level</p>
                 <p className="text-2xl font-extrabold text-[#001532] mt-1">

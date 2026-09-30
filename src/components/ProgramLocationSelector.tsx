@@ -83,7 +83,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
               <label
                 key={opt.value}
                 className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 cursor-pointer transition-colors ${
-                  checked ? "border-[#E5A823] bg-[#E5A823]/10" : "border-gray-200 hover:border-gray-300"
+                  checked ? "border-[#F4D734] bg-[#F4D734]/10" : "border-gray-200 hover:border-gray-300"
                 }`}
               >
                 <input
@@ -92,7 +92,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
                   value={opt.value}
                   checked={checked}
                   onChange={() => handleSelect(opt.value)}
-                  className="accent-[#E5A823] w-5 h-5 shrink-0"
+                  className="accent-[#F4D734] w-5 h-5 shrink-0"
                 />
                 <span>
                   <span className="block font-bold text-[#001532] text-base">{opt.title}</span>

@@ -113,7 +113,7 @@ export default function RegisterPage({ searchParams }: Props) {
               <Link
                 key={level}
                 href={`/register/${level}`}
-                className="group block bg-white rounded-2xl p-7 shadow-sm border border-gray-200 hover:border-[#E5A823] hover:shadow-lg transition-all"
+                className="group block bg-white rounded-2xl p-7 shadow-sm border border-gray-200 hover:border-[#F4D734] hover:shadow-lg transition-all"
               >
                 <p className="text-sm font-bold uppercase tracking-widest text-gray-500">{ageLabel(level, false)}</p>
                 <h2 className="text-2xl font-extrabold text-[#001532] mt-1">{config.label}</h2>

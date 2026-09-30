@@ -87,7 +87,7 @@ export default function TermsPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">9. Contact</h2>
               <p>
                 Questions about these terms should be directed to:{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>
               </p>

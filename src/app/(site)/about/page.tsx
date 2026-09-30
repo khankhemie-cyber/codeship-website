@@ -30,7 +30,7 @@ export default function AboutPage() {
         <SectionHeader title="What we believe" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {beliefs.map((b) => (
-            <div key={b.title} className="bg-white rounded-2xl shadow-sm p-7 border-t-4 border-[#E5A823]">
+            <div key={b.title} className="bg-white rounded-2xl shadow-sm p-7 border-t-4 border-[#F4D734]">
               <h3 className="text-2xl font-extrabold text-[#001532]">{b.title}</h3>
               <p className="text-lg text-gray-600 mt-3">{b.desc}</p>
             </div>
@@ -40,7 +40,7 @@ export default function AboutPage() {
 
       <Section tone="white" narrow>
         <div className="text-center">
-          <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest">Our mission</p>
+          <p className="text-[#0F6F7C] font-bold text-sm uppercase tracking-widest">Our mission</p>
           <p className="text-2xl sm:text-3xl font-bold text-[#001532] leading-snug mt-4">
             Every child has an idea worth building. We give them the skills and the confidence to build it.
           </p>

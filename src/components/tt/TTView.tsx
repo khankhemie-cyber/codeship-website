@@ -77,11 +77,11 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
       {/* Hero */}
       <section className="bg-[#001532] py-14 sm:py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">{headline}</h1>
           <p className="text-gray-300 text-lg mb-5 leading-relaxed">{campaign.subhead}</p>
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
+            <span className="inline-block bg-[#F4D734] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
               {campaign.label} · {campaign.grades} · {campaign.ages}
             </span>
             <span className="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full">
@@ -98,7 +98,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           ) : (
             <a
               {...registerButtonProps}
-              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
+              className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-all text-lg shadow-lg"
             >
               Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
             </a>
@@ -120,7 +120,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           <ul className="space-y-2.5">
             {campaign.outcomeBullets.map((b) => (
               <li key={b} className="flex items-start gap-3 bg-white rounded-xl p-3.5 shadow-sm border border-gray-100">
-                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#E5A823] text-[#001532] font-bold text-[10px] shrink-0 mt-0.5">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#F4D734] text-[#001532] font-bold text-[10px] shrink-0 mt-0.5">
                   ✓
                 </span>
                 <span className="text-[#001532] text-sm">{b}</span>
@@ -201,12 +201,12 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
             <ul className="text-left max-w-xs mx-auto space-y-1.5 mb-4">
               {TRINIDAD_PRICING.includes.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-gray-300 text-sm">
-                  <span aria-hidden="true" className="text-[#E5A823] shrink-0">✓</span>
+                  <span aria-hidden="true" className="text-[#F4D734] shrink-0">✓</span>
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="text-[#E5A823] text-xs font-semibold mb-4">{TRINIDAD_PRICING.startDateLine}</p>
+            <p className="text-[#F4D734] text-xs font-semibold mb-4">{TRINIDAD_PRICING.startDateLine}</p>
             {leadSubmitted ? (
               <p className="text-gray-300 text-sm bg-white/10 rounded-xl px-4 py-3">
                 Your registration request has already been received — no further sign-up is needed.
@@ -215,7 +215,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               <>
                 <a
                   {...registerButtonProps}
-                  className="inline-block w-full sm:w-auto bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
+                  className="inline-block w-full sm:w-auto bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg"
                 >
                   {TRINIDAD_PRICING.ctaLabel} — Secure Checkout
                 </a>
@@ -249,12 +249,12 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
           ) : (
             <a
               {...registerButtonProps}
-              className="inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg"
+              className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg"
             >
               Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
             </a>
           )}
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
         </div>
       </section>
 
@@ -273,7 +273,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
         <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
           <a
             {...registerButtonProps}
-            className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
+            className="block w-full bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#E6C51E] transition-colors"
           >
             Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
           </a>

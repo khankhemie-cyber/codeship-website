@@ -101,7 +101,7 @@ export default function ProgramRegisterPage({ params }: Props) {
                   <Link
                     key={level}
                     href={`/register/${level}`}
-                    className="block bg-white rounded-xl p-5 border border-gray-200 hover:border-[#E5A823] hover:shadow-md transition-all"
+                    className="block bg-white rounded-xl p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
                   >
                     <span className="block text-lg font-bold text-[#001532]">{PROGRAM_LINKS[level].label}</span>
                     <span className="block text-base text-gray-600 mt-1">{ageLabel(level, false)}</span>

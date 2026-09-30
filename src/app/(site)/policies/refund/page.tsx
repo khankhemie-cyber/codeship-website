@@ -63,7 +63,7 @@ export default function RefundPolicyPage() {
               </p>
               <p className="mt-3">
                 If your child misses a class, contact us at{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
                 and we&apos;ll share what was covered so they can catch up before the next session.
@@ -84,7 +84,7 @@ export default function RefundPolicyPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">6. How to Request a Refund</h2>
               <p>
                 To cancel a registration or request a refund, email{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
                 with your registration details, or reply to the Stripe payment receipt you received.
@@ -105,7 +105,7 @@ export default function RefundPolicyPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">8. Questions</h2>
               <p>
                 Questions about this refund policy or an existing registration should be directed to:{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>
               </p>

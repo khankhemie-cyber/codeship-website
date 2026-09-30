@@ -67,7 +67,7 @@ export default function ClassScheduleCard({ program, heading = "Dates and times"
           schedule={schedule.inperson}
           note={`${IN_PERSON_VENUE.building}, ${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city}`}
         />
-        <ScheduleRow label="Online" accent="#E5A823" schedule={schedule.online} note="Live with an instructor. Eastern Time." />
+        <ScheduleRow label="Online" accent="#F4D734" schedule={schedule.online} note="Live with an instructor. Eastern Time." />
       </div>
     </div>
   );

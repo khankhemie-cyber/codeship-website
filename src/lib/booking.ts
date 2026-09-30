@@ -37,7 +37,7 @@ export function saturdayTime(slug: Program["slug"]) {
 }
 
 export const LEVEL_ACCENT: Record<Program["slug"], string> = {
-  explorers: "#E5A823",
+  explorers: "#F4D734",
   builders: "#138A9A",
   developers: "#6E43A8",
   engineers: "#001532",

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 const NAVY = "#0D1B2A";
-const GOLD = "#F5A623";
+const GOLD = "#F4D734";
 
 interface Props {
   personKey: string;

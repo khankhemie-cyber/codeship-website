@@ -118,7 +118,7 @@ export default function FranchiseSelector() {
             </svg>
           </div>
           <h3 className="text-2xl font-bold text-[#001532] mb-1">Your Recommended Model:</h3>
-          <h4 className="text-xl font-semibold text-[#E5A823]">{rec.title}</h4>
+          <h4 className="text-xl font-semibold text-[#0F6F7C]">{rec.title}</h4>
           <p className="text-sm text-gray-500 mt-1">Investment range: {rec.investmentRange}</p>
         </div>
 
@@ -136,7 +136,7 @@ export default function FranchiseSelector() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href={rec.href}
-            className="bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors text-center"
+            className="bg-[#F4D734] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#E6C51E] transition-colors text-center"
           >
             Learn More
           </Link>
@@ -173,7 +173,7 @@ export default function FranchiseSelector() {
         </div>
         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#E5A823] rounded-full transition-all duration-500"
+            className="h-full bg-[#F4D734] rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -186,7 +186,7 @@ export default function FranchiseSelector() {
           <button
             key={option}
             onClick={() => handleAnswer(option)}
-            className="p-4 text-left border-2 border-gray-200 rounded-xl hover:border-[#E5A823] hover:bg-[#FAF8F4] transition-all duration-200 font-medium text-[#2E3440]"
+            className="p-4 text-left border-2 border-gray-200 rounded-xl hover:border-[#F4D734] hover:bg-[#FAF8F4] transition-all duration-200 font-medium text-[#2E3440]"
           >
             {option}
           </button>

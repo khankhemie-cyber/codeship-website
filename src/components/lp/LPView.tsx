@@ -159,7 +159,7 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
       {/* 1. Hero */}
       <section className="bg-[#001532] py-14 sm:py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mb-3">
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mb-3">
             {campaign.lang === "fr" ? "Rêver. Coder. Réussir." : "Dream. Code. Achieve."}
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">{headline}</h1>
@@ -167,13 +167,13 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <a
             {...ctaProps}
             className={ctaClasses(
-              "inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-all text-lg shadow-lg"
+              "inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-all text-lg shadow-lg"
             )}
           >
             {ctaLabel}
           </a>
           <p className="text-gray-400 text-xs mt-5">{campaign.trustLine}</p>
-          <div className="relative w-full max-w-md mx-auto aspect-video rounded-2xl overflow-hidden mt-8 ring-2 ring-[#E5A823]/20">
+          <div className="relative w-full max-w-md mx-auto aspect-video rounded-2xl overflow-hidden mt-8 ring-2 ring-[#F4D734]/20">
             <Image
               src={variant.heroImage}
               alt=""
@@ -206,7 +206,7 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <ul className="space-y-3">
             {campaign.outcomeBullets.map((b) => (
               <li key={b} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#E5A823] text-[#001532] font-bold text-xs shrink-0 mt-0.5">
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#F4D734] text-[#001532] font-bold text-xs shrink-0 mt-0.5">
                   ✓
                 </span>
                 <span className="text-[#001532] text-sm">{b}</span>
@@ -253,17 +253,17 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <div className="bg-[#001532] rounded-xl p-6 text-center mb-4">
             <h3 className="text-white font-bold text-lg mb-1">{campaign.offerHeadline}</h3>
             <p className="text-gray-300 text-sm mb-1">{campaign.offerBody}</p>
-            <p className="text-[#E5A823] text-xs font-semibold mb-4">{scheduleLine}</p>
+            <p className="text-[#F4D734] text-xs font-semibold mb-4">{scheduleLine}</p>
             <a
               {...ctaProps}
-              className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#d4941f] transition-colors")}
+              className={ctaClasses("inline-block bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl hover:bg-[#E6C51E] transition-colors")}
             >
               {ctaLabel}
             </a>
           </div>
           {campaign.secondaryLink && secondaryUrl && (
             <p className="text-center text-sm mt-4">
-              <Link href={secondaryUrl} target="_blank" rel="noopener noreferrer" className="text-[#E5A823] font-semibold hover:underline">
+              <Link href={secondaryUrl} target="_blank" rel="noopener noreferrer" className="text-[#0F6F7C] font-semibold hover:underline">
                 {campaign.secondaryLink.label}
               </Link>
             </p>
@@ -286,7 +286,7 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
           <p className="text-gray-300 mb-6 text-sm">{t.finalSub}</p>
           <a
             {...ctaProps}
-            className={ctaClasses("inline-block bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors text-lg")}
+            className={ctaClasses("inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg")}
           >
             {ctaLabel}
           </a>

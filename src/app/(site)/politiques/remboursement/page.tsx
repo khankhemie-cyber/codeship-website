@@ -52,7 +52,7 @@ export default function PolitiqueRemboursementPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">2. Demander un remboursement</h2>
               <p>
                 Pour demander un remboursement ou une annulation, écrivez à{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
                 avec les détails de votre inscription, ou répondez au reçu de paiement Stripe que vous avez
@@ -75,7 +75,7 @@ export default function PolitiqueRemboursementPage() {
               <p>
                 Si votre enfant doit se retirer d&apos;un programme après son début, ou manque des séances,
                 communiquez avec nous à{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>{" "}
                 et nous conviendrons ensemble des prochaines étapes, conformément aux conditions confirmées
@@ -97,7 +97,7 @@ export default function PolitiqueRemboursementPage() {
               <p>
                 Pour toute question sur cette politique de remboursement ou sur une inscription existante,
                 communiquez avec nous à :{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>
               </p>
