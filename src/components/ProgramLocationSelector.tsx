@@ -19,8 +19,8 @@ type Format = "inperson" | "online";
 /**
  * Format picker for a program page. Two formats, both sold through the same
  * Stripe link:
- *   - In-Person — open in Oshawa only (Saturdays).
- *   - Online — open to every city.
+ *   - In-Person: open in Oshawa only (Saturdays).
+ *   - Online: open to every city.
  * In-person in the other 11 cities is waitlist-only and lives on those cities'
  * location pages, not here.
  */

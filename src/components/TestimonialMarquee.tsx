@@ -13,7 +13,7 @@ const testimonials = [
   },
   {
     quote:
-      "What I appreciate most is that my kids aren't just watching screens — they're making things. There's a real difference in their confidence and the way they approach problems now.",
+      "What I appreciate most is that my kids aren't just watching screens: they're making things. There's a real difference in their confidence and the way they approach problems now.",
     name: "David & Linda K.",
     role: "Parents of two",
   },

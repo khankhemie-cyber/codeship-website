@@ -161,7 +161,7 @@ export const PROGRAMS: Program[] = [
       {
         number: 3,
         project: "Fact or Fake? Media-Literacy Quiz",
-        bigIdea: "Arrays and loops help programs process lots of information — just like people should question lots of sources.",
+        bigIdea: "Arrays and loops help programs process lots of information, just like people should question lots of sources.",
         learn: ["Arrays", "Loops", "Media literacy"],
       },
       {
@@ -203,7 +203,7 @@ export const PROGRAMS: Program[] = [
       {
         number: 2,
         project: "Smart Sorting AI",
-        bigIdea: "AI models learn patterns from data — and inherit the biases in that data.",
+        bigIdea: "AI models learn patterns from data, and inherit the biases in that data.",
         learn: ["Training & evaluating an AI model", "Bias & ethics in AI"],
       },
       {

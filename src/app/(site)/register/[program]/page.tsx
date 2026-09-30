@@ -21,7 +21,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!isProgramLevel(params.program)) return {};
   const c = PROGRAM_LINKS[params.program];
   return pageMetadata({
-    title: `Book ${c.label} (${c.gradesEn}) — Kids Coding | CODEship Academy`,
+    title: `Book ${c.label} (${c.gradesEn}): Kids Coding | CODEship Academy`,
     description: `${c.summary} CAD $${c.priceCad} for 8 weekly classes. Saturdays at Core21 in Oshawa or online.`,
     path: `/register/${params.program}`,
   });
@@ -43,7 +43,7 @@ export default function ProgramRegisterPage({ params }: Props) {
   const courseSchema = {
     "@context": "https://schema.org",
     "@type": "Course",
-    name: `${c.label} — Kids Coding Program`,
+    name: `${c.label}: Kids Coding Program`,
     description: c.summary,
     provider: { "@type": "EducationalOrganization", name: "CODEship Academy", sameAs: BASE_URL },
     offers: {

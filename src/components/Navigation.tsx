@@ -34,7 +34,7 @@ export default function Navigation() {
           <Link href="/" className="flex items-center" aria-label="CODEship Academy home">
             <Image
               src="/logo-header.png"
-              alt="CODEship Academy — Dream. Code. Achieve."
+              alt="CODEship Academy: Dream. Code. Achieve."
               width={742}
               height={302}
               className="h-14 lg:h-20 w-auto object-contain"

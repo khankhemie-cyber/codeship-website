@@ -1,7 +1,7 @@
 import { GUYANA_COMPLIANCE_DISCLAIMER } from "@/data/guyanaCampaigns";
 
 /**
- * Minimal Guyana-LP footer — no nav links, tagline + the required
+ * Minimal Guyana-LP footer, no nav links, tagline + the required
  * NGSA/Ministry compliance disclaimer. Never links deeper into the site.
  */
 export default function GYFooter() {

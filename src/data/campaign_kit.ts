@@ -1,5 +1,5 @@
 /**
- * The CODEship campaign kit — the single source of truth the paid landing
+ * The CODEship campaign kit: the single source of truth the paid landing
  * pages, ad platforms, and marketing team all read from. See
  * CAMPAIGN_KIT.md for the human-readable version of this same content.
  */
@@ -12,7 +12,7 @@ export interface MessagingPillar {
   description: string;
 }
 
-/** Messaging pillars — rewritten to sell the complete, finished K-8 curriculum. */
+/** Messaging pillars: rewritten to sell the complete, finished K-8 curriculum. */
 export const MESSAGING_PILLARS: MessagingPillar[] = [
   {
     title: "A real K–8 progression",
@@ -22,12 +22,12 @@ export const MESSAGING_PILLARS: MessagingPillar[] = [
   {
     title: "Project-based & tangible",
     description:
-      "Every level ends with something real a child built — a robot, a website, an app, an AI model — never a worksheet.",
+      "Every level ends with something real a child built, a robot, a website, an app, an AI model, never a worksheet.",
   },
   {
     title: "Future-ready & responsible",
     description:
-      "Real Python, hands-on AI with bias & ethics built into the curriculum, and practical cybersecurity — not just screen time.",
+      "Real Python, hands-on AI with bias & ethics built into the curriculum, and practical cybersecurity, not just screen time.",
   },
   {
     title: "Inclusive by design",
@@ -36,7 +36,7 @@ export const MESSAGING_PILLARS: MessagingPillar[] = [
   {
     title: "Province-aligned, including French for Québec",
     description:
-      "Curriculum is aligned to / maps to / supports Ontario's baseline, BC's ADST, Alberta's CS/CTF, and Québec's Cadre de référence de la compétence numérique — including a full French Explorers kit. Never \"endorsed\" or \"approved by\" a ministry.",
+      "Curriculum is aligned to / maps to / supports Ontario's baseline, BC's ADST, Alberta's CS/CTF, and Québec's Cadre de référence de la compétence numérique, including a full French Explorers kit. Never \"endorsed\" or \"approved by\" a ministry.",
   },
 ];
 
@@ -45,7 +45,7 @@ export const LEVEL_ONE_LINERS: Record<ProgramSlug, { oneLiner: string; outcome: 
   explorers: { oneLiner: "Your 5–7 year old's first real coding class.", outcome: getProgram("explorers")!.outcome },
   builders: { oneLiner: "Your child builds their first real website.", outcome: getProgram("builders")!.outcome },
   developers: { oneLiner: "Real code that solves real problems.", outcome: getProgram("developers")!.outcome },
-  engineers: { oneLiner: "Your teen can build AI — responsibly.", outcome: getProgram("engineers")!.outcome },
+  engineers: { oneLiner: "Your teen can build AI, responsibly.", outcome: getProgram("engineers")!.outcome },
 };
 
 export type LocationKey = Lowercase<InPersonCity> | "online" | "national";
@@ -79,7 +79,7 @@ function scheduleLine(program: ProgramSlug, location: LocationKey): string {
   return `Saturdays in ${capitalize(location)}`;
 }
 
-/** Generates a location-specific ad copy set from the program + location facts — no invented claims. */
+/** Generates a location-specific ad copy set from the program + location facts, no invented claims. */
 function buildAdCopySet(program: ProgramSlug, location: LocationKey): AdCopySet {
   const p = getProgram(program)!;
   const campaign = getCampaign(program)!;
@@ -111,12 +111,12 @@ function buildAdCopySet(program: ProgramSlug, location: LocationKey): AdCopySet 
     ],
     metaPrimaryTexts: [
       `${campaign.adHeadline} ${p.outcome} ${schedule}. Register today.`,
-      `Real projects, not worksheets: ${campaign.projects.slice(0, 3).join(", ")}. ${schedule}. Register online — seats are limited.`,
+      `Real projects, not worksheets: ${campaign.projects.slice(0, 3).join(", ")}. ${schedule}. Register online: seats are limited.`,
     ],
   };
 }
 
-/** Every level × every location (5 cities + online) — the full geo-targeted ad copy matrix. */
+/** Every level × every location (5 cities + online): the full geo-targeted ad copy matrix. */
 export const AD_COPY_SETS: AdCopySet[] = PROGRAMS.flatMap((p) =>
   LOCATION_KEYS.map((loc) => buildAdCopySet(p.slug, loc))
 );
@@ -125,7 +125,7 @@ export function getAdCopySet(program: ProgramSlug, location: LocationKey): AdCop
   return AD_COPY_SETS.find((s) => s.program === program && s.location === location);
 }
 
-/** Québec / French ad copy set — hand-authored, not generated from the English template. */
+/** Québec / French ad copy set: hand-authored, not generated from the English template. */
 export const QUEBEC_FR_AD_COPY: AdCopySet = {
   program: "explorers",
   location: "online",
@@ -151,7 +151,7 @@ export const QUEBEC_FR_AD_COPY: AdCopySet = {
   ],
   metaPrimaryTexts: [
     "Le codage pour les jeunes, en français. La Trousse Explorateurs, en ligne les mardis. Inscrivez-vous dès aujourd'hui.",
-    "Des projets réels, pas des feuilles d'exercices : Mon robot serviable, Cartes de gentillesse, Trieur de recyclage. Inscrivez-vous en ligne — places limitées.",
+    "Des projets réels, pas des feuilles d'exercices : Mon robot serviable, Cartes de gentillesse, Trieur de recyclage. Inscrivez-vous en ligne: places limitées.",
   ],
 };
 
@@ -189,7 +189,7 @@ export interface RoutingEntry {
 export const LP_ROUTING: RoutingEntry[] = CAMPAIGNS.map((c) => ({
   campaignSlug: c.slug,
   landingPage: `/lp/${c.slug}`,
-  registersVia: "Stripe Payment Link (see src/lib/payment-links.ts — one link per program)",
+  registersVia: "Stripe Payment Link (see src/lib/payment-links.ts, one link per program)",
 }));
 
 export const UTM_PLAN = {
@@ -215,7 +215,7 @@ export interface ComplianceChecklistItem {
  * Provincial alignment is mapped at the framework level and is
  * validation-ready, not yet verified against official outcome codes. Check
  * each claim against the current provincial document before it runs in a
- * live ad or LP, and always use "aligned to / maps to / supports" —
+ * live ad or LP, and always use "aligned to / maps to / supports"
  * never "endorsed" or "approved by" a ministry.
  */
 export const COMPLIANCE_CHECKLIST: ComplianceChecklistItem[] = [

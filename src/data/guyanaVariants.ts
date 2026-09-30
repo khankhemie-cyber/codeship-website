@@ -1,6 +1,6 @@
 import type { GuyanaPageSlug } from "./guyanaCampaigns";
 
-/** 3 headline variants per page, selected via ?v=1|2|3 (defaults to 1 — the campaign's own headline). */
+/** 3 headline variants per page, selected via ?v=1|2|3 (defaults to 1: the campaign's own headline). */
 export const GUYANA_HEADLINE_VARIANTS: Record<GuyanaPageSlug, [string, string, string]> = {
   "online-coding-classes": [
     "Online Coding Classes for Kids in Guyana",

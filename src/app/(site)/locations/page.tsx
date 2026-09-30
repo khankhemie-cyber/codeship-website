@@ -14,7 +14,7 @@ import { PageHero, Section, SectionHeader, ButtonLink } from "@/components/ui/Pa
 import { saturdayTime } from "@/lib/booking";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Locations — Oshawa In Person & Online Across Canada | CODEship Academy",
+  title: "Locations: Oshawa In Person & Online Across Canada | CODEship Academy",
   description:
     "In-person kids coding classes at Core21, 21 Simcoe St South, Oshawa. Live online classes across Canada. In-person waitlists open in 11 more cities.",
   path: "/locations",

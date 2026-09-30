@@ -38,9 +38,9 @@ export function organizationSchema() {
 }
 
 interface LocalBusinessOptions {
-  /** City-center coordinates — only pass for the open in-person city (Oshawa). */
+  /** City-center coordinates, only pass for the open in-person city (Oshawa). */
   geo?: { latitude: number; longitude: number };
-  /** e.g. ["Sa 09:00-12:30"] — only pass where CODEship actually runs in-person classes (Oshawa). */
+  /** e.g. ["Sa 09:00-12:30"], only pass where CODEship actually runs in-person classes (Oshawa). */
   openingHours?: string[];
   /** Only for the open in-person venue (Oshawa). */
   streetAddress?: string;
@@ -133,7 +133,7 @@ function parseOnlineWindow(window: string): { start: string; end: string } {
   return { start: to24Hour(`${startRaw} ${period}`), end: to24Hour(endRaw) };
 }
 
-/** Course schema for a /programs/:slug page — in-person + online CourseInstances, no invented facts. */
+/** Course schema for a /programs/:slug page, in-person + online CourseInstances, no invented facts. */
 export function courseSchema(program: CourseProgram, source: CourseInstanceSource) {
   const inPersonInstances = source.inPersonCities.map((city) => ({
     "@type": "CourseInstance",

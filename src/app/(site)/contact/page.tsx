@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact Us — Oshawa",
+  title: "Contact Us in Oshawa",
   description: `Questions about classes, camps, parties or schools? Email admin@codeshipacademy.com or visit us at ${IN_PERSON_VENUE.full}.`,
   path: "/contact",
 });

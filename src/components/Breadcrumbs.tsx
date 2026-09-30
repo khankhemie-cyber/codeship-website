@@ -11,7 +11,7 @@ interface BreadcrumbsProps {
 }
 
 /**
- * Visible breadcrumb trail (Home › Programs › Explorers) — pair with
+ * Visible breadcrumb trail (Home › Programs › Explorers): pair with
  * breadcrumbSchema() from lib/schema.ts for the matching BreadcrumbList
  * JSON-LD. The last item renders as plain text (current page).
  */

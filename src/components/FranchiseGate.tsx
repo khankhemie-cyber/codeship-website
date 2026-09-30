@@ -53,11 +53,11 @@ export default function FranchiseGate({ personKey, children }: Props) {
           inputRef.current?.focus();
         }, 600);
       } else if (res.status === 404) {
-        setError("Auth endpoint not found — please contact admin.");
+        setError("Auth endpoint not found: please contact admin.");
         setShaking(true);
         setTimeout(() => setShaking(false), 600);
       } else {
-        setError("Server error — the access password may not be configured yet.");
+        setError("Server error: the access password may not be configured yet.");
         setShaking(true);
         setTimeout(() => setShaking(false), 600);
       }
@@ -97,7 +97,7 @@ export default function FranchiseGate({ personKey, children }: Props) {
       }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase", color: GOLD, marginBottom: 10 }}>
-            Private — Invitation Only
+            Private: Invitation Only
           </div>
           <h1 style={{ fontSize: 22, fontWeight: 900, color: "#ffffff", margin: 0, lineHeight: 1.3 }}>
             Franchise Opportunity Kit

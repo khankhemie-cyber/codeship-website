@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About Us — Kids Coding School in Oshawa",
+  title: "About Us: Kids Coding School in Oshawa",
   description:
     "CODEship Academy teaches coding, AI and STEM to kids in K–Grade 8. Classes run Saturdays at Core21 in Oshawa and live online across Canada.",
   path: "/about",

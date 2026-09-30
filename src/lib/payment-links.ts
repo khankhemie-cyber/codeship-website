@@ -23,14 +23,14 @@ export interface ProgramConfig {
 /**
  * Single source of truth for the four CODEship program levels' Stripe Payment
  * Links, prices, and age bands. These links and ages are the real, live
- * products — do not guess or change them without confirming with the owner.
+ * products: do not guess or change them without confirming with the owner.
  *
  * Price is a single flat rate for every program (see FLAT_PRICE_CAD in
  * src/config/offering.ts); each level's `priceCad` points at that constant so
  * pricing changes are a one-line edit.
  *
  * Each Stripe link is wired to both (a) Oshawa in-person registration and
- * (b) online registration for that program from any city — the two paths that
+ * (b) online registration for that program from any city: the two paths that
  * sell a real seat. In-person in the other 11 cities is waitlist-only and does
  * not use these links.
  *

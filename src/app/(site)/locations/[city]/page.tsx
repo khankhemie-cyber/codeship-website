@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isOpen = location.inPerson === "open";
   return pageMetadata({
     title: isOpen
-      ? `Kids Coding Classes in ${location.name} — Saturdays at Core21 | CODEship Academy`
-      : `Kids Coding Classes in ${location.name} — Live Online | CODEship Academy`,
+      ? `Kids Coding Classes in ${location.name}: Saturdays at Core21 | CODEship Academy`
+      : `Kids Coding Classes in ${location.name}: Live Online | CODEship Academy`,
     description: isOpen
       ? `Saturday coding, AI & STEM classes for K–Grade 8 at ${IN_PERSON_VENUE.full}. Serving Durham Region. CAD $129 for 8 weekly classes.`
       : `Live online coding classes for ${location.name} kids in K–Grade 8. CAD $129 for 8 weekly classes. Join the waitlist for in-person classes.`,

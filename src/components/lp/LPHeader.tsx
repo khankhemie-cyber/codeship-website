@@ -3,7 +3,7 @@ import Image from "next/image";
 
 /**
  * Minimal paid-LP header: logo links home, nothing else. Deliberately has no
- * nav links (Programs/Franchise/Locations/etc.) — paid landing pages are
+ * nav links (Programs/Franchise/Locations/etc.): paid landing pages are
  * single-purpose and are never linked from the main site's nav or footer.
  */
 export default function LPHeader() {

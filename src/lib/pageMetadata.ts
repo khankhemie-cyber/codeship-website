@@ -12,7 +12,7 @@ interface PageMetadataArgs {
   image?: string;
   imageAlt?: string;
   type?: "website" | "article";
-  /** RFC 3339 date string — only meaningful when type is "article". */
+  /** RFC 3339 date string, only meaningful when type is "article". */
   publishedTime?: string;
   modifiedTime?: string;
   noindex?: boolean;
@@ -22,7 +22,7 @@ interface PageMetadataArgs {
  * Every page must emit its own self-referential og:title/description/url +
  * twitter:*, rather than inheriting the root layout's homepage-only
  * defaults (Next.js does not deep-merge `openGraph` between layout and
- * page — a page that omits it entirely inherits the parent's verbatim).
+ * page: a page that omits it entirely inherits the parent's verbatim).
  * Centralizing this guarantees every page stays correct and consistent.
  */
 export function pageMetadata({

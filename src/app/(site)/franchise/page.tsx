@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
 const franchiseFaqs = [
   {
     question: "Do I need a background in coding or technology?",
-    answer: "No. CODEship franchisees come from diverse backgrounds — education, business, community work, and more. We provide full curriculum, instructor training, and operational support. Passion for children's education and community matters more than technical expertise.",
+    answer: "No. CODEship franchisees come from diverse backgrounds: education, business, community work, and more. We provide full curriculum, instructor training, and operational support. Passion for children's education and community matters more than technical expertise.",
   },
   {
     question: "What is the royalty rate?",
@@ -92,7 +92,7 @@ export default function FranchisePage() {
               { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations.", dot: "bg-[#138A9A]" },
               { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families.", dot: "bg-[#138A9A]" },
               { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support.", dot: "bg-[#6E43A8]" },
-              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success.", dot: "bg-[#F4D734]" },
+              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching: we support your success.", dot: "bg-[#F4D734]" },
             ].map((w) => (
               <div key={w.title} className="bg-[#FAF8F4] rounded-2xl p-6">
                 <div className={`w-3 h-3 ${w.dot} rounded-full mb-4`} />

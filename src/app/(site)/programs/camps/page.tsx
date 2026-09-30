@@ -17,7 +17,7 @@ const crumbs = [
 ];
 
 const camps = [
-  { title: "Summer camp", when: "July – August", length: "Monday to Friday", desc: "A week of building that ends with a project showcase." },
+  { title: "Summer camp", when: "July to August", length: "Monday to Friday", desc: "A week of building that ends with a project showcase." },
   { title: "March Break camp", when: "March Break week", length: "Full or half week", desc: "Pick a track and build something big over the break." },
   { title: "PA Day workshops", when: "School PA days", length: "Full or half day", desc: "One focused day of building on a day off school." },
 ];

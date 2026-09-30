@@ -9,7 +9,7 @@ interface EnrollButtonProps {
 
 /**
  * The single Stripe Payment Link CTA for a program level. This is the only
- * place a Stripe checkout link should be rendered — everywhere else links to
+ * place a Stripe checkout link should be rendered: everywhere else links to
  * the per-program registration page (/register/[program]) that hosts it.
  */
 export function EnrollButton({ program, label = "Register Now", className = "", onClick }: EnrollButtonProps) {

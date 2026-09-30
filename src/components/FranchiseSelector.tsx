@@ -43,7 +43,7 @@ function getRecommendation(answers: string[]): Recommendation {
       title: "Mobile Community Model",
       investmentRange: "$10K–$18K",
       description:
-        "The Mobile Model is our lowest-investment entry point. Operate classes, camps, and workshops at community centres, libraries, schools, and partner spaces — no dedicated studio required.",
+        "The Mobile Model is our lowest-investment entry point. Operate classes, camps, and workshops at community centres, libraries, schools, and partner spaces, no dedicated studio required.",
       highlights: [
         "Lowest entry investment",
         "Flexible schedule",
@@ -74,7 +74,7 @@ function getRecommendation(answers: string[]): Recommendation {
     title: "Studio Learning Centre Model",
     investmentRange: "$60K–$100K",
     description:
-      "Open your own CODEship Academy studio — a branded, dedicated learning space for weekly classes, camps, birthday parties, and workshops. Build a community hub for young creators.",
+      "Open your own CODEship Academy studio: a branded, dedicated learning space for weekly classes, camps, birthday parties, and workshops. Build a community hub for young creators.",
     highlights: [
       "Dedicated branded studio",
       "Full program suite",

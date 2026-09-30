@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy | CODEship Academy",
-  description: "CODEship Academy's privacy policy — how we collect, use, and protect your personal information.",
+  description: "CODEship Academy's privacy policy: how we collect, use, and protect your personal information.",
   path: "/privacy-policy",
 });
 

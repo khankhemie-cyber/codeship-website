@@ -1,9 +1,9 @@
 /**
  * Single source of truth for CODEship program locations & schedules.
- * Render these facts exactly as defined here — do not restate them inline elsewhere.
+ * Render these facts exactly as defined here: do not restate them inline elsewhere.
  *
  * Format model:
- *   - Online is available everywhere — no location gating (no physical capacity).
+ *   - Online is available everywhere, no location gating (no physical capacity).
  *   - In-person is open for registration in Oshawa only. The other 11 cities are
  *     in-person waitlist (online still open). See LOCATIONS below.
  */
@@ -17,7 +17,7 @@ export const IN_PERSON_CITY_GEO: Record<InPersonCity, { latitude: number; longit
   Oshawa: { latitude: 43.8971, longitude: -78.8658 },
 };
 
-/** Where the Oshawa in-person Saturday classes run. Render these exactly — do not restate the address inline. */
+/** Where the Oshawa in-person Saturday classes run. Render these exactly: do not restate the address inline. */
 export const IN_PERSON_VENUE = {
   building: "Core21",
   street: "21 Simcoe St South",
@@ -28,7 +28,7 @@ export const IN_PERSON_VENUE = {
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Core21%2C+21+Simcoe+St+S%2C+Oshawa%2C+ON",
 } as const;
 
-/** Oshawa runs every program on Saturdays, 9:00 AM–12:30 PM — see IN_PERSON_SATURDAY_AGENDA below. */
+/** Oshawa runs every program on Saturdays, 9:00 AM–12:30 PM. See IN_PERSON_SATURDAY_AGENDA below. */
 export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-12:30"];
 
 export type LocationStatus = "open" | "waitlist";
@@ -42,7 +42,7 @@ export interface LocationInfo {
 }
 
 /**
- * The 12 CODEship locations. Exactly these — do not add or remove any.
+ * The 12 CODEship locations. Exactly these: do not add or remove any.
  * Oshawa in-person is open; the other 11 are in-person waitlist. Online is open
  * everywhere.
  */
@@ -68,17 +68,17 @@ export const LOCATIONS_BY_SLUG: Record<string, LocationInfo> = Object.fromEntrie
 /**
  * Durham Region municipalities CODEship serves from its Oshawa base. Oshawa is
  * the in-person location; the neighbouring towns are service-area only (families
- * travel in, or attend online) — not claims of a physical presence there.
+ * travel in, or attend online), not claims of a physical presence there.
  */
 export const DURHAM_SERVICE_AREA = ["Oshawa", "Whitby", "Courtice", "Bowmanville", "Clarington"] as const;
 
 export type ProgramSlug = "explorers" | "builders" | "developers" | "engineers";
 
 /**
- * Online (virtual) weekly schedule — one 55-minute class per program, back-to-back
+ * Online (virtual) weekly schedule, one 55-minute class per program, back-to-back
  * by pair (Explorers/Builders on Tuesday, Developers/Engineers on Thursday, each
  * pair younger-first). Display dates and times live in
- * src/config/classSchedule.js — keep the two in sync if the schedule changes.
+ * src/config/classSchedule.js: keep the two in sync if the schedule changes.
  */
 export const ONLINE: Record<
   ProgramSlug,

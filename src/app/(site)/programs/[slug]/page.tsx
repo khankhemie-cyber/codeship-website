@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = getProgram(params.slug);
   if (!program) return {};
   return pageMetadata({
-    title: `${program.level} Coding Classes (${program.gradeBand}) — Oshawa & Online`,
+    title: `${program.level} Coding Classes (${program.gradeBand}) in Oshawa & Online`,
     description: `${program.level} coding classes for ${program.gradeBand}. ${program.outcome} Saturdays at Core21 in Oshawa or online. CAD $129 per 8-week semester.`,
     path: `/programs/${program.slug}`,
     image: PROGRAM_OG_IMAGE[program.slug],
-    imageAlt: `${program.level} — CODEship Academy`,
+    imageAlt: `${program.level}: CODEship Academy`,
   });
 }
 

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: campaign.metaTitle,
     description: campaign.metaDescription,
     // Unlike /lp (pure paid traffic), these Guyana pages are meant to be
-    // found via organic search for Guyana-market keywords — indexable.
+    // found via organic search for Guyana-market keywords: indexable.
     alternates: { canonical: `https://www.codeshipacademy.com/gy/${campaign.slug}` },
     openGraph: {
       title: campaign.metaTitle,

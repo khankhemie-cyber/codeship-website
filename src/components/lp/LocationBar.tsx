@@ -40,13 +40,13 @@ function buildOptions(program: ProgramSlug): LocationOption[] {
   const schedule = CLASS_SCHEDULE[program];
   const inPerson: LocationOption[] = IN_PERSON.map((city) => ({
     value: toSlug(city),
-    label: `${city} — ${schedule.inperson.days} ${schedule.inperson.time}, ${startsSummary(schedule.inperson)}`,
+    label: `${city}: ${schedule.inperson.days} ${schedule.inperson.time}, ${startsSummary(schedule.inperson)}`,
   }));
   return [
     ...inPerson,
     {
       value: "online",
-      label: `Online — ${schedule.online.days} ${schedule.online.time}, ${startsSummary(schedule.online)}`,
+      label: `Online: ${schedule.online.days} ${schedule.online.time}, ${startsSummary(schedule.online)}`,
     },
   ];
 }

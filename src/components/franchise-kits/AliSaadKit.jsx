@@ -86,7 +86,7 @@ function PageCover(){
       <div style={{background:NAVY,flex:1,padding:"24px 42px",display:"flex",gap:20,alignItems:"center"}}>
         <div style={{background:TEAL,borderRadius:12,padding:"16px 20px",flexShrink:0,minWidth:170}}>
           <div style={{fontSize:9,fontWeight:800,letterSpacing:3,textTransform:"uppercase",color:"rgba(255,255,255,0.6)",marginBottom:5}}>Investment Range</div>
-          <div style={{fontSize:18,fontWeight:900,color:GOLD,lineHeight:1}}>$18K–$20K – $100K–$150K</div>
+          <div style={{fontSize:18,fontWeight:900,color:GOLD,lineHeight:1}}>$18K–$20K to $100K–$150K</div>
           <div style={{fontSize:11,fontWeight:700,color:WHITE,marginTop:2}}>Three models available</div>
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:10}}>
@@ -94,7 +94,7 @@ function PageCover(){
             [GOLD,"Territory:","Vancouver + Greater Vancouver"],
             [TEAL,"Background:","Business owner · Immigration industry · ECE-qualified household"],
             [PURPLE,"Models:","Pop-Up / Virtual  ·  Shared Space  ·  Studio Storefront"],
-            [GOLD,"Franchise Fee:","$10,000 CAD — one time"],
+            [GOLD,"Franchise Fee:","$10,000 CAD, one time"],
           ].map(([dot,lbl,v])=>(
             <div key={lbl} style={{display:"flex",alignItems:"center",gap:9}}>
               <div style={{width:7,height:7,borderRadius:"50%",background:dot,flexShrink:0}}/>
@@ -122,7 +122,7 @@ function PageOpportunity(){
           BUSINESS OWNER. <span style={{color:GOLD}}>COMMUNITY CONNECTOR.</span>
         </div>
         <p style={{fontSize:13.5,color:"rgba(255,255,255,0.7)",lineHeight:1.65,maxWidth:580}}>
-          You built an immigration business in Vancouver — a city that runs on community trust and newcomer networks. Those same relationships are the foundation that makes a CODEship franchise thrive from day one.
+          You built an immigration business in Vancouver: a city that runs on community trust and newcomer networks. Those same relationships are the foundation that makes a CODEship franchise thrive from day one.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -131,18 +131,18 @@ function PageOpportunity(){
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:TEAL,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What You Bring</div>
-            <DotItem text="An established business — you know how to run operations" color={TEAL}/>
+            <DotItem text="An established business: you know how to run operations" color={TEAL}/>
             <DotItem text="Deep roots in Vancouver's newcomer and immigrant communities" color={TEAL}/>
             <DotItem text="Relationships with families who prioritise their children's futures" color={TEAL}/>
-            <DotItem text="ECE expertise already in your household — a genuine credential with parents" color={TEAL}/>
-            <DotItem text="Entrepreneurial mindset — you have already taken the leap once" color={TEAL}/>
+            <DotItem text="ECE expertise already in your household: a genuine credential with parents" color={TEAL}/>
+            <DotItem text="Entrepreneurial mindset: you have already taken the leap once" color={TEAL}/>
           </Card>
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:GOLD,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What CODEship Adds</div>
-            <DotItem text="A fully built curriculum — Coding, AI, STEM, Robotics, App Development" color={GOLD}/>
+            <DotItem text="A fully built curriculum: Coding, AI, STEM, Robotics, App Development" color={GOLD}/>
             <DotItem text="A recognizable and growing national brand" color={GOLD}/>
-            <DotItem text="School partnership tools — access families where they already gather" color={GOLD}/>
+            <DotItem text="School partnership tools: access families where they already gather" color={GOLD}/>
             <DotItem text="Complete hiring and training systems pre-built for you" color={GOLD}/>
             <DotItem text="Operations manual and business playbooks ready from day one" color={GOLD}/>
           </Card>
@@ -162,7 +162,7 @@ function PageOpportunity(){
 // ── PAGE 3: MARKET ────────────────────────────────────────────────────────────
 function PageMarket(){
   const [tab,setTab]=useState(0);
-  const markets=[{label:"City of Vancouver",color:"#2A9D8F",stats:[["City Population (2024)", "662,248", "Largest city in BC · +3.1% growth per year"], ["Children under 15", "~70,860", "10.7% of city population"], ["Median Household Income", "$82,000", "Statistics Canada 2021 Census"], ["VSB Elementary Schools", "89", "Vancouver School Board · 52,428 K-12 students"]],community:[["Chinese community", "28.3%", "City of Vancouver"], ["South Asian", "7.0%", "City of Vancouver"], ["Foreign-born", "41.8%", "Metro Vancouver"]],schools:[["Vancouver School Board", "89 elementary", "52,428 K-12 students — actively seeks enrichment partners"], ["Vancouver Catholic Schools", "17 elementary", "Strong family and community engagement culture"]],opp:"Vancouver has 89 elementary schools and one of the most education-focused parent populations in Canada. Over 40% of Metro Vancouver residents are foreign-born. CODEship has no established presence in the city.",tags:["89 VSB elementary schools", "41.8% foreign-born Metro", "28% Chinese community", "Education-focused immigrant families", "No CODEship presence yet"],edge:"Your immigration business gives you direct access to Vancouver's newcomer families — the demographic that invests most in children's enrichment. You are not starting cold. You are already trusted."},{label:"Greater Vancouver",color:"#F4D734",stats:[["Metro Vancouver Population", "3,100,000+", "3rd largest metro in Canada · 54% visible minority"], ["Chinese Community (Metro)", "19.6%", "~607,000 residents — largest visible minority group"], ["South Asian Community (Metro)", "14.2%", "~369,000 residents — primarily Surrey and Burnaby"], ["Surrey Elementary Schools", "100+", "School District 36 — fastest growing school district in BC"]],community:[["Visible minority", "54%", "Metro Vancouver majority"], ["South Asian (Metro)", "14.2%", "369,000+ residents"], ["Recent immigrants 2016-21", "154,820", "India and China top sources"]],schools:[["School District 36 Surrey", "100+ elementary", "Fastest-growing school district in BC · 76,000+ students"], ["Burnaby, Richmond, Coquitlam", "150+ combined", "Significant Chinese and South Asian populations"]],opp:"Metro Vancouver is the most diverse major metro in Canada. Surrey alone has 100+ elementary schools and a South Asian community of 212,000+. Demand for trusted, community-rooted STEM programs is enormous and underserved.",tags:["3.1M Metro population", "54% visible minority", "Surrey 212K+ South Asian", "100+ Surrey elementary schools", "Fastest-growing school district in BC"],edge:"Your cultural background and immigration industry connections give you credibility across Metro Vancouver's diverse communities — Chinese, South Asian, Filipino, and broader newcomer families."}];
+  const markets=[{label:"City of Vancouver",color:"#2A9D8F",stats:[["City Population (2024)", "662,248", "Largest city in BC · +3.1% growth per year"], ["Children under 15", "~70,860", "10.7% of city population"], ["Median Household Income", "$82,000", "Statistics Canada 2021 Census"], ["VSB Elementary Schools", "89", "Vancouver School Board · 52,428 K-12 students"]],community:[["Chinese community", "28.3%", "City of Vancouver"], ["South Asian", "7.0%", "City of Vancouver"], ["Foreign-born", "41.8%", "Metro Vancouver"]],schools:[["Vancouver School Board", "89 elementary", "52,428 K-12 students, actively seeks enrichment partners"], ["Vancouver Catholic Schools", "17 elementary", "Strong family and community engagement culture"]],opp:"Vancouver has 89 elementary schools and one of the most education-focused parent populations in Canada. Over 40% of Metro Vancouver residents are foreign-born. CODEship has no established presence in the city.",tags:["89 VSB elementary schools", "41.8% foreign-born Metro", "28% Chinese community", "Education-focused immigrant families", "No CODEship presence yet"],edge:"Your immigration business gives you direct access to Vancouver's newcomer families: the demographic that invests most in children's enrichment. You are not starting cold. You are already trusted."},{label:"Greater Vancouver",color:"#F4D734",stats:[["Metro Vancouver Population", "3,100,000+", "3rd largest metro in Canada · 54% visible minority"], ["Chinese Community (Metro)", "19.6%", "~607,000 residents: largest visible minority group"], ["South Asian Community (Metro)", "14.2%", "~369,000 residents, primarily Surrey and Burnaby"], ["Surrey Elementary Schools", "100+", "School District 36: fastest growing school district in BC"]],community:[["Visible minority", "54%", "Metro Vancouver majority"], ["South Asian (Metro)", "14.2%", "369,000+ residents"], ["Recent immigrants 2016-21", "154,820", "India and China top sources"]],schools:[["School District 36 Surrey", "100+ elementary", "Fastest-growing school district in BC · 76,000+ students"], ["Burnaby, Richmond, Coquitlam", "150+ combined", "Significant Chinese and South Asian populations"]],opp:"Metro Vancouver is the most diverse major metro in Canada. Surrey alone has 100+ elementary schools and a South Asian community of 212,000+. Demand for trusted, community-rooted STEM programs is enormous and underserved.",tags:["3.1M Metro population", "54% visible minority", "Surrey 212K+ South Asian", "100+ Surrey elementary schools", "Fastest-growing school district in BC"],edge:"Your cultural background and immigration industry connections give you credibility across Metro Vancouver's diverse communities: Chinese, South Asian, Filipino, and broader newcomer families."}];
   const m=markets[tab];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -228,7 +228,7 @@ function PageMarket(){
 
 // ── PAGE 4: COMPETITORS ───────────────────────────────────────────────────────
 function PageCompetitors(){
-  const comps=[{name:"Code Ninjas",type:"Direct Competitor",tc:"#dc2626",invest:"$175K–$385K CAD",royalty:"8% + 2% marketing",location:"Physical dojo required",schools:"None",fit:"Generic / mass-market",status:"Limited BC presence",weakness:"Requires a large upfront investment and a physical dojo before you have a single student enrolled.",isUs:false},{name:"Kumon",type:"Adjacent Competitor",tc:"#d97706",invest:"$150K–$400K CAD",royalty:"~$36–$46/student/mo",location:"Physical centre required",schools:"None",fit:"Strong East Asian communities",status:"Multiple Metro Van locations",weakness:"Math and reading only. No STEM, coding, or creativity. No school partnership model.",isUs:false},{name:"Mathnasium",type:"Adjacent Competitor",tc:"#d97706",invest:"$112K–$149K CAD",royalty:"10% + fees",location:"Physical centre required",schools:"None",fit:"Broad / general market",status:"Limited Vancouver presence",weakness:"Math only. No school partnerships. No community-first growth model.",isUs:false},{name:"CODEship Academy",type:"Your Opportunity",tc:"#2A9D8F",invest:"$18K–$150K CAD",royalty:"$1,500 flat/mo (Yr 1)",location:"No fixed space to start",schools:"Core to the model",fit:"Community-led, culturally adaptable",status:"Vancouver OPEN — you first",weakness:null,isUs:true}];
+  const comps=[{name:"Code Ninjas",type:"Direct Competitor",tc:"#dc2626",invest:"$175K–$385K CAD",royalty:"8% + 2% marketing",location:"Physical dojo required",schools:"None",fit:"Generic / mass-market",status:"Limited BC presence",weakness:"Requires a large upfront investment and a physical dojo before you have a single student enrolled.",isUs:false},{name:"Kumon",type:"Adjacent Competitor",tc:"#d97706",invest:"$150K–$400K CAD",royalty:"~$36–$46/student/mo",location:"Physical centre required",schools:"None",fit:"Strong East Asian communities",status:"Multiple Metro Van locations",weakness:"Math and reading only. No STEM, coding, or creativity. No school partnership model.",isUs:false},{name:"Mathnasium",type:"Adjacent Competitor",tc:"#d97706",invest:"$112K–$149K CAD",royalty:"10% + fees",location:"Physical centre required",schools:"None",fit:"Broad / general market",status:"Limited Vancouver presence",weakness:"Math only. No school partnerships. No community-first growth model.",isUs:false},{name:"CODEship Academy",type:"Your Opportunity",tc:"#2A9D8F",invest:"$18K–$150K CAD",royalty:"$1,500 flat/mo (Yr 1)",location:"No fixed space to start",schools:"Core to the model",fit:"Community-led, culturally adaptable",status:"Vancouver OPEN: you first",weakness:null,isUs:true}];
   const rows=["Investment","Royalty (Yr 1)","Location Required","School Partnerships","Cultural Fit","Status in Market"];
   const vals=comps.map(c=>[c.invest,c.royalty,c.location,c.schools,c.fit,c.status]);
   return(
@@ -272,7 +272,7 @@ function PageCompetitors(){
                 {c.isUs?"Your Advantage":"Key Weakness"}
               </div>
               <p style={{fontSize:11.5,color:c.isUs?WHITE:"#4a5568",lineHeight:1.55}}>
-                {c.weakness||"Build students before you build a location. Lowest entry cost in children's enrichment franchising — with the highest community-fit in this market."}
+                {c.weakness||"Build students before you build a location. Lowest entry cost in children's enrichment franchising, with the highest community-fit in this market."}
               </p>
             </div>
           ))}
@@ -287,9 +287,9 @@ function PageCompetitors(){
 // ── PAGE 5: AUDIENCE ──────────────────────────────────────────────────────────
 function PageAudience(){
   const [tab,setTab]=useState("b2c");
-  const b2c=[{color:"#2A9D8F",label:"The Education-Focused Newcomer Parent",desc:"Recently arrived families from China, India, the Philippines, and beyond. Education for their children is a top priority — they actively seek quality enrichment programs and are willing to invest.",stats:["Metro Vancouver received 154,820 new immigrants 2016–2021", "India and China are the two largest source countries", "Newcomer families over-index on children's enrichment spending"]},{color:"#F4D734",label:"The High-Investment Immigrant Family",desc:"Established immigrant families with children in Vancouver schools. Academic achievement is a family value. These parents research thoroughly and pay for quality.",stats:["28.3% of Vancouver City identifies as Chinese", "7% South Asian — higher concentration in Surrey/Burnaby", "Education-focused families invest $3,000–$8,000+ per year on enrichment"]},{color:"#5C3D8F",label:"The Career-Change Parent",desc:"Parents exploring new income streams who enrol their children while considering the business opportunity themselves. A dual funnel unique to community-connected operators.",stats:["Trust community operators over chains", "Word-of-mouth referred through school pickup networks", "High loyalty once trust is established"]},{color:"#0D1B2A",label:"The Purpose-Driven Entrepreneur Parent",desc:"Parents who want enrichment that goes beyond test prep — creativity, confidence, and future-ready skills. Growing in Metro Vancouver's educated professional class.",stats:["Growing demand for creativity and innovation-focused programs", "STEM programs with life-skills framing appeal strongly", "Birthday experiences and events are strong entry points"]}];
+  const b2c=[{color:"#2A9D8F",label:"The Education-Focused Newcomer Parent",desc:"Recently arrived families from China, India, the Philippines, and beyond. Education for their children is a top priority: they actively seek quality enrichment programs and are willing to invest.",stats:["Metro Vancouver received 154,820 new immigrants 2016–2021", "India and China are the two largest source countries", "Newcomer families over-index on children's enrichment spending"]},{color:"#F4D734",label:"The High-Investment Immigrant Family",desc:"Established immigrant families with children in Vancouver schools. Academic achievement is a family value. These parents research thoroughly and pay for quality.",stats:["28.3% of Vancouver City identifies as Chinese", "7% South Asian: higher concentration in Surrey/Burnaby", "Education-focused families invest $3,000–$8,000+ per year on enrichment"]},{color:"#5C3D8F",label:"The Career-Change Parent",desc:"Parents exploring new income streams who enrol their children while considering the business opportunity themselves. A dual funnel unique to community-connected operators.",stats:["Trust community operators over chains", "Word-of-mouth referred through school pickup networks", "High loyalty once trust is established"]},{color:"#0D1B2A",label:"The Purpose-Driven Entrepreneur Parent",desc:"Parents who want enrichment that goes beyond test prep: creativity, confidence, and future-ready skills. Growing in Metro Vancouver's educated professional class.",stats:["Growing demand for creativity and innovation-focused programs", "STEM programs with life-skills framing appeal strongly", "Birthday experiences and events are strong entry points"]}];
   const b2b=[{color:"#2A9D8F",label:"Vancouver School Board (VSB)",desc:"89 elementary schools across Vancouver city. VSB actively seeks approved community enrichment partners for after-school programs and in-school workshops.",stats:["89 elementary schools · 52,428 K-12 students", "Formal after-school program partnership process", "Curriculum-aligned STEM programs are high priority"]},{color:"#F4D734",label:"School District 36 Surrey",desc:"The fastest-growing school district in BC with 100+ elementary schools and a predominantly South Asian community. Strong appetite for culturally relevant STEM programming.",stats:["100+ elementary schools · 76,000+ students", "Surrey has 212,000+ South Asian residents", "Fastest-growing school district in BC"]},{color:"#5C3D8F",label:"Newcomer and Settlement Organisations",desc:"Vancouver's settlement agencies, cultural centres, and newcomer organisations actively fund and refer family programming. Your immigration industry relationships are a direct channel.",stats:["Funded programming budgets available through settlement agencies", "Cultural centres actively seek quality children's programs", "Your existing relationships open doors immediately"]},{color:"#0D1B2A",label:"City Recreation Centres",desc:"The City of Vancouver operates 24+ community centres. These venues actively partner with enrichment providers for after-school and weekend programming.",stats:["City of Vancouver: 24+ community centres", "Community programming budgets available", "Ideal for pop-up and shared space delivery"]}];
-  const insight={b2c:"Your immigration business clients are already your best B2C prospects. You have their trust — CODEship gives you a program to offer their children.",b2b:"Your industry relationships with newcomer organisations and settlement agencies give you access to funded B2B programming most franchise operators cannot reach."};
+  const insight={b2c:"Your immigration business clients are already your best B2C prospects. You have their trust: CODEship gives you a program to offer their children.",b2b:"Your industry relationships with newcomer organisations and settlement agencies give you access to funded B2B programming most franchise operators cannot reach."};
   const data=tab==="b2c"?b2c:b2b;
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -299,7 +299,7 @@ function PageAudience(){
           WHO YOU SERVE. <span style={{color:GOLD}}>AND WHO PAYS YOU.</span>
         </div>
         <div style={{display:"flex",gap:8}}>
-          {[["b2c","B2C — Parents and Families"],["b2b","B2B — Schools and Organisations"]].map(([k,lbl])=>(
+          {[["b2c","B2C: Parents and Families"],["b2b","B2B: Schools and Organisations"]].map(([k,lbl])=>(
             <button key={k} onClick={()=>setTab(k)} style={{
               padding:"8px 16px",borderRadius:6,border:"none",cursor:"pointer",
               background:tab===k?GOLD:"rgba(255,255,255,0.12)",
@@ -335,7 +335,7 @@ function PageAudience(){
 // ── PAGE 6: MODELS ────────────────────────────────────────────────────────────
 function PageModels(){
   const [active,setActive]=useState(0);
-  const models=[{num:"01",color:"#2A9D8F",name:"Pop-Up Workshop Model",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Start lean alongside your existing business.",best:"Run CODEship alongside your immigration business with zero location overhead. Your immigration client base is your immediate warm market.",how:["Run workshops inside partner schools as an approved after-school provider", "Use community centres, libraries, and recreation rooms for weekend programs", "Deliver holiday camps and PA Day programs at partner venues", "Partner with cultural and community organisations for weekday sessions", "No lease, no rent, no fixed overhead"],programs:["After-school coding clubs", "School in-class workshops", "PA Day programs", "March Break and Summer camps", "Community pop-up events"],mindset:"Adding CODEship as a pop-up model means zero disruption to your current operations — and a new community-facing business that grows at your pace."},{num:"02",color:"#F4D734",name:"Shared Space Model",range:"$20K–$60K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"$800–$2,500/month",tagline:"A branded CODEship presence in Vancouver.",best:"Once you have 20–30 students from school partnerships, secure a shared or part-time commercial space. Your branded CODEship Academy becomes a real destination.",how:["Rent a dedicated or shared commercial unit — part-time or full-time", "Alternatively secure space within a recreation centre or community hub", "Brand it fully as your CODEship Academy location", "Run weekly classes, after-school programs, and weekend camps", "Continue school partnerships to drive enrollment to your space"],programs:["Weekly in-centre coding classes", "After-school enrolled programs", "Weekend STEM workshops", "Birthday party experiences", "AI and app development programs"],mindset:"Build the destination. Enrol students through schools first — then give them a home base. By the time you sign a lease, you already have the students."},{num:"03",color:"#5C3D8F",name:"Studio Learning Centre",range:"$100K–$150K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"Dedicated commercial storefront",tagline:"Vancouver's first full-scale CODEship Academy.",best:"The studio model is for operators ready to build a primary business. Your business background and the ECE expertise in your household make you a strong candidate.",how:["Secure a dedicated commercial storefront (800–2,000 sq ft) in a high-traffic Vancouver area", "Full build-out as a branded CODEship Studio Learning Centre", "Run multiple program streams simultaneously — classes, camps, workshops, events", "Hire and manage a team of CODEship-certified instructors", "Establish Vancouver's first full-scale CODEship Academy"],programs:["Weekly enrolled classes across multiple age groups", "School partnership programs", "Summer, March Break, and PA Day camps", "Birthday party experiences", "Corporate and community STEM workshops", "AI, robotics, and app development programs"],mindset:"This is a full business. With ECE expertise already in your household, a qualified educator is on the team from day one — eliminating a major barrier for most studio applicants."}];
+  const models=[{num:"01",color:"#2A9D8F",name:"Pop-Up Workshop Model",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Start lean alongside your existing business.",best:"Run CODEship alongside your immigration business with zero location overhead. Your immigration client base is your immediate warm market.",how:["Run workshops inside partner schools as an approved after-school provider", "Use community centres, libraries, and recreation rooms for weekend programs", "Deliver holiday camps and PA Day programs at partner venues", "Partner with cultural and community organisations for weekday sessions", "No lease, no rent, no fixed overhead"],programs:["After-school coding clubs", "School in-class workshops", "PA Day programs", "March Break and Summer camps", "Community pop-up events"],mindset:"Adding CODEship as a pop-up model means zero disruption to your current operations, and a new community-facing business that grows at your pace."},{num:"02",color:"#F4D734",name:"Shared Space Model",range:"$20K–$60K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"$800–$2,500/month",tagline:"A branded CODEship presence in Vancouver.",best:"Once you have 20–30 students from school partnerships, secure a shared or part-time commercial space. Your branded CODEship Academy becomes a real destination.",how:["Rent a dedicated or shared commercial unit: part-time or full-time", "Alternatively secure space within a recreation centre or community hub", "Brand it fully as your CODEship Academy location", "Run weekly classes, after-school programs, and weekend camps", "Continue school partnerships to drive enrollment to your space"],programs:["Weekly in-centre coding classes", "After-school enrolled programs", "Weekend STEM workshops", "Birthday party experiences", "AI and app development programs"],mindset:"Build the destination. Enrol students through schools first, then give them a home base. By the time you sign a lease, you already have the students."},{num:"03",color:"#5C3D8F",name:"Studio Learning Centre",range:"$100K–$150K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"Dedicated commercial storefront",tagline:"Vancouver's first full-scale CODEship Academy.",best:"The studio model is for operators ready to build a primary business. Your business background and the ECE expertise in your household make you a strong candidate.",how:["Secure a dedicated commercial storefront (800–2,000 sq ft) in a high-traffic Vancouver area", "Full build-out as a branded CODEship Studio Learning Centre", "Run multiple program streams simultaneously: classes, camps, workshops, events", "Hire and manage a team of CODEship-certified instructors", "Establish Vancouver's first full-scale CODEship Academy"],programs:["Weekly enrolled classes across multiple age groups", "School partnership programs", "Summer, March Break, and PA Day camps", "Birthday party experiences", "Corporate and community STEM workshops", "AI, robotics, and app development programs"],mindset:"This is a full business. With ECE expertise already in your household, a qualified educator is on the team from day one, eliminating a major barrier for most studio applicants."}];
   const m=models[active];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -399,7 +399,7 @@ function PageModels(){
 // ── PAGE 7: INVESTMENT ────────────────────────────────────────────────────────
 function PageInvestment(){
   const [model,setModel]=useState(0);
-  const models=[{label:"Pop-Up Model",range:"$18K–$20K",color:"#2A9D8F",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Curriculum training", "Included", "You and up to 3 instructors at launch"],["Branded launch kit (digital)", "Included", "Templates, school decks, social assets"],["Technology setup", "$500–$800", "Devices, subscriptions, platform access"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$800–$1,200", "Local print, social, school outreach"],["Operating reserve (2 months)", "$1,500–$3,000", "Buffer while first school partnerships confirm"]]},{label:"Shared Space",range:"$20K–$60K",color:"#F4D734",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Curriculum training", "Included", "You and up to 5 instructors at launch"],["Branded launch kit (physical + digital)", "Included", "Signage, banners, printed materials"],["Space deposit and first 2 months", "$2,000–$8,000", "$800–$2,500/month depending on location and size"],["Technology setup", "$1,000–$2,000", "Devices, display screen, subscriptions"],["Insurance and registration", "$800–$1,500", "Commercial insurance, business registration"],["Launch marketing", "$1,000–$2,500", "Local print, social, and paid digital campaign"],["Operating reserve (3 months)", "$3,000–$8,000", "Covers space costs while enrollment builds"]]},{label:"Studio Centre",range:"$100K–$150K",color:"#5C3D8F",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Commercial lease deposit and first months", "$8,000–$20,000", "Storefront in Vancouver — negotiated based on location"],["Leasehold improvements and build-out", "$35,000–$60,000", "Space design, branding, furnishings, safety compliance"],["Equipment and technology", "$10,000–$20,000", "Computers, robotics kits, displays, AV system"],["Curriculum training", "Included", "Full team certification program"],["Branded materials (signage + digital)", "$3,000–$6,000", "Exterior signage, printed materials, digital assets"],["Insurance and business registration", "$2,000–$4,000", "Commercial insurance, permits, registration"],["Pre-launch marketing", "$5,000–$10,000", "Launch campaign, school outreach, community events"],["Operating reserve (6 months)", "$15,000–$30,000", "Covers operating costs while enrollment builds"]]}];
+  const models=[{label:"Pop-Up Model",range:"$18K–$20K",color:"#2A9D8F",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Curriculum training", "Included", "You and up to 3 instructors at launch"],["Branded launch kit (digital)", "Included", "Templates, school decks, social assets"],["Technology setup", "$500–$800", "Devices, subscriptions, platform access"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$800–$1,200", "Local print, social, school outreach"],["Operating reserve (2 months)", "$1,500–$3,000", "Buffer while first school partnerships confirm"]]},{label:"Shared Space",range:"$20K–$60K",color:"#F4D734",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Curriculum training", "Included", "You and up to 5 instructors at launch"],["Branded launch kit (physical + digital)", "Included", "Signage, banners, printed materials"],["Space deposit and first 2 months", "$2,000–$8,000", "$800–$2,500/month depending on location and size"],["Technology setup", "$1,000–$2,000", "Devices, display screen, subscriptions"],["Insurance and registration", "$800–$1,500", "Commercial insurance, business registration"],["Launch marketing", "$1,000–$2,500", "Local print, social, and paid digital campaign"],["Operating reserve (3 months)", "$3,000–$8,000", "Covers space costs while enrollment builds"]]},{label:"Studio Centre",range:"$100K–$150K",color:"#5C3D8F",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Commercial lease deposit and first months", "$8,000–$20,000", "Storefront in Vancouver, negotiated based on location"],["Leasehold improvements and build-out", "$35,000–$60,000", "Space design, branding, furnishings, safety compliance"],["Equipment and technology", "$10,000–$20,000", "Computers, robotics kits, displays, AV system"],["Curriculum training", "Included", "Full team certification program"],["Branded materials (signage + digital)", "$3,000–$6,000", "Exterior signage, printed materials, digital assets"],["Insurance and business registration", "$2,000–$4,000", "Commercial insurance, permits, registration"],["Pre-launch marketing", "$5,000–$10,000", "Launch campaign, school outreach, community events"],["Operating reserve (6 months)", "$15,000–$30,000", "Covers operating costs while enrollment builds"]]}];
   const m=models[model];
   const otc=m.color==="#F4D734"?NAVY:WHITE;
   return(
@@ -414,7 +414,7 @@ function PageInvestment(){
         </p>
         <div style={{background:TEAL,borderRadius:"10px 10px 0 0",padding:"14px 22px",display:"flex",gap:20,alignItems:"center"}}>
           <div style={{flex:1.4}}>
-            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer — All Three Models</div>
+            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer: All Three Models</div>
             <div style={{fontSize:13,fontWeight:900,color:WHITE,textTransform:"uppercase"}}>For Your First 12 Months</div>
           </div>
           <div style={{flex:1,borderLeft:"1px solid rgba(255,255,255,0.25)",paddingLeft:20}}>
@@ -443,7 +443,7 @@ function PageInvestment(){
       <div style={{padding:"0 32px",display:"flex",gap:16,marginTop:14,flex:1,minHeight:0}}>
         <div style={{flex:1,border:`2px solid ${m.color}`,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column"}}>
           <div style={{background:m.color,padding:"11px 16px",textAlign:"center"}}>
-            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes — {m.range} CAD</div>
+            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes: {m.range} CAD</div>
           </div>
           <div style={{background:LIGHT,flex:1}}>
             {m.breakdown.map(([lbl,amount,note])=><CostRow key={lbl} label={lbl} amount={amount} note={note} accent={m.color}/>)}
@@ -460,7 +460,7 @@ function PageInvestment(){
           </div>
           <div style={{background:LIGHT,borderRadius:8,padding:"11px 14px",border:"1.5px solid #e0e3e8"}}>
             <span style={{fontSize:11,color:NAVY,fontWeight:800}}>After Year 1: </span>
-            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees — 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates. This document does not constitute a franchise offering or disclosure document.</span>
+            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees: 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates. This document does not constitute a franchise offering or disclosure document.</span>
           </div>
         </div>
       </div>
@@ -474,16 +474,16 @@ function PageInvestment(){
 function PagePrograms(){
   const streams=[
     {color:TEAL,label:"Foundation",title:"School Partnerships",sub:"Your anchor and student acquisition channel.",
-      desc:"Schools give you access to families before they are your customers. One partnership creates visibility, trust, and ongoing enrollment — without paid advertising.",
+      desc:"Schools give you access to families before they are your customers. One partnership creates visibility, trust, and ongoing enrollment, without paid advertising.",
       programs:[["After-School Clubs","Weekly programs running inside school premises. Students enrolled per term."],["In-Class Workshops","90-minute curriculum-aligned sessions delivered to entire classes. Schools book and pay."],["PA Day Programs","Full-day programs on teacher professional activity days. High demand, easy to fill."],["Lunch and Learn Sessions","Introduction sessions that build awareness and convert students to enrolled programs."]]},
     {color:GOLD,label:"Seasonal",title:"Camps and Holiday Programs",sub:"High-demand, high-enrollment windows.",
       desc:"Summer, March Break, and PA Day camps are the highest-volume enrollment periods. Families plan ahead and they fill quickly once your school partnerships are in place.",
       programs:[["Summer Camps","Multi-week programs in July and August. The highest enrollment period of the year."],["March Break Camps","Week-long intensive programs. Families actively seek structured activities."],["Holiday Workshops","December and school-break programs. Shorter, accessible formats."],["Weekend STEM Days","Single-day events introducing new students and complementing weekly programs."]]},
     {color:PURPLE,label:"Premium",title:"Specialist Programs",sub:"Deeper engagement for motivated students.",
-      desc:"Specialist programs serve families who want more depth. Longer commitments and higher engagement — working particularly well with education-focused communities.",
+      desc:"Specialist programs serve families who want more depth. Longer commitments and higher engagement, working particularly well with education-focused communities.",
       programs:[["AI and Machine Learning","Purpose-built for older students (Grades 5-8). High interest in education-focused communities."],["App Development","Students build real mobile apps. Strong appeal to parents who value practical outcomes."],["Robotics Programs","Hands-on hardware and software. Popular for STEM-focused school programs."],["Birthday Experiences","2-hour coded birthday party experiences. Easy first contact for new families."]]},
     {color:NAVY,label:"Community",title:"Community and B2B Programs",sub:"Your network is a direct channel.",
-      desc:"Community organisations, settlement agencies, cultural centres, and libraries are natural CODEship partners — generating funded programming and referrals advertising cannot replicate.",
+      desc:"Community organisations, settlement agencies, cultural centres, and libraries are natural CODEship partners, generating funded programming and referrals advertising cannot replicate.",
       programs:[["Community Organisation Partnerships","Programs delivered through cultural centres and community hubs."],["Settlement and Newcomer Programs","Programs for recently arrived families. Settlement agencies fund and refer."],["Corporate STEM Workshops","One-day events and CSR-funded programs. Booked by companies, not families."],["Library and Recreation Centre Programs","City-funded partnerships that pay CODEship to deliver community programming."]]},
   ];
   return(
@@ -494,7 +494,7 @@ function PagePrograms(){
           WHAT YOU DELIVER. <span style={{color:GOLD}}>WHAT FAMILIES SIGN UP FOR.</span>
         </div>
         <p style={{fontSize:13,color:"rgba(255,255,255,0.65)",lineHeight:1.6,maxWidth:580}}>
-          CODEship&apos;s program library covers four streams — designed to work across different models, price points, and enrollment patterns. You activate the ones that fit your model and your market.
+          CODEship&apos;s program library covers four streams, designed to work across different models, price points, and enrollment patterns. You activate the ones that fit your model and your market.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -563,7 +563,7 @@ function PageCustom(){
                 <span style={{fontSize:10,fontWeight:800,textTransform:"uppercase",letterSpacing:1,color:WHITE}}>You DO Need</span>
               </div>
               <div style={{background:LIGHT,padding:"14px"}}>
-                {["Drive to build something meaningful in your community","Ability to build relationships with schools and families","Willingness to follow a proven operating system","Commitment to delivering quality programs for children","Entrepreneurial mindset — you already have this","Passion for children's development and future readiness"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
+                {["Drive to build something meaningful in your community","Ability to build relationships with schools and families","Willingness to follow a proven operating system","Commitment to delivering quality programs for children","Entrepreneurial mindset: you already have this","Passion for children's development and future readiness"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
               </div>
             </div>
           </div>
@@ -571,14 +571,14 @@ function PageCustom(){
             <div style={{fontSize:10,fontWeight:800,textTransform:"uppercase",letterSpacing:1.5,color:GOLD,marginBottom:10}}>The Right Team Is Already in Place</div>
             <div style={{display:"flex",gap:16}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:12,fontWeight:800,color:WHITE,textTransform:"uppercase",marginBottom:6}}>Ali — The Operator</div>
+                <div style={{fontSize:12,fontWeight:800,color:WHITE,textTransform:"uppercase",marginBottom:6}}>Ali: The Operator</div>
                 <DotItem text="Business development and school partnerships" color={TEAL}/>
                 <DotItem text="Operations, hiring, and community growth" color={TEAL}/>
                 <DotItem text="Immigration community relationships and referrals" color={TEAL}/>
               </div>
               <div style={{width:1,background:"rgba(255,255,255,0.1)"}}/>
               <div style={{flex:1}}>
-                <div style={{fontSize:12,fontWeight:800,color:WHITE,textTransform:"uppercase",marginBottom:6}}>The ECE Partner — The Educator</div>
+                <div style={{fontSize:12,fontWeight:800,color:WHITE,textTransform:"uppercase",marginBottom:6}}>The ECE Partner: The Educator</div>
                 <DotItem text="ECE qualification builds instant parent trust" color={GOLD}/>
                 <DotItem text="Program quality oversight and instructor mentorship" color={GOLD}/>
                 <DotItem text="Curriculum delivery and student experience leadership" color={GOLD}/>
@@ -593,7 +593,7 @@ function PageCustom(){
               <div style={{fontSize:10,color:"rgba(13,27,42,0.65)",marginTop:1}}>We help you build your team</div>
             </div>
             <div style={{background:LIGHT,padding:"14px"}}>
-              {["Full instructor hiring framework — job descriptions, interview guides, offer templates","Every instructor completes CODEship certification before teaching a single student","Training covers curriculum delivery, classroom management, and parent communication","The ECE expertise in your household can lead training internally as you scale","Ongoing coaching keeps your team current as new programs launch","You do not need to design any of this — it is all built for you"].map(t=><CheckItem key={t} text={t} color={GOLD}/>)}
+              {["Full instructor hiring framework: job descriptions, interview guides, offer templates","Every instructor completes CODEship certification before teaching a single student","Training covers curriculum delivery, classroom management, and parent communication","The ECE expertise in your household can lead training internally as you scale","Ongoing coaching keeps your team current as new programs launch","You do not need to design any of this: it is all built for you"].map(t=><CheckItem key={t} text={t} color={GOLD}/>)}
             </div>
           </div>
           <GoldCallout title="The bottom line:" body="CODEship's value is the system. Curriculum, training, operations, and school partnerships are all pre-built. Your job is to lead the business and serve your community."/>
@@ -607,7 +607,7 @@ function PageCustom(){
 
 // ── PAGE 10: NEXT STEPS ───────────────────────────────────────────────────────
 function PageNextSteps(){
-  const steps=[["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We answer every question — including which model fits your current business setup and timeline."],["#F4D734","#0D1B2A","Choose Your Model","Pop-Up, Shared Space, or Studio. We help you decide which entry point makes sense given your immigration business and investment range."],["#0D1B2A","#fff","Sign and Lock In Vancouver","Your territory locked. No other CODEship partner can operate in your market. Vancouver has no current CODEship presence — you would be the first."],["#5C3D8F","#fff","Complete Training and Hiring","CODEship's instructor hiring framework and certification program gets your team ready. The ECE expertise in your household accelerates this significantly."],["#2A9D8F","#fff","Launch Your First Programs","Your first school partnership or pop-up workshop runs. The CODEship team supports you at every stage — curriculum, school outreach, and marketing."]];
+  const steps=[["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We answer every question, including which model fits your current business setup and timeline."],["#F4D734","#0D1B2A","Choose Your Model","Pop-Up, Shared Space, or Studio. We help you decide which entry point makes sense given your immigration business and investment range."],["#0D1B2A","#fff","Sign and Lock In Vancouver","Your territory locked. No other CODEship partner can operate in your market. Vancouver has no current CODEship presence: you would be the first."],["#5C3D8F","#fff","Complete Training and Hiring","CODEship's instructor hiring framework and certification program gets your team ready. The ECE expertise in your household accelerates this significantly."],["#2A9D8F","#fff","Launch Your First Programs","Your first school partnership or pop-up workshop runs. The CODEship team supports you at every stage: curriculum, school outreach, and marketing."]];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <HeroDark style={{padding:"36px 42px 32px",position:"relative",overflow:"hidden"}}>
@@ -618,7 +618,7 @@ function PageNextSteps(){
         <div style={{fontSize:28,fontWeight:900,color:WHITE,textTransform:"uppercase",lineHeight:0.95,marginBottom:3}}>FROM TODAY</div>
         <div style={{fontSize:28,fontWeight:900,color:GOLD,textTransform:"uppercase",lineHeight:0.95,marginBottom:14}}>TO LAUNCH.</div>
         <p style={{fontSize:14,color:"rgba(255,255,255,0.75)",lineHeight:1.65,maxWidth:520}}>
-          Here is the clear path from this conversation to your first program running — with the CODEship team supporting you at every stage.
+          Here is the clear path from this conversation to your first program running, with the CODEship team supporting you at every stage.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -635,12 +635,12 @@ function PageNextSteps(){
           ))}
         </div>
         <div style={{width:215,flexShrink:0}}>
-          <StatTile label="Model 1 — Pop-Up / Virtual" value="$18K–$20K" sub="Start lean, no location overhead" accent={TEAL}/>
-          <StatTile label="Model 2 — Shared Space" value="$20K–$60K" sub="Branded CODEship presence" accent={GOLD}/>
-          <StatTile label="Model 3 — Studio Storefront" value="$100K–$150K" sub="Full academy, dedicated commercial space" accent={PURPLE}/>
+          <StatTile label="Model 1: Pop-Up / Virtual" value="$18K–$20K" sub="Start lean, no location overhead" accent={TEAL}/>
+          <StatTile label="Model 2: Shared Space" value="$20K–$60K" sub="Branded CODEship presence" accent={GOLD}/>
+          <StatTile label="Model 3: Studio Storefront" value="$100K–$150K" sub="Full academy, dedicated commercial space" accent={PURPLE}/>
           <div style={{background:NAVY,borderRadius:10,padding:"14px 16px",marginTop:4}}>
             <div style={{fontSize:42,fontWeight:900,color:GOLD,lineHeight:0.7,marginBottom:8}}>&ldquo;</div>
-            <p style={{fontSize:12.5,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Vancouver is Canada&apos;s most diverse city — and one of its most underserved STEM markets. The families are here. The schools are here. The opportunity is now.</p>
+            <p style={{fontSize:12.5,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Vancouver is Canada&apos;s most diverse city, and one of its most underserved STEM markets. The families are here. The schools are here. The opportunity is now.</p>
           </div>
         </div>
       </div>

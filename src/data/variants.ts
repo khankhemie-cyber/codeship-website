@@ -10,7 +10,7 @@ export type VariantId = "a" | "b";
 
 /**
  * A/B variants per LP, selected via ?v=a|b on the URL (defaults to "a").
- * Only headline/hero image/CTA label vary — everything else (facts,
+ * Only headline/hero image/CTA label vary, everything else (facts,
  * projects, FAQ) stays identical between variants.
  */
 export const VARIANTS: Record<LPSlug, Record<VariantId, Variant>> = {
@@ -41,7 +41,7 @@ export const VARIANTS: Record<LPSlug, Record<VariantId, Variant>> = {
   engineers: {
     a: { heroImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&q=80", ctaLabel: "Register Now" },
     b: {
-      headline: "Python, AI, and cybersecurity — for grades 6–8.",
+      headline: "Python, AI, and cybersecurity, for grades 6–8.",
       heroImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80",
       ctaLabel: "Reserve My Child's Spot",
     },
@@ -49,7 +49,7 @@ export const VARIANTS: Record<LPSlug, Record<VariantId, Variant>> = {
   "quebec-fr": {
     a: { heroImage: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", ctaLabel: "Inscrivez-vous maintenant" },
     b: {
-      headline: "La première expérience de codage de votre enfant — en français.",
+      headline: "La première expérience de codage de votre enfant: en français.",
       heroImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80",
       ctaLabel: "Réservez la place de mon enfant",
     },

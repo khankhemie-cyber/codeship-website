@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Kids Coding Classes in Oshawa — Saturdays at Core21 | CODEship Academy",
+  title: "Kids Coding Classes in Oshawa: Saturdays at Core21 | CODEship Academy",
   description:
     "Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa. Booking October & November semesters. CAD $129 for 8 weekly classes.",
   path: "/",
@@ -26,7 +26,7 @@ const homeFaqs = [
   {
     question: "Which semesters can I book?",
     answer:
-      "The October semester runs Oct 3 – Nov 28, 2026. The November semester runs Nov 7, 2026 – Jan 9, 2027. Each has 8 weekly classes.",
+      "The October semester runs Oct 3 to Nov 28, 2026. The November semester runs Nov 7, 2026 to Jan 9, 2027. Each has 8 weekly classes.",
   },
   {
     question: "How much does it cost?",

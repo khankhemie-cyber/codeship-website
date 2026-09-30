@@ -7,13 +7,13 @@ const COPY = {
     tagline: "Dream. Code. Achieve.",
     rights: (year: number) => `© ${year} CODEship Academy. All rights reserved.`,
     disclaimer:
-      "Provincial curriculum alignment claims support and align with — not endorsed or approved by — any ministry of education.",
+      "Provincial curriculum alignment claims support and align with, not endorsed or approved by, any ministry of education.",
   },
   fr: {
     tagline: "Rêver. Coder. Réussir.",
     rights: (year: number) => `© ${year} CODEship Academy. Tous droits réservés.`,
     disclaimer:
-      "Les mentions d'alignement au curriculum provincial appuient et s'alignent avec — sans être endossées ou approuvées par — un ministère de l'Éducation.",
+      "Les mentions d'alignement au curriculum provincial appuient et s'alignent avec, sans être endossées ou approuvées par, un ministère de l'Éducation.",
   },
 };
 

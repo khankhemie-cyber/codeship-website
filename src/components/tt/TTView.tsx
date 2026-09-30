@@ -26,7 +26,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
   const utmContent = searchParams.get("utm_content") ?? undefined;
   const utmTerm = searchParams.get("utm_term") ?? undefined;
   const variantParam = searchParams.get("v");
-  // Paid Meta Instant Form leads land here with ?lead_submitted=1 — they've
+  // Paid Meta Instant Form leads land here with ?lead_submitted=1: they've
   // already registered, so the page confirms instead of asking again.
   const leadSubmitted = searchParams.get("lead_submitted") === "1";
 
@@ -50,7 +50,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
   }, []);
 
   // Registration and payment happen directly on this program's TT Stripe
-  // Payment Link — every CTA points at it and fires register_click.
+  // Payment Link, every CTA points at it and fires register_click.
   const handleRegisterClick = () => trackRegisterClick(eventBase);
 
   const headline = getTrinidadHeadline(campaign.slug, variantParam);
@@ -100,7 +100,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               {...registerButtonProps}
               className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-all text-lg shadow-lg"
             >
-              Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
+              Register &amp; Pay: {TRINIDAD_PROGRAMME_FEE}
             </a>
           )}
           <p className="text-gray-300 text-sm mt-4">
@@ -189,7 +189,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               </div>
             </dl>
             <p className="text-gray-400 text-[11px] mt-3">
-              Times align with our online groups and are shown in Eastern Time (ET) — the same local clock time in Trinidad
+              Times align with our online groups and are shown in Eastern Time (ET): the same local clock time in Trinidad
               and Tobago during this September–October cohort.
             </p>
           </div>
@@ -209,7 +209,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
             <p className="text-[#F4D734] text-xs font-semibold mb-4">{TRINIDAD_PRICING.startDateLine}</p>
             {leadSubmitted ? (
               <p className="text-gray-300 text-sm bg-white/10 rounded-xl px-4 py-3">
-                Your registration request has already been received — no further sign-up is needed.
+                Your registration request has already been received, no further sign-up is needed.
               </p>
             ) : (
               <>
@@ -217,7 +217,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                   {...registerButtonProps}
                   className="inline-block w-full sm:w-auto bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg"
                 >
-                  {TRINIDAD_PRICING.ctaLabel} — Secure Checkout
+                  {TRINIDAD_PRICING.ctaLabel}: Secure Checkout
                 </a>
                 <p className="text-gray-400 text-[11px] mt-3">
                   You&apos;ll complete registration and payment securely. Our team then confirms class placement and next steps.
@@ -251,7 +251,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
               {...registerButtonProps}
               className="inline-block bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors text-lg"
             >
-              Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
+              Register &amp; Pay: {TRINIDAD_PROGRAMME_FEE}
             </a>
           )}
           <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mt-6">Dream. Code. Achieve.</p>
@@ -275,7 +275,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
             {...registerButtonProps}
             className="block w-full bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#E6C51E] transition-colors"
           >
-            Register &amp; Pay — {TRINIDAD_PROGRAMME_FEE}
+            Register &amp; Pay: {TRINIDAD_PROGRAMME_FEE}
           </a>
         </div>
       )}

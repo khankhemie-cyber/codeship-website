@@ -5,7 +5,7 @@ import { organizationSchema } from "@/lib/schema";
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {/* Sitewide Organization schema — every main-site page, not just home. */}
+      {/* Sitewide Organization schema, every main-site page, not just home. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}

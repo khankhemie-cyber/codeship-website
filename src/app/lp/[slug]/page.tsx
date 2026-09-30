@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: campaign.adHeadline,
     description: campaign.subhead,
     // Paid-ad landing pages are single-purpose and never meant for organic
-    // discovery — kept out of the sitemap and marked noindex here.
+    // discovery: kept out of the sitemap and marked noindex here.
     robots: { index: false, follow: false },
     alternates: { canonical: `https://www.codeshipacademy.com/lp/${campaign.slug}` },
     openGraph: {

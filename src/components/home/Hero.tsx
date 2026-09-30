@@ -12,8 +12,8 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 /**
- * Home hero: a calm, editorial split — headline on the left, classroom
- * footage in a clean frame on the right — followed by one panel that lays out
+ * Home hero: a calm, editorial split. Headline on the left, classroom
+ * footage in a clean frame on the right, followed by one panel that lays out
  * the in-person and online semesters side by side.
  */
 export default function Hero() {
