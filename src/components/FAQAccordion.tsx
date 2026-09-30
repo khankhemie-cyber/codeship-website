@@ -22,7 +22,7 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-lg font-bold text-[#001532] [&::-webkit-details-marker]:hidden">
             <span>{faq.question}</span>
             <svg
-              className="h-5 w-5 shrink-0 text-[#E5A823] transition-transform duration-200 group-open:rotate-180"
+              className="h-5 w-5 shrink-0 text-[#001532] transition-transform duration-200 group-open:rotate-180"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

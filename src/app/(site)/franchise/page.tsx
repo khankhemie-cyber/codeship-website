@@ -65,7 +65,7 @@ export default function FranchisePage() {
             building the next generation of creators, thinkers, and innovators.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="#kit" className="bg-[#E5A823] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#d4941f] transition-colors">
+            <Link href="#kit" className="bg-[#F4D734] text-[#001532] font-bold px-8 py-4 rounded-xl hover:bg-[#E6C51E] transition-colors">
               Request Franchise Kit
             </Link>
             <Link href="#selector" className="border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white hover:text-[#001532] transition-colors">
@@ -92,7 +92,7 @@ export default function FranchisePage() {
               { title: "Flexible Models", desc: "Three franchise models from mobile community delivery to dedicated studio locations and regional operations.", dot: "bg-[#138A9A]" },
               { title: "School Partnerships", desc: "Our school partnership model provides a built-in channel to your community's families.", dot: "bg-[#138A9A]" },
               { title: "No Tech Required", desc: "No coding background needed. CODEship provides all curriculum, training, and instructor support.", dot: "bg-[#6E43A8]" },
-              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success.", dot: "bg-[#E5A823]" },
+              { title: "Full System Support", desc: "Curriculum, marketing, technology, training, and ongoing coaching — we support your success.", dot: "bg-[#F4D734]" },
             ].map((w) => (
               <div key={w.title} className="bg-[#FAF8F4] rounded-2xl p-6">
                 <div className={`w-3 h-3 ${w.dot} rounded-full mb-4`} />
@@ -127,7 +127,7 @@ export default function FranchisePage() {
                 href: "/franchise/studio-model",
                 features: ["Branded dedicated studio", "Full program suite", "Birthday parties", "Community hub model", "Walk-in visibility"],
                 featured: true,
-                topBorder: "border-t-4 border-[#E5A823]",
+                topBorder: "border-t-4 border-[#F4D734]",
               },
               {
                 title: "Regional Multi-Territory",
@@ -144,10 +144,10 @@ export default function FranchisePage() {
                 className={`rounded-2xl p-6 ${model.featured ? "bg-[#001532] text-white shadow-xl scale-105" : "bg-white shadow-md"} ${model.topBorder}`}
               >
                 {model.featured && (
-                  <div className="text-[#E5A823] text-xs font-bold uppercase tracking-wide mb-2">Most Popular</div>
+                  <div className="text-[#F4D734] text-xs font-bold uppercase tracking-wide mb-2">Most Popular</div>
                 )}
                 <h3 className={`font-bold text-xl mb-1 ${model.featured ? "text-white" : "text-[#001532]"}`}>{model.title}</h3>
-                <p className={`text-2xl font-bold mb-1 ${model.featured ? "text-[#E5A823]" : "text-[#E5A823]"}`}>{model.investment}</p>
+                <p className={`text-2xl font-bold mb-1 ${model.featured ? "text-[#F4D734]" : "text-[#F4D734]"}`}>{model.investment}</p>
                 <p className={`text-xs mb-4 ${model.featured ? "text-gray-400" : "text-gray-500"}`}>{model.schedule}</p>
                 <ul className="space-y-2 mb-6">
                   {model.features.map((f) => (
@@ -161,7 +161,7 @@ export default function FranchisePage() {
                   href={model.href}
                   className={`block text-center font-bold px-4 py-3 rounded-xl transition-colors ${
                     model.featured
-                      ? "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f]"
+                      ? "bg-[#F4D734] text-[#001532] hover:bg-[#E6C51E]"
                       : "border-2 border-[#001532] text-[#001532] hover:bg-[#001532] hover:text-white"
                   }`}
                 >
@@ -243,7 +243,7 @@ export default function FranchisePage() {
               { title: "Franchisee Network", desc: "Community of fellow franchisees for peer support and sharing." },
               { title: "Curriculum Updates", desc: "Regular curriculum updates to stay current with technology trends." },
             ].map((item) => (
-              <div key={item.title} className="bg-white rounded-xl p-5 shadow-sm border-l-4 border-[#E5A823]">
+              <div key={item.title} className="bg-white rounded-xl p-5 shadow-sm border-l-4 border-[#F4D734]">
                 <h3 className="font-bold text-[#001532] mb-1 text-sm">{item.title}</h3>
                 <p className="text-gray-500 text-xs">{item.desc}</p>
               </div>

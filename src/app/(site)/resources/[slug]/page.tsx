@@ -92,7 +92,7 @@ export default function ArticlePage({ params }: Props) {
                 { name: article.title, href: `/resources/${article.slug}` },
               ]}
             />
-            <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-3">
+            <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-3">
               {article.category} · {article.readTime} min read
             </p>
             <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
@@ -143,7 +143,7 @@ export default function ArticlePage({ params }: Props) {
               <p className="text-lg text-gray-200 mb-6">October and November semesters are open for K–Grade 8.</p>
               <Link
                 href="/#book"
-                className="bg-[#E5A823] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors inline-block"
+                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors inline-block"
               >
                 Book a Semester
               </Link>

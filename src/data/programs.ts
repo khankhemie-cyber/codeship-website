@@ -34,7 +34,7 @@ export const PROGRAMS: Program[] = [
     level: "Explorers",
     gradeBand: "K–Grade 1",
     codingSpace: "Visual block coding",
-    accentColour: "#E5A823",
+    accentColour: "#F4D734",
     outcome: "Gives a computer clear instructions and builds a simple interactive app.",
     summary:
       "A playful first step into coding. Kids snap together visual blocks to make characters move, talk and react.",

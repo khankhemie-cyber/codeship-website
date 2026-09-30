@@ -105,7 +105,7 @@ export default function PrivacyPolicyPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">8. Contact Us</h2>
               <p className="text-sm">
                 If you have questions about this privacy policy or our data practices, please contact us at:{" "}
-                <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+                <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
                 </a>
               </p>

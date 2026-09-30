@@ -29,7 +29,7 @@ export default function CookieBanner() {
           We use cookies to improve your experience and, with your consent, to measure our advertising. Choose
           &ldquo;Accept all&rdquo; to enable analytics, or &ldquo;Essential only&rdquo; to keep just what the site
           needs.{" "}
-          <a href="/privacy-policy" className="underline text-[#E5A823] hover:text-[#d4941f]">
+          <a href="/privacy-policy" className="underline text-[#F4D734] hover:text-[#E6C51E]">
             Learn more
           </a>
         </p>
@@ -42,7 +42,7 @@ export default function CookieBanner() {
           </button>
           <button
             onClick={accept}
-            className="text-sm px-4 py-2 bg-[#E5A823] text-[#001532] font-semibold rounded-lg hover:bg-[#d4941f] transition-colors"
+            className="text-sm px-4 py-2 bg-[#F4D734] text-[#001532] font-semibold rounded-lg hover:bg-[#E6C51E] transition-colors"
           >
             Accept all
           </button>

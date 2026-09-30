@@ -92,7 +92,7 @@ export default function LocationsPage() {
             <Link
               key={city.slug}
               href={`/locations/${city.slug}`}
-              className="group bg-[#FAF8F4] rounded-2xl p-5 border border-gray-200 hover:border-[#E5A823] hover:shadow-md transition-all"
+              className="group bg-[#FAF8F4] rounded-2xl p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
             >
               <p className="text-xl font-bold text-[#001532] group-hover:text-[#138A9A]">{city.name}</p>
               <p className="text-base text-gray-600 mt-1">{city.province} · Online open</p>

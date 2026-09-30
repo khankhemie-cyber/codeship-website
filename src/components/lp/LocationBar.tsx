@@ -67,7 +67,7 @@ export default function LocationBar({ program, value, onChange, defaulted, lang 
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="text-[#E5A823] font-semibold hover:underline shrink-0"
+          className="text-[#0F6F7C] font-semibold hover:underline shrink-0"
         >
           {t.change}
         </button>
@@ -86,7 +86,7 @@ export default function LocationBar({ program, value, onChange, defaulted, lang 
               <label
                 key={opt.value}
                 className={`flex items-center gap-2.5 rounded-lg border-2 px-3 py-2.5 cursor-pointer text-sm transition-colors ${
-                  checked ? "border-[#E5A823] bg-[#E5A823]/10" : "border-gray-200 hover:border-gray-300"
+                  checked ? "border-[#F4D734] bg-[#F4D734]/10" : "border-gray-200 hover:border-gray-300"
                 }`}
               >
                 <input
@@ -97,7 +97,7 @@ export default function LocationBar({ program, value, onChange, defaulted, lang 
                     onChange(opt.value);
                     setExpanded(false);
                   }}
-                  className="accent-[#E5A823] w-4 h-4 shrink-0"
+                  className="accent-[#F4D734] w-4 h-4 shrink-0"
                 />
                 <span className="text-[#001532]">{opt.label}</span>
               </label>

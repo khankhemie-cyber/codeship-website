@@ -48,15 +48,15 @@ export default function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[#001532] hover:text-[#E5A823] font-semibold transition-colors duration-200 text-base relative group"
+                className="text-[#001532] hover:text-[#0F6F7C] font-semibold transition-colors duration-200 text-base relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#E5A823] transition-all duration-200 group-hover:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#F4D734] transition-all duration-200 group-hover:w-full" />
               </Link>
             ))}
             <Link
               href="/#book"
-              className="bg-[#E5A823] text-[#001532] font-bold px-5 py-2.5 rounded-lg hover:bg-[#d4941f] transition-all duration-200 text-base shadow-sm hover:shadow-md"
+              className="bg-[#F4D734] text-[#001532] font-bold px-5 py-2.5 rounded-lg hover:bg-[#E6C51E] transition-all duration-200 text-base shadow-sm hover:shadow-md"
             >
               Book Now
             </Link>
@@ -83,7 +83,7 @@ export default function Navigation() {
             <Link
               key={link.href}
               href={link.href}
-              className="block text-[#001532] hover:text-[#E5A823] font-semibold text-lg py-3 border-b border-gray-100 transition-colors"
+              className="block text-[#001532] hover:text-[#0F6F7C] font-semibold text-lg py-3 border-b border-gray-100 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {link.label}
@@ -91,7 +91,7 @@ export default function Navigation() {
           ))}
           <Link
             href="/#book"
-            className="block bg-[#E5A823] text-[#001532] font-bold text-lg px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#d4941f] transition-colors"
+            className="block bg-[#F4D734] text-[#001532] font-bold text-lg px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#E6C51E] transition-colors"
             onClick={() => setIsOpen(false)}
           >
             Book Now

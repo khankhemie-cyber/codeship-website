@@ -56,7 +56,7 @@
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #E5A823, #ff9f43);
+    background: linear-gradient(135deg, #F4D734, #ff9f43);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -67,7 +67,7 @@
   }
 
   .shimmer {
-    background: linear-gradient(90deg, transparent 0%, rgba(229,168,35,0.3) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(244,215,52,0.3) 50%, transparent 100%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
   }
@@ -206,17 +206,17 @@
 }
 
 .article-content a {
-  color: #E5A823;
+  color: #0F6F7C;
   text-decoration: underline;
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-[#E5A823] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#d4941f] transition-colors duration-200 inline-block;
+    @apply bg-[#F4D734] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#E6C51E] transition-colors duration-200 inline-block;
   }
 
   .btn-secondary {
-    @apply border-2 border-[#E5A823] text-[#E5A823] font-semibold px-6 py-3 rounded-lg hover:bg-[#E5A823] hover:text-[#001532] transition-colors duration-200 inline-block;
+    @apply border-2 border-[#F4D734] text-[#F4D734] font-semibold px-6 py-3 rounded-lg hover:bg-[#F4D734] hover:text-[#001532] transition-colors duration-200 inline-block;
   }
 
   .btn-outline-white {

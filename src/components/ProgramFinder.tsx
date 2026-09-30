@@ -25,7 +25,7 @@ export default function ProgramFinder() {
   };
 
   const optionClass =
-    "p-5 text-left text-lg font-semibold text-[#001532] border-2 border-gray-200 rounded-xl hover:border-[#E5A823] hover:bg-[#FAF8F4] transition-colors";
+    "p-5 text-left text-lg font-semibold text-[#001532] border-2 border-gray-200 rounded-xl hover:border-[#F4D734] hover:bg-[#FAF8F4] transition-colors";
 
   if (grade && goal) {
     const program = PROGRAMS.find((p) => p.slug === grade.slug)!;
@@ -41,7 +41,7 @@ export default function ProgramFinder() {
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={`/register/${program.slug}`}
-                className="bg-[#E5A823] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors"
+                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors"
               >
                 Book {program.level}
               </Link>
@@ -60,7 +60,7 @@ export default function ProgramFinder() {
             <div className="mt-8">
               <Link
                 href={goal.href}
-                className="inline-block bg-[#E5A823] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#d4941f] transition-colors"
+                className="inline-block bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors"
               >
                 See Details
               </Link>

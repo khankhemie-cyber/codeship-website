@@ -16,7 +16,7 @@ export default function NowBookingCard({ className = "" }: { className?: string 
 
       <div className="grid grid-cols-2 gap-3 mb-6">
         {SEMESTERS.map((sem) => (
-          <div key={sem.key} className="rounded-2xl border-2 border-[#E5A823] bg-[#E5A823]/10 p-4">
+          <div key={sem.key} className="rounded-2xl border-2 border-[#F4D734] bg-[#F4D734]/10 p-4">
             <p className="font-extrabold text-[#001532] text-lg leading-tight">{sem.label}</p>
             <p className="text-[#001532] text-sm sm:text-base mt-1">{sem.dates}</p>
           </div>

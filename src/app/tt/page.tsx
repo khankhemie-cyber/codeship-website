@@ -40,7 +40,7 @@ export default function TrinidadProgramsIndex() {
       {/* Hero */}
       <section className="bg-[#001532] py-14 sm:py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[#E5A823] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
+          <p className="text-[#F4D734] font-bold text-xs uppercase tracking-widest mb-3">Dream. Code. Achieve.</p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
             Online Coding &amp; STEM Programs for Kids in Trinidad and Tobago
           </h1>
@@ -49,7 +49,7 @@ export default function TrinidadProgramsIndex() {
             it. Choose the program that matches your child&apos;s grade to see the schedule and register.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
-            <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
+            <span className="inline-block bg-[#F4D734] text-[#001532] font-bold text-sm px-4 py-1.5 rounded-full">
               {TRINIDAD_PROGRAMME_FEE} · Four-week programme
             </span>
             <span className="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full">
@@ -72,7 +72,7 @@ export default function TrinidadProgramsIndex() {
             <Link
               key={c.slug}
               href={`/tt/${c.slug}`}
-              className="group block bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-[#E5A823] hover:shadow-md transition-all"
+              className="group block bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-[#F4D734] hover:shadow-md transition-all"
             >
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-lg font-bold text-[#001532]">{c.label}</span>
@@ -81,7 +81,7 @@ export default function TrinidadProgramsIndex() {
               <p className="text-gray-500 text-sm mb-3 leading-relaxed">{c.subhead}</p>
               <p className="text-[#001532] text-xs font-semibold">{c.days} · {c.time}</p>
               <p className="text-gray-500 text-xs mb-3">{c.dates}</p>
-              <span className="inline-block bg-[#E5A823] text-[#001532] font-bold text-sm px-5 py-2 rounded-lg group-hover:bg-[#d4941f] transition-colors">
+              <span className="inline-block bg-[#F4D734] text-[#001532] font-bold text-sm px-5 py-2 rounded-lg group-hover:bg-[#E6C51E] transition-colors">
                 View schedule &amp; register &rarr;
               </span>
             </Link>

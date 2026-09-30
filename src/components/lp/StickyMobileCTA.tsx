@@ -13,7 +13,7 @@ export default function StickyMobileCTA({ href, label, onClick }: StickyMobileCT
           target="_blank"
           rel="noopener noreferrer"
           onClick={onClick}
-          className="block w-full bg-[#E5A823] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#d4941f] transition-colors"
+          className="block w-full bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-center hover:bg-[#E6C51E] transition-colors"
         >
           {label}
         </a>

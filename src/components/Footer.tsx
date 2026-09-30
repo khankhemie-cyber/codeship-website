@@ -52,7 +52,7 @@ export default function Footer() {
                 className="h-20 w-auto object-contain"
               />
             </Link>
-            <p className="text-[#E5A823] font-bold tracking-widest text-sm mb-4">DREAM. CODE. ACHIEVE.</p>
+            <p className="text-[#F4D734] font-bold tracking-widest text-sm mb-4">DREAM. CODE. ACHIEVE.</p>
             <address className="not-italic text-base text-gray-300 leading-relaxed">
               {IN_PERSON_VENUE.building}
               <br />
@@ -62,7 +62,7 @@ export default function Footer() {
             </address>
             <a
               href="mailto:admin@codeshipacademy.com"
-              className="block mt-3 text-base text-gray-300 hover:text-[#E5A823] transition-colors"
+              className="block mt-3 text-base text-gray-300 hover:text-[#F4D734] transition-colors"
             >
               admin@codeshipacademy.com
             </a>
@@ -70,7 +70,7 @@ export default function Footer() {
               href="https://www.instagram.com/codeshipacademy"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block mt-2 text-base text-gray-300 hover:text-[#E5A823] transition-colors"
+              className="inline-block mt-2 text-base text-gray-300 hover:text-[#F4D734] transition-colors"
             >
               Instagram @codeshipacademy
             </a>
@@ -82,7 +82,7 @@ export default function Footer() {
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-base text-gray-300 hover:text-[#E5A823] transition-colors">
+                    <Link href={link.href} className="text-base text-gray-300 hover:text-[#F4D734] transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -95,7 +95,7 @@ export default function Footer() {
         <div className="border-t border-white/15 mt-12 pt-8 text-center">
           <p className="text-sm text-gray-400">
             &copy; {new Date().getFullYear()} CODEship Academy · Oshawa, Ontario ·{" "}
-            <Link href="/politiques/remboursement" className="hover:text-[#E5A823]">
+            <Link href="/politiques/remboursement" className="hover:text-[#F4D734]">
               Politique de remboursement
             </Link>
           </p>

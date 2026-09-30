@@ -104,7 +104,7 @@ export default async function HomePage() {
       {/* Booking callout */}
       <Link
         href="#book"
-        className="block bg-[#E5A823] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#d4941f] transition-colors"
+        className="block bg-[#F4D734] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#E6C51E] transition-colors"
       >
         Now booking October &amp; November semesters
         <span className="hidden sm:inline">
@@ -134,11 +134,11 @@ export default async function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-center">
             <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
-              <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-4">
+              <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-4">
                 Coding, AI &amp; STEM · K–Grade 8
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
-                Saturday coding classes in <span className="text-[#E5A823]">Oshawa</span>
+                Saturday coding classes in <span className="text-[#F4D734]">Oshawa</span>
               </h1>
 
               <a
@@ -147,7 +147,7 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-4 bg-[#001532]/70 backdrop-blur-sm border border-white/20 rounded-2xl p-4 pr-6 hover:bg-[#001532]/85 transition-colors"
               >
-                <span className="shrink-0 w-11 h-11 rounded-full bg-[#E5A823] flex items-center justify-center">
+                <span className="shrink-0 w-11 h-11 rounded-full bg-[#F4D734] flex items-center justify-center">
                   <svg className="w-5 h-5 text-[#001532]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
                   </svg>
@@ -158,7 +158,7 @@ export default async function HomePage() {
                   </span>
                   <span className="block text-gray-200 text-base">
                     {IN_PERSON_VENUE.building} building ·{" "}
-                    <span className="text-[#E5A823] font-semibold group-hover:underline">Directions →</span>
+                    <span className="text-[#F4D734] font-semibold group-hover:underline">Directions →</span>
                   </span>
                 </span>
               </a>
@@ -200,7 +200,7 @@ export default async function HomePage() {
             <Link
               key={item.label}
               href={item.href}
-              className="bg-white border border-gray-200 rounded-xl px-5 py-4 text-lg font-bold text-[#001532] hover:border-[#E5A823] hover:shadow-md transition-all"
+              className="bg-white border border-gray-200 rounded-xl px-5 py-4 text-lg font-bold text-[#001532] hover:border-[#F4D734] hover:shadow-md transition-all"
             >
               {item.label} →
             </Link>
@@ -233,7 +233,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {reasons.map((r, i) => (
             <div key={r.title} className="rounded-2xl bg-white/5 border border-white/10 p-6">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E5A823] text-[#001532] font-extrabold">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F4D734] text-[#001532] font-extrabold">
                 {i + 1}
               </span>
               <h3 className="text-xl font-bold text-white mt-4">{r.title}</h3>

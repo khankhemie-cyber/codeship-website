@@ -29,7 +29,7 @@ export function PageHero({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         {crumbs && <Breadcrumbs className="mb-6" items={crumbs} />}
         {eyebrow && (
-          <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-3">{eyebrow}</p>
+          <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-3">{eyebrow}</p>
         )}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight max-w-3xl">{title}</h1>
         {lead && <p className="text-gray-200 text-lg sm:text-xl mt-5 max-w-2xl leading-relaxed">{lead}</p>}
@@ -79,7 +79,9 @@ export function SectionHeader({
 }) {
   return (
     <div className={`mb-10 ${center ? "text-center mx-auto" : ""} max-w-2xl`}>
-      {eyebrow && <p className="text-[#E5A823] font-bold text-sm uppercase tracking-widest mb-3">{eyebrow}</p>}
+      {eyebrow && (
+        <p className={`font-bold text-sm uppercase tracking-widest mb-3 ${dark ? "text-[#F4D734]" : "text-[#0F6F7C]"}`}>{eyebrow}</p>
+      )}
       <h2 className={`text-3xl sm:text-4xl font-extrabold leading-tight ${dark ? "text-white" : "text-[#001532]"}`}>
         {title}
       </h2>
@@ -98,7 +100,7 @@ export function ButtonLink({
   variant?: "primary" | "outline" | "outlineDark";
 }) {
   const styles = {
-    primary: "bg-[#E5A823] text-[#001532] hover:bg-[#d4941f] shadow-lg",
+    primary: "bg-[#F4D734] text-[#001532] hover:bg-[#E6C51E] shadow-lg",
     outline: "border-2 border-white/70 text-white hover:bg-white hover:text-[#001532]",
     outlineDark: "border-2 border-[#001532] text-[#001532] hover:bg-[#001532] hover:text-white",
   }[variant];

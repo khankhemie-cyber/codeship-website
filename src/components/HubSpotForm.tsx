@@ -55,7 +55,7 @@ export default function HubSpotForm({
   if (submitted) {
     return (
       <div className={`text-center py-10 px-6 ${className}`}>
-        <div className="w-16 h-16 bg-[#E5A823] rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg">
+        <div className="w-16 h-16 bg-[#F4D734] rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg">
           <svg className="w-8 h-8 text-[#001532]" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -72,7 +72,7 @@ export default function HubSpotForm({
         )}
         <p className="text-base text-gray-500 mt-6">
           Questions? Email us at{" "}
-          <a href="mailto:admin@codeshipacademy.com" className="text-[#E5A823] hover:underline">
+          <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
             admin@codeshipacademy.com
           </a>
         </p>

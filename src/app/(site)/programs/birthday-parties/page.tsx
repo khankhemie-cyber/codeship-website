@@ -48,7 +48,7 @@ export default function BirthdayPartiesPage() {
             <ol className="space-y-6">
               {steps.map((s, i) => (
                 <li key={s.title} className="flex gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#E5A823] text-lg font-extrabold text-[#001532]">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F4D734] text-lg font-extrabold text-[#001532]">
                     {i + 1}
                   </span>
                   <div>

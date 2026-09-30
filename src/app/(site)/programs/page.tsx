@@ -81,8 +81,8 @@ export default function ProgramsPage() {
         <SectionHeader center title="How each level works" />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {pathFacts.map((f) => (
-            <div key={f.label} className="rounded-2xl bg-[#FAF8F4] p-8 text-center">
-              <p className="text-5xl font-extrabold text-[#E5A823]">{f.value}</p>
+            <div key={f.label} className="rounded-2xl bg-[#F4D734] p-8 text-center">
+              <p className="text-5xl font-extrabold text-[#001532]">{f.value}</p>
               <p className="text-lg font-semibold text-[#001532] mt-2">{f.label}</p>
             </div>
           ))}

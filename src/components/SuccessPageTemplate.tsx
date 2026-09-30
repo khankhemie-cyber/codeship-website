@@ -72,7 +72,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <p className="text-[#F5C518] font-bold text-sm uppercase tracking-widest mb-2">Registration confirmed</p>
+          <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-2">Registration confirmed</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3">You&apos;re registered!</h1>
           <p className="text-gray-300 text-xl">
             Welcome to <span className="font-semibold text-white">{config.label}</span> at CODEship Academy.
@@ -132,7 +132,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               {/* Online */}
               <div className="rounded-xl border border-gray-100 bg-[#FAF8F4] p-5">
                 <div className="mb-3 flex items-center gap-2">
-                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F5C518]" />
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F4D734]" />
                   <h3 className="font-bold text-[#0D1B2A]">Online — anywhere</h3>
                 </div>
                 <dl className="space-y-2 text-sm">
