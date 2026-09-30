@@ -36,6 +36,34 @@ export function saturdayTime(slug: Program["slug"]) {
   return CLASS_SCHEDULE[slug].inperson.time.replace(" ET", "");
 }
 
+/** "Weekly, Oct 6 – Dec 1, 2026" -> "Oct 6" */
+function firstDate(range: string) {
+  return rangeOnly(range).split("–")[0].trim().replace(/,?\s*20\d\d$/, "");
+}
+
+/** Every distinct first-class date for a format and semester, in date order, e.g. "Oct 1 or Oct 6". */
+export function startDates(format: "inperson" | "online", sem: OpenStart) {
+  const dates = Array.from(new Set(PROGRAMS.map((p) => firstDate(CLASS_SCHEDULE[p.slug][format].starts[sem]))));
+  dates.sort((a, b) => Date.parse(`${a} 2026`) - Date.parse(`${b} 2026`));
+  return dates.join(" or ");
+}
+
+/** Online class days with the levels that meet on each, in run order. */
+export const ONLINE_DAYS = PROGRAMS.reduce<{ days: string; programs: Program[] }[]>((acc, p) => {
+  const days = CLASS_SCHEDULE[p.slug].online.days;
+  const row = acc.find((r) => r.days === days);
+  if (row) row.programs.push(p);
+  else acc.push({ days, programs: [p] });
+  return acc;
+}, []);
+
+/** Combined grade span for a group of levels, e.g. ["K–Grade 1", "Grades 2–3"] -> "K–Grade 3". */
+export function gradeSpan(programs: Program[]) {
+  const start = programs[0].gradeBand.replace(/^Grades?\s*/, "").split("–")[0];
+  const end = programs[programs.length - 1].gradeBand.split("–").pop()!.replace(/^Grade\s*/, "");
+  return start === "K" ? `K–Grade ${end}` : `Grades ${start}–${end}`;
+}
+
 export const LEVEL_ACCENT: Record<Program["slug"], string> = {
   explorers: "#F4D734",
   builders: "#138A9A",

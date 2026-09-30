@@ -31,7 +31,7 @@ export function PageHero({
         {eyebrow && (
           <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-3">{eyebrow}</p>
         )}
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight max-w-3xl">{title}</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight max-w-3xl">{title}</h1>
         {lead && <p className="text-gray-200 text-lg sm:text-xl mt-5 max-w-2xl leading-relaxed">{lead}</p>}
         {children && <div className="mt-8">{children}</div>}
       </div>
@@ -82,7 +82,7 @@ export function SectionHeader({
       {eyebrow && (
         <p className={`font-bold text-sm uppercase tracking-widest mb-3 ${dark ? "text-[#F4D734]" : "text-[#0F6F7C]"}`}>{eyebrow}</p>
       )}
-      <h2 className={`text-3xl sm:text-4xl font-extrabold leading-tight ${dark ? "text-white" : "text-[#001532]"}`}>
+      <h2 className={`font-display text-3xl sm:text-4xl font-extrabold leading-tight tracking-tight ${dark ? "text-white" : "text-[#001532]"}`}>
         {title}
       </h2>
       {lead && <p className={`text-lg mt-4 leading-relaxed ${dark ? "text-gray-300" : "text-gray-600"}`}>{lead}</p>}

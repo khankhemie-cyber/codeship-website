@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
@@ -7,6 +8,16 @@ import CookieBanner from "@/components/CookieBanner";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// Geometric display face for headings; matches the bold CODEship wordmark in the logo.
+// Self-hosted (Montserrat, SIL Open Font License, Latin subset) so builds never
+// depend on reaching Google Fonts.
+const montserrat = localFont({
+  src: "./fonts/MontserratLatin.woff2",
+  weight: "700 800",
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -68,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <head>
         {/* Google tag (gtag.js) — rendered server-side into the HTML so it is
             present on first load and detectable by Tag Assistant / GTM. Google

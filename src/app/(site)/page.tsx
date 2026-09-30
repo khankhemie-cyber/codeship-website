@@ -4,17 +4,11 @@ import Link from "next/link";
 import FAQAccordion from "@/components/FAQAccordion";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
 import GradeCards from "@/components/booking/GradeCards";
-import NowBookingCard from "@/components/booking/NowBookingCard";
+import Hero from "@/components/home/Hero";
 import { Section, SectionHeader, BookingBand, ButtonLink } from "@/components/ui/Page";
 import { websiteSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { getVisitorGeo } from "@/lib/geo";
-import { IN_PERSON_VENUE } from "@/data/locations";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
-
-// Reading Cloudflare geo headers for the city callout opts this route into
-// dynamic rendering; next-on-pages requires an explicit edge runtime for that.
-export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Classes in Oshawa — Saturdays at Core21 | CODEship Academy",
@@ -24,11 +18,6 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const homeFaqs = [
-  {
-    question: "Where are the classes?",
-    answer:
-      "Classes are at Core21, 21 Simcoe St South, Oshawa. Families come from across Durham Region, including Whitby, Courtice, Bowmanville and Clarington.",
-  },
   {
     question: "What are the Saturday class times?",
     answer:
@@ -87,9 +76,7 @@ const reasons = [
   { title: "A clear path", desc: "Four levels take your child from Kindergarten to Grade 8." },
 ];
 
-export default async function HomePage() {
-  const { city } = await getVisitorGeo();
-
+export default function HomePage() {
   return (
     <>
       <script
@@ -106,80 +93,10 @@ export default async function HomePage() {
         href="#book"
         className="block bg-[#F4D734] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#E6C51E] transition-colors"
       >
-        Now booking October &amp; November semesters
-        <span className="hidden sm:inline">
-          {city && city !== "Oshawa" ? ` · Online classes open in ${city}` : ` · Saturdays at ${IN_PERSON_VENUE.building}, Oshawa`}
-        </span>{" "}
-        →
+        Now booking October &amp; November semesters · In person &amp; online →
       </Link>
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#001532]">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          aria-hidden="true"
-        >
-          <source
-            src="https://videos.pexels.com/video-files/7868164/7868164-hd_1920_1080_25fps.mp4"
-            type="video/mp4"
-          />
-        </video>
-        {/* Darken only behind the words so the video stays visible */}
-        <div className="absolute inset-0 bg-[#001532]/65 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#001532]/90 lg:via-[#001532]/45 lg:to-transparent" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-center">
-            <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
-              <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-4">
-                Coding, AI &amp; STEM · K–Grade 8
-              </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
-                Saturday coding classes in <span className="text-[#F4D734]">Oshawa</span>
-              </h1>
-
-              <a
-                href={IN_PERSON_VENUE.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-4 bg-[#001532]/70 backdrop-blur-sm border border-white/20 rounded-2xl p-4 pr-6 hover:bg-[#001532]/85 transition-colors"
-              >
-                <span className="shrink-0 w-11 h-11 rounded-full bg-[#F4D734] flex items-center justify-center">
-                  <svg className="w-5 h-5 text-[#001532]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
-                  </svg>
-                </span>
-                <span>
-                  <span className="block text-white text-lg font-bold">
-                    {IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city}
-                  </span>
-                  <span className="block text-gray-200 text-base">
-                    {IN_PERSON_VENUE.building} building ·{" "}
-                    <span className="text-[#F4D734] font-semibold group-hover:underline">Directions →</span>
-                  </span>
-                </span>
-              </a>
-            </div>
-
-            <NowBookingCard className="lg:col-start-2 lg:row-start-1 lg:row-span-2" />
-
-            <div className="lg:col-start-1 lg:row-start-2 lg:self-start">
-              <p className="text-lg sm:text-xl text-white mb-6 leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">
-                Kids build real games, websites and AI projects. No experience needed.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <ButtonLink href="#book">Book a Semester</ButtonLink>
-                <ButtonLink href="/program-finder" variant="outline">
-                  Which level fits?
-                </ButtonLink>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* ── Book by grade ── */}
       <Section id="book">
@@ -263,7 +180,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <BookingBand href="#book" />
+      <BookingBand href="#book" detail="October and November semesters are open, in person and online." />
     </>
   );
 }
