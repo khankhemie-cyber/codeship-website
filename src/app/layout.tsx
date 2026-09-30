@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
@@ -11,9 +12,11 @@ const inter = Inter({
 });
 
 // Geometric display face for headings; matches the bold CODEship wordmark in the logo.
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["700", "800"],
+// Self-hosted (Montserrat, SIL Open Font License, Latin subset) so builds never
+// depend on reaching Google Fonts.
+const montserrat = localFont({
+  src: "./fonts/MontserratLatin.woff2",
+  weight: "700 800",
   variable: "--font-display",
   display: "swap",
 });
