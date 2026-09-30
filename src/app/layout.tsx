@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Fredoka } from "next/font/google";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
@@ -7,6 +7,14 @@ import CookieBanner from "@/components/CookieBanner";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// Friendly rounded display face for headlines, echoing the playful side of the brand.
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -68,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${fredoka.variable}`}>
       <head>
         {/* Google tag (gtag.js) — rendered server-side into the HTML so it is
             present on first load and detectable by Tag Assistant / GTM. Google
