@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fredoka } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
@@ -10,10 +10,10 @@ const inter = Inter({
   display: "swap",
 });
 
-// Friendly rounded display face for headlines, echoing the playful side of the brand.
-const fredoka = Fredoka({
+// Geometric display face for headings; matches the bold CODEship wordmark in the logo.
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["700", "800"],
   variable: "--font-display",
   display: "swap",
 });
@@ -76,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fredoka.variable}`}>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <head>
         {/* Google tag (gtag.js) — rendered server-side into the HTML so it is
             present on first load and detectable by Tag Assistant / GTM. Google

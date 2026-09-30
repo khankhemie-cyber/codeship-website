@@ -8,13 +8,7 @@ import Hero from "@/components/home/Hero";
 import { Section, SectionHeader, BookingBand, ButtonLink } from "@/components/ui/Page";
 import { websiteSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { getVisitorGeo } from "@/lib/geo";
-import { IN_PERSON_VENUE } from "@/data/locations";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
-
-// Reading Cloudflare geo headers for the city callout opts this route into
-// dynamic rendering; next-on-pages requires an explicit edge runtime for that.
-export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Classes in Oshawa — Saturdays at Core21 | CODEship Academy",
@@ -24,11 +18,6 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const homeFaqs = [
-  {
-    question: "Where are the classes?",
-    answer:
-      "Classes are at Core21, 21 Simcoe St South, Oshawa. Families come from across Durham Region, including Whitby, Courtice, Bowmanville and Clarington.",
-  },
   {
     question: "What are the Saturday class times?",
     answer:
@@ -87,9 +76,7 @@ const reasons = [
   { title: "A clear path", desc: "Four levels take your child from Kindergarten to Grade 8." },
 ];
 
-export default async function HomePage() {
-  const { city } = await getVisitorGeo();
-
+export default function HomePage() {
   return (
     <>
       <script
@@ -106,11 +93,7 @@ export default async function HomePage() {
         href="#book"
         className="block bg-[#F4D734] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#E6C51E] transition-colors"
       >
-        Now booking October &amp; November semesters
-        <span className="hidden sm:inline">
-          {city && city !== "Oshawa" ? ` · Online classes open in ${city}` : ` · Saturdays at ${IN_PERSON_VENUE.building}, Oshawa`}
-        </span>{" "}
-        →
+        Now booking October &amp; November semesters · In person &amp; online →
       </Link>
 
       <Hero />
@@ -197,7 +180,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <BookingBand href="#book" />
+      <BookingBand href="#book" detail="October and November semesters are open, in person and online." />
     </>
   );
 }
