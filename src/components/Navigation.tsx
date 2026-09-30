@@ -29,15 +29,15 @@ export default function Navigation() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-[76px] lg:h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center" aria-label="CODEship Academy home">
             <Image
-              src="/logo-nav.png"
-              alt="CODEship Academy"
-              width={120}
-              height={120}
-              className="h-12 w-auto object-contain"
+              src="/logo-header.png"
+              alt="CODEship Academy — Dream. Code. Achieve."
+              width={742}
+              height={302}
+              className="h-14 lg:h-20 w-auto object-contain"
               priority
             />
           </Link>

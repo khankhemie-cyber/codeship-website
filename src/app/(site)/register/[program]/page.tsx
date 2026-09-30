@@ -112,7 +112,7 @@ export default function ProgramRegisterPage({ params }: Props) {
           </div>
 
           <aside className="lg:col-span-1">
-            <div className="lg:sticky lg:top-24 bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+            <div className="lg:sticky lg:top-28 bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold text-[#001532]">CAD ${c.priceCad}</span>
                 <span className="text-base text-gray-600">/ semester</span>

@@ -11,7 +11,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
       />
       <Navigation />
-      <main className="pt-16">{children}</main>
+      <main className="pt-[76px] lg:pt-24">{children}</main>
       <Footer />
     </>
   );
