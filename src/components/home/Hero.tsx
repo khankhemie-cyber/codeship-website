@@ -36,7 +36,7 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
               <Link
                 href="#semesters"
-                className="inline-flex items-center rounded-lg bg-[#001532] px-8 py-4 text-lg font-semibold text-white hover:bg-[#0d2547] transition-colors"
+                className="inline-flex items-center bg-[#001532] px-8 py-4 text-lg font-semibold text-white hover:bg-[#0d2547] transition-colors"
               >
                 See Semesters
               </Link>
@@ -51,7 +51,7 @@ export default function Hero() {
 
           {/* Footage */}
           <div className="lg:col-span-7">
-            <div className="relative aspect-[4/3] lg:aspect-[5/4] rounded-2xl overflow-hidden bg-[#001532] shadow-[0_30px_60px_-20px_rgba(0,21,50,0.35)]">
+            <div className="relative aspect-[4/3] lg:aspect-[5/4] overflow-hidden bg-[#001532] shadow-[0_30px_60px_-20px_rgba(0,21,50,0.35)]">
               <video
                 autoPlay
                 muted
@@ -73,7 +73,7 @@ export default function Hero() {
         {/* Semesters */}
         <div
           id="semesters"
-          className="scroll-mt-28 mt-14 lg:mt-20 bg-white rounded-2xl shadow-[0_20px_50px_-25px_rgba(0,21,50,0.25)] border-t-4 border-[#F4D734]"
+          className="scroll-mt-28 mt-14 lg:mt-20 bg-white shadow-[0_20px_50px_-25px_rgba(0,21,50,0.25)] border-t-4 border-[#F4D734]"
         >
           <div className="px-6 sm:px-10 pt-8 pb-2 flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#001532]">
@@ -99,7 +99,7 @@ export default function Hero() {
               </dl>
               <Link
                 href="#book"
-                className="mt-6 inline-flex items-center rounded-lg bg-[#F4D734] px-6 py-3 text-base font-semibold text-[#001532] hover:bg-[#E6C51E] transition-colors"
+                className="mt-6 inline-flex items-center bg-[#F4D734] px-6 py-3 text-base font-semibold text-[#001532] hover:bg-[#E6C51E] transition-colors"
               >
                 Book In Person
               </Link>
@@ -119,7 +119,7 @@ export default function Hero() {
               </dl>
               <Link
                 href="/register"
-                className="mt-6 inline-flex items-center rounded-lg border-2 border-[#001532] px-6 py-2.5 text-base font-semibold text-[#001532] hover:bg-[#001532] hover:text-white transition-colors"
+                className="mt-6 inline-flex items-center border-2 border-[#001532] px-6 py-2.5 text-base font-semibold text-[#001532] hover:bg-[#001532] hover:text-white transition-colors"
               >
                 Book Online
               </Link>

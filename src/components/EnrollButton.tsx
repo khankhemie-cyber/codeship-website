@@ -19,7 +19,7 @@ export function EnrollButton({ program, label = "Register Now", className = "", 
       href={config.url}
       onClick={onClick}
       className={
-        "inline-flex w-full items-center justify-center rounded-xl bg-[#F4D734] px-7 py-4 text-center " +
+        "inline-flex w-full items-center justify-center bg-[#F4D734] px-7 py-4 text-center " +
         "font-bold text-[#001532] transition-colors hover:bg-[#E6C51E] " +
         className
       }

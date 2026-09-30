@@ -27,7 +27,7 @@ export default function TestimonialMarquee() {
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001532] text-center mb-12">What parents say</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t) => (
-            <figure key={t.name} className="bg-[#FAF8F4] rounded-2xl p-7 flex flex-col">
+            <figure key={t.name} className="bg-[#FAF8F4] p-7 flex flex-col">
               <div className="flex gap-1 mb-4" aria-label="5 out of 5 stars">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-[#F4D734]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">

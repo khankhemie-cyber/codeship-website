@@ -71,7 +71,7 @@ export default function ProgramRegisterPage({ params }: Props) {
       <PageHero crumbs={crumbs} eyebrow={ageLabel(program, false)} title={`Book ${c.label}`} lead={c.summary}>
         <div className="flex flex-wrap gap-3">
           {[c.techEn, `CAD $${c.priceCad} / semester`, SEMESTER_SHAPE_LABEL].map((chip) => (
-            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2 rounded-full">
+            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2">
               {chip}
             </span>
           ))}
@@ -101,7 +101,7 @@ export default function ProgramRegisterPage({ params }: Props) {
                   <Link
                     key={level}
                     href={`/register/${level}`}
-                    className="block bg-white rounded-xl p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
+                    className="block bg-white p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
                   >
                     <span className="block text-lg font-bold text-[#001532]">{PROGRAM_LINKS[level].label}</span>
                     <span className="block text-base text-gray-600 mt-1">{ageLabel(level, false)}</span>
@@ -112,7 +112,7 @@ export default function ProgramRegisterPage({ params }: Props) {
           </div>
 
           <aside className="lg:col-span-1">
-            <div className="lg:sticky lg:top-28 bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+            <div className="lg:sticky lg:top-28 bg-white shadow-md border border-gray-100 p-6 sm:p-8">
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold text-[#001532]">CAD ${c.priceCad}</span>
                 <span className="text-base text-gray-600">/ semester</span>

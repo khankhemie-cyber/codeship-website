@@ -38,7 +38,7 @@ export default function PolitiqueRemboursementPage() {
 
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-sm p-8 space-y-8 text-gray-700 text-sm">
+          <div className="bg-white shadow-sm p-8 space-y-8 text-gray-700 text-sm">
             <div>
               <h2 className="text-xl font-bold text-[#001532] mb-3">1. Inscription et paiement</h2>
               <p>

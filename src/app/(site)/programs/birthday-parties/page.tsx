@@ -59,7 +59,7 @@ export default function BirthdayPartiesPage() {
               ))}
             </ol>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm p-8">
+          <div className="bg-white shadow-sm p-8">
             <h2 className="text-2xl font-extrabold text-[#001532] mb-6">What&apos;s included</h2>
             <CheckList items={included} />
           </div>

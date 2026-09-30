@@ -117,7 +117,7 @@ export default function HomePage() {
             <Link
               key={item.label}
               href={item.href}
-              className="bg-white border border-gray-200 rounded-xl px-5 py-4 text-lg font-bold text-[#001532] hover:border-[#F4D734] hover:shadow-md transition-all"
+              className="bg-white border border-gray-200 px-5 py-4 text-lg font-bold text-[#001532] hover:border-[#F4D734] hover:shadow-md transition-all"
             >
               {item.label} →
             </Link>
@@ -130,7 +130,7 @@ export default function HomePage() {
         <SectionHeader center eyebrow="Every Saturday" title="How a class works" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((s, i) => (
-            <div key={s.label} className="rounded-2xl overflow-hidden bg-[#FAF8F4]">
+            <div key={s.label} className=" overflow-hidden bg-[#FAF8F4]">
               <div className="relative h-52">
                 <Image src={s.image} alt={s.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
               </div>
@@ -149,7 +149,7 @@ export default function HomePage() {
         <SectionHeader center dark eyebrow="Why CODEship" title="Built for kids. Clear for parents." />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {reasons.map((r, i) => (
-            <div key={r.title} className="rounded-2xl bg-white/5 border border-white/10 p-6">
+            <div key={r.title} className=" bg-white/5 border border-white/10 p-6">
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F4D734] text-[#001532] font-extrabold">
                 {i + 1}
               </span>

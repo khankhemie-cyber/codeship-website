@@ -41,7 +41,7 @@ export default function AIRoboticsPage() {
       <Section>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {tracks.map((t) => (
-            <div key={t.title} className="bg-white rounded-2xl shadow-sm p-8">
+            <div key={t.title} className="bg-white shadow-sm p-8">
               <h2 className="text-2xl font-extrabold text-[#001532] mb-6">{t.title}</h2>
               <CheckList items={t.items} />
             </div>

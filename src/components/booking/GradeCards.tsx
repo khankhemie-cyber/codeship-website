@@ -10,7 +10,7 @@ export default function GradeCards() {
       {PROGRAMS.map((p) => (
         <div
           key={p.slug}
-          className="h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow border-t-4 p-6 flex flex-col"
+          className="h-full bg-white shadow-sm hover:shadow-xl transition-shadow border-t-4 p-6 flex flex-col"
           style={{ borderTopColor: LEVEL_ACCENT[p.slug] }}
         >
           <p className="text-sm font-bold uppercase tracking-widest text-gray-500">{p.gradeBand}</p>
@@ -34,7 +34,7 @@ export default function GradeCards() {
 
           <Link
             href={`/register/${p.slug}`}
-            className="bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 rounded-xl text-center hover:bg-[#E6C51E] transition-colors"
+            className="bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 text-center hover:bg-[#E6C51E] transition-colors"
           >
             Book {p.level}
           </Link>

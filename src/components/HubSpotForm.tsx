@@ -65,7 +65,7 @@ export default function HubSpotForm({
         {thankYouCta && (
           <Link
             href={thankYouCta.href}
-            className="inline-block bg-[#001532] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#2a3052] transition-colors"
+            className="inline-block bg-[#001532] text-white font-bold px-6 py-3 hover:bg-[#2a3052] transition-colors"
           >
             {thankYouCta.label}
           </Link>

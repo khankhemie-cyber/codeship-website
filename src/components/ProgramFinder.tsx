@@ -25,13 +25,13 @@ export default function ProgramFinder() {
   };
 
   const optionClass =
-    "p-5 text-left text-lg font-semibold text-[#001532] border-2 border-gray-200 rounded-xl hover:border-[#F4D734] hover:bg-[#FAF8F4] transition-colors";
+    "p-5 text-left text-lg font-semibold text-[#001532] border-2 border-gray-200 hover:border-[#F4D734] hover:bg-[#FAF8F4] transition-colors";
 
   if (grade && goal) {
     const program = PROGRAMS.find((p) => p.slug === grade.slug)!;
     const weekly = goal.href === null;
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10 text-center">
+      <div className="bg-white shadow-lg p-8 sm:p-10 text-center">
         <p className="text-sm font-bold uppercase tracking-widest text-[#138A9A]">Our pick for you</p>
         {weekly ? (
           <>
@@ -41,13 +41,13 @@ export default function ProgramFinder() {
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={`/register/${program.slug}`}
-                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors"
+                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors"
               >
                 Book {program.level}
               </Link>
               <Link
                 href={`/programs/${program.slug}`}
-                className="border-2 border-[#001532] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#001532] hover:text-white transition-colors"
+                className="border-2 border-[#001532] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#001532] hover:text-white transition-colors"
               >
                 Learn More
               </Link>
@@ -60,7 +60,7 @@ export default function ProgramFinder() {
             <div className="mt-8">
               <Link
                 href={goal.href}
-                className="inline-block bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors"
+                className="inline-block bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors"
               >
                 See Details
               </Link>
@@ -77,7 +77,7 @@ export default function ProgramFinder() {
   const step = grade ? 2 : 1;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10">
+    <div className="bg-white shadow-lg p-8 sm:p-10">
       <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Question {step} of 2</p>
       <h2 className="text-2xl sm:text-3xl font-extrabold text-[#001532] mt-2 mb-6">
         {grade ? "What are you looking for?" : "What grade is your child in?"}

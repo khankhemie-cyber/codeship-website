@@ -17,7 +17,7 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
       {faqs.map((faq) => (
         <details
           key={faq.question}
-          className="group bg-white rounded-2xl border border-gray-200 open:shadow-md transition-shadow"
+          className="group bg-white border border-gray-200 open:shadow-md transition-shadow"
         >
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-lg font-bold text-[#001532] [&::-webkit-details-marker]:hidden">
             <span>{faq.question}</span>

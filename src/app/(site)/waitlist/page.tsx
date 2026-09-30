@@ -48,7 +48,7 @@ export default function WaitlistPage({ searchParams }: Props) {
       </PageHero>
 
       <Section narrow>
-        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+        <div className="bg-white shadow-sm p-6 sm:p-8">
           <RegistrationForm />
         </div>
       </Section>

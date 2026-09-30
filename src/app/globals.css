@@ -212,15 +212,15 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-[#F4D734] text-[#001532] font-semibold px-6 py-3 rounded-lg hover:bg-[#E6C51E] transition-colors duration-200 inline-block;
+    @apply bg-[#F4D734] text-[#001532] font-semibold px-6 py-3 hover:bg-[#E6C51E] transition-colors duration-200 inline-block;
   }
 
   .btn-secondary {
-    @apply border-2 border-[#F4D734] text-[#F4D734] font-semibold px-6 py-3 rounded-lg hover:bg-[#F4D734] hover:text-[#001532] transition-colors duration-200 inline-block;
+    @apply border-2 border-[#F4D734] text-[#F4D734] font-semibold px-6 py-3 hover:bg-[#F4D734] hover:text-[#001532] transition-colors duration-200 inline-block;
   }
 
   .btn-outline-white {
-    @apply border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-[#001532] transition-colors duration-200 inline-block;
+    @apply border-2 border-white text-white font-semibold px-6 py-3 hover:bg-white hover:text-[#001532] transition-colors duration-200 inline-block;
   }
 
   .section-heading {
@@ -232,7 +232,7 @@
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6;
+    @apply bg-white shadow-md hover:shadow-lg transition-shadow duration-300 p-6;
   }
 }
 

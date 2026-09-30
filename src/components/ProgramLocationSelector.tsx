@@ -66,7 +66,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+    <div className="bg-white shadow-md border border-gray-100 p-6 sm:p-8">
       <div className="flex items-baseline gap-1">
         <span className="text-3xl font-extrabold text-[#001532]">CAD ${config.priceCad}</span>
         <span className="text-gray-600 text-base">/ semester</span>
@@ -82,7 +82,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
             return (
               <label
                 key={opt.value}
-                className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 cursor-pointer transition-colors ${
+                className={`flex items-center gap-3 border-2 px-4 py-3 cursor-pointer transition-colors ${
                   checked ? "border-[#F4D734] bg-[#F4D734]/10" : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -104,7 +104,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         </div>
       </fieldset>
 
-      <p className="mt-5 bg-[#FAF8F4] rounded-xl px-4 py-3 text-base text-[#001532]" aria-live="polite">
+      <p className="mt-5 bg-[#FAF8F4] px-4 py-3 text-base text-[#001532]" aria-live="polite">
         {scheduleDetail}
       </p>
 
