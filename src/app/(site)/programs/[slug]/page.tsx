@@ -168,7 +168,7 @@ export default function ProgramPage({ params }: Props) {
           </div>
 
           <aside className="lg:col-span-1">
-            <div className="lg:sticky lg:top-24">
+            <div className="lg:sticky lg:top-28">
               <Suspense
                 fallback={<div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}
               >
