@@ -52,7 +52,7 @@ export default function ContactPage() {
               <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Quick links</h2>
               <ul className="mt-3 space-y-2">
                 {[
-                  { label: "Book a class", href: "/#book" },
+                  { label: "Enroll in a class", href: "/#book" },
                   { label: "Find the right level", href: "/program-finder" },
                   { label: "For schools", href: "/schools" },
                 ].map((l) => (

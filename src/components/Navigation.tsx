@@ -58,7 +58,7 @@ export default function Navigation() {
               href="/#book"
               className="bg-[#F4D734] text-[#001532] font-bold px-5 py-2.5 hover:bg-[#E6C51E] transition-all duration-200 text-base shadow-sm hover:shadow-md"
             >
-              Book Now
+              Enroll Now
             </Link>
           </div>
 
@@ -94,7 +94,7 @@ export default function Navigation() {
             className="block bg-[#F4D734] text-[#001532] font-bold text-lg px-4 py-3 text-center mt-4 hover:bg-[#E6C51E] transition-colors"
             onClick={() => setIsOpen(false)}
           >
-            Book Now
+            Enroll Now
           </Link>
         </div>
       </div>

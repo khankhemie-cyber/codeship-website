@@ -14,9 +14,9 @@ import { IN_PERSON_VENUE } from "@/data/locations";
 export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Book a Kids Coding Class | CODEship Academy",
+  title: "Enroll in a Kids Coding Class | CODEship Academy",
   description:
-    "Book a CODEship coding class for K–Grade 8. Saturdays at Core21 in Oshawa or live online. CAD $129 for 8 weekly classes.",
+    "Enroll in a CODEship coding class for K–Grade 8. Saturdays at Core21 in Oshawa or live online. CAD $129 for 8 weekly classes.",
   path: "/register",
 });
 
@@ -100,7 +100,7 @@ export default function RegisterPage({ searchParams }: Props) {
   return (
     <>
       <PageHero
-        eyebrow="Book a class"
+        eyebrow="Enroll"
         title="Choose your child's level"
         lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}. Pick in person or online at checkout.`}
       />
@@ -132,7 +132,7 @@ export default function RegisterPage({ searchParams }: Props) {
                     </dd>
                   </div>
                 </dl>
-                <p className="mt-6 text-lg font-bold text-[#001532] group-hover:text-[#138A9A]">Book {config.label} →</p>
+                <p className="mt-6 text-lg font-bold text-[#001532] group-hover:text-[#138A9A]">Enroll in {config.label} →</p>
               </Link>
             );
           })}

@@ -48,7 +48,7 @@ export default function AIRoboticsPage() {
           ))}
         </div>
         <p className="text-lg text-gray-700 mt-10 max-w-2xl">
-          AI is built into our Developers (Grades 4–5) and Engineers (Grades 6–8) levels. Book either level to start.
+          AI is built into our Developers (Grades 4–5) and Engineers (Grades 6–8) levels. Enroll in either level to start.
         </p>
       </Section>
 

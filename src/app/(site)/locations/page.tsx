@@ -51,14 +51,14 @@ export default function LocationsPage() {
       <PageHero
         crumbs={crumbs}
         eyebrow="Locations"
-        title="In person in Oshawa. Online everywhere."
+        title="Find classes near you"
         lead="Saturday classes run at Core21 in Oshawa. Families anywhere in Canada can join online."
       />
 
       <Section>
         <div className="bg-white shadow-sm p-8 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-4 border-[#138A9A]">
           <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">Open for booking</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">Open for enrollment</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001532] mt-2">Oshawa</h2>
             <address className="not-italic text-xl text-gray-700 mt-4 leading-snug">
               {IN_PERSON_VENUE.building}

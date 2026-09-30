@@ -21,7 +21,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!isProgramLevel(params.program)) return {};
   const c = PROGRAM_LINKS[params.program];
   return pageMetadata({
-    title: `Book ${c.label} (${c.gradesEn}): Kids Coding | CODEship Academy`,
+    title: `Enroll in ${c.label} (${c.gradesEn}): Kids Coding | CODEship Academy`,
     description: `${c.summary} CAD $${c.priceCad} for 8 weekly classes. Saturdays at Core21 in Oshawa or online.`,
     path: `/register/${params.program}`,
   });
@@ -36,7 +36,7 @@ export default function ProgramRegisterPage({ params }: Props) {
 
   const crumbs = [
     { name: "Home", href: "/" },
-    { name: "Book", href: "/register" },
+    { name: "Enroll", href: "/register" },
     { name: c.label, href: `/register/${program}` },
   ];
 
@@ -68,7 +68,7 @@ export default function ProgramRegisterPage({ params }: Props) {
         }}
       />
 
-      <PageHero crumbs={crumbs} eyebrow={ageLabel(program, false)} title={`Book ${c.label}`} lead={c.summary}>
+      <PageHero crumbs={crumbs} eyebrow={ageLabel(program, false)} title={`Enroll in ${c.label}`} lead={c.summary}>
         <div className="flex flex-wrap gap-3">
           {[c.techEn, `CAD $${c.priceCad} / semester`, SEMESTER_SHAPE_LABEL].map((chip) => (
             <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2">
@@ -120,7 +120,7 @@ export default function ProgramRegisterPage({ params }: Props) {
               <p className="text-base text-gray-600 mt-1 mb-6">{SEMESTER_SHAPE_LABEL}</p>
               <CheckList items={INCLUDED} />
               <div className="mt-6">
-                <EnrollButton program={program} label={`Book ${c.label}`} />
+                <EnrollButton program={program} label={`Enroll in ${c.label}`} />
               </div>
               <p className="text-sm text-gray-500 mt-3 text-center">
                 Choose in person or online and your semester at checkout. Secure checkout with Stripe.

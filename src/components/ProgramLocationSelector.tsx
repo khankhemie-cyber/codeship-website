@@ -55,7 +55,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
   const options: { value: Format; title: string; sub: string }[] = [
     {
       value: "inperson",
-      title: "In person · Oshawa",
+      title: "In person",
       sub: `${schedule.inperson.days}, ${schedule.inperson.time.replace(" ET", "")} · ${IN_PERSON_VENUE.building}`,
     },
     {
@@ -109,13 +109,13 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
       </p>
 
       <div className="mt-4">
-        <EnrollButton program={level} label={`Book ${program.level}`} onClick={handleRegisterClick} />
+        <EnrollButton program={level} label={`Enroll in ${program.level}`} onClick={handleRegisterClick} />
       </div>
       <p className="text-gray-500 text-sm mt-3 text-center">Secure checkout with Stripe.</p>
 
       {/* Sticky mobile register bar */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
-        <EnrollButton program={level} label={`Book ${program.level}`} onClick={handleRegisterClick} />
+        <EnrollButton program={level} label={`Enroll in ${program.level}`} onClick={handleRegisterClick} />
       </div>
       {/* Spacer so the sticky bar never covers page content on mobile */}
       <div className="md:hidden h-16" aria-hidden="true" />

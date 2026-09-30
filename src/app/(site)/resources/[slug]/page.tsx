@@ -145,7 +145,7 @@ export default function ArticlePage({ params }: Props) {
                 href="/#book"
                 className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors inline-block"
               >
-                Book a Semester
+                Enroll Now
               </Link>
             </div>
           </div>

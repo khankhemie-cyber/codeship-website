@@ -43,7 +43,7 @@ export default function ProgramFinder() {
                 href={`/register/${program.slug}`}
                 className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors"
               >
-                Book {program.level}
+                Enroll in {program.level}
               </Link>
               <Link
                 href={`/programs/${program.slug}`}

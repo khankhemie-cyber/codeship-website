@@ -42,7 +42,7 @@ export default function WaitlistPage({ searchParams }: Props) {
         <p className="text-lg text-gray-200">
           Want to start now?{" "}
           <Link href="/register" className="font-bold text-[#F4D734] underline underline-offset-2">
-            Book online classes
+            Enroll in online classes
           </Link>
         </p>
       </PageHero>

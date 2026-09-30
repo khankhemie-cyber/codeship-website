@@ -138,7 +138,7 @@ export default function CityPage({ params }: Props) {
 
           <Section tone="white" id="book">
             <SectionHeader
-              eyebrow="Book in 3 minutes"
+              eyebrow="Enroll in 3 minutes"
               title="Pick your child's grade"
               lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}`}
             />
@@ -154,7 +154,7 @@ export default function CityPage({ params }: Props) {
             lead="Live online classes are open now. In-person classes are coming soon."
           >
             <div className="flex flex-col sm:flex-row gap-3">
-              <ButtonLink href="/register">Book Online Classes</ButtonLink>
+              <ButtonLink href="/register">Enroll in Online Classes</ButtonLink>
               <ButtonLink href={`/waitlist?city=${encodeURIComponent(cityName)}`} variant="outline">
                 Join the Waitlist
               </ButtonLink>
@@ -191,7 +191,7 @@ export default function CityPage({ params }: Props) {
         <BookingBand
           title="Start online today"
           href="/register"
-          label="Book Online Classes"
+          label="Enroll Online"
           detail="Live online classes with an instructor. October and November semesters are open."
         />
       )}

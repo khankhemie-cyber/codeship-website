@@ -8,7 +8,7 @@ export default function NowBookingCard({ className = "" }: { className?: string 
   return (
     <div className={`bg-white shadow-2xl p-6 sm:p-8 ${className}`}>
       <div className="flex items-center justify-between gap-3 mb-5">
-        <h2 className="text-2xl font-extrabold text-[#001532]">Now booking</h2>
+        <h2 className="text-2xl font-extrabold text-[#001532]">Now enrolling</h2>
         <span className="text-sm font-bold bg-[#138A9A]/10 text-[#0f6f7c] px-3 py-1">
           {PRICE_LABEL}
         </span>
