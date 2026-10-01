@@ -238,7 +238,8 @@ The `/gy/ngsa-digital-skills` page's `complianceNote` field carries this explici
 
 ## Student tools (`/tools/*`)
 
-`/tools/web-playground` is an HTML/CSS/JavaScript editor with a live preview and console, for students
+`/tools/launchpad` (**CODEship Launchpad**, formerly "Web Playground"; `/tools/web-playground` redirects
+there and keeps the `#code=` fragment) is an HTML/CSS/JavaScript editor with a live preview and console, for students
 to use in class. Like `/lp/*`, it is **direct-link only**: `src/app/tools/layout.tsx` drops the main
 site chrome, nothing in `Navigation`/`Footer` links to it, it is not in `sitemap.ts`, `robots.ts`
 disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `public/_headers`).
@@ -249,7 +250,14 @@ disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `
   bare URL is reopened on the same device. A link is a snapshot: after more edits, save a new one.
 - **Sandboxed.** Student code runs in an iframe sandboxed without `allow-same-origin`, so it can't read
   the site's cookies, storage, or page.
-- Code lives in `src/components/tools/WebPlayground.tsx`.
+- **Editor & UI.** CodeMirror 6 (syntax highlighting, autocomplete, bracket matching, search, per-file
+  undo history), "Missions" (starter templates), light/dark themes in the brand palette (navy `#001532`, gold
+  `#F4D734`, teal `#138A9A`, purple `#6E43A8`), EN/FR interface, desktop/tablet/phone preview sizes,
+  open-in-new-tab (still sandboxed), and a console whose error rows jump to the line in `script.js`.
+  Theme, language, text size and layout are remembered per device in localStorage.
+- Code lives in `src/components/tools/launchpad/`: `lib.ts` (preview document + the link format; don't
+  change the format without keeping old links decodable), `templates.ts`, `i18n.ts`, `CodeEditor.tsx`,
+  `Launchpad.tsx`. The localStorage keys keep the old `codeship-web-playground` name on purpose.
 
 ## Deploy on Vercel
 
