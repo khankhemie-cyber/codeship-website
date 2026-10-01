@@ -35,6 +35,9 @@ const nextConfig = {
       // Merged into their main pages during the 2026 site cleanup.
       { source: "/programs/weekly-classes", destination: "/programs", permanent: true },
       { source: "/programs/school-workshops", destination: "/schools", permanent: true },
+      // The student editor was renamed from "Web Playground" to "CODEship Launchpad".
+      // Browsers carry the #code=... fragment across the redirect, so saved links still open.
+      { source: "/tools/web-playground", destination: "/tools/launchpad", permanent: true },
     ];
   },
 };

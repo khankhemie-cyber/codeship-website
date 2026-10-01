@@ -26,7 +26,7 @@ import { Icon, type IconName } from "./icons";
 import type { EditorApi } from "./CodeEditor";
 
 /**
- * Student HTML/CSS/JS playground (/tools/web-playground).
+ * CODEship Launchpad: the student HTML/CSS/JS editor (/tools/launchpad).
  *
  * Progress lives in the page's own URL: every edit is compressed into the
  * `#code=` hash, so the address bar is always a link back to the student's
@@ -215,7 +215,7 @@ function Logo() {
   );
 }
 
-export default function WebPlayground() {
+export default function Launchpad() {
   const [files, setFiles] = useState<Files | null>(null);
   const [active, setActive] = useState<Lang>("html");
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
@@ -289,7 +289,7 @@ export default function WebPlayground() {
       run(initial);
     };
     load();
-    // Pasting a different playground link into this tab's address bar.
+    // Pasting a different Launchpad link into this tab's address bar.
     const onHashChange = () => {
       const code = readHash();
       if (!code) return;
@@ -469,7 +469,7 @@ export default function WebPlayground() {
       <header className="flex flex-wrap items-center gap-2 border-b border-[var(--pg-border)] px-3 py-2 sm:gap-3 sm:px-4">
         <Logo />
         <h1 className="mr-1 font-display text-lg font-extrabold tracking-tight sm:text-xl">
-          <span className="text-[var(--pg-text)]">{s.titleLead} </span>
+          <span className="text-[var(--pg-text)]">{s.titleLead}</span>
           <span className="text-[#F4D734]">{s.titleAccent}</span>
         </h1>
         <span className="hidden h-6 w-px bg-[var(--pg-border)] sm:block" aria-hidden="true" />
@@ -479,7 +479,7 @@ export default function WebPlayground() {
           title={s.runHint}
           className={`inline-flex h-9 items-center gap-2 rounded-lg bg-[#F4D734] px-4 text-sm font-extrabold text-[#001532] shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:bg-[#FFE34D] active:translate-y-px ${focusRing}`}
         >
-          <Icon name="play" />
+          <Icon name="rocket" />
           {s.run}
         </button>
         <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-[var(--pg-muted)]">
@@ -505,7 +505,7 @@ export default function WebPlayground() {
             button={
               <>
                 <span className="text-[#138A9A]">
-                  <Icon name="templates" />
+                  <Icon name="missions" />
                 </span>
                 <span className="hidden md:inline">{s.templates}</span>
               </>

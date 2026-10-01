@@ -1,7 +1,21 @@
-// Minimal stroke icons (24x24, Lucide-style geometry) so the playground needs no icon library.
+// Minimal stroke icons (24x24, Lucide-style geometry) so the Launchpad needs no icon library.
 
 const PATHS = {
   play: <path d="M7 4.5v15l12-7.5-12-7.5z" fill="currentColor" stroke="none" />,
+  rocket: (
+    <>
+      <path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z" />
+      <path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z" />
+      <path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5" />
+    </>
+  ),
+  missions: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1" fill="currentColor" />
+    </>
+  ),
   templates: (
     <>
       <rect x="3" y="3" width="7" height="7" />

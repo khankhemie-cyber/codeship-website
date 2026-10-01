@@ -1,5 +1,5 @@
 /**
- * Pure helpers for the Web Playground: the preview document, the console
+ * Pure helpers for the CODEship Launchpad: the preview document, the console
  * bridge, and the `#code=` link format. Kept free of React so the link format
  * stays easy to audit: changing it would break every link students have saved.
  */
@@ -9,6 +9,8 @@ export type Files = Record<Lang, string>;
 export type LogLevel = "log" | "info" | "warn" | "error";
 export type LogLine = { level: LogLevel; text: string; line?: number };
 
+// Keys keep the tool's original name so work saved on a device before the
+// rename (it was the "Web Playground") still loads.
 export const STORAGE_KEY = "codeship-web-playground";
 export const SETTINGS_KEY = "codeship-web-playground-settings";
 export const HASH_KEY = "code=";

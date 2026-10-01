@@ -7,7 +7,7 @@ export type Template = { id: TemplateId; files: Files };
 const welcome: Files = {
   html: `<h1>Hello, World! 👋</h1>
 <p class="intro">
-  Welcome to the CODEship Web Playground!<br>
+  Welcome to the CODEship Launchpad!<br>
   Edit the HTML, CSS and JavaScript to see live results.
 </p>
 
