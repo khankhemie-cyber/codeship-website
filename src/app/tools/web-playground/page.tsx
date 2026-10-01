@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import WebPlayground from "@/components/tools/WebPlayground";
+import WebPlayground from "@/components/tools/playground/WebPlayground";
 
 export const metadata: Metadata = {
   title: "Web Playground",

@@ -249,7 +249,14 @@ disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `
   bare URL is reopened on the same device. A link is a snapshot: after more edits, save a new one.
 - **Sandboxed.** Student code runs in an iframe sandboxed without `allow-same-origin`, so it can't read
   the site's cookies, storage, or page.
-- Code lives in `src/components/tools/WebPlayground.tsx`.
+- **Editor & UI.** CodeMirror 6 (syntax highlighting, autocomplete, bracket matching, search, per-file
+  undo history), starter templates, light/dark themes in the brand palette (navy `#001532`, gold
+  `#F4D734`, teal `#138A9A`, purple `#6E43A8`), EN/FR interface, desktop/tablet/phone preview sizes,
+  open-in-new-tab (still sandboxed), and a console whose error rows jump to the line in `script.js`.
+  Theme, language, text size and layout are remembered per device in localStorage.
+- Code lives in `src/components/tools/playground/`: `lib.ts` (preview document + the link format; don't
+  change the format without keeping old links decodable), `templates.ts`, `i18n.ts`, `CodeEditor.tsx`,
+  `WebPlayground.tsx`.
 
 ## Deploy on Vercel
 
