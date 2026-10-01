@@ -34,7 +34,7 @@ export default function Navigation() {
           <Link href="/" className="flex items-center" aria-label="CODEship Academy home">
             <Image
               src="/logo-header.png"
-              alt="CODEship Academy — Dream. Code. Achieve."
+              alt="CODEship Academy: Dream. Code. Achieve."
               width={742}
               height={302}
               className="h-14 lg:h-20 w-auto object-contain"
@@ -56,15 +56,15 @@ export default function Navigation() {
             ))}
             <Link
               href="/#book"
-              className="bg-[#F4D734] text-[#001532] font-bold px-5 py-2.5 rounded-lg hover:bg-[#E6C51E] transition-all duration-200 text-base shadow-sm hover:shadow-md"
+              className="bg-[#F4D734] text-[#001532] font-bold px-5 py-2.5 hover:bg-[#E6C51E] transition-all duration-200 text-base shadow-sm hover:shadow-md"
             >
-              Book Now
+              Enroll Now
             </Link>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="lg:hidden p-2 rounded-md text-[#001532]"
+            className="lg:hidden p-2 text-[#001532]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
@@ -91,10 +91,10 @@ export default function Navigation() {
           ))}
           <Link
             href="/#book"
-            className="block bg-[#F4D734] text-[#001532] font-bold text-lg px-4 py-3 rounded-lg text-center mt-4 hover:bg-[#E6C51E] transition-colors"
+            className="block bg-[#F4D734] text-[#001532] font-bold text-lg px-4 py-3 text-center mt-4 hover:bg-[#E6C51E] transition-colors"
             onClick={() => setIsOpen(false)}
           >
-            Book Now
+            Enroll Now
           </Link>
         </div>
       </div>

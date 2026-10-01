@@ -13,7 +13,7 @@ const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
  *
  *  1. Flip GA consent from "denied" to "granted" once the visitor accepts all
  *     cookies (existing cookie banner fires CONSENT_EVENT), with no reload.
- *  2. Load the Meta Pixel, which stays fully consent-gated — injected only
+ *  2. Load the Meta Pixel, which stays fully consent-gated, injected only
  *     after the visitor has opted into all cookies.
  */
 export default function Analytics() {

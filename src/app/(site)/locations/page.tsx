@@ -14,7 +14,7 @@ import { PageHero, Section, SectionHeader, ButtonLink } from "@/components/ui/Pa
 import { saturdayTime } from "@/lib/booking";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Locations — Oshawa In Person & Online Across Canada | CODEship Academy",
+  title: "Locations: Oshawa In Person & Online Across Canada | CODEship Academy",
   description:
     "In-person kids coding classes at Core21, 21 Simcoe St South, Oshawa. Live online classes across Canada. In-person waitlists open in 11 more cities.",
   path: "/locations",
@@ -51,14 +51,14 @@ export default function LocationsPage() {
       <PageHero
         crumbs={crumbs}
         eyebrow="Locations"
-        title="In person in Oshawa. Online everywhere."
+        title="Find classes near you"
         lead="Saturday classes run at Core21 in Oshawa. Families anywhere in Canada can join online."
       />
 
       <Section>
-        <div className="bg-white rounded-3xl shadow-sm p-8 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-4 border-[#138A9A]">
+        <div className="bg-white shadow-sm p-8 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-4 border-[#138A9A]">
           <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">Open for booking</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">Open for enrollment</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001532] mt-2">Oshawa</h2>
             <address className="not-italic text-xl text-gray-700 mt-4 leading-snug">
               {IN_PERSON_VENUE.building}
@@ -92,7 +92,7 @@ export default function LocationsPage() {
             <Link
               key={city.slug}
               href={`/locations/${city.slug}`}
-              className="group bg-[#FAF8F4] rounded-2xl p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
+              className="group bg-[#FAF8F4] p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
             >
               <p className="text-xl font-bold text-[#001532] group-hover:text-[#138A9A]">{city.name}</p>
               <p className="text-base text-gray-600 mt-1">{city.province} · Online open</p>

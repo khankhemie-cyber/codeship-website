@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About Us — Kids Coding School in Oshawa",
+  title: "About Us: Kids Coding School in Oshawa",
   description:
     "CODEship Academy teaches coding, AI and STEM to kids in K–Grade 8. Classes run Saturdays at Core21 in Oshawa and live online across Canada.",
   path: "/about",
@@ -30,7 +30,7 @@ export default function AboutPage() {
         <SectionHeader title="What we believe" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {beliefs.map((b) => (
-            <div key={b.title} className="bg-white rounded-2xl shadow-sm p-7 border-t-4 border-[#F4D734]">
+            <div key={b.title} className="bg-white shadow-sm p-7 border-t-4 border-[#F4D734]">
               <h3 className="text-2xl font-extrabold text-[#001532]">{b.title}</h3>
               <p className="text-lg text-gray-600 mt-3">{b.desc}</p>
             </div>

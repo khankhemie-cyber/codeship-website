@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       // Explicit AI-crawler allowances for 2026 GEO discovery (Perplexity,
       // ChatGPT/Bing, Gemini's Google-Extended, and Common Crawl/CCBot feed
-      // many other AI answer engines). Same policy as the wildcard rule —
+      // many other AI answer engines). Same policy as the wildcard rule
       // stated explicitly since some AI-discovery audits check for it.
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,

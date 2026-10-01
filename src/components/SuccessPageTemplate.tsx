@@ -14,7 +14,7 @@ import { CLASSES_PER_SEMESTER } from "@/config/offering";
 const SUCCESS_CONTENT: Record<ProgramLevel, { project: string; framing: string }> = {
   explorers: {
     project: "My Helpful Robot",
-    framing: "Visual block coding — first steps in giving a computer instructions",
+    framing: "Visual block coding: first steps in giving a computer instructions",
   },
   builders: {
     project: "All About Me Page",
@@ -22,7 +22,7 @@ const SUCCESS_CONTENT: Record<ProgramLevel, { project: string; framing: string }
   },
   developers: {
     project: "Homework Timer & Focus Tool",
-    framing: "HTML/CSS into JavaScript — building something they'll actually use",
+    framing: "HTML/CSS into JavaScript, building something they'll actually use",
   },
   engineers: {
     project: "Password Strength Checker",
@@ -46,7 +46,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
 
     // fbq is only present once the visitor has accepted analytics cookies
     // (see components/Analytics.tsx). The optional call respects that consent
-    // gate — the value is used for the Pixel event only and is never rendered.
+    // gate: the value is used for the Pixel event only and is never rendered.
     const w = window as typeof window & { fbq?: (...args: unknown[]) => void };
     w.fbq?.("track", "Purchase", {
       value: config.priceCad,
@@ -84,29 +84,29 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {/* Program snapshot */}
           <div className="flex flex-wrap gap-3">
-            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 rounded-xl text-sm font-semibold">
+            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 text-sm font-semibold">
               {config.label}
             </span>
-            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 rounded-xl text-sm font-semibold">
+            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 text-sm font-semibold">
               {ageLabel(program, false)}
             </span>
-            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 rounded-xl text-sm font-semibold">
+            <span className="bg-white border border-gray-100 shadow-sm text-[#0D1B2A] px-4 py-2 text-sm font-semibold">
               In-Person &amp; Online
             </span>
           </div>
 
-          {/* Class schedule card — both formats, so families see the option they chose */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          {/* Class schedule card, both formats, so families see the option they chose */}
+          <div className="bg-white shadow-sm border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-[#0D1B2A] mb-1">Your class schedule</h2>
             <p className="text-gray-500 text-sm mb-5">
-              {CLASSES_PER_SEMESTER} weekly classes. Below are both formats — attend the one you chose at checkout.
+              {CLASSES_PER_SEMESTER} weekly classes. Below are both formats: attend the one you chose at checkout.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* In-person */}
-              <div className="rounded-xl border border-gray-100 bg-[#FAF8F4] p-5">
+              <div className=" border border-gray-100 bg-[#FAF8F4] p-5">
                 <div className="mb-3 flex items-center gap-2">
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#2E8C8C]" />
-                  <h3 className="font-bold text-[#0D1B2A]">In-Person — Oshawa</h3>
+                  <h3 className="font-bold text-[#0D1B2A]">In-Person: Oshawa</h3>
                 </div>
                 <dl className="space-y-2 text-sm">
                   <div className="flex justify-between gap-4">
@@ -130,10 +130,10 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               </div>
 
               {/* Online */}
-              <div className="rounded-xl border border-gray-100 bg-[#FAF8F4] p-5">
+              <div className=" border border-gray-100 bg-[#FAF8F4] p-5">
                 <div className="mb-3 flex items-center gap-2">
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F4D734]" />
-                  <h3 className="font-bold text-[#0D1B2A]">Online — anywhere</h3>
+                  <h3 className="font-bold text-[#0D1B2A]">Online: anywhere</h3>
                 </div>
                 <dl className="space-y-2 text-sm">
                   <div className="flex justify-between gap-4">
@@ -159,7 +159,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
           </div>
 
           {/* Semester 1 overview card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <div className="bg-white shadow-sm border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-[#0D1B2A] mb-1">What your child will build</h2>
             <p className="text-[#3A5B9E] text-sm font-semibold mb-4">{content.framing}</p>
             <p className="text-gray-600 text-sm leading-relaxed">
@@ -171,7 +171,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
           </div>
 
           {/* What happens next */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <div className="bg-white shadow-sm border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-[#0D1B2A] mb-3">What happens next</h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-4">
               There&apos;s nothing else you need to do right now. About one week before the first class, we&apos;ll
@@ -194,7 +194,7 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               ))}
             </ul>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Keep an eye on your inbox as the start date approaches — and check your spam folder just in case.
+              Keep an eye on your inbox as the start date approaches, and check your spam folder just in case.
             </p>
           </div>
 

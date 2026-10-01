@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 export const metadata: Metadata = pageMetadata({
   title: "Mobile Community Franchise Model | CODEship Academy",
   description:
-    "The CODEship Mobile Community Model — low-investment, community-based children's coding franchise from $10K–$18K. School-focused delivery.",
+    "The CODEship Mobile Community Model: low-investment, community-based children's coding franchise from $10K–$18K. School-focused delivery.",
   path: "/franchise/mobile-model",
 });
 
@@ -19,7 +19,7 @@ export default function MobileModelPage() {
           </Link>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Mobile Community Model</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-            The lowest-investment path to owning a CODEship Academy franchise — built for community-first entrepreneurs
+            The lowest-investment path to owning a CODEship Academy franchise: built for community-first entrepreneurs
             who want to reach children where they already are.
           </p>
           <div className="mt-6 inline-block bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-xl">
@@ -35,7 +35,7 @@ export default function MobileModelPage() {
               <h2 className="text-2xl font-bold text-[#001532] mb-4">How the Mobile Model Works</h2>
               <p className="text-gray-600 mb-4">
                 The Mobile Community Model delivers CODEship programs at community centres, libraries, schools,
-                recreation facilities, and partner spaces — without requiring a dedicated studio location.
+                recreation facilities, and partner spaces, without requiring a dedicated studio location.
               </p>
               <p className="text-gray-600 mb-6">
                 This model is designed for entrepreneurs who are deeply embedded in their local community, have strong
@@ -59,7 +59,7 @@ export default function MobileModelPage() {
                 { title: "Community-Based Delivery", desc: "Operate at schools, community centres, libraries, and partner locations. No studio lease required." },
                 { title: "School Partnership Focus", desc: "After-school clubs and workshops at local schools are the primary delivery channel." },
                 { title: "Flexible Schedule", desc: "Build your program schedule around your community's needs and your personal capacity." },
-                { title: "Low Overhead", desc: "Without a dedicated studio, overhead costs remain minimal — improving financial viability." },
+                { title: "Low Overhead", desc: "Without a dedicated studio, overhead costs remain minimal, improving financial viability." },
                 { title: "Comprehensive Support", desc: "Full curriculum, training, marketing, and operational support from CODEship." },
               ].map((feature) => (
                 <div key={feature.title} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">

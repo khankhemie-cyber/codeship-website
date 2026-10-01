@@ -14,7 +14,7 @@ const url = "https://www.codeshipacademy.com/tt";
 export const metadata: Metadata = {
   title: { absolute: "Online Coding & STEM Programs for Kids in Trinidad and Tobago | CODEship" },
   description:
-    "Live online coding and STEM programs for children across Trinidad and Tobago, grouped by grade band — Explorers (K–1), Builders (2–3), Developers (4–5) and Engineers (6–8). Four weeks for TT$600.",
+    "Live online coding and STEM programs for children across Trinidad and Tobago, grouped by grade band: Explorers (K–1), Builders (2–3), Developers (4–5) and Engineers (6–8). Four weeks for TT$600.",
   alternates: { canonical: url },
   openGraph: {
     title: "Online Coding & STEM Programs for Kids in Trinidad and Tobago | CODEship",

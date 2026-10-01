@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { IN_PERSON_VENUE } from "@/data/locations";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact Us — Oshawa",
+  title: "Contact Us in Oshawa",
   description: `Questions about classes, camps, parties or schools? Email admin@codeshipacademy.com or visit us at ${IN_PERSON_VENUE.full}.`,
   path: "/contact",
 });
@@ -18,7 +18,7 @@ export default function ContactPage() {
 
       <Section>
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-          <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-8">
+          <div className="lg:col-span-3 bg-white shadow-sm p-8">
             <h2 className="text-2xl font-extrabold text-[#001532] mb-6">Send a message</h2>
             <ContactForm />
           </div>
@@ -52,7 +52,7 @@ export default function ContactPage() {
               <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Quick links</h2>
               <ul className="mt-3 space-y-2">
                 {[
-                  { label: "Book a class", href: "/#book" },
+                  { label: "Enroll in a class", href: "/#book" },
                   { label: "Find the right level", href: "/program-finder" },
                   { label: "For schools", href: "/schools" },
                 ].map((l) => (

@@ -24,7 +24,7 @@ const UI = {
     outcomeHeading: "What your child will build",
     proofHeading: "What makes CODEship different",
     diff: [
-      { title: "Project-based", desc: "Every session ends with real progress on a real project — not a worksheet." },
+      { title: "Project-based", desc: "Every session ends with real progress on a real project, not a worksheet." },
       { title: "Capstone-gated", desc: "Each level ends with a capstone project that shows what your child can really do." },
       { title: "Inclusive by design", desc: "Accommodations are built into every class, for a range of learning styles and needs." },
     ],
@@ -32,9 +32,9 @@ const UI = {
     offerHeading: "Ready to start?",
     faqHeading: "Common questions",
     finalHeading: "Dream. Code. Achieve.",
-    finalSub: "Register today — classes run in 5 Canadian cities and online.",
+    finalSub: "Register today: classes run in 5 Canadian cities and online.",
     complianceNote:
-      "Curriculum alignment claims support and align with — not endorsed or approved by — any ministry of education.",
+      "Curriculum alignment claims support and align with, not endorsed or approved by, any ministry of education.",
     openingSoon: "Registration opening soon",
   },
   fr: {
@@ -42,7 +42,7 @@ const UI = {
     outcomeHeading: "Ce que votre enfant va construire",
     proofHeading: "Ce qui distingue CODEship",
     diff: [
-      { title: "Apprentissage par projet", desc: "Chaque cours se termine par un vrai progrès sur un vrai projet — jamais une feuille d'exercices." },
+      { title: "Apprentissage par projet", desc: "Chaque cours se termine par un vrai progrès sur un vrai projet: jamais une feuille d'exercices." },
       { title: "Projet final requis", desc: "Chaque niveau se termine par un projet final qui démontre ce que votre enfant peut vraiment faire." },
       { title: "Conçu pour l'inclusion", desc: "Des mesures d'adaptation sont intégrées à chaque cours." },
     ],
@@ -50,9 +50,9 @@ const UI = {
     offerHeading: "Prêt à commencer?",
     faqHeading: "Questions fréquentes",
     finalHeading: "Rêver. Coder. Réussir.",
-    finalSub: "Inscrivez-vous dès aujourd'hui — en ligne partout au Québec.",
+    finalSub: "Inscrivez-vous dès aujourd'hui: en ligne partout au Québec.",
     complianceNote:
-      "Les mentions d'alignement au curriculum appuient et s'alignent avec — sans être endossées ou approuvées par — un ministère de l'Éducation.",
+      "Les mentions d'alignement au curriculum appuient et s'alignent avec, sans être endossées ou approuvées par, un ministère de l'Éducation.",
     openingSoon: "Inscription bientôt disponible",
   },
 };
@@ -62,7 +62,7 @@ const FR_DAYS: Record<string, string> = { Saturdays: "Samedis", Tuesdays: "Mardi
 type ScheduleSlot = { days: string; time: string; starts: Record<string, string> };
 
 /**
- * Minimal-effort FR display of the (English-authored) class schedule facts —
+ * Minimal-effort FR display of the (English-authored) class schedule facts
  * day names translated, dates/time lightly adapted. Families now pick one of
  * an open start month at checkout; this teaser line shows the soonest
  * open (October) start's dates.
@@ -72,7 +72,7 @@ function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
   if (lang === "en") return { days: schedule.days, time: schedule.time, dates };
   return {
     days: FR_DAYS[schedule.days] ?? schedule.days,
-    dates: dates.replace("Weekly,", "chaque semaine,").replace("Oct", "oct.").replace("Nov", "nov.").replace("Dec", "déc."),
+    dates: dates.replace("Weekly,", "chaque semaine,").replace(" to ", " au ").replace("Oct", "oct.").replace("Nov", "nov.").replace("Dec", "déc."),
     time: schedule.time.replace(" AM ET", " HE").replace(" PM ET", " HE"),
   };
 }
@@ -127,7 +127,7 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
       ? `Prochain cours : ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`
       : `Next class: ${modeSchedule.days}, ${modeSchedule.dates} · ${modeSchedule.time}`;
 
-  // Checkout is a Stripe Payment Link per program — location is informational only.
+  // Checkout is a Stripe Payment Link per program: location is informational only.
   const registrationUrl = PROGRAM_LINKS[campaign.program].url;
 
   const secondaryUrl = campaign.secondaryLink ? PROGRAM_LINKS[campaign.secondaryLink.program].url : null;
@@ -144,7 +144,7 @@ export default function LPView({ campaign }: { campaign: Campaign }) {
   const headline = variant.headline ?? campaign.adHeadline;
   const ctaLabel = variant.ctaLabel;
 
-  // Stripe checkout is always available — no "opening soon" disabled state.
+  // Stripe checkout is always available, no "opening soon" disabled state.
   const ctaClasses = (base: string) => base;
 
   const ctaProps = {

@@ -19,8 +19,8 @@ type Format = "inperson" | "online";
 /**
  * Format picker for a program page. Two formats, both sold through the same
  * Stripe link:
- *   - In-Person — open in Oshawa only (Saturdays).
- *   - Online — open to every city.
+ *   - In-Person: open in Oshawa only (Saturdays).
+ *   - Online: open to every city.
  * In-person in the other 11 cities is waitlist-only and lives on those cities'
  * location pages, not here.
  */
@@ -55,7 +55,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
   const options: { value: Format; title: string; sub: string }[] = [
     {
       value: "inperson",
-      title: "In person · Oshawa",
+      title: "In person",
       sub: `${schedule.inperson.days}, ${schedule.inperson.time.replace(" ET", "")} · ${IN_PERSON_VENUE.building}`,
     },
     {
@@ -66,7 +66,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+    <div className="bg-white shadow-md border border-gray-100 p-6 sm:p-8">
       <div className="flex items-baseline gap-1">
         <span className="text-3xl font-extrabold text-[#001532]">CAD ${config.priceCad}</span>
         <span className="text-gray-600 text-base">/ semester</span>
@@ -82,7 +82,7 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
             return (
               <label
                 key={opt.value}
-                className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 cursor-pointer transition-colors ${
+                className={`flex items-center gap-3 border-2 px-4 py-3 cursor-pointer transition-colors ${
                   checked ? "border-[#F4D734] bg-[#F4D734]/10" : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -104,18 +104,18 @@ export default function ProgramLocationSelector({ program }: ProgramLocationSele
         </div>
       </fieldset>
 
-      <p className="mt-5 bg-[#FAF8F4] rounded-xl px-4 py-3 text-base text-[#001532]" aria-live="polite">
+      <p className="mt-5 bg-[#FAF8F4] px-4 py-3 text-base text-[#001532]" aria-live="polite">
         {scheduleDetail}
       </p>
 
       <div className="mt-4">
-        <EnrollButton program={level} label={`Book ${program.level}`} onClick={handleRegisterClick} />
+        <EnrollButton program={level} label={`Enroll in ${program.level}`} onClick={handleRegisterClick} />
       </div>
       <p className="text-gray-500 text-sm mt-3 text-center">Secure checkout with Stripe.</p>
 
       {/* Sticky mobile register bar */}
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3">
-        <EnrollButton program={level} label={`Book ${program.level}`} onClick={handleRegisterClick} />
+        <EnrollButton program={level} label={`Enroll in ${program.level}`} onClick={handleRegisterClick} />
       </div>
       {/* Spacer so the sticky bar never covers page content on mobile */}
       <div className="md:hidden h-16" aria-hidden="true" />

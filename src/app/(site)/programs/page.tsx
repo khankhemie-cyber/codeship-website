@@ -81,7 +81,7 @@ export default function ProgramsPage() {
         <SectionHeader center title="How each level works" />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {pathFacts.map((f) => (
-            <div key={f.label} className="rounded-2xl bg-[#F4D734] p-8 text-center">
+            <div key={f.label} className=" bg-[#F4D734] p-8 text-center">
               <p className="text-5xl font-extrabold text-[#001532]">{f.value}</p>
               <p className="text-lg font-semibold text-[#001532] mt-2">{f.label}</p>
             </div>
@@ -96,7 +96,7 @@ export default function ProgramsPage() {
             <Link
               key={m.href}
               href={m.href}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow"
+              className="group bg-white overflow-hidden shadow-sm hover:shadow-xl transition-shadow"
             >
               <div className="relative h-40">
                 <Image src={m.image} alt={m.alt} fill className="object-cover" sizes="(max-width: 640px) 100vw, 25vw" />

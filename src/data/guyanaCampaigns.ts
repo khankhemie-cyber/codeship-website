@@ -1,7 +1,7 @@
 /**
- * CODEship Guyana — online-only landing pages. Single source of truth for
+ * CODEship Guyana: online-only landing pages. Single source of truth for
  * the 5 /gy/:slug pages. These are separate from the K-8 program taxonomy
- * (programs.ts) — Guyana registrations are a generic "online semester",
+ * (programs.ts): Guyana registrations are a generic "online semester",
  * not tied to a specific Explorers/Builders/Developers/Engineers level.
  */
 
@@ -19,7 +19,7 @@ export interface GuyanaCampaign {
   corePromise: string;
   metaTitle: string;
   metaDescription: string;
-  /** Only set for the NGSA page — approved phrasing, never "guaranteed" or "official". */
+  /** Only set for the NGSA page, approved phrasing, never "guaranteed" or "official". */
   complianceNote?: string;
 }
 
@@ -87,9 +87,9 @@ export function getGuyanaCampaign(slug: string): GuyanaCampaign | undefined {
   return GUYANA_CAMPAIGNS.find((c) => c.slug === slug);
 }
 
-/** Shared page-anatomy content — identical across all 5 pages per the brief. */
+/** Shared page-anatomy content: identical across all 5 pages per the brief. */
 
-/** Guyana's own semester calendar — independent of the Canadian schedule in classSchedule.js. */
+/** Guyana's own semester calendar: independent of the Canadian schedule in classSchedule.js. */
 export const GUYANA_NEXT_SEMESTER_START = "the week of September 14, 2026";
 
 export const GUYANA_TRUST_LINE = "Online · Small-group learning · Math, English, writing, coding, and computer skills";
@@ -164,4 +164,4 @@ export const GUYANA_FAQ: GuyanaFAQItem[] = [
 ];
 
 export const GUYANA_COMPLIANCE_DISCLAIMER =
-  "CODEship is an online enrichment program. It supports school learning and NGSA skill-building — it is not an official NGSA program, is not Ministry-approved or endorsed, and does not guarantee grades or exam results.";
+  "CODEship is an online enrichment program. It supports school learning and NGSA skill-building: it is not an official NGSA program, is not Ministry-approved or endorsed, and does not guarantee grades or exam results.";

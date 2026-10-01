@@ -77,14 +77,14 @@ export default function SchoolsPage() {
             <SectionHeader title="Choose a format" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {formats.map((f) => (
-                <div key={f.title} className="bg-white rounded-2xl shadow-sm p-6">
+                <div key={f.title} className="bg-white shadow-sm p-6">
                   <h3 className="text-xl font-bold text-[#001532]">{f.title}</h3>
                   <p className="text-base text-gray-600 mt-2">{f.desc}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="bg-[#001532] rounded-2xl p-8">
+          <div className="bg-[#001532] p-8">
             <h2 className="text-2xl font-extrabold text-white mb-6">What schools get</h2>
             <CheckList items={benefits} dark />
           </div>
@@ -93,7 +93,7 @@ export default function SchoolsPage() {
 
       <Section tone="white" narrow id="request">
         <SectionHeader center title="Request information" lead="Tell us about your school. We reply within 2 business days." />
-        <div className="bg-[#FAF8F4] rounded-2xl p-6 sm:p-8">
+        <div className="bg-[#FAF8F4] p-6 sm:p-8">
           <SchoolContactForm />
         </div>
       </Section>

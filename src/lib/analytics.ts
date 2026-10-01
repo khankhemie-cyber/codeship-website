@@ -5,11 +5,11 @@ import type { LocationSlug } from "@/lib/registration";
  * Analytics stubs. The registration link's UTM (see lib/registration.ts) is
  * the durable source of attribution; these events mirror it for on-site
  * funnel analysis. Wire these up to GA4 (gtag) and/or the Meta Pixel by
- * filling in the calls below — see README.md.
+ * filling in the calls below: see README.md.
  */
 
 interface EventPayload {
-  /** Optional — the Guyana pages (guyanaCampaigns.ts) have no K-8 program mapping and pass `page` instead. */
+  /** Optional: the Guyana pages (guyanaCampaigns.ts) have no K-8 program mapping and pass `page` instead. */
   program?: ProgramSlug;
   location?: LocationSlug;
   [key: string]: unknown;

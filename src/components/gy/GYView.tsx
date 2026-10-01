@@ -19,7 +19,7 @@ import FAQAccordion from "@/components/FAQAccordion";
 import StickyMobileCTA from "@/components/lp/StickyMobileCTA";
 import GYFooter from "./GYFooter";
 
-// A short, easy-to-scan set — the full lists in guyanaCampaigns.ts stay available for future use.
+// A short, easy-to-scan set: the full lists in guyanaCampaigns.ts stay available for future use.
 const OUTCOME_HIGHLIGHTS = GUYANA_OUTCOME_BULLETS.slice(0, 5);
 const PROJECT_HIGHLIGHTS = GUYANA_PROJECTS_BY_AGE.flatMap((g) => g.projects.slice(0, 2));
 const FAQ_HIGHLIGHTS = GUYANA_FAQ.slice(0, 4);

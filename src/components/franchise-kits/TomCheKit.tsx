@@ -80,14 +80,14 @@ function PageCover(){
           <div style={{fontSize:34,fontWeight:900,color:WHITE,lineHeight:0.96,textTransform:"uppercase",letterSpacing:-1,marginBottom:3}}>STARTS</div>
           <div style={{fontSize:34,fontWeight:900,color:GOLD,lineHeight:0.96,textTransform:"uppercase",letterSpacing:-1,marginBottom:3}}>HERE.</div>
           <p style={{fontSize:14,color:"rgba(255,255,255,0.72)",lineHeight:1.65,marginTop:16,maxWidth:480}}>
-            You came from Hong Kong with a teaching background — classroom skills, patience, and the ability to connect with families. CODEship gives you the curriculum, the brand, and the school partnerships to build your own children&apos;s academy in Markham or Scarborough.
+            You came from Hong Kong with a teaching background: classroom skills, patience, and the ability to connect with families. CODEship gives you the curriculum, the brand, and the school partnerships to build your own children&apos;s academy in Markham or Scarborough.
           </p>
         </div>
       </div>
       <div style={{background:NAVY,flex:1,padding:"24px 42px",display:"flex",gap:20,alignItems:"center"}}>
         <div style={{background:TEAL,borderRadius:12,padding:"16px 20px",flexShrink:0,minWidth:170}}>
           <div style={{fontSize:9,fontWeight:800,letterSpacing:3,textTransform:"uppercase",color:"rgba(255,255,255,0.6)",marginBottom:5}}>Investment Range</div>
-          <div style={{fontSize:18,fontWeight:900,color:GOLD,lineHeight:1}}>$15K–$18K – $100K–$150K</div>
+          <div style={{fontSize:18,fontWeight:900,color:GOLD,lineHeight:1}}>$15K–$18K to $100K–$150K</div>
           <div style={{fontSize:11,fontWeight:700,color:WHITE,marginTop:2}}>Three models available</div>
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:10}}>
@@ -95,7 +95,7 @@ function PageCover(){
             [GOLD,"Territory:","Markham + Scarborough"],
             [TEAL,"Background:","Teaching background · Hong Kong trained · Markham / Scarborough"],
             [PURPLE,"Models:","Pop-Up / Virtual  ·  Shared Space  ·  Studio Storefront"],
-            [GOLD,"Franchise Fee:","$10,000 CAD — one time"],
+            [GOLD,"Franchise Fee:","$10,000 CAD, one time"],
           ].map(([dot,lbl,v])=>(
             <div key={lbl} style={{display:"flex",alignItems:"center",gap:9}}>
               <div style={{width:7,height:7,borderRadius:"50%",background:dot,flexShrink:0}}/>
@@ -123,7 +123,7 @@ function PageOpportunity(){
           YOU BUILT YOUR CAREER <span style={{color:GOLD}}>FOR OTHERS.</span>
         </div>
         <p style={{fontSize:13.5,color:"rgba(255,255,255,0.7)",lineHeight:1.65,maxWidth:580}}>
-          You came from Hong Kong with a teaching background. Right now you are in a 9-to-5 that has nothing to do with why you came to Canada. CODEship is your path back — on your own terms, with your name on the door.
+          You came from Hong Kong with a teaching background. Right now you are in a 9-to-5 that has nothing to do with why you came to Canada. CODEship is your path back, on your own terms, with your name on the door.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -132,7 +132,7 @@ function PageOpportunity(){
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:TEAL,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What You Bring</div>
-            <DotItem text="A teaching background — the most trusted credential in the enrichment industry" color={TEAL}/>
+            <DotItem text="A teaching background: the most trusted credential in the enrichment industry" color={TEAL}/>
             <DotItem text="Classroom experience that builds instant parent trust" color={TEAL}/>
             <DotItem text="Cultural and language connection to Markham and Scarborough's large Chinese community" color={TEAL}/>
             <DotItem text="Discipline and patience developed through years in education" color={TEAL}/>
@@ -141,9 +141,9 @@ function PageOpportunity(){
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:GOLD,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What CODEship Adds</div>
-            <DotItem text="A fully built curriculum — Coding, AI, STEM, Robotics, App Development" color={GOLD}/>
+            <DotItem text="A fully built curriculum: Coding, AI, STEM, Robotics, App Development" color={GOLD}/>
             <DotItem text="A recognizable and growing national brand" color={GOLD}/>
-            <DotItem text="School partnership tools — access families where they already gather" color={GOLD}/>
+            <DotItem text="School partnership tools: access families where they already gather" color={GOLD}/>
             <DotItem text="Complete hiring and training systems pre-built for you" color={GOLD}/>
             <DotItem text="Operations manual and business playbooks ready from day one" color={GOLD}/>
           </Card>
@@ -152,7 +152,7 @@ function PageOpportunity(){
           <div style={{fontSize:44,fontWeight:900,color:GOLD,lineHeight:0.7,flexShrink:0,marginTop:4}}>&ldquo;</div>
           <p style={{fontSize:15,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>You do not need a coding degree or an Ontario teaching certificate. You need passion for helping children and the drive to build something of your own. We provide everything else.</p>
         </div>
-        <GoldCallout title="The opportunity:" body="Your Hong Kong teaching background and Cantonese language skills give you direct cultural credibility with Markham and Scarborough's largest communities — in a way no corporate brand can replicate."/>
+        <GoldCallout title="The opportunity:" body="Your Hong Kong teaching background and Cantonese language skills give you direct cultural credibility with Markham and Scarborough's largest communities, in a way no corporate brand can replicate."/>
       </div>
       <div style={{height:16}}/><GoldBar/>
       <Footer right="Personalized for Tom Che"/>
@@ -163,7 +163,7 @@ function PageOpportunity(){
 // ── PAGE 3: MARKET ────────────────────────────────────────────────────────────
 function PageMarket(){
   const [tab,setTab]=useState(0);
-  const markets=[{label:"Markham",color:"#2A9D8F",stats:[["Markham Population (2024)", "338,503", "One of Ontario's fastest-growing cities · +2.6%/yr"], ["Children under 19", "~74,430", "22% of population · high family investment in education"], ["Median Household Income", "$104,000", "Significantly above Ontario average"], ["Elementary Schools", "90+", "YRDSB + YCDSB · approximately 90+ schools in Markham area"]],community:[["Chinese community", "40%+", "City of Markham"], ["South Asian", "12%", "City of Markham"], ["Pop. growth", "2.6%/yr", "One of Ontario's fastest"]],schools:[["York Region DSB (YRDSB)", "175 elementary total", "~90+ serving Markham students · 117,000+ students across York Region"], ["York Catholic DSB (YCDSB)", "86 elementary total", "54,000+ students · strong community partnership culture"]],opp:"Markham is one of Canada's fastest-growing cities. Over 40% of residents identify as Chinese — and parents here invest heavily in their children's education. With median household income at $104K, families have the means. The demand for quality STEM programs is high. The competition is thin.",tags:["40%+ Chinese community", "$104K median income", "90+ elementary schools", "Fastest-growing GTA city", "Very low STEM competition"],edge:"Your Hong Kong teaching background and Cantonese language skills give you a direct cultural connection that no other franchise operator in Markham can replicate. Families trust people from their own community. You are that person."},{label:"Scarborough",color:"#F4D734",stats:[["Scarborough Population", "~632,000", "Part of Toronto · large, diverse, education-focused"], ["Children and Youth", "~85,000", "~13.4% of population"], ["Median Household Income", "$72,000", "Strong family investment in enrichment"], ["Elementary Schools", "150+", "TDSB + TCDSB schools serving Scarborough"]],community:[["Chinese community", "38%", "Scarborough area"], ["South Asian", "24%", "Scarborough area"], ["Immigrant families", "High proportion", "Strong academic culture"]],schools:[["Toronto District School Board", "469 elementary total", "Canada's largest school board · significant Scarborough presence"], ["Toronto Catholic DSB", "163 elementary total", "Strong community culture · family engagement focus"]],opp:"Scarborough is a large, diverse, and underserved market. Large Chinese and South Asian communities with strong cultural emphasis on academic achievement. Far fewer organized STEM enrichment options than North York or Richmond Hill — your opportunity to be first.",tags:["38% Chinese community", "24% South Asian community", "150+ schools in reach", "Underserved STEM market", "Strong academic-achievement culture"],edge:"Both Markham and Scarborough have large Chinese communities. Your teaching background, Cantonese language skills, and cultural understanding give you a direct relationship advantage no other franchisee can replicate."}];
+  const markets=[{label:"Markham",color:"#2A9D8F",stats:[["Markham Population (2024)", "338,503", "One of Ontario's fastest-growing cities · +2.6%/yr"], ["Children under 19", "~74,430", "22% of population · high family investment in education"], ["Median Household Income", "$104,000", "Significantly above Ontario average"], ["Elementary Schools", "90+", "YRDSB + YCDSB · approximately 90+ schools in Markham area"]],community:[["Chinese community", "40%+", "City of Markham"], ["South Asian", "12%", "City of Markham"], ["Pop. growth", "2.6%/yr", "One of Ontario's fastest"]],schools:[["York Region DSB (YRDSB)", "175 elementary total", "~90+ serving Markham students · 117,000+ students across York Region"], ["York Catholic DSB (YCDSB)", "86 elementary total", "54,000+ students · strong community partnership culture"]],opp:"Markham is one of Canada's fastest-growing cities. Over 40% of residents identify as Chinese, and parents here invest heavily in their children's education. With median household income at $104K, families have the means. The demand for quality STEM programs is high. The competition is thin.",tags:["40%+ Chinese community", "$104K median income", "90+ elementary schools", "Fastest-growing GTA city", "Very low STEM competition"],edge:"Your Hong Kong teaching background and Cantonese language skills give you a direct cultural connection that no other franchise operator in Markham can replicate. Families trust people from their own community. You are that person."},{label:"Scarborough",color:"#F4D734",stats:[["Scarborough Population", "~632,000", "Part of Toronto · large, diverse, education-focused"], ["Children and Youth", "~85,000", "~13.4% of population"], ["Median Household Income", "$72,000", "Strong family investment in enrichment"], ["Elementary Schools", "150+", "TDSB + TCDSB schools serving Scarborough"]],community:[["Chinese community", "38%", "Scarborough area"], ["South Asian", "24%", "Scarborough area"], ["Immigrant families", "High proportion", "Strong academic culture"]],schools:[["Toronto District School Board", "469 elementary total", "Canada's largest school board · significant Scarborough presence"], ["Toronto Catholic DSB", "163 elementary total", "Strong community culture · family engagement focus"]],opp:"Scarborough is a large, diverse, and underserved market. Large Chinese and South Asian communities with strong cultural emphasis on academic achievement. Far fewer organized STEM enrichment options than North York or Richmond Hill, your opportunity to be first.",tags:["38% Chinese community", "24% South Asian community", "150+ schools in reach", "Underserved STEM market", "Strong academic-achievement culture"],edge:"Both Markham and Scarborough have large Chinese communities. Your teaching background, Cantonese language skills, and cultural understanding give you a direct relationship advantage no other franchisee can replicate."}];
   const m=markets[tab];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -273,7 +273,7 @@ function PageCompetitors(){
                 {c.isUs?"Your Advantage":"Key Weakness"}
               </div>
               <p style={{fontSize:11.5,color:c.isUs?WHITE:"#4a5568",lineHeight:1.55}}>
-                {c.weakness||"Build students before you build a location. Lowest entry cost in children's enrichment franchising — with the highest community-fit in this market."}
+                {c.weakness||"Build students before you build a location. Lowest entry cost in children's enrichment franchising, with the highest community-fit in this market."}
               </p>
             </div>
           ))}
@@ -288,9 +288,9 @@ function PageCompetitors(){
 // ── PAGE 5: AUDIENCE ──────────────────────────────────────────────────────────
 function PageAudience(){
   const [tab,setTab]=useState("b2c");
-  const b2c=[{color:"#2A9D8F",label:"The Tiger Parent",desc:"High-achieving families from East and South Asian backgrounds who actively invest in enrichment programs. Education is a top family priority. They research thoroughly and pay for quality.",stats:["Markham: 40%+ Chinese community", "Scarborough: 38% Chinese community", "Education-focused families invest $3,000–$8,000+/year on enrichment"]},{color:"#F4D734",label:"The Academic Achiever Family",desc:"Families whose children attend top-ranked elementary schools in Markham (Unionville, Stonebridge). Actively preparing for high school and university pathways.",stats:["Markham has some of Ontario's top-ranked elementary schools", "EQAO scores consistently above provincial average", "Already investing in tutoring and enrichment"]},{color:"#5C3D8F",label:"The New Immigrant Family",desc:"Recently arrived families — primarily Chinese and South Asian — who are building their lives in Markham and Scarborough. Seeking structured programs to help children integrate, excel, and build futures.",stats:["Markham among GTA's top destinations for new Chinese immigrants", "Scarborough has large newcomer South Asian population", "Strong cultural value for academic investment"]},{color:"#0D1B2A",label:"The Purpose-Driven Parent",desc:"Parents motivated by more than grades — they want creativity, confidence, and future-ready skills for their children. CODEship's whole-child approach resonates strongly.",stats:["Growing demand for STEM programs with life-skills framing", "Parents in education-focused communities over-index on enrichment", "Referral networks are strong in tight-knit communities"]}];
+  const b2c=[{color:"#2A9D8F",label:"The Tiger Parent",desc:"High-achieving families from East and South Asian backgrounds who actively invest in enrichment programs. Education is a top family priority. They research thoroughly and pay for quality.",stats:["Markham: 40%+ Chinese community", "Scarborough: 38% Chinese community", "Education-focused families invest $3,000–$8,000+/year on enrichment"]},{color:"#F4D734",label:"The Academic Achiever Family",desc:"Families whose children attend top-ranked elementary schools in Markham (Unionville, Stonebridge). Actively preparing for high school and university pathways.",stats:["Markham has some of Ontario's top-ranked elementary schools", "EQAO scores consistently above provincial average", "Already investing in tutoring and enrichment"]},{color:"#5C3D8F",label:"The New Immigrant Family",desc:"Recently arrived families, primarily Chinese and South Asian, who are building their lives in Markham and Scarborough. Seeking structured programs to help children integrate, excel, and build futures.",stats:["Markham among GTA's top destinations for new Chinese immigrants", "Scarborough has large newcomer South Asian population", "Strong cultural value for academic investment"]},{color:"#0D1B2A",label:"The Purpose-Driven Parent",desc:"Parents motivated by more than grades: they want creativity, confidence, and future-ready skills for their children. CODEship's whole-child approach resonates strongly.",stats:["Growing demand for STEM programs with life-skills framing", "Parents in education-focused communities over-index on enrichment", "Referral networks are strong in tight-knit communities"]}];
   const b2b=[{color:"#2A9D8F",label:"YRDSB Elementary Schools",desc:"York Region District School Board operates 175 elementary schools across York Region, with approximately 90+ serving Markham students. These schools actively seek curriculum-aligned enrichment partners.",stats:["~90 elementary schools in Markham area", "YRDSB serves 117,000+ students across York Region", "After-school programs actively recruited"]},{color:"#F4D734",label:"YCDSB Catholic Schools",desc:"York Catholic District School Board operates 86 elementary schools across York Region. Catholic schools have strong community focus and often welcome values-aligned enrichment partners.",stats:["86 elementary schools across York Region", "54,000+ students served", "Strong community partnership culture"]},{color:"#5C3D8F",label:"TDSB + TCDSB Scarborough",desc:"Toronto District School Board and Toronto Catholic DSB together serve 150+ schools across Scarborough. Canada's largest school board is a significant B2B opportunity.",stats:["150+ elementary schools in Scarborough area", "TDSB: Canada's largest school board", "TCDSB: 163 elementary schools in Toronto"]},{color:"#0D1B2A",label:"Rec Centres and Libraries",desc:"Markham and Toronto public rec centres and library branches run community programming and actively partner with enrichment providers for after-school and weekend slots.",stats:["City of Markham: 8 recreation centres", "Toronto Public Library: active digital literacy programs", "Community spaces available at low or no cost to start"]}];
-  const insight={b2c:"Your Cantonese language skills and teaching background let you market directly to Chinese-speaking families in a way no corporate brand can. That is your unfair competitive advantage.",b2b:"A single school partnership in Markham generates parent awareness, recurring enrollment, and referrals — without paying for a single ad. Schools are your acquisition channel."};
+  const insight={b2c:"Your Cantonese language skills and teaching background let you market directly to Chinese-speaking families in a way no corporate brand can. That is your unfair competitive advantage.",b2b:"A single school partnership in Markham generates parent awareness, recurring enrollment, and referrals, without paying for a single ad. Schools are your acquisition channel."};
   const data=tab==="b2c"?b2c:b2b;
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -300,7 +300,7 @@ function PageAudience(){
           WHO YOU SERVE. <span style={{color:GOLD}}>AND WHO PAYS YOU.</span>
         </div>
         <div style={{display:"flex",gap:8}}>
-          {[["b2c","B2C — Parents and Families"],["b2b","B2B — Schools and Organisations"]].map(([k,lbl])=>(
+          {[["b2c","B2C: Parents and Families"],["b2b","B2B: Schools and Organisations"]].map(([k,lbl])=>(
             <button key={k} onClick={()=>setTab(k)} style={{
               padding:"8px 16px",borderRadius:6,border:"none",cursor:"pointer",
               background:tab===k?GOLD:"rgba(255,255,255,0.12)",
@@ -336,7 +336,7 @@ function PageAudience(){
 // ── PAGE 6: MODELS ────────────────────────────────────────────────────────────
 function PageModels(){
   const [active,setActive]=useState(0);
-  const models=[{num:"01",color:"#2A9D8F",name:"Pop-Up Workshop Model",range:"$15K–$18K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Build your student base before you build your location.",best:"The perfect starting point. Build a student base through school partnerships first — then decide on a space once you have the students to justify it.",how:["Run workshops directly inside schools as an approved after-school partner", "Use community centres, libraries, and park recreation rooms for weekend sessions", "Partner with cultural organisations and religious centres for weekday programs", "Deliver holiday camps (March Break, PA Days, Summer) at partner venues", "No rent, no lease, no location overhead"],programs:["After-school coding clubs", "School in-class workshops", "PA Day programs", "March Break and Summer camps", "Community pop-up events"],mindset:"Start lean. Grow smart. Build your student base before committing to overhead. Most successful CODEship franchisees start here."},{num:"02",color:"#F4D734",name:"Shared Space Model",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"$500–$800/month",tagline:"Your branded space. A fraction of the cost.",best:"Once you have 20–30 students from school partnerships, secure a shared space or rec centre room. Your branded CODEship Academy becomes a real destination in the community.",how:["Rent a shared commercial unit or recreation centre room at $500–$800/month", "Brand it fully as your CODEship Academy location", "Continue school partnerships to drive enrollment to your space", "Run weekly classes, after-school programs, and weekend camps", "Flexible lease — month-to-month until you are ready to commit"],programs:["Weekly in-centre coding classes", "After-school enrolled programs", "Weekend STEM workshops", "Birthday party experiences", "AI and app development programs"],mindset:"Build the destination. Enrol students through schools first — then give them a home base. By the time you sign a lease, you already have the students."},{num:"03",color:"#5C3D8F",name:"Studio Learning Centre",range:"$100K–$150K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"Dedicated commercial storefront",tagline:"Your own CODEship Academy in Markham or Scarborough.",best:"For operators ready to build a primary business. Your teaching background and community connections in Markham or Scarborough make this a compelling long-term opportunity.",how:["Secure a dedicated commercial storefront (800–1,500 sq ft) in Markham or Scarborough", "Full build-out as a branded CODEship Studio Learning Centre", "Run multiple program streams simultaneously — classes, camps, workshops, events", "Hire and manage a team of CODEship-certified instructors", "Become the go-to children's innovation academy in your community"],programs:["Weekly enrolled classes across multiple age groups", "School partnership programs", "Summer, March Break, and PA Day camps", "Birthday party experiences", "Community STEM workshops", "AI, robotics, and app development programs"],mindset:"Your teaching background is the biggest asset a studio operator can have. Parents will drive across Markham or Scarborough to bring their children to a school led by an educator they trust."}];
+  const models=[{num:"01",color:"#2A9D8F",name:"Pop-Up Workshop Model",range:"$15K–$18K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Build your student base before you build your location.",best:"The perfect starting point. Build a student base through school partnerships first, then decide on a space once you have the students to justify it.",how:["Run workshops directly inside schools as an approved after-school partner", "Use community centres, libraries, and park recreation rooms for weekend sessions", "Partner with cultural organisations and religious centres for weekday programs", "Deliver holiday camps (March Break, PA Days, Summer) at partner venues", "No rent, no lease, no location overhead"],programs:["After-school coding clubs", "School in-class workshops", "PA Day programs", "March Break and Summer camps", "Community pop-up events"],mindset:"Start lean. Grow smart. Build your student base before committing to overhead. Most successful CODEship franchisees start here."},{num:"02",color:"#F4D734",name:"Shared Space Model",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"$500–$800/month",tagline:"Your branded space. A fraction of the cost.",best:"Once you have 20–30 students from school partnerships, secure a shared space or rec centre room. Your branded CODEship Academy becomes a real destination in the community.",how:["Rent a shared commercial unit or recreation centre room at $500–$800/month", "Brand it fully as your CODEship Academy location", "Continue school partnerships to drive enrollment to your space", "Run weekly classes, after-school programs, and weekend camps", "Flexible lease: month-to-month until you are ready to commit"],programs:["Weekly in-centre coding classes", "After-school enrolled programs", "Weekend STEM workshops", "Birthday party experiences", "AI and app development programs"],mindset:"Build the destination. Enrol students through schools first, then give them a home base. By the time you sign a lease, you already have the students."},{num:"03",color:"#5C3D8F",name:"Studio Learning Centre",range:"$100K–$150K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"Dedicated commercial storefront",tagline:"Your own CODEship Academy in Markham or Scarborough.",best:"For operators ready to build a primary business. Your teaching background and community connections in Markham or Scarborough make this a compelling long-term opportunity.",how:["Secure a dedicated commercial storefront (800–1,500 sq ft) in Markham or Scarborough", "Full build-out as a branded CODEship Studio Learning Centre", "Run multiple program streams simultaneously: classes, camps, workshops, events", "Hire and manage a team of CODEship-certified instructors", "Become the go-to children's innovation academy in your community"],programs:["Weekly enrolled classes across multiple age groups", "School partnership programs", "Summer, March Break, and PA Day camps", "Birthday party experiences", "Community STEM workshops", "AI, robotics, and app development programs"],mindset:"Your teaching background is the biggest asset a studio operator can have. Parents will drive across Markham or Scarborough to bring their children to a school led by an educator they trust."}];
   const m=models[active];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -400,7 +400,7 @@ function PageModels(){
 // ── PAGE 7: INVESTMENT ────────────────────────────────────────────────────────
 function PageInvestment(){
   const [model,setModel]=useState(0);
-  const models=[{label:"Pop-Up Model",range:"$15K–$18K",color:"#2A9D8F",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Curriculum training", "Included", "You and up to 3 instructors at launch"],["Branded launch kit (digital)", "Included", "Templates, school decks, social assets"],["Technology setup", "$500–$800", "Devices, subscriptions, platform access"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$500–$800", "Local print, social, school outreach"],["Operating reserve (2 months)", "$1,500–$2,600", "Buffer while first school partnerships confirm"]]},{label:"Shared Space",range:"$18K–$20K",color:"#F4D734",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Curriculum training", "Included", "You and up to 5 instructors at launch"],["Branded launch kit (physical + digital)", "Included", "Signage, banners, printed materials"],["Space deposit and first 2 months", "$1,000–$1,600", "$500–$800/month rec centre or shared unit"],["Technology setup", "$800–$1,200", "Devices, display screen, subscriptions"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$800–$1,200", "Local and paid digital launch campaign"],["Operating reserve (3 months)", "$1,000–$2,600", "Covers space costs while enrollment builds"]]},{label:"Studio Centre",range:"$100K–$150K",color:"#5C3D8F",breakdown:[["Franchise Fee", "$10,000", "One time — full CODEship licence"],["Commercial lease deposit and first months", "$5,000–$15,000", "Storefront in Markham or Scarborough — negotiated"],["Leasehold improvements and build-out", "$35,000–$60,000", "Space design, branding, furnishings, safety compliance"],["Equipment and technology", "$8,000–$18,000", "Computers, robotics kits, displays, AV system"],["Curriculum training", "Included", "Full team certification program"],["Branded materials (signage + digital)", "$2,000–$5,000", "Exterior signage, printed materials, digital assets"],["Insurance and business registration", "$1,500–$3,000", "Commercial insurance, permits, registration"],["Pre-launch marketing", "$3,000–$8,000", "Launch campaign, school outreach, community events"],["Operating reserve (6 months)", "$12,000–$28,000", "Covers operating costs while enrollment builds"]]}];
+  const models=[{label:"Pop-Up Model",range:"$15K–$18K",color:"#2A9D8F",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Curriculum training", "Included", "You and up to 3 instructors at launch"],["Branded launch kit (digital)", "Included", "Templates, school decks, social assets"],["Technology setup", "$500–$800", "Devices, subscriptions, platform access"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$500–$800", "Local print, social, school outreach"],["Operating reserve (2 months)", "$1,500–$2,600", "Buffer while first school partnerships confirm"]]},{label:"Shared Space",range:"$18K–$20K",color:"#F4D734",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Curriculum training", "Included", "You and up to 5 instructors at launch"],["Branded launch kit (physical + digital)", "Included", "Signage, banners, printed materials"],["Space deposit and first 2 months", "$1,000–$1,600", "$500–$800/month rec centre or shared unit"],["Technology setup", "$800–$1,200", "Devices, display screen, subscriptions"],["Insurance and registration", "$500–$800", "If not already in place"],["Launch marketing", "$800–$1,200", "Local and paid digital launch campaign"],["Operating reserve (3 months)", "$1,000–$2,600", "Covers space costs while enrollment builds"]]},{label:"Studio Centre",range:"$100K–$150K",color:"#5C3D8F",breakdown:[["Franchise Fee", "$10,000", "One time: full CODEship licence"],["Commercial lease deposit and first months", "$5,000–$15,000", "Storefront in Markham or Scarborough, negotiated"],["Leasehold improvements and build-out", "$35,000–$60,000", "Space design, branding, furnishings, safety compliance"],["Equipment and technology", "$8,000–$18,000", "Computers, robotics kits, displays, AV system"],["Curriculum training", "Included", "Full team certification program"],["Branded materials (signage + digital)", "$2,000–$5,000", "Exterior signage, printed materials, digital assets"],["Insurance and business registration", "$1,500–$3,000", "Commercial insurance, permits, registration"],["Pre-launch marketing", "$3,000–$8,000", "Launch campaign, school outreach, community events"],["Operating reserve (6 months)", "$12,000–$28,000", "Covers operating costs while enrollment builds"]]}];
   const m=models[model];
   const otc=m.color==="#F4D734"?NAVY:WHITE;
   return(
@@ -415,7 +415,7 @@ function PageInvestment(){
         </p>
         <div style={{background:TEAL,borderRadius:"10px 10px 0 0",padding:"14px 22px",display:"flex",gap:20,alignItems:"center"}}>
           <div style={{flex:1.4}}>
-            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer — All Three Models</div>
+            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer: All Three Models</div>
             <div style={{fontSize:13,fontWeight:900,color:WHITE,textTransform:"uppercase"}}>For Your First 12 Months</div>
           </div>
           <div style={{flex:1,borderLeft:"1px solid rgba(255,255,255,0.25)",paddingLeft:20}}>
@@ -444,7 +444,7 @@ function PageInvestment(){
       <div style={{padding:"0 32px",display:"flex",gap:16,marginTop:14,flex:1,minHeight:0}}>
         <div style={{flex:1,border:`2px solid ${m.color}`,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column"}}>
           <div style={{background:m.color,padding:"11px 16px",textAlign:"center"}}>
-            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes — {m.range} CAD</div>
+            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes: {m.range} CAD</div>
           </div>
           <div style={{background:LIGHT,flex:1}}>
             {m.breakdown.map(([lbl,amount,note])=><CostRow key={lbl} label={lbl} amount={amount} note={note} accent={m.color}/>)}
@@ -461,7 +461,7 @@ function PageInvestment(){
           </div>
           <div style={{background:LIGHT,borderRadius:8,padding:"11px 14px",border:"1.5px solid #e0e3e8"}}>
             <span style={{fontSize:11,color:NAVY,fontWeight:800}}>After Year 1: </span>
-            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees — 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates. This document does not constitute a franchise offering or disclosure document.</span>
+            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees: 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates. This document does not constitute a franchise offering or disclosure document.</span>
           </div>
         </div>
       </div>
@@ -475,16 +475,16 @@ function PageInvestment(){
 function PagePrograms(){
   const streams=[
     {color:TEAL,label:"Foundation",title:"School Partnerships",sub:"Your anchor and student acquisition channel.",
-      desc:"Schools give you access to families before they are your customers. One partnership creates visibility, trust, and ongoing enrollment — without paid advertising.",
+      desc:"Schools give you access to families before they are your customers. One partnership creates visibility, trust, and ongoing enrollment, without paid advertising.",
       programs:[["After-School Clubs","Weekly programs running inside school premises. Students enrolled per term."],["In-Class Workshops","90-minute curriculum-aligned sessions delivered to entire classes. Schools book and pay."],["PA Day Programs","Full-day programs on teacher professional activity days. High demand, easy to fill."],["Lunch and Learn Sessions","Introduction sessions that build awareness and convert students to enrolled programs."]]},
     {color:GOLD,label:"Seasonal",title:"Camps and Holiday Programs",sub:"High-demand, high-enrollment windows.",
       desc:"Summer, March Break, and PA Day camps are the highest-volume enrollment periods. Families plan ahead and they fill quickly once your school partnerships are in place.",
       programs:[["Summer Camps","Multi-week programs in July and August. The highest enrollment period of the year."],["March Break Camps","Week-long intensive programs. Families actively seek structured activities."],["Holiday Workshops","December and school-break programs. Shorter, accessible formats."],["Weekend STEM Days","Single-day events introducing new students and complementing weekly programs."]]},
     {color:PURPLE,label:"Premium",title:"Specialist Programs",sub:"Deeper engagement for motivated students.",
-      desc:"Specialist programs serve families who want more depth. Longer commitments and higher engagement — working particularly well with education-focused communities.",
+      desc:"Specialist programs serve families who want more depth. Longer commitments and higher engagement, working particularly well with education-focused communities.",
       programs:[["AI and Machine Learning","Purpose-built for older students (Grades 5-8). High interest in education-focused communities."],["App Development","Students build real mobile apps. Strong appeal to parents who value practical outcomes."],["Robotics Programs","Hands-on hardware and software. Popular for STEM-focused school programs."],["Birthday Experiences","2-hour coded birthday party experiences. Easy first contact for new families."]]},
     {color:NAVY,label:"Community",title:"Community and B2B Programs",sub:"Your network is a direct channel.",
-      desc:"Community organisations, settlement agencies, cultural centres, and libraries are natural CODEship partners — generating funded programming and referrals advertising cannot replicate.",
+      desc:"Community organisations, settlement agencies, cultural centres, and libraries are natural CODEship partners, generating funded programming and referrals advertising cannot replicate.",
       programs:[["Community Organisation Partnerships","Programs delivered through cultural centres and community hubs."],["Settlement and Newcomer Programs","Programs for recently arrived families. Settlement agencies fund and refer."],["Corporate STEM Workshops","One-day events and CSR-funded programs. Booked by companies, not families."],["Library and Recreation Centre Programs","City-funded partnerships that pay CODEship to deliver community programming."]]},
   ];
   return(
@@ -495,7 +495,7 @@ function PagePrograms(){
           WHAT YOU DELIVER. <span style={{color:GOLD}}>WHAT FAMILIES SIGN UP FOR.</span>
         </div>
         <p style={{fontSize:13,color:"rgba(255,255,255,0.65)",lineHeight:1.6,maxWidth:580}}>
-          CODEship&apos;s program library covers four streams — designed to work across different models, price points, and enrollment patterns. You activate the ones that fit your model and your market.
+          CODEship&apos;s program library covers four streams, designed to work across different models, price points, and enrollment patterns. You activate the ones that fit your model and your market.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -551,7 +551,7 @@ function PageCustom(){
                 <span style={{fontSize:10,fontWeight:800,textTransform:"uppercase",letterSpacing:1,color:WHITE}}>What Your Background Gives You</span>
               </div>
               <div style={{background:LIGHT,padding:"14px"}}>
-                {["Instant credibility with Chinese-speaking families in Markham and Scarborough","The ability to communicate in Cantonese — directly with parents in their preferred language","Understanding of the education culture that drives these communities","Experience managing classrooms, students, and parent relationships","The patience and discipline children's program operators need above everything else"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
+                {["Instant credibility with Chinese-speaking families in Markham and Scarborough","The ability to communicate in Cantonese, directly with parents in their preferred language","Understanding of the education culture that drives these communities","Experience managing classrooms, students, and parent relationships","The patience and discipline children's program operators need above everything else"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
               </div>
             </div>
             <div style={{flex:1,borderRadius:10,overflow:"hidden",border:"1.5px solid #e0e3e8"}}>
@@ -559,7 +559,7 @@ function PageCustom(){
                 <span style={{fontSize:10,fontWeight:800,textTransform:"uppercase",letterSpacing:1,color:NAVY}}>What CODEship Adds to Your Teaching</span>
               </div>
               <div style={{background:LIGHT,padding:"14px"}}>
-                {["A standardized curriculum — Coding, AI, STEM, Robotics, App Development","A national brand with growing recognition among education-focused parents","School partnership tools and outreach scripts — so your first meetings go well","Business systems and operations manual — so you run a school, not just a class","Hiring frameworks — so you can build a team as your student base grows"].map(t=><CheckItem key={t} text={t} color={GOLD}/>)}
+                {["A standardized curriculum: Coding, AI, STEM, Robotics, App Development","A national brand with growing recognition among education-focused parents","School partnership tools and outreach scripts, so your first meetings go well","Business systems and operations manual, so you run a school, not just a class","Hiring frameworks, so you can build a team as your student base grows"].map(t=><CheckItem key={t} text={t} color={GOLD}/>)}
               </div>
             </div>
           </div>
@@ -568,7 +568,7 @@ function PageCustom(){
             <div style={{display:"flex",gap:16}}>
               <div style={{flex:1}}>
                 <div style={{fontSize:12,fontWeight:800,color:WHITE,textTransform:"uppercase",marginBottom:6}}>What They Are Looking For</div>
-                <DotItem text="An educator they can trust — not a brand" color={TEAL}/>
+                <DotItem text="An educator they can trust, not a brand" color={TEAL}/>
                 <DotItem text="Programs delivered by someone who understands their culture" color={TEAL}/>
                 <DotItem text="STEM enrichment that goes beyond screen time" color={TEAL}/>
               </div>
@@ -589,7 +589,7 @@ function PageCustom(){
               <div style={{fontSize:10,color:"rgba(255,255,255,0.7)",marginTop:1}}>Your teaching skills are the requirement</div>
             </div>
             <div style={{background:LIGHT,padding:"14px"}}>
-              {["You do not need a computer science background","You do not need experience with AI or robotics","You do not need to know how to code before you start","CODEship curriculum training prepares you and your instructors completely","Your job is to run the business and build relationships — not be the technical expert"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
+              {["You do not need a computer science background","You do not need experience with AI or robotics","You do not need to know how to code before you start","CODEship curriculum training prepares you and your instructors completely","Your job is to run the business and build relationships, not be the technical expert"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
             </div>
           </div>
           <GoldCallout title="The insight:" body="Parents in Markham and Scarborough are not looking for a tech company. They are looking for an educator they trust. You are that person. CODEship gives you the programs to back it up."/>
@@ -603,7 +603,7 @@ function PageCustom(){
 
 // ── PAGE 10: NEXT STEPS ───────────────────────────────────────────────────────
 function PageNextSteps(){
-  const steps=[["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We confirm which model fits your timeline and answer every question."],["#F4D734","#0D1B2A","Choose Your Model","Pop-Up, Shared Space, or Studio. We help you choose the right starting point for where you are today."],["#0D1B2A","#fff","Sign and Lock In Your Territory","Markham or Scarborough locked to you. No other CODEship partner can operate in your market."],["#5C3D8F","#fff","Complete Training and Certification","CODEship curriculum training and operations onboarding. You will be ready to approach your first school within weeks."],["#2A9D8F","#fff","Launch Your First School Partnership","Your first after-school program runs. The CODEship team supports you at every stage — curriculum, school outreach, and marketing."]];
+  const steps=[["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We confirm which model fits your timeline and answer every question."],["#F4D734","#0D1B2A","Choose Your Model","Pop-Up, Shared Space, or Studio. We help you choose the right starting point for where you are today."],["#0D1B2A","#fff","Sign and Lock In Your Territory","Markham or Scarborough locked to you. No other CODEship partner can operate in your market."],["#5C3D8F","#fff","Complete Training and Certification","CODEship curriculum training and operations onboarding. You will be ready to approach your first school within weeks."],["#2A9D8F","#fff","Launch Your First School Partnership","Your first after-school program runs. The CODEship team supports you at every stage: curriculum, school outreach, and marketing."]];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <HeroDark style={{padding:"36px 42px 32px",position:"relative",overflow:"hidden"}}>
@@ -614,7 +614,7 @@ function PageNextSteps(){
         <div style={{fontSize:28,fontWeight:900,color:WHITE,textTransform:"uppercase",lineHeight:0.95,marginBottom:3}}>FROM TODAY</div>
         <div style={{fontSize:28,fontWeight:900,color:GOLD,textTransform:"uppercase",lineHeight:0.95,marginBottom:14}}>TO LAUNCH.</div>
         <p style={{fontSize:14,color:"rgba(255,255,255,0.75)",lineHeight:1.65,maxWidth:520}}>
-          Here is the clear path from this conversation to your first program running — with the CODEship team supporting you at every stage.
+          Here is the clear path from this conversation to your first program running, with the CODEship team supporting you at every stage.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -631,9 +631,9 @@ function PageNextSteps(){
           ))}
         </div>
         <div style={{width:215,flexShrink:0}}>
-          <StatTile label="Model 1 — Pop-Up / Virtual" value="$15K–$18K" sub="Start lean, no location overhead" accent={TEAL}/>
-          <StatTile label="Model 2 — Shared Space" value="$18K–$20K" sub="Branded CODEship presence" accent={GOLD}/>
-          <StatTile label="Model 3 — Studio Storefront" value="$100K–$150K" sub="Full academy, dedicated commercial space" accent={PURPLE}/>
+          <StatTile label="Model 1: Pop-Up / Virtual" value="$15K–$18K" sub="Start lean, no location overhead" accent={TEAL}/>
+          <StatTile label="Model 2: Shared Space" value="$18K–$20K" sub="Branded CODEship presence" accent={GOLD}/>
+          <StatTile label="Model 3: Studio Storefront" value="$100K–$150K" sub="Full academy, dedicated commercial space" accent={PURPLE}/>
           <div style={{background:NAVY,borderRadius:10,padding:"14px 16px",marginTop:4}}>
             <div style={{fontSize:42,fontWeight:900,color:GOLD,lineHeight:0.7,marginBottom:8}}>&ldquo;</div>
             <p style={{fontSize:12.5,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Your teaching background is your business credential. Parents in Markham and Scarborough are looking for an educator they can trust with their children&apos;s futures. You are that person.</p>

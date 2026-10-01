@@ -20,7 +20,7 @@ export default function RefundPolicyPage() {
 
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-sm p-8 space-y-8 text-gray-700 text-sm">
+          <div className="bg-white shadow-sm p-8 space-y-8 text-gray-700 text-sm">
             <div>
               <h2 className="text-xl font-bold text-[#001532] mb-3">1. Registration & Payment</h2>
               <p>
@@ -30,11 +30,11 @@ export default function RefundPolicyPage() {
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">2. Full Refunds — Up to 7 Days Before the First Class</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">2. Full Refunds: Up to 7 Days Before the First Class</h2>
               <p>
                 All CODEship Academy programs are <strong>fully refundable up to 7 days before the first
                 scheduled class</strong> of the semester you registered for. Cancel within this window and you
-                will receive a 100% refund of the program fee — no cancellation fees and no questions asked.
+                will receive a 100% refund of the program fee, no cancellation fees and no questions asked.
               </p>
               <p className="mt-3">
                 Approved refunds are issued to the original payment method through Stripe. Please allow
@@ -48,12 +48,12 @@ export default function RefundPolicyPage() {
                 Cancellations made <strong>less than 7 days before the first scheduled class</strong>, or after
                 the program has started, are <strong>not eligible for a refund</strong>. Our semesters run for
                 8 weeks, and instructor staffing, class sizes, and seat allocations are finalized in the
-                week leading up to the first class — a late cancellation means a seat another student could
+                week leading up to the first class: a late cancellation means a seat another student could
                 have taken goes unused.
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#001532] mb-3">4. Missed Classes — No Makeup Classes</h2>
+              <h2 className="text-xl font-bold text-[#001532] mb-3">4. Missed Classes: No Makeup Classes</h2>
               <p>
                 There are <strong>no makeup classes</strong> for missed sessions in any program. A missed class
                 is treated as a <strong>no-show</strong> and is not eligible for a refund, credit, transfer, or
@@ -73,8 +73,8 @@ export default function RefundPolicyPage() {
               <h2 className="text-xl font-bold text-[#001532] mb-3">5. Program Changes or Cancellations by CODEship</h2>
               <p>
                 If CODEship Academy cancels a class or program (for example, due to insufficient enrollment or
-                instructor availability), registered families will receive a <strong>full refund</strong> — including
-                for classes already underway, on a prorated basis for the sessions not delivered — or the option
+                instructor availability), registered families will receive a <strong>full refund</strong>, including
+                for classes already underway, on a prorated basis for the sessions not delivered, or the option
                 to transfer to another available class or location at no charge. If we reschedule a program and
                 the new time doesn&apos;t work for your family, you may request a full refund before the first
                 rescheduled class.

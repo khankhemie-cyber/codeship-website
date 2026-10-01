@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const campaign = getTrinidadCampaign(params.slug);
   if (!campaign) return {};
   // Indexable for Trinidad-market organic search, like /gy (unlike /lp, which
-  // is pure paid traffic). Canonical is always the clean route — the paid-only
+  // is pure paid traffic). Canonical is always the clean route: the paid-only
   // ?lead_submitted=1 and ?v= variants must never become canonical.
   const url = `https://www.codeshipacademy.com/tt/${campaign.slug}`;
   return {
-    // Absolute: the approved meta titles already carry the brand — the root
+    // Absolute: the approved meta titles already carry the brand. The root
     // layout's "%s | CODEship Academy" template would double it.
     title: { absolute: campaign.metaTitle },
     description: campaign.metaDescription,

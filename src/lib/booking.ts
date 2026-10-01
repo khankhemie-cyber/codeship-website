@@ -4,7 +4,7 @@ import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 
 export type OpenStart = "october" | "november";
 
-/** "Weekly, Oct 3 – Nov 28, 2026" -> "Oct 3 – Nov 28, 2026" */
+/** "Weekly, Oct 3 to Nov 28, 2026" -> "Oct 3 to Nov 28, 2026" */
 export function rangeOnly(range: string) {
   return range.replace(/^Weekly,\s*/, "");
 }
@@ -24,7 +24,7 @@ function shortTime(t: string) {
 /** Saturday time slots with the levels that share each one, in run order. */
 export const SATURDAY_SLOTS = PROGRAMS.reduce<{ time: string; programs: Program[] }[]>((slots, p) => {
   const { start, end } = IN_PERSON_SATURDAY_SCHEDULE[p.slug];
-  const time = `${shortTime(start)} – ${shortTime(end)}`;
+  const time = `${shortTime(start)} to ${shortTime(end)}`;
   const slot = slots.find((s) => s.time === time);
   if (slot) slot.programs.push(p);
   else slots.push({ time, programs: [p] });
@@ -36,9 +36,9 @@ export function saturdayTime(slug: Program["slug"]) {
   return CLASS_SCHEDULE[slug].inperson.time.replace(" ET", "");
 }
 
-/** "Weekly, Oct 6 – Dec 1, 2026" -> "Oct 6" */
+/** "Weekly, Oct 6 to Dec 1, 2026" -> "Oct 6" */
 function firstDate(range: string) {
-  return rangeOnly(range).split("–")[0].trim().replace(/,?\s*20\d\d$/, "");
+  return rangeOnly(range).split(/ to |–/)[0].trim().replace(/,?\s*20\d\d$/, "");
 }
 
 /** Every distinct first-class date for a format and semester, in date order, e.g. "Oct 1 or Oct 6". */

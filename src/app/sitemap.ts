@@ -72,7 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // Trinidad and Tobago online program pages — SEO-indexed like /gy. The /tt
+  // Trinidad and Tobago online program pages: SEO-indexed like /gy. The /tt
   // index plus the four grade-band program pages (Explorers/Builders/
   // Developers/Engineers). Clean routes only; the paid-only ?lead_submitted=1
   // and ?v= variants are deliberately excluded.

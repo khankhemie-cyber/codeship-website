@@ -18,7 +18,7 @@ export function setConsent(value: ConsentValue): void {
   window.dispatchEvent(new CustomEvent<ConsentValue>(CONSENT_EVENT, { detail: value }));
 }
 
-/** True only when the visitor opted into all cookies — the gate for any analytics/pixel loading. */
+/** True only when the visitor opted into all cookies: the gate for any analytics/pixel loading. */
 export function hasAnalyticsConsent(): boolean {
   return getConsent() === "all";
 }

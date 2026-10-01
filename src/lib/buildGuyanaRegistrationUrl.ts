@@ -2,9 +2,9 @@ import type { GuyanaPageSlug } from "@/data/guyanaCampaigns";
 
 /**
  * Guyana registrations stay on the existing HubSpot lead-capture form
- * (embedded on /register) — Guyana prices in GYD. Guyana registrations are a
- * generic "online semester" — not tied to a specific K-8 program slug (the
- * Canadian flow checks out per-program via Stripe on /register/[program]) —
+ * (embedded on /register): Guyana prices in GYD. Guyana registrations are a
+ * generic "online semester", not tied to a specific K-8 program slug (the
+ * Canadian flow checks out per-program via Stripe on /register/[program])
  * so this builds its own UTM shape onto /register.
  */
 const TERM_BY_PAGE: Record<GuyanaPageSlug, string> = {

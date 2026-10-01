@@ -1,5 +1,5 @@
 /**
- * CODEship Trinidad and Tobago — online program landing pages. Single source of
+ * CODEship Trinidad and Tobago: online program landing pages. Single source of
  * truth for the four /tt/:slug program pages. Unlike the earlier marketing-angle
  * pages, TT is now organized by the same four grade-band programs as Canada
  * (Explorers / Builders / Developers / Engineers), each with its own schedule
@@ -7,7 +7,7 @@
  *
  * Prices are in TTD (TT$600 flat, four weeks). Day and time mirror the Canadian
  * online groups (CLASS_SCHEDULE[...].online in classSchedule.js) so TT and the
- * Canadian online cohort run the same weekly slot — the only difference is
+ * Canadian online cohort run the same weekly slot: the only difference is
  * length (TT is 4 weeks, Canadian is 8).
  */
 
@@ -27,7 +27,7 @@ export interface TrinidadCampaign {
   corePromise: string;
   outcomeBullets: string[];
   projectExamples: string[];
-  /** Weekly class day — sourced from the Canadian online group so they align. */
+  /** Weekly class day, sourced from the Canadian online group so they align. */
   days: string;
   /** Weekly class time (ET; equals TT local time during the cohort). */
   time: string;
@@ -39,7 +39,7 @@ export interface TrinidadCampaign {
   metaDescription: string;
 }
 
-/** Shared programme constants — update once, reflected on every /tt page. */
+/** Shared programme constants: update once, reflected on every /tt page. */
 export const TRINIDAD_PROGRAMME_FEE = "TT$600";
 export const TRINIDAD_PER_CLASS_FEE = "TT$150";
 export const TRINIDAD_NEXT_COHORT_START = "the week of September 14, 2026";
@@ -78,7 +78,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     time: CLASS_SCHEDULE.explorers.online.time,
     dates: TT_TUESDAY_DATES,
     stripeUrl: "https://buy.stripe.com/4gM6oB6Ij6ZD1sR1vmdAk06",
-    metaTitle: "Explorers — Online Coding for Ages 4–6 in Trinidad and Tobago | CODEship",
+    metaTitle: "Explorers: Online Coding for Ages 4–6 in Trinidad and Tobago | CODEship",
     metaDescription:
       "Live online coding classes for children ages 4–6 (K–1) across Trinidad and Tobago. A playful first step into coding through stories, games and creative projects. Four weeks for TT$600.",
   },
@@ -111,7 +111,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     time: CLASS_SCHEDULE.builders.online.time,
     dates: TT_TUESDAY_DATES,
     stripeUrl: "https://buy.stripe.com/5kQfZb9Uv0Bf5J78XOdAk03",
-    metaTitle: "Builders — Coding & Web Projects for Ages 7–9 in Trinidad and Tobago | CODEship",
+    metaTitle: "Builders: Coding & Web Projects for Ages 7–9 in Trinidad and Tobago | CODEship",
     metaDescription:
       "Live online coding classes for children ages 7–9 (Grades 2–3) across Trinidad and Tobago. Build real web pages and games with block coding, HTML and CSS. Four weeks for TT$600.",
   },
@@ -122,7 +122,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     ages: "Ages 9–11",
     headline: "Developers: Real Code for Ages 9–11 in Trinidad and Tobago",
     subhead:
-      "The move into real programming languages — learners write JavaScript and Python and get their first hands-on look at how AI works.",
+      "The move into real programming languages: learners write JavaScript and Python and get their first hands-on look at how AI works.",
     corePromise:
       "After four weeks, your child should be able to write simple real code, build an interactive app or bot and present how it works.",
     outcomeBullets: [
@@ -144,7 +144,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     time: CLASS_SCHEDULE.developers.online.time,
     dates: TT_THURSDAY_DATES,
     stripeUrl: "https://buy.stripe.com/6oU8wJgiT2JnfjH0ridAk05",
-    metaTitle: "Developers — Real Code for Ages 9–11 in Trinidad and Tobago | CODEship",
+    metaTitle: "Developers: Real Code for Ages 9–11 in Trinidad and Tobago | CODEship",
     metaDescription:
       "Live online coding classes for children ages 9–11 (Grades 4–5) across Trinidad and Tobago. Write real JavaScript and Python and explore the foundations of AI. Four weeks for TT$600.",
   },
@@ -155,7 +155,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     ages: "Ages 12–16",
     headline: "Engineers: Build AI Responsibly, Ages 12–16 in Trinidad and Tobago",
     subhead:
-      "Advanced building for teens — full applications, product design and AI, aimed at real projects and post-secondary readiness.",
+      "Advanced building for teens: full applications, product design and AI, aimed at real projects and post-secondary readiness.",
     corePromise:
       "After four weeks, your teen should be able to design a more sophisticated application, apply AI concepts responsibly and pitch their solution.",
     outcomeBullets: [
@@ -177,7 +177,7 @@ export const TRINIDAD_CAMPAIGNS: TrinidadCampaign[] = [
     time: CLASS_SCHEDULE.engineers.online.time,
     dates: TT_THURSDAY_DATES,
     stripeUrl: "https://buy.stripe.com/7sY7sFaYz6ZDb3r6PGdAk07",
-    metaTitle: "Engineers — Build AI Responsibly, Ages 12–16 in Trinidad and Tobago | CODEship",
+    metaTitle: "Engineers: Build AI Responsibly, Ages 12–16 in Trinidad and Tobago | CODEship",
     metaDescription:
       "Live online coding classes for teens ages 12–16 (Grades 6–8) across Trinidad and Tobago. Build full applications and apply AI responsibly. Four weeks for TT$600.",
   },
@@ -187,13 +187,13 @@ export function getTrinidadCampaign(slug: string): TrinidadCampaign | undefined 
   return TRINIDAD_CAMPAIGNS.find((c) => c.slug === slug);
 }
 
-/** Shared page-anatomy content — identical across all program pages. */
+/** Shared page-anatomy content: identical across all program pages. */
 
 export const TRINIDAD_TRUST_LINE =
   "Live online classes · Small-group learning · Beginner-friendly · Available across Trinidad and Tobago";
 
 export const TRINIDAD_HOW_IT_WORKS: string[] = [
-  "Four live online classes — one instructor-led class each week",
+  "Four live online classes, one instructor-led class each week",
   "Beginner-friendly activities with small-group learning",
   "Practical digital projects your child builds and keeps",
   "Guided academic and problem-solving activities",
@@ -234,7 +234,7 @@ export const TRINIDAD_FAQ: TrinidadFAQItem[] = [
   {
     question: "How do I choose the right program?",
     answer:
-      "Programs are grouped by grade band — Explorers (K–1), Builders (Grades 2–3), Developers (Grades 4–5) and Engineers (Grades 6–8). Choose the one that matches your child's grade. If you're unsure, email admin@codeshipacademy.com and our team will help.",
+      "Programs are grouped by grade band: Explorers (K–1), Builders (Grades 2–3), Developers (Grades 4–5) and Engineers (Grades 6–8). Choose the one that matches your child's grade. If you're unsure, email admin@codeshipacademy.com and our team will help.",
   },
   {
     question: "Is the programme available in Tobago?",
@@ -254,7 +254,7 @@ export const TRINIDAD_FAQ: TrinidadFAQItem[] = [
 ];
 
 export const TRINIDAD_COMPLIANCE_DISCLAIMER =
-  "CODEship is an independent online enrichment programme for children across Trinidad and Tobago. It supports school-related skills — it is not an official SEA programme, is not Ministry-approved or endorsed, and does not guarantee grades, examination results or secondary-school placement.";
+  "CODEship is an independent online enrichment programme for children across Trinidad and Tobago. It supports school-related skills: it is not an official SEA programme, is not Ministry-approved or endorsed, and does not guarantee grades, examination results or secondary-school placement.";
 
 /** Shown on any /tt page opened with ?lead_submitted=1 (paid Meta Instant Form leads). */
 export const TRINIDAD_LEAD_SUBMITTED_MESSAGE =

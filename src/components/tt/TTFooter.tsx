@@ -1,7 +1,7 @@
 import { TRINIDAD_COMPLIANCE_DISCLAIMER } from "@/data/trinidadCampaigns";
 
 /**
- * Minimal Trinidad-LP footer — no nav links, tagline + the required
+ * Minimal Trinidad-LP footer, no nav links, tagline + the required
  * SEA/Ministry compliance disclaimer. Never links deeper into the site.
  */
 export default function TTFooter() {

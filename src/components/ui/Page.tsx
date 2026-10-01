@@ -2,6 +2,7 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
+import { CircuitLines } from "@/components/ui/Stem";
 
 /**
  * Shared page building blocks. Every parent-facing page uses these so type
@@ -25,8 +26,9 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="bg-[#001532]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <section className="relative overflow-hidden bg-[#001532] bg-dotgrid-dark">
+      <CircuitLines className="absolute -right-12 -top-6 w-80 opacity-30 hidden md:block" />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         {crumbs && <Breadcrumbs className="mb-6" items={crumbs} />}
         {eyebrow && (
           <p className="text-[#F4D734] font-bold text-sm uppercase tracking-widest mb-3">{eyebrow}</p>
@@ -58,8 +60,12 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={`${TONES[tone]} py-16 sm:py-20 ${id ? "scroll-mt-28" : ""}`}>
-      <div className={`${narrow ? "max-w-3xl" : "max-w-6xl"} mx-auto px-4 sm:px-6 lg:px-8`}>{children}</div>
+    <section
+      id={id}
+      className={`${TONES[tone]} relative overflow-hidden py-16 sm:py-20 ${tone === "navy" ? "bg-dotgrid-dark" : ""} ${id ? "scroll-mt-28" : ""}`}
+    >
+      {tone === "navy" && <CircuitLines className="absolute -left-12 bottom-0 w-72 opacity-25 hidden md:block" />}
+      <div className={`relative ${narrow ? "max-w-3xl" : "max-w-6xl"} mx-auto px-4 sm:px-6 lg:px-8`}>{children}</div>
     </section>
   );
 }
@@ -107,7 +113,7 @@ export function ButtonLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center rounded-xl px-7 py-3.5 text-lg font-bold transition-colors ${styles}`}
+      className={`inline-flex items-center justify-center px-7 py-3.5 text-lg font-bold transition-colors ${styles}`}
     >
       {children}
     </Link>
@@ -138,9 +144,9 @@ export function CheckList({ items, dark }: { items: string[]; dark?: boolean }) 
 
 /** The standard closing call to action: where, when, how much, one button. */
 export function BookingBand({
-  title = "Ready to book?",
+  title = "Ready to enroll?",
   href = "/#book",
-  label = "Book a Semester",
+  label = "Enroll Now",
   detail = `Saturdays at ${IN_PERSON_VENUE.full}. October and November semesters are open.`,
 }: {
   title?: string;
@@ -149,9 +155,10 @@ export function BookingBand({
   detail?: string;
 }) {
   return (
-    <section className="bg-[#001532]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white">{title}</h2>
+    <section className="relative overflow-hidden bg-[#001532] bg-dotgrid-dark">
+      <CircuitLines className="absolute -right-10 -bottom-10 w-72 opacity-25 hidden md:block" />
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white">{title}</h2>
         <p className="text-gray-200 text-lg mt-4">{detail}</p>
         <p className="text-gray-300 text-lg mt-1">
           {PRICE_LABEL} · {SEMESTER_SHAPE_LABEL}

@@ -28,7 +28,7 @@ export default function ResourcesPage() {
             <Link
               key={article.slug}
               href={`/resources/${article.slug}`}
-              className="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100 p-7 flex flex-col"
+              className="group bg-white shadow-sm hover:shadow-lg transition-shadow border border-gray-100 p-7 flex flex-col"
             >
               <p className="text-sm font-bold uppercase tracking-widest text-[#0f6f7c]">
                 {article.category} · {article.readTime} min

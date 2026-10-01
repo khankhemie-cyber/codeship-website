@@ -16,7 +16,7 @@ export default function FranchiseSelectorPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-extrabold text-white mb-4">Find Your Franchise Model</h1>
           <p className="text-gray-300 text-lg">
-            Answer 4 questions about your goals, budget, and preferred operating style — and we&apos;ll recommend the
+            Answer 4 questions about your goals, budget, and preferred operating style, and we&apos;ll recommend the
             best CODEship franchise model for you.
           </p>
         </div>

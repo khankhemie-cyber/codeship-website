@@ -6,7 +6,7 @@ export default function FranchiseKitForm() {
       <HubSpotForm
         formId="b63c5c03-e55e-4e57-9a03-cebebbb87b3c"
         thankYouTitle="Your franchise kit is on its way!"
-        thankYouBody="Thank you for your interest in CODEship Academy. We'll send your franchise information kit to your inbox shortly. If you have questions in the meantime, you're welcome to book a Discovery Call — we'd love to connect."
+        thankYouBody="Thank you for your interest in CODEship Academy. We'll send your franchise information kit to your inbox shortly. If you have questions in the meantime, you're welcome to book a Discovery Call: we'd love to connect."
         thankYouCta={{ label: "Book a Discovery Call", href: "/contact" }}
       />
       <p className="text-xs text-gray-400 text-center mt-4">

@@ -3,9 +3,9 @@
 > CODEship Academy is a Canadian children's coding, AI, and STEM education
 > company (operating since 2023), headquartered in Oshawa, Ontario and serving
 > families across Durham Region. Its flagship offering is a K-8 progression of
-> four coding levels — Explorers (K-1, visual blocks), Builders (grades 2-3,
+> four coding levels: Explorers (K-1, visual blocks), Builders (grades 2-3,
 > HTML/CSS), Developers (grades 4-5, JavaScript), and Engineers (grades 6-8,
-> Python + AI + cybersecurity) — each 4 semesters plus a capstone project.
+> Python + AI + cybersecurity), each 4 semesters plus a capstone project.
 > Every program is a flat CAD $129 per semester (8 weekly classes, one class
 > per week). Classes run in person on Saturdays at Core21, 21 Simcoe St
 > South, Oshawa (serving Oshawa, Whitby, Courtice, Bowmanville, and
@@ -19,7 +19,7 @@
 > all of them. CODEship also offers a separate online-only program for families
 > in Guyana. Tagline: "Dream. Code. Achieve." Curriculum alignment to
 > provincial (Ontario, BC, Alberta, Québec) and Guyana NGSA-related frameworks
-> is described as "aligned to / maps to / supports" — CODEship is not endorsed
+> is described as "aligned to / maps to / supports": CODEship is not endorsed
 > or approved by any ministry of education.
 
 ## Programs (Canada, K-8 journey)
@@ -39,9 +39,9 @@
 
 - [All locations](https://www.codeshipacademy.com/locations)
 - [Oshawa (in person)](https://www.codeshipacademy.com/locations/oshawa)
-- In-person Saturday classes: Core21, 21 Simcoe St South, Oshawa — Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM; booking October & November 2026 semesters (serving Durham Region — Oshawa, Whitby, Courtice, Bowmanville, Clarington)
+- In-person Saturday classes: Core21, 21 Simcoe St South, Oshawa, Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM; booking October & November 2026 semesters (serving Durham Region, Oshawa, Whitby, Courtice, Bowmanville, Clarington)
 - In-person waitlist (online open): Toronto, Mississauga, Brampton, Markham, Scarborough, Vaughan, Milton, Calgary, Edmonton, Vancouver, Surrey
-- Online: open across Canada — Tuesdays (Explorers, Builders) and Thursdays (Developers, Engineers), 4-6 PM ET
+- Online: open across Canada. Tuesdays (Explorers, Builders) and Thursdays (Developers, Engineers), 4-6 PM ET
 
 ## Guyana (online-only)
 
@@ -50,7 +50,7 @@
 - [NGSA & digital skills](https://www.codeshipacademy.com/gy/ngsa-digital-skills)
 - [Computer classes for kids](https://www.codeshipacademy.com/gy/computer-classes-for-kids)
 - [Online STEM classes](https://www.codeshipacademy.com/gy/online-stem-classes)
-- Price: GYD $20,000 per semester. Online only — no in-person Guyana locations.
+- Price: GYD $20,000 per semester. Online only, no in-person Guyana locations.
 
 ## Other
 

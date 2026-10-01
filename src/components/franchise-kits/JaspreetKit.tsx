@@ -78,7 +78,7 @@ function PageCover(){
           <div style={{fontSize:34,fontWeight:900,color:WHITE,lineHeight:0.96,textTransform:"uppercase",letterSpacing:-1,marginBottom:3}}>WHAT TECHNOLOGY</div>
           <div style={{fontSize:34,fontWeight:900,color:GOLD,lineHeight:0.96,textTransform:"uppercase",letterSpacing:-1,marginBottom:3}}>ACTUALLY DOES.</div>
           <p style={{fontSize:14,color:"rgba(255,255,255,0.72)",lineHeight:1.65,marginTop:16,maxWidth:480}}>
-            As an AI Automation Specialist, you work with the technology that parents are most anxious about right now. CODEship gives you a business built around making that technology accessible to children — and you already know how to talk about it.
+            As an AI Automation Specialist, you work with the technology that parents are most anxious about right now. CODEship gives you a business built around making that technology accessible to children, and you already know how to talk about it.
           </p>
         </div>
       </div>
@@ -90,10 +90,10 @@ function PageCover(){
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:10}}>
           {[
-            [GOLD,"Primary Territory:","Vaughan, ON — available now"],
+            [GOLD,"Primary Territory:","Vaughan, ON: available now"],
             [TEAL,"Background:","AI Automation Specialist · First-time business owner"],
             [BLUE,"Preferred Model:","Home-Based Academy + School-Based Delivery"],
-            [GOLD,"Franchise Fee:","$10,000 CAD — one time"],
+            [GOLD,"Franchise Fee:","$10,000 CAD, one time"],
           ].map(([dot,lbl,v])=>(
             <div key={lbl} style={{display:"flex",alignItems:"center",gap:9}}>
               <div style={{width:7,height:7,borderRadius:"50%",background:dot,flexShrink:0}}/>
@@ -121,7 +121,7 @@ function PageOpportunity(){
           AI SPECIALIST. <span style={{color:GOLD}}>EDUCATION ENTREPRENEUR.</span>
         </div>
         <p style={{fontSize:13.5,color:"rgba(255,255,255,0.7)",lineHeight:1.65,maxWidth:580}}>
-          You work in AI automation daily. You understand the technology that every parent in Canada is worried about — and every school is trying to address. That knowledge, paired with CODEship&apos;s built business system, is a combination that most operators simply cannot replicate.
+          You work in AI automation daily. You understand the technology that every parent in Canada is worried about, and every school is trying to address. That knowledge, paired with CODEship&apos;s built business system, is a combination that most operators simply cannot replicate.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -130,25 +130,25 @@ function PageOpportunity(){
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:TEAL,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What You Bring</div>
-            <DotItem text="Working knowledge of AI — you can speak credibly to parents and principals" color={TEAL}/>
+            <DotItem text="Working knowledge of AI: you can speak credibly to parents and principals" color={TEAL}/>
             <DotItem text="A purpose-driven motivation: additional income and meaningful community impact" color={TEAL}/>
-            <DotItem text="Vaughan residency — you live in the market, which builds trust faster" color={TEAL}/>
-            <DotItem text="Willingness to occasionally teach — giving your program personal credibility" color={TEAL}/>
-            <DotItem text="A 60-day launch goal — you are ready to move, not just explore" color={TEAL}/>
+            <DotItem text="Vaughan residency: you live in the market, which builds trust faster" color={TEAL}/>
+            <DotItem text="Willingness to occasionally teach, giving your program personal credibility" color={TEAL}/>
+            <DotItem text="A 60-day launch goal: you are ready to move, not just explore" color={TEAL}/>
           </Card>
           <Card style={{flex:1}}>
             <div style={{width:28,height:4,background:GOLD,borderRadius:2,marginBottom:10}}/>
             <div style={{fontSize:14,fontWeight:800,color:NAVY,textTransform:"uppercase",marginBottom:8}}>What CODEship Adds</div>
             <DotItem text="A complete curriculum across Coding, AI, STEM, Robotics, and App Development" color={GOLD}/>
-            <DotItem text="A school partnership toolkit — access families where they already are" color={GOLD}/>
-            <DotItem text="Instructor hiring framework, training, and certification — built for you" color={GOLD}/>
+            <DotItem text="A school partnership toolkit: access families where they already are" color={GOLD}/>
+            <DotItem text="Instructor hiring framework, training, and certification: built for you" color={GOLD}/>
             <DotItem text="Operations manual and business playbooks ready from day one" color={GOLD}/>
             <DotItem text="A growing national brand that gives parents confidence before they meet you" color={GOLD}/>
           </Card>
         </div>
         <div style={{background:NAVY,borderRadius:10,padding:"18px 22px",marginBottom:16,display:"flex",gap:14,alignItems:"flex-start"}}>
           <div style={{fontSize:44,fontWeight:900,color:GOLD,lineHeight:0.7,flexShrink:0,marginTop:4}}>&quot;</div>
-          <p style={{fontSize:15,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Parents in Vaughan are asking schools about AI. Principals are looking for credible partners to deliver it. You already have the knowledge — CODEship gives you the program, the curriculum, and the school entry strategy to put it in front of them.</p>
+          <p style={{fontSize:15,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Parents in Vaughan are asking schools about AI. Principals are looking for credible partners to deliver it. You already have the knowledge: CODEship gives you the program, the curriculum, and the school entry strategy to put it in front of them.</p>
         </div>
         <GoldCallout title="The opportunity:" body="Vaughan is one of the fastest-growing cities in Canada, with a high concentration of education-focused immigrant families. There is no established CODEship presence. Your AI background is the differentiator that makes you the obvious choice to be first."/>
       </div>
@@ -164,27 +164,27 @@ function PageMarket(){
   const markets=[
     {label:"Vaughan",color:"#2A9D8F",
       stats:[
-        ["City Population (2024)","~370,000","One of Canada's fastest-growing cities — up 44% since 2011"],
-        ["Children Under 15","~74,000","20% of population — well above national average"],
+        ["City Population (2024)","~370,000","One of Canada's fastest-growing cities: up 44% since 2011"],
+        ["Children Under 15","~74,000","20% of population: well above national average"],
         ["Visible Minority Population","~54%","South Asian 24%, Chinese 8.4%, Filipino 3.2%"],
         ["York Region Elementary Schools","185+","York Region DSB + York Catholic DSB combined"],
       ],
       community:[["South Asian","24%","City of Vaughan"],["Chinese","8.4%","City of Vaughan"],["Visible Minority","54%","City of Vaughan"]],
       schools:[
-        ["York Region District School Board","100+ elementary","Vaughan area — one of Ontario's largest and most diverse boards"],
-        ["York Catholic District School Board","50+ elementary","Strong family and community values — high enrichment engagement"],
-        ["Private Schools","15+","High concentration in Woodbridge and Thornhill — premium fee market"],
+        ["York Region District School Board","100+ elementary","Vaughan area, one of Ontario's largest and most diverse boards"],
+        ["York Catholic District School Board","50+ elementary","Strong family and community values: high enrichment engagement"],
+        ["Private Schools","15+","High concentration in Woodbridge and Thornhill: premium fee market"],
       ],
-      opp:"Vaughan has no established CODEship presence and a rapidly growing population of education-focused families. The South Asian community — 24% of the city — invests heavily in children's enrichment. With 185+ schools across two boards, school partnerships alone could sustain a full calendar.",
+      opp:"Vaughan has no established CODEship presence and a rapidly growing population of education-focused families. The South Asian community, 24% of the city, invests heavily in children's enrichment. With 185+ schools across two boards, school partnerships alone could sustain a full calendar.",
       tags:["185+ schools in York Region","54% visible minority","South Asian 24%","No CODEship presence","Canada's fastest-growing city"],
       edge:"You live in Vaughan. Community operators who are embedded in their territory build trust faster, retain students longer, and close school partnerships more readily than outsiders. You are already here."
     },
     {label:"Kingston",color:"#F4D734",
       stats:[
-        ["City Population (2024)","~145,000","Stable, educated population — Queen's and RMC anchor the city"],
-        ["Visible Minority Population","~12%","Growing but smaller than Vaughan — different community mix"],
-        ["University and College Families","~25,000 students","Queen's, St. Lawrence College, RMC — young educated parent base"],
-        ["Limestone DSB Elementary Schools","34","Limestone District School Board — active community enrichment programs"],
+        ["City Population (2024)","~145,000","Stable, educated population: Queen's and RMC anchor the city"],
+        ["Visible Minority Population","~12%","Growing but smaller than Vaughan: different community mix"],
+        ["University and College Families","~25,000 students","Queen's, St. Lawrence College, RMC: young educated parent base"],
+        ["Limestone DSB Elementary Schools","34","Limestone District School Board: active community enrichment programs"],
       ],
       community:[["University/College Town","~25K students","Queen's, St. Lawrence, RMC"],["Visible Minority","~12%","Smaller but growing"],["Military Families","~5,000","RMC and CFB Kingston"]],
       schools:[
@@ -198,20 +198,20 @@ function PageMarket(){
     },
     {label:"Barrie",color:"#3A5B9E",
       stats:[
-        ["City Population (2024)","~160,000","Simcoe County hub — growing commuter city north of GTA"],
-        ["Children Under 15","~28,000","17.5% of population — strong family demographic"],
-        ["Visible Minority Population","~13%","South Asian and Filipino growing — newcomer settlement increasing"],
+        ["City Population (2024)","~160,000","Simcoe County hub, growing commuter city north of GTA"],
+        ["Children Under 15","~28,000","17.5% of population: strong family demographic"],
+        ["Visible Minority Population","~13%","South Asian and Filipino growing: newcomer settlement increasing"],
         ["Simcoe County DSB Elementary Schools","80+","SCDSB and SMCDSB combined across Barrie and Simcoe County"],
       ],
-      community:[["South Asian / Filipino","~8%","Growing newcomer settlement"],["Commuter Families","Large portion","GTA commuters — value their children's time"],["Working Parents","High %","Both parents working — strong after-school demand"]],
+      community:[["South Asian / Filipino","~8%","Growing newcomer settlement"],["Commuter Families","Large portion","GTA commuters: value their children's time"],["Working Parents","High %","Both parents working: strong after-school demand"]],
       schools:[
-        ["Simcoe County District School Board","55+ elementary","Barrie area — active community partnership culture"],
-        ["Simcoe Muskoka Catholic District School Board","25+ elementary","Family-engaged — enrichment program demand"],
+        ["Simcoe County District School Board","55+ elementary","Barrie area: active community partnership culture"],
+        ["Simcoe Muskoka Catholic District School Board","25+ elementary","Family-engaged: enrichment program demand"],
         ["Independent Schools","5+","Growing private school market in south Barrie"],
       ],
-      opp:"Barrie is underserved by quality children's enrichment programs compared to the GTA. As a growing commuter city, families have strong after-school demand — two working parents are the norm, not the exception. 80+ schools across Simcoe County with an active SCDSB enrichment partnership process.",
+      opp:"Barrie is underserved by quality children's enrichment programs compared to the GTA. As a growing commuter city, families have strong after-school demand, two working parents are the norm, not the exception. 80+ schools across Simcoe County with an active SCDSB enrichment partnership process.",
       tags:["80+ schools in Simcoe County","Growing newcomer community","High after-school demand","Underserved enrichment market","GTA commuter families"],
-      edge:"Barrie's commuter family demographic is exactly the market CODEship serves best — dual-income families who need quality after-school programming and will pay for it. Low competition in this market means first-mover advantage."
+      edge:"Barrie's commuter family demographic is exactly the market CODEship serves best: dual-income families who need quality after-school programming and will pay for it. Low competition in this market means first-mover advantage."
     }
   ];
   const m=markets[tab];
@@ -229,7 +229,7 @@ function PageMarket(){
               background:tab===i?mk.color:"rgba(255,255,255,0.12)",
               color:tab===i?(mk.color==="#F4D734"?NAVY:WHITE):"rgba(255,255,255,0.75)",
               fontSize:12,fontWeight:800,
-            }}>{mk.label}{i===0?" — Primary":i===1?" — Secondary":" — Third Choice"}</button>
+            }}>{mk.label}{i===0?": Primary":i===1?": Secondary":": Third Choice"}</button>
           ))}
         </div>
       </HeroDark>
@@ -283,7 +283,7 @@ function PageCompetitors(){
     {name:"Code Ninjas",type:"Direct Competitor",tc:"#dc2626",invest:"$175K–$385K CAD",royalty:"8% + 2% marketing",location:"Physical dojo required",schools:"None",fit:"Generic / mass-market",status:"Limited Ontario presence",weakness:"Requires a large investment and a signed lease before a single student is enrolled. No school partnership model. High franchise fee for what you receive.",isUs:false},
     {name:"Kumon",type:"Adjacent",tc:"#d97706",invest:"$150K–$400K CAD",royalty:"~$36–$46/student/mo",location:"Physical centre required",schools:"None",fit:"Broad market",status:"Multiple York Region locations",weakness:"Math and reading only. No STEM, coding, or AI content. No school partnership model. Competes on very different content.",isUs:false},
     {name:"Mathnasium",type:"Adjacent",tc:"#d97706",invest:"$112K–$149K CAD",royalty:"10% + fees",location:"Physical centre required",schools:"None",fit:"Broad / general market",status:"Several York Region locations",weakness:"Math only. No creative or technology content. Location-dependent with high operating cost before break-even.",isUs:false},
-    {name:"CODEship Academy",type:"Your Opportunity",tc:"#2A9D8F",invest:"$18K–$20K to start",royalty:"$1,500 flat/mo (Yr 1)",location:"No fixed space to start",schools:"Core to the model",fit:"Community-led, AI-forward",status:"Vaughan OPEN — you first",weakness:null,isUs:true}
+    {name:"CODEship Academy",type:"Your Opportunity",tc:"#2A9D8F",invest:"$18K–$20K to start",royalty:"$1,500 flat/mo (Yr 1)",location:"No fixed space to start",schools:"Core to the model",fit:"Community-led, AI-forward",status:"Vaughan OPEN: you first",weakness:null,isUs:true}
   ];
   const rows=["Investment","Royalty (Yr 1)","Location Required","School Partnerships","Program Focus","Status in Market"];
   const vals=comps.map(c=>[c.invest,c.royalty,c.location,c.schools,c.fit,c.status]);
@@ -295,7 +295,7 @@ function PageCompetitors(){
           VAUGHAN IS <span style={{color:GOLD}}>WIDE OPEN.</span>
         </div>
         <p style={{fontSize:13,color:"rgba(255,255,255,0.65)",lineHeight:1.6,maxWidth:560}}>
-          Every alternative requires a physical location and a signed lease before you teach a single student. CODEship is the only model designed to build from schools first — with you starting from your community, not a storefront.
+          Every alternative requires a physical location and a signed lease before you teach a single student. CODEship is the only model designed to build from schools first, with you starting from your community, not a storefront.
         </p>
       </HeroDark>
       <GoldBar/>
@@ -328,7 +328,7 @@ function PageCompetitors(){
                 {c.isUs?"Your Advantage":"Key Weakness"}
               </div>
               <p style={{fontSize:11.5,color:c.isUs?WHITE:"#4a5568",lineHeight:1.55}}>
-                {c.weakness||"Build students before you build a location. Start with schools, scale to a space. Lowest entry cost in children's enrichment — with the AI curriculum that parents are actively looking for in Vaughan right now."}
+                {c.weakness||"Build students before you build a location. Start with schools, scale to a space. Lowest entry cost in children's enrichment, with the AI curriculum that parents are actively looking for in Vaughan right now."}
               </p>
             </div>
           ))}
@@ -344,18 +344,18 @@ function PageCompetitors(){
 function PageAudience(){
   const [tab,setTab]=useState("b2c");
   const b2c=[
-    {color:"#2A9D8F",label:"The Education-Focused South Asian Family",desc:"Vaughan's largest visible minority at 24% of the city. Education is a primary family value — enrichment is not optional, it is expected. These families invest $3,000–$10,000+ per year per child on programs.",stats:["24% of Vaughan identifies as South Asian","Woodbridge and Maple are high-concentration South Asian communities","Education-focused families — STEM and coding are high-demand subjects"]},
-    {color:"#F4D734",label:"The Anxious AI Parent",desc:"Every parent in Vaughan — South Asian, Chinese, Filipino, and mainstream — is reading about AI and wondering what it means for their child's future. You can speak to that concern with direct professional credibility.",stats:["AI literacy is the number one emerging concern for Canadian parents (2024)","Schools are not yet equipped to address it — creating a gap CODEship fills","Parents actively seeking community enrichment that addresses AI for children"]},
-    {color:"#3A5B9E",label:"The High-Investment Chinese Family",desc:"Vaughan's Chinese community — 8.4% of the city — is concentrated in the Thornhill and Woodbridge corridors. Academic achievement is a deep cultural value. These families are active in enrichment markets.",stats:["8.4% of Vaughan identifies as Chinese — concentrated in Thornhill/Woodbridge","Annual per-child enrichment spend typically $4,000–$12,000","Strong preference for programs with demonstrated academic outcomes"]},
-    {color:"#0D1B2A",label:"The Dual-Income GTA Commuter Family",desc:"Vaughan is a major GTA commuter city. Both parents working is the norm — not the exception. After-school programs are a practical need, not a luxury choice. Reliability and quality command a premium.",stats:["Vaughan median household income: $98,000 — well above provincial average","High proportion of dual-income households requiring after-school care","Long commutes create strong demand for dependable, high-quality enrichment"]}
+    {color:"#2A9D8F",label:"The Education-Focused South Asian Family",desc:"Vaughan's largest visible minority at 24% of the city. Education is a primary family value: enrichment is not optional, it is expected. These families invest $3,000–$10,000+ per year per child on programs.",stats:["24% of Vaughan identifies as South Asian","Woodbridge and Maple are high-concentration South Asian communities","Education-focused families: STEM and coding are high-demand subjects"]},
+    {color:"#F4D734",label:"The Anxious AI Parent",desc:"Every parent in Vaughan, South Asian, Chinese, Filipino, and mainstream, is reading about AI and wondering what it means for their child's future. You can speak to that concern with direct professional credibility.",stats:["AI literacy is the number one emerging concern for Canadian parents (2024)","Schools are not yet equipped to address it, creating a gap CODEship fills","Parents actively seeking community enrichment that addresses AI for children"]},
+    {color:"#3A5B9E",label:"The High-Investment Chinese Family",desc:"Vaughan's Chinese community, 8.4% of the city, is concentrated in the Thornhill and Woodbridge corridors. Academic achievement is a deep cultural value. These families are active in enrichment markets.",stats:["8.4% of Vaughan identifies as Chinese, concentrated in Thornhill/Woodbridge","Annual per-child enrichment spend typically $4,000–$12,000","Strong preference for programs with demonstrated academic outcomes"]},
+    {color:"#0D1B2A",label:"The Dual-Income GTA Commuter Family",desc:"Vaughan is a major GTA commuter city. Both parents working is the norm, not the exception. After-school programs are a practical need, not a luxury choice. Reliability and quality command a premium.",stats:["Vaughan median household income: $98,000. Well above provincial average","High proportion of dual-income households requiring after-school care","Long commutes create strong demand for dependable, high-quality enrichment"]}
   ];
   const b2b=[
     {color:"#2A9D8F",label:"York Region District School Board",desc:"One of Ontario's largest and most diverse school boards, with 100+ elementary schools in the Vaughan area. YRDSB has a formal process for approving community enrichment partners for after-school and in-class programs.",stats:["100+ elementary schools in Vaughan area","Formal community partner approval process","Curriculum-aligned STEM programs are an active board priority"]},
-    {color:"#F4D734",label:"York Catholic District School Board",desc:"50+ elementary schools in the Vaughan area with a highly family-engaged community. YCDSB schools are known for high enrichment participation and active school councils that drive program adoption.",stats:["50+ elementary schools in Vaughan","Family-engaged school councils — active in enrichment decisions","High community participation culture across the board"]},
-    {color:"#3A5B9E",label:"City of Vaughan Recreation Centres",desc:"The City of Vaughan operates 7 recreation and community centres with active programming. These centres partner with community providers for after-school, weekend, and holiday programming — with funded partnerships available.",stats:["7 City of Vaughan recreation and community centres","Funded programming partnership opportunities","Ideal for pop-up and holiday camp delivery at low overhead"]},
-    {color:"#0D1B2A",label:"Private and Independent Schools",desc:"Vaughan has 15+ private and independent schools with higher-income family populations. These schools actively seek premium enrichment partners and command higher per-student rates — ideal for the Studio model.",stats:["15+ private and independent schools in Vaughan and surrounding area","Higher per-student program rates — premium enrichment market","Direct decision-making by principals — shorter sales cycle"]}
+    {color:"#F4D734",label:"York Catholic District School Board",desc:"50+ elementary schools in the Vaughan area with a highly family-engaged community. YCDSB schools are known for high enrichment participation and active school councils that drive program adoption.",stats:["50+ elementary schools in Vaughan","Family-engaged school councils: active in enrichment decisions","High community participation culture across the board"]},
+    {color:"#3A5B9E",label:"City of Vaughan Recreation Centres",desc:"The City of Vaughan operates 7 recreation and community centres with active programming. These centres partner with community providers for after-school, weekend, and holiday programming, with funded partnerships available.",stats:["7 City of Vaughan recreation and community centres","Funded programming partnership opportunities","Ideal for pop-up and holiday camp delivery at low overhead"]},
+    {color:"#0D1B2A",label:"Private and Independent Schools",desc:"Vaughan has 15+ private and independent schools with higher-income family populations. These schools actively seek premium enrichment partners and command higher per-student rates: ideal for the Studio model.",stats:["15+ private and independent schools in Vaughan and surrounding area","Higher per-student program rates: premium enrichment market","Direct decision-making by principals: shorter sales cycle"]}
   ];
-  const insight={b2c:"Your AI background is directly relevant to what Vaughan parents are worried about right now. You can speak to it with professional authority — not just as a program provider, but as someone who works in the field.",b2b:"The school board partnership process is CODEship's primary enrollment channel. YRDSB has 100+ elementary schools in Vaughan and an active community partner program — your first 60 days should focus here."};
+  const insight={b2c:"Your AI background is directly relevant to what Vaughan parents are worried about right now. You can speak to it with professional authority, not just as a program provider, but as someone who works in the field.",b2b:"The school board partnership process is CODEship's primary enrollment channel. YRDSB has 100+ elementary schools in Vaughan and an active community partner program, your first 60 days should focus here."};
   const data=tab==="b2c"?b2c:b2b;
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -365,7 +365,7 @@ function PageAudience(){
           WHO YOU SERVE. <span style={{color:GOLD}}>AND WHO PAYS YOU.</span>
         </div>
         <div style={{display:"flex",gap:8}}>
-          {[["b2c","B2C — Parents and Families"],["b2b","B2B — Schools and Organisations"]].map(([k,lbl])=>(
+          {[["b2c","B2C: Parents and Families"],["b2b","B2B: Schools and Organisations"]].map(([k,lbl])=>(
             <button key={k} onClick={()=>setTab(k)} style={{
               padding:"8px 16px",borderRadius:6,border:"none",cursor:"pointer",
               background:tab===k?GOLD:"rgba(255,255,255,0.12)",
@@ -402,23 +402,23 @@ function PageAudience(){
 function PageModels(){
   const [active,setActive]=useState(0);
   const models=[
-    {num:"01",color:"#2A9D8F",name:"Home-Based Academy",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Your recommended starting model — schools first, space later.",
+    {num:"01",color:"#2A9D8F",name:"Home-Based Academy",range:"$18K–$20K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No fixed space required",tagline:"Your recommended starting model: schools first, space later.",
       best:"This is the right model for Jaspreet. Start with school partnerships and home-based or community venue delivery. Zero location overhead means your investment goes further, and you build a student base before committing to a lease.",
       how:["Partner with 2–3 Vaughan elementary schools as an after-school enrichment provider","Run classes from your home studio or a rented community centre room for weekend programs","Deliver PA Day and holiday camps at partner school venues or recreation centres","Scale to a dedicated space once you have 20–30 enrolled students","CODEship's school partnership toolkit gives you the pitch decks, pricing, and scripts to approach principals from day one"],
       programs:["After-school coding and AI clubs","In-school workshops (90-minute, curriculum-aligned)","PA Day and holiday programs","Weekend home studio classes","Community centre pop-up events"],
       mindset:"Start with the community you live in. One school partnership in Vaughan creates visibility across 400–600 families. Your AI background is what gets principals to take your call."
     },
-    {num:"02",color:"#F4D734",name:"School-Based Delivery",range:"$18K–$30K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No space required — schools provide it",tagline:"Build your entire business inside existing school infrastructure.",
-      best:"Run all programs inside school facilities — no external venue cost at all. B2B contracts with schools pay you directly for in-class workshops, after-school programs, and holiday camps delivered on their premises.",
-      how:["Sign formal enrichment partnership agreements with York Region schools","Deliver in-class workshops to entire classes — schools pay per session or per term","Run after-school clubs from school multipurpose rooms or gyms — schools provide the space","Expand to multiple schools rather than scaling a single venue","Higher margin per program — no venue overhead at all"],
+    {num:"02",color:"#F4D734",name:"School-Based Delivery",range:"$18K–$30K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"No space required: schools provide it",tagline:"Build your entire business inside existing school infrastructure.",
+      best:"Run all programs inside school facilities, no external venue cost at all. B2B contracts with schools pay you directly for in-class workshops, after-school programs, and holiday camps delivered on their premises.",
+      how:["Sign formal enrichment partnership agreements with York Region schools","Deliver in-class workshops to entire classes: schools pay per session or per term","Run after-school clubs from school multipurpose rooms or gyms: schools provide the space","Expand to multiple schools rather than scaling a single venue","Higher margin per program, no venue overhead at all"],
       programs:["In-class STEM and AI workshops","School after-school club programs","PA Day full-day programs","Lunchtime coding sessions","School-funded camp programs"],
-      mindset:"The cleanest model for a first-time operator. No lease, no space costs, no venue insurance complications. Schools provide the room, the students, and often the marketing — you provide the program."
+      mindset:"The cleanest model for a first-time operator. No lease, no space costs, no venue insurance complications. Schools provide the room, the students, and often the marketing: you provide the program."
     },
     {num:"03",color:"#3A5B9E",name:"Shared Space / Studio",range:"$30K–$80K CAD",royalty:"$1,500 flat/mo (Year 1)",location:"Shared or dedicated commercial space",tagline:"A branded CODEship location in Vaughan.",
-      best:"Once you have 25–40 enrolled students from schools, secure a shared or dedicated commercial space. A branded CODEship Academy in Vaughan becomes a community destination — reinforcing your school partnerships.",
-      how:["Rent a shared or dedicated commercial unit — full-time or part-time to start","CODEship's launch kit includes signage, branding, and physical setup guidance","Run multiple concurrent program streams: weekday after-school, weekend classes, holiday camps","Continue school partnerships to feed enrollment into your centre","Expand instructor team as program volume grows"],
+      best:"Once you have 25–40 enrolled students from schools, secure a shared or dedicated commercial space. A branded CODEship Academy in Vaughan becomes a community destination, reinforcing your school partnerships.",
+      how:["Rent a shared or dedicated commercial unit: full-time or part-time to start","CODEship's launch kit includes signage, branding, and physical setup guidance","Run multiple concurrent program streams: weekday after-school, weekend classes, holiday camps","Continue school partnerships to feed enrollment into your centre","Expand instructor team as program volume grows"],
       programs:["Weekly enrolled centre classes","After-school programs at dedicated location","Weekend STEM and AI workshops","Birthday party experiences","Advanced AI and app development programs"],
-      mindset:"Build the school base first — then give your students a home. By the time you sign a lease, you should already have the students to fill it."
+      mindset:"Build the school base first, then give your students a home. By the time you sign a lease, you should already have the students to fill it."
     }
   ];
   const m=models[active];
@@ -489,7 +489,7 @@ function PageInvestment(){
   const [model,setModel]=useState(0);
   const models=[
     {label:"Home-Based Start",range:"$18K–$20K",color:"#2A9D8F",breakdown:[
-      ["Franchise Fee","$10,000","One time — full CODEship licence and territory"],
+      ["Franchise Fee","$10,000","One time: full CODEship licence and territory"],
       ["Curriculum training","Included","You and up to 3 instructors at launch"],
       ["Branded launch kit (digital)","Included","School pitch decks, social templates, event materials"],
       ["Technology and device setup","$500–$800","Devices, subscriptions, platform access"],
@@ -498,8 +498,8 @@ function PageInvestment(){
       ["Operating reserve (2 months)","$1,500–$3,000","Buffer while first school partnerships activate"],
     ]},
     {label:"School-Based Delivery",range:"$18K–$30K",color:"#F4D734",breakdown:[
-      ["Franchise Fee","$10,000","One time — full CODEship licence and territory"],
-      ["Curriculum training","Included","You and up to 5 instructors — includes school delivery protocols"],
+      ["Franchise Fee","$10,000","One time: full CODEship licence and territory"],
+      ["Curriculum training","Included","You and up to 5 instructors: includes school delivery protocols"],
       ["Branded launch kit (physical + digital)","Included","Printed materials, banners, school presentation materials"],
       ["Program equipment kit","$1,000–$2,000","Robotics kits, coding supplies, presentation devices"],
       ["Insurance and registration","$800–$1,500","Business registration, liability insurance, school board requirements"],
@@ -507,7 +507,7 @@ function PageInvestment(){
       ["Operating reserve (2 months)","$2,000–$4,000","Covers instructor costs while school contracts activate"],
     ]},
     {label:"Shared Space / Studio",range:"$30K–$80K",color:"#3A5B9E",breakdown:[
-      ["Franchise Fee","$10,000","One time — full CODEship licence and territory"],
+      ["Franchise Fee","$10,000","One time: full CODEship licence and territory"],
       ["Space deposit and first 2 months","$2,500–$10,000","Shared or dedicated commercial space in Vaughan"],
       ["Branded launch kit (physical + digital)","Included","Signage, banners, full printed and digital materials"],
       ["Technology and device setup","$2,000–$5,000","Classroom devices, display screen, subscriptions, robotics kits"],
@@ -530,7 +530,7 @@ function PageInvestment(){
         </p>
         <div style={{background:TEAL,borderRadius:"10px 10px 0 0",padding:"14px 22px",display:"flex",gap:20,alignItems:"center"}}>
           <div style={{flex:1.4}}>
-            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer — All Models</div>
+            <div style={{fontSize:8,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.65)",marginBottom:3}}>Founding Partner Offer: All Models</div>
             <div style={{fontSize:13,fontWeight:900,color:WHITE,textTransform:"uppercase"}}>For Your First 12 Months</div>
           </div>
           <div style={{flex:1,borderLeft:"1px solid rgba(255,255,255,0.25)",paddingLeft:20}}>
@@ -559,7 +559,7 @@ function PageInvestment(){
       <div style={{padding:"0 32px",display:"flex",gap:16,marginTop:14,flex:1,minHeight:0}}>
         <div style={{flex:1,border:`2px solid ${m.color}`,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column"}}>
           <div style={{background:m.color,padding:"11px 16px",textAlign:"center"}}>
-            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes — {m.range} CAD</div>
+            <div style={{fontSize:12,fontWeight:900,color:otc,textTransform:"uppercase"}}>Where Every Dollar Goes: {m.range} CAD</div>
           </div>
           <div style={{background:LIGHT,flex:1}}>
             {m.breakdown.map(([lbl,amount,note])=><CostRow key={lbl} label={lbl} amount={amount} note={note} accent={m.color}/>)}
@@ -571,12 +571,12 @@ function PageInvestment(){
               <div style={{fontSize:11,fontWeight:900,color:WHITE,textTransform:"uppercase"}}>$10K Franchise Fee Unlocks</div>
             </div>
             <div style={{background:LIGHT,padding:"13px 14px"}}>
-              {["Full CODEship brand licence — Vaughan territory secured","Complete curriculum: Coding, AI, STEM, Robotics, App Dev","Operations manual and business systems","Instructor hiring framework and certification training","School partnership toolkit, pitch decks, and pricing","Marketing materials and launch assets","Ongoing coaching and partner network","Quarterly new curriculum and program content"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
+              {["Full CODEship brand licence: Vaughan territory secured","Complete curriculum: Coding, AI, STEM, Robotics, App Dev","Operations manual and business systems","Instructor hiring framework and certification training","School partnership toolkit, pitch decks, and pricing","Marketing materials and launch assets","Ongoing coaching and partner network","Quarterly new curriculum and program content"].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
             </div>
           </div>
           <div style={{background:LIGHT,borderRadius:8,padding:"11px 14px",border:"1.5px solid #e0e3e8"}}>
             <span style={{fontSize:11,color:NAVY,fontWeight:800}}>After Year 1: </span>
-            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees — 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates only. This document does not constitute a franchise offering or disclosure document.</span>
+            <span style={{fontSize:11,color:"#4a5568",lineHeight:1.6}}>Standard fees: 6% royalty on gross revenue plus 2% brand marketing fund. Figures are estimates only. This document does not constitute a franchise offering or disclosure document.</span>
           </div>
         </div>
       </div>
@@ -591,16 +591,16 @@ function PagePrograms(){
   const streams=[
     {color:TEAL,label:"Foundation",title:"School Partnerships",sub:"Your primary enrollment and revenue channel.",
       desc:"Schools give you access to families before they are your customers. One York Region school partnership creates visibility across 400–600 families without paid advertising.",
-      programs:[["After-School Clubs","Weekly programs inside school premises. Students enrolled per term — recurring revenue."],["In-Class Workshops","90-minute sessions delivered to entire classes. Schools book and pay per session."],["PA Day Programs","Full-day programs on teacher professional activity days. High demand, easy to fill."],["Lunch and Learn Sessions","Introductory sessions that build awareness and convert students to after-school programs."]]},
+      programs:[["After-School Clubs","Weekly programs inside school premises. Students enrolled per term, recurring revenue."],["In-Class Workshops","90-minute sessions delivered to entire classes. Schools book and pay per session."],["PA Day Programs","Full-day programs on teacher professional activity days. High demand, easy to fill."],["Lunch and Learn Sessions","Introductory sessions that build awareness and convert students to after-school programs."]]},
     {color:GOLD,label:"Seasonal",title:"Camps and Holiday Programs",sub:"High-demand, high-enrollment windows.",
-      desc:"Summer, March Break, and PA Day camps are the highest-volume periods of the year. School partnerships create the pipeline — camps are where families sign up in volume.",
-      programs:[["Summer Camps","Multi-week programs in July and August. The highest enrollment period of the year."],["March Break Camps","Week-long intensive programs. Vaughan families actively seek structured activities."],["Holiday Workshops","December and school-break programs. Shorter formats — easy entry points for new families."],["Weekend STEM Days","Single-day events that introduce new students and complement weekly programs."]]},
+      desc:"Summer, March Break, and PA Day camps are the highest-volume periods of the year. School partnerships create the pipeline: camps are where families sign up in volume.",
+      programs:[["Summer Camps","Multi-week programs in July and August. The highest enrollment period of the year."],["March Break Camps","Week-long intensive programs. Vaughan families actively seek structured activities."],["Holiday Workshops","December and school-break programs. Shorter formats: easy entry points for new families."],["Weekend STEM Days","Single-day events that introduce new students and complement weekly programs."]]},
     {color:BLUE,label:"Specialist",title:"AI and Tech Programs",sub:"Your personal differentiator in Vaughan.",
-      desc:"CODEship's AI curriculum is where your professional background becomes a business advantage. Parents in Vaughan are actively looking for AI programs — you are the most credible person to deliver them.",
-      programs:[["AI and Machine Learning","Purpose-built for Grades 5-8. Your expertise makes this authentic and credible."],["App Development","Students build real mobile apps. Strong appeal to education-focused families."],["Robotics and Automation","Hands-on hardware and software. Popular for school enrichment programs."],["Coding Foundations","Scratch, Python basics, game development — K–4 entry programs."]]},
+      desc:"CODEship's AI curriculum is where your professional background becomes a business advantage. Parents in Vaughan are actively looking for AI programs: you are the most credible person to deliver them.",
+      programs:[["AI and Machine Learning","Purpose-built for Grades 5-8. Your expertise makes this authentic and credible."],["App Development","Students build real mobile apps. Strong appeal to education-focused families."],["Robotics and Automation","Hands-on hardware and software. Popular for school enrichment programs."],["Coding Foundations","Scratch, Python basics, game development: K–4 entry programs."]]},
     {color:NAVY,label:"Community",title:"Community and Events",sub:"Grow beyond classes.",
       desc:"Birthday experiences, community events, and corporate STEM workshops extend your reach and build the CODEship brand in Vaughan outside the school schedule.",
-      programs:[["Birthday Party Experiences","2-hour coded birthday parties. Easy first contact for families not yet enrolled."],["Community Pop-Up Events","Library, recreation centre, and community hub programs."],["Corporate STEM Days","One-day events for company CSR programs — higher per-student rates."],["Weekend Open Workshops","Drop-in programs that introduce new students and keep the community engaged."]]},
+      programs:[["Birthday Party Experiences","2-hour coded birthday parties. Easy first contact for families not yet enrolled."],["Community Pop-Up Events","Library, recreation centre, and community hub programs."],["Corporate STEM Days","One-day events for company CSR programs: higher per-student rates."],["Weekend Open Workshops","Drop-in programs that introduce new students and keep the community engaged."]]},
   ];
   return(
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:WHITE}}>
@@ -800,10 +800,10 @@ function PagePricing(){
           <div style={{background:NAVY,borderRadius:10,padding:"14px 16px",marginBottom:12}}>
             <div style={{fontSize:9,fontWeight:800,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,0.45)",marginBottom:10}}>Curriculum Levels</div>
             {[
-              [TEAL,"Explorers","Kindergarten – Grade 1","$175/semester"],
-              [GOLD,"Builders","Grade 2 – Grade 3","$175/semester"],
-              [BLUE,"Developers","Grade 4 – Grade 6","$175/semester"],
-              [GOLD,"Engineers","Grade 7 – Grade 8","$199/semester"],
+              [TEAL,"Explorers","Kindergarten to Grade 1","$175/semester"],
+              [GOLD,"Builders","Grade 2 to Grade 3","$175/semester"],
+              [BLUE,"Developers","Grade 4 to Grade 6","$175/semester"],
+              [GOLD,"Engineers","Grade 7 to Grade 8","$199/semester"],
             ].map(([c,lbl,grades,price])=>(
               <div key={lbl} style={{marginBottom:9,paddingBottom:9,borderBottom:"1px solid rgba(255,255,255,0.07)"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}>
@@ -814,7 +814,7 @@ function PagePricing(){
               </div>
             ))}
           </div>
-          <GoldCallout title="School workshop discount:" body="Book 4 or more workshops and the rate drops from $150 to $100 per session — a $50 saving per workshop."/>
+          <GoldCallout title="School workshop discount:" body="Book 4 or more workshops and the rate drops from $150 to $100 per session: a $50 saving per workshop."/>
         </div>
       </div>
       <div style={{height:10}}/><GoldBar/>
@@ -836,7 +836,7 @@ function PageSystem(){
           YOU DO NOT NEED PRIOR<br/><span style={{color:NAVY}}>BUSINESS EXPERIENCE.</span>
         </div>
         <p style={{fontSize:14,color:"rgba(255,255,255,0.9)",lineHeight:1.65,maxWidth:560}}>
-          CODEship is not a franchise where you figure things out as you go. The curriculum, school partnership tools, instructor training, operations manual, and marketing system are all pre-built and ready. Your job is to run the business and serve your community — not create the system from scratch.
+          CODEship is not a franchise where you figure things out as you go. The curriculum, school partnership tools, instructor training, operations manual, and marketing system are all pre-built and ready. Your job is to run the business and serve your community, not create the system from scratch.
         </p>
       </div>
       <div style={{padding:"20px 42px 0",flex:1,display:"flex",gap:18}}>
@@ -849,13 +849,13 @@ function PageSystem(){
               <div style={{background:LIGHT,padding:"14px"}}>
                 {[
                   "Complete K–8 curriculum across Coding, AI, STEM, Robotics, and App Development",
-                  "School partnership toolkit — pitch decks, pricing frameworks, outreach scripts",
-                  "Instructor hiring framework — job descriptions, interview guides, offer templates",
+                  "School partnership toolkit: pitch decks, pricing frameworks, outreach scripts",
+                  "Instructor hiring framework: job descriptions, interview guides, offer templates",
                   "Full instructor certification program before they teach a single student",
                   "Operations manual covering scheduling, enrollment, parent communications, and retention",
-                  "Marketing launch kit — social templates, local print assets, event materials",
+                  "Marketing launch kit: social templates, local print assets, event materials",
                   "Ongoing coaching and a dedicated account manager",
-                  "Quarterly new curriculum and program content — you never create content",
+                  "Quarterly new curriculum and program content: you never create content",
                 ].map(t=><CheckItem key={t} text={t} color={TEAL}/>)}
               </div>
             </div>
@@ -865,7 +865,7 @@ function PageSystem(){
             <div style={{display:"flex",gap:12}}>
               {[
                 {n:"1",c:TEAL,t:"Sign and lock Vaughan",b:"Territory secured. No other CODEship partner can operate in Vaughan. Training begins."},
-                {n:"2",c:GOLD,t:"Complete onboarding",b:"Curriculum training, school partnership toolkit, instructor hiring framework — all provided."},
+                {n:"2",c:GOLD,t:"Complete onboarding",b:"Curriculum training, school partnership toolkit, instructor hiring framework, all provided."},
                 {n:"3",c:BLUE,t:"Approach first schools",b:"Use CODEship's school pitch decks to approach 3–5 York Region elementary schools."},
                 {n:"4",c:TEAL,t:"Launch first program",b:"First after-school club or in-class workshop running. CODEship supports you at every step."},
               ].map(({n,c,t,b})=>(
@@ -886,15 +886,15 @@ function PageSystem(){
             </div>
             <div style={{background:LIGHT,padding:"14px"}}>
               {[
-                "Parents are anxious about AI — you can speak to it with professional authority",
-                "Principals are looking for credible AI curriculum partners — you have field credibility",
+                "Parents are anxious about AI: you can speak to it with professional authority",
+                "Principals are looking for credible AI curriculum partners: you have field credibility",
                 "CODEship's AI program is your strongest program stream in this market",
-                "You can teach occasionally — giving your programs authentic instructor credibility",
+                "You can teach occasionally, giving your programs authentic instructor credibility",
                 "Your AI knowledge keeps you ahead of curriculum changes as the technology evolves",
               ].map(t=><CheckItem key={t} text={t} color={GOLD}/>)}
             </div>
           </div>
-          <GoldCallout title="The bottom line:" body="CODEship's value is the built system. Curriculum, training, school tools, operations — all pre-built. You do not need prior business ownership experience. You need the drive to build something meaningful in Vaughan. You clearly have that."/>
+          <GoldCallout title="The bottom line:" body="CODEship's value is the built system. Curriculum, training, school tools, operations, all pre-built. You do not need prior business ownership experience. You need the drive to build something meaningful in Vaughan. You clearly have that."/>
         </div>
       </div>
       <div style={{height:12}}/><GoldBar/>
@@ -906,8 +906,8 @@ function PageSystem(){
 // ── PAGE 10: NEXT STEPS ────────────────────────────────────────────────────────
 function PageNextSteps(){
   const steps=[
-    ["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We go through your specific situation — your 60-day goal, your financing path, and which model fits best."],
-    ["#F4D734","#0D1B2A","Choose Your Entry Model","Home-Based Academy or School-Based Delivery — we recommend starting here. The discovery call confirms your path based on your timeline and investment range."],
+    ["#2A9D8F","#fff","Book Your Discovery Call","30 minutes with the CODEship team. We go through your specific situation, your 60-day goal, your financing path, and which model fits best."],
+    ["#F4D734","#0D1B2A","Choose Your Entry Model","Home-Based Academy or School-Based Delivery: we recommend starting here. The discovery call confirms your path based on your timeline and investment range."],
     ["#0D1B2A","#fff","Sign and Lock Vaughan","Your territory locked. No other CODEship partner can operate in Vaughan. Curriculum training begins immediately. You will have your school partnership toolkit within the first week."],
     ["#3A5B9E","#fff","Complete Training","CODEship's onboarding covers curriculum delivery, the school partnership process, and instructor hiring. Your AI background means the curriculum training is fast and intuitive."],
     ["#2A9D8F","#fff","Approach Your First Schools","Use CODEship's school pitch decks to approach 3–5 York Region elementary schools. One signed school partnership creates visibility across 400–600 families without a marketing budget."],
@@ -939,9 +939,9 @@ function PageNextSteps(){
           ))}
         </div>
         <div style={{width:215,flexShrink:0}}>
-          <StatTile label="Recommended Start — Home-Based" value="$18K–$20K" sub="School partnerships + home or community venue delivery" accent={TEAL}/>
-          <StatTile label="School-Based Delivery Model" value="$18K–$30K" sub="All programs run inside school facilities — zero venue cost" accent={GOLD}/>
-          <StatTile label="Shared Space / Studio" value="$30K–$80K" sub="Branded CODEship location — build school base first" accent={BLUE}/>
+          <StatTile label="Recommended Start: Home-Based" value="$18K–$20K" sub="School partnerships + home or community venue delivery" accent={TEAL}/>
+          <StatTile label="School-Based Delivery Model" value="$18K–$30K" sub="All programs run inside school facilities: zero venue cost" accent={GOLD}/>
+          <StatTile label="Shared Space / Studio" value="$30K–$80K" sub="Branded CODEship location: build school base first" accent={BLUE}/>
           <div style={{background:NAVY,borderRadius:10,padding:"14px 16px",marginTop:4}}>
             <div style={{fontSize:42,fontWeight:900,color:GOLD,lineHeight:0.7,marginBottom:8}}>&quot;</div>
             <p style={{fontSize:12.5,fontStyle:"italic",color:WHITE,lineHeight:1.7}}>Vaughan is Canada&apos;s fastest-growing city, with 185+ schools and a highly education-focused parent population. There is no established CODEship presence. Your AI expertise and your 60-day goal put you exactly where this market needs you.</p>

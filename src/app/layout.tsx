@@ -25,7 +25,7 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-83QR0ML32G";
 
 export const metadata: Metadata = {
   title: {
-    default: "CODEship Academy | Kids Coding, AI & STEM — Oshawa & Online",
+    default: "CODEship Academy | Kids Coding, AI & STEM: Oshawa & Online",
     template: "%s | CODEship Academy",
   },
   description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "https://www.codeshipacademy.com",
     siteName: "CODEship Academy",
-    title: "CODEship Academy | Kids Coding, AI & STEM — Oshawa & Online",
+    title: "CODEship Academy | Kids Coding, AI & STEM: Oshawa & Online",
     description:
       "Where curiosity becomes creation. K–8 coding, AI & STEM in Oshawa and across Durham Region, plus live online classes across Canada.",
     images: [
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
         url: "/logo-banner.png",
         width: 1200,
         height: 630,
-        alt: "CODEship Academy — Dream. Code. Achieve.",
+        alt: "CODEship Academy: Dream. Code. Achieve.",
       },
     ],
   },
@@ -81,7 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <head>
-        {/* Google tag (gtag.js) — rendered server-side into the HTML so it is
+        {/* Google tag (gtag.js), rendered server-side into the HTML so it is
             present on first load and detectable by Tag Assistant / GTM. Google
             Consent Mode v2 defaults storage to "denied"; the client-side
             Analytics component flips it to "granted" once the visitor accepts

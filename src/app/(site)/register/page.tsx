@@ -14,9 +14,9 @@ import { IN_PERSON_VENUE } from "@/data/locations";
 export const runtime = "edge";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Book a Kids Coding Class | CODEship Academy",
+  title: "Enroll in a Kids Coding Class | CODEship Academy",
   description:
-    "Book a CODEship coding class for K–Grade 8. Saturdays at Core21 in Oshawa or live online. CAD $129 for 8 weekly classes.",
+    "Enroll in a CODEship coding class for K–Grade 8. Saturdays at Core21 in Oshawa or live online. CAD $129 for 8 weekly classes.",
   path: "/register",
 });
 
@@ -62,7 +62,7 @@ export default function RegisterPage({ searchParams }: Props) {
 
         <section className="py-20">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl shadow-md p-8">
+            <div className="bg-white shadow-md p-8">
               <h2 className="text-2xl font-bold text-[#001532] mb-6 text-center">Online Programme Registration</h2>
               <RegistrationForm />
             </div>
@@ -87,7 +87,7 @@ export default function RegisterPage({ searchParams }: Props) {
 
         <section className="py-20">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl shadow-md p-8">
+            <div className="bg-white shadow-md p-8">
               <h2 className="text-2xl font-bold text-[#001532] mb-6 text-center">Program Registration</h2>
               <RegistrationForm />
             </div>
@@ -100,7 +100,7 @@ export default function RegisterPage({ searchParams }: Props) {
   return (
     <>
       <PageHero
-        eyebrow="Book a class"
+        eyebrow="Enroll"
         title="Choose your child's level"
         lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}. Pick in person or online at checkout.`}
       />
@@ -113,7 +113,7 @@ export default function RegisterPage({ searchParams }: Props) {
               <Link
                 key={level}
                 href={`/register/${level}`}
-                className="group block bg-white rounded-2xl p-7 shadow-sm border border-gray-200 hover:border-[#F4D734] hover:shadow-lg transition-all"
+                className="group block bg-white p-7 shadow-sm border border-gray-200 hover:border-[#F4D734] hover:shadow-lg transition-all"
               >
                 <p className="text-sm font-bold uppercase tracking-widest text-gray-500">{ageLabel(level, false)}</p>
                 <h2 className="text-2xl font-extrabold text-[#001532] mt-1">{config.label}</h2>
@@ -132,7 +132,7 @@ export default function RegisterPage({ searchParams }: Props) {
                     </dd>
                   </div>
                 </dl>
-                <p className="mt-6 text-lg font-bold text-[#001532] group-hover:text-[#138A9A]">Book {config.label} →</p>
+                <p className="mt-6 text-lg font-bold text-[#001532] group-hover:text-[#138A9A]">Enroll in {config.label} →</p>
               </Link>
             );
           })}

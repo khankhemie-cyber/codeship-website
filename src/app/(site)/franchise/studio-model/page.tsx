@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 export const metadata: Metadata = pageMetadata({
   title: "Studio Learning Centre Franchise Model | CODEship Academy",
   description:
-    "Open a CODEship Academy Studio Learning Centre — a dedicated branded space for coding, AI, and STEM education. Investment $60K–$100K.",
+    "Open a CODEship Academy Studio Learning Centre: a dedicated branded space for coding, AI, and STEM education. Investment $60K–$100K.",
   path: "/franchise/studio-model",
 });
 
@@ -19,7 +19,7 @@ export default function StudioModelPage() {
           </Link>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Studio Learning Centre Model</h1>
           <p className="text-gray-300 text-xl max-w-2xl mx-auto">
-            Your own branded CODEship Academy studio — a dedicated community learning hub for coding, AI, STEM,
+            Your own branded CODEship Academy studio: a dedicated community learning hub for coding, AI, STEM,
             birthday parties, and more.
           </p>
           <div className="mt-6 inline-block bg-[#F4D734] text-[#001532] font-bold px-6 py-3 rounded-xl text-xl">
@@ -34,7 +34,7 @@ export default function StudioModelPage() {
             <div>
               <h2 className="text-2xl font-bold text-[#001532] mb-4">A Dedicated Home for Your Community</h2>
               <p className="text-gray-600 mb-4">
-                The Studio Learning Centre Model gives you a branded, permanent location in your community — a physical
+                The Studio Learning Centre Model gives you a branded, permanent location in your community: a physical
                 home for CODEship programs that families can visit, parents can trust, and children can grow in.
               </p>
               <p className="text-gray-600 mb-6">
@@ -58,7 +58,7 @@ export default function StudioModelPage() {
               {[
                 { title: "Dedicated Branded Space", desc: "A fully branded CODEship Academy studio, designed to create an inspiring learning environment." },
                 { title: "Full Program Suite", desc: "Access to the complete CODEship program portfolio including birthday parties and evening events." },
-                { title: "Community Hub", desc: "Become a recognized educational hub in your neighbourhood — building lasting community relationships." },
+                { title: "Community Hub", desc: "Become a recognized educational hub in your neighbourhood, building lasting community relationships." },
                 { title: "Walk-In Visibility", desc: "Street-level presence builds brand awareness organically within your local community." },
                 { title: "Comprehensive Support", desc: "Complete franchisor support: curriculum, marketing, training, technology, and ongoing coaching." },
               ].map((feature) => (

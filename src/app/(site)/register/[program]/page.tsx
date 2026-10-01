@@ -21,7 +21,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!isProgramLevel(params.program)) return {};
   const c = PROGRAM_LINKS[params.program];
   return pageMetadata({
-    title: `Book ${c.label} (${c.gradesEn}) — Kids Coding | CODEship Academy`,
+    title: `Enroll in ${c.label} (${c.gradesEn}): Kids Coding | CODEship Academy`,
     description: `${c.summary} CAD $${c.priceCad} for 8 weekly classes. Saturdays at Core21 in Oshawa or online.`,
     path: `/register/${params.program}`,
   });
@@ -36,14 +36,14 @@ export default function ProgramRegisterPage({ params }: Props) {
 
   const crumbs = [
     { name: "Home", href: "/" },
-    { name: "Book", href: "/register" },
+    { name: "Enroll", href: "/register" },
     { name: c.label, href: `/register/${program}` },
   ];
 
   const courseSchema = {
     "@context": "https://schema.org",
     "@type": "Course",
-    name: `${c.label} — Kids Coding Program`,
+    name: `${c.label}: Kids Coding Program`,
     description: c.summary,
     provider: { "@type": "EducationalOrganization", name: "CODEship Academy", sameAs: BASE_URL },
     offers: {
@@ -68,10 +68,10 @@ export default function ProgramRegisterPage({ params }: Props) {
         }}
       />
 
-      <PageHero crumbs={crumbs} eyebrow={ageLabel(program, false)} title={`Book ${c.label}`} lead={c.summary}>
+      <PageHero crumbs={crumbs} eyebrow={ageLabel(program, false)} title={`Enroll in ${c.label}`} lead={c.summary}>
         <div className="flex flex-wrap gap-3">
           {[c.techEn, `CAD $${c.priceCad} / semester`, SEMESTER_SHAPE_LABEL].map((chip) => (
-            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2 rounded-full">
+            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2">
               {chip}
             </span>
           ))}
@@ -101,7 +101,7 @@ export default function ProgramRegisterPage({ params }: Props) {
                   <Link
                     key={level}
                     href={`/register/${level}`}
-                    className="block bg-white rounded-xl p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
+                    className="block bg-white p-5 border border-gray-200 hover:border-[#F4D734] hover:shadow-md transition-all"
                   >
                     <span className="block text-lg font-bold text-[#001532]">{PROGRAM_LINKS[level].label}</span>
                     <span className="block text-base text-gray-600 mt-1">{ageLabel(level, false)}</span>
@@ -112,7 +112,7 @@ export default function ProgramRegisterPage({ params }: Props) {
           </div>
 
           <aside className="lg:col-span-1">
-            <div className="lg:sticky lg:top-28 bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+            <div className="lg:sticky lg:top-28 bg-white shadow-md border border-gray-100 p-6 sm:p-8">
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold text-[#001532]">CAD ${c.priceCad}</span>
                 <span className="text-base text-gray-600">/ semester</span>
@@ -120,7 +120,7 @@ export default function ProgramRegisterPage({ params }: Props) {
               <p className="text-base text-gray-600 mt-1 mb-6">{SEMESTER_SHAPE_LABEL}</p>
               <CheckList items={INCLUDED} />
               <div className="mt-6">
-                <EnrollButton program={program} label={`Book ${c.label}`} />
+                <EnrollButton program={program} label={`Enroll in ${c.label}`} />
               </div>
               <p className="text-sm text-gray-500 mt-3 text-center">
                 Choose in person or online and your semester at checkout. Secure checkout with Stripe.

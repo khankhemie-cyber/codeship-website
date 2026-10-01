@@ -17,7 +17,7 @@ const crumbs = [
 ];
 
 const camps = [
-  { title: "Summer camp", when: "July – August", length: "Monday to Friday", desc: "A week of building that ends with a project showcase." },
+  { title: "Summer camp", when: "July to August", length: "Monday to Friday", desc: "A week of building that ends with a project showcase." },
   { title: "March Break camp", when: "March Break week", length: "Full or half week", desc: "Pick a track and build something big over the break." },
   { title: "PA Day workshops", when: "School PA days", length: "Full or half day", desc: "One focused day of building on a day off school." },
 ];
@@ -38,7 +38,7 @@ export default function CampsPage() {
       <Section>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {camps.map((c) => (
-            <div key={c.title} className="bg-white rounded-2xl shadow-sm p-7">
+            <div key={c.title} className="bg-white shadow-sm p-7">
               <h2 className="text-2xl font-extrabold text-[#001532]">{c.title}</h2>
               <p className="text-base font-semibold text-[#138A9A] mt-2">
                 {c.when} · {c.length}
@@ -53,7 +53,7 @@ export default function CampsPage() {
         <SectionHeader center title="Camp tracks" lead="Each camp focuses on one track." />
         <div className="flex flex-wrap justify-center gap-3">
           {tracks.map((t) => (
-            <span key={t} className="bg-[#FAF8F4] border border-gray-200 text-[#001532] text-lg font-semibold px-5 py-3 rounded-full">
+            <span key={t} className="bg-[#FAF8F4] border border-gray-200 text-[#001532] text-lg font-semibold px-5 py-3">
               {t}
             </span>
           ))}

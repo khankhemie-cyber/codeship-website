@@ -138,14 +138,14 @@ export default function ArticlePage({ params }: Props) {
             )}
 
             {/* CTA */}
-            <div className="mt-12 bg-[#001532] rounded-2xl p-8 text-center text-white">
+            <div className="mt-12 bg-[#001532] p-8 text-center text-white">
               <h3 className="text-2xl sm:text-3xl font-extrabold mb-3">Saturday coding classes in Oshawa</h3>
               <p className="text-lg text-gray-200 mb-6">October and November semesters are open for K–Grade 8.</p>
               <Link
                 href="/#book"
-                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 rounded-xl hover:bg-[#E6C51E] transition-colors inline-block"
+                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors inline-block"
               >
-                Book a Semester
+                Enroll Now
               </Link>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function ArticlePage({ params }: Props) {
                 <Link
                   key={r.slug}
                   href={`/resources/${r.slug}`}
-                  className="bg-[#FAF8F4] rounded-2xl p-6 hover:shadow-md transition-shadow border border-gray-100 block"
+                  className="bg-[#FAF8F4] p-6 hover:shadow-md transition-shadow border border-gray-100 block"
                 >
                   <span className="text-sm text-[#0f6f7c] font-bold uppercase tracking-widest">{r.category}</span>
                   <h3 className="font-bold text-[#001532] mt-2 mb-3 text-lg leading-snug">{r.title}</h3>

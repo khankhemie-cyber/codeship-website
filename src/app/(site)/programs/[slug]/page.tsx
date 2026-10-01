@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = getProgram(params.slug);
   if (!program) return {};
   return pageMetadata({
-    title: `${program.level} Coding Classes (${program.gradeBand}) — Oshawa & Online`,
+    title: `${program.level} Coding Classes (${program.gradeBand}) in Oshawa & Online`,
     description: `${program.level} coding classes for ${program.gradeBand}. ${program.outcome} Saturdays at Core21 in Oshawa or online. CAD $129 per 8-week semester.`,
     path: `/programs/${program.slug}`,
     image: PROGRAM_OG_IMAGE[program.slug],
-    imageAlt: `${program.level} — CODEship Academy`,
+    imageAlt: `${program.level}: CODEship Academy`,
   });
 }
 
@@ -114,7 +114,7 @@ export default function ProgramPage({ params }: Props) {
       <PageHero crumbs={crumbs} eyebrow={program.gradeBand} title={program.level} lead={program.summary}>
         <div className="flex flex-wrap gap-3">
           {[program.codingSpace, `Saturdays ${saturdayTime(program.slug)}`, `${PRICE_LABEL} / semester`].map((chip) => (
-            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2 rounded-full">
+            <span key={chip} className="bg-white/10 text-white text-base font-semibold px-4 py-2">
               {chip}
             </span>
           ))}
@@ -131,7 +131,7 @@ export default function ProgramPage({ params }: Props) {
                 {program.semesters.map((sem) => (
                   <li
                     key={sem.number}
-                    className="bg-white rounded-2xl p-6 border-l-4 shadow-sm"
+                    className="bg-white p-6 border-l-4 shadow-sm"
                     style={{ borderLeftColor: program.accentColour }}
                   >
                     <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Semester {sem.number}</p>
@@ -139,7 +139,7 @@ export default function ProgramPage({ params }: Props) {
                     <p className="text-base text-gray-600 mt-2">{sem.bigIdea}</p>
                   </li>
                 ))}
-                <li className="sm:col-span-2 bg-[#001532] rounded-2xl p-6 text-white">
+                <li className="sm:col-span-2 bg-[#001532] p-6 text-white">
                   <p className="text-sm font-bold uppercase tracking-widest text-[#F4D734]">Capstone</p>
                   <h3 className="text-xl font-bold mt-1">{program.capstone.title}</h3>
                   <p className="text-base text-gray-300 mt-2">{program.capstone.description}</p>
@@ -157,7 +157,7 @@ export default function ProgramPage({ params }: Props) {
             {next && (
               <Link
                 href={`/programs/${next.slug}`}
-                className="block rounded-2xl bg-white border border-gray-200 p-6 hover:border-[#F4D734] hover:shadow-md transition-all"
+                className="block bg-white border border-gray-200 p-6 hover:border-[#F4D734] hover:shadow-md transition-all"
               >
                 <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Next level</p>
                 <p className="text-2xl font-extrabold text-[#001532] mt-1">
@@ -170,7 +170,7 @@ export default function ProgramPage({ params }: Props) {
           <aside className="lg:col-span-1">
             <div className="lg:sticky lg:top-28">
               <Suspense
-                fallback={<div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}
+                fallback={<div className="bg-white shadow-md border border-gray-100 p-6 sm:p-8 h-96" aria-hidden="true" />}
               >
                 <ProgramLocationSelector program={program} />
               </Suspense>

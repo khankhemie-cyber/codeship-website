@@ -16,7 +16,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!isProgramLevel(params.program)) return {};
   const c = PROGRAM_LINKS[params.program];
   return pageMetadata({
-    title: `You're registered — ${c.label} | CODEship Academy`,
+    title: `You're registered: ${c.label} | CODEship Academy`,
     description: `Registration confirmed for the ${c.label} program at CODEship Academy.`,
     path: `/success/${params.program}`,
     // Post-payment confirmation pages should never be indexed or in the sitemap.

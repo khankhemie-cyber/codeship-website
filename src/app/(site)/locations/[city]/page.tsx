@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isOpen = location.inPerson === "open";
   return pageMetadata({
     title: isOpen
-      ? `Kids Coding Classes in ${location.name} — Saturdays at Core21 | CODEship Academy`
-      : `Kids Coding Classes in ${location.name} — Live Online | CODEship Academy`,
+      ? `Kids Coding Classes in ${location.name}: Saturdays at Core21 | CODEship Academy`
+      : `Kids Coding Classes in ${location.name}: Live Online | CODEship Academy`,
     description: isOpen
       ? `Saturday coding, AI & STEM classes for K–Grade 8 at ${IN_PERSON_VENUE.full}. Serving Durham Region. CAD $129 for 8 weekly classes.`
       : `Live online coding classes for ${location.name} kids in K–Grade 8. CAD $129 for 8 weekly classes. Join the waitlist for in-person classes.`,
@@ -122,7 +122,7 @@ export default function CityPage({ params }: Props) {
           <Section>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
               <NowBookingCard />
-              <div className="rounded-3xl overflow-hidden shadow-sm border border-gray-200 h-80 lg:h-full lg:min-h-[420px]">
+              <div className=" overflow-hidden shadow-sm border border-gray-200 h-80 lg:h-full lg:min-h-[420px]">
                 <iframe
                   title={`Map of ${IN_PERSON_VENUE.full}`}
                   src={`https://maps.google.com/maps?q=${encodeURIComponent(`${IN_PERSON_VENUE.street}, ${IN_PERSON_VENUE.city}, ON, Canada`)}&output=embed&z=16`}
@@ -138,7 +138,7 @@ export default function CityPage({ params }: Props) {
 
           <Section tone="white" id="book">
             <SectionHeader
-              eyebrow="Book in 3 minutes"
+              eyebrow="Enroll in 3 minutes"
               title="Pick your child's grade"
               lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}`}
             />
@@ -154,7 +154,7 @@ export default function CityPage({ params }: Props) {
             lead="Live online classes are open now. In-person classes are coming soon."
           >
             <div className="flex flex-col sm:flex-row gap-3">
-              <ButtonLink href="/register">Book Online Classes</ButtonLink>
+              <ButtonLink href="/register">Enroll in Online Classes</ButtonLink>
               <ButtonLink href={`/waitlist?city=${encodeURIComponent(cityName)}`} variant="outline">
                 Join the Waitlist
               </ButtonLink>
@@ -165,7 +165,7 @@ export default function CityPage({ params }: Props) {
             <SectionHeader title="Online class times" lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}`} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {PROGRAMS.map((p) => (
-                <div key={p.slug} className="bg-white rounded-2xl shadow-sm p-6">
+                <div key={p.slug} className="bg-white shadow-sm p-6">
                   <p className="text-sm font-bold uppercase tracking-widest text-gray-500">{p.gradeBand}</p>
                   <h3 className="text-2xl font-extrabold text-[#001532] mt-1">{p.level}</h3>
                   <p className="text-lg font-semibold text-[#001532] mt-4">
@@ -191,7 +191,7 @@ export default function CityPage({ params }: Props) {
         <BookingBand
           title="Start online today"
           href="/register"
-          label="Book Online Classes"
+          label="Enroll Online"
           detail="Live online classes with an instructor. October and November semesters are open."
         />
       )}

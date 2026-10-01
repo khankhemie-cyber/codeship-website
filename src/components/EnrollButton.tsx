@@ -9,7 +9,7 @@ interface EnrollButtonProps {
 
 /**
  * The single Stripe Payment Link CTA for a program level. This is the only
- * place a Stripe checkout link should be rendered — everywhere else links to
+ * place a Stripe checkout link should be rendered: everywhere else links to
  * the per-program registration page (/register/[program]) that hosts it.
  */
 export function EnrollButton({ program, label = "Register Now", className = "", onClick }: EnrollButtonProps) {
@@ -19,7 +19,7 @@ export function EnrollButton({ program, label = "Register Now", className = "", 
       href={config.url}
       onClick={onClick}
       className={
-        "inline-flex w-full items-center justify-center rounded-xl bg-[#F4D734] px-7 py-4 text-center " +
+        "inline-flex w-full items-center justify-center bg-[#F4D734] px-7 py-4 text-center " +
         "font-bold text-[#001532] transition-colors hover:bg-[#E6C51E] " +
         className
       }
