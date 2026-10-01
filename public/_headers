@@ -3,3 +3,6 @@
 
 /emails/*
   X-Robots-Tag: noindex, nofollow, noarchive
+
+/tools/*
+  X-Robots-Tag: noindex, nofollow, noarchive

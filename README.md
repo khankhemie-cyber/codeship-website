@@ -236,6 +236,21 @@ Only "supports NGSA skill-building" / "helps strengthen skills used in NGSA prep
 The `/gy/ngsa-digital-skills` page's `complianceNote` field carries this explicitly, and
 `GUYANA_COMPLIANCE_DISCLAIMER` repeats a shorter version in `GYFooter` on every Guyana page.
 
+## Student tools (`/tools/*`)
+
+`/tools/web-playground` is an HTML/CSS/JavaScript editor with a live preview and console, for students
+to use in class. Like `/lp/*`, it is **direct-link only**: `src/app/tools/layout.tsx` drops the main
+site chrome, nothing in `Navigation`/`Footer` links to it, it is not in `sitemap.ts`, `robots.ts`
+disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `public/_headers`).
+
+- **Progress lives in the link.** Every edit is compressed (deflate) into the URL's `#code=` hash, so
+  the address bar is always a link to the student's latest work. "Save link" copies it. The hash never
+  reaches the server, so nothing is stored on our side. A localStorage copy restores work when the
+  bare URL is reopened on the same device. A link is a snapshot: after more edits, save a new one.
+- **Sandboxed.** Student code runs in an iframe sandboxed without `allow-same-origin`, so it can't read
+  the site's cookies, storage, or page.
+- Code lives in `src/components/tools/WebPlayground.tsx`.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
