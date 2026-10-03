@@ -259,6 +259,74 @@ disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `
   change the format without keeping old links decodable), `templates.ts`, `i18n.ts`, `CodeEditor.tsx`,
   `Launchpad.tsx`. The localStorage keys keep the old `codeship-web-playground` name on purpose.
 
+### `/tools/python` (CODEship Python)
+
+A one-file Python console for the Engineers programme (ages 11–14): `checker.py`, a **Run** button
+(or Ctrl/Cmd+Enter) and an output panel. Same direct-link-only rules as the Launchpad. Things it
+deliberately does **not** have, because the lessons depend on students doing them: autocomplete,
+snippets, bracket auto-closing, auto-dedent of `else:`, "explain this error", AI help, `input()`,
+`pip`/`micropip`, multiple files, a REPL.
+
+**How Python is loaded and cached.** Python runs in the browser via [Pyodide](https://pyodide.org)
+(pinned at an exact version in `package.json`; it currently ships Python 3.14). Nothing runs on our servers.
+- `scripts/copy-pyodide.mjs` runs before `dev` and `build` and copies the five runtime files from
+  `node_modules/pyodide` into `public/py/pyodide-<version>/` (gitignored). We serve them from our own
+  origin rather than a CDN, so no third party sees students' requests and a school filter that
+  blocks CDNs can't break a class.
+- The folder name carries the version, so `public/_headers` caches it as `immutable` for a year.
+  After the first visit a Chromebook loads Python from its own cache.
+- The page starts a module Web Worker (`public/py/worker.js`) as soon as it opens, so Python is
+  usually ready before a student finishes typing. Running in a worker means an infinite loop can't
+  freeze the tab: **Stop** terminates the worker and boots a fresh one.
+- Cold load (measured in Chromium with throttling, gzip): about 6.3 MB over the wire, ready in
+  ~3 s on fast broadband, ~5 s at 20 Mbps, ~7 s at 10 Mbps, ~12 s at 5 Mbps. A whole class
+  loading at once on one school connection shares that bandwidth, so ask students to open the page
+  at the start of class.
+- `public/py/runner.py` runs the student's code. It `compile()`s the source itself under the
+  filename `checker.py` (Pyodide's own `runPython` silently dedents code, which would hide
+  `IndentationError`), shows the **real, unmodified** Python error, drops interpreter frames so only
+  the student's lines show, and replaces `input()` with a plain message. If you change `worker.js`
+  or `runner.py`, bump `RUNNER_VERSION` in `src/components/tools/python/runtime.ts`.
+- Upgrading Pyodide changes the Python version, and Python's error wording changes between
+  versions. Run the tests below and check the printed error text against the workbook cheat sheet.
+
+**Where students' work lives.** Nothing is stored on our server.
+1. *Autosave* (`autosave.ts`): localStorage on this computer, ~2 s after typing stops. Labelled
+   "Saved on this computer" on purpose. Restored when the page opens without a link. Opening a link
+   never overwrites it until the student edits.
+2. *Share link* (`share.ts`): **Share link** copies `/tools/python/#c=1<payload>`. The payload is
+   raw deflate of the UTF-8 file, base64url-encoded; the `1` is the format version. It's in the
+   fragment, so it never reaches the server. The address bar is also kept up to date as students
+   type, so a refresh or a copied address bar never loses work.
+3. *Download / Open* `checker.py`: a real `.py` file, the durable backup and the portfolio piece.
+   Open it from the file picker or by dragging it onto the page. (CRLF line endings in a file
+   edited on Windows come back as LF.)
+
+**Size limit in practice.** Share links are capped at **2,000 characters** for the whole URL
+(`SHARE_URL_LIMIT`), which is about what mail clients and messaging apps reliably pass through.
+Over the cap, Share refuses with "This project is too big to share as a link. Download the file
+instead." It never truncates. Measured: the finished Semester 1 student file (1,288 chars, no
+comments) is a 688-char payload, about **735 characters** as a full `https://www.codeshipacademy.com`
+link; the commented 1,697-char version comes to about 1,000. Varied code compresses to roughly
+half its size and base64 adds a third, so the cap works out at roughly 2.5–3.5 KB of typical
+Python. Repetitive code goes further.
+
+**Adding stored projects later** (multi-file projects will need them): only `share.ts` knows the
+link format. `createShareLink()` and `readSharedCode()` are already async, so a short-code link
+such as `#p=<id>` can be resolved there without touching the editor. Keep `#c=1` links decodable
+forever: instructors keep a sheet of them.
+
+**Tests** (cases from the Semester 1 lesson plans; CI runs both in
+`.github/workflows/python-console.yml`):
+- `npm run test:python`: every lesson program, error and silent-failure case through `runner.py`
+  on the same Pyodide build, in Node. A few seconds, no browser. Prints the real error text.
+- `npm run build && npm run test:python:e2e`: the real page in Chromium. Share link round-trip
+  and length, oversize refusal, autosave and link priority, download/open/drag-and-drop
+  byte-identity, editor indentation keys, Stop, and a 150%-zoom Chromebook viewport. Needs
+  Chromium for Playwright (`npx playwright-core install chromium`, or set `CHROMIUM_PATH`).
+- Code: `src/components/tools/python/` (`PythonConsole.tsx`, `PythonEditor.tsx`, `share.ts`,
+  `autosave.ts`, `runtime.ts`), `public/py/`, `scripts/test-python*.mjs`, `scripts/python-fixtures/`.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

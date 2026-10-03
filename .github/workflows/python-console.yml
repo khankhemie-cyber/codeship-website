@@ -1,0 +1,27 @@
+# Acceptance tests for the /tools/python student console. The cases come from
+# the Engineers Semester 1 lesson plans: if this goes red, a lesson is broken.
+name: Python console
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Lesson programs, errors and input() (Pyodide in Node)
+        run: npm run test:python
+      - name: Install Chromium
+        run: npx playwright-core install --with-deps chromium
+      - run: npm run build
+      - name: Share links, autosave, files and editor (real page in Chromium)
+        run: npm run test:python:e2e

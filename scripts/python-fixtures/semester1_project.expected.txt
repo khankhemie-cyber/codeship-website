@@ -1,0 +1,8 @@
+Checking a password for: my game account
+Length: 11
+Kinds of character: 2
+Rating: WEAK
+Advice: make it longer. Length beats symbols.
+
+What a site should store instead of your password:
+816a4092660e4e87b5b584c4a51e7b33db2fb1b8f972578ef90c5ed7608e0f19

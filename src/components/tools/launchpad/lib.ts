@@ -4,6 +4,8 @@
  * stays easy to audit: changing it would break every link students have saved.
  */
 
+import { deflateRaw, fromBase64Url, inflateRaw, toBase64Url } from "../shared/linkCodec";
+
 export type Lang = "html" | "css" | "js";
 export type Files = Record<Lang, string>;
 export type LogLevel = "log" | "info" | "warn" | "error";
@@ -73,32 +75,12 @@ export function buildPopoutPage(files: Files, title: string): string {
 </head><body><iframe sandbox="allow-scripts allow-modals allow-forms allow-pointer-lock" srcdoc="${doc}"></iframe></body></html>`;
 }
 
-function toBase64Url(bytes: Uint8Array): string {
-  let bin = "";
-  for (let i = 0; i < bytes.length; i += 0x8000) {
-    bin += String.fromCharCode(...Array.from(bytes.subarray(i, i + 0x8000)));
-  }
-  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-function fromBase64Url(s: string): Uint8Array {
-  const bin = atob(s.replace(/-/g, "+").replace(/_/g, "/"));
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-}
-
-async function pipe(bytes: Uint8Array, stream: TransformStream): Promise<Uint8Array> {
-  const piped = new Blob([bytes as BlobPart]).stream().pipeThrough(stream);
-  return new Uint8Array(await new Response(piped).arrayBuffer());
-}
-
 // Link format: "1" + base64url(deflate-raw(json)), or "0" + base64url(json)
 // on browsers without CompressionStream.
 export async function encodeFiles(files: Files): Promise<string> {
   const bytes = new TextEncoder().encode(JSON.stringify({ h: files.html, c: files.css, j: files.js }));
   try {
-    return "1" + toBase64Url(await pipe(bytes, new CompressionStream("deflate-raw")));
+    return "1" + toBase64Url(await deflateRaw(bytes));
   } catch {
     return "0" + toBase64Url(bytes);
   }
@@ -106,7 +88,7 @@ export async function encodeFiles(files: Files): Promise<string> {
 
 export async function decodeFiles(code: string): Promise<Files> {
   let bytes = fromBase64Url(code.slice(1));
-  if (code[0] === "1") bytes = await pipe(bytes, new DecompressionStream("deflate-raw"));
+  if (code[0] === "1") bytes = await inflateRaw(bytes);
   else if (code[0] !== "0") throw new Error("Unknown link format");
   const data = JSON.parse(new TextDecoder().decode(bytes));
   return { html: String(data.h ?? ""), css: String(data.c ?? ""), js: String(data.j ?? "") };
