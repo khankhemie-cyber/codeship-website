@@ -63,7 +63,7 @@ export const kindnessCards = () =>
 export const sorterTravel = (n = 5, inner = ["move_right"], withShow = true) => ["start_tap", ...(withShow ? ["show"] : []), ["repeat", n, inner]];
 export const sorterBump = ["start_bump", ["say", "Yes! That one recycles"], "pop", ["wait", 1], "hide"];
 export const recyclingSorter = ({ travel = sorterTravel(), onBin = false } = {}) => {
-  const canScripts = scripts(stack(travel), stack(sorterBump, 20, 260));
+  const canScripts = scripts(stack(travel), stack(sorterBump, 20, 380));
   const empty = scripts();
   return project("Recycling Sorter", [{ id: "can", costume: "can" }, { id: "bin", costume: "bin" }], [
     { id: "p1", background: "street", actors: [
@@ -87,7 +87,7 @@ export const neighbourhoodMap = ({ listen = "blue", goHome = true } = {}) => {
     [
       { id: "p1", background: "map", actors: [
         { id: "park1", characterId: "park", x: 1, y: 1, scripts: scripts(stack(["start_tap", ["say", "The park!"], ["send_message", "blue"], ["wait", 1], ["go_page", 2]])) },
-        { id: "library1", characterId: "library", x: 6, y: 2, scripts: scripts(stack([["start_message", listen], "grow", "pop", ["wait", 1], "shrink"]), stack(["start_tap", ["go_page", 3]], 20, 300)) },
+        { id: "library1", characterId: "library", x: 6, y: 2, scripts: scripts(stack([["start_message", listen], "grow", "pop", ["wait", 1], "shrink"]), stack(["start_tap", ["go_page", 3]], 20, 420)) },
         { id: "school1", characterId: "school", x: 3, y: 6, scripts: scripts(stack(["start_tap", ["go_page", 4]])) },
       ] },
       placePage("p2", "park2", "park", "voice-park"),
