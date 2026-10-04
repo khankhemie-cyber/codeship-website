@@ -1,0 +1,27 @@
+# Acceptance tests for the /tools/blocks Explorers editor. The projects are the
+# finished Semester 1–4 lesson projects: if this goes red, a class is broken.
+name: Explorers Blocks
+
+on:
+  pull_request:
+  push:
+    branches: [main, claude/laughing-rubin-0j1pX]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lesson projects through the engine (Node, virtual clock)
+        run: npm run test:blocks
+      - name: Install Chromium
+        run: npx playwright-core install --with-deps chromium
+      - run: npm run build
+      - name: Real page in Chromium (fake microphone, touch, save/open)
+        run: npm run test:blocks:e2e

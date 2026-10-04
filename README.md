@@ -327,6 +327,56 @@ forever: instructors keep a sheet of them.
 - Code: `src/components/tools/python/` (`PythonConsole.tsx`, `PythonEditor.tsx`, `share.ts`,
   `autosave.ts`, `runtime.ts`), `public/py/`, `scripts/test-python*.mjs`, `scripts/python-fixtures/`.
 
+### `/tools/blocks` (CODEship Blocks, Explorers)
+
+Picture-block coding for the Explorers programme (ages 5–7, four semesters). Children build with
+pictures and colours; the instructor does all typing (`Say` words), settings and saving. Built on
+[Blockly](https://developers.google.com/blockly) 13 (Apache-2.0, pinned) for the block editor;
+the stage, characters and the engine that runs the blocks are ours.
+
+- **The twenty blocks** (`blockDefs.ts`) are the whole vocabulary: do not add more without the
+  curriculum changing. Colour groups match the printed books exactly: Start `#D58401`, Move
+  `#E6ECF4`, Say/Record `#035762`, Fun `#4E2B6F`, Control `#012C61`. Gold and pale blocks use navy
+  text. Settings (⋯, per device): English/French, "pictures and words" or "pictures only", and a
+  palette filter by semester (default: all twenty).
+- **How blocks run** (`engine.ts`, pure TypeScript): every stack is a thread on a 10 × 8 grid.
+  Timings: a move is 0.3 s, `Say` holds 1.5 s (the bubble stays until that character's next `Say`),
+  `Wait N` is N s, `Grow`/`Shrink` go 7 steps each way. Arriving on a page resets its characters
+  and runs its Green Flag stacks; the green flag button does the same for the current page.
+  `Go to Page` waits (up to 10 s) for the other characters on the page to finish, so a message sent
+  just before a page turn plays out. A bump is a visible character moving onto another visible
+  character's square. Silent failures the lessons rely on (empty `Repeat`, unheard `Send Message`,
+  a `Go to Page` dead end, hidden characters not bumping) are deliberate and tested.
+- **Project format** (`model.ts`): JSON `{ format: "codeship-blocks", version: 1, name,
+  characters, pages, recordings }`. A character (a built-in picture) can appear on several pages;
+  each appearance (an *actor*) has its own starting square and its own blocks, stored as Blockly's
+  workspace JSON. Page 1 is the map. Bump `version` and migrate in `parseProject` if this changes:
+  instructors keep these files.
+- **Recordings** (`audio.ts`, `RecorderPanel.tsx`): tap a `Record` block to open Record / Stop /
+  Play. Capped at 15 s, with a level meter and a "very quiet" warning; re-recording replaces the
+  clip with no warning. Saved as 16 kHz mono WAV (plays in every browser, unlike each browser's own
+  recording format), boosted up to 8× if quiet, embedded in the project as base64. About 32 KB per
+  second: 3 s ≈ 96 KB, the 15 s cap ≈ 480 KB, so a four-recording Semester 4 project is well under
+  2 MB.
+- **Where work lives** (`files.ts`). Nothing is stored on our server.
+  - **Save** downloads `<project name>.codeship`; **Open** (or dragging the file onto the page)
+    loads it on any device. This is how work moves between classes.
+  - **Autosave** goes to this browser's IndexedDB (localStorage is too small for audio), labelled
+    "Saved on this computer". Opening a link or file never overwrites it until someone edits.
+  - **Copy link** (`#p=1…`, raw deflate + base64url, capped at 2,000 characters) works only for
+    projects without recordings: every Semester 1 project, and the Semester 3 Sorter (≈480
+    characters). It refuses, with a reason, rather than dropping recordings.
+- **Microphone**: "Set up microphone" in ⋯ asks for permission before class. Instructors should
+  choose "Allow on every visit". On managed Chromebooks, IT can pre-approve the site with Chrome's
+  `AudioCaptureAllowedUrls` policy so no prompt ever appears.
+- **Tests** (CI: `.github/workflows/blocks.yml`); fixtures are the finished lesson projects in
+  `scripts/blocks/fixtures.mjs`:
+  - `npm run test:blocks`: all four semester projects and their deliberate-failure variants through
+    the real engine on a virtual clock. Needs Node 22 (runs the TypeScript directly).
+  - `npm run build && npm run test:blocks:e2e`: the real page in Chromium with a fake microphone.
+    Covers record/re-record/play, Save → Open in a fresh browser with recordings playing on the
+    right pages, autosave and link priority, finger drag, 150% zoom, labels and semester filter.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
