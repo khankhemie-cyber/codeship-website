@@ -205,12 +205,15 @@ export function blockTheme() {
   });
 }
 
-/** The palette, in colour groups, limited to blocks taught up to `semester` (0 = all twenty). */
-export function toolboxFor(semester: number): Blockly.utils.toolbox.ToolboxDefinition {
+/**
+ * The palette, in colour groups, limited to blocks taught up to `semester`
+ * (0 = all twenty), or to exactly `only` (a level's palette).
+ */
+export function toolboxFor(semester: number, only?: readonly string[]): Blockly.utils.toolbox.ToolboxDefinition {
   const groups: Group[] = ["start", "move", "say", "fun", "control"];
   const contents: Blockly.utils.toolbox.FlyoutItemInfo[] = [];
   for (const group of groups) {
-    const defs = BLOCKS.filter((b) => b.group === group && (semester === 0 || b.semester <= semester));
+    const defs = BLOCKS.filter((b) => b.group === group && (only ? only.includes(b.type) : semester === 0 || b.semester <= semester));
     defs.forEach((d, i) => contents.push({ kind: "block", type: d.type, gap: i === defs.length - 1 ? 36 : 12 } as Blockly.utils.toolbox.FlyoutItemInfo));
   }
   return { kind: "flyoutToolbox", contents };

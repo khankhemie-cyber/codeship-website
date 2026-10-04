@@ -11,6 +11,7 @@ import { Engine } from "./engine";
 import { createProjectLink, downloadProject, projectFileName, readAutosave, readProjectFile, readProjectLink, writeAutosave } from "./files";
 import { STRINGS, type UiLang } from "./i18n";
 import { GRID_COLS, GRID_ROWS, newId, emptyScripts, starterProject, type Project, type Recording, type Scripts } from "./model";
+import LevelsMode from "./LevelsMode";
 import RecorderPanel from "./RecorderPanel";
 import Stage from "./Stage";
 
@@ -37,9 +38,10 @@ const PAGE_CSS = `
 .cb-dark-text text.blocklyText { fill: #010F2A !important; }
 .blocklyText { font-weight: 700; }
 @keyframes cb-flash { 0% { background-color: #D58401; } 100% { background-color: #0A2648; } }
+@keyframes cb-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(520px) rotate(200deg); opacity: 0; } }
 `;
 
-type Settings = { lang: UiLang; mode: LabelMode; semester: number };
+type Settings = { lang: UiLang; mode: LabelMode; semester: number; view: "create" | "levels" };
 type SaveState = { kind: "none" } | { kind: "link" } | { kind: "file" } | { kind: "saved"; at: number } | { kind: "failed" };
 type LinkDialog = { url: string; copied: boolean } | { error: string } | null;
 
@@ -63,7 +65,7 @@ function ToolButton({ icon, label, onClick, testId, hideLabel }: { icon: IconNam
 }
 
 function readSettings(): Settings {
-  const fallback: Settings = { lang: navigator.language?.toLowerCase().startsWith("fr") ? "fr" : "en", mode: "words", semester: 0 };
+  const fallback: Settings = { lang: navigator.language?.toLowerCase().startsWith("fr") ? "fr" : "en", mode: "words", semester: 0, view: "create" };
   try {
     return { ...fallback, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
   } catch {
@@ -76,7 +78,7 @@ export default function BlocksApp() {
   const engineRef = useRef<Engine | null>(null);
   const [, setVersion] = useState(0);
   const [, setFrame] = useState(0);
-  const [settings, setSettings] = useState<Settings>({ lang: "en", mode: "words", semester: 0 });
+  const [settings, setSettings] = useState<Settings>({ lang: "en", mode: "words", semester: 0, view: "create" });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [save, setSave] = useState<SaveState>({ kind: "none" });
   const [recordFor, setRecordFor] = useState<{ blockId: string; clipId: string | null } | null>(null);
@@ -474,9 +476,35 @@ export default function BlocksApp() {
         <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white">
           <span className="block h-8 w-7 bg-no-repeat" style={{ backgroundImage: "url(/logo-header.png)", backgroundSize: "auto 100%", backgroundPosition: "left center" }} />
         </span>
-        <h1 className="mr-1 font-display text-lg font-extrabold sm:text-xl">
+        {/* The wordmark gives way to the controls on narrow (or 150%-zoomed) screens. */}
+        <h1 className="mr-1 hidden font-display text-xl font-extrabold xl:block">
           CODEship <span className="text-[#D58401]">{s.title}</span>
         </h1>
+        {/* Create (free play) or Levels (reach the goal) */}
+        <div className="flex rounded-xl bg-white/10 p-1" role="tablist" aria-label={`${s.create} / ${s.levels}`}>
+          {(["create", "levels"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              role="tab"
+              aria-selected={settings.view === v}
+              data-testid={`view-${v}`}
+              onClick={() => {
+                if (v === settings.view) return;
+                engineRef.current?.stopAll();
+                stopAllSounds();
+                setRecordFor(null);
+                updateSettings({ view: v });
+              }}
+              className={`flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-extrabold ${settings.view === v ? "bg-white text-[#010F2A]" : "text-white/80 hover:text-white"} ${focusRing}`}
+            >
+              <span aria-hidden="true">{v === "create" ? "🎨" : "⭐"}</span>
+              <span className="hidden lg:inline">{v === "create" ? s.create : s.levels}</span>
+            </button>
+          ))}
+        </div>
+        {settings.view === "create" && (
+          <>
         <button
           type="button"
           onClick={onGreenFlag}
@@ -503,8 +531,12 @@ export default function BlocksApp() {
         <span className="mx-1 hidden h-8 w-px bg-white/15 sm:block" aria-hidden="true" />
         <ToolButton icon="undo" label={s.undo} onClick={() => editorApi.current?.undo()} testId="undo" hideLabel />
         <ToolButton icon="redo" label={s.redo} onClick={() => editorApi.current?.redo()} hideLabel />
+          </>
+        )}
 
         <div className="ml-auto flex flex-wrap items-center gap-2">
+          {settings.view === "create" && (
+            <>
           <button
             type="button"
             onClick={onSaveFile}
@@ -516,8 +548,10 @@ export default function BlocksApp() {
             <Icon name="download" className="h-5 w-5" />
             {s.save}
           </button>
-          <ToolButton icon="folderOpen" label={s.open} onClick={() => fileInput.current?.click()} testId="open" />
+          <ToolButton icon="folderOpen" label={s.open} onClick={() => fileInput.current?.click()} testId="open" hideLabel />
           <ToolButton icon="link" label={s.copyLink} onClick={onCopyLink} testId="copy-link" hideLabel />
+            </>
+          )}
           <div className="relative" data-menu>
             <button
               type="button"
@@ -597,6 +631,10 @@ export default function BlocksApp() {
         </div>
       )}
 
+      {settings.view === "levels" ? (
+        <LevelsMode s={s} lang={settings.lang} mode={settings.mode} />
+      ) : (
+        <>
       {/* ───────── Workspace ───────── */}
       <main className="flex min-h-0 flex-1 flex-col-reverse md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,min(46%,600px))]">
         {/* Blocks for the selected character: the state is made loud on purpose. */}
@@ -789,6 +827,8 @@ export default function BlocksApp() {
           </div>
         </section>
       </main>
+        </>
+      )}
 
       <footer className="flex items-center justify-center border-t border-white/10 px-4 py-1.5 text-xs">
         <span className="font-display font-extrabold tracking-[0.25em] text-[#D58401]">{s.tagline}</span>

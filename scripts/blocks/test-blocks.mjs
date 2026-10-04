@@ -186,6 +186,75 @@ test("4. Send Message with no listener does nothing", () => {
   eq(sounds(h.log), 0, "no reaction");
 });
 
+// ── Levels ──
+const L = await import("../../src/components/tools/blocks/levels.ts");
+const { SOLUTIONS, NEAR_MISSES } = await import("./level-solutions.mjs");
+
+/** Plays a level with the given stacks; returns { won, hero }. */
+function playLevel(level, stacks, seconds = 25) {
+  const rules = new L.LevelRules(level);
+  const project = L.levelProject(level, L.scriptsOf(...stacks.map((st, i) => L.stackJson(st, 30, 30 + i * 300))));
+  const engine = new Engine(project, { canEnter: rules.canEnter, afterReset: rules.afterReset });
+  const tapped = stacks.some((st) => st[0] === "start_tap");
+  // How a child plays: green flag for flag stacks, otherwise a tap on the character.
+  if (stacks.some((st) => st[0] === "start_flag")) engine.greenFlag();
+  if (tapped) engine.tap(L.HERO_ID);
+  let won = false;
+  for (let t = 0; t < seconds * 1000 && !won; t += 10) {
+    engine.tick(engine.now + 10);
+    won = rules.check(engine.states);
+  }
+  return { won, hero: engine.states.get(L.HERO_ID) };
+}
+
+test(`levels: ${L.LEVELS.length} levels, 6–8 per semester, each map 10 x 8`, () => {
+  for (const sem of [1, 2, 3, 4]) {
+    const n = L.LEVELS.filter((l) => l.semester === sem).length;
+    if (n < 6 || n > 8) throw new Error(`semester ${sem} has ${n} levels`);
+  }
+  for (const l of L.LEVELS) {
+    if (l.map.length !== 8 || l.map.some((r) => r.length !== 10)) throw new Error(`${l.id}: map is not 10 x 8`);
+    if (l.map.join("").split("H").length !== 2 || l.map.join("").split("*").length !== 2) throw new Error(`${l.id}: needs exactly one H and one *`);
+  }
+});
+
+test("levels: every level can be won with its reference solution", () => {
+  const bad = [];
+  for (const l of L.LEVELS) {
+    if (!SOLUTIONS[l.id]) { bad.push(`${l.id}: no reference solution`); continue; }
+    const { won, hero } = playLevel(l, SOLUTIONS[l.id]);
+    if (!won) bad.push(`${l.id}: not won, hero ended at ${hero.x},${hero.y} visible=${hero.visible}`);
+    const used = new Set(JSON.stringify(SOLUTIONS[l.id]).match(/[a-z_]+/g));
+    for (const b of used) if (b.includes("_") || ["shrink", "hide", "show", "grow", "pop", "say", "wait", "repeat"].includes(b)) {
+      if (!l.palette.includes(b) && !["red", "blue", "yellow", "green"].includes(b)) bad.push(`${l.id}: solution uses ${b}, not in the level's palette`);
+    }
+  }
+  if (bad.length) throw new Error(bad.join("\n      "));
+});
+
+test("levels: doing nothing, or the starter blocks alone, never wins", () => {
+  for (const l of L.LEVELS) {
+    if (playLevel(l, [], 5).won) throw new Error(`${l.id} won with no blocks`);
+    if (l.starter.length && playLevel(l, [l.starter], 5).won) throw new Error(`${l.id} won with only the starter`);
+  }
+});
+
+test("levels: the near misses each level is built to catch do not win (and no warning, the character just stops)", () => {
+  const bad = [];
+  for (const [name, stacks] of Object.entries(NEAR_MISSES)) {
+    const level = L.levelById(name.split(" ")[0]);
+    if (playLevel(level, stacks).won) bad.push(`${name} was won`);
+  }
+  if (bad.length) throw new Error(bad.join("; "));
+});
+
+test("levels: rocks, closed doors and closed gates stop the character where it is", () => {
+  const { hero } = playLevel(L.levelById("s2-1"), [["start_tap", "move_right", "move_right", "move_right", "move_right", "move_right"]]);
+  eq([hero.x, hero.y], [3, 4], "stopped in front of the door");
+  const gate = playLevel(L.levelById("s4-1"), [["start_tap", "move_right", "move_right", "move_right", "move_right"]]);
+  eq([gate.hero.x], [3], "stopped in front of the closed gate");
+});
+
 // ── Format ──
 test("project files round-trip through parseProject unchanged", () => {
   for (const p of [F.helpfulRobot(), F.kindnessCards(), F.recyclingSorter(), F.neighbourhoodMap()]) {

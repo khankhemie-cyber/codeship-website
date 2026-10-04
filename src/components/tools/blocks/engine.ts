@@ -61,6 +61,13 @@ export type EngineHooks = {
   playRecording?: (clipId: string) => number;
   /** Something visible changed. */
   changed?: () => void;
+  /**
+   * Levels only: may this character step onto (x, y)? A refused step leaves
+   * the character where it is, silently (it still takes a move's time).
+   */
+  canEnter?: (actorId: string, x: number, y: number, states: Map<string, ActorState>) => boolean;
+  /** Levels only: adjust the starting state after every reset (e.g. a bridge that starts hidden). */
+  afterReset?: (states: Map<string, ActorState>) => void;
 };
 
 type PageRequest = { page: number; home: boolean };
@@ -134,6 +141,7 @@ export class Engine {
   resetPage() {
     this.states = new Map();
     for (const a of this.actors()) this.states.set(a.id, { x: a.x, y: a.y, level: 0, visible: true, bubble: null });
+    this.hooks.afterReset?.(this.states);
   }
 
   // ── Scheduler ──
@@ -217,11 +225,16 @@ export class Engine {
         case "move_down": {
           const dx = b.type === "move_right" ? 1 : b.type === "move_left" ? -1 : 0;
           const dy = b.type === "move_down" ? 1 : b.type === "move_up" ? -1 : 0;
-          s.x = Math.min(GRID_COLS - 1, Math.max(0, s.x + dx));
-          s.y = Math.min(GRID_ROWS - 1, Math.max(0, s.y + dy));
-          this.changed();
+          const nx = Math.min(GRID_COLS - 1, Math.max(0, s.x + dx));
+          const ny = Math.min(GRID_ROWS - 1, Math.max(0, s.y + dy));
+          const moved = (nx !== s.x || ny !== s.y) && (this.hooks.canEnter?.(actorId, nx, ny, this.states) ?? true);
+          if (moved) {
+            s.x = nx;
+            s.y = ny;
+            this.changed();
+          }
           yield TIMING.move;
-          this.checkBump(actorId);
+          if (moved) this.checkBump(actorId);
           break;
         }
         case "say":

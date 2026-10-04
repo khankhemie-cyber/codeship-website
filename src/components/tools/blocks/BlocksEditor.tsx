@@ -29,6 +29,8 @@ type Props = {
   lang: UiLang;
   mode: LabelMode;
   semester: number;
+  /** A level's exact palette; overrides `semester`. */
+  palette?: readonly string[];
   pageCount: number;
   /** Changes whenever a different character is selected. */
   actorKey: string;
@@ -68,14 +70,14 @@ function patchBlocklyOnce() {
 }
 
 export default function BlocksEditor(props: Props) {
-  const { lang, mode, semester, pageCount, actorKey, scripts, clipIds, onChange, onRecordBlock, apiRef } = props;
+  const { lang, mode, semester, palette, pageCount, actorKey, scripts, clipIds, onChange, onRecordBlock, apiRef } = props;
   const hostRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const loading = useRef(false);
   const handlers = useRef({ onChange, onRecordBlock });
   handlers.current = { onChange, onRecordBlock };
-  const latest = useRef({ scripts, clipIds, semester });
-  latest.current = { scripts, clipIds, semester };
+  const latest = useRef({ scripts, clipIds, semester, palette });
+  latest.current = { scripts, clipIds, semester, palette };
 
   setPageCount(pageCount);
 
@@ -109,7 +111,7 @@ export default function BlocksEditor(props: Props) {
     Blockly.setLocale((lang === "fr" ? BlocklyFr : BlocklyEn) as unknown as Record<string, string>);
     registerBlocks(lang, mode);
     const ws = Blockly.inject(hostRef.current, {
-      toolbox: toolboxFor(latest.current.semester),
+      toolbox: toolboxFor(latest.current.semester, latest.current.palette),
       theme: blockTheme(),
       renderer: "zelos",
       trashcan: false,
@@ -169,9 +171,10 @@ export default function BlocksEditor(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actorKey]);
 
+  const paletteKey = palette?.join(",") ?? "";
   useEffect(() => {
-    wsRef.current?.updateToolbox(toolboxFor(semester));
-  }, [semester]);
+    wsRef.current?.updateToolbox(toolboxFor(semester, latest.current.palette));
+  }, [semester, paletteKey]);
 
   useEffect(() => {
     if (wsRef.current) syncRecordIcons(wsRef.current);

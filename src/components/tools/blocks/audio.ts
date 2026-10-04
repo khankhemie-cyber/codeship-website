@@ -49,6 +49,25 @@ export function playPop() {
   osc.stop(t + 0.22);
 }
 
+/** A short rising "ta-da" for finishing a level. */
+export function playCheer() {
+  const c = audioContext();
+  const t0 = c.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+    const t = t0 + i * 0.12;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + (i === 3 ? 0.6 : 0.2));
+    osc.connect(gain).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.65);
+  });
+}
+
 function decode(clipId: string, dataUrl: string): Promise<AudioBuffer> {
   let p = buffers.get(clipId);
   if (!p) {

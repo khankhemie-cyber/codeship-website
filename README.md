@@ -366,13 +366,24 @@ the stage, characters and the engine that runs the blocks are ours.
   - **Copy link** (`#p=1…`, raw deflate + base64url, capped at 2,000 characters) works only for
     projects without recordings: every Semester 1 project, and the Semester 3 Sorter (≈480
     characters). It refuses, with a reason, rather than dropping recordings.
+- **Levels** (`levels.ts`, `LevelsMode.tsx`; the ⭐ Levels tab): 26 reach-the-goal puzzles, 6–8
+  per semester, each limited to blocks taught by then. Semester 1: counting squares, turns, a path
+  around rocks, collecting apples. Semester 2: a small door you must `Shrink` to fit, a bridge that
+  appears 3 s after the green flag (`Wait`). Semester 3: `Repeat` paths and staircases, a ladder for
+  a `Start on Bump` stack, a guard dog you can only pass while hidden (`Hide`, then `Show` at the
+  goal). Semester 4: coloured gates that open on a matching `Send Message`. Win = the character is
+  on the goal, visible, with every apple collected; a miss just stops, with no hint. Maps are 10 × 8
+  text grids (legend at the top of `levels.ts`). Every level always opens. Finished levels and each
+  level's blocks are remembered in this browser only. `scripts/blocks/level-solutions.mjs` holds a
+  reference solution (the instructor's answer key) and the near miss each level is built to catch;
+  the tests fail if any level becomes impossible or winnable by doing nothing.
 - **Microphone**: "Set up microphone" in ⋯ asks for permission before class. Instructors should
   choose "Allow on every visit". On managed Chromebooks, IT can pre-approve the site with Chrome's
   `AudioCaptureAllowedUrls` policy so no prompt ever appears.
 - **Tests** (CI: `.github/workflows/blocks.yml`); fixtures are the finished lesson projects in
   `scripts/blocks/fixtures.mjs`:
-  - `npm run test:blocks`: all four semester projects and their deliberate-failure variants through
-    the real engine on a virtual clock. Needs Node 22 (runs the TypeScript directly).
+  - `npm run test:blocks`: all four semester projects and their deliberate-failure variants, plus
+    every level's solution and near miss, through the real engine on a virtual clock. Needs Node 22 (runs the TypeScript directly).
   - `npm run build && npm run test:blocks:e2e`: the real page in Chromium with a fake microphone.
     Covers record/re-record/play, Save → Open in a fresh browser with recordings playing on the
     right pages, autosave and link priority, finger drag, 150% zoom, labels and semester filter.

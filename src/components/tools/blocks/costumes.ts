@@ -121,7 +121,48 @@ export const COSTUMES: Costume[] = [
   },
 ];
 
-export const costumeById = (id: string) => COSTUMES.find((c) => c.id === id) ?? COSTUMES[0];
+const GATE_COLOURS: Record<string, string> = { red: "#E53935", orange: "#FB8C00", yellow: "#FDD835", green: "#43A047", blue: "#1E88E5", purple: "#8E24AA" };
+
+/** Pictures used by levels only (not offered in the character gallery). */
+export const LEVEL_COSTUMES: Costume[] = [
+  {
+    id: "rock",
+    name: { en: "Rock", fr: "Rocher" },
+    svg: svg(`<path d="M8 80l10-34 20-16 26 4 18 22 8 24z" fill="#8D99AE" stroke="#4A5568" stroke-width="3" stroke-linejoin="round"/><path d="M30 44l14 10M58 40l-6 18" stroke="#6B7689" stroke-width="3" stroke-linecap="round"/>`),
+  },
+  {
+    id: "water",
+    name: { en: "Water", fr: "Eau" },
+    svg: svg(`<rect width="100" height="100" fill="#4FC3F7"/><path d="M8 34q10-8 20 0t20 0 20 0 20 0M8 64q10-8 20 0t20 0 20 0 20 0" fill="none" stroke="#E1F5FE" stroke-width="5" stroke-linecap="round"/>`),
+  },
+  {
+    id: "bridge",
+    name: { en: "Bridge", fr: "Pont" },
+    svg: svg(`<rect width="100" height="100" fill="#4FC3F7"/><g fill="#A1887F" stroke="#5D4037" stroke-width="3"><rect x="4" y="10" width="92" height="16"/><rect x="4" y="32" width="92" height="16"/><rect x="4" y="54" width="92" height="16"/><rect x="4" y="76" width="92" height="16"/></g>`),
+  },
+  {
+    id: "door",
+    name: { en: "Small door", fr: "Petite porte" },
+    svg: svg(`<rect width="100" height="100" fill="#8D99AE"/><path d="M34 100V62a16 16 0 0 1 32 0v38z" fill="#6D4C41" stroke="#3E2723" stroke-width="3"/><circle cx="59" cy="82" r="3" fill="#FFCA28"/>`),
+  },
+  {
+    id: "ladder",
+    name: { en: "Ladder", fr: "Échelle" },
+    svg: svg(`<g stroke="#8D6E63" stroke-width="7" stroke-linecap="round"><path d="M30 6v88M70 6v88"/><path d="M30 20h40M30 40h40M30 60h40M30 80h40" stroke-width="5"/></g>`),
+  },
+  {
+    id: "apple",
+    name: { en: "Apple", fr: "Pomme" },
+    svg: svg(`<path d="M50 30c-8-8-30-8-30 20 0 22 14 38 24 38 3 0 4-2 6-2s3 2 6 2c10 0 24-16 24-38 0-28-22-28-30-20z" fill="#E53935"/><path d="M50 30c0-10 4-16 10-20" stroke="#5D4037" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M54 22c8-8 18-6 20-2-6 6-14 6-20 2z" fill="#43A047"/>`),
+  },
+  ...Object.entries(GATE_COLOURS).map(([colour, hex]) => ({
+    id: `gate-${colour}`,
+    name: { en: `${colour} gate`, fr: `barrière ${colour}` },
+    svg: svg(`<rect x="6" y="6" width="88" height="88" rx="8" fill="${hex}" stroke="#010F2A" stroke-width="4"/><g stroke="#010F2A" stroke-width="5"><path d="M30 6v88M50 6v88M70 6v88"/></g><circle cx="50" cy="50" r="12" fill="#fff" stroke="#010F2A" stroke-width="4"/>`),
+  })),
+];
+
+export const costumeById = (id: string) => COSTUMES.find((c) => c.id === id) ?? LEVEL_COSTUMES.find((c) => c.id === id) ?? COSTUMES[0];
 
 export const costumeUrl = (id: string) => `data:image/svg+xml;utf8,${encodeURIComponent(costumeById(id).svg)}`;
 

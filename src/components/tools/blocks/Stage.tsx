@@ -21,13 +21,15 @@ type Props = {
   states: Map<string, ActorState>;
   selectedId: string | null;
   running: boolean;
+  /** Levels: nothing can be dragged to a new starting square. */
+  fixed?: boolean;
   onTap: (actorId: string) => void;
   onPlace: (actorId: string, x: number, y: number) => void;
 };
 
 const DRAG_THRESHOLD = 10;
 
-export default function Stage({ background, actors, characters, states, selectedId, running, onTap, onPlace }: Props) {
+export default function Stage({ background, actors, characters, states, selectedId, running, fixed, onTap, onPlace }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [cell, setCell] = useState(40);
   const [drag, setDrag] = useState<{ id: string; dx: number; dy: number } | null>(null);
@@ -53,7 +55,7 @@ export default function Stage({ background, actors, characters, states, selected
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const p = press.current;
-    if (!p || running) return;
+    if (!p || running || fixed) return;
     const dx = e.clientX - p.x;
     const dy = e.clientY - p.y;
     if (!p.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;

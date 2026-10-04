@@ -331,6 +331,60 @@ await test("labels: pictures-only mode drops words; French labels; semester 1 sh
   assert(count === 9, `semester 1 palette has ${count} blocks`);
 });
 
+// ── Levels ──
+async function dragFromPalette(page, label, below) {
+  const src = await page.locator(".blocklyFlyout .blocklyDraggable").filter({ hasText: label }).first().boundingBox();
+  const placed = page.locator(".blocklySvg .blocklyBlockCanvas .blocklyDraggable");
+  // Under the last block, or into empty space on a blank workspace.
+  const target = (await placed.count()) ? await placed.last().boundingBox() : null;
+  const ws = await page.getByTestId("blocks-workspace").boundingBox();
+  const to = target ? { x: target.x + 40, y: (below ? target.y + target.height : target.y) + 22 } : { x: ws.x + ws.width * 0.6, y: ws.y + 80 };
+  await page.mouse.move(src.x + 20, src.y + src.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(to.x, to.y, { steps: 12 });
+  await page.mouse.up();
+  await page.waitForTimeout(300);
+}
+const levelHero = (page) => page.evaluate(() => ({ ...window.__codeshipLevels.engine().states.get("hero") }));
+
+await test("levels: Semester 1 Level 1 is finished by building Move Right, Move Right and tapping the robot", async (page) => {
+  await open(page);
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s1-1").click();
+  await page.locator(".blocklyFlyout").waitFor();
+  await dragFromPalette(page, "Move Right", true);
+  await dragFromPalette(page, "Move Right", true);
+  const blocks = await page.evaluate(() => window.__codeshipLevels.project().pages[0].actors.find((a) => a.id === "hero").scripts.blocks.blocks);
+  assert(blocks.length === 1 && blocks[0].next?.block?.next?.block?.type === "move_right", `blocks: ${JSON.stringify(blocks).slice(0, 200)}`);
+  await page.getByTestId("actor-hero").click();
+  await page.getByTestId("level-won").waitFor({ timeout: 5000 });
+  await page.getByTestId("next-level").click();
+  assert((await page.getByTestId("level-label").textContent()).includes("Level 2"), "Next level did not open level 2");
+  await page.getByTestId("all-levels").click();
+  assert((await page.getByTestId("level-s1-1").getAttribute("aria-label")).includes("Finished"), "level 1 not marked finished");
+  await open(page, PAGE);
+  assert((await page.getByTestId("level-s1-1").getAttribute("aria-label")).includes("Finished"), "progress not remembered after a refresh");
+});
+
+await test("levels: a near miss just stops — no win, no hint (door without Shrink)", async (page) => {
+  await open(page);
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s2-1").click();
+  await page.locator(".blocklyFlyout").waitFor();
+  await dragFromPalette(page, "Start on Tap", false);
+  for (let i = 0; i < 4; i++) await dragFromPalette(page, "Move Right", true);
+  await page.getByTestId("actor-hero").click();
+  await page.waitForTimeout(3000);
+  const hero = await levelHero(page);
+  assert(hero.x === 3 && hero.y === 4, `cat ended at ${hero.x},${hero.y} (should stop in front of the door)`);
+  assert((await page.getByTestId("level-won").count()) === 0, "won without shrinking");
+  // Blockly's screen-reader announcements are visually hidden (.hiddenForAria); only visible text counts.
+  const messages = await page
+    .locator("[role=status], [role=alert]")
+    .evaluateAll((els) => els.filter((e) => !e.closest(".hiddenForAria") && e.getBoundingClientRect().width > 2).map((e) => e.textContent.trim()).filter(Boolean));
+  assert(messages.length === 0, `a message appeared: ${messages}`);
+});
+
 await browser.close();
 if (server) process.kill(-server.pid);
 console.log(failed ? `\n${failed} failed, ${passed} passed` : `\nAll ${passed} passed`);
