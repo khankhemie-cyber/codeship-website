@@ -351,6 +351,9 @@ await test("levels: Semester 1 Level 1 is finished by building Move Right, Move 
   await open(page);
   await page.getByTestId("view-levels").click();
   await page.getByTestId("level-s1-1").click();
+  assert((await page.getByTestId("prompt-text").textContent()) === "Help the robot get to the star.", "Level 1 prompt missing");
+  await page.getByTestId("prompt-go").click();
+  assert((await page.getByTestId("prompt-strip").textContent()).includes("Help the robot get to the star."), "prompt not kept in view");
   await page.locator(".blocklyFlyout").waitFor();
   await dragFromPalette(page, "Move Right", true);
   await dragFromPalette(page, "Move Right", true);
@@ -360,6 +363,8 @@ await test("levels: Semester 1 Level 1 is finished by building Move Right, Move 
   await page.getByTestId("level-won").waitFor({ timeout: 5000 });
   await page.getByTestId("next-level").click();
   assert((await page.getByTestId("level-label").textContent()).includes("Level 2"), "Next level did not open level 2");
+  await page.getByTestId("level-prompt").waitFor();
+  await page.getByTestId("prompt-go").click();
   await page.getByTestId("all-levels").click();
   assert((await page.getByTestId("level-s1-1").getAttribute("aria-label")).includes("Finished"), "level 1 not marked finished");
   await open(page, PAGE);
@@ -370,6 +375,7 @@ await test("levels: a near miss just stops — no win, no hint (door without Shr
   await open(page);
   await page.getByTestId("view-levels").click();
   await page.getByTestId("level-s2-1").click();
+  await page.getByTestId("prompt-go").click();
   await page.locator(".blocklyFlyout").waitFor();
   await dragFromPalette(page, "Start on Tap", false);
   for (let i = 0; i < 4; i++) await dragFromPalette(page, "Move Right", true);
@@ -383,6 +389,26 @@ await test("levels: a near miss just stops — no win, no hint (door without Shr
     .locator("[role=status], [role=alert]")
     .evaluateAll((els) => els.filter((e) => !e.closest(".hiddenForAria") && e.getBoundingClientRect().width > 2).map((e) => e.textContent.trim()).filter(Boolean));
   assert(messages.length === 0, `a message appeared: ${messages}`);
+});
+
+await test("levels: the prompt reads aloud and follows the language (French)", async (page, context) => {
+  await context.addInitScript(() => {
+    window.__spoken = [];
+    if ("speechSynthesis" in window) window.speechSynthesis.speak = (u) => window.__spoken.push({ text: u.text, lang: u.lang });
+  });
+  await open(page);
+  await page.getByTestId("settings").click();
+  await page.getByTestId("set-lang").selectOption("fr");
+  await page.keyboard.press("Escape");
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s4-1").click();
+  const text = await page.getByTestId("prompt-text").textContent();
+  assert(text === "La barrière est bleue. Envoie un message bleu pour l'ouvrir !", `French prompt: ${text}`);
+  const spoken = await page.evaluate(() => window.__spoken);
+  assert(spoken.length === 1 && spoken[0].lang === "fr-CA" && spoken[0].text === text, `spoken: ${JSON.stringify(spoken)}`);
+  await page.getByTestId("prompt-go").click();
+  await page.getByTestId("prompt-speak-again").click();
+  assert((await page.evaluate(() => window.__spoken.length)) === 2, "speaker button did not read it again");
 });
 
 await browser.close();

@@ -189,6 +189,7 @@ test("4. Send Message with no listener does nothing", () => {
 // ── Levels ──
 const L = await import("../../src/components/tools/blocks/levels.ts");
 const { SOLUTIONS, NEAR_MISSES } = await import("./level-solutions.mjs");
+const P = await import("../../src/components/tools/blocks/levelPrompts.ts");
 
 /** Plays a level with the given stacks; returns { won, hero }. */
 function playLevel(level, stacks, seconds = 25) {
@@ -216,6 +217,21 @@ test(`levels: ${L.LEVELS.length} levels, 6–8 per semester, each map 10 x 8`, (
     if (l.map.length !== 8 || l.map.some((r) => r.length !== 10)) throw new Error(`${l.id}: map is not 10 x 8`);
     if (l.map.join("").split("H").length !== 2 || l.map.join("").split("*").length !== 2) throw new Error(`${l.id}: needs exactly one H and one *`);
   }
+});
+
+test("levels: every level has a short prompt in English and French", () => {
+  const { LEVEL_PROMPTS } = P;
+  const bad = [];
+  for (const l of L.LEVELS) {
+    for (const lang of ["en", "fr"]) {
+      const text = LEVEL_PROMPTS[l.id]?.[lang];
+      if (!text) bad.push(`${l.id}: no ${lang} prompt`);
+      else if (text.split(/\s+/).length > 13) bad.push(`${l.id} ${lang}: ${text.split(/\s+/).length} words is too long for a 5-year-old`);
+    }
+  }
+  const extra = Object.keys(LEVEL_PROMPTS).filter((id) => !L.levelById(id));
+  if (extra.length) bad.push(`prompts for levels that don't exist: ${extra}`);
+  if (bad.length) throw new Error(bad.join("\n      "));
 });
 
 test("levels: every level can be won with its reference solution", () => {

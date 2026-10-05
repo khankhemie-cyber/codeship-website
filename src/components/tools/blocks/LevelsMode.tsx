@@ -11,6 +11,7 @@ import { Engine } from "./engine";
 import type { Strings, UiLang } from "./i18n";
 import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, starterScripts, type Level } from "./levels";
 import type { Project, Scripts } from "./model";
+import { LEVEL_PROMPTS, canSpeak, speak } from "./levelPrompts";
 import Stage from "./Stage";
 
 /**
@@ -57,6 +58,8 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   const [progress, setProgress] = useState<Progress>({ done: {}, blocks: {} });
   const [won, setWon] = useState(false);
   const [armed, setArmed] = useState(false);
+  const [promptOpen, setPromptOpen] = useState(false);
+  const [speechOk, setSpeechOk] = useState(false);
   const [, setFrame] = useState(0);
   const engineRef = useRef<Engine | null>(null);
   const rulesRef = useRef<LevelRules | null>(null);
@@ -65,7 +68,13 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   const saveTimer = useRef(0);
   const wonRef = useRef(false);
 
-  useEffect(() => setProgress(readProgress()), []);
+  useEffect(() => {
+    setProgress(readProgress());
+    setSpeechOk(canSpeak());
+    return () => {
+      if (canSpeak()) window.speechSynthesis.cancel();
+    };
+  }, []);
 
   // Exposed for the acceptance tests (scripts/blocks/test-blocks-e2e.mjs).
   useEffect(() => {
@@ -79,6 +88,11 @@ export default function LevelsMode({ s, lang, mode }: Props) {
 
   const startLevel = useCallback((l: Level) => {
     stopAllSounds();
+    // Read the task aloud straight away (this runs inside the tap that opened the level,
+    // which browsers require before they will speak).
+    const prompt = LEVEL_PROMPTS[l.id]?.[lang];
+    if (prompt) speak(prompt, lang);
+    setPromptOpen(true);
     const saved = readProgress().blocks[l.id];
     const project = levelProject(l, saved ?? starterScripts(l));
     const rules = new LevelRules(l);
@@ -98,7 +112,7 @@ export default function LevelsMode({ s, lang, mode }: Props) {
     setWon(false);
     setArmed(false);
     setLevelId(l.id);
-  }, []);
+  }, [lang]);
 
   // Drive the engine; check the goal after every tick.
   useEffect(() => {
@@ -217,6 +231,20 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   const goal = things.find((t) => t.kind === "goal");
   const apples = things.filter((t) => t.kind === "item");
   const next = LEVELS[LEVELS.findIndex((l) => l.id === level.id) + 1];
+  const prompt = LEVEL_PROMPTS[level.id]?.[lang] ?? "";
+  const speakButton = (big: boolean) =>
+    speechOk && (
+      <button
+        type="button"
+        onClick={() => speak(prompt, lang)}
+        data-testid={big ? "prompt-speak" : "prompt-speak-again"}
+        aria-label={s.readToMe}
+        title={s.readToMe}
+        className={`flex shrink-0 items-center justify-center rounded-full bg-[#035762] text-white shadow active:scale-95 ${big ? "h-16 w-16 text-3xl" : "h-11 w-11 text-xl"} ${focusRing}`}
+      >
+        <span aria-hidden="true">🔊</span>
+      </button>
+    );
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
@@ -271,6 +299,18 @@ export default function LevelsMode({ s, lang, mode }: Props) {
           <Icon name="restart" className="h-5 w-5" />
           <span className="hidden md:inline">{armed ? s.tapAgainToStartOver : s.resetLevel}</span>
         </button>
+      </div>
+
+      {/* The task, always in view: tap the speaker to hear it again. */}
+      <div className="flex items-center gap-3 border-b border-white/10 bg-[#FFF8E6] px-3 py-2 text-[#010F2A]" data-testid="prompt-strip">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white p-1 ring-2 ring-[#D58401]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={costumeUrl(level.hero)} alt="" className="h-full w-full" />
+        </span>
+        <p className="flex-1 text-lg font-extrabold leading-snug sm:text-xl" lang={lang}>
+          <Readable text={prompt} />
+        </p>
+        {speakButton(false)}
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col-reverse md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,min(46%,600px))]">
@@ -357,6 +397,42 @@ export default function LevelsMode({ s, lang, mode }: Props) {
         </section>
       </div>
 
+      {promptOpen && !won && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#010F2A]/70 p-4" role="dialog" aria-label={s.levelLabel(level.semester, level.number)} data-testid="level-prompt">
+          <div className="w-full max-w-lg rounded-3xl bg-white p-6 text-center text-[#010F2A] shadow-2xl">
+            <p className="text-sm font-bold uppercase tracking-wide text-[#586173]">{s.levelLabel(level.semester, level.number)}</p>
+            <div className="mt-3 flex items-center justify-center gap-4" aria-hidden="true">
+              <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#F4F7FB] p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={costumeUrl(level.hero)} alt="" className="h-full w-full" />
+              </span>
+              <span className="text-4xl font-extrabold text-[#D58401]">→</span>
+              {goal && (
+                <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#F4F7FB] p-2 ring-4 ring-[#D58401]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={costumeUrl(goal.costume)} alt="" className="h-full w-full" />
+                </span>
+              )}
+            </div>
+            <p className="mt-5 font-display text-3xl font-extrabold leading-tight sm:text-4xl" lang={lang} data-testid="prompt-text">
+              <Readable text={prompt} />
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-4">
+              {speakButton(true)}
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setPromptOpen(false)}
+                data-testid="prompt-go"
+                className={`flex h-16 min-w-32 items-center justify-center gap-2 rounded-2xl bg-[#2EB84B] px-6 text-2xl font-extrabold text-white shadow-lg active:scale-95 ${focusRing}`}
+              >
+                {s.go} <span aria-hidden="true">➜</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {won && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#010F2A]/70 p-4" role="dialog" aria-label={s.wellDone} data-testid="level-won">
           <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white p-6 text-center text-[#010F2A] shadow-2xl">
@@ -412,3 +488,17 @@ export default function LevelsMode({ s, lang, mode }: Props) {
 }
 
 const EMPTY = new Set<string>();
+
+/** Keeps hyphenated words ("Montre-toi", "Cache-toi") on one line, so a beginning reader sees the whole word. */
+function Readable({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(" ").map((word, i) => (
+        <span key={i}>
+          {i > 0 && " "}
+          {word.includes("-") ? <span className="whitespace-nowrap">{word}</span> : word}
+        </span>
+      ))}
+    </>
+  );
+}

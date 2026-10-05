@@ -159,6 +159,8 @@ export const STRINGS = {
     wellDone: "Well done!",
     goal: "Get here",
     tapAgainToStartOver: "Tap again to start over",
+    readToMe: "Read to me",
+    go: "Go!",
   },
   fr: {
     title: "Blocs",
@@ -239,6 +241,8 @@ export const STRINGS = {
     wellDone: "Bravo !",
     goal: "Arrive ici",
     tapAgainToStartOver: "Touchez encore pour recommencer",
+    readToMe: "Lis-moi",
+    go: "C'est parti !",
   },
 };
 

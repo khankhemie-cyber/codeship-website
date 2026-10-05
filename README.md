@@ -377,6 +377,10 @@ the stage, characters and the engine that runs the blocks are ours.
   level's blocks are remembered in this browser only. `scripts/blocks/level-solutions.mjs` holds a
   reference solution (the instructor's answer key) and the near miss each level is built to catch;
   the tests fail if any level becomes impossible or winnable by doing nothing.
+  Each level opens with a short task prompt for 4–5 year olds (`levelPrompts.ts`, English and
+  French, at most about ten words) that says what to do, never how. It is read aloud with the
+  device's built-in voice when the level opens, stays in a strip above the level, and the 🔊 button
+  reads it again. Devices without a voice show the text only.
 - **Microphone**: "Set up microphone" in ⋯ asks for permission before class. Instructors should
   choose "Allow on every visit". On managed Chromebooks, IT can pre-approve the site with Chrome's
   `AudioCaptureAllowedUrls` policy so no prompt ever appears.
