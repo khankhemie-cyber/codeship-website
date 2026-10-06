@@ -397,6 +397,40 @@ the stage, characters and the engine that runs the blocks are ours.
     Covers record/re-record/play, Save → Open in a fresh browser with recordings playing on the
     right pages, autosave and link priority, finger drag, 150% zoom, labels and semester filter.
 
+## Staff certificates (`/admin/certificates`)
+
+A password-protected page where staff issue a CODEship-branded PDF certificate and email it to
+the family straight away. For every program (Explorers, Builders, Developers, Engineers) there is a
+**semester certificate** (Semester 1–4, naming that semester's project and skills) and a **program
+certificate** (all four semesters + the capstone). Staff pick the program and certificate, type the
+child's name, completion date, optional instructor, and the parent's email (plus an optional
+greeting name and personal note), check the live preview, then **Email certificate** or
+**Download PDF**. After sending, the program/certificate/date/instructor stay selected so a whole
+class can be issued in a row.
+
+- Template: `src/lib/certificates/certificate.ts` (pdf-lib, US Letter landscape). Program names,
+  projects, skills and capstones come from `src/data/programs.ts`; artwork is
+  `public/certificates/{logo,seal}.png`. The same code renders the browser preview and the emailed
+  PDF; the server always rebuilds the PDF from the details, it never emails an uploaded file.
+- API: `/api/certificates/verify` (password) and `/api/certificates/send` (builds + emails via
+  [Resend](https://resend.com)). Email copy lives in `src/lib/certificates/server.ts`.
+- Not linked anywhere, `noindex`, disallowed in `robots.ts`, not in the sitemap.
+- Names print in the standard PDF fonts, which cover Latin letters with accents (é, ñ, ü…) but not
+  other scripts; the page says so if a name can't be printed.
+
+**Setup (Cloudflare Pages → Settings → Environment variables):**
+
+| Variable | |
+| --- | --- |
+| `CERTIFICATES_PASSWORD` | Staff password for the page (required). |
+| `RESEND_API_KEY` | Resend API key (required to email). |
+| `CERTIFICATES_FROM_EMAIL` | Sender, e.g. `CODEship Academy <certificates@codeshipacademy.com>`. Verify the domain in Resend first. |
+| `CERTIFICATES_REPLY_TO` | Optional: where family replies go, e.g. the office inbox. |
+| `CERTIFICATES_BCC` | Optional, comma-separated: gets a copy of every certificate sent (a simple record). |
+
+Tests: `npm run test:certificates` renders every program × certificate, checks validation and the
+email (Resend stubbed). Add `-- --out <dir>` to keep the PDFs for a look.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
