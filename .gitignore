@@ -42,3 +42,6 @@ out/
 
 # Pyodide runtime, copied from node_modules by scripts/copy-pyodide.mjs
 /public/py/pyodide-*/
+
+# Plaintext student workbooks: never commit (the repo is public)
+/scripts/workbooks/private/
