@@ -381,6 +381,11 @@ the stage, characters and the engine that runs the blocks are ours.
   French, at most about ten words) that says what to do, never how. It is read aloud with the
   device's built-in voice when the level opens, stays in a strip above the level, and the 🔊 button
   reads it again. Devices without a voice show the text only.
+  Every try starts from the beginning (a second tap doesn't carry on with gates still open); the
+  bridge appears a few seconds after the program starts, however it starts; a hiding character
+  shows faintly so children can follow it; a coming bridge shows as a dashed outline with its delay
+  (⏱ 3); and a bouncing 👆 shows when the character has a `Start on Tap` stack. Hovering over any
+  block or level object shows a one-line description of what it does (English/French).
 - **Microphone**: "Set up microphone" in ⋯ asks for permission before class. Instructors should
   choose "Allow on every visit". On managed Chromebooks, IT can pre-approve the site with Chrome's
   `AudioCaptureAllowedUrls` policy so no prompt ever appears.

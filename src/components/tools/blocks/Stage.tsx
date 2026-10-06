@@ -23,16 +23,25 @@ type Props = {
   running: boolean;
   /** Levels: nothing can be dragged to a new starting square. */
   fixed?: boolean;
+  /** Hover text per actor (levels: what a rock, bridge or gate is). */
+  titles?: Record<string, string>;
+  /** Actors that show as a faint dashed outline while hidden (a bridge that is coming, a hiding hero). */
+  ghosts?: Set<string>;
+  /** A small label on a hidden ghost (the bridge's delay, "⏱ 3"). */
+  ghostLabels?: Record<string, string>;
+  /** Levels: a bouncing hand over this character, "tap me to start". */
+  tapHintId?: string | null;
   onTap: (actorId: string) => void;
   onPlace: (actorId: string, x: number, y: number) => void;
 };
 
 const DRAG_THRESHOLD = 10;
 
-export default function Stage({ background, actors, characters, states, selectedId, running, fixed, onTap, onPlace }: Props) {
+export default function Stage({ background, actors, characters, states, selectedId, running, fixed, titles, ghosts, ghostLabels, tapHintId, onTap, onPlace }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [cell, setCell] = useState(40);
   const [drag, setDrag] = useState<{ id: string; dx: number; dy: number } | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const press = useRef<{ id: string; x: number; y: number; moved: boolean } | null>(null);
 
   // Fit the largest whole-pixel square that shows all 10 x 8 cells.
@@ -120,18 +129,20 @@ export default function Stage({ background, actors, characters, states, selected
             data-level={s.level}
             data-visible={s.visible}
             role="button"
-            aria-label={costumeOf(actor)}
+            aria-label={titles?.[actor.id] ?? costumeOf(actor)}
             onPointerDown={(e) => onPointerDown(e, actor.id)}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             onPointerCancel={() => ((press.current = null), setDrag(null))}
+            onPointerEnter={(e) => e.pointerType === "mouse" && titles?.[actor.id] && setHovered(actor.id)}
+            onPointerLeave={() => setHovered((h) => (h === actor.id ? null : h))}
             className="absolute left-0 top-0 cursor-pointer"
             style={{
               width: cell,
               height: cell,
               transform: `translate(${tx}px, ${ty}px)`,
               transition: dragging ? "none" : "transform 280ms ease-in-out",
-              zIndex: dragging ? 30 : selected ? 20 : 10,
+              zIndex: dragging || hovered === actor.id ? 30 : selected ? 20 : 10,
             }}
           >
             <div
@@ -140,12 +151,42 @@ export default function Stage({ background, actors, characters, states, selected
                 transform: `scale(${scale})`,
                 transition: "transform 260ms ease-out, opacity 120ms",
                 // Hidden characters are invisible but still tappable ("it is just hiding").
-                opacity: s.visible ? 1 : 0,
+                opacity: s.visible ? 1 : ghosts?.has(actor.id) ? 0.35 : 0,
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={costumeUrl(costumeOf(actor))} alt="" draggable={false} className="pointer-events-none h-full w-full" />
             </div>
+            {hovered === actor.id && titles?.[actor.id] && (
+              // Same look as the block descriptions; below the object on the top rows so it isn't cut off.
+              <div
+                role="tooltip"
+                data-testid="stage-tooltip"
+                className={`pointer-events-none absolute left-1/2 z-50 w-max max-w-[260px] -translate-x-1/2 rounded-[10px] border-2 border-[#D58401] bg-[#FFF8E6] px-3 py-2 text-[15px] font-bold leading-snug text-[#010F2A] shadow-xl ${
+                  s.y <= 1 ? "top-full mt-2" : "bottom-full mb-2"
+                }`}
+              >
+                {titles[actor.id]}
+              </div>
+            )}
+            {!s.visible && ghosts?.has(actor.id) && (
+              <div aria-hidden="true" className="pointer-events-none absolute inset-1 flex items-end justify-end rounded-md border-[3px] border-dashed border-white">
+                {ghostLabels?.[actor.id] && (
+                  <span className="m-0.5 rounded bg-[#010F2A] px-1 text-[11px] font-extrabold leading-tight text-white" data-testid={`ghost-label-${actor.id}`}>
+                    {ghostLabels[actor.id]}
+                  </span>
+                )}
+              </div>
+            )}
+            {tapHintId === actor.id && !running && (
+              <div
+                aria-hidden="true"
+                data-testid="tap-hint"
+                className={`pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 animate-bounce text-3xl drop-shadow ${s.y >= 6 ? "bottom-full" : "top-full"}`}
+              >
+                👆
+              </div>
+            )}
             {selected && !running && (
               <div aria-hidden="true" className="pointer-events-none absolute -inset-1 animate-pulse rounded-lg border-[3px] border-dashed border-[#D58401]" />
             )}

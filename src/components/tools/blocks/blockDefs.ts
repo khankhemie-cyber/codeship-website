@@ -14,7 +14,7 @@
 
 import * as Blockly from "blockly/core";
 import { MESSAGE_COLOURS } from "./model";
-import { blockLabel, type BlockType, type UiLang } from "./i18n";
+import { blockLabel, blockTooltip, type BlockType, type UiLang } from "./i18n";
 
 export type LabelMode = "words" | "icons";
 
@@ -161,7 +161,7 @@ export function registerBlocks(lang: UiLang, mode: LabelMode) {
         break;
     }
     const message = args.map((_, i) => `%${i + 1}`).join(" ");
-    const json: Record<string, unknown> = { type: def.type, message0: message, args0: args, style: def.group, tooltip: "" };
+    const json: Record<string, unknown> = { type: def.type, message0: message, args0: args, style: def.group, tooltip: blockTooltip(lang, def.type) };
     if (HAT_TYPES.has(def.type)) json.nextStatement = null;
     else {
       json.previousStatement = null;

@@ -40,7 +40,7 @@ export const NEAR_MISSES = {
   "s1-7": [["start_tap", ...n(5, R), U, U]],
   "s2-1": [["start_tap", ...n(6, R)]],
   "s2-3": [["start_flag", ...n(5, R)]],
-  "s2-3 (tapped, no flag)": [["start_tap", ["wait", 3], ...n(5, R)]],
+  "s2-3 (too short a wait)": [["start_flag", ["wait", 2], ...n(5, R)]],
   "s2-5": [["start_flag", "shrink", ["wait", 1], ...n(7, R)]],
   "s3-1": [["start_tap", ["repeat", 8, [R]]]],
   "s3-5": [["start_tap", ...n(6, R)]],

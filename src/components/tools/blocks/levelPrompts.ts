@@ -1,8 +1,9 @@
 /**
  * What each level asks, shown (and read aloud) when the level opens. Written
  * for 4–5 year olds: one or two short sentences, everyday words, no more
- * than about ten words each. A prompt says WHAT to do, never HOW: working
- * that out is the lesson.
+ * than about ten words each. A prompt says WHAT to do, not the blocks to
+ * use. The bridge levels say the bridge comes by itself a little after the
+ * start, because nothing else on screen can tell a child that.
  *
  * Every level in levels.ts must have both languages (the tests check).
  */
@@ -22,9 +23,10 @@ export const LEVEL_PROMPTS: Record<string, Record<UiLang, string>> = {
   // Semester 2: cat → star
   "s2-1": { en: "The door is very small. Can you fit?", fr: "La porte est toute petite. Peux-tu passer ?" },
   "s2-2": { en: "Find the little door. Go to the star.", fr: "Trouve la petite porte. Va jusqu'à l'étoile." },
-  "s2-3": { en: "Wait for the bridge. Then cross the water!", fr: "Attends le pont. Puis traverse l'eau !" },
+  // The bridge comes by itself after the green flag; the child's job is to Wait for it.
+  "s2-3": { en: "The bridge comes a little after you start. Wait for it!", fr: "Le pont arrive un peu après le départ. Attends-le !" },
   "s2-4": { en: "Wait for the bridge. Then go up to the star.", fr: "Attends le pont. Puis monte jusqu'à l'étoile." },
-  "s2-5": { en: "A little door and a bridge. You can do it!", fr: "Une petite porte et un pont. Tu peux y arriver !" },
+  "s2-5": { en: "Get small for the door. Wait for the bridge to come!", fr: "Deviens petit pour la porte. Attends que le pont arrive !" },
   "s2-6": { en: "Get both apples. Then go to the star.", fr: "Prends les deux pommes. Puis va à l'étoile." },
 
   // Semester 3: can → recycling bin

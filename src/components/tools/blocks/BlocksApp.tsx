@@ -37,6 +37,7 @@ const AUTOSAVE_DELAY = 2000;
 const PAGE_CSS = `
 .cb-dark-text text.blocklyText { fill: #010F2A !important; }
 .blocklyText { font-weight: 700; }
+.blocklyTooltipDiv { font-size: 16px !important; font-weight: 700; line-height: 1.35; max-width: 300px; padding: 8px 12px !important; border-radius: 10px; background: #FFF8E6 !important; color: #010F2A !important; border: 2px solid #D58401 !important; box-shadow: 0 6px 20px rgba(1,15,42,0.35) !important; }
 @keyframes cb-flash { 0% { background-color: #D58401; } 100% { background-color: #0A2648; } }
 @keyframes cb-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(520px) rotate(200deg); opacity: 0; } }
 `;

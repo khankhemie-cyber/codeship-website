@@ -128,6 +128,12 @@ export class Engine {
     this.changed();
   }
 
+  /** Levels: run these characters' Green Flag stacks without resetting anything. */
+  runFlagStacksOf(actorIds: string[]) {
+    for (const id of actorIds) this.startHats((b) => b.type === "start_flag", id);
+    this.changed();
+  }
+
   isRunning() {
     return this.threads.some((t) => !t.done);
   }

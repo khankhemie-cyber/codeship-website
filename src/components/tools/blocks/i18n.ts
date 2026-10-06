@@ -77,6 +77,80 @@ const BLOCK_LABELS: Record<UiLang, Record<BlockType, string>> = {
 
 export const blockLabel = (lang: UiLang, type: BlockType) => BLOCK_LABELS[lang][type];
 
+/** What each block does, in simple words: shown when you hover over a block. */
+const BLOCK_TOOLTIPS: Record<UiLang, Record<BlockType, string>> = {
+  en: {
+    start_tap: "When you tap this character, the blocks under it run.",
+    start_flag: "When you press the green flag, the blocks under it run.",
+    start_bump: "When this character touches another one, the blocks under it run.",
+    start_message: "When a message of this colour is sent, the blocks under it run.",
+    move_right: "Moves one square to the right.",
+    move_left: "Moves one square to the left.",
+    move_up: "Moves one square up.",
+    move_down: "Moves one square down.",
+    go_home: "Goes back to page 1 and starts again.",
+    say: "Shows a speech bubble with these words.",
+    record: "Plays your voice. Tap the block to record.",
+    pop: "Makes a pop sound.",
+    grow: "Makes this character bigger.",
+    shrink: "Makes this character smaller.",
+    hide: "Makes this character invisible. It is still there!",
+    show: "Makes this character appear again.",
+    wait: "Waits this many seconds, then carries on.",
+    go_page: "Goes to this page.",
+    repeat: "Does the blocks inside it again and again, this many times.",
+    send_message: "Sends a message of this colour to every character.",
+  },
+  fr: {
+    start_tap: "Quand tu touches ce personnage, les blocs en dessous se lancent.",
+    start_flag: "Quand tu appuies sur le drapeau vert, les blocs en dessous se lancent.",
+    start_bump: "Quand ce personnage en touche un autre, les blocs en dessous se lancent.",
+    start_message: "Quand un message de cette couleur est envoyé, les blocs en dessous se lancent.",
+    move_right: "Avance d'une case vers la droite.",
+    move_left: "Avance d'une case vers la gauche.",
+    move_up: "Monte d'une case.",
+    move_down: "Descend d'une case.",
+    go_home: "Retourne à la page 1 et recommence.",
+    say: "Affiche une bulle avec ces mots.",
+    record: "Fait entendre ta voix. Touche le bloc pour enregistrer.",
+    pop: "Fait un bruit de pop.",
+    grow: "Rend ce personnage plus grand.",
+    shrink: "Rend ce personnage plus petit.",
+    hide: "Rend ce personnage invisible. Il est toujours là !",
+    show: "Fait réapparaître ce personnage.",
+    wait: "Attend ce nombre de secondes, puis continue.",
+    go_page: "Va à cette page.",
+    repeat: "Refait les blocs à l'intérieur, encore et encore, autant de fois que ce nombre.",
+    send_message: "Envoie un message de cette couleur à tous les personnages.",
+  },
+};
+
+export const blockTooltip = (lang: UiLang, type: BlockType) => BLOCK_TOOLTIPS[lang][type];
+
+/** What the objects in a level are, shown when you hover over them on the stage. */
+export const THING_TOOLTIPS: Record<UiLang, Record<string, string>> = {
+  en: {
+    goal: "The goal. Get here!",
+    item: "An apple. Collect it on the way!",
+    wall: "You can't go through here.",
+    bridge: "A bridge. It comes a few seconds after you start.",
+    door: "A little door. Only small characters fit.",
+    guard: "A guard dog. Only a hidden character can sneak past.",
+    ladder: "A ladder. Climb it to get to the top!",
+    gate: "A gate. It opens when a message of its colour is sent.",
+  },
+  fr: {
+    goal: "L'arrivée. Va jusqu'ici !",
+    item: "Une pomme. Prends-la en chemin !",
+    wall: "On ne peut pas passer ici.",
+    bridge: "Un pont. Il arrive quelques secondes après le départ.",
+    door: "Une petite porte. Seuls les petits personnages passent.",
+    guard: "Un chien de garde. Seul un personnage caché peut passer.",
+    ladder: "Une échelle. Grimpe pour aller en haut !",
+    gate: "Une barrière. Elle s'ouvre quand on envoie un message de sa couleur.",
+  },
+};
+
 export const STRINGS = {
   en: {
     title: "Blocks",

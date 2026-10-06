@@ -8,8 +8,8 @@ import type { LabelMode } from "./blockDefs";
 import type { EditorApi } from "./BlocksEditor";
 import { costumeUrl } from "./costumes";
 import { Engine } from "./engine";
-import type { Strings, UiLang } from "./i18n";
-import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, starterScripts, type Level } from "./levels";
+import { THING_TOOLTIPS, type Strings, type UiLang } from "./i18n";
+import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, startRun, starterScripts, type Level } from "./levels";
 import type { Project, Scripts } from "./model";
 import { LEVEL_PROMPTS, canSpeak, speak } from "./levelPrompts";
 import Stage from "./Stage";
@@ -147,6 +147,7 @@ export default function LevelsMode({ s, lang, mode }: Props) {
     (scripts: Scripts) => {
       if (!hero || !levelId) return;
       hero.scripts = scripts;
+      setFrame((f) => f + 1); // e.g. the tap hint appears once there is a Start on Tap
       window.clearTimeout(saveTimer.current);
       saveTimer.current = window.setTimeout(() => {
         const p = readProgress();
@@ -162,7 +163,7 @@ export default function LevelsMode({ s, lang, mode }: Props) {
     stopAllSounds();
     wonRef.current = false;
     setWon(false);
-    engineRef.current?.greenFlag();
+    if (engineRef.current && level) startRun(engineRef.current, level, "flag");
   };
 
   const resetLevel = () => {
@@ -230,6 +231,12 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   const things = levelThings(level);
   const goal = things.find((t) => t.kind === "goal");
   const apples = things.filter((t) => t.kind === "item");
+  // Hover text for every object, and a dashed outline where a bridge will appear.
+  const titles = Object.fromEntries(things.filter((t) => THING_TOOLTIPS[lang][t.kind]).map((t) => [t.id, THING_TOOLTIPS[lang][t.kind]]));
+  // The hero too: a hiding character stays faintly visible, so a child can follow it.
+  const ghosts = new Set([HERO_ID, ...things.filter((t) => t.kind === "bridge").map((t) => t.id)]);
+  const ghostLabels = Object.fromEntries(things.filter((t) => t.kind === "bridge").map((t) => [t.id, `⏱ ${level.bridgeDelay ?? 3}`]));
+  const heroHasTapStart = Boolean(hero?.scripts.blocks?.blocks?.some((b) => b.type === "start_tap"));
   const next = LEVELS[LEVELS.findIndex((l) => l.id === level.id) + 1];
   const prompt = LEVEL_PROMPTS[level.id]?.[lang] ?? "";
   const speakButton = (big: boolean) =>
@@ -359,9 +366,13 @@ export default function LevelsMode({ s, lang, mode }: Props) {
                 selectedId={HERO_ID}
                 running={engine.isRunning()}
                 fixed
+                titles={titles}
+                ghosts={ghosts}
+                ghostLabels={ghostLabels}
+                tapHintId={heroHasTapStart && !won ? HERO_ID : null}
                 onTap={(id) => {
                   unlockAudio();
-                  if (id === HERO_ID) engine.tap(id);
+                  if (id === HERO_ID) startRun(engine, level, "tap");
                 }}
                 onPlace={() => {}}
               />

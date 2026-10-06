@@ -196,10 +196,9 @@ function playLevel(level, stacks, seconds = 25) {
   const rules = new L.LevelRules(level);
   const project = L.levelProject(level, L.scriptsOf(...stacks.map((st, i) => L.stackJson(st, 30, 30 + i * 300))));
   const engine = new Engine(project, { canEnter: rules.canEnter, afterReset: rules.afterReset });
-  const tapped = stacks.some((st) => st[0] === "start_tap");
-  // How a child plays: green flag for flag stacks, otherwise a tap on the character.
-  if (stacks.some((st) => st[0] === "start_flag")) engine.greenFlag();
-  if (tapped) engine.tap(L.HERO_ID);
+  // How a child plays: the green flag for a flag stack, otherwise a tap on the character.
+  if (stacks.some((st) => st[0] === "start_flag")) L.startRun(engine, level, "flag");
+  else if (stacks.some((st) => st[0] === "start_tap")) L.startRun(engine, level, "tap");
   let won = false;
   for (let t = 0; t < seconds * 1000 && !won; t += 10) {
     engine.tick(engine.now + 10);
@@ -234,6 +233,12 @@ test("levels: every level has a short prompt in English and French", () => {
   if (bad.length) throw new Error(bad.join("\n      "));
 });
 
+test("every block has a hover description in English and French", async () => {
+  const I = await import("../../src/components/tools/blocks/i18n.ts");
+  const types = ["start_tap", "start_flag", "start_bump", "start_message", "move_right", "move_left", "move_up", "move_down", "go_home", "say", "record", "pop", "grow", "shrink", "hide", "show", "wait", "go_page", "repeat", "send_message"];
+  for (const t of types) for (const lang of ["en", "fr"]) if (!I.blockTooltip(lang, t)) throw new Error(`${t}: no ${lang} description`);
+});
+
 test("levels: every level can be won with its reference solution", () => {
   const bad = [];
   for (const l of L.LEVELS) {
@@ -260,6 +265,38 @@ test("levels: the near misses each level is built to catch do not win (and no wa
   for (const [name, stacks] of Object.entries(NEAR_MISSES)) {
     const level = L.levelById(name.split(" ")[0]);
     if (playLevel(level, stacks).won) bad.push(`${name} was won`);
+  }
+  if (bad.length) throw new Error(bad.join("; "));
+});
+
+test("levels: every try starts from the beginning (a second tap doesn't carry on, gates close again)", () => {
+  const level = L.levelById("s4-1");
+  const rules = new L.LevelRules(level);
+  const engine = new Engine(L.levelProject(level, L.scriptsOf(L.stackJson(["start_tap", ["send_message", "blue"], "move_right", "move_right", "move_right"]))), { canEnter: rules.canEnter, afterReset: rules.afterReset });
+  const run = (ms) => { for (let t = 0; t < ms; t += 10) engine.tick(engine.now + 10); };
+  L.startRun(engine, level, "tap"); run(3000);
+  eq(engine.states.get(L.HERO_ID).x, 4, "first try went through the open gate");
+  // Second try with the message removed: must start at the beginning, gate closed again.
+  engine.project.pages[0].actors.find((a) => a.id === L.HERO_ID).scripts = L.scriptsOf(L.stackJson(["start_tap", "move_right", "move_right", "move_right", "move_right", "move_right", "move_right"]));
+  L.startRun(engine, level, "tap"); run(3000);
+  eq(engine.states.get(L.HERO_ID).x, 3, "second try started over and stopped at the closed gate");
+  // A tap while a try is running doesn't restart it.
+  L.startRun(engine, level, "tap"); run(300);
+  eq(L.startRun(engine, level, "tap") || engine.isRunning(), true, "running try kept going");
+});
+
+test("levels: the bridge comes however the program starts (tap or green flag)", () => {
+  const tap = playLevel(L.levelById("s2-3"), [["start_tap", ["wait", 3], "move_right", "move_right", "move_right", "move_right", "move_right"]]);
+  if (!tap.won) throw new Error(`tap-started try did not get across: ${tap.hero.x}`);
+});
+
+test("levels: no level depends on which Start block the child picks (tap or green flag)", () => {
+  const bad = [];
+  for (const l of L.LEVELS) {
+    const swapped = SOLUTIONS[l.id].map((st, i) =>
+      i === 0 && (st[0] === "start_tap" || st[0] === "start_flag") ? [st[0] === "start_tap" ? "start_flag" : "start_tap", ...st.slice(1)] : st,
+    );
+    if (!playLevel(l, swapped).won) bad.push(`${l.id} only works with ${SOLUTIONS[l.id][0][0]}`);
   }
   if (bad.length) throw new Error(bad.join("; "));
 });

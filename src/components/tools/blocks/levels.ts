@@ -10,7 +10,7 @@
  * Maps are 10 x 8 text grids:
  *   .  empty           H  the child's character    *  goal
  *   a  apple (collect) #  rock                      ~  water
- *   =  bridge: hidden until `bridgeDelay` s after the green flag
+ *   =  bridge: hidden until `bridgeDelay` s after the program starts
  *   d  small door: only a character that has Shrunk fits
  *   D  guard dog: only a hidden character can sneak past
  *   L  ladder (a "Start on Bump" landmark)
@@ -22,7 +22,7 @@
  * Erasable TypeScript only: the acceptance tests import this into Node.
  */
 
-import type { ActorState } from "./engine";
+import type { ActorState, Engine } from "./engine";
 import type { BlockType } from "./i18n";
 import { GRID_COLS, GRID_ROWS, type BlockJson, type MessageColour, type Project, type Scripts } from "./model";
 
@@ -249,7 +249,8 @@ export function levelProject(level: Level, heroScripts: Scripts): Project {
   const costumes = [...new Set([level.hero, ...things.map((t) => t.costume)])];
   const characters = costumes.map((c) => ({ id: `c-${c}`, costume: c }));
   const helperScripts = (t: Thing): Scripts => {
-    // Bridges start hidden (LevelRules.afterReset) and appear N seconds after the green flag.
+    // Bridges start hidden (LevelRules.afterReset) and appear N seconds after the program
+    // starts: on the green flag, or on a tap via startRun().
     if (t.kind === "bridge") return scriptsOf(stackJson(["start_flag", ["wait", level.bridgeDelay ?? 3], "show"]));
     if (t.kind === "gate") return scriptsOf(stackJson([["start_message", t.colour], "hide"]));
     return scriptsOf();
@@ -271,6 +272,24 @@ export function levelProject(level: Level, heroScripts: Scripts): Project {
       },
     ],
   };
+}
+
+/**
+ * Starts a try at the level. Every try starts from the beginning (a second
+ * tap after a miss doesn't carry on from where the character stopped, with
+ * gates still open), and the bridge's timer starts however the program does.
+ * Returns false if a try is already running.
+ */
+export function startRun(engine: Engine, level: Level, how: "flag" | "tap"): boolean {
+  if (how === "flag") {
+    engine.greenFlag();
+    return true;
+  }
+  if (engine.isRunning()) return false;
+  engine.resetPage();
+  engine.tap(HERO_ID);
+  engine.runFlagStacksOf(levelThings(level).filter((t) => t.kind === "bridge").map((t) => t.id));
+  return true;
 }
 
 /** The level's rules, plugged into the engine (canEnter) and checked after every tick. */

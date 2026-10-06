@@ -411,6 +411,22 @@ await test("levels: the prompt reads aloud and follows the language (French)", a
   assert((await page.evaluate(() => window.__spoken.length)) === 2, "speaker button did not read it again");
 });
 
+await test("hovering over a block shows what it does; a coming bridge shows as an outline", async (page) => {
+  await open(page);
+  await page.locator(".blocklyFlyout .blocklyDraggable").filter({ hasText: "Move Right" }).first().hover();
+  const tip = page.locator(".blocklyTooltipDiv");
+  await tip.getByText("Moves one square to the right.").waitFor({ timeout: 4000 });
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s2-5").click();
+  await page.getByTestId("prompt-go").click();
+  const bridge = page.getByTestId("actor-t6-4");
+  await bridge.hover();
+  await page.getByTestId("stage-tooltip").getByText("A bridge. It comes a few seconds after you start.").waitFor({ timeout: 3000 });
+  assert((await page.getByTestId("ghost-label-t6-4").textContent()) === "⏱ 3", "bridge delay not shown");
+  const opacity = await bridge.locator("div").first().evaluate((el) => getComputedStyle(el).opacity);
+  assert(Number(opacity) > 0, `the coming bridge is invisible (opacity ${opacity})`);
+});
+
 await browser.close();
 if (server) process.kill(-server.pid);
 console.log(failed ? `\n${failed} failed, ${passed} passed` : `\nAll ${passed} passed`);
