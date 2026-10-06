@@ -58,6 +58,7 @@ extraction). Validate any page with Google's Rich Results Test after changes.
 - `/gy/*` (Guyana, SEO-relevant): indexable, included in `sitemap.ts`, **not** disallowed.
 - `/franchise/{ali-saad,jaspreet,raghavi,tom-che}` (private, password-gated kits): `noindex`,
   disallowed — unchanged, pre-existing.
+- `/workbooks/*` (password-gated student workbooks): `noindex`, disallowed, not in `sitemap.ts`.
 - Everything else (programs, locations, resources/blog, schools, franchise overview): indexable.
 
 ### AI-crawler policy
@@ -397,3 +398,30 @@ the stage, characters and the engine that runs the blocks are ours.
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Student workbooks (`/workbooks`)
+
+Fillable Semester 1 workbooks for Explorers, Builders, Developers and Engineers. Students open
+`/workbooks/<program>/`, enter their program's password, download the PDF, save it on their own
+computer and type into it (Acrobat Reader, Mac Preview, Edge or Chrome), saving as they go.
+
+**This repo is public, so the plain PDFs are never committed.** Only encrypted copies live in
+`public/workbooks/encrypted/s1/` (AES-256-GCM); without the key they are random bytes.
+
+- **Environment variables** (Cloudflare Pages → Settings → Environment variables, type *Secret*):
+  - `WORKBOOK_PASSWORD_EXPLORERS`, `WORKBOOK_PASSWORD_BUILDERS`, `WORKBOOK_PASSWORD_DEVELOPERS`,
+    `WORKBOOK_PASSWORD_ENGINEERS`: the password for each program. Matching ignores capitals and
+    surrounding spaces. Changing one signs that program's families out (they re-enter the new one).
+  - `WORKBOOK_FILE_KEY`: the base64 AES key the encrypted PDFs were made with. Never commit it.
+  - For local `next dev` / `next start`, put them in `.env.local`.
+- **Gate**: `/api/workbooks/login` checks the password and sets an HttpOnly cookie (an HMAC of the
+  program keyed by its password, never the password itself). `/api/workbooks/download/?program=…`
+  checks that cookie, decrypts the PDF with `WORKBOOK_FILE_KEY` and sends it as a download; without
+  the cookie it redirects to the password page.
+- **Updating a workbook**: put the original PDFs (Chrome-printed, no form fields) in
+  `scripts/workbooks/private/source/` (gitignored), then run
+  `WORKBOOK_FILE_KEY=… sh scripts/workbooks/build.sh` (needs `pip install pymupdf`).
+  `make_fillable.py` detects the writing lines, checkboxes, answer boxes, tracker "Done" cells and
+  Explorers star boxes and adds form fields (fillable copies go to `scripts/workbooks/private/fillable/`
+  for checking; pass a fourth argument to `make_fillable.py` for PNG previews with the fields
+  outlined), then `encrypt.mjs` writes the encrypted files. Commit only `public/workbooks/encrypted/`.
