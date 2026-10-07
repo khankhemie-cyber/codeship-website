@@ -413,7 +413,7 @@ class can be issued in a row.
   `public/certificates/{logo,seal}.png`. The same code renders the browser preview and the emailed
   PDF; the server always rebuilds the PDF from the details, it never emails an uploaded file.
 - API: `/api/certificates/verify` (password) and `/api/certificates/send` (builds + emails via
-  [Resend](https://resend.com)). Email copy lives in `src/lib/certificates/server.ts`.
+  [Brevo](https://www.brevo.com)'s transactional email API). Email copy lives in `src/lib/certificates/server.ts`.
 - Not linked anywhere, `noindex`, disallowed in `robots.ts`, not in the sitemap.
 - Names print in the standard PDF fonts, which cover Latin letters with accents (é, ñ, ü…) but not
   other scripts; the page says so if a name can't be printed.
@@ -423,13 +423,13 @@ class can be issued in a row.
 | Variable | |
 | --- | --- |
 | `CERTIFICATES_PASSWORD` | Staff password for the page (required). |
-| `RESEND_API_KEY` | Resend API key (required to email). |
-| `CERTIFICATES_FROM_EMAIL` | Sender, e.g. `CODEship Academy <certificates@codeshipacademy.com>`. Verify the domain in Resend first. |
+| `BREVO_API_KEY` | Brevo API key: Brevo → SMTP & API → API keys (required to email). |
+| `CERTIFICATES_FROM_EMAIL` | Sender, e.g. `CODEship Academy <certificates@codeshipacademy.com>`. Must be a sender or domain verified in Brevo (Senders, Domains & Dedicated IPs). |
 | `CERTIFICATES_REPLY_TO` | Optional: where family replies go, e.g. the office inbox. |
 | `CERTIFICATES_BCC` | Optional, comma-separated: gets a copy of every certificate sent (a simple record). |
 
 Tests: `npm run test:certificates` renders every program × certificate, checks validation and the
-email (Resend stubbed). Add `-- --out <dir>` to keep the PDFs for a look.
+email (Brevo stubbed). Add `-- --out <dir>` to keep the PDFs for a look.
 
 ## Deploy on Vercel
 

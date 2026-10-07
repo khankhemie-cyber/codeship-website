@@ -74,7 +74,7 @@ await test("file name is tidy", async () => {
   if (n !== "CODEship-Builders-Program-Amelie-OConnor-Nguyen.pdf") throw new Error(n);
 });
 
-// Email (src/lib/certificates/server.ts), with the Resend API stubbed out.
+// Email (src/lib/certificates/server.ts), with the Brevo API stubbed out.
 const S = await import("../../src/lib/certificates/server.ts");
 await test("password check", async () => {
   if (S.checkPassword({}, "x") !== "not_configured") throw new Error("unset should be not_configured");
@@ -87,24 +87,36 @@ await test("email escapes the note and names the achievement", async () => {
   if (html.includes("<b>Great</b>") || !html.includes("&lt;b&gt;Great")) throw new Error("note not escaped");
   if (!text.includes("Kindness Cards") || !text.startsWith("Hi Sam,")) throw new Error(text);
 });
-await test("sends the PDF as an attachment through Resend", async () => {
+await test("sends the PDF as an attachment through Brevo", async () => {
   const realFetch = globalThis.fetch;
   let sentReq = null;
   globalThis.fetch = async (url, init) => { sentReq = { url, init }; return new Response("{}", { status: 200 }); };
   try {
-    const env = { RESEND_API_KEY: "k", CERTIFICATES_FROM_EMAIL: "CODEship <c@example.com>", CERTIFICATES_BCC: "a@x.com, b@x.com" };
+    const env = { BREVO_API_KEY: "k", CERTIFICATES_REPLY_TO: "office@x.com", CERTIFICATES_FROM_EMAIL: "CODEship <c@example.com>", CERTIFICATES_BCC: "a@x.com, b@x.com" };
     const pdf = await C.renderCertificatePdf(base, assets);
-    const err = await S.sendCertificateEmail(env, { to: "p@example.com", fields: base, pdf, fileName: "c.pdf" });
+    const err = await S.sendCertificateEmail(env, { to: "p@example.com", parentName: "Sam", fields: base, pdf, fileName: "c.pdf" });
     if (err) throw new Error(err);
     const body = JSON.parse(sentReq.init.body);
-    if (sentReq.url !== "https://api.resend.com/emails") throw new Error(sentReq.url);
-    if (JSON.stringify(body.bcc) !== '["a@x.com","b@x.com"]') throw new Error(JSON.stringify(body.bcc));
-    if (Buffer.from(body.attachments[0].content, "base64").compare(Buffer.from(pdf)) !== 0) throw new Error("attachment differs");
+    if (sentReq.url !== "https://api.brevo.com/v3/smtp/email") throw new Error(sentReq.url);
+    if (sentReq.init.headers["api-key"] !== "k") throw new Error("api key header");
+    const eq = (a, b, what) => { if (JSON.stringify(a) !== JSON.stringify(b)) throw new Error(`${what}: ${JSON.stringify(a)}`); };
+    eq(body.sender, { name: "CODEship", email: "c@example.com" }, "sender");
+    eq(body.to, [{ email: "p@example.com", name: "Sam" }], "to");
+    eq(body.bcc, [{ email: "a@x.com" }, { email: "b@x.com" }], "bcc");
+    eq(body.replyTo, { email: "office@x.com" }, "replyTo");
+    if (!body.htmlContent || !body.textContent || !body.subject) throw new Error("missing content");
+    eq(body.attachment[0].name, "c.pdf", "attachment name");
+    if (Buffer.from(body.attachment[0].content, "base64").compare(Buffer.from(pdf)) !== 0) throw new Error("attachment differs");
   } finally { globalThis.fetch = realFetch; }
+});
+await test("parses sender formats", async () => {
+  const a = S.parseSender("CODEship Academy <certificates@codeshipacademy.com>");
+  const b = S.parseSender("certificates@codeshipacademy.com");
+  if (a.name !== "CODEship Academy" || a.email !== "certificates@codeshipacademy.com" || b.name || b.email !== "certificates@codeshipacademy.com") throw new Error(JSON.stringify([a, b]));
 });
 await test("explains missing email settings", async () => {
   const err = await S.sendCertificateEmail({}, { to: "p@example.com", fields: base, pdf: new Uint8Array(), fileName: "c.pdf" });
-  if (!/RESEND_API_KEY/.test(err ?? "")) throw new Error(String(err));
+  if (!/BREVO_API_KEY/.test(err ?? "")) throw new Error(String(err));
 });
 
 console.log(`\n${passed} passed, ${failed} failed${outDir ? ` (PDFs in ${outDir})` : ""}`);

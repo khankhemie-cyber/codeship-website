@@ -1,12 +1,12 @@
 /**
  * Server-only helpers for /api/certificates/*: the staff password check and the
- * certificate email (sent through Resend, https://resend.com).
+ * certificate email (sent through Brevo's transactional email API, https://www.brevo.com).
  *
  * Environment variables (Cloudflare Pages → Settings → Environment variables):
  *   CERTIFICATES_PASSWORD   staff password for /admin/certificates (required)
- *   RESEND_API_KEY          Resend API key (required to email)
+ *   BREVO_API_KEY           Brevo API key, from Brevo → SMTP & API → API keys (required to email)
  *   CERTIFICATES_FROM_EMAIL sender, e.g. "CODEship Academy <certificates@codeshipacademy.com>";
- *                           its domain must be verified in Resend (required to email)
+ *                           must be a sender/domain verified in Brevo (required to email)
  *   CERTIFICATES_REPLY_TO   where family replies go (optional)
  *   CERTIFICATES_BCC        comma-separated addresses that get a copy of every certificate (optional)
  */
@@ -115,31 +115,43 @@ ${p("We're so proud of the work that went into this. Thank you for being part of
   return { subject, text, html };
 }
 
-/** Sends the certificate. Returns null on success, or an error message for staff. */
+/** "CODEship Academy <c@x.com>" or "c@x.com" -> Brevo's { name, email }. */
+export function parseSender(value: string): { name?: string; email: string } {
+  const m = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+  if (!m) return { email: value.trim() };
+  const name = m[1].replace(/^"|"$/g, "").trim();
+  return name ? { name, email: m[2].trim() } : { email: m[2].trim() };
+}
+
+/** Sends the certificate through Brevo. Returns null on success, or an error message for staff. */
 export async function sendCertificateEmail(env: CertificatesEnv, email: CertificateEmail): Promise<string | null> {
-  const apiKey = env.RESEND_API_KEY;
+  const apiKey = env.BREVO_API_KEY;
   const from = env.CERTIFICATES_FROM_EMAIL;
   if (!apiKey || !from) {
-    return "Email isn't set up yet: add RESEND_API_KEY and CERTIFICATES_FROM_EMAIL to the site's environment variables.";
+    return "Email isn't set up yet: add BREVO_API_KEY and CERTIFICATES_FROM_EMAIL to the site's environment variables.";
   }
   const { subject, text, html } = buildCertificateEmail(email);
   const bcc = (env.CERTIFICATES_BCC ?? "")
     .split(",")
     .map((s) => s.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((address) => ({ email: address }));
+  const parentName = email.parentName?.trim();
 
-  const res = await fetch("https://api.resend.com/emails", {
+  // https://developers.brevo.com/reference/sendtransacemail
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    headers: { "api-key": apiKey, "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
-      from,
-      to: [email.to],
+      sender: parseSender(from),
+      to: [parentName ? { email: email.to, name: parentName } : { email: email.to }],
       ...(bcc.length ? { bcc } : {}),
-      ...(env.CERTIFICATES_REPLY_TO ? { reply_to: env.CERTIFICATES_REPLY_TO } : {}),
+      ...(env.CERTIFICATES_REPLY_TO ? { replyTo: parseSender(env.CERTIFICATES_REPLY_TO) } : {}),
       subject,
-      text,
-      html,
-      attachments: [{ filename: email.fileName, content: toBase64(email.pdf) }],
+      textContent: text,
+      htmlContent: html,
+      attachment: [{ name: email.fileName, content: toBase64(email.pdf) }],
+      tags: ["certificate"],
     }),
   });
   if (res.ok) return null;
