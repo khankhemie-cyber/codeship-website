@@ -7,6 +7,9 @@
 /tools/*
   X-Robots-Tag: noindex, nofollow, noarchive
 
+/admin/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+
 # Pyodide runtime for /tools/python. The folder name carries the Pyodide
 # version (scripts/copy-pyodide.mjs), so its files never change: cache forever.
 /py/pyodide-*

@@ -10,7 +10,8 @@
     "test:python": "node scripts/test-python.mjs",
     "test:python:e2e": "node scripts/test-python-e2e.mjs",
     "test:blocks": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/blocks/test-blocks.mjs",
-    "test:blocks:e2e": "node scripts/blocks/test-blocks-e2e.mjs"
+    "test:blocks:e2e": "node scripts/blocks/test-blocks-e2e.mjs",
+    "test:certificates": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/certificates/test-certificates.mjs"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",
@@ -26,6 +27,7 @@
     "codemirror": "^6.0.2",
     "next": "14.2.35",
     "next-sitemap": "^4.2.3",
+    "pdf-lib": "^1.17.1",
     "pyodide": "314.0.7",
     "react": "^18",
     "react-dom": "^18"
