@@ -323,6 +323,16 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
         >
           <span aria-hidden="true" className="block h-5 w-5 rounded-sm bg-white" />
         </button>
+        <button
+          type="button"
+          onClick={() => (stopAllSounds(), engine?.showPage(0))}
+          title={s.resetStage}
+          aria-label={s.resetStage}
+          data-testid="reset"
+          className={`flex h-11 w-11 items-center justify-center rounded-xl bg-[#F5B544] text-[#010F2A] shadow active:translate-y-px ${focusRing}`}
+        >
+          <Icon name="restart" className="h-6 w-6" />
+        </button>
         <button type="button" onClick={() => editorApi.current?.undo()} className={ctrlBtn} aria-label={s.undo} title={s.undo}>
           <Icon name="undo" className="h-5 w-5" />
         </button>

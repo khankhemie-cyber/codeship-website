@@ -27,7 +27,11 @@ import { tags as t } from "@lezer/highlight";
  * Indentation is soft tabs of 4 spaces:
  *  - Tab inserts spaces to the next multiple of 4 (indents a multi-line selection).
  *  - Shift+Tab removes one level.
- *  - Enter keeps the current indent, plus one level after a line ending in ":".
+ *  - Enter keeps the current indent, plus one level after a line ending in ":",
+ *    and one level less after return, pass, break, continue or raise (as IDLE
+ *    does): nothing after those runs, so the next line almost always belongs
+ *    outside the block. Without this, the print() a student types after
+ *    `return` lands inside the function and never runs.
  *  - Backspace in leading spaces removes back to the previous multiple of 4
  *    (CodeMirror's deleteCharBackward does this once indentUnit is 4 spaces).
  * Escape then Tab moves focus out of the editor (CodeMirror built-in), so
@@ -63,6 +67,9 @@ const insertSoftTab: StateCommand = ({ state, dispatch }) => {
   return true;
 };
 
+/** Statements after which nothing more in the block runs. */
+const BLOCK_ENDERS = /^(return|pass|break|continue|raise)\b/;
+
 const newlineKeepIndent: StateCommand = ({ state, dispatch }) => {
   dispatch(
     state.update(
@@ -70,7 +77,13 @@ const newlineKeepIndent: StateCommand = ({ state, dispatch }) => {
         const line = state.doc.lineAt(range.from);
         const before = line.text.slice(0, range.from - line.from);
         const indent = /^[ \t]*/.exec(before)![0];
-        const insert = "\n" + indent + (before.trimEnd().endsWith(":") ? INDENT : "");
+        const statement = before.trim();
+        const next = statement.endsWith(":")
+          ? indent + INDENT
+          : BLOCK_ENDERS.test(statement)
+            ? indent.slice(0, Math.max(0, indent.length - INDENT.length))
+            : indent;
+        const insert = "\n" + next;
         return {
           changes: { from: range.from, to: range.to, insert },
           range: EditorSelection.cursor(range.from + insert.length),

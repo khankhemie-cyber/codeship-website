@@ -114,6 +114,18 @@ await test("1. Helpful Robot: tap → right 2, bubble, left 2, bubble, ends one 
   assert(a.x === 2 && a.y === 4, `ended at ${a.x},${a.y}`);
 });
 
+await test("1. Reset stops the robot and puts it back where it started", async (page) => {
+  await open(page);
+  await openProject(page, F.helpfulRobot());
+  await page.getByTestId("actor-robot1").click();
+  await until(page, async () => (await actor(page, "robot1")).x === 4, "the robot to move", 5000);
+  await page.getByTestId("reset").click();
+  const a = await actor(page, "robot1");
+  assert(a.x === 2 && a.y === 4 && a.level === 0 && a.visible, `after Reset: ${JSON.stringify(a)}`);
+  await page.waitForTimeout(1500);
+  assert((await actor(page, "robot1")).x === 2, "the robot kept running after Reset");
+});
+
 // ── 2. Kindness Cards + the recording round trip ──
 await test("2. Kindness Cards: front page bubbles, then page 2 plays the recording", async (page) => {
   await open(page);
@@ -364,6 +376,11 @@ await test("levels: Semester 1 Level 1 is finished by building Move Right, Move 
   await dragFromPalette(page, "Move Right", true);
   const blocks = await page.evaluate(() => window.__codeshipLevels.project().pages[0].actors.find((a) => a.id === "hero").scripts.blocks.blocks);
   assert(blocks.length === 1 && blocks[0].next?.block?.next?.block?.type === "move_right", `blocks: ${JSON.stringify(blocks).slice(0, 200)}`);
+  // Reset puts the robot back without touching the blocks.
+  await page.getByTestId("actor-hero").click();
+  await until(page, async () => (await levelHero(page)).x !== 1, "the robot to move", 3000);
+  await page.getByTestId("reset").click();
+  assert((await levelHero(page)).x === 1, "Reset did not put the robot back");
   await page.getByTestId("actor-hero").click();
   await page.getByTestId("level-won").waitFor({ timeout: 5000 });
   await page.getByTestId("next-level").click();

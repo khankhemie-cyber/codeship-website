@@ -282,6 +282,9 @@ snippets, bracket auto-closing, auto-dedent of `else:`, "explain this error", AI
   ~3 s on fast broadband, ~5 s at 20 Mbps, ~7 s at 10 Mbps, ~12 s at 5 Mbps. A whole class
   loading at once on one school connection shares that bandwidth, so ask students to open the page
   at the start of class.
+- Editor (`PythonEditor.tsx`): 4-space soft tabs; Enter keeps the indent, adds a level after `:`
+  and drops one after `return`/`pass`/`break`/`continue`/`raise`, as IDLE does (so a `print()`
+  typed after `return` lands outside the function). No autocomplete or bracket closing.
 - `public/py/runner.py` runs the student's code. It `compile()`s the source itself under the
   filename `checker.py` (Pyodide's own `runPython` silently dedents code, which would hide
   `IndentationError`), shows the **real, unmodified** Python error, drops interpreter frames so only
@@ -343,6 +346,8 @@ the stage, characters and the engine that runs the blocks are ours.
   Timings: a move is 0.3 s, `Say` holds 1.5 s (the bubble stays until that character's next `Say`),
   `Wait N` is N s, `Grow`/`Shrink` go 7 steps each way. Arriving on a page resets its characters
   and runs its Green Flag stacks; the green flag button does the same for the current page.
+  The yellow Reset button (Create and Levels) stops everything and puts the page's characters
+  back on their starting squares without running anything.
   `Go to Page` waits (up to 10 s) for the other characters on the page to finish, so a message sent
   just before a page turn plays out. A bump is a visible character moving onto another visible
   character's square. Silent failures the lessons rely on (empty `Repeat`, unheard `Send Message`,

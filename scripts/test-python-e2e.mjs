@@ -118,6 +118,21 @@ await test("output persists after editing, Clear output empties it", async (page
 });
 
 // ── Editor behaviour ──
+await test("editor: a print() typed after return runs (Enter steps out of the function)", async (page) => {
+  await open(page);
+  await setCode(page, "");
+  await page.locator(".cm-content").click();
+  for (const line of ["def add(a, b):", "return a + b"]) {
+    await page.keyboard.type(line);
+    await page.keyboard.press("Enter");
+  }
+  await page.keyboard.type("print(add(2, 3))");
+  assert((await getCode(page)) === "def add(a, b):\n    return a + b\nprint(add(2, 3))", `code: ${JSON.stringify(await getCode(page))}`);
+  await waitReady(page);
+  const r = await runAndRead(page);
+  assert(r.output.trim() === "5" && !r.error, `output: ${JSON.stringify(r)}`);
+});
+
 await test("editor: 4-space soft tabs, auto-indent after ':', backspace removes 4, no autocomplete", async (page) => {
   await open(page);
   await setCode(page, "");
@@ -132,11 +147,15 @@ await test("editor: 4-space soft tabs, auto-indent after ':', backspace removes 
   await page.keyboard.type("if length >= 16:");
   await page.keyboard.press("Enter");
   assert((await getCode(page)).endsWith("\n        "), "second level not indented to 8");
+  await page.keyboard.type("x = 1");
+  await page.keyboard.press("Enter");
+  assert((await getCode(page)).endsWith("x = 1\n        "), "Enter did not keep the indent");
+  await page.keyboard.press("Backspace");
+  assert((await getCode(page)).endsWith("x = 1\n    "), "Backspace did not remove exactly 4 spaces");
+  await page.keyboard.press("Tab");
   await page.keyboard.type('return "STRONG"');
   await page.keyboard.press("Enter");
-  assert((await getCode(page)).endsWith('return "STRONG"\n        '), "Enter did not keep the indent");
-  await page.keyboard.press("Backspace");
-  assert((await getCode(page)).endsWith('return "STRONG"\n    '), "Backspace did not remove exactly 4 spaces");
+  assert((await getCode(page)).endsWith('return "STRONG"\n    '), "Enter after return did not step back one level");
   await page.keyboard.type("els");
   await page.waitForTimeout(400);
   assert((await page.locator(".cm-tooltip-autocomplete").count()) === 0, "an autocomplete popup appeared");

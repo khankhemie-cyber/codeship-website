@@ -403,6 +403,12 @@ export default function BlocksApp() {
     engine?.stopAll();
   };
 
+  /** Stop, and put every character on this page back on its starting square, size and visibility. */
+  const onReset = () => {
+    stopAllSounds();
+    engine?.showPage(engine.page);
+  };
+
   const onMicSetup = async () => {
     setMenu(null);
     try {
@@ -528,6 +534,16 @@ export default function BlocksApp() {
           className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#E53935] shadow active:translate-y-px ${focusRing}`}
         >
           <span aria-hidden="true" className="block h-5 w-5 rounded-sm bg-white" />
+        </button>
+        <button
+          type="button"
+          onClick={onReset}
+          title={s.resetStage}
+          aria-label={s.resetStage}
+          data-testid="reset"
+          className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#F5B544] text-[#010F2A] shadow active:translate-y-px ${focusRing}`}
+        >
+          <Icon name="restart" className="h-7 w-7" />
         </button>
         <span className="mx-1 hidden h-8 w-px bg-white/15 sm:block" aria-hidden="true" />
         <ToolButton icon="undo" label={s.undo} onClick={() => editorApi.current?.undo()} testId="undo" hideLabel />
