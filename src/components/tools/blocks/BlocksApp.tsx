@@ -42,7 +42,7 @@ const PAGE_CSS = `
 @keyframes cb-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(520px) rotate(200deg); opacity: 0; } }
 `;
 
-type Settings = { lang: UiLang; mode: LabelMode; semester: number; view: "create" | "levels" };
+type Settings = { lang: UiLang; mode: LabelMode; semester: number; view: "create" | "levels"; unlockAll: boolean };
 type SaveState = { kind: "none" } | { kind: "link" } | { kind: "file" } | { kind: "saved"; at: number } | { kind: "failed" };
 type LinkDialog = { url: string; copied: boolean } | { error: string } | null;
 
@@ -66,7 +66,7 @@ function ToolButton({ icon, label, onClick, testId, hideLabel }: { icon: IconNam
 }
 
 function readSettings(): Settings {
-  const fallback: Settings = { lang: navigator.language?.toLowerCase().startsWith("fr") ? "fr" : "en", mode: "words", semester: 0, view: "create" };
+  const fallback: Settings = { lang: navigator.language?.toLowerCase().startsWith("fr") ? "fr" : "en", mode: "words", semester: 0, view: "create", unlockAll: false };
   try {
     return { ...fallback, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
   } catch {
@@ -79,7 +79,7 @@ export default function BlocksApp() {
   const engineRef = useRef<Engine | null>(null);
   const [, setVersion] = useState(0);
   const [, setFrame] = useState(0);
-  const [settings, setSettings] = useState<Settings>({ lang: "en", mode: "words", semester: 0, view: "create" });
+  const [settings, setSettings] = useState<Settings>({ lang: "en", mode: "words", semester: 0, view: "create", unlockAll: false });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [save, setSave] = useState<SaveState>({ kind: "none" });
   const [recordFor, setRecordFor] = useState<{ blockId: string; clipId: string | null } | null>(null);
@@ -592,6 +592,16 @@ export default function BlocksApp() {
                     ))}
                   </select>
                 </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={settings.unlockAll}
+                    onChange={(e) => updateSettings({ unlockAll: e.target.checked })}
+                    data-testid="set-unlock-all"
+                    className="h-5 w-5 accent-[#D58401]"
+                  />
+                  <span className="font-semibold text-white/80">{s.unlockAll}</span>
+                </label>
                 <label className="block">
                   <span className="mb-1 block font-semibold text-white/80">{s.projectName}</span>
                   <input
@@ -633,7 +643,7 @@ export default function BlocksApp() {
       )}
 
       {settings.view === "levels" ? (
-        <LevelsMode s={s} lang={settings.lang} mode={settings.mode} />
+        <LevelsMode s={s} lang={settings.lang} mode={settings.mode} unlockAll={settings.unlockAll} />
       ) : (
         <>
       {/* ───────── Workspace ───────── */}

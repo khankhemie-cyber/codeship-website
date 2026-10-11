@@ -127,9 +127,12 @@ export default function BlocksEditor(props: Props) {
       grid: { spacing: 40, length: 2, colour: "#D5DEEA", snap: false },
     });
     wsRef.current = ws;
-    // Hover descriptions and dropdowns go on the page itself, not inside the
-    // editor box, so they are never cut off at its edge.
-    Blockly.common.setParentContainer(document.body);
+    // Hover descriptions go on the page itself, not inside the editor box, so
+    // they are never cut off at its edge. Only the tooltip: moving every popup
+    // (Blockly.common.setParentContainer) breaks the number dropdowns on
+    // Repeat and Wait, which close and throw the moment they open.
+    const tip = Blockly.Tooltip.getDiv();
+    if (tip && tip.parentElement !== document.body) document.body.appendChild(tip);
     load(ws, latest.current.scripts);
 
     ws.addChangeListener((e: Blockly.Events.Abstract) => {

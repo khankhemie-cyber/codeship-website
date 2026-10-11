@@ -308,6 +308,55 @@ test("levels: rocks, closed doors and closed gates stop the character where it i
   eq([gate.hero.x], [3], "stopped in front of the closed gate");
 });
 
+test("levels: Semester 1 is open; each later semester opens when the one before is finished", () => {
+  const all = (sem) => Object.fromEntries(L.LEVELS.filter((l) => l.semester === sem).map((l) => [l.id, true]));
+  eq([1, 2, 3, 4].map((n) => L.semesterOpen(n, {})), [true, false, false, false], "fresh browser");
+  const allButOne = all(1);
+  delete allButOne["s1-7"];
+  eq(L.semesterOpen(2, allButOne), false, "one Semester 1 level left");
+  eq([2, 3].map((n) => L.semesterOpen(n, all(1))), [true, false], "Semester 1 finished");
+  eq(L.semesterOpen(3, all(2)), false, "Semester 2 alone doesn't skip past a locked Semester 2");
+  eq([2, 3, 4].map((n) => L.semesterOpen(n, {}, true)), [true, true, true], "an adult opened them all");
+});
+
+// ── JavaScript view ──
+const JS = await import("../../src/components/tools/blocks/javascript.ts");
+test("JavaScript: Start blocks become handlers, Repeat a for loop, and the values carry over", () => {
+  const scripts = L.scriptsOf(
+    L.stackJson(["start_tap", ["repeat", 4, ["move_right", ["repeat", 2, ["pop"]]]], ["wait", 3], ["say", 'Hi "you"'], ["send_message", "blue"]]),
+    L.stackJson([["start_message", "blue"], "shrink"]),
+    L.stackJson(["move_up"]),
+  );
+  eq(JS.toJavaScript(scripts).split("\n"), [
+    "whenTapped(() => {",
+    "  for (let i = 0; i < 4; i++) {",
+    "    moveRight();",
+    "    for (let j = 0; j < 2; j++) {",
+    "      pop();",
+    "    }",
+    "  }",
+    "  wait(3);",
+    '  say("Hi \\"you\\"");',
+    '  sendMessage("blue");',
+    "});",
+    "",
+    'whenMessageReceived("blue", () => {',
+    "  shrink();",
+    "});",
+    "",
+    "// Not joined to a Start block, so this never runs:",
+    "// moveUp();",
+  ], "generated code");
+  eq(JS.toJavaScript(L.scriptsOf()), "// No blocks yet.", "empty workspace");
+});
+
+test("JavaScript: every level's reference solution translates to code that parses", () => {
+  for (const l of L.LEVELS) {
+    const code = JS.toJavaScript(L.scriptsOf(...SOLUTIONS[l.id].map((st, i) => L.stackJson(st, 30, 30 + i * 200))));
+    new Function("whenTapped", "whenGreenFlagClicked", "whenBumped", "whenMessageReceived", code);
+  }
+});
+
 // ── Format ──
 test("project files round-trip through parseProject unchanged", () => {
   for (const p of [F.helpfulRobot(), F.kindnessCards(), F.recyclingSorter(), F.neighbourhoodMap()]) {

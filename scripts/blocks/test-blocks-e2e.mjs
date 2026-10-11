@@ -345,6 +345,11 @@ async function dragFromPalette(page, label, below) {
   await page.mouse.up();
   await page.waitForTimeout(300);
 }
+async function unlockAllSemesters(page) {
+  await page.getByTestId("settings").click();
+  await page.getByTestId("set-unlock-all").check();
+  await page.getByTestId("settings").click();
+}
 const levelHero = (page) => page.evaluate(() => ({ ...window.__codeshipLevels.engine().states.get("hero") }));
 
 await test("levels: Semester 1 Level 1 is finished by building Move Right, Move Right and tapping the robot", async (page) => {
@@ -373,6 +378,7 @@ await test("levels: Semester 1 Level 1 is finished by building Move Right, Move 
 
 await test("levels: a near miss just stops — no win, no hint (door without Shrink)", async (page) => {
   await open(page);
+  await unlockAllSemesters(page);
   await page.getByTestId("view-levels").click();
   await page.getByTestId("level-s2-1").click();
   await page.getByTestId("prompt-go").click();
@@ -399,7 +405,8 @@ await test("levels: the prompt reads aloud and follows the language (French)", a
   await open(page);
   await page.getByTestId("settings").click();
   await page.getByTestId("set-lang").selectOption("fr");
-  await page.keyboard.press("Escape");
+  await page.getByTestId("set-unlock-all").check();
+  await page.getByTestId("settings").click();
   await page.getByTestId("view-levels").click();
   await page.getByTestId("level-s4-1").click();
   const text = await page.getByTestId("prompt-text").textContent();
@@ -416,6 +423,7 @@ await test("hovering over a block shows what it does; a coming bridge shows as a
   await page.locator(".blocklyFlyout .blocklyDraggable").filter({ hasText: "Move Right" }).first().hover();
   const tip = page.locator(".blocklyTooltipDiv");
   await tip.getByText("Moves one square to the right.").waitFor({ timeout: 4000 });
+  await unlockAllSemesters(page);
   await page.getByTestId("view-levels").click();
   await page.getByTestId("level-s2-5").click();
   await page.getByTestId("prompt-go").click();
@@ -425,6 +433,84 @@ await test("hovering over a block shows what it does; a coming bridge shows as a
   assert((await page.getByTestId("ghost-label-t6-4").textContent()) === "⏱ 3", "bridge delay not shown");
   const opacity = await bridge.locator("div").first().evaluate((el) => getComputedStyle(el).opacity);
   assert(Number(opacity) > 0, `the coming bridge is invisible (opacity ${opacity})`);
+});
+
+await test("levels: only Semester 1 is open; finishing it opens Semester 2", async (page) => {
+  await open(page);
+  await page.getByTestId("view-levels").click();
+  for (const [sem, locked] of [[1, "false"], [2, "true"], [3, "true"], [4, "true"]]) {
+    assert((await page.getByTestId(`semester-${sem}`).getAttribute("data-locked")) === locked, `semester ${sem} data-locked should be ${locked}`);
+  }
+  assert(await page.getByTestId("level-s2-1").isDisabled(), "a Semester 2 level can be opened");
+  assert((await page.getByTestId("level-s2-1").getAttribute("aria-label")).includes("Locked"), "locked level doesn't say so");
+  // Every Semester 1 level but the last finished: still locked.
+  await page.evaluate(() => {
+    const done = Object.fromEntries(["s1-1", "s1-2", "s1-3", "s1-4", "s1-5", "s1-6"].map((id) => [id, true]));
+    localStorage.setItem("codeship-blocks-levels", JSON.stringify({ done, blocks: {} }));
+  });
+  await open(page, PAGE);
+  assert((await page.getByTestId("semester-2").getAttribute("data-locked")) === "true", "Semester 2 opened with a level left");
+  await page.evaluate(() => {
+    const p = JSON.parse(localStorage.getItem("codeship-blocks-levels"));
+    p.done["s1-7"] = true;
+    localStorage.setItem("codeship-blocks-levels", JSON.stringify(p));
+  });
+  await open(page, PAGE);
+  assert((await page.getByTestId("semester-2").getAttribute("data-locked")) === "false", "Semester 2 still locked after Semester 1");
+  assert((await page.getByTestId("semester-3").getAttribute("data-locked")) === "true", "Semester 3 opened too early");
+  await unlockAllSemesters(page);
+  assert((await page.getByTestId("semester-4").getAttribute("data-locked")) === "false", "the adult setting did not open Semester 4");
+});
+
+await test("levels: the number on a Repeat block can be changed", async (page) => {
+  await page.addInitScript(() => {
+    const repeat = { type: "start_tap", x: 30, y: 30, next: { block: { type: "repeat", fields: { N: "1" }, inputs: { DO: { block: { type: "move_right" } } } } } };
+    localStorage.setItem("codeship-blocks-levels", JSON.stringify({ done: {}, blocks: { "s3-1": { blocks: { languageVersion: 0, blocks: [repeat] } } } }));
+  });
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await open(page);
+  await unlockAllSemesters(page);
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s3-1").click();
+  await page.getByTestId("prompt-go").click();
+  const ws = await page.getByTestId("blocks-workspace").boundingBox();
+  const fields = page.locator(".blocklyDropdownRect");
+  let field = null;
+  for (let i = 0; i < (await fields.count()); i++) {
+    const b = await fields.nth(i).boundingBox();
+    if (b && b.x > ws.x + ws.width * 0.3 && b.y > ws.y && b.y < ws.y + ws.height) field = b; // on the workspace, not the palette
+  }
+  assert(field, "no Repeat number on the workspace");
+  await page.mouse.click(field.x + field.width / 2, field.y + field.height / 2);
+  await page.locator(".blocklyDropDownDiv .blocklyMenuItem").filter({ hasText: /^4$/ }).click({ timeout: 3000 });
+  await page.waitForTimeout(300);
+  const n = await page.evaluate(() => window.__codeshipLevels.project().pages[0].actors.find((a) => a.id === "hero").scripts.blocks.blocks[0].next.block.fields.N);
+  assert(String(n) === "4", `Repeat is ${n}`);
+  assert(errors.length === 0, `page errors: ${errors}`);
+  // And it runs four times.
+  const startX = (await levelHero(page)).x;
+  await page.getByTestId("actor-hero").click();
+  await until(page, async () => (await levelHero(page)).x === startX + 4, "the can to move four squares", 5000);
+});
+
+await test("levels: the JavaScript switch shows the code behind the blocks, and follows edits", async (page) => {
+  await open(page);
+  await page.getByTestId("view-levels").click();
+  await page.getByTestId("level-s1-1").click();
+  await page.getByTestId("prompt-go").click();
+  assert((await page.getByTestId("code-panel").count()) === 0, "code shows before switching it on");
+  await page.getByTestId("show-code").click();
+  assert((await page.getByTestId("show-code").getAttribute("aria-checked")) === "true", "switch not on");
+  assert((await page.getByTestId("code-text").textContent()) === "whenTapped(() => {\n});", `code: ${await page.getByTestId("code-text").textContent()}`);
+  await page.locator(".blocklyFlyout").waitFor();
+  await dragFromPalette(page, "Move Right", true);
+  await until(page, async () => (await page.getByTestId("code-text").textContent()).includes("  moveRight();"), "the code to follow the new block", 3000);
+  // Remembered on this computer.
+  await open(page, PAGE);
+  await page.getByTestId("level-s1-2").click();
+  await page.getByTestId("prompt-go").click();
+  assert(await page.getByTestId("code-panel").isVisible(), "the switch was not remembered");
 });
 
 await browser.close();

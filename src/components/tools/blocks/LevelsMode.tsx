@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "../launchpad/icons";
 import { playCheer, playPop, stopAllSounds, unlockAudio } from "./audio";
 import type { LabelMode } from "./blockDefs";
@@ -9,15 +9,18 @@ import type { EditorApi } from "./BlocksEditor";
 import { costumeUrl } from "./costumes";
 import { Engine } from "./engine";
 import { THING_TOOLTIPS, type Strings, type UiLang } from "./i18n";
-import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, startRun, starterScripts, type Level } from "./levels";
+import { toJavaScript } from "./javascript";
+import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, semesterOpen, startRun, starterScripts, type Level } from "./levels";
 import type { Project, Scripts } from "./model";
 import { LEVEL_PROMPTS, canSpeak, speak } from "./levelPrompts";
 import Stage from "./Stage";
 
 /**
  * Levels: get your character to the goal. A level picker grouped by
- * semester (every level always open), and the level itself: the child's
- * blocks on the left, the level on the right.
+ * semester (Semester 1 open; each later one opens when the one before is
+ * finished, or an adult opens them all), and the level itself: the child's
+ * blocks on the left, the level on the right, and a switch that shows the
+ * JavaScript behind the blocks.
  *
  * No hints, ever: a program that falls short just stops. Finishing shows a
  * celebration and the next level. Finished levels and each level's blocks
@@ -30,6 +33,7 @@ const BlocksEditor = dynamic(() => import("./BlocksEditor"), {
 });
 
 const PROGRESS_KEY = "codeship-blocks-levels";
+const SHOW_CODE_KEY = "codeship-blocks-show-code";
 const SEMESTER_COLOURS = ["#D58401", "#035762", "#4E2B6F", "#012C61"];
 
 type Progress = { done: Record<string, true>; blocks: Record<string, Scripts> };
@@ -51,15 +55,16 @@ function writeProgress(p: Progress) {
 const focusRing = "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D58401] focus-visible:ring-offset-2 focus-visible:ring-offset-[#010F2A]";
 const ctrlBtn = `inline-flex h-11 items-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-3 text-sm font-semibold text-white hover:bg-white/10 ${focusRing}`;
 
-type Props = { s: Strings; lang: UiLang; mode: LabelMode };
+type Props = { s: Strings; lang: UiLang; mode: LabelMode; unlockAll: boolean };
 
-export default function LevelsMode({ s, lang, mode }: Props) {
+export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
   const [levelId, setLevelId] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress>({ done: {}, blocks: {} });
   const [won, setWon] = useState(false);
   const [armed, setArmed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const [speechOk, setSpeechOk] = useState(false);
+  const [showCode, setShowCode] = useState(false);
   const [, setFrame] = useState(0);
   const engineRef = useRef<Engine | null>(null);
   const rulesRef = useRef<LevelRules | null>(null);
@@ -71,6 +76,9 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   useEffect(() => {
     setProgress(readProgress());
     setSpeechOk(canSpeak());
+    try {
+      setShowCode(localStorage.getItem(SHOW_CODE_KEY) === "1");
+    } catch {}
     return () => {
       if (canSpeak()) window.speechSynthesis.cancel();
     };
@@ -85,6 +93,14 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   }, []);
 
   const level = levelId ? levelById(levelId) : undefined;
+
+  const toggleCode = () =>
+    setShowCode((on) => {
+      try {
+        localStorage.setItem(SHOW_CODE_KEY, on ? "0" : "1");
+      } catch {}
+      return !on;
+    });
 
   const startLevel = useCallback((l: Level) => {
     stopAllSounds();
@@ -184,14 +200,27 @@ export default function LevelsMode({ s, lang, mode }: Props) {
         <div className="mt-4 space-y-4">
           {[1, 2, 3, 4].map((sem) => {
             const levels = LEVELS.filter((l) => l.semester === sem);
+            const open = semesterOpen(sem, progress.done, unlockAll);
             return (
-              <section key={sem} className="rounded-2xl border-l-8 bg-white/[0.05] p-3" style={{ borderColor: SEMESTER_COLOURS[sem - 1] }}>
-                <h3 className="mb-2 flex items-center gap-2 font-display text-lg font-extrabold">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1">
+              <section
+                key={sem}
+                className={`rounded-2xl border-l-8 p-3 ${open ? "bg-white/[0.05]" : "bg-white/[0.02]"}`}
+                style={{ borderColor: SEMESTER_COLOURS[sem - 1] }}
+                data-testid={`semester-${sem}`}
+                data-locked={!open}
+              >
+                <h3 className="mb-2 flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
+                  <span className={`flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 ${open ? "" : "opacity-50 grayscale"}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={costumeUrl(levels[0].hero)} alt="" className="h-full w-full" />
                   </span>
                   {s.semesterN(sem)}
+                  {!open && (
+                    <span className="ml-1 flex items-center gap-1 rounded-full bg-white/10 px-3 py-1 font-sans text-sm font-semibold text-white/80">
+                      <span aria-hidden="true">🔒</span>
+                      {s.semesterLocked(sem)}
+                    </span>
+                  )}
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {levels.map((l) => {
@@ -200,14 +229,15 @@ export default function LevelsMode({ s, lang, mode }: Props) {
                       <button
                         key={l.id}
                         type="button"
+                        disabled={!open}
                         onClick={() => startLevel(l)}
                         data-testid={`level-${l.id}`}
-                        aria-label={`${s.levelLabel(l.semester, l.number)}${done ? ` · ${s.levelDone}` : ""}`}
-                        className={`relative flex h-20 w-20 flex-col items-center justify-center rounded-2xl text-3xl font-extrabold shadow-md transition active:scale-95 ${
-                          done ? "bg-[#D58401] text-[#010F2A]" : "bg-white text-[#010F2A]"
+                        aria-label={`${s.levelLabel(l.semester, l.number)}${done ? ` · ${s.levelDone}` : ""}${open ? "" : ` · ${s.locked}`}`}
+                        className={`relative flex h-20 w-20 flex-col items-center justify-center rounded-2xl text-3xl font-extrabold shadow-md transition ${
+                          !open ? "cursor-not-allowed bg-white/15 text-white/40 shadow-none" : done ? "bg-[#D58401] text-[#010F2A] active:scale-95" : "bg-white text-[#010F2A] active:scale-95"
                         } ${focusRing}`}
                       >
-                        {l.number}
+                        {open ? l.number : <span aria-hidden="true" className="text-2xl">🔒</span>}
                         {done && (
                           <span aria-hidden="true" className="absolute -right-2 -top-2 text-2xl drop-shadow">
                             ⭐
@@ -237,7 +267,10 @@ export default function LevelsMode({ s, lang, mode }: Props) {
   const ghosts = new Set([HERO_ID, ...things.filter((t) => t.kind === "bridge").map((t) => t.id)]);
   const ghostLabels = Object.fromEntries(things.filter((t) => t.kind === "bridge").map((t) => [t.id, `⏱ ${level.bridgeDelay ?? 3}`]));
   const heroHasTapStart = Boolean(hero?.scripts.blocks?.blocks?.some((b) => b.type === "start_tap"));
-  const next = LEVELS[LEVELS.findIndex((l) => l.id === level.id) + 1];
+  const following = LEVELS[LEVELS.findIndex((l) => l.id === level.id) + 1];
+  // The next level, unless it starts a semester that is still locked.
+  const next = following && semesterOpen(following.semester, progress.done, unlockAll) ? following : undefined;
+  const code = showCode && hero ? toJavaScript(hero.scripts) : "";
   const prompt = LEVEL_PROMPTS[level.id]?.[lang] ?? "";
   const speakButton = (big: boolean) =>
     speechOk && (
@@ -298,8 +331,26 @@ export default function LevelsMode({ s, lang, mode }: Props) {
         </button>
         <button
           type="button"
+          role="switch"
+          aria-checked={showCode}
+          onClick={toggleCode}
+          className={`ml-auto ${ctrlBtn} ${showCode ? "!border-[#D58401] !bg-[#D58401]/20" : ""}`}
+          title={s.showCodeHint}
+          aria-label={s.showCodeHint}
+          data-testid="show-code"
+        >
+          <span aria-hidden="true" className="font-mono text-sm font-bold text-[#F5B544]">
+            {"</>"}
+          </span>
+          <span className="hidden lg:inline">{s.showCode}</span>
+          <span aria-hidden="true" className={`relative h-6 w-10 rounded-full transition ${showCode ? "bg-[#2EB84B]" : "bg-white/25"}`}>
+            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${showCode ? "left-[18px]" : "left-0.5"}`} />
+          </span>
+        </button>
+        <button
+          type="button"
           onClick={resetLevel}
-          className={`ml-auto ${ctrlBtn} ${armed ? "!bg-[#E53935]" : ""}`}
+          className={`${ctrlBtn} ${armed ? "!bg-[#E53935]" : ""}`}
           title={armed ? s.tapAgainToStartOver : s.resetLevel}
           aria-label={s.resetLevel}
         >
@@ -353,6 +404,21 @@ export default function LevelsMode({ s, lang, mode }: Props) {
               />
             )}
           </div>
+          {showCode && (
+            <div className="flex max-h-[40%] min-h-[120px] flex-col border-x-4 border-b-4 border-[#D58401] bg-[#06142E]" data-testid="code-panel">
+              <div className="flex items-center gap-2 border-b border-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white/70">
+                <span aria-hidden="true" className="font-mono text-[#F5B544]">
+                  {"</>"}
+                </span>
+                {s.codeTitle}
+              </div>
+              <pre className="min-h-0 flex-1 overflow-auto px-3 py-2 font-mono text-sm leading-relaxed text-[#E6ECF4]" lang="en" data-testid="code-text">
+                <code>
+                  <Highlighted code={code} />
+                </code>
+              </pre>
+            </div>
+          )}
         </section>
 
         <section className="flex min-h-0 flex-col gap-2 border-white/10 bg-[#010F2A] p-2 md:border-l">
@@ -499,6 +565,26 @@ export default function LevelsMode({ s, lang, mode }: Props) {
 }
 
 const EMPTY = new Set<string>();
+
+/** Light syntax colouring for the generated JavaScript (comments, keywords, strings, numbers, calls). */
+const TOKEN = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(for|let)\b|\b(\d+)\b|([A-Za-z_]\w*)(?=\()/gm;
+function Highlighted({ code }: { code: string }) {
+  const parts: ReactNode[] = [];
+  let last = 0;
+  for (const m of code.matchAll(TOKEN)) {
+    const i = m.index ?? 0;
+    if (i > last) parts.push(code.slice(last, i));
+    const colour = m[1] ? "#7D8BA3" : m[2] ? "#7EE0A1" : m[3] ? "#C792EA" : m[4] ? "#F5B544" : "#6CC4FF";
+    parts.push(
+      <span key={i} style={{ color: colour, fontStyle: m[1] ? "italic" : undefined }}>
+        {m[0]}
+      </span>,
+    );
+    last = i + m[0].length;
+  }
+  parts.push(code.slice(last));
+  return <>{parts}</>;
+}
 
 /** Keeps hyphenated words ("Montre-toi", "Cache-toi") on one line, so a beginning reader sees the whole word. */
 function Readable({ text }: { text: string }) {

@@ -373,7 +373,9 @@ the stage, characters and the engine that runs the blocks are ours.
   a `Start on Bump` stack, a guard dog you can only pass while hidden (`Hide`, then `Show` at the
   goal). Semester 4: coloured gates that open on a matching `Send Message`. Win = the character is
   on the goal, visible, with every apple collected; a miss just stops, with no hint. Maps are 10 × 8
-  text grids (legend at the top of `levels.ts`). Every level always opens. Finished levels and each
+  text grids (legend at the top of `levels.ts`). Semester 1 is always open; each later semester
+  unlocks once every level of the one before is finished (`semesterOpen` in `levels.ts`), and
+  "Open every semester in Levels" in ⋯ unlocks them all on that computer. Finished levels and each
   level's blocks are remembered in this browser only. `scripts/blocks/level-solutions.mjs` holds a
   reference solution (the instructor's answer key) and the near miss each level is built to catch;
   the tests fail if any level becomes impossible or winnable by doing nothing.
@@ -386,6 +388,9 @@ the stage, characters and the engine that runs the blocks are ours.
   shows faintly so children can follow it; a coming bridge shows as a dashed outline with its delay
   (⏱ 3); and a bouncing 👆 shows when the character has a `Start on Tap` stack. Hovering over any
   block or level object shows a one-line description of what it does (English/French).
+  The `</> JavaScript` switch in a level shows, live, the JavaScript behind the child's blocks
+  (`javascript.ts`: Start blocks become handlers such as `whenTapped(() => { … })`, Repeat a `for`
+  loop). Read-only; the switch is remembered in this browser.
 - **Microphone**: "Set up microphone" in ⋯ asks for permission before class. Instructors should
   choose "Allow on every visit". On managed Chromebooks, IT can pre-approve the site with Chrome's
   `AudioCaptureAllowedUrls` policy so no prompt ever appears.

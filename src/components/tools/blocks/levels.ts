@@ -201,6 +201,15 @@ export const LEVELS: Level[] = [
 
 export const levelById = (id: string) => LEVELS.find((l) => l.id === id);
 
+/**
+ * Semester 1 is always open. Each later semester opens once every level of
+ * the one before it is finished (or for everyone, when an adult unlocks all).
+ */
+export function semesterOpen(semester: number, done: Record<string, unknown>, unlockAll = false): boolean {
+  if (unlockAll || semester <= 1) return true;
+  return LEVELS.filter((l) => l.semester === semester - 1).every((l) => done[l.id]) && semesterOpen(semester - 1, done);
+}
+
 // ── Building a level as a project ──
 
 type Thing = { id: string; kind: string; costume: string; x: number; y: number; colour?: MessageColour };
