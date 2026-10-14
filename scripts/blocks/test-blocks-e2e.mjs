@@ -120,8 +120,11 @@ await test("1. Reset stops the robot and puts it back where it started", async (
   await page.getByTestId("actor-robot1").click();
   await until(page, async () => (await actor(page, "robot1")).x === 4, "the robot to move", 5000);
   await page.getByTestId("reset").click();
-  const a = await actor(page, "robot1");
-  assert(a.x === 2 && a.y === 4 && a.level === 0 && a.visible, `after Reset: ${JSON.stringify(a)}`);
+  // The stage redraws on the next animation frame, so give it a moment.
+  let a;
+  await until(page, async () => ((a = await actor(page, "robot1")), a.x === 2 && a.y === 4 && a.level === 0 && a.visible), "the robot to go back", 2000).catch(() => {
+    throw new Error(`after Reset: ${JSON.stringify(a)}`);
+  });
   await page.waitForTimeout(1500);
   assert((await actor(page, "robot1")).x === 2, "the robot kept running after Reset");
 });
@@ -528,6 +531,16 @@ await test("levels: the JavaScript switch shows the code behind the blocks, and 
   await page.getByTestId("level-s1-2").click();
   await page.getByTestId("prompt-go").click();
   assert(await page.getByTestId("code-panel").isVisible(), "the switch was not remembered");
+});
+
+await test("create: the JavaScript switch shows the selected character's blocks as code", async (page) => {
+  await open(page);
+  await openProject(page, F.helpfulRobot());
+  assert((await page.getByTestId("code-panel").count()) === 0, "code shows before switching it on");
+  await page.getByTestId("show-code").click();
+  assert((await page.getByTestId("show-code").getAttribute("aria-checked")) === "true", "switch not on");
+  await page.getByTestId("actor-robot1").click();
+  await until(page, async () => /whenTapped\(\(\) => \{[\s\S]*moveRight\(\);[\s\S]*say\("Got it!"\);/.test(await page.getByTestId("code-text").textContent()), "the robot's code", 3000);
 });
 
 await browser.close();
