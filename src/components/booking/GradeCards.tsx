@@ -4,6 +4,7 @@ import { PROGRAMS } from "@/data/programs";
 import { CLASS_SCHEDULE } from "@/config/classSchedule";
 import { SEMESTERS, LEVEL_ACCENT, rangeOnly, saturdayTime } from "@/lib/booking";
 import { LevelIcon, LEVEL_PHOTO } from "@/components/ui/Stem";
+import { OpenTag } from "@/components/home/Hero";
 
 /** Text colour that reads on each level's accent colour. */
 const ON_ACCENT: Record<string, string> = {
@@ -48,7 +49,10 @@ export default function GradeCards() {
               </div>
               {SEMESTERS.map((sem) => (
                 <div key={sem.key}>
-                  <dt className="text-sm text-gray-500">{sem.label} semester</dt>
+                  <dt className="text-sm text-gray-500">
+                    {sem.label} semester
+                    {sem.key === "november" && <OpenTag />}
+                  </dt>
                   <dd className="text-base font-semibold text-[#001532]">
                     {rangeOnly(CLASS_SCHEDULE[p.slug].inperson.starts[sem.key])}
                   </dd>

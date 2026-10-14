@@ -3,12 +3,24 @@ import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
 import { CircuitLines, CodeMark, LevelIcon } from "@/components/ui/Stem";
 import { SATURDAY_SLOTS, ONLINE_DAYS, SEMESTERS, startDates, gradeSpan } from "@/lib/booking";
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, open = false }: { label: string; value: string; open?: boolean }) {
   return (
     <div className="flex items-baseline justify-between gap-4 py-3 border-t border-gray-200">
-      <dt className="text-base text-gray-600 whitespace-nowrap">{label}</dt>
+      <dt className="text-base text-gray-600 whitespace-nowrap">
+        {label}
+        {open && <OpenTag />}
+      </dt>
       <dd className="text-base font-semibold text-[#001532] text-right">{value}</dd>
     </div>
+  );
+}
+
+/** Small "Open now" marker for the semester taking registrations. */
+export function OpenTag() {
+  return (
+    <span className="ml-2 inline-block bg-[#F4D734] px-1.5 py-0.5 align-middle text-xs font-bold uppercase tracking-wider text-[#001532]">
+      Open now
+    </span>
   );
 }
 
@@ -32,7 +44,17 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Message */}
           <div className="lg:col-span-5">
-            <p className="inline-flex items-center gap-2 bg-[#001532] text-[#F4D734] px-3 py-1.5 text-sm font-bold uppercase tracking-[0.2em]">
+            <Link
+              href="#semesters"
+              className="inline-flex items-center gap-2 bg-[#F4D734] text-[#001532] px-3 py-1.5 text-sm font-bold uppercase tracking-[0.15em] hover:bg-[#E6C51E] transition-colors"
+            >
+              <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#001532] opacity-60 animate-ping" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#001532]" />
+              </span>
+              November registration open
+            </Link>
+            <p className="mt-3 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-[#0F6F7C]">
               <CodeMark className="h-4 w-4" />
               Coding · AI · STEM
             </p>
@@ -42,12 +64,16 @@ export default function Hero() {
             <p className="text-lg sm:text-xl text-gray-600 mt-6 leading-relaxed max-w-md">
               Kindergarten to Grade 8. Kids build games, websites, robots and AI projects. In person or live online.
             </p>
+            <p className="text-lg font-semibold text-[#001532] mt-4 max-w-md">
+              The November semester starts {startDates("inperson", "november")} in person and{" "}
+              {startDates("online", "november")} online.
+            </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
               <Link
                 href="#semesters"
                 className="inline-flex items-center bg-[#001532] px-8 py-4 text-lg font-semibold text-white hover:bg-[#0d2547] transition-colors"
               >
-                See Semesters
+                Enroll for November
               </Link>
               <Link
                 href="/program-finder"
@@ -103,7 +129,7 @@ export default function Hero() {
         >
           <div className="px-6 sm:px-10 pt-8 pb-2 flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#001532]">
-              Now enrolling: {SEMESTERS.map((s) => s.label).join(" & ")} semesters
+              November registration is open
             </h2>
             <p className="text-base text-gray-600">
               {PRICE_LABEL} · {SEMESTER_SHAPE_LABEL}
@@ -117,7 +143,7 @@ export default function Hero() {
               <h3 className="font-display text-xl font-bold text-[#001532] mt-2">Saturday classes</h3>
               <dl className="mt-5">
                 {SEMESTERS.map((s) => (
-                  <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("inperson", s.key)}`} />
+                  <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("inperson", s.key)}`} open={s.key === "november"} />
                 ))}
                 {SATURDAY_SLOTS.map((slot) => (
                   <Row key={slot.time} label={gradeSpan(slot.programs)} value={slot.time} />
@@ -137,7 +163,7 @@ export default function Hero() {
               <h3 className="font-display text-xl font-bold text-[#001532] mt-2">After-school classes from home</h3>
               <dl className="mt-5">
                 {SEMESTERS.map((s) => (
-                  <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("online", s.key)}`} />
+                  <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("online", s.key)}`} open={s.key === "november"} />
                 ))}
                 {ONLINE_DAYS.map((row) => (
                   <Row key={row.days} label={gradeSpan(row.programs)} value={`${row.days}, 4–6 PM ET`} />
