@@ -10,11 +10,12 @@ import { LevelIcon } from "@/components/ui/Stem";
 import { websiteSchema, faqSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { PRICE_LABEL, SEMESTER_SHAPE_LABEL } from "@/config/offering";
+import { startDates } from "@/lib/booking";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Classes in Oshawa: Saturdays at Core21 | CODEship Academy",
   description:
-    "Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa. Enrolling October & November semesters. CAD $129 for 8 weekly classes.",
+    "Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa. November semester registration now open. CAD $129 for 8 weekly classes.",
   path: "/",
 });
 
@@ -100,7 +101,8 @@ export default function HomePage() {
         href="#book"
         className="block bg-[#F4D734] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#E6C51E] transition-colors"
       >
-        Now enrolling October &amp; November semesters · In person &amp; online →
+        November registration is now open · Classes start {startDates("inperson", "november")} in person &amp;{" "}
+        {startDates("online", "november")} online · Enroll now →
       </Link>
 
       <Hero />
@@ -109,7 +111,7 @@ export default function HomePage() {
       <Section id="book">
         <SectionHeader
           center
-          eyebrow="Enroll in 3 minutes"
+          eyebrow="November registration open"
           title="Pick your child's grade"
           lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}`}
         />
@@ -194,7 +196,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BookingBand href="#book" detail="October and November semesters are open, in person and online." />
+      <BookingBand href="#book" detail={`November registration is open. Classes start ${startDates("inperson", "november")} in person and ${startDates("online", "november")} online.`} />
     </>
   );
 }
