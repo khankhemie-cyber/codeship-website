@@ -120,8 +120,11 @@ await test("1. Reset stops the robot and puts it back where it started", async (
   await page.getByTestId("actor-robot1").click();
   await until(page, async () => (await actor(page, "robot1")).x === 4, "the robot to move", 5000);
   await page.getByTestId("reset").click();
-  const a = await actor(page, "robot1");
-  assert(a.x === 2 && a.y === 4 && a.level === 0 && a.visible, `after Reset: ${JSON.stringify(a)}`);
+  // The stage redraws on the next animation frame, so give it a moment.
+  let a;
+  await until(page, async () => ((a = await actor(page, "robot1")), a.x === 2 && a.y === 4 && a.level === 0 && a.visible), "the robot to go back", 2000).catch(() => {
+    throw new Error(`after Reset: ${JSON.stringify(a)}`);
+  });
   await page.waitForTimeout(1500);
   assert((await actor(page, "robot1")).x === 2, "the robot kept running after Reset");
 });
