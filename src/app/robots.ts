@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/franchise/", "/lp/", "/tools/"],
+        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/"],
       },
       // Explicit AI-crawler allowances for 2026 GEO discovery (Perplexity,
       // ChatGPT/Bing, Gemini's Google-Extended, and Common Crawl/CCBot feed
@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
         allow: "/",
-        disallow: ["/franchise/", "/lp/", "/tools/"],
+        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/"],
       })),
     ],
     sitemap: "https://www.codeshipacademy.com/sitemap.xml",
