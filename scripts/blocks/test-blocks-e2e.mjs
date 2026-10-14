@@ -530,6 +530,16 @@ await test("levels: the JavaScript switch shows the code behind the blocks, and 
   assert(await page.getByTestId("code-panel").isVisible(), "the switch was not remembered");
 });
 
+await test("create: the JavaScript switch shows the selected character's blocks as code", async (page) => {
+  await open(page);
+  await openProject(page, F.helpfulRobot());
+  assert((await page.getByTestId("code-panel").count()) === 0, "code shows before switching it on");
+  await page.getByTestId("show-code").click();
+  assert((await page.getByTestId("show-code").getAttribute("aria-checked")) === "true", "switch not on");
+  await page.getByTestId("actor-robot1").click();
+  await until(page, async () => /whenTapped\(\(\) => \{[\s\S]*moveRight\(\);[\s\S]*say\("Got it!"\);/.test(await page.getByTestId("code-text").textContent()), "the robot's code", 3000);
+});
+
 await browser.close();
 if (server) process.kill(-server.pid);
 console.log(failed ? `\n${failed} failed, ${passed} passed` : `\nAll ${passed} passed`);

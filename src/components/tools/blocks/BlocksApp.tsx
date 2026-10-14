@@ -14,6 +14,8 @@ import { GRID_COLS, GRID_ROWS, newId, emptyScripts, starterProject, type Project
 import LevelsMode from "./LevelsMode";
 import RecorderPanel from "./RecorderPanel";
 import Stage from "./Stage";
+import { CodePanel, ShowCodeSwitch, useShowCode } from "./CodeView";
+import { toJavaScript } from "./javascript";
 
 /**
  * CODEship Blocks (/tools/blocks): visual block coding for the Explorers
@@ -89,6 +91,7 @@ export default function BlocksApp() {
   const [notice, setNotice] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [showCode, toggleCode] = useShowCode();
 
   const editorApi = useRef<EditorApi | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -674,7 +677,8 @@ export default function BlocksApp() {
                 <img src={costumeUrl(costumeOfActor(selected.characterId))} alt={costumeOfActor(selected.characterId)} className="h-full w-full" />
               </span>
             )}
-            <span className="ml-auto rounded-md bg-white/10 px-2 py-1 text-xs font-bold">
+            <ShowCodeSwitch s={s} on={showCode} onToggle={toggleCode} className="ml-auto" />
+            <span className="rounded-md bg-white/10 px-2 py-1 text-xs font-bold">
               {s.page} {(engine?.page ?? 0) + 1}
             </span>
             <button type="button" onClick={() => editorApi.current?.zoom(-1)} aria-label={s.zoomOut} title={s.zoomOut} className={`h-10 w-10 rounded-lg bg-white/10 text-xl font-bold ${focusRing}`}>
@@ -706,6 +710,7 @@ export default function BlocksApp() {
               </div>
             )}
           </div>
+          {showCode && selected && <CodePanel s={s} code={toJavaScript(selected.scripts)} className="border-x-4 border-[#D58401]" />}
           <div className="flex items-center gap-2 border-t border-white/10 bg-[#010F2A] px-3 py-1.5 text-[13px] text-white/80">
             <span className={`h-2 w-2 rounded-full ${save.kind === "saved" ? "bg-[#3CC6A8]" : "bg-white/40"}`} aria-hidden="true" />
             <span data-testid="save-status">{saveText}</span>
