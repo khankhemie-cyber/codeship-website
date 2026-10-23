@@ -49,3 +49,7 @@ export function trackRegisterClick(payload: EventPayload) {
 export function trackPriceView(payload: EventPayload) {
   dispatch("price_view", payload);
 }
+
+export function trackTrialClick(payload: EventPayload) {
+  dispatch("free_trial_click", payload);
+}

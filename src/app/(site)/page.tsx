@@ -5,6 +5,10 @@ import FAQAccordion from "@/components/FAQAccordion";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
 import GradeCards from "@/components/booking/GradeCards";
 import Hero from "@/components/home/Hero";
+import Semesters from "@/components/home/Semesters";
+import ToolPreviews from "@/components/home/ToolPreviews";
+import FreeTrial from "@/components/trial/FreeTrial";
+import TrialBanner from "@/components/trial/TrialBanner";
 import { Section, SectionHeader, BookingBand, ButtonLink } from "@/components/ui/Page";
 import { LevelIcon } from "@/components/ui/Stem";
 import { websiteSchema, faqSchema } from "@/lib/schema";
@@ -15,11 +19,16 @@ import { startDates } from "@/lib/booking";
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Classes in Oshawa: Saturdays at Core21 | CODEship Academy",
   description:
-    "Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa. November semester registration now open. CAD $129 for 8 weekly classes.",
+    "Try a free coding class this November. Saturday coding, AI & STEM classes for kids in K–Grade 8 at Core21, 21 Simcoe St South, Oshawa, or live online. CAD $129 for 8 weekly classes.",
   path: "/",
 });
 
 const homeFaqs = [
+  {
+    question: "How does the free trial class work?",
+    answer:
+      "Book one free trial class for your child in November 2026 and attend it in November. It works for in-person classes in Oshawa and live online classes. There is one free trial class per student, in one program.",
+  },
   {
     question: "What are the Saturday class times?",
     answer:
@@ -96,26 +105,24 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}
       />
 
-      {/* Booking callout */}
-      <Link
-        href="#book"
-        className="block bg-[#F4D734] text-[#001532] text-center text-base font-bold px-4 py-3 hover:bg-[#E6C51E] transition-colors"
-      >
-        November registration is now open · Classes start {startDates("inperson", "november")} in person &amp;{" "}
-        {startDates("online", "november")} online · Enroll now →
-      </Link>
+      <TrialBanner />
 
       <Hero />
+
+      <FreeTrial />
+
+      <ToolPreviews />
 
       {/* ── Book by grade ── */}
       <Section id="book">
         <SectionHeader
           center
-          eyebrow="November registration open"
-          title="Pick your child's grade"
+          eyebrow="03 · November registration open"
+          title="Join for the full semester"
           lead={`${PRICE_LABEL} per semester · ${SEMESTER_SHAPE_LABEL}`}
         />
         <GradeCards />
+        <Semesters />
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: "Online classes", href: "/register" },
@@ -179,8 +186,8 @@ export default function HomePage() {
       <TestimonialMarquee />
 
       {/* ── FAQ ── */}
-      <Section narrow>
-        <SectionHeader center title="Questions parents ask" />
+      <Section narrow id="faq">
+        <SectionHeader center eyebrow="04 · Questions" title="Questions parents ask" />
         <FAQAccordion faqs={homeFaqs} />
       </Section>
 
