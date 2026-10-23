@@ -6,6 +6,10 @@ import { articleSchema, faqSchema, breadcrumbSchema, itemListSchema, speakableSc
 import { pageMetadata } from "@/lib/pageMetadata";
 import FAQAccordion from "@/components/FAQAccordion";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ArticleCTA from "@/components/trial/ArticleCTA";
+
+const longDate = (iso: string) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" });
 
 interface Props {
   params: { slug: string };
@@ -54,8 +58,15 @@ export default function ArticlePage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(article.faqs)) }}
         />
       )}
-      {article.faqs.length > 0 && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema()) }} />
+      {(article.faqs.length > 0 || article.keyTakeaways?.length) && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              speakableSchema([...(article.keyTakeaways?.length ? [".key-takeaways"] : []), ".faq-answer"])
+            ),
+          }}
+        />
       )}
       {article.listItems && article.listItems.length > 0 && (
         <script
@@ -100,9 +111,12 @@ export default function ArticlePage({ params }: Props) {
             </h1>
             <p className="text-gray-300 text-base">
               By {article.author ?? "CODEship Academy Team"} ·
-              Published {article.publishDate}
+              Published <time dateTime={article.publishDate}>{longDate(article.publishDate)}</time>
               {article.dateModified && article.dateModified !== article.publishDate && (
-                <> · Last updated {article.dateModified}</>
+                <>
+                  {" "}
+                  · Last updated <time dateTime={article.dateModified}>{longDate(article.dateModified)}</time>
+                </>
               )}
             </p>
           </div>
@@ -111,10 +125,38 @@ export default function ArticlePage({ params }: Props) {
         {/* Article Content */}
         <section className="py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            {article.keyTakeaways && article.keyTakeaways.length > 0 && (
+              <aside className="key-takeaways mb-10 border-l-4 border-[#F4D734] bg-white p-6 shadow-sm" aria-label="Key takeaways">
+                <h2 className="text-xl font-bold text-[#001532]">Key takeaways</h2>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-lg text-gray-700">
+                  {article.keyTakeaways.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+              </aside>
+            )}
+
             <div
               className="article-content max-w-none text-lg text-gray-700"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
+
+            {article.sources && article.sources.length > 0 && (
+              <div className="mt-12 border-t border-gray-200 pt-8">
+                <h2 className="text-2xl font-bold text-[#001532] mb-4">References</h2>
+                <ol className="list-decimal space-y-3 pl-5 text-base text-gray-700">
+                  {article.sources.map((src) => (
+                    <li key={src.url}>
+                      {src.authors && <>{src.authors} </>}({longDate(src.date)}).{" "}
+                      <a href={src.url} target="_blank" rel="noopener" className="text-[#0f6f7c] underline">
+                        {src.title}
+                      </a>
+                      . <em>{src.publisher}</em>.
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
 
             {article.faqs.length > 0 && (
               <div className="mt-12">
@@ -137,17 +179,7 @@ export default function ArticlePage({ params }: Props) {
               </div>
             )}
 
-            {/* CTA */}
-            <div className="mt-12 bg-[#001532] p-8 text-center text-white">
-              <h3 className="text-2xl sm:text-3xl font-extrabold mb-3">Saturday coding classes in Oshawa</h3>
-              <p className="text-lg text-gray-200 mb-6">October and November semesters are open for K–Grade 8.</p>
-              <Link
-                href="/#book"
-                className="bg-[#F4D734] text-[#001532] text-lg font-bold px-7 py-3.5 hover:bg-[#E6C51E] transition-colors inline-block"
-              >
-                Enroll Now
-              </Link>
-            </div>
+            <ArticleCTA />
           </div>
         </section>
 

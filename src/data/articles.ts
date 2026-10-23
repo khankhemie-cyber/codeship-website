@@ -1,3 +1,16 @@
+/** A published study or report an article cites. Rendered as a References list and as schema.org citations. */
+export interface ArticleSource {
+  /** Title exactly as published. */
+  title: string;
+  /** Journal, outlet or organization, e.g. "Education Week". */
+  publisher: string;
+  /** Authors as published, e.g. "Alrawashdeh, G. S., & Bers, M. U.". */
+  authors?: string;
+  /** ISO date of publication, e.g. "2026-05-28". */
+  date: string;
+  url: string;
+}
+
 export interface Article {
   slug: string;
   title: string;
@@ -18,6 +31,10 @@ export interface Article {
   ogImage?: string;
   /** Renders ItemList schema alongside Article + FAQPage for listicle articles. */
   listItems?: { name: string; description?: string }[];
+  /** Short, answer-first summary shown above the article and used as the schema.org abstract. */
+  keyTakeaways?: string[];
+  /** Studies and reports the article cites, newest evidence first. */
+  sources?: ArticleSource[];
   content: string;
   faqs: { question: string; answer: string }[];
 }
@@ -2281,6 +2298,375 @@ export const articles: Article[] = [
         question: "Can my child start coding with no experience?",
         answer:
           "Yes. Every level welcomes complete beginners, and the K–8 journey builds from visual blocks up to Python and AI as your child grows.",
+      },
+    ],
+  },
+  {
+    slug: "does-coding-help-kids-math-reading-2026-research",
+    title: "Does Coding Help Kids in Math and Reading? What 2026 Research Says",
+    metaDescription:
+      "New 2026 studies, including a 1,705-student randomized trial, link early coding to gains in math, literacy and problem-solving. What parents should know.",
+    category: "parent",
+    readTime: 7,
+    publishDate: "2026-10-23",
+    author: "CODEship Academy Team",
+    cluster: "research-2026",
+    targetQuery: "does coding help kids with math and reading",
+    internalLinks: [
+      { label: "Try a free class in November", href: "/#free-trial" },
+      { label: "Find your child's level", href: "/program-finder" },
+      { label: "Should kids still learn to code in the age of AI?", href: "/resources/should-kids-still-learn-to-code-ai-2026" },
+    ],
+    keyTakeaways: [
+      "A 2026 randomized controlled trial of 1,705 K–2 students found that growth in coding skills predicted gains in both math and literacy.",
+      "A 2026 classroom experiment with 200 students aged 8–12 found large gains in computational thinking and problem-solving after 24 weeks of Scratch and Python.",
+      "The gains showed up most in logic, patterns and breaking problems into steps, not in arithmetic drills.",
+      "A 2026 study of after-school Code Clubs found smaller effects, a reminder that how coding is taught matters as much as whether it is taught.",
+    ],
+    sources: [
+      {
+        title: "Do Early CS Skills Transfer? Investigating the Academic Impact of Coding and CT in K–2 Classrooms",
+        publisher: "Early Childhood Education Journal (Springer Nature)",
+        authors: "Alrawashdeh, G. S., & Bers, M. U.",
+        date: "2026-05-28",
+        url: "https://doi.org/10.1007/s10643-026-02252-2",
+      },
+      {
+        title: "Enhancing computational thinking through coding education in primary school students: an experimental study on the impact of early programming exposure on problem-solving skills",
+        publisher: "Frontiers in Psychology",
+        authors: "Wang, X., Wan, F., & Dai, J.",
+        date: "2026-02-18",
+        url: "https://doi.org/10.3389/fpsyg.2026.1734482",
+      },
+      {
+        title: "Do Coding Club After-School Activities Improve Pupils' Non-cognitive Skills and Performance in Coding?",
+        publisher: "Computers in the Schools (Taylor & Francis)",
+        authors: "Siddiqui, N., Gorard, S., & See, B. H.",
+        date: "2026-02-10",
+        url: "https://doi.org/10.1080/07380569.2026.2622713",
+      },
+      {
+        title: "Momentum Builds to Expand Coding Education to Learning About AI 'Under the Hood'",
+        publisher: "Education Week",
+        authors: "Langreo, L.",
+        date: "2026-06-17",
+        url: "https://www.edweek.org/technology/momentum-builds-to-expand-coding-education-to-learning-about-ai-under-the-hood/2026/06",
+      },
+    ],
+    content: `
+<p>Parents often ask us a fair question: will learning to code actually help my child at school, or is it just another screen activity? For years the honest answer was "probably, but the evidence is thin." In 2026 that started to change. Several new studies, published in peer-reviewed journals from Springer Nature, Frontiers and Taylor &amp; Francis, looked directly at what happens to children's thinking and schoolwork when they learn to code.</p>
+
+<h2>The short answer</h2>
+<p>Yes, well-designed coding instruction is linked to better math and literacy outcomes in young children, and to stronger problem-solving in older ones. The strongest new evidence comes from a large randomized trial in kindergarten to Grade 2 classrooms. The effect is not magic, though. It depends on how coding is taught.</p>
+
+<h2>The biggest 2026 study: 1,705 children in K–2</h2>
+<p>In May 2026, researchers Ghaida Alrawashdeh and Marina Bers published a randomized controlled trial in the <a href="https://doi.org/10.1007/s10643-026-02252-2" target="_blank" rel="noopener"><em>Early Childhood Education Journal</em></a>. Marina Bers leads the DevTech Research Group at Boston College and created ScratchJr, one of the most widely used coding apps for young children.</p>
+<p>The study followed 1,705 students in kindergarten to Grade 2 across two U.S. states. Some classrooms used a coding curriculum and others continued with regular instruction. Two findings stand out for parents:</p>
+<ul>
+<li><strong>Coding skills grew.</strong> Children in the coding classrooms made significantly larger gains in coding and computational thinking than children in comparison classrooms.</li>
+<li><strong>The gains carried over.</strong> Growth in coding skills significantly predicted improvements in both math and literacy.</li>
+</ul>
+<p>The authors note that earlier evidence on this kind of "transfer" was limited and mixed, and that the benefit was strongest when the curriculum was inclusive and deliberately connected to other learning. In other words, coding helped with reading and math when it was taught as a way of thinking, not as an isolated tech skill.</p>
+
+<h2>Ages 8–12: problem-solving jumped</h2>
+<p>A February 2026 experiment in <a href="https://doi.org/10.3389/fpsyg.2026.1734482" target="_blank" rel="noopener"><em>Frontiers in Psychology</em></a> followed 200 primary school students aged 8 to 12. Half took a 24-week coding course: 16 weeks of Scratch, then 8 weeks of Python. The other half followed the regular curriculum.</p>
+<ul>
+<li>Computational thinking scores in the coding group rose from 20.4 to 30.6, a large effect compared with the control group.</li>
+<li>Problem-solving scores rose from 17.8 to 23.5.</li>
+<li>The biggest improvement was in <strong>decomposition</strong>, breaking a big problem into smaller parts, followed by abstraction and pattern recognition.</li>
+<li>Boys and girls improved by similar amounts.</li>
+<li>Children who spent more hours coding tended to improve more.</li>
+</ul>
+<p>One detail is worth knowing. The problem-solving gains came mostly from logic puzzles and pattern tasks. Arithmetic reasoning did not change significantly. Coding seems to strengthen how children approach problems, which supports math, rather than replacing math practice itself.</p>
+
+<h2>Not every program gets the same results</h2>
+<p>A third 2026 study, from researchers at Durham University in the U.K. and published in <a href="https://doi.org/10.1080/07380569.2026.2622713" target="_blank" rel="noopener"><em>Computers in the Schools</em></a>, looked at volunteer-run after-school Code Clubs. It found small positive effects on coding skills and on non-cognitive skills such as confidence, smaller than in the classroom studies above.</p>
+<p>That contrast is useful. Structured, regular instruction with a clear progression produced bigger gains than informal, drop-in activity. For parents, the lesson is to look at how a program is built, not just whether it says "coding" on the label.</p>
+
+<h2>Why coding might help with reading and math</h2>
+<p>Researchers point to a few overlapping skills:</p>
+<ul>
+<li><strong>Sequencing.</strong> Putting instructions in the right order is the same skill as retelling a story or following the steps of a math problem.</li>
+<li><strong>Decomposition.</strong> Splitting a big task into small steps helps with word problems and with planning a piece of writing.</li>
+<li><strong>Debugging.</strong> Finding and fixing a mistake teaches children to check their work rather than give up.</li>
+<li><strong>Precise language.</strong> Code only works when instructions are exact, which builds careful reading habits.</li>
+</ul>
+<p>Education Week reported in June 2026 that even as the large nonprofit Code.org rebranded as CodeAI to focus on artificial intelligence, it described computational thinking as a <a href="https://www.edweek.org/technology/momentum-builds-to-expand-coding-education-to-learning-about-ai-under-the-hood/2026/06" target="_blank" rel="noopener">foundational skill</a> that helps students build and question technology instead of only using it.</p>
+
+<h2>What this means when choosing a program</h2>
+<p>Based on the 2026 research, look for a program that:</p>
+<ul>
+<li>Meets every week over a full term, not just once.</li>
+<li>Follows a clear progression from blocks to text code as children grow.</li>
+<li>Connects coding to stories, math and real projects.</li>
+<li>Asks children to explain and present their work, which builds language skills.</li>
+</ul>
+<p>That is how we built CODEship Academy's four levels, from <a href="/programs/explorers">Explorers</a> in K–Grade 1 to <a href="/programs/engineers">Engineers</a> in Grades 6–8. If you would like to see it for yourself, every family can book <a href="/#free-trial">one free trial class</a> this November, in person in Oshawa or live online.</p>
+`,
+    faqs: [
+      {
+        question: "Does learning to code improve math scores?",
+        answer:
+          "A 2026 randomized trial of 1,705 K–2 students found that growth in coding skills predicted improvements in math and literacy. A separate 2026 study of children aged 8–12 found large gains in problem-solving, mainly in logic and pattern tasks rather than arithmetic.",
+      },
+      {
+        question: "Does coding help with reading?",
+        answer:
+          "The 2026 K–2 trial published in the Early Childhood Education Journal found that coding gains predicted literacy gains as well as math gains, especially when coding was connected to other classroom learning.",
+      },
+      {
+        question: "What age do the academic benefits of coding start?",
+        answer:
+          "The largest 2026 study looked at kindergarten to Grade 2, so benefits can start as early as age 5 or 6 with age-appropriate, mostly visual tools.",
+      },
+      {
+        question: "Is any coding program enough?",
+        answer:
+          "No. A 2026 study of informal after-school clubs found smaller effects than structured classroom programs. Regular weekly classes with a clear progression showed the strongest results.",
+      },
+    ],
+  },
+  {
+    slug: "should-kids-still-learn-to-code-ai-2026",
+    title: "Should Kids Still Learn to Code in the Age of AI? A 2026 Guide for Parents",
+    metaDescription:
+      "AI can write code, so is coding still worth learning? What 2026 reporting from Education Week, The Globe and Mail and new research means for kids in K–8.",
+    category: "ai",
+    readTime: 7,
+    publishDate: "2026-10-23",
+    author: "CODEship Academy Team",
+    cluster: "research-2026",
+    targetQuery: "should kids still learn to code with AI",
+    internalLinks: [
+      { label: "Try a free class in November", href: "/#free-trial" },
+      { label: "AI literacy for kids", href: "/resources/ai-literacy-for-kids-2026" },
+      { label: "Does coding help kids in math and reading?", href: "/resources/does-coding-help-kids-math-reading-2026-research" },
+    ],
+    keyTakeaways: [
+      "Yes. For children, coding is less about future programming jobs and more about learning to think in steps, test ideas and understand how AI works.",
+      "In 2026 Code.org rebranded as CodeAI but still calls computational thinking foundational, according to Education Week.",
+      "The Government of Canada committed $30 million in July 2026 to teach coding and AI skills to 1.1 million K–12 students.",
+      "Fewer university students are choosing computer science, but that is a job-market story about adults, not a reason to skip coding in K–8.",
+    ],
+    sources: [
+      {
+        title: "Momentum Builds to Expand Coding Education to Learning About AI 'Under the Hood'",
+        publisher: "Education Week",
+        authors: "Langreo, L.",
+        date: "2026-06-17",
+        url: "https://www.edweek.org/technology/momentum-builds-to-expand-coding-education-to-learning-about-ai-under-the-hood/2026/06",
+      },
+      {
+        title: "Students Know AI Will Define Their Future. Now They Need The Tools To Understand It.",
+        publisher: "CodeAI (formerly Code.org)",
+        date: "2026-06-02",
+        url: "https://code.org/codeorg-is-now-codeai",
+      },
+      {
+        title: "AI has changed the calculus for computer-science students, and schools that hope to teach them",
+        publisher: "The Globe and Mail",
+        authors: "Grant, K.",
+        date: "2026-09-12",
+        url: "https://www.theglobeandmail.com/canada/article-ai-computer-science-students-and-schools-that-hope-to-teach-them/",
+      },
+      {
+        title: "Government of Canada invests $30 million to launch fifth phase of CanCode program to offer new training opportunities for youth and teachers",
+        publisher: "Innovation, Science and Economic Development Canada",
+        date: "2026-07-08",
+        url: "https://www.canada.ca/en/innovation-science-economic-development/news/2026/07/government-of-canada-invests-30-million-to-launch-fifth-phase-of-cancode-program-to-offer-new-training-opportunities-for-youth-and-teachers.html",
+      },
+      {
+        title: "The Ed-Tech Backlash Is Here. What It Means for Schools",
+        publisher: "Education Week",
+        authors: "Klein, A., & Langreo, L.",
+        date: "2026-04-20",
+        url: "https://www.edweek.org/technology/the-ed-tech-backlash-is-here-what-it-means-for-schools/2026/04",
+      },
+      {
+        title: "Do Early CS Skills Transfer? Investigating the Academic Impact of Coding and CT in K–2 Classrooms",
+        publisher: "Early Childhood Education Journal (Springer Nature)",
+        authors: "Alrawashdeh, G. S., & Bers, M. U.",
+        date: "2026-05-28",
+        url: "https://doi.org/10.1007/s10643-026-02252-2",
+      },
+    ],
+    content: `
+<p>If AI tools can write code in seconds, why should a seven-year-old learn to code? It is one of the most common questions we hear from parents this year, and it is a good one. Here is what 2026 reporting and research actually say.</p>
+
+<h2>The short answer</h2>
+<p>Yes, kids should still learn to code. For children, coding was never mainly about becoming a programmer. It teaches them to break problems into steps, test ideas, fix mistakes and understand how the technology around them works. Those skills matter more, not less, when AI is everywhere.</p>
+
+<h2>What changed in 2026</h2>
+<p>Three things made headlines this year.</p>
+<h3>1. Code.org became CodeAI</h3>
+<p>On June 2, 2026, Code.org, the nonprofit behind the Hour of Code, <a href="https://code.org/codeorg-is-now-codeai" target="_blank" rel="noopener">rebranded as CodeAI</a>. Its announcement cited College Board figures that 84% of U.S. students report using AI, and National Center for Education Statistics figures that only 16% of high school leaders say all their students are learning about AI in school.</p>
+<p>Some read the rebrand as "coding is over." Education Week's coverage tells a different story. CodeAI said it will keep investing in computer science, and described computational thinking as a <a href="https://www.edweek.org/technology/momentum-builds-to-expand-coding-education-to-learning-about-ai-under-the-hood/2026/06" target="_blank" rel="noopener">foundational skill</a> that helps students judge what AI produces and build technology rather than just use it. Its CEO compared it to learning how a car works before you are handed the keys.</p>
+
+<h3>2. Fewer university students chose computer science</h3>
+<p>In September, <a href="https://www.theglobeandmail.com/canada/article-ai-computer-science-students-and-schools-that-hope-to-teach-them/" target="_blank" rel="noopener">The Globe and Mail reported</a> that Ontario applications to undergraduate computer and information systems programs fell 44% from their 2023 peak, as students worried that AI would shrink entry-level programming jobs.</p>
+<p>That is a real trend, but it is about 18-year-olds choosing a career, not about what a child in Grade 3 should learn. The same article quotes a student who chose applied mathematics instead, arguing that strong reasoning is what lets people use AI well. Reasoning is exactly what early coding builds.</p>
+
+<h3>3. Canada doubled down on coding and AI for K–12</h3>
+<p>In July 2026 the federal government <a href="https://www.canada.ca/en/innovation-science-economic-development/news/2026/07/government-of-canada-invests-30-million-to-launch-fifth-phase-of-cancode-program-to-offer-new-training-opportunities-for-youth-and-teachers.html" target="_blank" rel="noopener">announced $30 million</a> for a fifth phase of CanCode, aiming to reach 1.1 million kindergarten to Grade 12 students and train 76,000 teachers in coding and AI skills.</p>
+
+<h2>Coding still builds skills AI cannot give a child</h2>
+<p>New 2026 research backs this up. A <a href="https://doi.org/10.1007/s10643-026-02252-2" target="_blank" rel="noopener">randomized trial of 1,705 K–2 students</a> published in May found that growth in coding skills predicted improvements in math and literacy. We cover that study in detail in <a href="/resources/does-coding-help-kids-math-reading-2026-research">Does Coding Help Kids in Math and Reading?</a></p>
+<p>When a child codes, they practise:</p>
+<ul>
+<li><strong>Clear instructions.</strong> The same skill makes a good AI prompt and a good piece of writing.</li>
+<li><strong>Checking the output.</strong> Debugging teaches children not to trust a result just because a computer produced it.</li>
+<li><strong>Understanding the machine.</strong> Children who have built a simple program understand that AI is software made by people, with limits and mistakes.</li>
+</ul>
+
+<h2>What about screen time?</h2>
+<p>It is a fair worry. In April 2026, <a href="https://www.edweek.org/technology/the-ed-tech-backlash-is-here-what-it-means-for-schools/2026/04" target="_blank" rel="noopener">Education Week reported</a> that 61% of educators say most parents feel there is too much technology in schools, even though 55% of educators see a positive effect on academics.</p>
+<p>The difference is active versus passive screen time. Building a game, explaining it to classmates and fixing what broke is very different from scrolling. Good coding classes for young children also mix in unplugged activities, group work and presentations.</p>
+
+<h2>How CODEship teaches coding with AI in mind</h2>
+<p>Our K–8 journey keeps coding at the centre and adds AI as children are ready:</p>
+<ul>
+<li><a href="/programs/explorers">Explorers</a> (K–Grade 1) and <a href="/programs/builders">Builders</a> (Grades 2–3) learn sequencing, logic and web basics.</li>
+<li><a href="/programs/developers">Developers</a> (Grades 4–5) learn JavaScript and how to question what they see online.</li>
+<li><a href="/programs/engineers">Engineers</a> (Grades 6–8) learn Python, how AI works and how to use it responsibly.</li>
+</ul>
+<p>Want to see it in action? Book <a href="/#free-trial">one free trial class</a> this November, in person in Oshawa or live online.</p>
+`,
+    faqs: [
+      {
+        question: "Is coding still worth learning for kids now that AI can write code?",
+        answer:
+          "Yes. For children, coding builds problem-solving, logical thinking and an understanding of how technology, including AI, works. In 2026 CodeAI (formerly Code.org) still described computational thinking as foundational, and a 2026 randomized trial linked early coding to math and literacy gains.",
+      },
+      {
+        question: "Why are fewer students choosing computer science in university?",
+        answer:
+          "The Globe and Mail reported in September 2026 that Ontario applications to undergraduate computer programs fell 44% from their 2023 peak, as students worried about AI and entry-level jobs. That is a career decision for adults and does not change the value of coding skills for K–8 children.",
+      },
+      {
+        question: "Should my child learn AI instead of coding?",
+        answer:
+          "Children benefit most from learning both, in order. Coding teaches how software works, which makes it easier to understand, question and use AI tools well.",
+      },
+      {
+        question: "Is Canada still investing in coding for kids?",
+        answer:
+          "Yes. In July 2026 the Government of Canada announced $30 million for a fifth phase of CanCode to bring coding and AI skills to 1.1 million K–12 students and 76,000 teachers.",
+      },
+    ],
+  },
+  {
+    slug: "coding-kindergarten-grade-2-research-2026",
+    title: "Coding in Kindergarten to Grade 2: What New 2026 Research Shows",
+    metaDescription:
+      "Is kindergarten too early for coding? 2026 studies on young children show gains in problem-solving, math and literacy. What parents of 5- to 8-year-olds should know.",
+    category: "coding",
+    readTime: 6,
+    publishDate: "2026-10-23",
+    author: "CODEship Academy Team",
+    cluster: "research-2026",
+    targetQuery: "should kindergarteners learn coding",
+    internalLinks: [
+      { label: "Explorers program (K–Grade 1)", href: "/programs/explorers" },
+      { label: "Builders program (Grades 2–3)", href: "/programs/builders" },
+      { label: "Try a free class in November", href: "/#free-trial" },
+    ],
+    keyTakeaways: [
+      "Kindergarten is not too early. A 2026 randomized trial of 1,705 K–2 students linked coding gains to later math and literacy gains.",
+      "Young children learn coding ideas well through play, stories and hands-on tasks, many of them away from a screen.",
+      "2026 studies found 6- to 8-year-olds can break problems into parts, spot patterns, build step-by-step instructions and debug.",
+      "Look for short, playful classes that mix screen and unplugged activities and connect coding to stories and numbers.",
+    ],
+    sources: [
+      {
+        title: "Do Early CS Skills Transfer? Investigating the Academic Impact of Coding and CT in K–2 Classrooms",
+        publisher: "Early Childhood Education Journal (Springer Nature)",
+        authors: "Alrawashdeh, G. S., & Bers, M. U.",
+        date: "2026-05-28",
+        url: "https://doi.org/10.1007/s10643-026-02252-2",
+      },
+      {
+        title: "Computational Thinking in Childhood Education: Exploring Fundamental Components Through Playful Unplugged Tasks and Storytelling",
+        publisher: "Early Childhood Education Journal (Springer Nature)",
+        authors: "Estrella, S., Ramírez, B., Santibáñez, P., Mondaca-Saavedra, A., Araya, R., Olfos, R., & Parraguez, M.",
+        date: "2026-05-12",
+        url: "https://doi.org/10.1007/s10643-026-02230-8",
+      },
+      {
+        title: "Unplugged coding in early childhood: Problem-solving strategies across task-based activities",
+        publisher: "The Journal of Educational Research (Taylor & Francis)",
+        authors: "Abanoz, T., & Kalelioğlu, F.",
+        date: "2026-05-10",
+        url: "https://doi.org/10.1080/00220671.2026.2667931",
+      },
+      {
+        title: "Enhancing computational thinking through coding education in primary school students: an experimental study on the impact of early programming exposure on problem-solving skills",
+        publisher: "Frontiers in Psychology",
+        authors: "Wang, X., Wan, F., & Dai, J.",
+        date: "2026-02-18",
+        url: "https://doi.org/10.3389/fpsyg.2026.1734482",
+      },
+      {
+        title: "The Ed-Tech Backlash Is Here. What It Means for Schools",
+        publisher: "Education Week",
+        authors: "Klein, A., & Langreo, L.",
+        date: "2026-04-20",
+        url: "https://www.edweek.org/technology/the-ed-tech-backlash-is-here-what-it-means-for-schools/2026/04",
+      },
+    ],
+    content: `
+<p>Parents of young children often wonder whether coding is something to save for later. Can a five-year-old really learn to code, and is it good for them? A cluster of studies published in 2026 gives a clearer answer than ever before.</p>
+
+<h2>The short answer</h2>
+<p>Kindergarten is not too early, as long as coding looks like play. Children aged 5 to 8 can learn the core ideas of coding, and new research links those skills to progress in math and reading.</p>
+
+<h2>A large trial in K–2 classrooms</h2>
+<p>The most important 2026 study for parents of young children is a <a href="https://doi.org/10.1007/s10643-026-02252-2" target="_blank" rel="noopener">randomized controlled trial of 1,705 students</a> in kindergarten to Grade 2, published in the <em>Early Childhood Education Journal</em> by Ghaida Alrawashdeh and Marina Bers of Boston College. Children who received a coding curriculum made significantly larger gains in coding and computational thinking than their peers, and those coding gains predicted improvements in both math and literacy.</p>
+<p>The authors stress that results were strongest when the curriculum was inclusive and woven into other learning, rather than taught as a separate tech subject.</p>
+
+<h2>Young children can think like coders</h2>
+<p>Two more 2026 studies looked closely at how young children reason when they code.</p>
+<ul>
+<li>A study of 6- to 8-year-olds in the <a href="https://doi.org/10.1007/s10643-026-02230-8" target="_blank" rel="noopener"><em>Early Childhood Education Journal</em></a> used playful unplugged tasks and storytelling. Children broke complex problems into manageable parts, recognized patterns and designed logical step-by-step instructions.</li>
+<li>A study in <a href="https://doi.org/10.1080/00220671.2026.2667931" target="_blank" rel="noopener"><em>The Journal of Educational Research</em></a> watched young children work through unplugged algorithm and debugging tasks, mapping the problem-solving strategies they use to plan and fix instructions.</li>
+</ul>
+<p>"Unplugged" means coding ideas taught without a computer: arranging picture cards into a sequence, guiding a friend through a maze with arrow commands, or finding the mistake in a set of instructions. It is a good fit for young learners, and it keeps screen time in check.</p>
+
+<h2>What older children gain, for comparison</h2>
+<p>For children aged 8 to 12, a <a href="https://doi.org/10.3389/fpsyg.2026.1734482" target="_blank" rel="noopener">2026 experiment in <em>Frontiers in Psychology</em></a> found that 24 weeks of Scratch and Python produced large gains in computational thinking and problem-solving, with the biggest jump in breaking problems into smaller parts. Starting early lays the groundwork for that next step.</p>
+
+<h2>What about screen time for little ones?</h2>
+<p>Many parents share this concern. <a href="https://www.edweek.org/technology/the-ed-tech-backlash-is-here-what-it-means-for-schools/2026/04" target="_blank" rel="noopener">Education Week reported in April 2026</a> that 61% of educators say most parents feel schools use too much technology. The research above points to a balance: short, active sessions where children create something, mixed with talking, moving and hands-on activities.</p>
+
+<h2>What a good K–2 coding class looks like</h2>
+<ul>
+<li><strong>Short and playful.</strong> About an hour, with movement and variety.</li>
+<li><strong>Picture-based tools.</strong> Blocks with icons, so children do not need to read or type well yet.</li>
+<li><strong>Stories and numbers.</strong> Projects that tell a story or count and measure, linking coding to reading and math.</li>
+<li><strong>Talking about the work.</strong> Children explain what their program does, which builds language skills.</li>
+<li><strong>Small groups.</strong> So an adult can help each child debug.</li>
+</ul>
+<p>Our <a href="/programs/explorers">Explorers</a> level (K–Grade 1) uses picture blocks to make characters move, talk and react, and <a href="/programs/builders">Builders</a> (Grades 2–3) moves on to simple web pages. Classes meet once a week, Saturdays in Oshawa or live online. This November, you can book <a href="/#free-trial">one free trial class</a> to see how your child takes to it.</p>
+`,
+    faqs: [
+      {
+        question: "What age can a child start learning to code?",
+        answer:
+          "Children can start around age 5 with picture-based blocks and unplugged activities. A 2026 randomized trial of 1,705 kindergarten to Grade 2 students found that coding gains predicted later math and literacy gains.",
+      },
+      {
+        question: "Is coding good for kindergarteners?",
+        answer:
+          "Yes, when it is playful and hands-on. 2026 studies found that 6- to 8-year-olds can decompose problems, spot patterns, build step-by-step instructions and debug, all skills that support early math and reading.",
+      },
+      {
+        question: "Do young children need a computer to learn coding?",
+        answer:
+          "Not always. Unplugged activities such as sequencing picture cards or giving a friend arrow directions teach the same ideas, and 2026 research used them successfully with young children.",
+      },
+      {
+        question: "How much coding is right for a 5- to 8-year-old?",
+        answer:
+          "A short weekly class of about an hour, mixing screen time with talking and hands-on activities, fits young children well and follows the structured, regular approach that showed the strongest results in 2026 studies.",
       },
     ],
   },
