@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { articles } from "@/data/articles";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, itemListSchema } from "@/lib/schema";
 import { PageHero, Section } from "@/components/ui/Page";
 
 export const metadata: Metadata = pageMetadata({
@@ -10,6 +10,11 @@ export const metadata: Metadata = pageMetadata({
   description: "Short guides for parents about coding, AI and STEM for kids in K–Grade 8.",
   path: "/resources",
 });
+
+/** Newest first, so fresh research pieces lead the list. */
+const sorted = [...articles].sort((a, b) =>
+  (b.dateModified ?? b.publishDate).localeCompare(a.dateModified ?? a.publishDate)
+);
 
 const crumbs = [
   { name: "Home", href: "/" },
@@ -20,11 +25,21 @@ export default function ResourcesPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(crumbs)) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            itemListSchema(
+              sorted.map((a) => ({ name: a.title, url: `https://www.codeshipacademy.com/resources/${a.slug}` }))
+            )
+          ),
+        }}
+      />
       <PageHero crumbs={crumbs} eyebrow="Resources" title="Guides for parents" lead="Clear answers about coding, AI and STEM for kids." />
 
       <Section>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article) => (
+          {sorted.map((article) => (
             <Link
               key={article.slug}
               href={`/resources/${article.slug}`}

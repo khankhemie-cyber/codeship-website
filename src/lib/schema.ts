@@ -75,14 +75,33 @@ export function articleSchema(article: {
   dateModified?: string;
   slug: string;
   authorName?: string;
+  keyTakeaways?: string[];
+  sources?: { title: string; publisher: string; authors?: string; date: string; url: string }[];
 }) {
+  const url = `https://www.codeshipacademy.com/resources/${article.slug}`;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.metaDescription,
+    ...(article.keyTakeaways?.length ? { abstract: article.keyTakeaways.join(" ") } : {}),
+    inLanguage: "en-CA",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    image: "https://www.codeshipacademy.com/logo-banner.png",
     datePublished: article.publishDate,
     dateModified: article.dateModified ?? article.publishDate,
+    ...(article.sources?.length
+      ? {
+          citation: article.sources.map((s) => ({
+            "@type": "CreativeWork",
+            name: s.title,
+            url: s.url,
+            datePublished: s.date,
+            publisher: { "@type": "Organization", name: s.publisher },
+            ...(s.authors ? { author: s.authors } : {}),
+          })),
+        }
+      : {}),
     author: {
       "@type": "Organization",
       name: article.authorName ?? "CODEship Academy Team",
@@ -96,7 +115,7 @@ export function articleSchema(article: {
         url: "https://www.codeshipacademy.com/logo-nav.png",
       },
     },
-    url: `https://www.codeshipacademy.com/resources/${article.slug}`,
+    url,
   };
 }
 
@@ -262,13 +281,7 @@ export function websiteSchema() {
     "@type": "WebSite",
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: "https://www.codeshipacademy.com/resources?q={search_term_string}",
-      },
-      "query-input": "required name=search_term_string",
-    },
+    inLanguage: "en-CA",
+    publisher: { "@type": "Organization", name: "CODEship Academy", url: "https://www.codeshipacademy.com" },
   };
 }
