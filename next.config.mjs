@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
+  // Inlined into server and client bundles alike, so date-gated UI (the
+  // November free trial) renders the same HTML on both before it re-checks
+  // the visitor's clock.
+  env: {
+    NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

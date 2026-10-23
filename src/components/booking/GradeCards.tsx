@@ -4,7 +4,7 @@ import { PROGRAMS } from "@/data/programs";
 import { CLASS_SCHEDULE } from "@/config/classSchedule";
 import { SEMESTERS, LEVEL_ACCENT, rangeOnly, saturdayTime } from "@/lib/booking";
 import { LevelIcon, LEVEL_PHOTO } from "@/components/ui/Stem";
-import { OpenTag } from "@/components/home/Hero";
+import { OpenTag } from "@/components/home/Semesters";
 
 /** Text colour that reads on each level's accent colour. */
 const ON_ACCENT: Record<string, string> = {
