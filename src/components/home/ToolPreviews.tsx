@@ -67,7 +67,7 @@ export default function ToolPreviews() {
     <section id="tools" ref={section} className="relative overflow-hidden bg-[#000B1C] py-16 sm:py-24 text-white scroll-mt-28">
       <div
         className="absolute inset-0 transition-[background] duration-700"
-        style={{ background: `radial-gradient(ellipse at 75% 45%, ${tool.glow}33, transparent 55%)` }}
+        style={{ background: `radial-gradient(ellipse at 75% 45%, ${tool.glow}1A, transparent 55%)` }}
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-dotgrid-dark opacity-60" aria-hidden="true" />
@@ -134,18 +134,11 @@ export default function ToolPreviews() {
           {/* Clip */}
           <div className="lg:col-span-8" id="tool-panel" role="tabpanel" aria-labelledby={`tool-tab-${tool.key}`}>
             <div className="relative">
-              <div
-                className="absolute -inset-6 rounded-[2rem] blur-3xl opacity-40 transition-colors duration-700"
-                style={{ backgroundColor: tool.glow }}
-                aria-hidden="true"
-              />
-              <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-[#001532] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)]">
+              <div className="relative overflow-hidden border border-white/15 border-t-4 bg-[#001532] transition-colors duration-500"
+                style={{ borderTopColor: tool.glow }}>
                 {/* Window bar */}
                 <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
-                  <span className="h-3 w-3 rounded-full bg-[#FF5F57]" aria-hidden="true" />
-                  <span className="h-3 w-3 rounded-full bg-[#FEBC2E]" aria-hidden="true" />
-                  <span className="h-3 w-3 rounded-full bg-[#28C840]" aria-hidden="true" />
-                  <span className="ml-3 text-sm font-semibold text-gray-300">{tool.name}</span>
+                  <span className="text-sm font-semibold text-gray-300">{tool.name}</span>
                 </div>
                 <div className="relative aspect-[960/570]">
                   <video
@@ -170,20 +163,16 @@ export default function ToolPreviews() {
                   </video>
                   {/* Only a peek: the bottom fades out */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#001532] via-[#001532]/70 to-transparent" aria-hidden="true" />
-                  <span className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/25 bg-[#001532]/80 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md">
-                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                      <rect x="5" y="11" width="14" height="10" rx="2" />
-                      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                    </svg>
-                    The full toolkit unlocks in class
-                  </span>
+                  <p className="absolute bottom-4 inset-x-0 text-center text-sm font-semibold text-white">
+                    The full toolkit unlocks in class.
+                  </p>
                 </div>
               </div>
             </div>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <Link
                 href={trial ? "#free-trial" : "#book"}
-                className="inline-flex items-center rounded-full bg-[#F4D734] px-7 py-3.5 text-lg font-bold text-[#001532] shadow-[0_0_40px_-8px_rgba(244,215,52,0.7)] hover:bg-white transition-colors"
+                className="inline-flex items-center bg-[#F4D734] px-7 py-3.5 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
               >
                 {trial ? "Try it in a free class" : "Enroll your child"}
               </Link>

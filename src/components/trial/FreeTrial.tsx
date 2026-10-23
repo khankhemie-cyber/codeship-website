@@ -50,7 +50,7 @@ export default function FreeTrial() {
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {PROGRAMS.map((p, i) => (
             <Reveal key={p.slug} delay={i * 80} className="h-full">
-              <div className="group relative flex h-full flex-col bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_-20px_rgba(0,21,50,0.35)]">
+              <div className="group relative flex h-full flex-col bg-white shadow-sm transition-shadow hover:shadow-xl">
                 <div
                   className="flex items-center justify-between px-5 py-3"
                   style={{ backgroundColor: LEVEL_ACCENT[p.slug], color: ON_ACCENT[p.slug] }}
@@ -70,12 +70,12 @@ export default function FreeTrial() {
                       href={TRIAL_LINKS[p.slug]}
                       onClick={() => trackTrialClick({ program: p.slug })}
                       aria-label={`Book a free ${p.level} trial class`}
-                      className="mt-4 inline-flex items-center justify-center whitespace-nowrap rounded-full bg-[#001532] px-5 py-3 text-base font-bold text-white transition-colors hover:bg-[#F4D734] hover:text-[#001532]"
+                      className="mt-4 inline-flex items-center justify-center whitespace-nowrap bg-[#001532] px-5 py-3 text-base font-bold text-white transition-colors hover:bg-[#F4D734] hover:text-[#001532]"
                     >
                       Book free trial →
                     </a>
                   ) : (
-                    <span className="mt-4 inline-flex cursor-not-allowed items-center justify-center rounded-full border-2 border-dashed border-gray-300 px-5 py-2.5 text-base font-bold text-gray-500">
+                    <span className="mt-4 inline-flex cursor-not-allowed items-center justify-center border-2 border-gray-300 px-5 py-2.5 text-base font-bold text-gray-500">
                       Opens Nov 1
                     </span>
                   )}
@@ -92,9 +92,7 @@ export default function FreeTrial() {
             <ol className="mt-5 space-y-5">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="flex gap-4">
-                  <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#F4D734] font-display text-lg font-extrabold text-[#001532]">
-                    {i + 1}
-                  </span>
+                  <span className="w-6 flex-none font-display text-2xl font-extrabold text-[#0F6F7C]">{i + 1}</span>
                   <div>
                     <p className="text-lg font-bold text-[#001532]">{s.title}</p>
                     <p className="text-base text-gray-600">{s.desc}</p>
@@ -108,8 +106,7 @@ export default function FreeTrial() {
               <h3 className="font-display text-xl font-bold text-[#001532]">The fine print</h3>
               <ul className="mt-4 space-y-3">
                 {TRIAL_TERMS.map((t) => (
-                  <li key={t} className="flex gap-3 text-base text-gray-700">
-                    <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[#0F6F7C]" aria-hidden="true" />
+                  <li key={t} className="text-base text-gray-700">
                     {t}
                   </li>
                 ))}

@@ -10,13 +10,9 @@ export default function TrialBanner() {
   return (
     <Link
       href="#free-trial"
-      className="group relative block overflow-hidden bg-[#F4D734] px-4 py-3 text-center text-base font-bold text-[#001532]"
+      className="group block bg-[#F4D734] px-4 py-3 text-center text-base font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
     >
-      <span className="shimmer absolute inset-0" aria-hidden="true" />
-      <span className="relative">
-        <span className="mr-2 inline-block bg-[#001532] px-2 py-0.5 text-xs uppercase tracking-widest text-[#F4D734] align-middle">
-          New
-        </span>
+      <span>
         Free trial class this November · Online or in person ·{" "}
         {phase === "open" ? "Claim yours" : "Booking opens Nov 1"}
         <span className="inline-block transition-transform group-hover:translate-x-1"> →</span>

@@ -258,9 +258,8 @@
 }
 
 /* ── Home hero cube ──
-   Four sides turn a quarter at a time (hold, turn, hold…). The glow, the floor
-   reflection and the caption share the same 16s timeline so they change with
-   the side that faces forward. */
+   Four sides turn a quarter at a time (hold, turn, hold…). The caption shares
+   the same 16s timeline so it changes with the side that faces forward. */
 .cube-stage {
   --s: 200px;
   --lean-x: 0deg;
@@ -292,7 +291,7 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.35);
   background: #001532;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35), 0 0 30px -6px var(--glow, #F4D734);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
   backface-visibility: hidden;
 }
 .cube-face::after {
@@ -314,9 +313,8 @@
 .cube-face-top { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
 .cube-face-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
 
-.cube-glow,
-.cube-floor { animation: cubeGlow 16s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
-.cube-floor { opacity: 0.55; }
+
+.cube-floor { background: rgba(0, 0, 0, 0.7); }
 
 .cube-caption { opacity: 0; animation: cubeCaption 16s linear infinite; }
 .cube-caption-1 { animation-delay: 4s; }
@@ -330,13 +328,6 @@
   75%, 93%  { transform: rotateX(-12deg) rotateY(-290deg); }
   100%      { transform: rotateX(-12deg) rotateY(-380deg); }
 }
-@keyframes cubeGlow {
-  0%, 18%   { background-color: #F4D734; }
-  25%, 43%  { background-color: #19B3C4; }
-  50%, 68%  { background-color: #9B6BE0; }
-  75%, 93%  { background-color: #F4D734; }
-  100%      { background-color: #F4D734; }
-}
 @keyframes cubeCaption {
   0%        { opacity: 0; transform: translateY(6px); }
   3%, 20%   { opacity: 1; transform: translateY(0); }
@@ -348,9 +339,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cube, .cube-float, .cube-glow, .cube-floor { animation: none; }
+  .cube, .cube-float { animation: none; }
   .cube { transform: rotateX(-12deg) rotateY(-20deg); }
-  .cube-glow, .cube-floor { background-color: #F4D734; }
   .cube-caption { animation: none; }
   .cube-caption-0 { opacity: 1; }
 }

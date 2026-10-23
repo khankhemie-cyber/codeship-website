@@ -6,12 +6,12 @@ import Link from "next/link";
 import { useTrialPhase } from "@/components/trial/useTrialPhase";
 import { startDates } from "@/lib/booking";
 
-/** The cube's four sides, in spin order, each with the glow it casts. */
+/** The cube's four sides, in spin order. */
 const FACES = [
-  { src: "/previews/blocks.jpg", alt: "", label: "Block coding", sub: "Explorers · K–Grade 1", glow: "#F4D734" },
-  { src: "/previews/launchpad.jpg", alt: "", label: "HTML & CSS", sub: "Builders · Grades 2–3", glow: "#19B3C4" },
-  { src: "/previews/python.jpg", alt: "", label: "Python", sub: "Engineers · Grades 6–8", glow: "#9B6BE0" },
-  { src: null, alt: "", label: "Free trial class", sub: "November only", glow: "#F4D734" },
+  { src: "/previews/blocks.jpg", alt: "", label: "Block coding", sub: "Explorers · K–Grade 1" },
+  { src: "/previews/launchpad.jpg", alt: "", label: "HTML & CSS", sub: "Builders · Grades 2–3" },
+  { src: "/previews/python.jpg", alt: "", label: "Python", sub: "Engineers · Grades 6–8" },
+  { src: null, alt: "", label: "Free trial class", sub: "November only" },
 ];
 
 /** In-page chapters, the hero's quick way into the page. */
@@ -23,7 +23,7 @@ export const CHAPTERS = [
 ];
 
 /**
- * Home hero: one glowing object on a dark stage, a short promise and two
+ * Home hero: one object on a dark stage, a short promise and two
  * clear next steps. The cube shows a sliver of each student tool; it turns on
  * its own and leans toward the pointer. Motion stops for reduced-motion users.
  */
@@ -51,8 +51,6 @@ export default function Hero() {
       onPointerMove={lean}
       onPointerLeave={settle}
     >
-      {/* Stage lighting */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,rgba(19,138,154,0.28),transparent_55%),radial-gradient(ellipse_at_10%_90%,rgba(110,67,168,0.22),transparent_50%)]" aria-hidden="true" />
       <div className="absolute inset-0 bg-dotgrid-dark opacity-60" aria-hidden="true" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10 lg:pt-20">
@@ -62,19 +60,15 @@ export default function Hero() {
             {trial ? (
               <Link
                 href="#free-trial"
-                className="inline-flex items-center gap-2 rounded-full border border-[#F4D734]/50 bg-[#F4D734]/10 px-4 py-1.5 text-sm font-bold uppercase tracking-[0.15em] text-[#F4D734] backdrop-blur-sm hover:bg-[#F4D734]/20 transition-colors"
+                className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734] border-b-2 border-[#F4D734]/40 pb-1 hover:border-[#F4D734] transition-colors"
               >
-                <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#F4D734] opacity-60 animate-ping" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#F4D734]" />
-                </span>
                 {phase === "open" ? "November only · Free trial class" : "Free trial class · Opens Nov 1"}
               </Link>
             ) : (
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#5FD3E0]">Coding · AI · STEM</p>
             )}
 
-            <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.05] tracking-tight mt-6 [text-shadow:0_4px_30px_rgba(0,0,0,0.5)]">
+            <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.05] tracking-tight mt-6">
               {trial ? (
                 <>
                   Your child&apos;s first coding class is <span className="text-[#F4D734]">on us.</span>
@@ -92,13 +86,13 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link
                 href={trial ? "#free-trial" : "#book"}
-                className="inline-flex items-center rounded-full bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] shadow-[0_0_40px_-6px_rgba(244,215,52,0.7)] hover:bg-white hover:shadow-[0_0_50px_-4px_rgba(255,255,255,0.6)] transition-all"
+                className="inline-flex items-center bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
               >
                 {phase === "open" ? "Claim a free class" : trial ? "See the free trial" : "Enroll now"}
               </Link>
               <Link
                 href="#tools"
-                className="inline-flex items-center rounded-full border border-white/40 bg-white/5 px-7 py-[15px] text-lg font-semibold text-white backdrop-blur-md hover:border-white hover:bg-white/10 transition-colors"
+                className="inline-flex items-center border-2 border-white/60 px-7 py-[14px] text-lg font-semibold text-white hover:bg-white hover:text-[#001532] transition-colors"
               >
                 Peek inside our tools
               </Link>
@@ -113,12 +107,11 @@ export default function Hero() {
           {/* The cube */}
           <div className="lg:col-span-6 flex flex-col items-center">
             <div ref={stage} className="cube-stage relative flex h-[320px] w-full items-center justify-center sm:h-[400px]">
-              <div className="cube-glow absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-60 sm:h-72 sm:w-72" aria-hidden="true" />
               <div className="cube-lean">
                 <div className="cube-float">
                   <div className="cube" aria-hidden="true">
                     {FACES.map((f, i) => (
-                      <div key={f.label} className={`cube-face cube-face-${i}`} style={{ ["--glow" as string]: f.glow }}>
+                      <div key={f.label} className={`cube-face cube-face-${i}`}>
                         {f.src ? (
                           <Image src={f.src} alt={f.alt} fill sizes="300px" className="object-cover object-left-top" priority={i === 0} />
                         ) : (
