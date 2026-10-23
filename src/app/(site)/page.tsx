@@ -27,7 +27,7 @@ const homeFaqs = [
   {
     question: "How does the free trial class work?",
     answer:
-      "Book one free trial class for your child in November 2026 and attend it in November. It works for in-person classes in Oshawa and live online classes. There is one free trial class per student, in one program.",
+      "Book one free trial class for your child any time up to November 30, 2026, and take the class in November. It works for in-person classes in Oshawa and live online classes. There is one free trial class per student, in one program.",
   },
   {
     question: "What are the Saturday class times?",

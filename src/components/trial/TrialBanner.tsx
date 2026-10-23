@@ -13,8 +13,7 @@ export default function TrialBanner() {
       className="group block bg-[#F4D734] px-4 py-3 text-center text-base font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
     >
       <span>
-        Free trial class this November · Online or in person ·{" "}
-        {phase === "open" ? "Claim yours" : "Booking opens Nov 1"}
+        Free trial class this November · Online or in person · Claim yours
         <span className="inline-block transition-transform group-hover:translate-x-1"> →</span>
       </span>
     </Link>

@@ -62,7 +62,7 @@ export default function Hero() {
                 href="#free-trial"
                 className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734] border-b-2 border-[#F4D734]/40 pb-1 hover:border-[#F4D734] transition-colors"
               >
-                {phase === "open" ? "November only · Free trial class" : "Free trial class · Opens Nov 1"}
+                November only · Free trial class
               </Link>
             ) : (
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#5FD3E0]">Coding · AI · STEM</p>
@@ -88,7 +88,7 @@ export default function Hero() {
                 href={trial ? "#free-trial" : "#book"}
                 className="inline-flex items-center bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
               >
-                {phase === "open" ? "Claim a free class" : trial ? "See the free trial" : "Enroll now"}
+                {trial ? "Claim a free class" : "Enroll now"}
               </Link>
               <Link
                 href="#tools"
@@ -99,7 +99,7 @@ export default function Hero() {
             </div>
             <p className="mt-5 text-sm text-gray-400">
               {trial
-                ? "Register and attend in November 2026 · 1 free class per student"
+                ? "Book by Nov 30 · Class taken in November 2026 · 1 free class per student"
                 : `November semester starts ${startDates("inperson", "november")} in person and ${startDates("online", "november")} online.`}
             </p>
           </div>

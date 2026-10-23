@@ -17,8 +17,8 @@ const ON_ACCENT: Record<string, string> = {
 
 const STEPS = [
   { title: "Pick your child's grade", desc: "Each grade band has its own program and tools." },
-  { title: "Register for free", desc: "Book your spot during November. It takes a minute." },
-  { title: "Come to class", desc: "Join in person in Oshawa or live online, in November." },
+  { title: "Register for free", desc: "Book any time up to November 30. It takes a minute." },
+  { title: "Come to class", desc: "Take your free class in November, in person in Oshawa or live online." },
 ];
 
 /**
@@ -28,7 +28,6 @@ const STEPS = [
 export default function FreeTrial() {
   const phase = useTrialPhase();
   if (phase === "closed") return null;
-  const open = phase === "open";
 
   return (
     <section id="free-trial" className="relative overflow-hidden bg-[#FAF8F4] bg-dotgrid py-16 sm:py-24 scroll-mt-28">
@@ -42,7 +41,6 @@ export default function FreeTrial() {
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 mt-5">
             See how your child learns with us before you commit to a semester.
-            {!open && " Booking opens November 1."}
           </p>
         </Reveal>
 
@@ -65,20 +63,14 @@ export default function FreeTrial() {
                     <span className="font-display text-3xl font-extrabold">Free</span>
                     <span className="text-sm text-gray-500">1 trial class</span>
                   </p>
-                  {open ? (
-                    <a
-                      href={TRIAL_LINKS[p.slug]}
-                      onClick={() => trackTrialClick({ program: p.slug })}
-                      aria-label={`Book a free ${p.level} trial class`}
-                      className="mt-4 inline-flex items-center justify-center whitespace-nowrap bg-[#001532] px-5 py-3 text-base font-bold text-white transition-colors hover:bg-[#F4D734] hover:text-[#001532]"
-                    >
-                      Book free trial →
-                    </a>
-                  ) : (
-                    <span className="mt-4 inline-flex cursor-not-allowed items-center justify-center border-2 border-gray-300 px-5 py-2.5 text-base font-bold text-gray-500">
-                      Opens Nov 1
-                    </span>
-                  )}
+                  <a
+                    href={TRIAL_LINKS[p.slug]}
+                    onClick={() => trackTrialClick({ program: p.slug })}
+                    aria-label={`Book a free ${p.level} trial class`}
+                    className="mt-4 inline-flex items-center justify-center whitespace-nowrap bg-[#001532] px-5 py-3 text-base font-bold text-white transition-colors hover:bg-[#F4D734] hover:text-[#001532]"
+                  >
+                    Book free trial →
+                  </a>
                 </div>
               </div>
             </Reveal>
