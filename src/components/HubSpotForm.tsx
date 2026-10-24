@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 interface Props {
   formId: string;
@@ -74,6 +75,10 @@ export default function HubSpotForm({
           Questions? Email us at{" "}
           <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
             admin@codeshipacademy.com
+          </a>{" "}
+          or call{" "}
+          <a href={PHONE_HREF} className="text-[#0F6F7C] hover:underline">
+            {PHONE_DISPLAY}
           </a>
         </p>
       </div>

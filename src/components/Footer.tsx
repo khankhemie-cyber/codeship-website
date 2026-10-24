@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { IN_PERSON_VENUE } from "@/data/locations";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 const COLUMNS = [
   {
@@ -65,6 +66,9 @@ export default function Footer() {
               className="block mt-3 text-base text-gray-300 hover:text-[#F4D734] transition-colors"
             >
               admin@codeshipacademy.com
+            </a>
+            <a href={PHONE_HREF} className="block mt-2 text-base text-gray-300 hover:text-[#F4D734] transition-colors">
+              {PHONE_DISPLAY}
             </a>
             <a
               href="https://www.instagram.com/codeshipacademy"

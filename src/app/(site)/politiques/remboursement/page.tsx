@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BASE_URL, DEFAULT_OG_IMAGE } from "@/lib/pageMetadata";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 const TITLE = "Politique de remboursement | CODEship Academy";
 const DESCRIPTION = "La politique de remboursement de CODEship Academy pour les inscriptions traitées par Stripe.";
@@ -99,6 +100,10 @@ export default function PolitiqueRemboursementPage() {
                 communiquez avec nous à :{" "}
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
+                </a>{" "}
+                ou{" "}
+                <a href={PHONE_HREF} className="text-[#0F6F7C] hover:underline">
+                  {PHONE_DISPLAY}
                 </a>
               </p>
             </div>

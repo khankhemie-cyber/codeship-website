@@ -4,10 +4,11 @@ import ContactForm from "@/components/ContactForm";
 import { PageHero, Section } from "@/components/ui/Page";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { IN_PERSON_VENUE } from "@/data/locations";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact Us in Oshawa",
-  description: `Questions about classes, camps, parties or schools? Email admin@codeshipacademy.com or visit us at ${IN_PERSON_VENUE.full}.`,
+  description: `Questions about classes, camps, parties or schools? Email admin@codeshipacademy.com, call ${PHONE_DISPLAY} or visit us at ${IN_PERSON_VENUE.full}.`,
   path: "/contact",
 });
 
@@ -28,6 +29,12 @@ export default function ContactPage() {
               <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Email</h2>
               <a href="mailto:admin@codeshipacademy.com" className="block text-xl font-bold text-[#001532] mt-2 hover:text-[#138A9A]">
                 admin@codeshipacademy.com
+              </a>
+            </div>
+            <div>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500">Phone</h2>
+              <a href={PHONE_HREF} className="block text-xl font-bold text-[#001532] mt-2 hover:text-[#138A9A]">
+                {PHONE_DISPLAY}
               </a>
             </div>
             <div>

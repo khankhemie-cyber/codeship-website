@@ -6,6 +6,7 @@ import { PROGRAM_LINKS, ageLabel, type ProgramLevel } from "@/lib/payment-links"
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { CLASSES_PER_SEMESTER } from "@/config/offering";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 /**
  * Per-program Semester 1 content for the post-payment page. Project names and
@@ -204,6 +205,10 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
               Questions? Email us at{" "}
               <a href="mailto:admin@codeshipacademy.com" className="text-[#2E8C8C] font-semibold hover:underline">
                 admin@codeshipacademy.com
+              </a>{" "}
+              or call{" "}
+              <a href={PHONE_HREF} className="text-[#2E8C8C] font-semibold hover:underline">
+                {PHONE_DISPLAY}
               </a>
             </p>
             <p className="text-[#0D1B2A] font-bold text-sm uppercase tracking-widest mt-4">Dream. Code. Achieve.</p>

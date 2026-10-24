@@ -1,5 +1,6 @@
 import { FLAT_PRICE_CAD } from "@/config/offering";
 import { IN_PERSON_VENUE } from "@/data/locations";
+import { PHONE_E164 } from "@/config/contact";
 
 export function organizationSchema() {
   return {
@@ -8,6 +9,7 @@ export function organizationSchema() {
     name: "CODEship Academy",
     url: "https://www.codeshipacademy.com",
     logo: "https://www.codeshipacademy.com/logo-nav.png",
+    telephone: PHONE_E164,
     description:
       "CODEship Academy teaches coding, AI and STEM to kids in K–Grade 8. Classes run Saturdays at Core21, 21 Simcoe St South, Oshawa, and live online across Canada.",
     address: {
@@ -30,6 +32,7 @@ export function organizationSchema() {
       "@type": "ContactPoint",
       contactType: "customer service",
       email: "admin@codeshipacademy.com",
+      telephone: PHONE_E164,
     },
     sameAs: [
       "https://www.instagram.com/codeshipacademy",

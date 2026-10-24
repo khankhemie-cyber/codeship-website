@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
 
 export const metadata: Metadata = pageMetadata({
   title: "Terms of Service | CODEship Academy",
@@ -89,6 +90,10 @@ export default function TermsPage() {
                 Questions about these terms should be directed to:{" "}
                 <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] hover:underline">
                   admin@codeshipacademy.com
+                </a>{" "}
+                or{" "}
+                <a href={PHONE_HREF} className="text-[#0F6F7C] hover:underline">
+                  {PHONE_DISPLAY}
                 </a>
               </p>
             </div>
