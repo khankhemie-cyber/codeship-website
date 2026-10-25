@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Icon } from "../launchpad/icons";
 import { playCheer, playPop, stopAllSounds, unlockAudio } from "./audio";
 import type { LabelMode } from "./blockDefs";
@@ -10,6 +10,7 @@ import { costumeUrl } from "./costumes";
 import { Engine } from "./engine";
 import { THING_TOOLTIPS, type Strings, type UiLang } from "./i18n";
 import { toJavaScript } from "./javascript";
+import { CodePanel, ShowCodeSwitch, useShowCode } from "./CodeView";
 import { HERO_ID, LEVELS, LevelRules, levelById, levelProject, levelThings, semesterOpen, startRun, starterScripts, type Level } from "./levels";
 import type { Project, Scripts } from "./model";
 import { LEVEL_PROMPTS, canSpeak, speak } from "./levelPrompts";
@@ -33,7 +34,6 @@ const BlocksEditor = dynamic(() => import("./BlocksEditor"), {
 });
 
 const PROGRESS_KEY = "codeship-blocks-levels";
-const SHOW_CODE_KEY = "codeship-blocks-show-code";
 const SEMESTER_COLOURS = ["#D58401", "#035762", "#4E2B6F", "#012C61"];
 
 type Progress = { done: Record<string, true>; blocks: Record<string, Scripts> };
@@ -64,7 +64,7 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
   const [armed, setArmed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const [speechOk, setSpeechOk] = useState(false);
-  const [showCode, setShowCode] = useState(false);
+  const [showCode, toggleCode] = useShowCode();
   const [, setFrame] = useState(0);
   const engineRef = useRef<Engine | null>(null);
   const rulesRef = useRef<LevelRules | null>(null);
@@ -76,9 +76,6 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
   useEffect(() => {
     setProgress(readProgress());
     setSpeechOk(canSpeak());
-    try {
-      setShowCode(localStorage.getItem(SHOW_CODE_KEY) === "1");
-    } catch {}
     return () => {
       if (canSpeak()) window.speechSynthesis.cancel();
     };
@@ -93,14 +90,6 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
   }, []);
 
   const level = levelId ? levelById(levelId) : undefined;
-
-  const toggleCode = () =>
-    setShowCode((on) => {
-      try {
-        localStorage.setItem(SHOW_CODE_KEY, on ? "0" : "1");
-      } catch {}
-      return !on;
-    });
 
   const startLevel = useCallback((l: Level) => {
     stopAllSounds();
@@ -339,24 +328,7 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
         <button type="button" onClick={() => editorApi.current?.redo()} className={ctrlBtn} aria-label={s.redo} title={s.redo}>
           <Icon name="redo" className="h-5 w-5" />
         </button>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={showCode}
-          onClick={toggleCode}
-          className={`ml-auto ${ctrlBtn} ${showCode ? "!border-[#D58401] !bg-[#D58401]/20" : ""}`}
-          title={s.showCodeHint}
-          aria-label={s.showCodeHint}
-          data-testid="show-code"
-        >
-          <span aria-hidden="true" className="font-mono text-sm font-bold text-[#F5B544]">
-            {"</>"}
-          </span>
-          <span className="hidden lg:inline">{s.showCode}</span>
-          <span aria-hidden="true" className={`relative h-6 w-10 rounded-full transition ${showCode ? "bg-[#2EB84B]" : "bg-white/25"}`}>
-            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${showCode ? "left-[18px]" : "left-0.5"}`} />
-          </span>
-        </button>
+        <ShowCodeSwitch s={s} on={showCode} onToggle={toggleCode} className="ml-auto" />
         <button
           type="button"
           onClick={resetLevel}
@@ -414,21 +386,7 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
               />
             )}
           </div>
-          {showCode && (
-            <div className="flex max-h-[40%] min-h-[120px] flex-col border-x-4 border-b-4 border-[#D58401] bg-[#06142E]" data-testid="code-panel">
-              <div className="flex items-center gap-2 border-b border-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white/70">
-                <span aria-hidden="true" className="font-mono text-[#F5B544]">
-                  {"</>"}
-                </span>
-                {s.codeTitle}
-              </div>
-              <pre className="min-h-0 flex-1 overflow-auto px-3 py-2 font-mono text-sm leading-relaxed text-[#E6ECF4]" lang="en" data-testid="code-text">
-                <code>
-                  <Highlighted code={code} />
-                </code>
-              </pre>
-            </div>
-          )}
+          {showCode && <CodePanel s={s} code={code} className="border-x-4 border-b-4 border-[#D58401]" />}
         </section>
 
         <section className="flex min-h-0 flex-col gap-2 border-white/10 bg-[#010F2A] p-2 md:border-l">
@@ -575,26 +533,6 @@ export default function LevelsMode({ s, lang, mode, unlockAll }: Props) {
 }
 
 const EMPTY = new Set<string>();
-
-/** Light syntax colouring for the generated JavaScript (comments, keywords, strings, numbers, calls). */
-const TOKEN = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(for|let)\b|\b(\d+)\b|([A-Za-z_]\w*)(?=\()/gm;
-function Highlighted({ code }: { code: string }) {
-  const parts: ReactNode[] = [];
-  let last = 0;
-  for (const m of code.matchAll(TOKEN)) {
-    const i = m.index ?? 0;
-    if (i > last) parts.push(code.slice(last, i));
-    const colour = m[1] ? "#7D8BA3" : m[2] ? "#7EE0A1" : m[3] ? "#C792EA" : m[4] ? "#F5B544" : "#6CC4FF";
-    parts.push(
-      <span key={i} style={{ color: colour, fontStyle: m[1] ? "italic" : undefined }}>
-        {m[0]}
-      </span>,
-    );
-    last = i + m[0].length;
-  }
-  parts.push(code.slice(last));
-  return <>{parts}</>;
-}
 
 /** Keeps hyphenated words ("Montre-toi", "Cache-toi") on one line, so a beginning reader sees the whole word. */
 function Readable({ text }: { text: string }) {

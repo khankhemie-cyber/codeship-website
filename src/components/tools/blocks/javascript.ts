@@ -1,6 +1,6 @@
 /**
  * The JavaScript behind a character's blocks, for the "Show JavaScript"
- * switch in Levels. Read-only: children never type it, it just shows that
+ * switch in Create and Levels. Read-only: children never type it, it just shows that
  * every block is a line of real code (a Repeat is a `for` loop, a Start
  * block is an event handler).
  *
