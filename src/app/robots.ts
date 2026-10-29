@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/"],
+        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/", "/quizzes/"],
       },
       // Explicit AI-crawler allowances for 2026 GEO discovery (ChatGPT,
       // Claude, Perplexity, Gemini's Google-Extended, Apple, Copilot via Bing,
@@ -24,7 +24,7 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
         allow: "/",
-        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/"],
+        disallow: ["/franchise/", "/lp/", "/tools/", "/workbooks/", "/quizzes/"],
       })),
     ],
     sitemap: "https://www.codeshipacademy.com/sitemap.xml",

@@ -77,7 +77,7 @@ export async function decryptWorkbook(program: ProgramSlug, data: ArrayBuffer) {
   );
 }
 
-async function hmacHex(key: string, message: string) {
+export async function hmacHex(key: string, message: string) {
   const enc = new TextEncoder();
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
