@@ -10,17 +10,18 @@
  */
 
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { QUIZZES, type Quiz } from "@/data/quizzes";
+import { QUIZZES, type CodeLanguage, type Quiz } from "@/data/quizzes";
 import type { ProgramSlug } from "@/data/programs";
 import { hmacHex, safeEqual } from "@/lib/workbooks";
 
 export type PublicQuestion =
   | { id: string; type: "choice"; prompt: string; code?: string; options: string[] }
-  | { id: string; type: "short"; prompt: string; code?: string };
+  | { id: string; type: "short"; prompt: string; code?: string }
+  | { id: string; type: "code"; prompt: string; language: CodeLanguage; hint?: string; starter?: string };
 
 export type PublicQuiz = Omit<Quiz, "questions"> & { questions: PublicQuestion[] };
 
-/** A student's answers: an option index for "choice", text for "short". */
+/** A student's answers: an option index for "choice", text for "short" and "code". */
 export type QuizAnswers = Record<string, number | string>;
 
 export interface QuizSubmission {
@@ -39,6 +40,7 @@ export interface QuizSubmission {
 
 export const MAX_NAME_LENGTH = 60;
 export const MAX_SHORT_ANSWER_LENGTH = 1000;
+export const MAX_CODE_ANSWER_LENGTH = 5000;
 
 /** Stable id across programs, e.g. "builders/s1-quiz-1". */
 export function quizId(quiz: Pick<Quiz, "program" | "slug">) {
@@ -57,15 +59,24 @@ export function getQuizById(id: string) {
   return QUIZZES.find((q) => quizId(q) === id);
 }
 
-/** The quiz without its answer key: the only shape that may reach a student's browser. */
+/**
+ * The quiz without its answer key or model answers: the only shape that may
+ * reach a student's browser. Fields are listed one by one so a new secret
+ * field can't slip through.
+ */
 export function toPublicQuiz(quiz: Quiz): PublicQuiz {
   return {
     ...quiz,
-    questions: quiz.questions.map((q) =>
-      q.type === "choice"
-        ? { id: q.id, type: q.type, prompt: q.prompt, code: q.code, options: q.options }
-        : { id: q.id, type: q.type, prompt: q.prompt, code: q.code },
-    ),
+    questions: quiz.questions.map((q): PublicQuestion => {
+      switch (q.type) {
+        case "choice":
+          return { id: q.id, type: q.type, prompt: q.prompt, code: q.code, options: q.options };
+        case "short":
+          return { id: q.id, type: q.type, prompt: q.prompt, code: q.code };
+        case "code":
+          return { id: q.id, type: q.type, prompt: q.prompt, language: q.language, hint: q.hint, starter: q.starter };
+      }
+    }),
   };
 }
 
@@ -92,6 +103,12 @@ export function markQuiz(quiz: Quiz, raw: unknown) {
       correct[q.id] = value === q.answer;
       maxScore++;
       if (correct[q.id]) score++;
+    } else if (q.type === "code") {
+      if (typeof value !== "string") return null;
+      // Keep leading indentation: it matters in Python.
+      const code = value.trimEnd();
+      if (code.length > MAX_CODE_ANSWER_LENGTH) return null;
+      answers[q.id] = code;
     } else {
       if (typeof value !== "string") return null;
       const text = value.trim();

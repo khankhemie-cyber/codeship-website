@@ -9,7 +9,7 @@ Students take quizzes at **/quizzes/** and submit them online. Instructors see t
   They type their name (and their class, if they want), answer the questions, and press **Submit my quiz**.
 - **Marking:** the server marks the multiple-choice and true/false questions. The student sees their score and which
   questions they got right, but not the correct answers. The answer key never reaches the browser. Written answers
-  go to the instructor without a mark.
+  and code go to the instructor without a mark.
 - **Instructors** open `/quizzes/results/`, enter `QUIZ_INSTRUCTOR_PASSWORD`, choose a quiz, and can filter by class.
   For each student they can open the answers (wrong choices show the right answer), download everything as a CSV
   for Excel or Google Sheets, or delete a submission (for example a test run).
@@ -31,8 +31,22 @@ Until steps 1–3 are done, students see "Quizzes are not switched on yet" and t
 
 ## Editing quizzes
 
-All quizzes are in `src/data/quizzes.ts`: two per program for Semester 1 (week 4 and week 8). Each question is either
-`"choice"` (with `options` and `answer`, the 0-based index of the correct option) or `"short"` (a written answer).
+All quizzes are in `src/data/quizzes.ts`: two per program for Semester 1 (week 4 and week 8).
+
+| Program | Questions | Writing code |
+| --- | --- | --- |
+| Explorers | 10 | none: picture questions on sequencing and debugging, using only the Semester 1 blocks |
+| Builders | 10 | 4 HTML questions |
+| Developers | 20 | 6 JavaScript questions (30%) |
+| Engineers | 20 | 6 Python questions (30%) |
+
+Each question is one of:
+
+- `"choice"`: `options`, plus `answer`, the 0-based index of the correct option. Marked automatically.
+- `"short"`: a written answer for the instructor to read.
+- `"code"`: the student writes code in a code box that starts with `starter`, and sees `hint` as a tip. The instructor
+  sees it next to `sample`, the model answer, and marks it by hand. `answer` and `sample` never reach students' browsers.
+
 Add a quiz by adding an entry. Its page appears at `/quizzes/<program>/<slug>/`.
 
 Don't change the question `id`s of a quiz that students have already taken. Saved answers are stored by id.

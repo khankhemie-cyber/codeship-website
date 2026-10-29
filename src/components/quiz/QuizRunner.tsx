@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ClassPasswordForm, { useClassAccess } from "@/components/ClassPasswordForm";
-import type { PublicQuiz } from "@/lib/quizzes";
+import type { PublicQuestion, PublicQuiz } from "@/lib/quizzes";
 
 interface Props {
   quiz: PublicQuiz;
@@ -84,7 +84,7 @@ export default function QuizRunner({ quiz, level }: Props) {
     setError("");
     try {
       const payload: Answers = {};
-      for (const q of quiz.questions) payload[q.id] = answers[q.id] ?? (q.type === "short" ? "" : -1);
+      for (const q of quiz.questions) payload[q.id] = answers[q.id] ?? (q.type === "choice" ? -1 : q.type === "code" ? (q.starter ?? "") : "");
       const res = await fetch("/api/quizzes/submit/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -121,17 +121,17 @@ export default function QuizRunner({ quiz, level }: Props) {
         <h2 className="font-display text-3xl font-extrabold text-[#001532] mt-2">Great work, {student.name.trim()}!</h2>
         <p className="text-lg text-gray-700 mt-3">
           You got <strong>{result.score}</strong> out of <strong>{result.maxScore}</strong> multiple-choice questions right.
-          {quiz.questions.some((q) => q.type === "short") && " Your instructor will read your written answers."}
+          {quiz.questions.some((q) => q.type !== "choice") && " Your instructor will read your written answers and code."}
         </p>
         <ul className="mt-6 space-y-2">
           {quiz.questions.map((q, i) => (
             <li key={q.id} className="flex gap-3 text-base text-gray-700">
               <span aria-hidden className="w-6 shrink-0 font-bold">
-                {q.type === "short" ? "✎" : result.correct[q.id] ? "✓" : "✗"}
+                {q.type !== "choice" ? "✎" : result.correct[q.id] ? "✓" : "✗"}
               </span>
               <span>
                 <strong>Question {i + 1}:</strong>{" "}
-                {q.type === "short" ? "sent to your instructor" : result.correct[q.id] ? "right" : "not quite. Ask your instructor about it in class."}
+                {q.type !== "choice" ? "sent to your instructor" : result.correct[q.id] ? "right" : "not quite. Ask your instructor about it in class."}
               </span>
             </li>
           ))}
@@ -190,7 +190,7 @@ export default function QuizRunner({ quiz, level }: Props) {
           <legend className="sr-only">Question {i + 1}</legend>
           <p className="text-sm font-bold uppercase tracking-widest text-[#0F6F7C]">Question {i + 1}</p>
           <p className="font-display text-xl font-extrabold text-[#001532] mt-1">{q.prompt}</p>
-          {q.code && (
+          {q.type !== "code" && q.code && (
             <pre className="mt-4 bg-[#001532] text-[#F4F1EA] text-base p-4 overflow-x-auto">
               <code>{q.code}</code>
             </pre>
@@ -215,6 +215,13 @@ export default function QuizRunner({ quiz, level }: Props) {
                 </label>
               ))}
             </div>
+          ) : q.type === "code" ? (
+            <CodeBox
+              question={q}
+              label={`Your code for question ${i + 1}`}
+              value={(answers[q.id] as string | undefined) ?? q.starter ?? ""}
+              onChange={(value) => setAnswers({ ...answers, [q.id]: value })}
+            />
           ) : (
             <textarea
               aria-label={`Answer to question ${i + 1}`}
@@ -241,5 +248,82 @@ export default function QuizRunner({ quiz, level }: Props) {
         {submitting ? "Sending…" : "Submit my quiz"}
       </button>
     </form>
+  );
+}
+
+const LANGUAGE_NAMES = { html: "HTML", javascript: "JavaScript", python: "Python" } as const;
+
+/**
+ * A plain code box. Tab indents (4 spaces for Python, 2 otherwise) so
+ * students can indent like in their editor; Esc then Tab moves on, so the
+ * keyboard is never trapped.
+ */
+function CodeBox({
+  question,
+  label,
+  value,
+  onChange,
+}: {
+  question: Extract<PublicQuestion, { type: "code" }>;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [tabIndents, setTabIndents] = useState(true);
+  const indent = question.language === "python" ? "    " : "  ";
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Escape") {
+      setTabIndents(false);
+      return;
+    }
+    if (e.key !== "Tab" || e.shiftKey || !tabIndents) return;
+    e.preventDefault();
+    const el = e.currentTarget;
+    const { selectionStart: start, selectionEnd: end } = el;
+    onChange(value.slice(0, start) + indent + value.slice(end));
+    requestAnimationFrame(() => el.setSelectionRange(start + indent.length, start + indent.length));
+  };
+
+  return (
+    <div className="mt-4">
+      {question.hint && (
+        <div className="mb-3 border-l-4 border-[#F4D734] bg-[#FFFBE6] px-4 py-3">
+          <p className="text-sm font-bold uppercase tracking-widest text-[#001532]">Tip</p>
+          <p className="text-base text-gray-800 whitespace-pre-wrap font-mono">{question.hint}</p>
+        </div>
+      )}
+      <div className="flex items-center justify-between bg-[#001532] px-4 py-2 text-sm font-bold text-[#F4D734]">
+        <span>{LANGUAGE_NAMES[question.language]}</span>
+        {question.starter !== undefined && value !== question.starter && (
+          <button
+            type="button"
+            onClick={() => window.confirm("Start this question again? Your code here will be replaced.") && onChange(question.starter ?? "")}
+            className="text-white underline font-normal"
+          >
+            Start again
+          </button>
+        )}
+      </div>
+      <textarea
+        aria-label={label}
+        aria-describedby={`${question.id}-keys`}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setTabIndents(true)}
+        maxLength={5000}
+        rows={Math.max(6, value.split("\n").length + 2)}
+        spellCheck={false}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
+        className="block w-full bg-[#0B1E3A] text-[#F4F1EA] font-mono text-base leading-relaxed px-4 py-3 outline-none border-2 border-[#0B1E3A] focus:border-[#138A9A] [tab-size:4]"
+        placeholder="Type your code here"
+      />
+      <p id={`${question.id}-keys`} className="text-sm text-gray-500 mt-1">
+        Tab adds an indent. Press Esc, then Tab, to move to the next question.
+      </p>
+    </div>
   );
 }
