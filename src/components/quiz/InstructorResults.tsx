@@ -212,6 +212,24 @@ function SubmissionRow({
                         {q.options[a as number] ?? "—"}
                         {!s.correct[q.id] && <span className="text-gray-500"> (answer: {q.options[q.answer]})</span>}
                       </p>
+                    ) : q.type === "code" ? (
+                      <div className="grid gap-2 lg:grid-cols-2 mt-1">
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Student&apos;s code</p>
+                          {/* The server trims trailing whitespace, so compare without it. */}
+                          {(a as string) && (a as string).trimEnd() !== (q.starter ?? "").trimEnd() ? (
+                            <pre className="bg-[#0B1E3A] text-[#F4F1EA] text-sm p-3 overflow-x-auto">{a as string}</pre>
+                          ) : (
+                            <p className="text-base">
+                              <em className="text-gray-500">Not attempted (starter code left as it was)</em>
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Model answer</p>
+                          <pre className="bg-white border border-gray-200 text-sm p-3 overflow-x-auto">{q.sample}</pre>
+                        </div>
+                      </div>
                     ) : (
                       <p className="text-base whitespace-pre-wrap">{(a as string) || <em className="text-gray-500">No answer</em>}</p>
                     )}
