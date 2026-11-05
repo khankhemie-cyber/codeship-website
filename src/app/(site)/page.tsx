@@ -37,7 +37,7 @@ const homeFaqs = [
   {
     question: "Which semesters can I book?",
     answer:
-      "The October semester runs Oct 3 to Nov 28, 2026. The November semester runs Nov 7, 2026 to Jan 9, 2027. Each has 8 weekly classes.",
+      "The November semester runs Nov 7, 2026 to Jan 9, 2027, and the January semester runs Jan 16 to Mar 6, 2027 (in person, Saturdays). Online, the January semester starts Jan 12 (Tuesdays) or Jan 14 (Thursdays). Each has 8 weekly classes.",
   },
   {
     question: "How much does it cost?",
@@ -203,7 +203,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BookingBand href="#book" detail={`November registration is open. Classes start ${startDates("inperson", "november")} in person and ${startDates("online", "november")} online.`} />
+      <BookingBand href="#book" detail={`November and January registration is open. The January semester starts ${startDates("inperson", "january")} in person and ${startDates("online", "january")} online.`} />
     </>
   );
 }

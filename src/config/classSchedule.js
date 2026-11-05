@@ -4,9 +4,9 @@
  * In-person runs Saturdays; online runs Tuesdays (Explorers/Builders) or
  * Thursdays (Developers/Engineers).
  *
- * Families choose one of two open semesters at checkout: October or
- * November, both at the same weekly day and time. (The September semester is
- * already underway and no longer bookable.) A single Stripe Payment
+ * Families choose one of two open semesters at checkout: November or
+ * January, both at the same weekly day and time. (The September and October
+ * semesters are already underway and no longer bookable.) A single Stripe Payment
  * Link (see src/lib/payment-links.ts) serves every start; the desired start is
  * confirmed by a question on the Stripe checkout, so no per-start links exist.
  *
@@ -19,8 +19,8 @@
 
 /** The enrollment starts open for booking, in display order. */
 export const START_OPTIONS = [
-  { key: "october", label: "October semester" },
   { key: "november", label: "November semester" },
+  { key: "january", label: "January semester" },
 ];
 
 /**
@@ -35,10 +35,10 @@ export function startDate(rangeString) {
 
 /**
  * Compact one-line summary of the open starts for a format slot, e.g.
- * "starts Oct 3 or Nov 7".
+ * "starts Nov 7 or Jan 16".
  */
 export function startsSummary(slot) {
-  return `starts ${startDate(slot.starts.october)} or ${startDate(slot.starts.november)}`;
+  return `starts ${startDate(slot.starts.november)} or ${startDate(slot.starts.january)}`;
 }
 
 export const CLASS_SCHEDULE = {
@@ -47,16 +47,16 @@ export const CLASS_SCHEDULE = {
       days: "Saturdays",
       time: "9:00–10:00 AM ET",
       starts: {
-        october: "Weekly, Oct 3 to Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 to Jan 9, 2027",
+        january: "Weekly, Jan 16 to Mar 6, 2027",
       },
     },
     online: {
       days: "Tuesdays",
-      time: "4:00–5:00 PM ET",
+      time: "4:00–4:55 PM ET",
       starts: {
-        october: "Weekly, Oct 6 to Dec 1, 2026",
         november: "Weekly, Nov 3, 2026 to Jan 5, 2027",
+        january: "Weekly, Jan 12 to Mar 2, 2027",
       },
     },
   },
@@ -65,16 +65,16 @@ export const CLASS_SCHEDULE = {
       days: "Saturdays",
       time: "9:00–10:00 AM ET",
       starts: {
-        october: "Weekly, Oct 3 to Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 to Jan 9, 2027",
+        january: "Weekly, Jan 16 to Mar 6, 2027",
       },
     },
     online: {
       days: "Tuesdays",
       time: "5:00–5:55 PM ET",
       starts: {
-        october: "Weekly, Oct 6 to Dec 1, 2026",
         november: "Weekly, Nov 3, 2026 to Jan 5, 2027",
+        january: "Weekly, Jan 12 to Mar 2, 2027",
       },
     },
   },
@@ -83,16 +83,16 @@ export const CLASS_SCHEDULE = {
       days: "Saturdays",
       time: "11:30 AM–12:30 PM ET",
       starts: {
-        october: "Weekly, Oct 3 to Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 to Jan 9, 2027",
+        january: "Weekly, Jan 16 to Mar 6, 2027",
       },
     },
     online: {
       days: "Thursdays",
       time: "4:00–4:55 PM ET",
       starts: {
-        october: "Weekly, Oct 1 to Nov 26, 2026",
         november: "Weekly, Nov 5, 2026 to Jan 7, 2027",
+        january: "Weekly, Jan 14 to Mar 4, 2027",
       },
     },
   },
@@ -101,16 +101,16 @@ export const CLASS_SCHEDULE = {
       days: "Saturdays",
       time: "11:30 AM–12:30 PM ET",
       starts: {
-        october: "Weekly, Oct 3 to Nov 28, 2026",
         november: "Weekly, Nov 7, 2026 to Jan 9, 2027",
+        january: "Weekly, Jan 16 to Mar 6, 2027",
       },
     },
     online: {
       days: "Thursdays",
       time: "5:00–5:55 PM ET",
       starts: {
-        october: "Weekly, Oct 1 to Nov 26, 2026",
         november: "Weekly, Nov 5, 2026 to Jan 7, 2027",
+        january: "Weekly, Jan 14 to Mar 4, 2027",
       },
     },
   },

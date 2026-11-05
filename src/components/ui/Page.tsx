@@ -147,7 +147,7 @@ export function BookingBand({
   title = "Ready to enroll?",
   href = "/#book",
   label = "Enroll Now",
-  detail = `Saturdays at ${IN_PERSON_VENUE.full}. October and November semesters are open.`,
+  detail = `Saturdays at ${IN_PERSON_VENUE.full}. November and January semesters are open.`,
 }: {
   title?: string;
   href?: string;

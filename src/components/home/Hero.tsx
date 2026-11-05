@@ -100,7 +100,7 @@ export default function Hero() {
             <p className="mt-5 text-sm text-gray-400">
               {trial
                 ? "Book by Nov 30 · Class taken in November 2026 · 1 free class per student"
-                : `November semester starts ${startDates("inperson", "november")} in person and ${startDates("online", "november")} online.`}
+                : `January semester starts ${startDates("inperson", "january")} in person and ${startDates("online", "january")} online.`}
             </p>
           </div>
 

@@ -12,8 +12,9 @@
 > Clarington). Explorers and Builders meet 9:00-10:00 AM; Developers and
 > Engineers meet 11:30 AM-12:30 PM. Classes also run live online across
 > Canada (Tuesdays for Explorers/Builders, Thursdays for Developers/Engineers,
-> 4-6 PM ET). The November 2026 semester (Nov 7, 2026 - Jan 9, 2027) is open
-> for booking. Free trial class (November 2026 only): one free trial class per
+> 4-6 PM ET). The November 2026 semester (Nov 7, 2026 - Jan 9, 2027) and the
+> January 2027 semester (Jan 16 - Mar 6, 2027 in person; online from Jan 12 or
+> Jan 14) are open for booking. Free trial class (November 2026 only): one free trial class per
 > student, in one program, booked any time up to November 30, 2026 and taken
 > in November 2026, valid for in-person and online classes. In-person classes in Toronto, Mississauga,
 > Brampton, Markham, Scarborough, Vaughan, Milton, Calgary, Edmonton,
@@ -51,7 +52,7 @@
 
 - [All locations](https://www.codeshipacademy.com/locations)
 - [Oshawa (in person)](https://www.codeshipacademy.com/locations/oshawa)
-- In-person Saturday classes: Core21, 21 Simcoe St South, Oshawa, Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM; booking the November 2026 semester (serving Durham Region, Oshawa, Whitby, Courtice, Bowmanville, Clarington)
+- In-person Saturday classes: Core21, 21 Simcoe St South, Oshawa, Explorers & Builders 9:00–10:00 AM, Developers & Engineers 11:30 AM–12:30 PM; booking the November 2026 and January 2027 semesters (serving Durham Region, Oshawa, Whitby, Courtice, Bowmanville, Clarington)
 - In-person waitlist (online open): Toronto, Mississauga, Brampton, Markham, Scarborough, Vaughan, Milton, Calgary, Edmonton, Vancouver, Surrey
 - Online: open across Canada. Tuesdays (Explorers, Builders) and Thursdays (Developers, Engineers), 4-6 PM ET
 
