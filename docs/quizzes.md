@@ -47,6 +47,17 @@ Each question is one of:
 - `"code"`: the student writes code in a code box that starts with `starter`, and sees `hint` as a tip. The instructor
   sees it next to `sample`, the model answer, and marks it by hand. `answer` and `sample` never reach students' browsers.
 
+Vary which option is right. Students shouldn't be able to guess a pattern, so `npm run test:quizzes` fails if one
+position (first, second, third…) is the answer to more than half of a quiz's multiple-choice questions, or is the
+answer three times in a row. True/False questions always list True first and aren't counted.
+
+Every question must only use what students have been taught by that quiz's week:
+
+- **Developers:** quiz 1 (week 4) is variables only. Quiz 2 (week 8) adds functions, `addEventListener`, and the page
+  (`getElementById`, `textContent`, `setInterval`). No `if`, loops, function parameters or `return` yet.
+- **Engineers:** quiz 1 (week 4) covers variables, `len`, types, the character-checking `for` loop and the errors
+  from the lessons. Quiz 2 (week 8) adds variety, `def`/`return`, the rating rules, the advice and hashing.
+
 Add a quiz by adding an entry. Its page appears at `/quizzes/<program>/<slug>/`.
 
 Don't change the question `id`s of a quiz that students have already taken. Saved answers are stored by id.
