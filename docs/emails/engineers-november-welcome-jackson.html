@@ -1,0 +1,156 @@
+<!--
+  CODEship — send-ready welcome email for Jackson, a new student in the
+  Engineers program (online), November semester. First class is today,
+  Thursday, November 5, 2026.
+
+  Schedule comes from src/config/classSchedule.js (engineers.online.november):
+  Thursdays, 5:00–5:55 PM ET, Nov 5, 2026 to Jan 7, 2027 (8 classes; no class
+  during the winter break weeks of Dec 21 and Dec 28).
+
+  Class link: https://meet.google.com/fwd-ufmz-rmr
+
+  Paste-ready for any ESP or Gmail. Table layout + inline styles for broad
+  email-client support.
+
+  Subject line options:
+    1. Welcome to CODEship Engineers, Jackson! Your first class is today
+    2. Jackson, class starts today at 5 PM ET: here's your link
+    3. You're in! Your CODEship Engineers class link and schedule
+  Preview text: Your first Engineers class is today, Thursday at 5:00 PM ET.
+  Here's your Google Meet link and the full November schedule.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0;padding:0;background-color:#f4f6fb;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+        <!-- Header (navy) with the real white-on-dark logo -->
+        <tr>
+          <td style="background-color:#001532;padding:28px 32px;text-align:center;">
+            <img src="https://www.codeshipacademy.com/logo-footer.png" alt="CODEship Academy" height="52" style="height:52px;width:auto;display:inline-block;border:0;outline:none;text-decoration:none;">
+            <div style="color:#E5A823;font-size:12px;font-weight:700;letter-spacing:2px;margin-top:14px;">DREAM. CODE. ACHIEVE.</div>
+            <div style="color:#8fb4ff;font-size:13px;margin-top:6px;">Engineers Program &middot; November Semester</div>
+          </td>
+        </tr>
+
+        <!-- Intro -->
+        <tr>
+          <td style="padding:32px 32px 8px 32px;">
+            <h1 style="margin:0 0 16px 0;font-size:24px;line-height:1.3;color:#001532;">Welcome aboard, Jackson!</h1>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#334155;">Hi Jackson,</p>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#334155;">
+              We're excited to have you join the <strong>CODEship Engineers program</strong> for the November semester. Engineers is where you'll write real <strong>Python</strong>, learn how AI models are trained, and pick up real cybersecurity skills.
+            </p>
+            <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;color:#334155;">
+              <strong>Your first class is today</strong>, Thursday, November 5, at <strong>5:00 PM ET</strong>. Use the button below to join.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Join CTA -->
+        <tr>
+          <td align="center" style="padding:20px 32px 4px 32px;">
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td align="center" style="background-color:#E5A823;border-radius:8px;">
+                  <a href="https://meet.google.com/fwd-ufmz-rmr" target="_blank" style="display:inline-block;padding:15px 40px;font-size:16px;font-weight:700;color:#001532;text-decoration:none;border-radius:8px;">Join Class on Google Meet</a>
+                </td>
+              </tr>
+            </table>
+            <div style="font-size:13px;color:#64748b;padding-top:10px;line-height:1.5;">
+              Or copy this link: <a href="https://meet.google.com/fwd-ufmz-rmr" style="color:#138A9A;text-decoration:none;">meet.google.com/fwd-ufmz-rmr</a><br>
+              Same link every week. Save this email so it's easy to find.
+            </div>
+          </td>
+        </tr>
+
+        <!-- Class details -->
+        <tr>
+          <td style="padding:24px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#001532;border-radius:10px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#ffffff;line-height:1.9;">
+                    <tr><td style="color:#E5A823;font-weight:700;width:90px;" valign="top">Program</td><td>Engineers &middot; Grades 6&ndash;8</td></tr>
+                    <tr><td style="color:#E5A823;font-weight:700;" valign="top">When</td><td>Thursdays, 5:00&ndash;5:55 PM ET</td></tr>
+                    <tr><td style="color:#E5A823;font-weight:700;" valign="top">Dates</td><td>Nov 5, 12, 19, 26 &middot; Dec 3, 10, 17 &middot; Jan 7</td></tr>
+                    <tr><td style="color:#E5A823;font-weight:700;" valign="top">Break</td><td>No class Dec 24 or Dec 31 (winter break)</td></tr>
+                    <tr><td style="color:#E5A823;font-weight:700;" valign="top">Where</td><td>Live online on Google Meet</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- What you'll build -->
+        <tr>
+          <td style="padding:20px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <div style="font-size:16px;font-weight:700;color:#001532;margin-bottom:8px;">What you'll build this semester</div>
+                  <div style="font-size:14px;line-height:1.6;color:#475569;margin-bottom:10px;">
+                    Your project is a <strong style="color:#001532;">Password Strength Checker</strong> written in Python. Along the way you'll learn:
+                  </div>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#334155;line-height:1.8;">
+                    <tr><td width="24" valign="top" style="color:#E5A823;font-weight:700;">&#10003;</td><td>Python logic and working with data</td></tr>
+                    <tr><td valign="top" style="color:#E5A823;font-weight:700;">&#10003;</td><td>How real cybersecurity protects people online</td></tr>
+                    <tr><td valign="top" style="color:#E5A823;font-weight:700;">&#10003;</td><td>Writing programs that take input and make decisions</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Before class checklist -->
+        <tr>
+          <td style="padding:20px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fff8e6;border-left:4px solid #E5A823;border-radius:0 10px 10px 0;">
+              <tr>
+                <td style="padding:16px 20px;">
+                  <div style="font-size:15px;font-weight:700;color:#001532;margin-bottom:8px;">Before class today</div>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#334155;line-height:1.8;">
+                    <tr><td width="24" valign="top" style="color:#001532;font-weight:700;">1.</td><td>Use a laptop or desktop computer (a tablet or phone won't work for coding).</td></tr>
+                    <tr><td valign="top" style="color:#001532;font-weight:700;">2.</td><td>Use the Chrome browser and make sure your camera and microphone work.</td></tr>
+                    <tr><td valign="top" style="color:#001532;font-weight:700;">3.</td><td>Join 5 minutes early so we can start right on time.</td></tr>
+                    <tr><td valign="top" style="color:#001532;font-weight:700;">4.</td><td>Find a quiet spot and bring your curiosity!</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Parent note -->
+        <tr>
+          <td style="padding:20px 32px 0 32px;">
+            <p style="margin:0;font-size:14px;line-height:1.6;color:#475569;">
+              <strong style="color:#001532;">For parents:</strong> if anything comes up or Jackson will miss a class, just reply to this email or call us at <a href="tel:+12893143401" style="color:#138A9A;text-decoration:none;">(289) 314-3401</a>.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Close -->
+        <tr>
+          <td style="padding:24px 32px 28px 32px;">
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#334155;">See you in class today, Jackson!<br><strong style="color:#001532;">The CODEship Academy Team</strong></p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background-color:#f8fafc;border-top:1px solid #e2e8f0;padding:22px 32px;text-align:center;">
+            <img src="https://www.codeshipacademy.com/logo-nav.png" alt="CODEship Academy" height="32" style="height:32px;width:auto;display:inline-block;border:0;margin-bottom:10px;">
+            <div style="font-size:12px;line-height:1.8;color:#64748b;">
+              <a href="https://codeshipacademy.com" style="color:#138A9A;text-decoration:none;">codeshipacademy.com</a> &nbsp;|&nbsp; <a href="mailto:admin@codeshipacademy.com" style="color:#138A9A;text-decoration:none;">admin@codeshipacademy.com</a> &nbsp;|&nbsp; <a href="tel:+12893143401" style="color:#138A9A;text-decoration:none;">(289) 314-3401</a><br>
+              21 Simcoe St S, Oshawa, ON, Canada
+            </div>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
