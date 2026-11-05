@@ -2,9 +2,9 @@ import { PROGRAMS, type Program } from "@/data/programs";
 import { IN_PERSON_SATURDAY_SCHEDULE } from "@/data/locations";
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 
-export type OpenStart = "october" | "november";
+export type OpenStart = "november" | "january";
 
-/** "Weekly, Oct 3 to Nov 28, 2026" -> "Oct 3 to Nov 28, 2026" */
+/** "Weekly, Jan 16 to Mar 6, 2027" -> "Jan 16 to Mar 6, 2027" */
 export function rangeOnly(range: string) {
   return range.replace(/^Weekly,\s*/, "");
 }
@@ -41,7 +41,7 @@ function firstDate(range: string) {
   return rangeOnly(range).split(/ to |–/)[0].trim().replace(/,?\s*20\d\d$/, "");
 }
 
-/** Every distinct first-class date for a format and semester, in date order, e.g. "Oct 1 or Oct 6". */
+/** Every distinct first-class date for a format and semester, in date order, e.g. "Jan 12 or Jan 14". */
 export function startDates(format: "inperson" | "online", sem: OpenStart) {
   const dates = Array.from(new Set(PROGRAMS.map((p) => firstDate(CLASS_SCHEDULE[p.slug][format].starts[sem]))));
   dates.sort((a, b) => Date.parse(`${a} 2026`) - Date.parse(`${b} 2026`));

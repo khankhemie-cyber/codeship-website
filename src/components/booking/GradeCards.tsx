@@ -51,7 +51,7 @@ export default function GradeCards() {
                 <div key={sem.key}>
                   <dt className="text-sm text-gray-500">
                     {sem.label} semester
-                    {sem.key === "november" && <OpenTag />}
+                    <OpenTag />
                   </dt>
                   <dd className="text-base font-semibold text-[#001532]">
                     {rangeOnly(CLASS_SCHEDULE[p.slug].inperson.starts[sem.key])}

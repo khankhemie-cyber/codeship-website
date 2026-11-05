@@ -32,7 +32,7 @@ export default function Semesters() {
     >
       <div className="px-6 sm:px-10 pt-8 pb-2 flex flex-wrap items-end justify-between gap-3">
         <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#001532]">
-          November registration is open
+          November and January registration is open
         </h2>
         <p className="text-base text-gray-600">
           {PRICE_LABEL} · {SEMESTER_SHAPE_LABEL}
@@ -46,7 +46,7 @@ export default function Semesters() {
           <h3 className="font-display text-xl font-bold text-[#001532] mt-2">Saturday classes</h3>
           <dl className="mt-5">
             {SEMESTERS.map((s) => (
-              <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("inperson", s.key)}`} open={s.key === "november"} />
+              <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("inperson", s.key)}`} open />
             ))}
             {SATURDAY_SLOTS.map((slot) => (
               <Row key={slot.time} label={gradeSpan(slot.programs)} value={slot.time} />
@@ -66,7 +66,7 @@ export default function Semesters() {
           <h3 className="font-display text-xl font-bold text-[#001532] mt-2">After-school classes from home</h3>
           <dl className="mt-5">
             {SEMESTERS.map((s) => (
-              <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("online", s.key)}`} open={s.key === "november"} />
+              <Row key={s.key} label={`${s.label} semester`} value={`Starts ${startDates("online", s.key)}`} open />
             ))}
             {ONLINE_DAYS.map((row) => (
               <Row key={row.days} label={gradeSpan(row.programs)} value={`${row.days}, 4–6 PM ET`} />
