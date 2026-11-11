@@ -1,0 +1,20 @@
+# Every Star Path level in /tools/playground has a reference solution that must
+# still win within its block budget, and every "fix the bug" level must open broken.
+name: Playground games
+
+on:
+  pull_request:
+  push:
+    branches: [claude/laughing-rubin-0j1pX]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Star Path levels (Node, no browser)
+        run: npm run test:playground

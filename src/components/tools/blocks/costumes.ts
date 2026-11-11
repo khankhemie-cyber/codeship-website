@@ -168,15 +168,23 @@ export const costumeUrl = (id: string) => `data:image/svg+xml;utf8,${encodeURICo
 
 export type Background = { id: string; name: { en: string; fr: string }; css: string };
 
-/** Page backgrounds: plain colour fields so the counting grid stays readable on top. */
+/**
+ * Page backgrounds. Each id is drawn as an illustrated, gently animated scene
+ * by scenes.tsx; `css` is only the base colour behind it (and the fallback
+ * if the picture can't draw). Ids are saved in projects: never rename one.
+ */
 export const BACKGROUNDS: Background[] = [
-  { id: "grass", name: { en: "Grass", fr: "Herbe" }, css: "linear-gradient(#BDE5F8 0 25%, #A5D6A7 25%)" },
-  { id: "map", name: { en: "Map", fr: "Carte" }, css: "linear-gradient(90deg, transparent 47%, #FFFFFF 47% 53%, transparent 53%), linear-gradient(transparent 47%, #FFFFFF 47% 53%, transparent 53%), #DCEDC8" },
-  { id: "room", name: { en: "Room", fr: "Chambre" }, css: "linear-gradient(#FFF3E0 0 70%, #D7B899 70%)" },
-  { id: "street", name: { en: "Street", fr: "Rue" }, css: "linear-gradient(#BBDEFB 0 45%, #CFD8DC 45% 75%, #90A4AE 75%)" },
-  { id: "sky", name: { en: "Sky", fr: "Ciel" }, css: "linear-gradient(#81D4FA, #E1F5FE)" },
-  { id: "party", name: { en: "Party", fr: "Fête" }, css: "radial-gradient(circle at 20% 20%, #FFE082 0 6%, transparent 7%), radial-gradient(circle at 80% 30%, #F8BBD0 0 6%, transparent 7%), radial-gradient(circle at 60% 80%, #B2EBF2 0 6%, transparent 7%), #FFF8E1" },
-  { id: "night", name: { en: "Night", fr: "Nuit" }, css: "radial-gradient(circle at 80% 20%, #FFF9C4 0 5%, transparent 6%), linear-gradient(#1A237E, #3949AB)" },
+  { id: "grass", name: { en: "Meadow", fr: "Prairie" }, css: "linear-gradient(#4FC3F7 0 55%, #4CAF50 55%)" },
+  { id: "map", name: { en: "Town map", fr: "Plan de la ville" }, css: "#C5E1A5" },
+  { id: "room", name: { en: "Bedroom", fr: "Chambre" }, css: "linear-gradient(#FFF3E0 0 70%, #D7B899 70%)" },
+  { id: "street", name: { en: "City street", fr: "Rue de la ville" }, css: "linear-gradient(#64B5F6 0 70%, #546E7A 70%)" },
+  { id: "sky", name: { en: "Up in the sky", fr: "Dans le ciel" }, css: "linear-gradient(#29B6F6, #FFF8E1)" },
+  { id: "party", name: { en: "Dance party", fr: "Fête dansante" }, css: "#4A148C" },
+  { id: "night", name: { en: "Night city", fr: "Ville la nuit" }, css: "linear-gradient(#0D1440, #3F51B5)" },
+  { id: "ocean", name: { en: "Under the sea", fr: "Sous la mer" }, css: "linear-gradient(#4FC3F7, #01579B)" },
+  { id: "space", name: { en: "Outer space", fr: "Espace" }, css: "#1A1050" },
+  { id: "snow", name: { en: "Snowy day", fr: "Jour de neige" }, css: "linear-gradient(#90CAF9, #FFFFFF)" },
+  { id: "beach", name: { en: "Sunset beach", fr: "Plage au coucher du soleil" }, css: "linear-gradient(#FF8A65, #FFD54F)" },
   { id: "plain", name: { en: "Plain", fr: "Uni" }, css: "#FFFFFF" },
 ];
 
