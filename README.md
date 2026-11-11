@@ -274,6 +274,10 @@ backgrounds are the CODEship Blocks ones (`blocks/costumes.ts`).
   Logic and levels are in `starPath.ts`; each level's reference solution is in
   `scripts/playground/test-playground.mjs` (`npm run test:playground`, run in CI), so a level edit that
   makes a level impossible, or a bug level that already works, fails the build.
+- **Scenes** (shared with CODEship Blocks): `blocks/scenes.tsx` draws each background as an illustrated
+  inline-SVG scene with gentle CSS animation (drifting clouds, twinkling stars, swimming fish, falling
+  snow...), switched off under "reduce motion". 12 scenes; ids are saved in projects, so add new ids,
+  never rename one. Blocks draws a two-tone counting grid on top so squares stay countable.
 - **Sprite Party** (ages 6–10): add characters, then give each kind "When ___, do ___" rules (scene
   starts / tapped / touches another / every 2 s → wander, bounce, follow, spin, dance, jump, grow, say,
   sparkle, make another one, ...). Rules belong to the costume, so clones follow them too. Capped at

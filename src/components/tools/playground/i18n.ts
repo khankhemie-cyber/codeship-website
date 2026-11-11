@@ -50,7 +50,7 @@ export const STRINGS = {
     actions: {
       wander: "wander around", bounce: "bounce off the walls", spin: "keep spinning", dance: "dance", follow: "follow my finger", still: "stand still",
       jump: "jump", grow: "grow", shrink: "shrink", colour: "change colour", say: "say something", sparkle: "sparkle", pop: "make a sound",
-      clone: "make another one", teleport: "jump somewhere new", vanish: "disappear",
+      clone: "make another one", teleport: "jump somewhere new", vanish: "disappear", scene: "change the scene",
     },
     behaviours: "Keep doing",
     once: "Do once",
@@ -124,7 +124,7 @@ export const STRINGS = {
     actions: {
       wander: "se promener", bounce: "rebondir sur les murs", spin: "tourner sans arrêt", dance: "danser", follow: "suivre mon doigt", still: "rester immobile",
       jump: "sauter", grow: "grandir", shrink: "rapetisser", colour: "changer de couleur", say: "dire quelque chose", sparkle: "scintiller", pop: "faire un son",
-      clone: "en faire un autre", teleport: "sauter ailleurs", vanish: "disparaître",
+      clone: "en faire un autre", teleport: "sauter ailleurs", vanish: "disparaître", scene: "changer de décor",
     },
     behaviours: "Faire sans arrêt",
     once: "Faire une fois",

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { playPop, unlockAudio } from "../blocks/audio";
 import { BACKGROUNDS, backgroundById, costumeUrl } from "../blocks/costumes";
+import { SceneBackdrop } from "../blocks/scenes";
 import type { Strings } from "./i18n";
 
 /**
@@ -22,7 +23,7 @@ const SPRITE_COSTUMES = ["cat", "dog", "robot", "star", "ball", "flower", "sun",
 
 export type EventId = "start" | "clicked" | "touch" | "every";
 const BEHAVIOURS = ["wander", "bounce", "spin", "dance", "follow", "still"] as const;
-const ONCE = ["jump", "grow", "shrink", "colour", "say", "sparkle", "pop", "clone", "teleport", "vanish"] as const;
+const ONCE = ["jump", "grow", "shrink", "colour", "say", "sparkle", "pop", "clone", "teleport", "vanish", "scene"] as const;
 export type ActionId = (typeof BEHAVIOURS)[number] | (typeof ONCE)[number];
 const EVENTS: EventId[] = ["start", "clicked", "touch", "every"];
 
@@ -44,7 +45,7 @@ type Live = Placed & {
   bubbleUntil: number;
   turnAt: number;
 };
-type Spark = { x: number; y: number; vx: number; vy: number; until: number; colour: string };
+type Spark = { x: number; y: number; vx: number; vy: number; until: number; colour: string; spin: number };
 
 let nextId = 1;
 const uid = () => `s${Date.now().toString(36)}${nextId++}`;
@@ -60,6 +61,22 @@ const EXAMPLES: { name: { en: string; fr: string }; scene: () => Scene }[] = [
         { id: uid(), costume: "ball", x: 800, y: 250 },
       ],
       rules: { ball: [{ event: "start", action: "bounce" }, { event: "touch", action: "colour" }, { event: "touch", action: "pop" }, { event: "clicked", action: "clone" }] },
+    }),
+  },
+  {
+    name: { en: "Under the sea", fr: "Sous la mer" },
+    scene: () => ({
+      background: "ocean",
+      sprites: [
+        { id: uid(), costume: "ball", x: 250, y: 300 },
+        { id: uid(), costume: "star", x: 700, y: 480 },
+        { id: uid(), costume: "flower", x: 520, y: 520 },
+      ],
+      rules: {
+        ball: [{ event: "start", action: "wander" }, { event: "touch", action: "say", text: "Blub!" }],
+        star: [{ event: "start", action: "spin" }, { event: "clicked", action: "jump" }, { event: "clicked", action: "sparkle" }],
+        flower: [{ event: "start", action: "dance" }, { event: "clicked", action: "grow" }],
+      },
     }),
   },
   {
@@ -79,16 +96,16 @@ const EXAMPLES: { name: { en: string; fr: string }; scene: () => Scene }[] = [
     }),
   },
   {
-    name: { en: "Night sky", fr: "Ciel de nuit" },
+    name: { en: "Space party", fr: "Fête dans l'espace" },
     scene: () => ({
-      background: "night",
+      background: "space",
       sprites: [
         { id: uid(), costume: "star", x: 300, y: 200 },
         { id: uid(), costume: "robot", x: 650, y: 430 },
       ],
       rules: {
         star: [{ event: "start", action: "spin" }, { event: "clicked", action: "clone" }, { event: "clicked", action: "sparkle" }, { event: "every", action: "teleport" }],
-        robot: [{ event: "start", action: "dance" }, { event: "clicked", action: "say", text: "Beep boop!" }],
+        robot: [{ event: "start", action: "dance" }, { event: "clicked", action: "say", text: "Beep boop!" }, { event: "clicked", action: "scene" }],
       },
     }),
   },
@@ -191,7 +208,7 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
         for (let i = 0; i < 14; i++) {
           const ang = rand(0, Math.PI * 2);
           const v = rand(2, 7);
-          sparks.current.push({ x: sp.x, y: sp.y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, until: now + rand(500, 900), colour: ["#F4D734", "#E91E63", "#29B6F6", "#66BB6A", "#FFFFFF"][i % 5] });
+          sparks.current.push({ x: sp.x, y: sp.y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, until: now + rand(600, 1100), colour: ["#F4D734", "#E91E63", "#29B6F6", "#66BB6A", "#FFFFFF"][i % 5], spin: rand(-12, 12) });
         }
         break;
       case "pop":
@@ -207,6 +224,13 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
       case "teleport":
         sp.x = rand(60, W - 60);
         sp.y = rand(60, H - 60);
+        break;
+      case "scene":
+        setScene((sc) => {
+          const i = BACKGROUNDS.findIndex((b) => b.id === sc.background);
+          const next = BACKGROUNDS[(i + 1) % BACKGROUNDS.length].id;
+          return { ...sc, background: next === "plain" ? BACKGROUNDS[0].id : next };
+        });
         break;
       case "vanish":
         live.current = live.current.filter((o) => o !== sp);
@@ -349,7 +373,7 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
 
   return (
     <div className="mx-auto grid w-full max-w-6xl gap-4 p-4 lg:grid-cols-[1fr_340px]">
-      <div className="flex flex-col gap-3">
+      <div className="flex min-w-0 flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -358,16 +382,6 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
           >
             {running ? "■" : "▶"} {running ? s.stop : s.run}
           </button>
-          <label className="ml-auto flex items-center gap-2 text-sm text-white/80">
-            {s.scene}
-            <select className={select} value={scene.background} onChange={(e) => setScene((sc) => ({ ...sc, background: e.target.value }))}>
-              {BACKGROUNDS.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name[lang]}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
 
         <div
@@ -379,6 +393,7 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
           onPointerLeave={() => (drag.current = null)}
           data-testid="sprite-stage"
         >
+          <SceneBackdrop id={scene.background} />
           {shown.map((p) => {
             const l = running ? (p as Live) : null;
             const jump = l && l.jumpT ? Math.max(0, 1 - (performance.now() - l.jumpT) / 500) : 0;
@@ -391,25 +406,50 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
                 className="absolute"
                 style={{ left: pct(p.x, W), top: pct(p.y, H), width: pct(SIZE * scale, W), aspectRatio: "1", transform: `translate(-50%, -50%) translateY(${pct(dy, SIZE * scale)})` }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={costumeUrl(p.costume)}
-                  alt={p.costume}
-                  draggable={false}
-                  onPointerDown={(e) => onSpriteDown(e, p)}
-                  className={`h-full w-full cursor-pointer ${!running && selected === p.costume ? "drop-shadow-[0_0_6px_#F4D734]" : ""}`}
-                  style={{ transform: `rotate(${(l?.angle ?? 0) + dance}deg)`, filter: l?.hue ? `hue-rotate(${l.hue}deg) saturate(1.4)` : undefined }}
-                />
+                <div className="absolute bottom-[-4%] left-[15%] h-[12%] w-[70%] rounded-[50%] bg-black/25 blur-[2px]" style={{ transform: `scale(${1 - jump * 0.4})` }} />
+                <div className="sp-idle relative h-full w-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={costumeUrl(p.costume)}
+                    alt={p.costume}
+                    draggable={false}
+                    onPointerDown={(e) => onSpriteDown(e, p)}
+                    className={`h-full w-full cursor-pointer ${!running && selected === p.costume ? "drop-shadow-[0_0_8px_#F4D734]" : "drop-shadow-[0_3px_2px_rgba(0,0,0,0.25)]"}`}
+                    style={{ transform: `rotate(${(l?.angle ?? 0) + dance}deg)`, filter: l?.hue ? `hue-rotate(${l.hue}deg) saturate(1.4)` : undefined }}
+                  />
+                </div>
                 {l?.bubble && (
-                  <div className="absolute bottom-[95%] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl border-2 border-[#010F2A] bg-white px-3 py-1 text-sm font-bold text-[#010F2A] sm:text-base">{l.bubble}</div>
+                  <div className="sp-pop absolute bottom-[100%] left-1/2 whitespace-nowrap rounded-2xl border-[3px] border-[#010F2A] bg-white px-3 py-1 text-sm font-extrabold text-[#010F2A] shadow-[0_3px_0_#010F2A] sm:text-lg">
+                    {l.bubble}
+                    <span className="absolute -bottom-[10px] left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-b-[3px] border-r-[3px] border-[#010F2A] bg-white" />
+                  </div>
                 )}
               </div>
             );
           })}
           {sparks.current.map((p, i) => (
-            <span key={i} className="pointer-events-none absolute h-2 w-2 rounded-full" style={{ left: pct(p.x, W), top: pct(p.y, H), background: p.colour }} />
+            <svg key={i} viewBox="0 0 20 20" className="pointer-events-none absolute h-[3.2%] w-[3.2%]" style={{ left: pct(p.x, W), top: pct(p.y, H), transform: `translate(-50%,-50%) rotate(${(p.until % 360) + p.spin * 10}deg)` }}>
+              <path d="M10 0l2.6 7.4L20 10l-7.4 2.6L10 20l-2.6-7.4L0 10l7.4-2.6z" fill={p.colour} stroke="#010F2A" strokeWidth="0.8" />
+            </svg>
           ))}
           {scene.sprites.length === 0 && <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-lg font-bold text-[#010F2A]/60">{s.pickSprite}</p>}
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1" role="radiogroup" aria-label={s.scene}>
+          {BACKGROUNDS.map((b) => (
+            <button
+              key={b.id}
+              type="button"
+              role="radio"
+              aria-checked={scene.background === b.id}
+              aria-label={b.name[lang]}
+              title={b.name[lang]}
+              onClick={() => setScene((sc) => ({ ...sc, background: b.id }))}
+              className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D58401] ${scene.background === b.id ? "border-[#F4D734] ring-2 ring-[#F4D734]" : "border-white/20 hover:border-white/60"}`}
+              style={{ background: b.css }}
+            >
+              <SceneBackdrop id={b.id} still />
+            </button>
+          ))}
         </div>
         {notice && (
           <p className="text-sm text-[#F4D734]" role="status">
@@ -518,6 +558,13 @@ export default function SpriteParty({ s, lang }: { s: Strings; lang: "en" | "fr"
           </section>
         )}
       </aside>
+      <style>{`
+@keyframes sp-idle { 0%,100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(-3%) scale(1.02, 0.98); } }
+@keyframes sp-pop { from { transform: translateX(-50%) scale(0.3); } 70% { transform: translateX(-50%) scale(1.1); } to { transform: translateX(-50%) scale(1); } }
+.sp-idle { animation: sp-idle 2.4s ease-in-out infinite; transform-origin: bottom center; }
+.sp-pop { animation: sp-pop 250ms ease-out forwards; transform: translateX(-50%); }
+@media (prefers-reduced-motion: reduce) { .sp-idle, .sp-pop { animation: none; } }
+`}</style>
     </div>
   );
 }

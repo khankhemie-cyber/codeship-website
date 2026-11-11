@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { backgroundById, costumeUrl } from "./costumes";
+import { SceneBackdrop } from "./scenes";
 import type { ActorState } from "./engine";
 import { GRID_COLS, GRID_ROWS, SIZE_FACTOR, type Actor, type Character } from "./model";
 
@@ -103,12 +104,16 @@ export default function Stage({ background, actors, characters, states, selected
         background: backgroundById(background).css,
       }}
     >
-      {/* Counting grid */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg" data-testid="scene" data-scene={background}>
+        <SceneBackdrop id={background} />
+      </div>
+      {/* Counting grid: a dark and a light line together, so the squares stay countable on any scene. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: "linear-gradient(rgba(1,15,42,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(1,15,42,0.14) 1px, transparent 1px)",
+          backgroundImage:
+            "linear-gradient(rgba(1,15,42,0.22) 1px, rgba(255,255,255,0.45) 1px, rgba(255,255,255,0.45) 2px, transparent 2px), linear-gradient(90deg, rgba(1,15,42,0.22) 1px, rgba(255,255,255,0.45) 1px, rgba(255,255,255,0.45) 2px, transparent 2px)",
           backgroundSize: `${cell}px ${cell}px`,
         }}
       />
