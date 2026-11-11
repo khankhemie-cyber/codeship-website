@@ -260,6 +260,28 @@ disallows `/tools/`, and it is `noindex` (page metadata plus `X-Robots-Tag` in `
   change the format without keeping old links decodable), `templates.ts`, `i18n.ts`, `CodeEditor.tsx`,
   `Launchpad.tsx`. The localStorage keys keep the old `codeship-web-playground` name on purpose.
 
+### `/tools/playground` (CODEship Playground)
+
+Short coding games for warm-ups, brain breaks and the last five minutes of class. Same
+direct-link-only rules as the other tools. Each game has its own link for the board:
+`/tools/playground#star-path`, `#sprite-party`, `#rocket-hop`. EN/FR, no sign-in, nothing stored on
+our side (progress, scenes and best score are in localStorage on that device). Characters and
+backgrounds are the CODEship Blocks ones (`blocks/costumes.ts`).
+
+- **Star Path** (ages 4–7, no reading): tap arrows to build a program, press Go, and the robot walks it
+  to collect every star. 15 levels: sequencing (1–6), Repeat with a block budget (7–11) and "fix the
+  bug" levels that open with a broken program (12–15). Bumping a rock or the edge just stops the robot.
+  Logic and levels are in `starPath.ts`; each level's reference solution is in
+  `scripts/playground/test-playground.mjs` (`npm run test:playground`, run in CI), so a level edit that
+  makes a level impossible, or a bug level that already works, fails the build.
+- **Sprite Party** (ages 6–10): add characters, then give each kind "When ___, do ___" rules (scene
+  starts / tapped / touches another / every 2 s → wander, bounce, follow, spin, dance, jump, grow, say,
+  sparkle, make another one, ...). Rules belong to the costume, so clones follow them too. Capped at
+  40 characters. Three example scenes.
+- **Rocket Hop** (ages 6–12): a one-button flying game whose rules the child picks (tap → hop size,
+  gap → points or speed-up, crash → game over / bounce / ghost, plus speed, gravity, scene and player),
+  then plays. Space or tap to fly.
+
 ### `/tools/python` (CODEship Python)
 
 A one-file Python console for the Engineers programme (ages 11–14): `checker.py`, a **Run** button

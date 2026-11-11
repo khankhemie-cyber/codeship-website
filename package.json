@@ -11,7 +11,8 @@
     "test:python:e2e": "node scripts/test-python-e2e.mjs",
     "test:blocks": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/blocks/test-blocks.mjs",
     "test:blocks:e2e": "node scripts/blocks/test-blocks-e2e.mjs",
-    "test:quizzes": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-quizzes.mjs"
+    "test:quizzes": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-quizzes.mjs",
+    "test:playground": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/playground/test-playground.mjs"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",
