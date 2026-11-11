@@ -10,6 +10,7 @@ export const STRINGS = {
     play: "Play",
     moreTools: "Our other student tools",
     games: {
+      adventure: { name: "CODEship Adventure", blurb: "A story mode! Help Captain Kai and Bolt the robot fly home: build roads for the rover, then join the stars to fix the star map. Every line can be read aloud.", skills: "Sequencing · Planning · Debugging · Reading code" },
       starPath: { name: "Star Path", blurb: "Tap the arrows to walk the robot to every star. Then learn loops and fix bugs. No reading needed.", skills: "Sequencing · Loops · Debugging" },
       spriteParty: { name: "Sprite Party", blurb: "Add characters, give them rules (when this happens, do that) and watch your scene come alive.", skills: "Events · Behaviours · Clones" },
       rocketHop: { name: "Rocket Hop", blurb: "Pick the rules for your own flying game: how high to hop, how fast to fly, what happens on a crash. Then play it!", skills: "Events · Variables · Game design" },
@@ -86,6 +87,7 @@ export const STRINGS = {
     play: "Jouer",
     moreTools: "Nos autres outils pour élèves",
     games: {
+      adventure: { name: "Aventure CODEship", blurb: "Un mode histoire ! Aide la capitaine Kai et Bolt le robot à rentrer : construis des routes pour le rover, puis relie les étoiles pour réparer la carte du ciel. Chaque phrase peut être lue à voix haute.", skills: "Séquences · Planification · Débogage · Lecture de code" },
       starPath: { name: "Chemin d'étoiles", blurb: "Touche les flèches pour mener le robot à chaque étoile. Puis découvre les boucles et corrige les bogues. Aucune lecture.", skills: "Séquences · Boucles · Débogage" },
       spriteParty: { name: "Fête des lutins", blurb: "Ajoute des personnages, donne-leur des règles (quand ceci arrive, fais cela) et regarde ta scène s'animer.", skills: "Événements · Comportements · Clones" },
       rocketHop: { name: "Saut de fusée", blurb: "Choisis les règles de ton propre jeu : la hauteur du saut, la vitesse, ce qui arrive en cas de choc. Puis joue !", skills: "Événements · Variables · Conception de jeux" },
