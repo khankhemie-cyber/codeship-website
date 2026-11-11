@@ -5,7 +5,7 @@ name: Playground games
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [claude/laughing-rubin-0j1pX]
 
 jobs:
   test:
