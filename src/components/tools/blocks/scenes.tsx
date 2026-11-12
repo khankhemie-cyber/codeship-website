@@ -433,6 +433,26 @@ const SCENES: Record<string, () => ReactNode> = {
     </>
   ),
 
+  // Not offered as a page background: a calm sky for the Playground's adventure screens.
+  starfield: () => (
+    <>
+      <defs>
+        <radialGradient id="sc-f-sky" cx="0.5" cy="0.35" r="0.9">
+          <stop offset="0" stopColor="#24306E" />
+          <stop offset="0.6" stopColor="#111842" />
+          <stop offset="1" stopColor="#070B24" />
+        </radialGradient>
+      </defs>
+      <rect width="1000" height="800" fill="url(#sc-f-sky)" />
+      <ellipse cx="300" cy="300" rx="380" ry="160" fill="#5E35B1" opacity="0.18" transform="rotate(-20 300 300)" />
+      <ellipse cx="760" cy="560" rx="300" ry="120" fill="#00838F" opacity="0.15" transform="rotate(15 760 560)" />
+      <Stars n={140} h={800} seed={77} colour="#FFFFFF" />
+      <g className="sc-shoot" style={d(13, 4)}>
+        <path d="M900 90l90-40" stroke="#B3E5FC" strokeWidth="4" strokeLinecap="round" />
+      </g>
+    </>
+  ),
+
   plain: () => (
     <>
       <rect width="1000" height="800" fill="#FFFFFF" />

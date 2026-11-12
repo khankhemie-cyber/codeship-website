@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { costumeUrl } from "../blocks/costumes";
+import Adventure from "./adventure/Adventure";
+import { CREW } from "./adventure/story";
 import { STRINGS, type Lang } from "./i18n";
 import RocketHop from "./RocketHop";
 import SpriteParty from "./SpriteParty";
@@ -14,6 +16,7 @@ import StarPath from "./StarPath";
  */
 
 const GAMES = [
+  { id: "adventure", key: "adventure", ages: "4–8", icon: "kai", colour: "#283593" },
   { id: "star-path", key: "starPath", ages: "4–7", icon: "robot", colour: "#138A9A" },
   { id: "sprite-party", key: "spriteParty", ages: "6–10", icon: "cat", colour: "#7E57C2" },
   { id: "rocket-hop", key: "rocketHop", ages: "6–12", icon: "star", colour: "#D58401" },
@@ -80,6 +83,7 @@ export default function PlaygroundApp() {
         </button>
       </header>
 
+      {current?.id === "adventure" && <Adventure lang={lang} />}
       {current?.id === "star-path" && <StarPath s={s} />}
       {current?.id === "sprite-party" && <SpriteParty s={s} lang={lang} />}
       {current?.id === "rocket-hop" && <RocketHop s={s} />}
@@ -87,7 +91,7 @@ export default function PlaygroundApp() {
       {!current && (
         <main className="mx-auto max-w-5xl px-4 py-8">
           <p className="mb-6 max-w-2xl text-white/75">{s.tagline}</p>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {GAMES.map((g) => (
               <button
                 key={g.id}
@@ -98,7 +102,7 @@ export default function PlaygroundApp() {
               >
                 <div className="flex h-36 items-center justify-center" style={{ background: g.colour }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={costumeUrl(g.icon)} alt="" className="h-24 w-24 transition group-hover:scale-110" />
+                  <img src={g.icon === "kai" ? CREW.kai.img : costumeUrl(g.icon)} alt="" className="h-24 w-24 transition group-hover:scale-110" />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-4">
                   <div className="flex items-center justify-between gap-2">

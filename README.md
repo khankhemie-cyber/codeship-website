@@ -268,6 +268,18 @@ direct-link-only rules as the other tools. Each game has its own link for the bo
 our side (progress, scenes and best score are in localStorage on that device). Characters and
 backgrounds are the CODEship Blocks ones (`blocks/costumes.ts`).
 
+- **CODEship Adventure** (ages 4–8, story mode; `playground/adventure/`): Captain Kai and Bolt the robot
+  need fuel and a star map to fly the CODEship home. A chapter map, short story scenes before levels
+  (`script.ts`, EN/FR), a read-aloud button on every line (the device's own speech voice, so pre-readers
+  can play; an "auto read-aloud" toggle is off by default because a classroom of talking devices is a lot),
+  and a pointing hand that walks each chapter's first level. Progress is kept per device in localStorage.
+  - *Chapter 1, Rover Roads* (`roverRoads.ts`): lay straight and corner road pieces so the rover drives
+    itself from its pad to the base over every fuel crystal. Rocks, a piece budget, and "the storm
+    scrambled the road" fix-it levels. 10 levels.
+  - *Chapter 2, Star Stitch* (`starStitch.ts`): join the stars with one stretchy line to rebuild a
+    constellation. Trace levels are one-stroke puzzles (start in the wrong place and you get stuck);
+    code levels give a card of star badges (colour + shape, no reading) to follow, revealing a picture. 10 levels.
+  - Every level has a reference solution (or a one-stroke search) in `npm run test:playground`.
 - **Star Path** (ages 4–7, no reading): tap arrows to build a program, press Go, and the robot walks it
   to collect every star. 15 levels: sequencing (1–6), Repeat with a block budget (7–11) and "fix the
   bug" levels that open with a broken program (12–15). Bumping a rock or the edge just stops the robot.
