@@ -32,7 +32,7 @@ export default function Semesters() {
     >
       <div className="px-6 sm:px-10 pt-8 pb-2 flex flex-wrap items-end justify-between gap-3">
         <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#001532]">
-          November and January registration is open
+          January registration is open
         </h2>
         <p className="text-base text-gray-600">
           {PRICE_LABEL} · {SEMESTER_SHAPE_LABEL}

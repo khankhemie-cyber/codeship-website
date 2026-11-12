@@ -65,10 +65,10 @@ type ScheduleSlot = { days: string; time: string; starts: Record<string, string>
  * Minimal-effort FR display of the (English-authored) class schedule facts
  * day names translated, dates/time lightly adapted. Families now pick one of
  * an open start month at checkout; this teaser line shows the soonest
- * open (November) start's dates.
+ * open (January) start's dates.
  */
 function localizeSchedule(schedule: ScheduleSlot, lang: "en" | "fr") {
-  const dates = schedule.starts.november;
+  const dates = schedule.starts.january;
   if (lang === "en") return { days: schedule.days, time: schedule.time, dates };
   return {
     days: FR_DAYS[schedule.days] ?? schedule.days,
