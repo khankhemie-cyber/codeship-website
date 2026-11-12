@@ -22,7 +22,9 @@ export interface ProgramConfig {
 
 /**
  * Single source of truth for the four CODEship program levels' Stripe Payment
- * Links, prices, and age bands. These links and ages are the real, live
+ * Links, prices, and age bands. The links are the January 2027 semester links
+ * ("CODEship <Program> | January 2027 Semester" in Stripe), whose checkout
+ * offers only the January classes. These links and ages are the real, live
  * products: do not guess or change them without confirming with the owner.
  *
  * Price is a single flat rate for every program (see FLAT_PRICE_CAD in
@@ -60,7 +62,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Grow confidence and independence with technology",
       "Create and share a first interactive project",
     ],
-    url: "https://buy.stripe.com/cNi8wJ2s3gAd9Znei8dAk0j",
+    url: "https://buy.stripe.com/fZufZb3w7cjX0oN8XOdAk0p",
   },
   builders: {
     order: 2,
@@ -83,7 +85,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Debug independently and iterate on their work",
       "Collaborate with peers on team challenges",
     ],
-    url: "https://buy.stripe.com/4gM5kxgiT97L4F34HydAk0h",
+    url: "https://buy.stripe.com/7sY28l9UvcjX2wVfmcdAk0s",
   },
   developers: {
     order: 3,
@@ -106,7 +108,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Understand the foundations of AI and how data drives it",
       "Present and explain their own technical projects",
     ],
-    url: "https://buy.stripe.com/cNi6oB9Uves52wVgqgdAk0i",
+    url: "https://buy.stripe.com/7sYbIV9UvabPc7v0ridAk0q",
   },
   engineers: {
     order: 4,
@@ -129,7 +131,7 @@ export const PROGRAM_LINKS: Record<ProgramLevel, ProgramConfig> = {
       "Apply AI/ML concepts to a project that matters to them",
       "Lead a build and explore tech career pathways",
     ],
-    url: "https://buy.stripe.com/cNidR3eaL0Bfb3r3DudAk0k",
+    url: "https://buy.stripe.com/3cI8wJ4Abfw94F31vmdAk0r",
   },
 };
 

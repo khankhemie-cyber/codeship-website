@@ -2,7 +2,7 @@ import { PROGRAMS, type Program } from "@/data/programs";
 import { IN_PERSON_SATURDAY_SCHEDULE } from "@/data/locations";
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 
-export type OpenStart = "november" | "january";
+export type OpenStart = "january";
 
 /** "Weekly, Jan 16 to Mar 6, 2027" -> "Jan 16 to Mar 6, 2027" */
 export function rangeOnly(range: string) {

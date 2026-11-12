@@ -192,7 +192,7 @@ export default function CityPage({ params }: Props) {
           title="Start online today"
           href="/register"
           label="Enroll Online"
-          detail="Live online classes with an instructor. November and January semesters are open."
+          detail="Live online classes with an instructor. The January semester is open."
         />
       )}
     </>
