@@ -24,6 +24,22 @@ const nextConfig = {
   // into the four grade-band program pages (/tt/explorers, /tt/builders,
   // /tt/developers, /tt/engineers). Redirect the retired slugs to the /tt
   // program index so old links and any indexed URLs still resolve.
+  // public/_headers covers every static page, but Cloudflare Pages does not
+  // apply it to responses from Functions. These are the edge-rendered routes
+  // (runtime = "edge"), so they get the same security headers here. Keep the
+  // values in sync with public/_headers, and do not widen the sources to
+  // static pages, or those responses would carry each header twice.
+  async headers() {
+    const security = [
+      { key: "Strict-Transport-Security", value: "max-age=31536000" },
+      { key: "Content-Security-Policy", value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'" },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Permissions-Policy", value: "camera=(), geolocation=(), payment=(), usb=(), microphone=(self)" },
+    ];
+    return ["/register/", "/waitlist/", "/api/:path*"].map((source) => ({ source, headers: security }));
+  },
   async redirects() {
     const retiredTrinidadSlugs = [
       "online-coding-classes",
