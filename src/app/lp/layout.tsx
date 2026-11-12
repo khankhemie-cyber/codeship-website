@@ -1,4 +1,5 @@
 import LPHeader from "@/components/lp/LPHeader";
+import SkipLink from "@/components/SkipLink";
 
 /**
  * Paid-ad landing pages are single-purpose and never linked from the main
@@ -9,8 +10,9 @@ import LPHeader from "@/components/lp/LPHeader";
 export default function LPLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <SkipLink />
       <LPHeader />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1} className="focus:outline-none">{children}</main>
     </>
   );
 }

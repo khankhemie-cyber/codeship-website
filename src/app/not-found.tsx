@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SkipLink from "@/components/SkipLink";
 import { ButtonLink } from "@/components/ui/Page";
 import { CircuitLines, CodeMark } from "@/components/ui/Stem";
 
@@ -42,8 +43,9 @@ const suggestions = [
 export default function NotFound() {
   return (
     <>
+      <SkipLink />
       <Navigation />
-      <main className="pt-[76px] lg:pt-24">
+      <main id="main" tabIndex={-1} className="pt-[76px] lg:pt-24 focus:outline-none">
         <section className="relative overflow-hidden bg-[#001532] bg-dotgrid-dark">
           <CircuitLines className="absolute -right-12 -top-6 w-80 opacity-30 hidden md:block" />
           <CircuitLines className="absolute -left-16 -bottom-16 w-72 opacity-20 rotate-180 hidden md:block" />

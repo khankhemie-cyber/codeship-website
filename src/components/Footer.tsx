@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
+import CookieSettingsButton from "@/components/CookieSettingsButton";
 
 const COLUMNS = [
   {
@@ -101,7 +102,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} CODEship Academy · Oshawa, Ontario ·{" "}
             <Link href="/politiques/remboursement" className="hover:text-[#F4D734]">
               Politique de remboursement
-            </Link>
+            </Link>{" "}
+            · <CookieSettingsButton className="hover:text-[#F4D734]" />
           </p>
           <p className="text-sm text-gray-500 mt-2">
             Franchise information is not an offering. Offerings are made only by disclosure document.

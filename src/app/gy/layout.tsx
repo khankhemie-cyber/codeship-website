@@ -1,4 +1,5 @@
 import LPHeader from "@/components/lp/LPHeader";
+import SkipLink from "@/components/SkipLink";
 
 /**
  * Guyana landing pages are single-purpose, like /lp/*: this layout
@@ -9,8 +10,9 @@ import LPHeader from "@/components/lp/LPHeader";
 export default function GuyanaLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <SkipLink />
       <LPHeader />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1} className="focus:outline-none">{children}</main>
     </>
   );
 }

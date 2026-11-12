@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SkipLink from "@/components/SkipLink";
 import { organizationSchema } from "@/lib/schema";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -10,8 +11,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
       />
+      <SkipLink />
       <Navigation />
-      <main className="pt-[76px] lg:pt-24">{children}</main>
+      <main id="main" tabIndex={-1} className="pt-[76px] lg:pt-24 focus:outline-none">{children}</main>
       <Footer />
     </>
   );

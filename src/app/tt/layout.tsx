@@ -1,4 +1,5 @@
 import LPHeader from "@/components/lp/LPHeader";
+import SkipLink from "@/components/SkipLink";
 
 /**
  * Trinidad and Tobago landing pages are single-purpose, like /gy/*: this
@@ -9,8 +10,9 @@ import LPHeader from "@/components/lp/LPHeader";
 export default function TrinidadLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <SkipLink />
       <LPHeader />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1} className="focus:outline-none">{children}</main>
     </>
   );
 }

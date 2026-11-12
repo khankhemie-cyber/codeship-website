@@ -1,5 +1,19 @@
-/franchise/*
-  X-Robots-Tag: noindex, nofollow, noarchive
+# Security headers on every response (Cloudflare Pages).
+# - HSTS: browsers only ever use HTTPS for this host. No includeSubDomains or
+#   preload, so other subdomains are not affected.
+# - CSP is limited to directives that cannot break third-party scripts
+#   (GA, HubSpot, Meta Pixel, Pyodide, Blockly): no framing by other sites,
+#   no <base> hijacking, no plugins. Script/connect rules would need a full
+#   allowlist and a report-only trial before enforcing.
+# - Permissions-Policy: the Blocks editor records sound (microphone, own
+#   origin only); nothing on the site needs camera, location or payments.
+/*
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy: frame-ancestors 'self'; base-uri 'self'; object-src 'none'
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), geolocation=(), payment=(), usb=(), microphone=(self)
 
 /emails/*
   X-Robots-Tag: noindex, nofollow, noarchive

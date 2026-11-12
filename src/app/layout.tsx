@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
+import { GA_ID } from "@/config/analytics";
+import { CHILD_PATH_PATTERN_SOURCE } from "@/lib/childPages";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,7 +23,6 @@ const montserrat = localFont({
   display: "swap",
 });
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-83QR0ML32G";
 
 export const metadata: Metadata = {
   title: {
@@ -81,20 +82,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <head>
-        {/* Google tag (gtag.js), rendered server-side into the HTML so it is
-            present on first load and detectable by Tag Assistant / GTM. Google
-            Consent Mode v2 defaults storage to "denied"; the client-side
+        {/* Google tag (gtag.js), set up by an inline script in the server HTML
+            so it is present on first load and detectable by Tag Assistant / GTM.
+            Google Consent Mode v2 defaults storage to "denied"; the client-side
             Analytics component flips it to "granted" once the visitor accepts
-            all cookies via the banner. */}
+            all cookies via the banner. On child-facing pages (/tools, /quizzes,
+            /workbooks) the tag is never loaded at all. */}
         {GA_ID && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer = window.dataLayer || [];
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('consent', 'default', {
   analytics_storage: 'denied',
@@ -102,11 +99,20 @@ gtag('consent', 'default', {
   ad_user_data: 'denied',
   ad_personalization: 'denied'
 });
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`,
-              }}
-            />
-          </>
+if (new RegExp(${JSON.stringify(CHILD_PATH_PATTERN_SOURCE)}).test(location.pathname)) {
+  window['ga-disable-${GA_ID}'] = true;
+} else {
+  (function () {
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}';
+    document.head.appendChild(s);
+  })();
+  gtag('js', new Date());
+  gtag('config', '${GA_ID}');
+}`,
+            }}
+          />
         )}
       </head>
       <body className="font-sans bg-[#FAF8F4] text-[#2E3440] antialiased">

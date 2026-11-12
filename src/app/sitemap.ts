@@ -14,39 +14,37 @@ const BASE_URL = "https://www.codeshipacademy.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
-    { url: `${BASE_URL}/programs`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/programs/camps`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/programs/birthday-parties`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/programs/ai-robotics`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: BASE_URL, changeFrequency: "weekly", priority: 1.0 },
+    { url: `${BASE_URL}/programs`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/programs/camps`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/programs/birthday-parties`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/programs/ai-robotics`, changeFrequency: "monthly", priority: 0.8 },
     ...PROGRAMS.map((p) => ({
       url: `${BASE_URL}/programs/${p.slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     })),
-    { url: `${BASE_URL}/register`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/register`, changeFrequency: "monthly", priority: 0.9 },
     ...PROGRAM_ORDER.map((level) => ({
       url: `${BASE_URL}/register/${level}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     })),
-    { url: `${BASE_URL}/schools`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/franchise`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/franchise/mobile-model`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/franchise/studio-model`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/franchise/regional-model`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
-    { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
-    { url: `${BASE_URL}/resources`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/locations`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/program-finder`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.7 },
-    { url: `${BASE_URL}/franchise-selector`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
-    { url: `${BASE_URL}/privacy-policy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE_URL}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE_URL}/policies/refund`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE_URL}/politiques/remboursement`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/schools`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/franchise`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/franchise/mobile-model`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/franchise/studio-model`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/franchise/regional-model`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/about`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/contact`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/resources`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/locations`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/program-finder`, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${BASE_URL}/franchise-selector`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/privacy-policy`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/policies/refund`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/politiques/remboursement`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const articlePages: MetadataRoute.Sitemap = articles.map((a) => ({
@@ -58,7 +56,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const locationPages: MetadataRoute.Sitemap = cities.map((city) => ({
     url: `${BASE_URL}/locations/${city}`,
-    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
@@ -67,7 +64,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // is pure paid traffic and intentionally excluded from this sitemap).
   const guyanaPages: MetadataRoute.Sitemap = GUYANA_CAMPAIGNS.map((c) => ({
     url: `${BASE_URL}/gy/${c.slug}`,
-    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
@@ -77,14 +73,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Developers/Engineers). Clean routes only; the paid-only ?lead_submitted=1
   // and ?v= variants are deliberately excluded.
   const trinidadPages: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/tt`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${BASE_URL}/tt`, changeFrequency: "monthly" as const, priority: 0.9 },
     ...TRINIDAD_CAMPAIGNS.map((c) => ({
       url: `${BASE_URL}/tt/${c.slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
   ];
 
-  return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages, ...trinidadPages];
+  // The site uses trailing slashes (next.config.mjs), so list the final URLs
+  // rather than ones that redirect. Only articles carry a lastModified: they
+  // have real edit dates, and a date that changes on every build tells search
+  // engines nothing.
+  return [...staticPages, ...articlePages, ...locationPages, ...guyanaPages, ...trinidadPages].map((entry) => ({
+    ...entry,
+    url: entry.url.endsWith("/") ? entry.url : `${entry.url}/`,
+  }));
 }

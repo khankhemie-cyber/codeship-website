@@ -1,5 +1,6 @@
 import type { ProgramSlug } from "@/data/locations";
 import type { LocationSlug } from "@/lib/registration";
+import { isChildPath } from "@/lib/childPages";
 
 /**
  * Analytics stubs. The registration link's UTM (see lib/registration.ts) is
@@ -16,7 +17,7 @@ interface EventPayload {
 }
 
 function dispatch(eventName: string, payload: EventPayload) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || isChildPath(window.location.pathname)) return;
 
   // GA4 / Meta Pixel are loaded only after analytics consent (see
   // components/Analytics.tsx). These globals are absent until then, so the
@@ -52,4 +53,25 @@ export function trackPriceView(payload: EventPayload) {
 
 export function trackTrialClick(payload: EventPayload) {
   dispatch("free_trial_click", payload);
+}
+
+type Params = Record<string, string | number | undefined>;
+
+/**
+ * GA4 recommended events (begin_checkout, generate_lead, purchase), with the
+ * matching standard Meta Pixel event when the pixel has loaded. Never sends
+ * anything from a child-facing page. GA applies the visitor's Consent Mode
+ * choice, so this is safe to call unconditionally.
+ */
+export function trackEvent(name: string, params: Params = {}, pixelEvent?: string) {
+  if (typeof window === "undefined" || isChildPath(window.location.pathname)) return;
+  const w = window as typeof window & {
+    gtag?: (...args: unknown[]) => void;
+    fbq?: (...args: unknown[]) => void;
+  };
+  w.gtag?.("event", name, params);
+  if (pixelEvent) {
+    const { value, currency } = params;
+    w.fbq?.("track", pixelEvent, value !== undefined ? { value, currency } : {});
+  }
 }

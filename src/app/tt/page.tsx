@@ -76,7 +76,7 @@ export default function TrinidadProgramsIndex() {
             >
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-lg font-bold text-[#001532]">{c.label}</span>
-                <span className="text-xs font-semibold text-[#138A9A]">{c.grades} · {c.ages}</span>
+                <span className="text-xs font-semibold text-[#0F6F7C]">{c.grades} · {c.ages}</span>
               </div>
               <p className="text-gray-500 text-sm mb-3 leading-relaxed">{c.subhead}</p>
               <p className="text-[#001532] text-xs font-semibold">{c.days} · {c.time}</p>
@@ -87,9 +87,9 @@ export default function TrinidadProgramsIndex() {
             </Link>
           ))}
         </div>
-        <p className="text-gray-400 text-[11px] text-center mt-6">
+        <p className="text-gray-600 text-xs text-center mt-6">
           Not sure which program fits? Email{" "}
-          <a href="mailto:admin@codeshipacademy.com" className="text-[#138A9A]">admin@codeshipacademy.com</a> and our team
+          <a href="mailto:admin@codeshipacademy.com" className="text-[#0F6F7C] underline">admin@codeshipacademy.com</a> and our team
           will help you choose.
         </p>
       </div>

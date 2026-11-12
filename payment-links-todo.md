@@ -11,12 +11,10 @@ is waitlist-only and never uses a Stripe link.
 
 ## Live — wired in (coding programs)
 
-| Program   | Grades | Stripe Payment Link |
-|-----------|--------|---------------------|
-| Explorers | K–1    | https://buy.stripe.com/cNi8wJ2s3gAd9Znei8dAk0j |
-| Builders  | 2–3    | https://buy.stripe.com/4gM5kxgiT97L4F34HydAk0h |
-| Developers| 4–5    | https://buy.stripe.com/cNi6oB9Uves52wVgqgdAk0i |
-| Engineers | 6–8    | https://buy.stripe.com/cNidR3eaL0Bfb3r3DudAk0k |
+The current links are listed only in
+[`src/lib/payment-links.ts`](src/lib/payment-links.ts) (January 2027 semester,
+CAD $129 each). They are deliberately not copied here: an older copy of this
+table drifted out of date.
 
 ## Stripe custom fields — confirmed
 

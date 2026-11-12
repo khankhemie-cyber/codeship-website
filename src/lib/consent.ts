@@ -22,3 +22,11 @@ export function setConsent(value: ConsentValue): void {
 export function hasAnalyticsConsent(): boolean {
   return getConsent() === "all";
 }
+
+/** Window event asking the cookie banner to reopen (the footer's "Cookie settings" link). */
+export const OPEN_SETTINGS_EVENT = "codeship-open-cookie-settings";
+
+export function openCookieSettings(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(OPEN_SETTINGS_EVENT));
+}

@@ -32,11 +32,13 @@ export async function POST(request: Request) {
   }
 
   const db = getQuizDb();
+  if (!db) console.error("[quizzes/submit] QUIZ_DB binding is missing");
   if (!db) return Response.json({ ok: false, error: "not_configured" }, { status: 500 });
 
   try {
     await saveSubmission(db, { quizId: quizId(quiz), program: quiz.program, studentName, className, ...marked });
-  } catch {
+  } catch (err) {
+    console.error(`[quizzes/submit] ${quizId(quiz)}:`, err);
     return Response.json({ ok: false, error: "save_failed" }, { status: 500 });
   }
 

@@ -32,7 +32,7 @@ export default function ProgramFinder() {
     const weekly = goal.href === null;
     return (
       <div className="bg-white shadow-lg p-8 sm:p-10 text-center">
-        <p className="text-sm font-bold uppercase tracking-widest text-[#138A9A]">Our pick for you</p>
+        <p className="text-sm font-bold uppercase tracking-widest text-[#0F6F7C]">Our pick for you</p>
         {weekly ? (
           <>
             <h2 className="text-3xl font-extrabold text-[#001532] mt-2">{program.level}</h2>

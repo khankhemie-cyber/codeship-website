@@ -158,7 +158,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="p-6">
-                <p className="text-sm font-bold uppercase tracking-widest text-[#138A9A]">Step {i + 1}</p>
+                <p className="text-sm font-bold uppercase tracking-widest text-[#0F6F7C]">Step {i + 1}</p>
                 <h3 className="font-display text-2xl font-extrabold text-[#001532] mt-1">{s.label}</h3>
                 <p className="text-lg text-gray-600 mt-2">{s.desc}</p>
               </div>

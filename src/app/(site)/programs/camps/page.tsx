@@ -40,7 +40,7 @@ export default function CampsPage() {
           {camps.map((c) => (
             <div key={c.title} className="bg-white shadow-sm p-7">
               <h2 className="text-2xl font-extrabold text-[#001532]">{c.title}</h2>
-              <p className="text-base font-semibold text-[#138A9A] mt-2">
+              <p className="text-base font-semibold text-[#0F6F7C] mt-2">
                 {c.when} · {c.length}
               </p>
               <p className="text-lg text-gray-600 mt-3">{c.desc}</p>

@@ -66,7 +66,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
   return (
     <div className="bg-[#FAF8F4]">
       {leadSubmitted && (
-        <div role="status" className="bg-[#138A9A] px-4 py-3">
+        <div role="status" className="bg-[#0F6F7C] px-4 py-3">
           <p className="max-w-2xl mx-auto text-white text-sm text-center font-medium">
             <span aria-hidden="true" className="mr-1.5">✓</span>
             {TRINIDAD_LEAD_SUBMITTED_MESSAGE}
@@ -169,7 +169,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
 
           {/* Schedule card */}
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-4">
-            <p className="text-[#138A9A] text-xs font-bold uppercase tracking-wide mb-2">Your Class Schedule</p>
+            <p className="text-[#0F6F7C] text-xs font-bold uppercase tracking-wide mb-2">Your Class Schedule</p>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
               <div className="flex justify-between sm:block">
                 <dt className="text-gray-500">Program</dt>
@@ -188,7 +188,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                 <dd className="text-[#001532] font-semibold">Live online · four weeks</dd>
               </div>
             </dl>
-            <p className="text-gray-400 text-[11px] mt-3">
+            <p className="text-gray-600 text-xs mt-3">
               Times align with our online groups and are shown in Eastern Time (ET): the same local clock time in Trinidad
               and Tobago during this September–October cohort.
             </p>
@@ -219,7 +219,7 @@ export default function TTView({ campaign }: { campaign: TrinidadCampaign }) {
                 >
                   {TRINIDAD_PRICING.ctaLabel}: Secure Checkout
                 </a>
-                <p className="text-gray-400 text-[11px] mt-3">
+                <p className="text-gray-300 text-xs mt-3">
                   You&apos;ll complete registration and payment securely. Our team then confirms class placement and next steps.
                 </p>
               </>
