@@ -66,7 +66,7 @@ export function gradeSpan(programs: Program[]) {
 
 export const LEVEL_ACCENT: Record<Program["slug"], string> = {
   explorers: "#F4D734",
-  builders: "#138A9A",
+  builders: "#0F6F7C", // darker than the Builders teal (#138A9A) so white text on it passes WCAG AA
   developers: "#6E43A8",
   engineers: "#001532",
 };

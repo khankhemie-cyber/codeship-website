@@ -61,6 +61,7 @@ export async function GET(request: Request) {
   if (!(await authorized())) return Response.json({ ok: false }, { status: 401, headers: NO_STORE });
 
   const db = getQuizDb();
+  if (!db) console.error("[quizzes/results] QUIZ_DB binding is missing");
   if (!db) return Response.json({ ok: false, error: "not_configured" }, { status: 500, headers: NO_STORE });
 
   const params = new URL(request.url).searchParams;
@@ -89,6 +90,7 @@ export async function GET(request: Request) {
 export async function DELETE(request: Request) {
   if (!(await authorized())) return Response.json({ ok: false }, { status: 401, headers: NO_STORE });
   const db = getQuizDb();
+  if (!db) console.error("[quizzes/results] QUIZ_DB binding is missing");
   if (!db) return Response.json({ ok: false, error: "not_configured" }, { status: 500, headers: NO_STORE });
   try {
     const { id } = (await request.json()) as { id?: number };

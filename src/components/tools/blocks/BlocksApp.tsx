@@ -484,7 +484,7 @@ export default function BlocksApp() {
           <span className="block h-8 w-7 bg-no-repeat" style={{ backgroundImage: "url(/logo-header.png)", backgroundSize: "auto 100%", backgroundPosition: "left center" }} />
         </span>
         {/* The wordmark gives way to the controls on narrow (or 150%-zoomed) screens. */}
-        <h1 className="mr-1 hidden font-display text-xl font-extrabold xl:block">
+        <h1 className="sr-only font-display text-xl font-extrabold xl:not-sr-only xl:mr-1 xl:block">
           CODEship <span className="text-[#D58401]">{s.title}</span>
         </h1>
         {/* Create (free play) or Levels (reach the goal) */}
@@ -495,6 +495,7 @@ export default function BlocksApp() {
               type="button"
               role="tab"
               aria-selected={settings.view === v}
+              aria-label={v === "create" ? s.create : s.levels}
               data-testid={`view-${v}`}
               onClick={() => {
                 if (v === settings.view) return;

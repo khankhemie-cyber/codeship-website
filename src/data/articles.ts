@@ -2000,7 +2000,7 @@ export const articles: Article[] = [
     cluster: "comparisons-listicles",
     targetQuery: "coding camp vs classes kids",
     internalLinks: [
-      { label: "Weekly Classes", href: "/programs/weekly-classes" },
+      { label: "Weekly Classes", href: "/programs" },
       { label: "Camps", href: "/programs/camps" },
     ],
     content: `

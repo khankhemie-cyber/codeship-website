@@ -14,7 +14,10 @@ export async function POST(request: Request) {
     if (!password) return Response.json({ ok: false }, { status: 400 });
 
     const secret = getInstructorPassword();
-    if (!secret) return Response.json({ ok: false, error: "not_configured" }, { status: 500 });
+    if (!secret) {
+      console.error("[quizzes/instructor-login] QUIZ_INSTRUCTOR_PASSWORD is not set");
+      return Response.json({ ok: false, error: "not_configured" }, { status: 500 });
+    }
 
     if (!safeEqual(password.trim(), secret.trim())) {
       // Slow down password guessing.

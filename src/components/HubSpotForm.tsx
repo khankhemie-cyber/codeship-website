@@ -3,6 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
+import { trackEvent } from "@/lib/analytics";
 
 interface Props {
   formId: string;
@@ -38,6 +39,9 @@ export default function HubSpotForm({
 
     // Listen for HubSpot submission events (new embed format fires via postMessage)
     function handleMessage(event: MessageEvent) {
+      // Only HubSpot (its embed script on this page, or its form frame) may report a submission.
+      const fromHubSpot = /^https:\/\/([a-z0-9-]+\.)*(hsforms\.(com|net)|hubspot\.com)$/.test(event.origin);
+      if (event.origin !== window.location.origin && !fromHubSpot) return;
       if (!event.data || typeof event.data !== "object") return;
       const d = event.data as { type?: string; eventName?: string; id?: string };
       if (
@@ -46,6 +50,7 @@ export default function HubSpotForm({
         d.id === formId
       ) {
         setSubmitted(true);
+        trackEvent("generate_lead", { form_id: formId, page_path: window.location.pathname }, "Lead");
       }
     }
 

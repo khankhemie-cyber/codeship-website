@@ -7,6 +7,7 @@ import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { CLASSES_PER_SEMESTER } from "@/config/offering";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/config/contact";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * Per-program Semester 1 content for the post-payment page. Project names and
@@ -43,24 +44,33 @@ export default function SuccessPageTemplate({ program }: SuccessPageTemplateProp
   useEffect(() => {
     if (typeof window === "undefined") return;
     const key = `purchase_fired_${program}`;
-    if (sessionStorage.getItem(key)) return;
-
-    // fbq is only present once the visitor has accepted analytics cookies
-    // (see components/Analytics.tsx). The optional call respects that consent
-    // gate: the value is used for the Pixel event only and is never rendered.
-    const w = window as typeof window & { fbq?: (...args: unknown[]) => void };
-    w.fbq?.("track", "Purchase", {
-      value: config.priceCad,
-      currency: "CAD",
-      content_name: `${config.label} - Semester 1`,
-      content_type: "product",
-    });
-
     try {
+      if (sessionStorage.getItem(key)) return;
       sessionStorage.setItem(key, "true");
     } catch {
-      // Ignore storage failures (private mode).
+      // Storage blocked (private mode): report anyway.
     }
+
+    const name = `${config.label} - Semester 1`;
+    // GA4 purchase (GA applies the visitor's Consent Mode choice).
+    trackEvent("purchase", {
+      currency: "CAD",
+      value: config.priceCad,
+      item_name: name,
+      item_id: program,
+    });
+
+    // The Meta Pixel only exists after "Accept all", and it loads after this
+    // page hydrates, so wait briefly for it rather than miss the conversion.
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      const w = window as typeof window & { fbq?: (...args: unknown[]) => void };
+      if (w.fbq) {
+        w.fbq("track", "Purchase", { value: config.priceCad, currency: "CAD", content_name: name, content_type: "product" });
+      }
+      if (w.fbq || ++tries >= 20) window.clearInterval(timer);
+    }, 250);
+    return () => window.clearInterval(timer);
   }, [program, config.priceCad, config.label]);
 
   return (

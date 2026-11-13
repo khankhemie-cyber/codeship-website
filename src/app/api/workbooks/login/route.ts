@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
     const secret = await getWorkbookPassword(program);
     if (!secret) {
+      console.error(`[workbooks/login] password environment variable is not set`);
       return Response.json({ ok: false, error: "not_configured" }, { status: 500 });
     }
 

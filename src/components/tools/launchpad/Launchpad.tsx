@@ -60,7 +60,7 @@ type Settings = {
 const DEFAULT_SETTINGS: Settings = { theme: "dark", lang: "en", fontSize: 15, wrap: false, autoRun: true, split: 50 };
 
 const FILE_TABS: { id: Lang; name: string; badge: string; color: string }[] = [
-  { id: "html", name: "index.html", badge: "<>", color: "bg-[#138A9A] text-white" },
+  { id: "html", name: "index.html", badge: "<>", color: "bg-[#0F6F7C] text-white" },
   { id: "css", name: "styles.css", badge: "#", color: "bg-[#6E43A8] text-white" },
   { id: "js", name: "script.js", badge: "JS", color: "bg-[#F4D734] text-[#001532]" },
 ];
@@ -199,7 +199,7 @@ function MenuItem({
 
 function Logo() {
   return (
-    <div className="flex items-center gap-2" aria-label="CODEship Academy">
+    <div className="flex items-center gap-2" role="img" aria-label="CODEship Academy">
       {/* The brain mark is the left part of the header logo (which has a white
           background), shown on a white app-icon tile so it reads on both themes. */}
       <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
@@ -486,6 +486,7 @@ export default function Launchpad() {
           <input
             type="checkbox"
             role="switch"
+            aria-label={s.autoRun}
             checked={settings.autoRun}
             onChange={(e) => updateSettings({ autoRun: e.target.checked })}
             className="peer sr-only"
@@ -877,7 +878,7 @@ export default function Launchpad() {
             type="button"
             onClick={() => setPreviewHidden(false)}
             title={s.showPreview}
-            className={`absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 items-center gap-1 rounded-l-lg bg-[#138A9A] px-2 py-3 text-white shadow-lg md:flex ${focusRing}`}
+            className={`absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 items-center gap-1 rounded-l-lg bg-[#0F6F7C] px-2 py-3 text-white shadow-lg md:flex ${focusRing}`}
           >
             <Icon name="chevronLeft" />
             <span className="sr-only">{s.showPreview}</span>
@@ -887,7 +888,7 @@ export default function Launchpad() {
       </div>
 
       {toast && (
-        <div role="status" className="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-[#138A9A] px-4 py-2 text-sm font-semibold text-white shadow-xl">
+        <div role="status" className="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-[#0F6F7C] px-4 py-2 text-sm font-semibold text-white shadow-xl">
           {toast}
         </div>
       )}
@@ -903,7 +904,7 @@ export default function Launchpad() {
         >
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 text-[#001532] shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#138A9A] text-white">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#0F6F7C] text-white">
                 <Icon name={share.copied ? "check" : "link"} className="h-5 w-5" />
               </span>
               <h2 id="share-title" className="font-display text-xl font-extrabold">

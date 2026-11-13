@@ -56,8 +56,9 @@ extraction). Validate any page with Google's Rich Results Test after changes.
 
 - `/lp/*` (paid-only landing pages): `noindex`, excluded from `sitemap.ts`, disallowed in `robots.ts`.
 - `/gy/*` (Guyana, SEO-relevant): indexable, included in `sitemap.ts`, **not** disallowed.
-- `/franchise/{ali-saad,jaspreet,raghavi,tom-che}` (private, password-gated kits): `noindex`,
-  disallowed — unchanged, pre-existing.
+- `/franchise/*` (franchise overview and the three model pages): indexable. The private,
+  per-person franchise kits were removed from the site (the repository is public, so they could
+  not be kept private here); send proposals to prospects directly instead.
 - `/workbooks/*` (password-gated student workbooks): `noindex`, disallowed, not in `sitemap.ts`.
 - Everything else (programs, locations, resources/blog, schools, franchise overview): indexable.
 

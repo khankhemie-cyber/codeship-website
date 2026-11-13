@@ -48,7 +48,8 @@ export async function GET(request: Request) {
         "X-Robots-Tag": "noindex, nofollow, noarchive",
       },
     });
-  } catch {
+  } catch (err) {
+    console.error(`[workbooks/download] ${program}:`, err);
     return new Response("The workbook is not available right now. Please tell your instructor.", {
       status: 500,
     });
