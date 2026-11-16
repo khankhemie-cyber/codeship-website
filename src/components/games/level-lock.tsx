@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ClassPasswordForm, { useClassAccess } from "@/components/ClassPasswordForm";
 import { PROGRAMS } from "@/data/programs";
 import type { ProgramSlug } from "@/data/programs";
@@ -24,6 +25,33 @@ export function useLevelAccess(program: ProgramSlug) {
     isLocked: (index: number) => index >= FREE_LEVELS && status !== "open",
     markUnlocked: () => setStatus("open"),
   };
+}
+
+/**
+ * Fetches a game's paid levels (6+) once the class password is in. The data is
+ * never part of the public bundle: /api/arcade/levels returns it only to a
+ * browser holding the class-password cookie. Returns null until loaded.
+ */
+export function usePaidLevels<T>(game: string, unlocked: boolean): { levels: T[] | null; failed: boolean } {
+  const [levels, setLevels] = useState<T[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!unlocked) return;
+    let cancelled = false;
+    setFailed(false);
+    fetch(`/api/arcade/levels/?game=${encodeURIComponent(game)}`, { cache: "no-store", credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((data: { levels?: T[] }) => {
+        if (!cancelled) setLevels(data.levels ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [game, unlocked]);
+  return { levels, failed };
 }
 
 function programLabel(program: ProgramSlug) {

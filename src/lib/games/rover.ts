@@ -192,18 +192,25 @@ export interface RoverLevel {
   tools: { label: string; insert: string }[];
 }
 
-const MOVE = { label: "move();", insert: "move();\n" };
-const LEFT = { label: "turnLeft();", insert: "turnLeft();\n" };
-const RIGHT = { label: "turnRight();", insert: "turnRight();\n" };
-const COLLECT = { label: "collect();", insert: "collect();\n" };
-const FOR = { label: "for loop", insert: "for (let i = 0; i < 3; i++) {\n  move();\n}\n" };
-const IF = { label: "if", insert: "if (gemHere()) {\n  collect();\n}\n" };
-const WHILE = { label: "while", insert: "while (!atGoal()) {\n  move();\n}\n" };
-const FUNC = { label: "function", insert: "function hop() {\n  move();\n}\n" };
-const LET = { label: "let", insert: "let steps = 3;\n" };
-const SAY = { label: "say()", insert: 'say("Hello!");\n' };
+export const MOVE = { label: "move();", insert: "move();\n" };
+export const LEFT = { label: "turnLeft();", insert: "turnLeft();\n" };
+export const RIGHT = { label: "turnRight();", insert: "turnRight();\n" };
+export const COLLECT = { label: "collect();", insert: "collect();\n" };
+export const FOR = { label: "for loop", insert: "for (let i = 0; i < 3; i++) {\n  move();\n}\n" };
+export const IF = { label: "if", insert: "if (gemHere()) {\n  collect();\n}\n" };
+export const WHILE = { label: "while", insert: "while (!atGoal()) {\n  move();\n}\n" };
+export const FUNC = { label: "function", insert: "function hop() {\n  move();\n}\n" };
+export const LET = { label: "let", insert: "let steps = 3;\n" };
+export const SAY = { label: "say()", insert: 'say("Hello!");\n' };
 
-export const ROVER_LEVELS: RoverLevel[] = [
+/**
+ * The free missions (1–5). They ship with the page so anyone can play them.
+ * Missions 6+ are part of the paid program: their data lives only on the
+ * server (src/lib/games/paid/rover.ts) and is sent by /api/arcade/levels to a
+ * browser that holds the class-password cookie. Never import the paid file
+ * from client code, or the paid levels end up in the public JavaScript.
+ */
+export const ROVER_FREE_LEVELS: RoverLevel[] = [
   {
     id: "first-steps",
     title: "First Steps",
@@ -277,80 +284,15 @@ export const ROVER_LEVELS: RoverLevel[] = [
     hint: "One step = move, collect, turnRight, move, turnLeft. Repeat it 4 times.",
     tools: [MOVE, LEFT, RIGHT, COLLECT, FOR],
   },
-  {
-    id: "functions",
-    title: "Jump Function",
-    concept: "Functions",
-    lesson:
-      "A function is a new command you invent. Give a group of steps a name, then use that name as many times as you like.",
-    example: "function spin() {\n  turnLeft();\n  turnLeft();\n}\n\nspin();",
-    mission: "Hop over 3 walls and grab the gems on top. Make a jump() function!",
-    map: ["###########", "#..*.*.*..#", "#R.#.#.#.G#", "###########"],
-    dir: 1,
-    starter: "function jump() {\n  turnLeft();\n  move();\n  \n}\n\nmove();\njump();\n",
-    par: 15,
-    hint: "jump(): turnLeft, move, turnRight, move, collect, move, turnRight, move, turnLeft.",
-    tools: [MOVE, LEFT, RIGHT, COLLECT, FUNC, FOR],
-  },
-  {
-    id: "if-gem",
-    title: "Gem Detector",
-    concept: "Conditionals (if)",
-    lesson:
-      "An if statement asks a yes/no question. The code inside only runs when the answer is yes. Use gemHere() to check for a gem.",
-    example: "if (gemHere()) {\n  collect();\n}",
-    mission: "Gems are scattered along the track. Only collect where a gem is — 4 lines or fewer.",
-    map: ["############", "#R.*..**.*G#", "############"],
-    dir: 1,
-    starter: "for (let i = 0; i < 9; i++) {\n  move();\n  \n}\n",
-    par: 4,
-    hint: "Inside the loop, after move(); add: if (gemHere()) { collect(); }",
-    tools: [MOVE, COLLECT, FOR, IF],
-  },
-  {
-    id: "while-spiral",
-    title: "Spiral Maze",
-    concept: "While loops",
-    lesson:
-      "A while loop keeps going as long as its question is true. You don't need to know how many steps — the rover figures it out!",
-    example: "while (!atGoal()) {\n  move();\n}",
-    mission: "Escape the spiral using a while loop and pathAhead().",
-    map: ["#########", "#R......#", "#######.#", "#...G##.#", "#.#####.#", "#.......#", "#########"],
-    dir: 1,
-    starter: "while (!atGoal()) {\n  \n}\n",
-    par: 5,
-    hint: "If pathAhead() is true, move(). Otherwise (else), turnRight().",
-    tools: [MOVE, RIGHT, WHILE, { label: "if / else", insert: "if (pathAhead()) {\n  move();\n} else {\n  turnRight();\n}\n" }],
-  },
-  {
-    id: "variables",
-    title: "Shrinking Spiral",
-    concept: "Variables",
-    lesson:
-      "A variable is a labelled box that stores a value. You can change what's inside: steps = steps - 1 makes it one smaller.",
-    example: "let steps = 6;\nsteps = steps - 1; // now 5",
-    mission: "Follow the dotted trail: 6 steps, then 5, then 4... Use a variable!",
-    map: ["#########", "#Roooooo#", "#......o#", "#..ooo.o#", "#..o.G.o#", "#..o...o#", "#..ooooo#", "#########"],
-    dir: 1,
-    starter: "let steps = 6;\n\nwhile (steps > 0) {\n  \n  steps = steps - 1;\n}\n",
-    par: 6,
-    hint: "Inside the while: a for loop that moves `steps` times, then turnRight().",
-    tools: [MOVE, RIGHT, LET, FOR, WHILE],
-  },
-  {
-    id: "bug-hunt",
-    title: "Bug Hunt",
-    concept: "Debugging",
-    lesson:
-      "Real developers spend lots of time debugging — finding and fixing mistakes. Run the code, read the error, fix one bug at a time.",
-    example: "// Tip: run it, see where it breaks,\n// then fix that line.",
-    mission: "This code has 3 bugs. Squash them all!",
-    map: ["#########", "#R.*.*.*#", "#######.#", "#######.#", "#######G#", "#########"],
-    dir: 1,
-    starter:
-      "// 🐞 This code has 3 bugs. Find and fix them!\nfor (let i = 0; i < 2; i++) {\n  move();\n  Move();\n  collect();\n}\nturnLeft();\nmove();\nmove();\nmove();\n",
-    par: 8,
-    hint: "Check the capital letters, how many times the loop runs, and which way the rover should turn.",
-    tools: [MOVE, LEFT, RIGHT, COLLECT, FOR],
-  },
+
+];
+
+/** Every mission in play order, for the mission grid (titles only, no level content). */
+export const ROVER_CATALOG: { id: string; title: string; concept: string }[] = [
+  ...ROVER_FREE_LEVELS.map(({ id, title, concept }) => ({ id, title, concept })),
+  { id: "functions", title: "Jump Function", concept: "Functions" },
+  { id: "if-gem", title: "Gem Detector", concept: "Conditionals (if)" },
+  { id: "while-spiral", title: "Spiral Maze", concept: "While loops" },
+  { id: "variables", title: "Shrinking Spiral", concept: "Variables" },
+  { id: "bug-hunt", title: "Bug Hunt", concept: "Debugging" },
 ];

@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  ROVER_LEVELS,
+  ROVER_CATALOG,
+  ROVER_FREE_LEVELS,
   countLines,
   scoreRover,
   simulateRover,
@@ -13,7 +14,7 @@ import {
 import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate, useDevFact } from "./arcade-kit";
 import { CodeEditor, highlight, type CodeEditorHandle } from "./code-editor";
-import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
+import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess, usePaidLevels } from "./level-lock";
 
 const COMMANDS = ["move", "turnLeft", "turnRight", "collect", "pathAhead", "gemHere", "atGoal", "say"];
 const SPEEDS = [
@@ -219,7 +220,7 @@ function LevelSelect({
   askUnlock: () => void;
 }) {
   const p = useProgress();
-  const total = ROVER_LEVELS.reduce((s, l) => s + starsFor(p, "rover", l.id), 0);
+  const total = ROVER_CATALOG.reduce((s, l) => s + starsFor(p, "rover", l.id), 0);
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
       <div className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
@@ -234,17 +235,17 @@ function LevelSelect({
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">Stars collected</p>
           <p className="mt-1 font-display text-4xl text-amber">
-            {total} <span className="text-white/40">/ {ROVER_LEVELS.length * 3}</span>
+            {total} <span className="text-white/40">/ {ROVER_CATALOG.length * 3}</span>
           </p>
           <p className="mt-1 text-xs text-white/60">★ reach the beacon · ★ grab every gem · ★ use par lines or fewer</p>
         </div>
       </div>
 
       <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {ROVER_LEVELS.map((l, i) => {
+        {ROVER_CATALOG.map((l, i) => {
           const stars = starsFor(p, "rover", l.id);
           const paid = isPaid(i);
-          const locked = paid || (!unlockAll && i > 0 && starsFor(p, "rover", ROVER_LEVELS[i - 1].id) === 0);
+          const locked = paid || (!unlockAll && i > 0 && starsFor(p, "rover", ROVER_CATALOG[i - 1].id) === 0);
           return (
             <li key={l.id}>
               <motion.button
@@ -290,7 +291,7 @@ function LevelSelect({
           <p>
             Missions 1–{FREE_LEVELS} are free.{" "}
             <button type="button" onClick={askUnlock} className="focus-ring rounded font-semibold text-amber underline-offset-4 hover:underline">
-              Have a class password? Unlock all {ROVER_LEVELS.length} →
+              Have a class password? Unlock all {ROVER_CATALOG.length} →
             </button>
           </p>
         )}
@@ -316,8 +317,7 @@ function rotationsFor(frames: { d: number }[], startDir: number) {
   return out;
 }
 
-function Play({ index, onBack, onNext }: { index: number; onBack: () => void; onNext: () => void }) {
-  const level = ROVER_LEVELS[index];
+function Play({ index, level, onBack, onNext }: { index: number; level: RoverLevel; onBack: () => void; onNext: () => void }) {
   const storeKey = `codeship-rover-code-${level.id}`;
   const [code, setCode] = useState(level.starter);
   const [result, setResult] = useState<RoverResult | null>(null);
@@ -374,8 +374,8 @@ function Play({ index, onBack, onNext }: { index: number; onBack: () => void; on
           level.id === "bug-hunt" && "bug-hunter",
         ];
         const p = getProgress();
-        if (ROVER_LEVELS.every((l) => (p.stars[`rover:${l.id}`] ?? 0) > 0)) badges.push("rover-commander");
-        if (ROVER_LEVELS.every((l) => (p.stars[`rover:${l.id}`] ?? 0) === 3)) badges.push("perfectionist");
+        if (ROVER_CATALOG.every((l) => (p.stars[`rover:${l.id}`] ?? 0) > 0)) badges.push("rover-commander");
+        if (ROVER_CATALOG.every((l) => (p.stars[`rover:${l.id}`] ?? 0) === 3)) badges.push("perfectionist");
         window.setTimeout(() => {
           badges.forEach((b) => {
             if (!b) return;
@@ -441,7 +441,7 @@ function Play({ index, onBack, onNext }: { index: number; onBack: () => void; on
         <button type="button" onClick={onBack} className="focus-ring rounded-lg px-3 py-1.5 text-sm font-semibold text-white/70 hover:bg-white/10 hover:text-white">
           ← All missions
         </button>
-        <span className="text-sm text-white/40">Mission {index + 1} of {ROVER_LEVELS.length}</span>
+        <span className="text-sm text-white/40">Mission {index + 1} of {ROVER_CATALOG.length}</span>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -567,7 +567,7 @@ function Play({ index, onBack, onNext }: { index: number; onBack: () => void; on
               <button type="button" onClick={() => setOutcome(null)} className="focus-ring flex-1 rounded-2xl border border-white/15 px-4 py-3 font-semibold hover:bg-white/10">
                 Improve my code
               </button>
-              {index < ROVER_LEVELS.length - 1 ? (
+              {index < ROVER_CATALOG.length - 1 ? (
                 <button type="button" onClick={onNext} className="focus-ring flex-1 rounded-2xl bg-amber px-4 py-3 font-bold text-navy">
                   Next mission →
                 </button>
@@ -589,6 +589,10 @@ export function RoverRescue() {
   const [unlockAll, setUnlockAll] = useState(false);
   const [asking, setAsking] = useState(false);
   const access = useLevelAccess("developers");
+  // Missions 6+ come from the server only after the class password (see usePaidLevels).
+  const paid = usePaidLevels<RoverLevel>("rover", access.unlocked);
+  const levels: RoverLevel[] = paid.levels ? [...ROVER_FREE_LEVELS, ...paid.levels] : ROVER_FREE_LEVELS;
+  const current = index === null ? undefined : levels[index];
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -607,13 +611,27 @@ export function RoverRescue() {
           unlocked={access.unlocked}
           askUnlock={() => setAsking(true)}
         />
+      ) : !current ? (
+        <div className="mx-auto max-w-md px-4 py-24 text-center text-white/70" aria-live="polite">
+          {paid.failed ? (
+            <>
+              <p>We couldn’t load this mission. Check your internet connection and try again.</p>
+              <button type="button" onClick={() => setIndex(null)} className="focus-ring mt-4 rounded-xl border border-white/20 px-4 py-2 font-semibold text-white">
+                ← All missions
+              </button>
+            </>
+          ) : (
+            <p>Loading mission…</p>
+          )}
+        </div>
       ) : (
         <Play
           key={index}
           index={index}
+          level={current}
           onBack={() => setIndex(null)}
           onNext={() => {
-            const next = Math.min(ROVER_LEVELS.length - 1, index + 1);
+            const next = Math.min(ROVER_CATALOG.length - 1, index + 1);
             if (access.isLocked(next)) {
               setIndex(null);
               setAsking(true);
