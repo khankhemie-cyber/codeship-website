@@ -9,7 +9,7 @@
  */
 import { useSyncExternalStore } from "react";
 
-export type GameId = "rover" | "bot" | "studio";
+export type GameId = "rover" | "bot" | "studio" | "prompt";
 
 export interface Progress {
   /** A fun coder name the player picks (never a real name — we say so in the UI). */
@@ -40,6 +40,8 @@ export const BADGES: Badge[] = [
   { id: "shipped-it", emoji: "🚀", title: "Shipped It!", description: "Download your app to share it." },
   { id: "app-architect", emoji: "🏗️", title: "App Architect", description: "Complete every App Studio mission." },
   { id: "perfectionist", emoji: "🌟", title: "Perfectionist", description: "Get 3 stars on every Rover mission." },
+  { id: "fact-checker", emoji: "🕵️", title: "Fact Checker", description: "Catch Astro’s mistake in Prompt Pilot." },
+  { id: "prompt-pilot", emoji: "🧑‍✈️", title: "Prompt Pilot", description: "Finish every Prompt Pilot mission." },
 ];
 
 export const RANKS = [

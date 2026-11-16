@@ -7,6 +7,7 @@ import { BADGES, rankFor, setCoderName, useProgress, type GameId, type Progress 
 import { ROVER_CATALOG } from "@/lib/games/rover";
 import { PY_ROUNDS, RULE_CATALOG, TRAIN_ROUNDS } from "@/lib/games/bot";
 import { MISSIONS } from "@/lib/games/studio";
+import { PROMPT_CATALOG } from "@/lib/games/prompt";
 import { Pill, RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
 import { FREE_LEVELS } from "./level-lock";
 
@@ -37,6 +38,19 @@ const ARCADE_GAMES: ArcadeGame[] = [
     gradient: "from-[#2b3a8f] via-[#25306b] to-[#1b1e33]",
     glow: "shadow-[0_30px_80px_-30px_rgba(96,165,250,0.7)]",
     teaches: ["Sequencing", "Loops", "Functions", "Conditionals", "While loops", "Variables", "Debugging"],
+  },
+  {
+    game: "prompt",
+    title: "Prompt Pilot",
+    emoji: "🧑‍✈️",
+    href: "/ship-it/prompt-pilot/",
+    grades: "Ages 7–10",
+    language: "AI skills",
+    pitch: "Team up with Astro, an AI copilot. Learn to ask clear questions, ask for sources, catch AI mistakes, and grow your own ideas.",
+    levels: PROMPT_CATALOG.map((m) => m.id),
+    gradient: "from-[#0e6b73] via-[#1d4a63] to-[#1b1e33]",
+    glow: "shadow-[0_30px_80px_-30px_rgba(45,212,191,0.6)]",
+    teaches: ["Clear prompts", "Asking for sources", "Fact-checking AI", "Growing ideas", "Spotting gaps"],
   },
   {
     game: "studio",
@@ -137,7 +151,7 @@ export function ArcadeHub() {
       <section className="relative mx-auto max-w-6xl px-4 pb-6 pt-12 md:px-6 md:pt-16">
         <div className="grid items-end gap-10 md:grid-cols-[1.3fr_1fr]">
           <div>
-            <Pill tone="yellow">Free to start · No sign-up · Grades 4–8</Pill>
+            <Pill tone="yellow">Free to start · No sign-up · Ages 7–14</Pill>
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-4 font-display text-5xl font-extrabold leading-[0.95] text-white md:text-7xl">
               Ship It! <span className="bg-gradient-to-r from-amber to-pink-400 bg-clip-text text-transparent">Arcade</span>
             </motion.h1>
@@ -170,7 +184,7 @@ export function ArcadeHub() {
         <h2 id="games-heading" className="sr-only">
           Choose a game
         </h2>
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {ARCADE_GAMES.map((g, i) => {
             const stars = starsIn(p, g);
             const max = g.levels.length * 3;
