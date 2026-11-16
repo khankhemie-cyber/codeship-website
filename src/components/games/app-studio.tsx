@@ -1285,7 +1285,7 @@ export function AppStudio() {
 
   return (
     <>
-      <ArcadeTopBar title="App Studio" emoji="📱" semester="Code Hour · App design" />
+      <ArcadeTopBar title="App Studio" emoji="📱" semester="Ship It! Arcade · App design" />
       <RewardLayer />
       {current ? (
         <Editor key={current.id} project={current} onSave={onSave} onExit={() => setOpenId(null)} allProjects={projects} />

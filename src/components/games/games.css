@@ -1,4 +1,4 @@
-/* Code Hour games: shared helpers (the games are dark, full-bleed apps). */
+/* Ship It! Arcade games: shared helpers (the games are dark, full-bleed apps). */
 .focus-ring:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px #161827, 0 0 0 5px #F4D734;
@@ -16,7 +16,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .code-hour [class*="animate-"] {
+  .ship-it [class*="animate-"] {
     animation: none !important;
   }
 }
