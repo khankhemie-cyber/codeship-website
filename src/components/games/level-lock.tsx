@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import ClassPasswordForm, { useClassAccess } from "@/components/ClassPasswordForm";
+import ClassPasswordForm from "@/components/ClassPasswordForm";
 import { PROGRAMS } from "@/data/programs";
 import type { ProgramSlug } from "@/data/programs";
 import { Modal } from "./arcade-kit";
@@ -13,11 +13,35 @@ import { Modal } from "./arcade-kit";
  * class password families already use for that program's workbook and quizzes
  * (checked on the server by /api/workbooks/login, which sets an HttpOnly
  * cookie). Every game must gate its levels with useLevelAccess().
+ *
+ * A game for an age range that spans programs (e.g. Prompt Pilot, ages 7–10)
+ * passes several programs: any one of their class passwords unlocks it.
  */
 export const FREE_LEVELS = 5;
 
-export function useLevelAccess(program: ProgramSlug) {
-  const [status, setStatus] = useClassAccess(program);
+type Programs = ProgramSlug | readonly ProgramSlug[];
+const asList = (p: Programs): readonly ProgramSlug[] => (typeof p === "string" ? [p] : p);
+
+export function useLevelAccess(program: Programs) {
+  const list = asList(program);
+  const key = list.join(",");
+  const [status, setStatus] = useState<"checking" | "locked" | "open">("checking");
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all(
+      key.split(",").map((slug) =>
+        fetch(`/api/workbooks/session/?program=${slug}`, { cache: "no-store" })
+          .then((res) => (res.ok ? res.json() : { ok: false }))
+          .then((data: { ok?: boolean }) => !!data.ok)
+          .catch(() => false),
+      ),
+    ).then((results) => {
+      if (!cancelled) setStatus(results.some(Boolean) ? "open" : "locked");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [key]);
   return {
     status,
     unlocked: status === "open",
@@ -71,14 +95,18 @@ export function LockBadge() {
 export function UnlockModal({
   open,
   onClose,
-  program,
+  program: programs,
   onUnlock,
 }: {
   open: boolean;
   onClose: () => void;
-  program: ProgramSlug;
+  /** One program, or several when any of their class passwords unlocks the game. */
+  program: Programs;
   onUnlock: () => void;
 }) {
+  const list = asList(programs);
+  const [picked, setPicked] = useState<ProgramSlug>(list[0]);
+  const program = list.includes(picked) ? picked : list[0];
   const p = PROGRAMS.find((x) => x.slug === program);
   return (
     <Modal open={open} onClose={onClose} label="Unlock more levels">
@@ -89,12 +117,38 @@ export function UnlockModal({
         <p className="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-amber">Class levels</p>
         <h3 className="mt-1 font-display text-3xl font-extrabold">You finished the free levels!</h3>
         <p className="mt-2 text-sm text-white/70">
-          The first {FREE_LEVELS} levels are free for everyone. The rest are part of the {p?.level ?? "CODEship"} program. Enter your class
-          password to keep going.
+          The first {FREE_LEVELS} levels are free for everyone. The rest are part of{" "}
+          {list.length > 1 ? "our CODEship programs" : `the ${p?.level ?? "CODEship"} program`}. Enter your class password to keep going.
         </p>
       </div>
+      {list.length > 1 ? (
+        <div className="mt-5" role="radiogroup" aria-label="Which class are you in?">
+          <p className="mb-2 text-center text-sm font-semibold text-white/80">Which class are you in?</p>
+          <div className="grid grid-cols-2 gap-2">
+            {list.map((slug) => {
+              const info = PROGRAMS.find((x) => x.slug === slug);
+              return (
+                <button
+                  key={slug}
+                  type="button"
+                  role="radio"
+                  aria-checked={program === slug}
+                  onClick={() => setPicked(slug)}
+                  className={`focus-ring rounded-xl border px-3 py-2 text-sm font-bold transition ${
+                    program === slug ? "border-amber bg-amber text-navy" : "border-white/20 text-white hover:bg-white/10"
+                  }`}
+                >
+                  {info?.level ?? slug}
+                  <span className="block text-[11px] font-semibold opacity-75">{info?.gradeBand}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
       <div className="mt-5 [&>div]:max-w-none [&>div]:rounded-2xl">
         <ClassPasswordForm
+          key={program}
           program={program}
           level={p?.level ?? program}
           action="Unlock all levels"
