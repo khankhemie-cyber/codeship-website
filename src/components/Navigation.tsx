@@ -7,6 +7,7 @@ import Image from "next/image";
 const navLinks = [
   { href: "/programs", label: "Programs" },
   { href: "/locations", label: "Locations" },
+  { href: "/code-hour", label: "Code Hour" },
   { href: "/schools", label: "For Schools" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

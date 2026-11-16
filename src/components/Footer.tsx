@@ -22,6 +22,7 @@ const COLUMNS = [
       { href: "/programs/birthday-parties", label: "Birthday parties" },
       { href: "/schools", label: "For schools" },
       { href: "/resources", label: "Parent resources" },
+      { href: "/code-hour", label: "Code Hour: free coding games" },
       { href: "/franchise", label: "Franchise" },
     ],
   },

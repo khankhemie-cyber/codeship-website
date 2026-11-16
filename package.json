@@ -26,6 +26,7 @@
     "@lezer/highlight": "^1.2.5",
     "blockly": "13.3.0",
     "codemirror": "^6.0.2",
+    "framer-motion": "^11.15.0",
     "next": "14.2.35",
     "next-sitemap": "^4.2.3",
     "pyodide": "314.0.7",
