@@ -125,10 +125,10 @@ export function ArcadeTopBar({ title, emoji, semester }: { title: string; emoji:
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#161827]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 md:px-6">
         <Link
-          href="/code-hour/"
+          href="/ship-it/"
           className="focus-ring flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white"
         >
-          <span aria-hidden>←</span> <span className="hidden sm:inline">Code Hour</span>
+          <span aria-hidden>←</span> <span className="hidden sm:inline">Ship It! Arcade</span>
         </Link>
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <span className="text-2xl" aria-hidden>

@@ -9,7 +9,7 @@ import { PY_ROUNDS, RULE_CHALLENGES, TRAIN_ROUNDS } from "@/lib/games/bot";
 import { MISSIONS } from "@/lib/games/studio";
 import { Pill, RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
 
-interface CodeHourGame {
+interface ArcadeGame {
   game: GameId;
   title: string;
   emoji: string;
@@ -23,12 +23,12 @@ interface CodeHourGame {
   teaches: string[];
 }
 
-const CODE_HOUR_GAMES: CodeHourGame[] = [
+const ARCADE_GAMES: ArcadeGame[] = [
   {
     game: "rover",
     title: "Rover Rescue",
     emoji: "🛰️",
-    href: "/code-hour/rover-rescue/",
+    href: "/ship-it/rover-rescue/",
     grades: "Grades 4–8",
     language: "JavaScript",
     pitch: "A rover is stranded on the moon. Type real JavaScript to guide it home. Each mission unlocks a new coding superpower.",
@@ -41,7 +41,7 @@ const CODE_HOUR_GAMES: CodeHourGame[] = [
     game: "studio",
     title: "App Studio",
     emoji: "📱",
-    href: "/code-hour/app-studio/",
+    href: "/ship-it/app-studio/",
     grades: "Grades 4–8",
     language: "App design + JavaScript",
     pitch: "Build your own app. Add buttons and variables, make them react to taps, see the real code, then download your app to share.",
@@ -54,7 +54,7 @@ const CODE_HOUR_GAMES: CodeHourGame[] = [
     game: "bot",
     title: "Bot Trainer",
     emoji: "🤖",
-    href: "/code-hour/bot-trainer/",
+    href: "/ship-it/bot-trainer/",
     grades: "Grades 6–8",
     language: "Python + AI",
     pitch: "Warm up with Python, then train Sortie the sorting robot with data and discover how AI really learns, and how it gets biased.",
@@ -65,7 +65,7 @@ const CODE_HOUR_GAMES: CodeHourGame[] = [
   },
 ];
 
-function starsIn(p: Progress, g: CodeHourGame) {
+function starsIn(p: Progress, g: ArcadeGame) {
   return g.levels.reduce((s, id) => s + (p.stars[`${g.game}:${id}`] ?? 0), 0);
 }
 
@@ -138,7 +138,7 @@ export function ArcadeHub() {
           <div>
             <Pill tone="yellow">Free · No sign-up · Grades 4–8</Pill>
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-4 font-display text-5xl font-extrabold leading-[0.95] text-white md:text-7xl">
-              Code <span className="bg-gradient-to-r from-amber to-pink-400 bg-clip-text text-transparent">Hour</span>
+              Ship It! <span className="bg-gradient-to-r from-amber to-pink-400 bg-clip-text text-transparent">Arcade</span>
             </motion.h1>
             <p className="mt-4 max-w-xl text-lg text-white/75">
               Free coding games for kids. Pick a game, write real code and build something in about an hour. Nothing to install, nothing to buy.
@@ -170,7 +170,7 @@ export function ArcadeHub() {
           Choose a game
         </h2>
         <div className="grid gap-6 lg:grid-cols-3">
-          {CODE_HOUR_GAMES.map((g, i) => {
+          {ARCADE_GAMES.map((g, i) => {
             const stars = starsIn(p, g);
             const max = g.levels.length * 3;
             return (
@@ -250,7 +250,7 @@ export function ArcadeHub() {
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           <div className="rounded-3xl border border-white/10 bg-[#1b1e33] p-6">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber">For teachers</p>
-            <h2 className="mt-1 font-display text-2xl font-extrabold text-white">Run a Code Hour with your class</h2>
+            <h2 className="mt-1 font-display text-2xl font-extrabold text-white">Run a Ship It! session with your class</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/70">
               Each game fits a single class period. It runs in any modern browser, including Chromebooks, with no accounts, so students can start right away.
               Rover Rescue has an <strong className="text-white">Instructor mode</strong> that unlocks every mission for live demos.
@@ -262,7 +262,7 @@ export function ArcadeHub() {
           <div className="rounded-3xl border border-white/10 bg-[#1b1e33] p-6">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber">What each game teaches</p>
             <dl className="mt-3 space-y-3 text-sm">
-              {CODE_HOUR_GAMES.map((g) => (
+              {ARCADE_GAMES.map((g) => (
                 <div key={g.game}>
                   <dt className="font-bold text-white">
                     {g.emoji} {g.title} <span className="font-normal text-white/50">· {g.grades}</span>

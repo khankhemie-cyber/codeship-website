@@ -561,7 +561,7 @@ export function RoverRescue() {
 
   return (
     <>
-      <ArcadeTopBar title="Rover Rescue" emoji="🛰️" semester="Code Hour · JavaScript" />
+      <ArcadeTopBar title="Rover Rescue" emoji="🛰️" semester="Ship It! Arcade · JavaScript" />
       <RewardLayer />
       {index === null ? (
         <LevelSelect onPick={setIndex} unlockAll={unlockAll} setUnlockAll={setUnlockAll} />

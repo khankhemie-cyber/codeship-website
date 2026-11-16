@@ -808,7 +808,7 @@ export function BotTrainer() {
 
   return (
     <>
-      <ArcadeTopBar title="Bot Trainer" emoji="🤖" semester="Code Hour · Python & AI" />
+      <ArcadeTopBar title="Bot Trainer" emoji="🤖" semester="Ship It! Arcade · Python & AI" />
       <RewardLayer />
       {screen.kind === "hub" ? <Hub go={setScreen} /> : null}
       {screen.kind === "py" ? <PyQuiz key={screen.round.id} round={screen.round} back={back} /> : null}

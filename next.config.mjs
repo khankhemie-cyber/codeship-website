@@ -60,6 +60,9 @@ const nextConfig = {
       // The student editor was renamed from "Web Playground" to "CODEship Launchpad".
       // Browsers carry the #code=... fragment across the redirect, so saved links still open.
       { source: "/tools/web-playground", destination: "/tools/launchpad", permanent: true },
+      // The free coding games section launched as "Code Hour" and was renamed "Ship It! Arcade".
+      { source: "/code-hour", destination: "/ship-it", permanent: true },
+      { source: "/code-hour/:path*", destination: "/ship-it/:path*", permanent: true },
     ];
   },
 };
