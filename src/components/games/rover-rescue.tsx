@@ -13,6 +13,7 @@ import {
 import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate, useDevFact } from "./arcade-kit";
 import { CodeEditor, highlight, type CodeEditorHandle } from "./code-editor";
+import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
 
 const COMMANDS = ["move", "turnLeft", "turnRight", "collect", "pathAhead", "gemHere", "atGoal", "say"];
 const SPEEDS = [
@@ -202,7 +203,21 @@ function Board({
 /* Level select                                                         */
 /* ------------------------------------------------------------------ */
 
-function LevelSelect({ onPick, unlockAll, setUnlockAll }: { onPick: (i: number) => void; unlockAll: boolean; setUnlockAll: (v: boolean) => void }) {
+function LevelSelect({
+  onPick,
+  unlockAll,
+  setUnlockAll,
+  isPaid,
+  unlocked,
+  askUnlock,
+}: {
+  onPick: (i: number) => void;
+  unlockAll: boolean;
+  setUnlockAll: (v: boolean) => void;
+  isPaid: (i: number) => boolean;
+  unlocked: boolean;
+  askUnlock: () => void;
+}) {
   const p = useProgress();
   const total = ROVER_LEVELS.reduce((s, l) => s + starsFor(p, "rover", l.id), 0);
   return (
@@ -228,13 +243,14 @@ function LevelSelect({ onPick, unlockAll, setUnlockAll }: { onPick: (i: number) 
       <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {ROVER_LEVELS.map((l, i) => {
           const stars = starsFor(p, "rover", l.id);
-          const locked = !unlockAll && i > 0 && starsFor(p, "rover", ROVER_LEVELS[i - 1].id) === 0;
+          const paid = isPaid(i);
+          const locked = paid || (!unlockAll && i > 0 && starsFor(p, "rover", ROVER_LEVELS[i - 1].id) === 0);
           return (
             <li key={l.id}>
               <motion.button
                 type="button"
-                disabled={locked}
-                onClick={() => onPick(i)}
+                disabled={locked && !paid}
+                onClick={() => (paid ? askUnlock() : onPick(i))}
                 whileHover={locked ? undefined : { y: -4 }}
                 whileTap={locked ? undefined : { scale: 0.97 }}
                 className={`focus-ring group relative flex h-full w-full flex-col rounded-2xl border p-4 text-left transition ${
@@ -244,24 +260,41 @@ function LevelSelect({ onPick, unlockAll, setUnlockAll }: { onPick: (i: number) 
                     ? "border-amber/30 bg-gradient-to-br from-[#2a2d4a] to-[#1d2036] hover:border-amber/60"
                     : "border-sky-400/40 bg-gradient-to-br from-[#25305e] to-[#1d2036] shadow-[0_0_30px_-10px_rgba(96,165,250,0.6)] hover:border-sky-300"
                 }`}
-                aria-label={`Mission ${i + 1}: ${l.title}, ${l.concept}${locked ? ", locked" : `, ${stars} stars`}`}
+                aria-label={`Mission ${i + 1}: ${l.title}, ${l.concept}${paid ? ", class level, needs class password" : locked ? ", locked" : `, ${stars} stars`}`}
               >
                 <span className="flex items-center justify-between">
                   <span className="font-display text-3xl leading-none text-white/30">{String(i + 1).padStart(2, "0")}</span>
-                  {locked ? <span aria-hidden>🔒</span> : <Stars count={stars} size="text-base" />}
+                  {paid ? <span aria-hidden>🔑</span> : locked ? <span aria-hidden>🔒</span> : <Stars count={stars} size="text-base" />}
                 </span>
                 <span className="mt-3 text-[11px] font-bold uppercase tracking-[0.15em] text-sky-300">{l.concept}</span>
                 <span className="mt-0.5 text-lg font-bold text-white">{l.title}</span>
-                {!locked && !stars ? <span className="mt-2 text-xs font-semibold text-amber">▶ Next up</span> : null}
+                {paid ? (
+                  <span className="mt-2">
+                    <LockBadge />
+                  </span>
+                ) : !locked && !stars ? (
+                  <span className="mt-2 text-xs font-semibold text-amber">▶ Next up</span>
+                ) : null}
               </motion.button>
             </li>
           );
         })}
       </ol>
-      <label className="mt-6 inline-flex cursor-pointer items-center gap-2 text-xs text-white/50">
-        <input type="checkbox" checked={unlockAll} onChange={(e) => setUnlockAll(e.target.checked)} className="accent-amber" />
-        Instructor mode — unlock every mission
-      </label>
+      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-white/50">
+        {unlocked ? (
+          <label className="inline-flex cursor-pointer items-center gap-2">
+            <input type="checkbox" checked={unlockAll} onChange={(e) => setUnlockAll(e.target.checked)} className="accent-amber" />
+            Instructor mode — unlock every mission
+          </label>
+        ) : (
+          <p>
+            Missions 1–{FREE_LEVELS} are free.{" "}
+            <button type="button" onClick={askUnlock} className="focus-ring rounded font-semibold text-amber underline-offset-4 hover:underline">
+              Have a class password? Unlock all {ROVER_LEVELS.length} →
+            </button>
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -554,6 +587,8 @@ function Play({ index, onBack, onNext }: { index: number; onBack: () => void; on
 export function RoverRescue() {
   const [index, setIndex] = useState<number | null>(null);
   const [unlockAll, setUnlockAll] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const access = useLevelAccess("developers");
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -563,16 +598,30 @@ export function RoverRescue() {
     <>
       <ArcadeTopBar title="Rover Rescue" emoji="🛰️" semester="Ship It! Arcade · JavaScript" />
       <RewardLayer />
-      {index === null ? (
-        <LevelSelect onPick={setIndex} unlockAll={unlockAll} setUnlockAll={setUnlockAll} />
+      {index === null || access.isLocked(index) ? (
+        <LevelSelect
+          onPick={setIndex}
+          unlockAll={unlockAll}
+          setUnlockAll={setUnlockAll}
+          isPaid={access.isLocked}
+          unlocked={access.unlocked}
+          askUnlock={() => setAsking(true)}
+        />
       ) : (
         <Play
           key={index}
           index={index}
           onBack={() => setIndex(null)}
-          onNext={() => setIndex(Math.min(ROVER_LEVELS.length - 1, index + 1))}
+          onNext={() => {
+            const next = Math.min(ROVER_LEVELS.length - 1, index + 1);
+            if (access.isLocked(next)) {
+              setIndex(null);
+              setAsking(true);
+            } else setIndex(next);
+          }}
         />
       )}
+      <UnlockModal open={asking} onClose={() => setAsking(false)} program="developers" onUnlock={access.markUnlocked} />
     </>
   );
 }

@@ -24,6 +24,7 @@ import {
 import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { highlight } from "./code-editor";
+import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
 
 type Screen =
   | { kind: "hub" }
@@ -77,7 +78,10 @@ function grantBadges(ids: (string | false)[]) {
 /* Hub                                                                  */
 /* ------------------------------------------------------------------ */
 
-function Hub({ go }: { go: (s: Screen) => void }) {
+/** Every Bot Trainer level in play order: the first FREE_LEVELS are free. */
+const LEVEL_ORDER = [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CHALLENGES.map((c) => c.id)];
+
+function Hub({ go, isPaid, askUnlock, unlocked }: { go: (s: Screen) => void; isPaid: (i: number) => boolean; askUnlock: () => void; unlocked: boolean }) {
   const p = useProgress();
   const tracks = [
     {
@@ -136,7 +140,7 @@ function Hub({ go }: { go: (s: Screen) => void }) {
                 <li key={i.id}>
                   <button
                     type="button"
-                    onClick={i.open}
+                    onClick={isPaid(LEVEL_ORDER.indexOf(i.id)) ? askUnlock : i.open}
                     className="focus-ring group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-[#1b1e33] p-3 text-left transition hover:-translate-y-0.5 hover:border-amber/40"
                   >
                     <span className="text-2xl" aria-hidden>
@@ -146,7 +150,7 @@ function Hub({ go }: { go: (s: Screen) => void }) {
                       <span className="block font-bold text-white">{i.title}</span>
                       <span className="block truncate text-xs text-white/55">{i.sub}</span>
                     </span>
-                    <Stars count={starsFor(p, "bot", i.id)} size="text-sm" />
+                    {isPaid(LEVEL_ORDER.indexOf(i.id)) ? <LockBadge /> : <Stars count={starsFor(p, "bot", i.id)} size="text-sm" />}
                   </button>
                 </li>
               ))}
@@ -154,6 +158,14 @@ function Hub({ go }: { go: (s: Screen) => void }) {
           </motion.section>
         ))}
       </div>
+      {!unlocked ? (
+        <p className="mt-6 text-sm text-white/55">
+          The first {FREE_LEVELS} levels are free.{" "}
+          <button type="button" onClick={askUnlock} className="focus-ring rounded font-semibold text-amber underline-offset-4 hover:underline">
+            Have a class password? Unlock all {LEVEL_ORDER.length} →
+          </button>
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -800,7 +812,11 @@ function RuleWriter({ challenge, back }: { challenge: RuleChallenge; back: () =>
 
 export function BotTrainer() {
   const [screen, setScreen] = useState<Screen>({ kind: "hub" });
+  const [asking, setAsking] = useState(false);
+  const access = useLevelAccess("engineers");
   const back = () => setScreen({ kind: "hub" });
+  const screenId = screen.kind === "py" || screen.kind === "train" ? screen.round.id : screen.kind === "rules" ? screen.challenge.id : null;
+  const screenLocked = screenId !== null && access.isLocked(LEVEL_ORDER.indexOf(screenId));
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -810,10 +826,13 @@ export function BotTrainer() {
     <>
       <ArcadeTopBar title="Bot Trainer" emoji="🤖" semester="Ship It! Arcade · Python & AI" />
       <RewardLayer />
-      {screen.kind === "hub" ? <Hub go={setScreen} /> : null}
-      {screen.kind === "py" ? <PyQuiz key={screen.round.id} round={screen.round} back={back} /> : null}
-      {screen.kind === "train" ? <Train key={screen.round.id} round={screen.round} back={back} /> : null}
-      {screen.kind === "rules" ? <RuleWriter key={screen.challenge.id} challenge={screen.challenge} back={back} /> : null}
+      {screen.kind === "hub" || screenLocked ? (
+        <Hub go={setScreen} isPaid={access.isLocked} askUnlock={() => setAsking(true)} unlocked={access.unlocked} />
+      ) : null}
+      <UnlockModal open={asking} onClose={() => setAsking(false)} program="engineers" onUnlock={access.markUnlocked} />
+      {screen.kind === "py" && !screenLocked ? <PyQuiz key={screen.round.id} round={screen.round} back={back} /> : null}
+      {screen.kind === "train" && !screenLocked ? <Train key={screen.round.id} round={screen.round} back={back} /> : null}
+      {screen.kind === "rules" && !screenLocked ? <RuleWriter key={screen.challenge.id} challenge={screen.challenge} back={back} /> : null}
     </>
   );
 }

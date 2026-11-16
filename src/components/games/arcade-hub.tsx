@@ -8,6 +8,7 @@ import { ROVER_LEVELS } from "@/lib/games/rover";
 import { PY_ROUNDS, RULE_CHALLENGES, TRAIN_ROUNDS } from "@/lib/games/bot";
 import { MISSIONS } from "@/lib/games/studio";
 import { Pill, RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
+import { FREE_LEVELS } from "./level-lock";
 
 interface ArcadeGame {
   game: GameId;
@@ -136,7 +137,7 @@ export function ArcadeHub() {
       <section className="relative mx-auto max-w-6xl px-4 pb-6 pt-12 md:px-6 md:pt-16">
         <div className="grid items-end gap-10 md:grid-cols-[1.3fr_1fr]">
           <div>
-            <Pill tone="yellow">Free · No sign-up · Grades 4–8</Pill>
+            <Pill tone="yellow">Free to start · No sign-up · Grades 4–8</Pill>
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-4 font-display text-5xl font-extrabold leading-[0.95] text-white md:text-7xl">
               Ship It! <span className="bg-gradient-to-r from-amber to-pink-400 bg-clip-text text-transparent">Arcade</span>
             </motion.h1>
@@ -204,7 +205,12 @@ export function ArcadeHub() {
                     <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-black/30">
                       <div className="h-full rounded-full bg-gradient-to-r from-amber to-emerald-300 transition-all" style={{ width: `${(stars / max) * 100}%` }} />
                     </div>
-                    <span className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-amber py-3 font-display text-xl font-extrabold text-navy transition group-hover:brightness-110">
+                    <p className="mt-3 text-[11px] font-semibold text-white/55">
+                      {g.levels.length > FREE_LEVELS
+                        ? `Levels 1–${FREE_LEVELS} free · 🔑 class password unlocks all ${g.levels.length}`
+                        : `All ${g.levels.length} levels free`}
+                    </p>
+                    <span className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-amber py-3 font-display text-xl font-extrabold text-navy transition group-hover:brightness-110">
                       {stars ? "Continue" : "Play now"} <span aria-hidden className="transition group-hover:translate-x-1">→</span>
                     </span>
                   </div>

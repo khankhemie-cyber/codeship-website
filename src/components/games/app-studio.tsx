@@ -32,6 +32,7 @@ import {
 import { addXp, completeLevel, earnBadge, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { highlight } from "./code-editor";
+import { LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
 
 const STORE = "codeship-app-studio-v1";
 const HELPER_NAMES = ["clearScreen", "addTitle", "addText", "addPicture", "addButton", "addTextBox", "addList", "addMeter", "addDivider", "randomNumber", "showMessage", "render"];
@@ -1126,6 +1127,9 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
 
 function Gallery({ projects, open, create, remove }: { projects: AppProject[]; open: (id: string) => void; create: (m?: Mission) => void; remove: (id: string) => void }) {
   const p = useProgress();
+  // Missions are levels: the first FREE_LEVELS are free, later ones need the Developers class password.
+  const access = useLevelAccess("developers");
+  const [asking, setAsking] = useState(false);
   const [confirm, setConfirm] = useState<AppProject | null>(null);
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
@@ -1171,6 +1175,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
         {MISSIONS.map((m, i) => {
           const existing = projects.find((x) => x.missionId === m.id);
           const done = existing ? existing.doneGoals.length : 0;
+          const paid = access.isLocked(i);
           return (
             <motion.button
               key={m.id}
@@ -1179,7 +1184,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
               whileHover={{ y: -4 }}
-              onClick={() => (existing ? open(existing.id) : create(m))}
+              onClick={() => (paid ? setAsking(true) : existing ? open(existing.id) : create(m))}
               className="focus-ring group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#1b1e33] text-left hover:border-white/30"
             >
               <div className="flex h-28 items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${m.theme}, ${m.theme}55)` }} aria-hidden>
@@ -1188,7 +1193,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
               <div className="flex flex-1 flex-col p-4">
                 <div className="flex items-center justify-between">
                   <p className="font-display text-2xl text-white">{m.title}</p>
-                  <Stars count={starsFor(p, "studio", m.id)} size="text-sm" />
+                  {paid ? <LockBadge /> : <Stars count={starsFor(p, "studio", m.id)} size="text-sm" />}
                 </div>
                 <p className="mt-1 text-sm text-white/65">{m.pitch}</p>
                 <div className="mt-3 flex flex-wrap gap-1">
@@ -1207,6 +1212,8 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
           );
         })}
       </div>
+
+      <UnlockModal open={asking} onClose={() => setAsking(false)} program="developers" onUnlock={access.markUnlocked} />
 
       <h3 className="mt-12 font-display text-4xl text-white">My apps</h3>
       {projects.length ? (
