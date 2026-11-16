@@ -1,0 +1,22 @@
+/* Code Hour games: shared helpers (the games are dark, full-bleed apps). */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #161827, 0 0 0 5px #F4D734;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8%) rotate(4deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-hour [class*="animate-"] {
+    animation: none !important;
+  }
+}

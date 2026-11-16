@@ -5,6 +5,8 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // Code Hour game data carries Tailwind classes (e.g. bin colours).
+    "./src/lib/games/**/*.ts",
   ],
   theme: {
     extend: {

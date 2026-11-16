@@ -40,6 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/resources`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/locations`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/program-finder`, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${BASE_URL}/code-hour`, changeFrequency: "monthly", priority: 0.8 },
+    ...["rover-rescue", "app-studio", "bot-trainer"].map((game) => ({
+      url: `${BASE_URL}/code-hour/${game}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: `${BASE_URL}/franchise-selector`, changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE_URL}/privacy-policy`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },
