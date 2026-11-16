@@ -8,7 +8,7 @@ import {
   MATERIALS,
   NUM_OPS,
   PY_ROUNDS,
-  RULE_CHALLENGES,
+  RULE_CATALOG,
   TEXT_OPS,
   TRAIN_ROUNDS,
   predict,
@@ -24,7 +24,7 @@ import {
 import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { highlight } from "./code-editor";
-import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
+import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess, usePaidLevels } from "./level-lock";
 
 type Screen =
   | { kind: "hub" }
@@ -79,9 +79,22 @@ function grantBadges(ids: (string | false)[]) {
 /* ------------------------------------------------------------------ */
 
 /** Every Bot Trainer level in play order: the first FREE_LEVELS are free. */
-const LEVEL_ORDER = [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CHALLENGES.map((c) => c.id)];
+const LEVEL_ORDER = [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CATALOG.map((c) => c.id)];
 
-function Hub({ go, isPaid, askUnlock, unlocked }: { go: (s: Screen) => void; isPaid: (i: number) => boolean; askUnlock: () => void; unlocked: boolean }) {
+function Hub({
+  go,
+  isPaid,
+  askUnlock,
+  unlocked,
+  ruleChallenges,
+}: {
+  go: (s: Screen) => void;
+  isPaid: (i: number) => boolean;
+  askUnlock: () => void;
+  unlocked: boolean;
+  /** Rule Writer level data, fetched from the server after the class password (null until then). */
+  ruleChallenges: RuleChallenge[] | null;
+}) {
   const p = useProgress();
   const tracks = [
     {
@@ -103,7 +116,16 @@ function Hub({ go, isPaid, askUnlock, unlocked }: { go: (s: Screen) => void; isP
       emoji: "📜",
       blurb: "Program a bot with if / elif / else rules and make every test pass.",
       tone: "from-sky-500/20",
-      items: RULE_CHALLENGES.map((c) => ({ id: c.id, title: c.title, sub: c.concept, emoji: c.emoji, open: () => go({ kind: "rules", challenge: c }) })),
+      items: RULE_CATALOG.map((c) => ({
+        id: c.id,
+        title: c.title,
+        sub: c.concept,
+        emoji: c.emoji,
+        open: () => {
+          const challenge = ruleChallenges?.find((x) => x.id === c.id);
+          if (challenge) go({ kind: "rules", challenge });
+        },
+      })),
     },
   ];
 
@@ -639,7 +661,7 @@ function RuleWriter({ challenge, back }: { challenge: RuleChallenge; back: () =>
       setDone({ stars, xp });
       setConfetti((c) => c + 1);
       const p = getProgress();
-      grantBadges([RULE_CHALLENGES.every((c) => (p.stars[`bot:${c.id}`] ?? 0) > 0) && "rule-maker"]);
+      grantBadges([RULE_CATALOG.every((c) => (p.stars[`bot:${c.id}`] ?? 0) > 0) && "rule-maker"]);
     }
   };
 
@@ -814,6 +836,8 @@ export function BotTrainer() {
   const [screen, setScreen] = useState<Screen>({ kind: "hub" });
   const [asking, setAsking] = useState(false);
   const access = useLevelAccess("engineers");
+  // Rule Writer (levels 6–7) comes from the server only after the class password.
+  const paidRules = usePaidLevels<RuleChallenge>("bot", access.unlocked);
   const back = () => setScreen({ kind: "hub" });
   const screenId = screen.kind === "py" || screen.kind === "train" ? screen.round.id : screen.kind === "rules" ? screen.challenge.id : null;
   const screenLocked = screenId !== null && access.isLocked(LEVEL_ORDER.indexOf(screenId));
@@ -827,7 +851,7 @@ export function BotTrainer() {
       <ArcadeTopBar title="Bot Trainer" emoji="🤖" semester="Ship It! Arcade · Python & AI" />
       <RewardLayer />
       {screen.kind === "hub" || screenLocked ? (
-        <Hub go={setScreen} isPaid={access.isLocked} askUnlock={() => setAsking(true)} unlocked={access.unlocked} />
+        <Hub go={setScreen} isPaid={access.isLocked} askUnlock={() => setAsking(true)} unlocked={access.unlocked} ruleChallenges={paidRules.levels} />
       ) : null}
       <UnlockModal open={asking} onClose={() => setAsking(false)} program="engineers" onUnlock={access.markUnlocked} />
       {screen.kind === "py" && !screenLocked ? <PyQuiz key={screen.round.id} round={screen.round} back={back} /> : null}

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BADGES, rankFor, setCoderName, useProgress, type GameId, type Progress } from "@/lib/games/progress";
-import { ROVER_LEVELS } from "@/lib/games/rover";
-import { PY_ROUNDS, RULE_CHALLENGES, TRAIN_ROUNDS } from "@/lib/games/bot";
+import { ROVER_CATALOG } from "@/lib/games/rover";
+import { PY_ROUNDS, RULE_CATALOG, TRAIN_ROUNDS } from "@/lib/games/bot";
 import { MISSIONS } from "@/lib/games/studio";
 import { Pill, RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
 import { FREE_LEVELS } from "./level-lock";
@@ -33,7 +33,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     grades: "Grades 4–8",
     language: "JavaScript",
     pitch: "A rover is stranded on the moon. Type real JavaScript to guide it home. Each mission unlocks a new coding superpower.",
-    levels: ROVER_LEVELS.map((l) => l.id),
+    levels: ROVER_CATALOG.map((l) => l.id),
     gradient: "from-[#2b3a8f] via-[#25306b] to-[#1b1e33]",
     glow: "shadow-[0_30px_80px_-30px_rgba(96,165,250,0.7)]",
     teaches: ["Sequencing", "Loops", "Functions", "Conditionals", "While loops", "Variables", "Debugging"],
@@ -59,7 +59,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     grades: "Grades 6–8",
     language: "Python + AI",
     pitch: "Warm up with Python, then train Sortie the sorting robot with data and discover how AI really learns, and how it gets biased.",
-    levels: [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CHALLENGES.map((r) => r.id)],
+    levels: [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CATALOG.map((r) => r.id)],
     gradient: "from-[#4b2b8f] via-[#33276b] to-[#1b1e33]",
     glow: "shadow-[0_30px_80px_-30px_rgba(167,139,250,0.7)]",
     teaches: ["Python basics", "Lists & loops", "Training data", "AI bias", "if / elif / else"],
