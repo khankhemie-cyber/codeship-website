@@ -32,6 +32,44 @@ const DENIED = {
  *     including when they are reached by in-app navigation.
  *  4. Reports a `begin_checkout` event when a visitor opens a Stripe checkout.
  */
+const SOURCE_KEY = "codeship-visit-source";
+
+/** Letters, digits, dashes and underscores only (Stripe's client_reference_id rule). */
+function clean(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+}
+
+/**
+ * Builds "<source>-<medium>-<campaign>" from the landing URL's UTM tags, or
+ * "ref_<site>" for an external referrer, or "direct". Saved once per tab
+ * (sessionStorage), so a family who browses several pages keeps the tag.
+ */
+function rememberVisitSource() {
+  try {
+    if (sessionStorage.getItem(SOURCE_KEY)) return;
+    const params = new URLSearchParams(window.location.search);
+    const parts = ["utm_source", "utm_medium", "utm_campaign"]
+      .map((k) => clean(params.get(k) ?? ""))
+      .filter(Boolean);
+    let tag = parts.join("-");
+    if (!tag && document.referrer) {
+      const host = new URL(document.referrer).hostname.replace(/^www\./, "");
+      if (host && !host.endsWith("codeshipacademy.com")) tag = `ref_${clean(host)}`;
+    }
+    sessionStorage.setItem(SOURCE_KEY, (tag || "direct").slice(0, 200));
+  } catch {
+    // Storage blocked: checkout simply goes untagged.
+  }
+}
+
+function getVisitSource(): string | null {
+  try {
+    return sessionStorage.getItem(SOURCE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export default function Analytics() {
   const pathname = usePathname();
   const childPage = isChildPath(pathname);
@@ -54,12 +92,28 @@ export default function Analytics() {
     if (typeof w.fbq === "function") w.fbq("consent", granted ? "grant" : "revoke");
   }, [consent, childPage]);
 
+  // Remember where this visit came from (first touch in the tab), so the
+  // Stripe checkout can carry it. Campaign labels only: no personal data.
+  useEffect(() => {
+    if (!isChildPath(window.location.pathname)) rememberVisitSource();
+  }, []);
+
   // Stripe Payment Links are plain <a href="https://buy.stripe.com/...">, so
   // one delegated listener covers every checkout button on the site.
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const link = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
       if (!link || !link.href.startsWith("https://buy.stripe.com/")) return;
+      // Tag the checkout with the visit's source so each paid seat in Stripe
+      // shows which channel it came from (Checkout Session client_reference_id).
+      const source = getVisitSource();
+      if (source) {
+        const url = new URL(link.href);
+        if (!url.searchParams.has("client_reference_id")) {
+          url.searchParams.set("client_reference_id", source);
+          link.href = url.toString();
+        }
+      }
       trackEvent(
         "begin_checkout",
         { checkout_url: link.href, link_text: link.innerText.trim().slice(0, 100), page_path: window.location.pathname },

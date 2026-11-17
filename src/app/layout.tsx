@@ -84,7 +84,9 @@ export default function RootLayout({
       <head>
         {/* Google tag (gtag.js), set up by an inline script in the server HTML
             so it is present on first load and detectable by Tag Assistant / GTM.
-            Google Consent Mode v2 defaults storage to "denied"; the client-side
+            Google Consent Mode v2 defaults storage to "denied" (or "granted" when a
+            returning visitor already chose "Accept all", so their first
+            page_view is counted with consent); the client-side
             Analytics component flips it to "granted" once the visitor accepts
             all cookies via the banner. On child-facing pages (/tools, /quizzes,
             /workbooks) the tag is never loaded at all. */}
@@ -93,11 +95,14 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{
               __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
+var consentChoice = null;
+try { consentChoice = localStorage.getItem('codeship-cookie-consent'); } catch (e) {}
+var consentState = consentChoice === 'all' ? 'granted' : 'denied';
 gtag('consent', 'default', {
-  analytics_storage: 'denied',
-  ad_storage: 'denied',
-  ad_user_data: 'denied',
-  ad_personalization: 'denied'
+  analytics_storage: consentState,
+  ad_storage: consentState,
+  ad_user_data: consentState,
+  ad_personalization: consentState
 });
 if (new RegExp(${JSON.stringify(CHILD_PATH_PATTERN_SOURCE)}).test(location.pathname)) {
   window['ga-disable-${GA_ID}'] = true;
