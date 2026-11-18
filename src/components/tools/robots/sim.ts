@@ -287,7 +287,7 @@ export class Sim {
       const along = dx * Math.cos(h) - dy * Math.sin(h);
       const side = Math.abs(dx * Math.sin(h) + dy * Math.cos(h));
       const inFront = Math.hypot(p.x - front.x, p.y - front.y) <= REACH;
-      const underFront = along >= -1 && along <= this.radius + REACH && side <= this.radius;
+      const underFront = along >= -this.radius / 2 && along <= this.radius + REACH && side <= this.radius;
       const d = Math.hypot(p.x - front.x, p.y - front.y);
       if ((inFront || underFront) && d < bestD) {
         bestD = d;
