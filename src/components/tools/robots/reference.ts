@@ -1,0 +1,27 @@
+/** The robot's functions, as the Reference tab lists them for each language. */
+
+export type RefEntry = { js: string; py: string; does: string; group: "Move" | "Do" | "Sense" | "Wait" };
+
+export const REFERENCE: RefEntry[] = [
+  { group: "Move", js: "forward(cm)", py: "forward(cm)", does: "Drive forward. One square on the mat is 10 cm." },
+  { group: "Move", js: "backward(cm)", py: "backward(cm)", does: "Drive backward." },
+  { group: "Move", js: "turnLeft(degrees)", py: "turn_left(degrees)", does: "Turn on the spot. 90 is a quarter turn." },
+  { group: "Move", js: "turnRight(degrees)", py: "turn_right(degrees)", does: "Turn the other way." },
+  { group: "Move", js: "setSpeed(cmPerSecond)", py: "set_speed(cm_per_second)", does: "2 to 40. The robot starts at 15." },
+  { group: "Do", js: "pickUp()", py: "pick_up()", does: "Grab the object just in front. Gives true if it got one." },
+  { group: "Do", js: "drop()", py: "drop()", does: "Put the object down in front of the robot." },
+  { group: "Do", js: "beep()", py: "beep()", does: "Make a sound." },
+  { group: "Do", js: 'led("green")', py: 'led("green")', does: "Light colour: off, red, green, blue, yellow, white or purple." },
+  { group: "Do", js: 'display("Hi")', py: 'display("Hi")', does: "Show short text on the robot's screen." },
+  { group: "Do", js: 'record("light", light())', py: 'record("light", light())', does: "Save a reading to the Data tab (and the CSV)." },
+  { group: "Do", js: "console.log(value)", py: "print(value)", does: "Write to the Console tab." },
+  { group: "Sense", js: "distance()", py: "distance()", does: "Centimetres to the nearest wall straight ahead (up to 200)." },
+  { group: "Sense", js: "obstacle()", py: "obstacle()", does: "true when something is less than 15 cm ahead." },
+  { group: "Sense", js: "lineLeft()  lineRight()  onLine()", py: "line_left()  line_right()  on_line()", does: "true when that line sensor is over black tape." },
+  { group: "Sense", js: "light()", py: "light()", does: "How bright it is, 0 (dark) to 100 (bright)." },
+  { group: "Sense", js: "colour()", py: "colour()", does: 'Floor colour under the robot, like "red" or "white".' },
+  { group: "Sense", js: "itemColour()", py: "item_colour()", does: 'Colour of the object in front, or "none".' },
+  { group: "Sense", js: "clapped()", py: "clapped()", does: "true once for each clap that has happened." },
+  { group: "Wait", js: "wait(seconds)", py: "wait(seconds)", does: "Pause." },
+  { group: "Wait", js: "waitForClap()", py: "wait_for_clap()", does: "Pause until someone claps." },
+];
