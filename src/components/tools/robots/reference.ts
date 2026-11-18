@@ -22,6 +22,8 @@ export const REFERENCE: RefEntry[] = [
   { group: "Sense", js: "colour()", py: "colour()", does: 'Floor colour under the robot, like "red" or "white".' },
   { group: "Sense", js: "itemColour()", py: "item_colour()", does: 'Colour of the object in front, or "none".' },
   { group: "Sense", js: "clapped()", py: "clapped()", does: "true once for each clap that has happened." },
+  { group: "Sense", js: "nextCode()", py: "next_code()", does: 'The next passcode a visitor types, or "" when nobody is left.' },
+  { group: "Sense", js: "nextMessage()", py: "next_message()", does: 'The next chat message sent to the robot, or "" at the end.' },
   { group: "Wait", js: "wait(seconds)", py: "wait(seconds)", does: "Pause." },
   { group: "Wait", js: "waitForClap()", py: "wait_for_clap()", does: "Pause until someone claps." },
 ];

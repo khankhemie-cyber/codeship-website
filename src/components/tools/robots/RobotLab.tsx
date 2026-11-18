@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { DEFAULT_LANG, MISSIONS, missionById, type GoalResult, type Lang, type Mission, type Program } from "./missions";
+import { DEFAULT_LANG, MISSIONS, levelOf, missionById, type GoalResult, type Lang, type Mission, type Program } from "./missions";
 import { REFERENCE } from "./reference";
 import { EMPTY_WORKSPACE, blockIcon, blocksToJs } from "./robotBlocks";
 import Stage, { FLOOR } from "./Stage";
@@ -434,6 +434,14 @@ function MissionGallery({ current, done, onPick, onClose }: { current: string; d
               <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider">
                 <span className="inline-block h-3 w-3 rounded-full" style={{ background: st.colour }} />
                 {st.label} <span className="font-semibold normal-case tracking-normal text-[var(--rl-muted)]">· {st.grades}</span>
+                {p !== "Everyone" && (
+                  <span className="ml-auto flex items-center gap-2 text-xs font-bold normal-case tracking-normal text-[var(--rl-muted)]">
+                    <span className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-[var(--rl-hover)] sm:block">
+                      <span className="block h-full rounded-full bg-[#2EB84B]" style={{ width: `${(list.filter((m) => done.includes(m.id)).length / list.length) * 100}%` }} />
+                    </span>
+                    {list.filter((m) => done.includes(m.id)).length} of {list.length} done
+                  </span>
+                )}
               </h3>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {list.map((m) => {
@@ -448,6 +456,11 @@ function MissionGallery({ current, done, onPick, onClose }: { current: string; d
                         <div className="overflow-hidden rounded-lg ring-2 ring-white/30">
                           <Stage world={m.world} scene={m.scene} frame={new Sim(m.world).frames[0]} thumbnail />
                         </div>
+                        {m.semester && (
+                          <span className="absolute left-4 top-4 rounded-full bg-[#001532]/85 px-2 py-0.5 text-xs font-extrabold text-white shadow">
+                            Level {levelOf(m)} · {m.semester === "Capstone" ? "Capstone" : m.semester}
+                          </span>
+                        )}
                         {isDone && (
                           <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-[#2EB84B] px-2 py-0.5 text-xs font-bold text-white shadow">
                             <Icon name="check" className="h-3.5 w-3.5" /> Done
@@ -854,7 +867,7 @@ export default function RobotLab() {
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#D58401]">
                 {st.label} · {st.grades}
-                {mission.program !== "Everyone" ? ` · ${mission.fits}` : ""}
+                {mission.semester ? ` · Level ${levelOf(mission)} of 5 · ${mission.fits}` : ""}
               </p>
               <h2 className="font-display text-lg font-extrabold leading-tight">
                 {mission.title}

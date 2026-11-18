@@ -24,8 +24,13 @@ export type Scene = {
   wall?: "bin" | "brick";
 };
 
+export type Semester = "S1" | "S2" | "S3" | "S4" | "Capstone";
+export const SEMESTERS: Semester[] = ["S1", "S2", "S3", "S4", "Capstone"];
+
 export type Mission = {
   id: string;
+  /** Which block of the program this level belongs to (the sandbox has none). */
+  semester?: Semester;
   scene: Scene;
   /** Short skill tags for the mission card. */
   skills: string[];
@@ -88,6 +93,7 @@ const notYet = (message: string): GoalResult => ({ ok: false, message });
 // ---------------------------------------------------------------- missions
 
 const toyBin: Mission = {
+  semester: "S1",
   scene: { ground: "rug", decor: [{ kind: "ball", x: 30, y: 10, r: 3 }, { kind: "ball", x: 75, y: 52, r: 2.5 }], zoneIcons: { bin: "toybox" } },
   skills: ["Sequencing", "Counting"],
   id: "toy-bin",
@@ -118,6 +124,7 @@ const toyBin: Mission = {
 };
 
 const kindness: Mission = {
+  semester: "S2",
   scene: { ground: "rug", decor: [{ kind: "ball", x: 50, y: 8, r: 2.5 }], zoneIcons: { friend: "heart" } },
   skills: ["Events", "Sound"],
   id: "kindness-delivery",
@@ -148,6 +155,7 @@ const kindness: Mission = {
 };
 
 const binStop: Mission = {
+  semester: "S3",
   scene: { ground: "tiles", wall: "bin" },
   skills: ["Sensors", "Loops"],
   id: "bin-stop",
@@ -178,6 +186,7 @@ const binStop: Mission = {
 };
 
 const neighbourhood: Mission = {
+  semester: "S4",
   scene: {
     ground: "grass",
     roads: true,
@@ -215,6 +224,7 @@ const neighbourhood: Mission = {
 
 const tunnel = { x: 60, y: 0, w: 40, h: 50, level: 10, label: "Tunnel" };
 const dayNight: Mission = {
+  semester: "S2",
   scene: { ground: "grass", decor: [{ kind: "bush", x: 25, y: 8, r: 4 }, { kind: "tree", x: 125, y: 42, r: 5 }, { kind: "bush", x: 140, y: 8, r: 3 }] },
   skills: ["If / else", "Light sensor"],
   id: "day-night",
@@ -265,6 +275,7 @@ const flowers: Pt[] = [
   { x: 140, y: 60 },
 ];
 const pollinator: Mission = {
+  semester: "S4",
   scene: { ground: "grass", decor: [{ kind: "bee", x: 70, y: 50 }, { kind: "bee", x: 128, y: 30 }, { kind: "bush", x: 20, y: 20, r: 5 }, { kind: "tree", x: 80, y: 62, r: 8 }] },
   skills: ["Sequencing", "Timing"],
   id: "pollinator",
@@ -292,6 +303,7 @@ const pollinator: Mission = {
 };
 
 const wallStop: Mission = {
+  semester: "S3",
   scene: { ground: "tiles", wall: "brick" },
   skills: ["if / else", "Checking data"],
   id: "wall-stop",
@@ -323,6 +335,7 @@ const wallStop: Mission = {
 
 const BUDGET = 170;
 const delivery: Mission = {
+  semester: "S4",
   scene: {
     ground: "grass",
     roads: true,
@@ -375,6 +388,7 @@ const sortZones: Zone[] = [
   { id: "yellow", x: 120, y: 67, w: 35, h: 28, colour: "yellow", label: "Yellow" },
 ];
 const colourSort: Mission = {
+  semester: "S2",
   scene: { ground: "concrete", zoneIcons: { red: "bin", blue: "bin", yellow: "bin" } },
   skills: ["Dictionaries", "Functions", "Classifying"],
   id: "colour-sort",
@@ -410,6 +424,7 @@ const colourSort: Mission = {
 };
 
 const survey: Mission = {
+  semester: "S4",
   scene: { ground: "grass", decor: [{ kind: "tree", x: 88, y: 12, r: 7 }, { kind: "tree", x: 108, y: 50, r: 7 }, { kind: "tree", x: 95, y: 32, r: 5 }, { kind: "rock", x: 175, y: 12, r: 4 }, { kind: "bush", x: 55, y: 50, r: 4 }] },
   skills: ["Lists", "Statistics", "Data"],
   id: "survey",
@@ -481,7 +496,356 @@ const sandbox: Mission = {
   },
 };
 
-export const MISSIONS: Mission[] = [toyBin, kindness, binStop, neighbourhood, dayNight, pollinator, wallStop, delivery, colourSort, survey, sandbox];
+
+// ---------------------------------------------------------------- levels added 2026-11-18 (one per semester and capstone)
+
+const showTell: Mission = {
+  semester: "Capstone",
+  scene: { ground: "rug", decor: [{ kind: "ball", x: 60, y: 10, r: 3 }], zoneIcons: { stage: "heart", home: "house" } },
+  skills: ["Sequencing", "Events", "Sound"],
+  id: "show-and-tell",
+  title: "Show-and-tell tour",
+  program: "Explorers",
+  fits: "Capstone Show-and-Tell App",
+  goal: "Drive to the show-and-tell spot, turn your light on and beep to say hello, then drive back home.",
+  hint: "Four parts: go there, light on, beep, come back. To come back, turn all the way round first (180).",
+  world: base({
+    w: 140,
+    h: 70,
+    robot: "scout",
+    start: { x: 15, y: 35, heading: 0 },
+    zones: [
+      { id: "home", x: 2, y: 20, w: 26, h: 30, colour: "grey", label: "Home" },
+      { id: "stage", x: 95, y: 20, w: 30, h: 30, colour: "purple", label: "Show-and-tell" },
+    ],
+  }),
+  check(trace, world) {
+    const stage = world.zones.find((z) => z.id === "stage")!;
+    const home = world.zones.find((z) => z.id === "home")!;
+    if (!trace.frames.some((f) => inZone(f, stage))) return notYet("Drive all the way to the show-and-tell spot first.");
+    if (!trace.frames.some((f) => inZone(f, stage) && f.led !== "off")) return notYet("At the spot, turn your light on so everyone can see you.");
+    if (trace.stats.beeps === 0) return notYet("Say hello with a beep.");
+    if (!inZone(last(trace), home)) return notYet("Great show! Now drive back home.");
+    return pass("Show-and-tell done, and home again. You're a coder now!");
+  },
+  starter: { js: "// Show-and-tell tour\nforward(10);\n", py: "# Show-and-tell tour\nforward(10)\n" },
+};
+
+const meetRobot: Mission = {
+  semester: "S1",
+  scene: { ground: "tiles" },
+  skills: ["Sequencing", "Outputs"],
+  id: "meet-my-robot",
+  title: "Meet my robot",
+  program: "Builders",
+  fits: "S1 All About Me Page",
+  goal: "Make your robot introduce itself: show a hello on its screen, light up, beep twice, and spin all the way round.",
+  hint: "A full spin is 360. Your hello can be your robot's name. Keep it short so it fits the screen.",
+  world: base({ w: 100, h: 60, robot: "scout", start: { x: 50, y: 30, heading: 90 } }),
+  check(trace) {
+    if (!trace.frames.some((f) => f.display)) return notYet("Show a hello on the robot's screen.");
+    if (!trace.frames.some((f) => f.led !== "off")) return notYet("Light up in your favourite colour.");
+    if (trace.stats.beeps < 2) return notYet(`Beep twice. You beeped ${trace.stats.beeps} time${trace.stats.beeps === 1 ? "" : "s"}.`);
+    if (trace.stats.turned < 355) return notYet(`Spin all the way round. You turned ${Math.round(trace.stats.turned)} degrees; a full spin is 360.`);
+    return pass("Nice to meet you, robot! That's an About Me in code.");
+  },
+  starter: { js: '// Meet my robot\ndisplay("Hi!");\n', py: '# Meet my robot\ndisplay("Hi!")\n' },
+};
+
+const petRoutine: Mission = {
+  semester: "S3",
+  scene: { ground: "rug", zoneIcons: { bowl: "toybox", bed: "heart" } },
+  skills: ["Loops", "Routines"],
+  id: "pet-routine",
+  title: "Robot pet routine",
+  program: "Builders",
+  fits: "S3 Class Pet Care Guide",
+  goal: "Your robot pet needs its routine twice: go to the food bowl, then go to its bed. Use a repeat loop.",
+  hint: "Write the routine once (bowl, turn round, bed, turn round), then put it inside repeat 2 times.",
+  world: base({
+    w: 120,
+    h: 70,
+    robot: "scout",
+    start: { x: 60, y: 35, heading: 0 },
+    zones: [
+      { id: "bowl", x: 95, y: 22, w: 20, h: 26, colour: "orange", label: "Food bowl" },
+      { id: "bed", x: 5, y: 22, w: 20, h: 26, colour: "purple", label: "Bed" },
+    ],
+  }),
+  check(trace, world) {
+    const bowl = world.zones.find((z) => z.id === "bowl")!;
+    const bed = world.zones.find((z) => z.id === "bed")!;
+    const visits = { bowl: 0, bed: 0 };
+    let where: "bowl" | "bed" | null = null;
+    for (const f of trace.frames) {
+      const now = inZone(f, bowl) ? "bowl" : inZone(f, bed) ? "bed" : null;
+      if (now && now !== where) visits[now]++;
+      if (now) where = now;
+    }
+    if (visits.bowl < 2 || visits.bed < 2) return notYet(`Food bowl ${visits.bowl} of 2, bed ${visits.bed} of 2. Repeat the routine twice.`);
+    return pass("Fed and rested, twice. A happy robot pet!");
+  },
+  starter: { js: "// Robot pet routine\nforward(45);\n", py: "# Robot pet routine\nforward(45)\n" },
+};
+
+const helper: Mission = {
+  semester: "Capstone",
+  scene: {
+    ground: "grass",
+    roads: true,
+    decor: [{ kind: "tree", x: 40, y: 30, r: 7 }, { kind: "tree", x: 130, y: 40, r: 6 }, { kind: "bush", x: 60, y: 85, r: 4 }],
+    zoneIcons: { bank: "house", centre: "school" },
+  },
+  skills: ["Planning", "Sequencing"],
+  id: "community-helper",
+  title: "Community helper",
+  program: "Builders",
+  fits: "Capstone Community Helper Website",
+  goal: "Be a community helper: pick up the supplies at the Food bank, deliver them to the Community centre, and beep when you arrive.",
+  hint: "Plan the route first: how far along the road, which way to turn, how far up. Then pick up, drive, drop, beep.",
+  world: base({
+    w: 150,
+    h: 90,
+    robot: "scout",
+    start: { x: 20, y: 70, heading: 0 },
+    items: [{ id: "supplies", x: 28, y: 70, colour: "green", label: "Supplies" }],
+    lines: [{ points: [{ x: 8, y: 70 }, { x: 140, y: 70 }] }, { points: [{ x: 100, y: 70 }, { x: 100, y: 32 }] }],
+    zones: [
+      { id: "bank", x: 3, y: 50, w: 22, h: 35, colour: "orange", label: "Food bank" },
+      { id: "centre", x: 85, y: 5, w: 30, h: 25, colour: "blue", label: "Community centre" },
+    ],
+  }),
+  check(trace, world) {
+    const centre = world.zones.find((z) => z.id === "centre")!;
+    if (trace.stats.pickUps === 0) return notYet("Pick up the supplies first. They're right in front of you.");
+    if (last(trace).carrying) return notYet("Drop the supplies at the Community centre.");
+    if (!inZone(itemAt(trace, world, "supplies"), centre)) return notYet("The supplies didn't land in the Community centre. Check your distances.");
+    if (trace.stats.beeps === 0) return notYet("Delivered! Now beep to let them know you're here.");
+    return pass("Supplies delivered. Thank you, community helper!");
+  },
+  starter: { js: "// Community helper\npickUp();\n", py: "# Community helper\npick_up()\n" },
+};
+
+const focusTimer: Mission = {
+  semester: "S1",
+  scene: { ground: "tiles", zoneIcons: { break: "park" } },
+  skills: ["Variables", "Functions"],
+  id: "focus-timer",
+  title: "Focus timer",
+  program: "Developers",
+  fits: "S1 Homework Timer & Focus Tool",
+  goal: "Count down 5, 4, 3, 2, 1 on the robot's screen, one number per second. Then beep and drive to Break time.",
+  hint: "Store the time in a variable. Write a function that shows it, waits 1 second and subtracts 1. Call it while the time is above 0.",
+  world: base({
+    w: 140,
+    h: 50,
+    robot: "racer",
+    start: { x: 15, y: 25, heading: 0 },
+    zones: [{ id: "break", x: 100, y: 10, w: 35, h: 30, colour: "green", label: "Break time" }],
+  }),
+  check(trace, world) {
+    const moveAt = trace.stats.firstMoveAt < 0 ? Infinity : trace.stats.firstMoveAt;
+    const shown = new Set(trace.frames.filter((f) => f.t <= moveAt && /^\d+$/.test(f.display)).map((f) => f.display));
+    if (["5", "4", "3", "2", "1"].some((n) => !shown.has(n))) return notYet("Show every number from 5 down to 1 on the screen before the robot moves.");
+    if (moveAt < 4.9) return notYet("Wait 1 second on each number. The robot left too early.");
+    if (trace.stats.beeps === 0) return notYet("Beep when the timer ends.");
+    if (!inZone(last(trace), world.zones[0])) return notYet("Time's up! Now drive to Break time.");
+    return pass("Focused for 5 seconds, then off to a break. That's a working timer.");
+  },
+  starter: { js: "// Focus timer\nlet time = 5;\ndisplay(time);\n", py: "# Focus timer\ntime = 5\ndisplay(time)\n" },
+};
+
+const STONE = 22;
+const snack: Mission = {
+  semester: "S2",
+  scene: { ground: "grass", zoneIcons: { stand: "toybox" }, decor: [{ kind: "tree", x: 140, y: 12, r: 6 }, { kind: "bush", x: 40, y: 8, r: 3 }] },
+  skills: ["Operators", "Input and output"],
+  id: "snack-stand",
+  title: "Snack stand",
+  program: "Developers",
+  fits: "S2 Healthy Snack Calculator",
+  goal: `The snack stand is 4 paving stones away and each stone is ${STONE} cm. Calculate the distance in your code, print it, then stop right at the stand (within 2 cm).`,
+  hint: "Use variables for the number of stones and their size, multiply them, print the answer, then drive that far.",
+  world: base({
+    w: 160,
+    h: 50,
+    robot: "racer",
+    start: { x: 10, y: 25, heading: 0 },
+    grid: false,
+    zones: [
+      { x: 10, y: 15, w: STONE, h: 20, colour: "grey" },
+      { x: 10 + STONE, y: 15, w: STONE, h: 20, colour: "white" },
+      { x: 10 + STONE * 2, y: 15, w: STONE, h: 20, colour: "grey" },
+      { x: 10 + STONE * 3, y: 15, w: STONE, h: 20, colour: "white" },
+      { id: "stand", x: 10 + STONE * 4, y: 5, w: 26, h: 40, colour: "orange", label: "Snack stand" },
+    ],
+  }),
+  check(trace) {
+    const target = 10 + STONE * 4;
+    const x = last(trace).x;
+    const printed = trace.log.some((l) => l.text.split(/[^0-9.]+/).includes(String(STONE * 4)));
+    if (!printed) return notYet("Print the distance you calculated, so you can check it.");
+    if (Math.abs(x - target) > 2) return notYet(`The robot stopped ${Math.abs(Math.round(x - target))} cm from the stand. Check your calculation.`);
+    return pass(`Calculated ${STONE * 4} cm and stopped right at the stand. Snack time!`);
+  },
+  starter: { js: "// Snack stand\nconst stones = 4;\n", py: "# Snack stand\nstones = 4\n" },
+};
+
+const hallway: Mission = {
+  semester: "Capstone",
+  scene: { ground: "tiles", wall: "brick" },
+  skills: ["Sensors", "if / else", "Loops"],
+  id: "hallway-helper",
+  title: "Hallway helper",
+  program: "Developers",
+  fits: "Capstone Problem-Solver App",
+  goal: "Solve a real problem: guide a visitor down the hallway to the classroom door. Light the way in the dark part, switch off in the bright part, and stop before the door without touching it.",
+  hint: "One loop does it all: step forward, check the light, check for the door. Use distance() or obstacle() to stop.",
+  world: base({
+    w: 200,
+    h: 50,
+    robot: "racer",
+    start: { x: 12, y: 25, heading: 0 },
+    light: 85,
+    lightZones: [{ x: 70, y: 0, w: 50, h: 50, level: 15, label: "Dark hallway" }],
+    walls: [{ x: 185, y: 5, w: 10, h: 40 }],
+    places: [{ x: 172, y: 4, label: "Classroom", kind: "flag" }],
+  }),
+  check(trace) {
+    const f = last(trace);
+    if (trace.stats.bumps > 0) return notYet("Bump! Stop before the classroom door.");
+    if (!f.sensors.obstacle) return notYet("Keep going until you reach the classroom door.");
+    let good = 0;
+    let counted = 0;
+    for (const fr of trace.frames) {
+      const inside = fr.x > 76 && fr.x < 119;
+      const outside = fr.x < 69 || (fr.x > 127 && fr.x < 170);
+      if (inside || outside) {
+        counted++;
+        if (inside === (fr.led !== "off")) good++;
+      }
+    }
+    if (!counted || good / counted < 0.85) return notYet("Light on in the dark hallway, off where it's bright.");
+    return pass("Visitor delivered safely to the classroom. Problem solved!");
+  },
+  starter: { js: "// Hallway helper\nforward(10);\n", py: "# Hallway helper\nforward(10)\n" },
+};
+
+const lockRobot: Mission = {
+  semester: "S1",
+  scene: { ground: "concrete", zoneIcons: { vault: "bin" } },
+  skills: ["Functions", "if / elif / else", "Cybersecurity"],
+  id: "lock-the-robot",
+  title: "Lock the robot",
+  program: "Engineers",
+  fits: "S1 Password Strength Checker",
+  goal: "Visitors type passcodes. Read each with next_code(), beep to reject weak ones, and only drive into the Vault after a strong one (12 or more characters with letters, numbers and a symbol).",
+  hint: "Write an is_strong(code) function first. Then loop: read a code, check it, beep or drive. An empty code means nobody is left.",
+  world: base({
+    w: 140,
+    h: 60,
+    robot: "rover",
+    start: { x: 20, y: 30, heading: 0 },
+    codes: ["1234", "password", "Rover-Blue-7731!"],
+    zones: [{ id: "vault", x: 105, y: 15, w: 30, h: 30, colour: "blue", label: "Vault" }],
+  }),
+  check(trace, world) {
+    const reads = trace.stats.codeReads;
+    const moved = trace.stats.firstMoveAt >= 0;
+    if (moved && (reads.length < 3 || trace.stats.firstMoveAt < reads[2])) return notYet("The robot moved before the strong passcode. A weak code must never unlock it.");
+    if (reads.length < 3) return notYet(`You read ${reads.length} of 3 passcodes. Use next_code() in a loop.`);
+    if (trace.stats.beeps < 2) return notYet("Beep once for each weak passcode you reject.");
+    if (!inZone(last(trace), world.zones[0])) return notYet("Strong code accepted? Then drive into the Vault.");
+    return pass("Two weak passcodes rejected, the strong one accepted. Secure!");
+  },
+  starter: { js: "// Lock the robot\nconst code = nextCode();\nconsole.log(code);\n", py: "# Lock the robot\ncode = next_code()\nprint(code)\n" },
+};
+
+const helpDesk: Mission = {
+  semester: "S3",
+  scene: { ground: "tiles", zoneIcons: { desk: "heart" } },
+  skills: ["Dictionaries", "Intents", "AI ethics"],
+  id: "help-desk-robot",
+  title: "Help desk robot",
+  program: "Engineers",
+  fits: "S3 Chatbot for Good",
+  goal: 'Someone is chatting to your robot. Read each message with next_message(), use a dictionary of intents to move ("forward 40", "left 90"), politely refuse anything else on the screen, and stop when told "stop".',
+  hint: 'Split each message into a word and a number. Look the word up in a dictionary of actions. If it is not there, display a polite "Sorry".',
+  world: base({
+    w: 120,
+    h: 80,
+    robot: "rover",
+    start: { x: 20, y: 70, heading: 0 },
+    messages: ["forward 40", "left 90", "forward 40", "tell me your password", "stop", "forward 50"],
+    zones: [{ id: "desk", x: 45, y: 15, w: 30, h: 30, colour: "green", label: "Help desk" }],
+  }),
+  check(trace, world) {
+    const reads = trace.stats.messageReads;
+    if (reads.length < 5) return notYet(`You read ${reads.length} messages. Keep reading until "stop".`);
+    const refusal = trace.frames.some((f) => f.t >= reads[3] && f.t < reads[4] && f.display);
+    if (!refusal) return notYet("When asked for a password, show a polite refusal on the screen.");
+    const after = trace.frames.filter((f) => f.t > reads[4]);
+    if (after.some((f) => Math.hypot(f.x - after[0].x, f.y - after[0].y) > 0.5)) return notYet('The robot kept going after "stop". A good assistant listens.');
+    if (!inZone(last(trace), world.zones[0])) return notYet("Follow the movement messages to reach the Help desk.");
+    return pass("Helpful, polite, and it kept the secret. A chatbot for good.");
+  },
+  starter: { js: "// Help desk robot\nconst message = nextMessage();\nconsole.log(message);\n", py: "# Help desk robot\nmessage = next_message()\nprint(message)\n" },
+};
+
+const recycleZones: Zone[] = [
+  { id: "recycle", x: 125, y: 5, w: 35, h: 31, colour: "blue", label: "Recycling" },
+  { id: "compost", x: 125, y: 39, w: 35, h: 31, colour: "green", label: "Compost" },
+  { id: "trash", x: 125, y: 73, w: 35, h: 31, colour: "grey", label: "Garbage" },
+];
+const recycling: Mission = {
+  semester: "Capstone",
+  scene: { ground: "concrete", zoneIcons: { recycle: "bin", compost: "bin", trash: "bin" } },
+  skills: ["Design thinking", "Data", "Sustainability"],
+  id: "recycling-helper",
+  title: "Recycling helper",
+  program: "Engineers",
+  fits: "Capstone Innovation Challenge",
+  goal: "Prototype a fix for a real problem: sort all 4 items (blue = recycling, green = compost, grey = garbage), then record how many went into each bin for your pitch.",
+  hint: "Reuse your go_to() from Sorting robot. Keep a dictionary of counts, then record() each one at the end.",
+  world: base({
+    w: 170,
+    h: 110,
+    robot: "rover",
+    start: { x: 70, y: 55, heading: 180 },
+    items: [
+      { id: "r1", x: 30, y: 18, colour: "blue" },
+      { id: "r2", x: 30, y: 42, colour: "green" },
+      { id: "r3", x: 30, y: 66, colour: "grey" },
+      { id: "r4", x: 30, y: 90, colour: "blue" },
+    ],
+    zones: recycleZones,
+  }),
+  check(trace, world) {
+    let right = 0;
+    for (const it of world.items) {
+      const z = recycleZones.find((s) => s.colour === it.colour)!;
+      if (inZone(itemAt(trace, world, it.id), z)) right++;
+    }
+    if (right < 4) return notYet(`${right} of 4 items in the right bin.`);
+    const names = new Set(trace.data.map((d) => d.name));
+    if (names.size < 3) return notYet("All sorted! Now record() the count for each of the 3 bins.");
+    return pass("Everything sorted and counted. Ready to pitch your prototype.");
+  },
+  starter: { js: "// Recycling helper\nconsole.log(itemColour());\n", py: "# Recycling helper\nprint(item_colour())\n" },
+};
+
+export const MISSIONS: Mission[] = [
+  toyBin, kindness, binStop, neighbourhood, showTell,
+  meetRobot, dayNight, petRoutine, pollinator, helper,
+  focusTimer, snack, wallStop, delivery, hallway,
+  lockRobot, colourSort, helpDesk, survey, recycling,
+  sandbox,
+];
+
+/** "Level 3 · S3" for a mission, from its place in its program. */
+export function levelOf(m: Mission): number {
+  return m.semester ? SEMESTERS.indexOf(m.semester) + 1 : 0;
+}
 
 export const DEFAULT_LANG: Record<Program, Lang> = {
   Explorers: "blocks",

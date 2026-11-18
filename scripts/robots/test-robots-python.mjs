@@ -57,6 +57,57 @@ for i in range(18):
     forward(10)
     record("light", light())
 `,
+  "lock-the-robot": `
+def is_strong(code):
+    has_letter = any(ch.isalpha() for ch in code)
+    has_digit = any(ch.isdigit() for ch in code)
+    has_symbol = any(not ch.isalnum() for ch in code)
+    return len(code) >= 12 and has_letter and has_digit and has_symbol
+
+code = next_code()
+while code != "":
+    if is_strong(code):
+        print("Accepted")
+        forward(100)
+        break
+    else:
+        print("Rejected:", code)
+        beep()
+    code = next_code()
+`,
+  "help-desk-robot": `
+actions = {"forward": forward, "left": turn_left, "right": turn_right}
+message = next_message()
+while message != "":
+    parts = message.split()
+    word = parts[0]
+    if word == "stop":
+        break
+    if word in actions and len(parts) == 2 and parts[1].isdigit():
+        actions[word](int(parts[1]))
+    else:
+        display("Sorry, I can't help")
+    message = next_message()
+`,
+  "snack-stand": `
+stones = 4
+size = 22
+distance_cm = stones * size
+print("Distance:", distance_cm)
+forward(distance_cm)
+`,
+  "focus-timer": `
+time_left = 5
+def tick():
+    global time_left
+    display(time_left)
+    wait(1)
+    time_left -= 1
+while time_left > 0:
+    tick()
+beep()
+forward(100)
+`,
   "bin-stop": `
 while not obstacle():
     forward(2)

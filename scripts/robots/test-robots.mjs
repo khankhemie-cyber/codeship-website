@@ -3,7 +3,8 @@
 // No browser.   npm run test:robots
 import "../blocks/ts-resolve.mjs";
 const { runJs } = await import("../../src/components/tools/robots/run.ts");
-const { MISSIONS, missionById } = await import("../../src/components/tools/robots/missions.ts");
+const { MISSIONS, SEMESTERS, missionById } = await import("../../src/components/tools/robots/missions.ts");
+import fs from "node:fs";
 const { JS, LINE_FOLLOWER } = await import("./solutions.mjs");
 const { blocksToJs } = await import("../../src/components/tools/robots/robotBlocks.ts");
 
@@ -18,6 +19,31 @@ function test(name, fn) {
   catch (e) { failed++; console.log(`FAIL  ${name}\n      ${e.message}`); }
 }
 const assert = (c, m) => { if (!c) throw new Error(m); };
+
+// Every program has exactly one level per semester plus the capstone, and
+// the project names match the curriculum (codeship-ops curriculum/INDEX.md).
+const PROJECTS = {
+  Explorers: ["My Helpful Robot", "Kindness Cards", "Recycling Sorter", "My Neighbourhood Map", "Show-and-Tell App"],
+  Builders: ["All About Me Page", "Weather Helper", "Class Pet Care Guide", "Save the Bees Awareness Site", "Community Helper Website"],
+  Developers: ["Homework Timer & Focus Tool", "Healthy Snack Calculator", "Fact or Fake? Media-Literacy Quiz", "Budget Buddy", "Problem-Solver App"],
+  Engineers: ["Password Strength Checker", "Smart Sorting AI", "Chatbot for Good", "Data Detective", "Innovation Challenge"],
+};
+for (const [program, projects] of Object.entries(PROJECTS)) {
+  test(`${program}: one level for each of S1, S2, S3, S4 and the capstone`, () => {
+    const list = MISSIONS.filter((m) => m.program === program);
+    assert(list.length === 5, `${list.length} levels`);
+    SEMESTERS.forEach((sem, i) => {
+      const found = list.filter((m) => m.semester === sem);
+      assert(found.length === 1, `${sem}: ${found.length} levels`);
+      assert(found[0].fits.endsWith(projects[i]), `${sem} fits "${found[0].fits}", curriculum project is "${projects[i]}"`);
+    });
+  });
+}
+test("mission ids are unique and every mission has a solution", () => {
+  const ids = MISSIONS.map((m) => m.id);
+  assert(new Set(ids).size === ids.length, "duplicate id");
+  for (const id of ids) assert(JS[id], `no reference solution for ${id}`);
+});
 
 for (const m of MISSIONS) {
   test(`${m.id}: reference solution passes`, () => {
@@ -72,6 +98,57 @@ test("blocks: generated code is readable JavaScript", () => {
   const code = blocksToJs(ws(blk("robot_repeat", { N: 2 }, { DO: { block: blk("robot_turn_left", { N: 90 }) } })));
   assert(code === "for (let i = 0; i < 2; i++) {\n  turnLeft(90);\n}\n", JSON.stringify(code));
 });
+// Common wrong answers get the right "not yet" message.
+const WRONG = [
+  ["lock-the-robot", `forward(100);`, /moved before the strong passcode|read 0 of 3/],
+  ["lock-the-robot", `let c = nextCode(); while (c !== "") { if (c.length >= 4) { forward(100); break; } beep(); c = nextCode(); }`, /moved before the strong passcode/],
+  ["help-desk-robot", `const a = { forward: (n) => forward(n), left: (n) => turnLeft(n) }; let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (a[w]) a[w](Number(n)); else display("Sorry"); m = nextMessage(); }`, /kept going after "stop"/],
+  ["help-desk-robot", `let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (w === "stop") break; if (w === "forward") forward(Number(n)); if (w === "left") turnLeft(Number(n)); m = nextMessage(); }`, /polite refusal/],
+  ["focus-timer", `for (const n of [5, 4, 3, 2, 1]) display(n); beep(); forward(100);`, /Wait 1 second/],
+  ["snack-stand", `forward(88);`, /Print the distance/],
+  ["snack-stand", `const d = 4 * 20; console.log(d); forward(d);`, /Print the distance|stopped 8 cm/],
+  ["pet-routine", `forward(45); turnLeft(180); forward(90);`, /Food bowl 1 of 2, bed 1 of 2/],
+  ["meet-my-robot", `display("Hi"); led("red"); beep(); beep(); turnLeft(180);`, /turned 180 degrees/],
+  ["show-and-tell", `forward(95); beep(); turnLeft(180); forward(95);`, /turn your light on/],
+  ["hallway-helper", `while (!obstacle()) forward(2);`, /Light on in the dark/],
+  ["recycling-helper", `forward(5);`, /0 of 4 items in the right bin/],
+];
+for (const [id, code, expect] of WRONG) {
+  test(`${id}: wrong answer is caught (${String(expect).slice(1, 30)}...)`, () => {
+    const m = missionById(id);
+    const { trace, error } = runJs(code, m.world);
+    assert(!error, error);
+    const r = m.check(trace, m.world);
+    assert(!r.ok && expect.test(r.message), r.message);
+  });
+}
+
+// Blocks: an Explorers or Builders child can finish their levels with blocks alone.
+test("blocks: every Explorers and Builders level can be solved with blocks", () => {
+  const f = (N) => blk("robot_forward", { N }), L = (N) => blk("robot_turn_left", { N }), R = (N) => blk("robot_turn_right", { N });
+  const STACKS = {
+    "toy-bin": [f(32), blk("robot_pick_up"), f(40), blk("robot_drop")],
+    "kindness-delivery": [blk("robot_wait_clap"), f(80), blk("robot_beep")],
+    "bin-stop": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_beep")],
+    "neighbourhood": [f(50), L(90), f(55), R(90), f(45)],
+    "show-and-tell": [f(95), blk("robot_led", { C: "green" }), blk("robot_beep"), L(180), f(95)],
+    "meet-my-robot": [blk("robot_display", { T: "Hi I'm Bolt" }), blk("robot_led", { C: "blue" }), blk("robot_beep"), blk("robot_beep"), L(360)],
+    "day-night": [blk("robot_repeat", { N: 66 }, { DO: { block: chain([f(2), blk("robot_if_else", null, { COND: { block: blk("robot_sense", { S: "light() < 30" }) }, DO: { block: blk("robot_led", { C: "yellow" }) }, ELSE: { block: blk("robot_led", { C: "off" }) } })]) } })],
+    "pet-routine": [blk("robot_repeat", { N: 2 }, { DO: { block: chain([f(45), blk("robot_beep"), L(180), f(90), blk("robot_wait", { N: 1 }), L(180), f(45)]) } })],
+    "pollinator": [f(25), blk("robot_wait", { N: 1 }), f(15), L(90), f(35), R(90), f(30), blk("robot_wait", { N: 1 }), f(30), R(90), f(20), blk("robot_wait", { N: 1 }), f(15), L(90), f(30), blk("robot_wait", { N: 1 })],
+    "community-helper": [blk("robot_pick_up"), f(80), L(90), f(40), blk("robot_drop"), blk("robot_beep")],
+  };
+  for (const [id, list] of Object.entries(STACKS)) {
+    const m = missionById(id);
+    const { trace, error } = runJs(blocksToJs(ws(...list)), m.world);
+    assert(!error, `${id}: ${error}`);
+    const r = m.check(trace, m.world);
+    assert(r.ok, `${id}: ${r.message}`);
+  }
+  const covered = MISSIONS.filter((m) => m.program === "Explorers" || m.program === "Builders").every((m) => STACKS[m.id]);
+  assert(covered, "an Explorers or Builders level has no blocks solution");
+});
+
 test("time limit stops a loop that never ends", () => {
   const { trace, error } = runJs("while (true) { turnLeft(10); }", missionById("sandbox").world);
   assert(!error, error);
@@ -84,6 +161,10 @@ test("a sensor-only loop still ends (reads take time)", () => {
 test("misspelt function names get a hint", () => {
   const { error } = runJs("Forward(10);", missionById("sandbox").world);
   assert(/Did you mean forward\?/.test(error), error);
+});
+test("NaN distances are explained", () => {
+  const { error } = runJs("forward(0 / 0);", missionById("sandbox").world);
+  assert(/NaN \(not a number\)/.test(error), error);
 });
 test("bad LED colour explains the choices", () => {
   const { error } = runJs('led("pink");', missionById("sandbox").world);

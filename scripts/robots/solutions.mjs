@@ -27,6 +27,41 @@ for (const row of [19, 50, 81]) {
 }`,
   "survey": `for (let i = 0; i < 17; i++) { forward(10); record("light", light()); }`,
   "sandbox": `forward(5);`,
+  "show-and-tell": `forward(95); led("green"); beep(); turnLeft(180); forward(95);`,
+  "meet-my-robot": `display("Hi, I'm Bolt"); led("blue"); beep(); beep(); turnLeft(360);`,
+  "pet-routine": `for (let i = 0; i < 2; i++) { forward(45); beep(); turnLeft(180); forward(90); wait(1); turnLeft(180); forward(45); }`,
+  "community-helper": `pickUp(); forward(80); turnLeft(90); forward(40); drop(); beep();`,
+  "focus-timer": `let time = 5;
+function tick() { display(time); wait(1); time = time - 1; }
+while (time > 0) { tick(); }
+beep(); forward(100);`,
+  "snack-stand": `const stones = 4; const size = 22; const d = stones * size; console.log("Distance:", d); forward(d);`,
+  "hallway-helper": `while (!obstacle()) { forward(2); if (light() < 30) { led("white"); } else { led("off"); } }`,
+  "lock-the-robot": `function strong(c) { return c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c); }
+let c = nextCode();
+while (c !== "") { if (strong(c)) { forward(100); break; } else { beep(); } c = nextCode(); }`,
+  "help-desk-robot": `const actions = { forward: (n) => forward(n), left: (n) => turnLeft(n), right: (n) => turnRight(n) };
+let m = nextMessage();
+while (m !== "") {
+  const [word, num] = m.split(" ");
+  if (word === "stop") break;
+  if (actions[word] && !isNaN(Number(num))) actions[word](Number(num));
+  else display("Sorry, I can't help");
+  m = nextMessage();
+}`,
+  "recycling-helper": `
+let x = 70, y = 55, h = 180;
+function face(t) { let d = ((t - h) % 360 + 540) % 360 - 180; if (d > 0) turnLeft(d); else turnRight(-d); h = t; }
+function goTo(tx, ty) { const dx = tx - x, dy = ty - y, dist = Math.hypot(dx, dy); if (dist < 0.01) return; face(Math.atan2(-dy, dx) * 180 / Math.PI); forward(dist); x = tx; y = ty; }
+const binY = { blue: 20.5, green: 54.5, grey: 88.5 };
+const binName = { blue: "recycling", green: "compost", grey: "garbage" };
+const counts = { recycling: 0, compost: 0, garbage: 0 };
+for (const row of [18, 42, 66, 90]) {
+  goTo(41, row); face(180);
+  const c = itemColour(); pickUp();
+  goTo(70, row); goTo(70, binY[c]); goTo(132, binY[c]); face(0); drop(); counts[binName[c]]++; goTo(100, binY[c]);
+}
+for (const k in counts) record(k, counts[k]);`,
 };
 
 // A two-sensor line follower for the Free build oval.

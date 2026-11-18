@@ -41,6 +41,10 @@ export type World = {
   lightZones: LightZone[];
   /** Seconds (from the start of the run) when a friend claps. */
   claps: number[];
+  /** Passcodes visitors type, in order (next_code() hands them out one at a time). */
+  codes?: string[];
+  /** Chat messages a person sends the robot, in order (next_message()). */
+  messages?: string[];
   /** Distance sensor wobble in cm (0 = perfect). Deterministic, so runs repeat exactly. */
   distanceNoise: number;
   /** Show a 10 cm grid. */
@@ -86,6 +90,11 @@ export type RunStats = {
   drops: { t: number; id: string; x: number; y: number }[];
   /** First time the robot moved or turned (-1 if it never did). */
   firstMoveAt: number;
+  /** Total degrees turned, either way. */
+  turned: number;
+  /** When each passcode / message was read. */
+  codeReads: number[];
+  messageReads: number[];
 };
 
 export type Trace = {
@@ -201,7 +210,7 @@ export class Sim {
   log: LogLine[] = [];
   data: DataRow[] = [];
   sounds: SoundEvent[] = [];
-  stats: RunStats = { distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1 };
+  stats: RunStats = { distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1, turned: 0, codeReads: [], messageReads: [] };
   private clapsHeard = 0;
   private rand: () => number;
   readonly radius: number;
@@ -346,7 +355,10 @@ export class Sim {
 
   private num(v: unknown, name: string): number {
     const n = Number(v);
-    if (!Number.isFinite(n)) throw new RobotError(`${name} needs a number, but got ${JSON.stringify(v)}.`);
+    if (!Number.isFinite(n)) {
+      const got = typeof v === "number" && Number.isNaN(v) ? "NaN (not a number). Check the maths or the variable that made it" : typeof v === "undefined" ? "nothing (undefined)" : JSON.stringify(v);
+      throw new RobotError(`${name} needs a number, but got ${got}.`);
+    }
     return n;
   }
 
@@ -384,6 +396,7 @@ export class Sim {
     while (remaining > 1e-6) {
       const step = Math.min(remaining, TURN_SPEED * FRAME_DT);
       this.heading = (((this.heading + step * dir) % 360) + 360) % 360;
+      this.stats.turned += step;
       remaining -= step;
       this.tick(step / TURN_SPEED);
     }
@@ -461,6 +474,26 @@ export class Sim {
     return true;
   }
 
+  /** The next passcode a visitor types, or "" when nobody else is waiting. */
+  nextCode(): string {
+    const list = this.world.codes ?? [];
+    const i = this.stats.codeReads.length;
+    this.tick(0.3);
+    if (i >= list.length) return "";
+    this.stats.codeReads.push(this.t);
+    return list[i];
+  }
+
+  /** The next chat message, or "" when the conversation is over. */
+  nextMessage(): string {
+    const list = this.world.messages ?? [];
+    const i = this.stats.messageReads.length;
+    this.tick(0.3);
+    if (i >= list.length) return "";
+    this.stats.messageReads.push(this.t);
+    return list[i];
+  }
+
   /** True once for each clap that has happened since the last check. */
   clapped(): boolean {
     this.tick(0.02);
@@ -533,6 +566,8 @@ export function robotApi(sim: Sim) {
     colour: () => s.read("colour"),
     itemColour: () => s.read("itemColour"),
     record: (name: string, value: unknown) => s.record(name, value),
+    nextCode: () => s.nextCode(),
+    nextMessage: () => s.nextMessage(),
     print: (...parts: unknown[]) => s.print(parts.map(String).join(" ")),
   };
 }
@@ -565,6 +600,8 @@ export const PYTHON_NAMES: Record<string, keyof RobotApi> = {
   item_colour: "itemColour",
   item_color: "itemColour",
   record: "record",
+  next_code: "nextCode",
+  next_message: "nextMessage",
 };
 
 /** The JavaScript names, in the order the reference card lists them. */
