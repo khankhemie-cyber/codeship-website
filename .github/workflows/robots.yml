@@ -16,7 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .node-version
+          # Node 22 runs the app's TypeScript directly (like the Blocks tests).
+          node-version: 22
           cache: npm
       - run: npm ci
       - name: Levels, blocks and simulator
