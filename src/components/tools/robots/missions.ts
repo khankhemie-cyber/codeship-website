@@ -12,8 +12,23 @@ export type Lang = "blocks" | "js" | "py";
 
 export type GoalResult = { ok: boolean; message: string };
 
+/** How the mat is drawn. Decoration only: the simulator never sees it. */
+export type Scene = {
+  ground: "rug" | "grass" | "tiles" | "concrete";
+  /** Draw tape lines as roads (grey band under the black tape). */
+  roads?: boolean;
+  decor?: { kind: "tree" | "bush" | "ball" | "rock" | "bee"; x: number; y: number; r?: number }[];
+  /** Picture drawn in each zone, by zone id. */
+  zoneIcons?: Record<string, "toybox" | "heart" | "house" | "school" | "park" | "bin">;
+  /** Wall style. */
+  wall?: "bin" | "brick";
+};
+
 export type Mission = {
   id: string;
+  scene: Scene;
+  /** Short skill tags for the mission card. */
+  skills: string[];
   title: string;
   program: Program;
   /** Where it fits, e.g. "S1 My Helpful Robot". */
@@ -73,6 +88,8 @@ const notYet = (message: string): GoalResult => ({ ok: false, message });
 // ---------------------------------------------------------------- missions
 
 const toyBin: Mission = {
+  scene: { ground: "rug", decor: [{ kind: "ball", x: 30, y: 10, r: 3 }, { kind: "ball", x: 75, y: 52, r: 2.5 }], zoneIcons: { bin: "toybox" } },
+  skills: ["Sequencing", "Counting"],
   id: "toy-bin",
   title: "Toy to the bin",
   program: "Explorers",
@@ -101,6 +118,8 @@ const toyBin: Mission = {
 };
 
 const kindness: Mission = {
+  scene: { ground: "rug", decor: [{ kind: "ball", x: 50, y: 8, r: 2.5 }], zoneIcons: { friend: "heart" } },
+  skills: ["Events", "Sound"],
   id: "kindness-delivery",
   title: "Kindness delivery",
   program: "Explorers",
@@ -129,6 +148,8 @@ const kindness: Mission = {
 };
 
 const binStop: Mission = {
+  scene: { ground: "tiles", wall: "bin" },
+  skills: ["Sensors", "Loops"],
   id: "bin-stop",
   title: "Stop at the bin",
   program: "Explorers",
@@ -157,6 +178,13 @@ const binStop: Mission = {
 };
 
 const neighbourhood: Mission = {
+  scene: {
+    ground: "grass",
+    roads: true,
+    decor: [{ kind: "tree", x: 45, y: 40, r: 7 }, { kind: "tree", x: 30, y: 25, r: 6 }, { kind: "bush", x: 95, y: 92, r: 4 }, { kind: "tree", x: 130, y: 70, r: 6 }, { kind: "rock", x: 85, y: 10, r: 3 }],
+    zoneIcons: { home: "house", school: "school", park: "park" },
+  },
+  skills: ["Sequencing", "Left and right"],
   id: "neighbourhood",
   title: "Drive my street",
   program: "Explorers",
@@ -187,6 +215,8 @@ const neighbourhood: Mission = {
 
 const tunnel = { x: 60, y: 0, w: 40, h: 50, level: 10, label: "Tunnel" };
 const dayNight: Mission = {
+  scene: { ground: "grass", decor: [{ kind: "bush", x: 25, y: 8, r: 4 }, { kind: "tree", x: 125, y: 42, r: 5 }, { kind: "bush", x: 140, y: 8, r: 3 }] },
+  skills: ["If / else", "Light sensor"],
   id: "day-night",
   title: "Lights in the tunnel",
   program: "Builders",
@@ -235,6 +265,8 @@ const flowers: Pt[] = [
   { x: 140, y: 60 },
 ];
 const pollinator: Mission = {
+  scene: { ground: "grass", decor: [{ kind: "bee", x: 70, y: 50 }, { kind: "bee", x: 128, y: 30 }, { kind: "bush", x: 20, y: 20, r: 5 }, { kind: "tree", x: 80, y: 62, r: 8 }] },
+  skills: ["Sequencing", "Timing"],
   id: "pollinator",
   title: "Pollinator path",
   program: "Builders",
@@ -260,6 +292,8 @@ const pollinator: Mission = {
 };
 
 const wallStop: Mission = {
+  scene: { ground: "tiles", wall: "brick" },
+  skills: ["if / else", "Checking data"],
   id: "wall-stop",
   title: "Can you trust the sensor?",
   program: "Developers",
@@ -289,6 +323,13 @@ const wallStop: Mission = {
 
 const BUDGET = 170;
 const delivery: Mission = {
+  scene: {
+    ground: "grass",
+    roads: true,
+    decor: [{ kind: "tree", x: 50, y: 70, r: 6 }, { kind: "tree", x: 100, y: 72, r: 6 }, { kind: "bush", x: 145, y: 60, r: 4 }, { kind: "tree", x: 145, y: 15, r: 5 }],
+    zoneIcons: { h1: "house", h2: "house", h3: "house" },
+  },
+  skills: ["Arrays", "Loops", "Budget math"],
   id: "delivery",
   title: "Delivery on a budget",
   program: "Developers",
@@ -334,6 +375,8 @@ const sortZones: Zone[] = [
   { id: "yellow", x: 120, y: 67, w: 35, h: 28, colour: "yellow", label: "Yellow" },
 ];
 const colourSort: Mission = {
+  scene: { ground: "concrete", zoneIcons: { red: "bin", blue: "bin", yellow: "bin" } },
+  skills: ["Dictionaries", "Functions", "Classifying"],
   id: "colour-sort",
   title: "Sorting robot",
   program: "Engineers",
@@ -367,6 +410,8 @@ const colourSort: Mission = {
 };
 
 const survey: Mission = {
+  scene: { ground: "grass", decor: [{ kind: "tree", x: 88, y: 12, r: 7 }, { kind: "tree", x: 108, y: 50, r: 7 }, { kind: "tree", x: 95, y: 32, r: 5 }, { kind: "rock", x: 175, y: 12, r: 4 }, { kind: "bush", x: 55, y: 50, r: 4 }] },
+  skills: ["Lists", "Statistics", "Data"],
   id: "survey",
   title: "Survey robot",
   program: "Engineers",
@@ -405,6 +450,8 @@ for (let i = 0; i <= 48; i++) {
   oval.push({ x: Math.round((80 + Math.cos(a) * 55) * 10) / 10, y: Math.round((55 + Math.sin(a) * 32) * 10) / 10 });
 }
 const sandbox: Mission = {
+  scene: { ground: "tiles", wall: "brick" },
+  skills: ["Anything goes"],
   id: "sandbox",
   title: "Free build",
   program: "Everyone",

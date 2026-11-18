@@ -13,6 +13,7 @@ import { EMPTY_WORKSPACE, TOOLBOX, registerRobotBlocks } from "./robotBlocks";
 
 type Props = {
   value: unknown;
+  dark: boolean;
   docKey: string;
   onChange: (workspace: unknown) => void;
 };
@@ -32,7 +33,7 @@ function patchOnce() {
   }
 }
 
-export default function RobotBlocksEditor({ value, docKey, onChange }: Props) {
+export default function RobotBlocksEditor({ value, dark, docKey, onChange }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const handler = useRef(onChange);
   handler.current = onChange;
@@ -52,8 +53,8 @@ export default function RobotBlocksEditor({ value, docKey, onChange }: Props) {
       sounds: false,
       media: "/blockly-media-unused/",
       move: { scrollbars: true, drag: true, wheel: true },
-      zoom: { controls: false, wheel: false, startScale: 0.8, maxScale: 1.5, minScale: 0.5, pinch: true },
-      grid: { spacing: 40, length: 2, colour: "#D5DEEA", snap: false },
+      zoom: { controls: false, wheel: false, startScale: 0.95, maxScale: 1.5, minScale: 0.5, pinch: true },
+      grid: { spacing: 40, length: 2, colour: dark ? "#1E3A63" : "#D5DEEA", snap: false },
     });
     let loading = true;
     Blockly.Events.disable();
@@ -77,18 +78,21 @@ export default function RobotBlocksEditor({ value, docKey, onChange }: Props) {
       resize.disconnect();
       ws.dispose();
     };
-    // Rebuilt only when a different project is opened.
+    // Rebuilt only when a different project is opened (docKey includes the theme).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docKey]);
 
   return (
     <>
       <style>{`
-        .robot-blocks .blocklyToolboxDiv, .robot-blocks .blocklyToolbox { background: #012C61; color: #fff; padding-top: 6px; }
-        .robot-blocks .blocklyToolboxCategory, .robot-blocks .blocklyTreeRow { height: 40px; line-height: 40px; margin-bottom: 4px; padding-right: 14px; }
-        .robot-blocks .blocklyToolboxCategoryLabel, .robot-blocks .blocklyTreeLabel { color: #fff; font: 700 15px system-ui, sans-serif; }
+        .robot-blocks .blocklyToolboxDiv, .robot-blocks .blocklyToolbox { background: ${dark ? "#00102A" : "#F3F5F9"}; padding: 8px 4px; border-right: 1px solid ${dark ? "rgba(255,255,255,0.1)" : "#DFE3EB"}; }
+        .robot-blocks .blocklyToolboxCategory, .robot-blocks .blocklyTreeRow { height: 42px; line-height: 42px; margin: 0 0 4px; padding: 0 14px 0 6px; border-radius: 10px; }
+        .robot-blocks .blocklyToolboxCategory:hover { background: ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,21,50,0.06)"}; }
+        .robot-blocks .blocklyToolboxCategoryLabel, .robot-blocks .blocklyTreeLabel { color: ${dark ? "#E6EDF7" : "#001532"}; font: 700 15px system-ui, sans-serif; }
         .robot-blocks .blocklyToolboxSelected .blocklyToolboxCategoryLabel, .robot-blocks .blocklyTreeSelected .blocklyTreeLabel { color: #fff; }
-        .robot-blocks .blocklyFlyoutBackground { fill: #E6ECF4; fill-opacity: 0.97; }
+        .robot-blocks .blocklyToolboxCategoryIcon { width: 14px; height: 14px; border-radius: 4px; }
+        .robot-blocks .blocklyMainBackground { fill: ${dark ? "#011735" : "#FFFFFF"} !important; }
+        .robot-blocks .blocklyFlyoutBackground { fill: ${dark ? "#0A2648" : "#E6ECF4"}; fill-opacity: 0.97; }
         .robot-blocks .blocklyText { font-weight: 700; }
       `}</style>
       <div ref={host} className="robot-blocks h-full w-full" data-testid="robot-blocks" />

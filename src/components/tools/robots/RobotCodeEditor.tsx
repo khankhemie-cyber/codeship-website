@@ -12,7 +12,7 @@ import { python } from "@codemirror/lang-python";
 
 /** A plain CodeMirror editor for robot programs (JavaScript or Python), in the tools' navy theme. */
 
-const highlight = HighlightStyle.define([
+const darkHighlight = HighlightStyle.define([
   { tag: t.comment, color: "#7C93B5", fontStyle: "italic" },
   { tag: [t.keyword, t.modifier, t.operatorKeyword, t.controlKeyword], color: "#B79CFF" },
   { tag: [t.string, t.special(t.string)], color: "#F4D734" },
@@ -23,7 +23,28 @@ const highlight = HighlightStyle.define([
   { tag: t.variableName, color: "#E6EDF7" },
 ]);
 
-const theme = EditorView.theme(
+const lightHighlight = HighlightStyle.define([
+  { tag: t.comment, color: "#7A8699", fontStyle: "italic" },
+  { tag: [t.keyword, t.modifier, t.operatorKeyword, t.controlKeyword], color: "#6E43A8" },
+  { tag: [t.string, t.special(t.string)], color: "#0F6F7C" },
+  { tag: [t.number, t.bool, t.null, t.atom], color: "#C25E00" },
+  { tag: [t.function(t.variableName), t.function(t.propertyName)], color: "#1F5FBF" },
+  { tag: [t.propertyName, t.definition(t.propertyName)], color: "#1F5FBF" },
+  { tag: [t.operator, t.punctuation, t.bracket], color: "#5A6478" },
+  { tag: t.variableName, color: "#001532" },
+]);
+
+const lightTheme = EditorView.theme({
+  "&": { height: "100%", backgroundColor: "#FFFFFF", color: "#001532", fontSize: "15px" },
+  ".cm-scroller": { fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace", lineHeight: "1.55" },
+  ".cm-gutters": { backgroundColor: "#F3F5F9", color: "#8A93A6", border: "none" },
+  ".cm-activeLine": { backgroundColor: "#F4F7FC" },
+  ".cm-activeLineGutter": { backgroundColor: "#E8EDF6", color: "#001532" },
+  "&.cm-focused .cm-cursor": { borderLeftColor: "#D58401" },
+  "&.cm-focused .cm-selectionBackground, ::selection": { backgroundColor: "#CFE0FA" },
+});
+
+const darkTheme = EditorView.theme(
   {
     "&": { height: "100%", backgroundColor: "#011735", color: "#E6EDF7", fontSize: "15px" },
     ".cm-scroller": { fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace", lineHeight: "1.55" },
@@ -39,6 +60,7 @@ const theme = EditorView.theme(
 
 type Props = {
   lang: "js" | "py";
+  dark: boolean;
   value: string;
   onChange: (value: string) => void;
   onRun: () => void;
@@ -46,7 +68,7 @@ type Props = {
   docKey: string;
 };
 
-export default function RobotCodeEditor({ lang, value, onChange, onRun, docKey }: Props) {
+export default function RobotCodeEditor({ lang, dark, value, onChange, onRun, docKey }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const view = useRef<EditorView | null>(null);
   const handlers = useRef({ onChange, onRun });
@@ -64,8 +86,8 @@ export default function RobotCodeEditor({ lang, value, onChange, onRun, docKey }
         ]),
         lang === "py" ? python() : javascript(),
         indentUnit.of(lang === "py" ? "    " : "  "),
-        theme,
-        syntaxHighlighting(highlight),
+        dark ? darkTheme : lightTheme,
+        syntaxHighlighting(dark ? darkHighlight : lightHighlight),
         EditorView.updateListener.of((u) => {
           if (u.docChanged) handlers.current.onChange(u.state.doc.toString());
         }),
@@ -78,9 +100,9 @@ export default function RobotCodeEditor({ lang, value, onChange, onRun, docKey }
       v.destroy();
       view.current = null;
     };
-    // Rebuilt only when a different file is opened; typing never rebuilds.
+    // Rebuilt only when a different file is opened or the theme changes; typing never rebuilds.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docKey, lang]);
+  }, [docKey, lang, dark]);
 
   return <div ref={host} className="h-full min-h-0 overflow-hidden" />;
 }

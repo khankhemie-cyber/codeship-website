@@ -71,6 +71,74 @@ export const BLOCK_DEFS: Json[] = [
   { type: "robot_not", message0: "not %1", args0: [{ type: "input_value", name: "A", check: "Boolean" }], output: "Boolean", colour: BLOCK_COLOURS.sense },
 ];
 
+// ---------------------------------------------------------------- icons
+
+const ICON_PATHS: Record<string, string> = {
+  flag: '<path d="M5 22V3"/><path d="M5 3h13l-3 4.5 3 4.5H5z" fill="#2EB84B"/>',
+  forward: '<path d="M12 20V5m-6 6 6-6 6 6"/>',
+  backward: '<path d="M12 4v15m-6-6 6 6 6-6"/>',
+  left: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/>',
+  right: '<path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/>',
+  speed: '<path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-6"/>',
+  grab: '<path d="M7 11V6a2 2 0 0 1 4 0v4m0-1V4a2 2 0 0 1 4 0v6m0-1a2 2 0 0 1 4 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3l-2.5-4a2 2 0 0 1 3.4-2L7 15"/>',
+  drop: '<path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 21h14"/>',
+  beep: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  bulb: '<path d="M9 18h6m-5 3h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+  screen: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M7 10h6M7 13h4"/>',
+  chart: '<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5m4 5V8m4 8v-3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  clap: '<path d="M8 13 5 10a1.5 1.5 0 0 1 2-2l4 4m-1-3-2-2a1.5 1.5 0 0 1 2-2l5 5a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7 0l-3-3"/><path d="M16 3l1-1.5M19 5l1.5-1M20 8h1.5"/>',
+  repeat: '<path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12"/><path d="m7 22-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/>',
+  forever: '<path d="M12 12c-2-2.7-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.3 6-4zm0 0c2 2.7 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.3-6 4z"/>',
+  branch: '<path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+};
+
+export function blockIcon(name: string, colour = "#FFFFFF"): string {
+  const body = ICON_PATHS[name] ?? ICON_PATHS.eye;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${colour}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`,
+  )}`;
+}
+
+const BLOCK_ICONS: Record<string, string> = {
+  robot_start: "flag",
+  robot_forward: "forward",
+  robot_backward: "backward",
+  robot_turn_left: "left",
+  robot_turn_right: "right",
+  robot_speed: "speed",
+  robot_pick_up: "grab",
+  robot_drop: "drop",
+  robot_beep: "beep",
+  robot_led: "bulb",
+  robot_display: "screen",
+  robot_record: "chart",
+  robot_wait: "clock",
+  robot_wait_clap: "clap",
+  robot_repeat: "repeat",
+  robot_forever: "forever",
+  robot_until: "repeat",
+  robot_if: "branch",
+  robot_if_else: "branch",
+  robot_sense: "eye",
+};
+
+/** Puts each block's picture first (%1) and renumbers the rest of its first line. */
+function withIcons(defs: Json[]): Json[] {
+  return defs.map((d) => {
+    const icon = BLOCK_ICONS[String(d.type)];
+    if (!icon) return d;
+    const colour = d.type === "robot_start" ? "#010F2A" : "#FFFFFF";
+    const msg = String(d.message0).replace(/%(\d+)/g, (_, n) => `%${Number(n) + 1}`);
+    return {
+      ...d,
+      message0: `%1 ${msg}`,
+      args0: [{ type: "field_image", src: blockIcon(icon, colour), width: 26, height: 26, alt: "" }, ...((d.args0 as object[]) ?? [])],
+    };
+  });
+}
+
 export const TOOLBOX = {
   kind: "categoryToolbox",
   contents: [
@@ -181,5 +249,5 @@ export function blocksToJs(workspace: unknown): string {
 /** Register the blocks with a Blockly instance (called once, in the browser). */
 export function registerRobotBlocks(Blockly: { defineBlocksWithJsonArray: (defs: object[]) => void; Blocks: Record<string, unknown> }) {
   if (Blockly.Blocks.robot_start) return;
-  Blockly.defineBlocksWithJsonArray(BLOCK_DEFS);
+  Blockly.defineBlocksWithJsonArray(withIcons(BLOCK_DEFS));
 }
