@@ -92,6 +92,8 @@ export type RunStats = {
   firstMoveAt: number;
   /** Total degrees turned, either way. */
   turned: number;
+  /** pick_up() calls that found nothing in reach. */
+  missedPickUps: number;
   /** When each passcode / message was read. */
   codeReads: number[];
   messageReads: number[];
@@ -210,7 +212,7 @@ export class Sim {
   log: LogLine[] = [];
   data: DataRow[] = [];
   sounds: SoundEvent[] = [];
-  stats: RunStats = { distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1, turned: 0, codeReads: [], messageReads: [] };
+  stats: RunStats = { distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1, turned: 0, missedPickUps: 0, codeReads: [], messageReads: [] };
   private clapsHeard = 0;
   private rand: () => number;
   readonly radius: number;
@@ -268,14 +270,26 @@ export class Sim {
     return Math.min(DISTANCE_MAX, best);
   }
 
+  /**
+   * The object the gripper can reach: just in front of the robot, or under
+   * its front half (a child who counts squares to the toy drives right up
+   * onto it, and that has to count as reaching it).
+   */
   private itemInReach(): string | null {
     let bestId: string | null = null;
     let bestD = Infinity;
     const front = this.sensorPoint(this.radius + REACH / 2, 0);
+    const h = rad(this.heading);
     for (const [id, p] of this.items) {
       if (id === this.carrying) continue;
+      const dx = p.x - this.x;
+      const dy = p.y - this.y;
+      const along = dx * Math.cos(h) - dy * Math.sin(h);
+      const side = Math.abs(dx * Math.sin(h) + dy * Math.cos(h));
+      const inFront = Math.hypot(p.x - front.x, p.y - front.y) <= REACH;
+      const underFront = along >= -1 && along <= this.radius + REACH && side <= this.radius;
       const d = Math.hypot(p.x - front.x, p.y - front.y);
-      if (d <= REACH && d < bestD) {
+      if ((inFront || underFront) && d < bestD) {
         bestD = d;
         bestId = id;
       }
@@ -441,7 +455,10 @@ export class Sim {
     }
     const id = this.itemInReach();
     this.tick(0.3);
-    if (!id) return false;
+    if (!id) {
+      this.stats.missedPickUps++;
+      return false;
+    }
     this.carrying = id;
     this.stats.pickUps++;
     this.tick(0.2);

@@ -149,6 +149,23 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
   assert(covered, "an Explorers or Builders level has no blocks solution");
 });
 
+test("toy-bin: counting 4 squares onto the toy still picks it up (CEO report 2026-11-18)", () => {
+  const m = missionById("toy-bin");
+  for (const first of [25, 30, 32, 35, 40, 42]) {
+    const { trace } = runJs(`forward(${first}); pickUp(); forward(40); drop();`, m.world);
+    assert(trace.stats.pickUps === 1, `forward(${first}) then pickUp() missed`);
+  }
+});
+test("toy-bin: a pick-up that misses explains why", () => {
+  const m = missionById("toy-bin");
+  const { trace } = runJs("forward(10); pickUp();", m.world);
+  assert(/wasn't in front of it/.test(m.check(trace, m.world).message), m.check(trace, m.world).message);
+});
+test("pick-up never grabs an object behind the robot", () => {
+  const m = missionById("toy-bin");
+  const { trace } = runJs("forward(60); pickUp();", m.world);
+  assert(trace.stats.pickUps === 0, "grabbed the toy from behind");
+});
 test("time limit stops a loop that never ends", () => {
   const { trace, error } = runJs("while (true) { turnLeft(10); }", missionById("sandbox").world);
   assert(!error, error);
