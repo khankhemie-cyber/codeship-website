@@ -35,10 +35,12 @@ All quizzes are in `src/data/quizzes.ts`: two per program for Semester 1 (week 4
 
 | Program | Questions | Writing code |
 | --- | --- | --- |
-| Explorers | 10 | none: picture questions on sequencing and debugging, using only the Semester 1 blocks |
-| Builders | 10 | 4 HTML questions |
-| Developers | 20 | 6 JavaScript questions (30%) |
-| Engineers | 20 | 6 Python questions (30%) |
+| Explorers | 12 | none: picture questions on sequencing and debugging, using only the Semester 1 blocks |
+| Builders | 12 | 4 HTML questions |
+| Developers | 22 | 6 JavaScript questions |
+| Engineers | 22 | 6 Python questions |
+
+Every quiz ends with two Robot Lab questions (ids `robot-lab-1` and `robot-lab-2`) about that semester's Robot Lab level at /tools/robots/ (Explorers: Toy to the bin; Builders: Meet my robot; Developers: Focus timer; Engineers: Lock the robot).
 
 Each question is one of:
 

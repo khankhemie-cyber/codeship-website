@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import RobotLab from "@/components/tools/robots/RobotLab";
+import RobotGate from "@/components/tools/robots/RobotGate";
 
 export const metadata: Metadata = {
   title: "CODEship Robot Lab",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function RobotsPage() {
-  return <RobotLab />;
+  return <RobotGate />;
 }
