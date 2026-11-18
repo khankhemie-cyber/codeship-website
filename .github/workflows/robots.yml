@@ -1,0 +1,28 @@
+# Acceptance tests for /tools/robots (CODEship Robot Lab): every level in all
+# four programs can be finished (JavaScript, Blocks, Python), wrong answers get
+# the right message, and each program has a level for S1-S4 and the capstone.
+name: Robot Lab
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Node 22 runs the app's TypeScript directly (like the Blocks tests).
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Levels, blocks and simulator
+        run: npm run test:robots
+      - name: Python levels (Pyodide in Node)
+        run: npm run test:robots:python
+      - name: Quizzes (incl. Robot Lab questions)
+        run: npm run test:quizzes

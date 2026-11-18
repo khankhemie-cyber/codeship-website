@@ -15,8 +15,9 @@ import type { ProgramSlug } from "./programs";
  * `answer` and `sample` are stripped before a quiz is sent to the browser
  * (see toPublicQuiz in src/lib/quizzes.ts).
  *
- * Sizes: Explorers and Builders 10 questions; Developers and Engineers 20,
- * 6 of them (30%) writing code. Every question only uses what that program
+ * Sizes: Explorers and Builders 12 questions; Developers and Engineers 22,
+ * 6 of them writing code. The last two of every quiz are about that
+ * semester's Robot Lab level (/tools/robots/). Every question only uses what that program
  * has been taught by that week of Semester 1 (Explorers: the S1 blocks in
  * src/components/tools/blocks/levels.ts; Engineers: the S1 project in
  * scripts/python-fixtures/semester1_project.py).
@@ -170,6 +171,20 @@ export const QUIZZES: Quiz[] = [
         ],
         answer: 1,
       },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "In Robot Lab, the robot must carry the toy to the bin. What does it do first?",
+        options: ["Drop the toy", "Drive to the toy and pick it up", "Beep"],
+        answer: 1,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "Which Robot Lab block makes the robot wait until it hears a clap?",
+        options: ["Wait for a clap", "Forward", "Turn left"],
+        answer: 0,
+      },
     ],
   },
   {
@@ -256,6 +271,21 @@ export const QUIZZES: Quiz[] = [
         prompt: "One app can have more than one start block (a trigger).",
         options: TRUE_FALSE,
         answer: 0,
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "The robot stopped before it reached the bin. How do we fix the bug?",
+        code: "🤖 ⬜ ⬜ 🧺",
+        options: ["Make the Forward number bigger", "Add a Beep", "Add Turn left"],
+        answer: 0,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "Each square on the Robot Lab mat is 10 cm. The bin is 3 squares away. How far forward?",
+        options: ["3 cm", "10 cm", "30 cm"],
+        answer: 2,
       },
     ],
   },
@@ -349,6 +379,20 @@ export const QUIZZES: Quiz[] = [
         hint: "Use one <h2>…</h2>, then two <p>…</p>. Put each one on its own line.",
         sample: "<h2>My Hobbies</h2>\n<p>I like to swim.</p>\n<p>I like to draw dragons.</p>",
       },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "In the Robot Lab level Meet my robot, which block shows a hello on the robot's screen?",
+        options: ["beep", "show", "turn left"],
+        answer: 1,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "Your robot spins all the way round. How many degrees is a full spin?",
+        options: ["360", "180", "90"],
+        answer: 0,
+      },
     ],
   },
   {
@@ -441,6 +485,20 @@ export const QUIZZES: Quiz[] = [
         prompt: "Write a part of your page about your favourite animal: a heading, a paragraph, and a picture.",
         hint: "Use <h2>…</h2>, then <p>…</p>, then <img src=\"…\" alt=\"…\">. Make up a picture name like fox.png.",
         sample: '<h2>My Favourite Animal</h2>\n<p>I love foxes because they are clever.</p>\n<img src="fox.png" alt="A red fox">',
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "For your About Me page, why do we use a photo of the robot instead of our face?",
+        options: ["Robots look better", "It keeps our digital footprint safe", "HTML can't show faces"],
+        answer: 1,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "Which tag puts the robot's photo on your page?",
+        options: ["<p>", "<h1>", "<img>"],
+        answer: 2,
       },
     ],
   },
@@ -621,6 +679,22 @@ export const QUIZZES: Quiz[] = [
         hint: "Join text with +",
         starter: 'let name = "Sam";\n// make greeting here\n',
         sample: 'let name = "Sam";\nlet greeting = "Good job, " + name;\nconsole.log(greeting);',
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "In the Robot Lab level Focus timer, what is time?",
+        code: "let time = 5;",
+        options: ["A variable that stores 5", "A function", "An event"],
+        answer: 0,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "What does this line show on the robot's screen?",
+        code: "let time = 5;\ndisplay(time);",
+        options: ["The word time", "5", "0"],
+        answer: 1,
       },
     ],
   },
@@ -809,6 +883,21 @@ export const QUIZZES: Quiz[] = [
         starter: "// 1. find the pause button\n\n// 2. write pauseTimer\n\n// 3. connect them\n",
         sample:
           'const pauseButton = document.getElementById("pause");\n\nfunction pauseTimer() {\n  console.log("Paused");\n}\n\npauseButton.addEventListener("click", pauseTimer);',
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "In Focus timer, why put display, wait and subtract inside a function called tick?",
+        options: ["Functions make the robot faster", "So the robot can't move", "So we can run those steps by name, again and again"],
+        answer: 2,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "What happens to time after this line runs?",
+        code: "time = time - 1;",
+        options: ["It goes down by 1", "It goes up by 1", "It becomes 1"],
+        answer: 0,
       },
     ],
   },
@@ -999,6 +1088,21 @@ export const QUIZZES: Quiz[] = [
           'test_password = "Sun1!"\nhas_digit = False\nhas_upper = False\nhas_lower = False\nhas_symbol = False\n\nfor character in test_password:\n    # your if / elif / else goes here\n\nprint(has_digit, has_upper, has_lower, has_symbol)',
         sample:
           'test_password = "Sun1!"\nhas_digit = False\nhas_upper = False\nhas_lower = False\nhas_symbol = False\n\nfor character in test_password:\n    if character.isdigit():\n        has_digit = True\n    elif character.isupper():\n        has_upper = True\n    elif character.islower():\n        has_lower = True\n    else:\n        has_symbol = True\n\nprint(has_digit, has_upper, has_lower, has_symbol)',
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "In the Robot Lab level Lock the robot, the first visitor types 1234. What prints?",
+        code: "code = next_code()\nprint(len(code))",
+        options: ["1234", "4", "1"],
+        answer: 1,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "Why must the robot never move before it reads a strong passcode?",
+        options: ["A weak code could let anyone control it", "Robots are slow to start", "Python needs a pause"],
+        answer: 0,
       },
     ],
   },
@@ -1195,6 +1299,21 @@ export const QUIZZES: Quiz[] = [
         starter: 'test_password = "sunshine123"\nchecker_for = "my game account"\n\n# my rule:\n',
         sample:
           'test_password = "sunshine123"\nchecker_for = "my game account"\n\n# my rule: very short passwords can be guessed in seconds\nif len(test_password) < 8:\n    print("Warning: too short to be safe.")',
+      },
+      {
+        id: "robot-lab-1",
+        type: "choice",
+        prompt: "What does is_strong(\"password\") return?",
+        code: "def is_strong(code):\n    return len(code) >= 12",
+        options: ["True", "12", "False"],
+        answer: 2,
+      },
+      {
+        id: "robot-lab-2",
+        type: "choice",
+        prompt: "In Lock the robot, what should the robot do with a weak passcode?",
+        options: ["Drive into the vault", "Beep to reject it and read the next code", "Restart the program"],
+        answer: 1,
       },
     ],
   },
