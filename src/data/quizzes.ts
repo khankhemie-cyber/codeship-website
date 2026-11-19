@@ -174,8 +174,8 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "In Robot Lab, the robot must carry the toy to the bin. What does it do first?",
-        options: ["Drop the toy", "Drive to the toy and pick it up", "Beep"],
+        prompt: "In the Robot Lab level Egg hunt, how does the robot collect an egg?",
+        options: ["It beeps at the egg", "It drives right over the egg", "It turns left"],
         answer: 1,
       },
       {
@@ -275,7 +275,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "The robot stopped before it reached the bin. How do we fix the bug?",
+        prompt: "The robot stopped before it reached the basket. How do we fix the bug?",
         code: "🤖 ⬜ ⬜ 🧺",
         options: ["Make the Forward number bigger", "Add a Beep", "Add Turn left"],
         answer: 0,
@@ -283,7 +283,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-2",
         type: "choice",
-        prompt: "Each square on the Robot Lab mat is 10 cm. The bin is 3 squares away. How far forward?",
+        prompt: "Each square on the Robot Lab mat is 10 cm. The basket is 3 squares away. How far forward?",
         options: ["3 cm", "10 cm", "30 cm"],
         answer: 2,
       },
@@ -382,7 +382,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "In the Robot Lab level Meet my robot, which block shows a hello on the robot's screen?",
+        prompt: "In the Robot Lab level Dance party hello, which block shows a hello on the robot's screen?",
         options: ["beep", "show", "turn left"],
         answer: 1,
       },
@@ -683,7 +683,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "In the Robot Lab level Focus timer, what is time?",
+        prompt: "In the Robot Lab level Rocket countdown, what is time?",
         code: "let time = 5;",
         options: ["A variable that stores 5", "A function", "An event"],
         answer: 0,
@@ -887,7 +887,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "In Focus timer, why put display, wait and subtract inside a function called tick?",
+        prompt: "In Rocket countdown, why put display, wait and subtract inside a function called tick?",
         options: ["Functions make the robot faster", "So the robot can't move", "So we can run those steps by name, again and again"],
         answer: 2,
       },
@@ -1092,7 +1092,7 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-1",
         type: "choice",
-        prompt: "In the Robot Lab level Lock the robot, the first visitor types 1234. What prints?",
+        prompt: "In the Robot Lab level Treasure vault, the first pirate types 1234. What prints?",
         code: "code = next_code()\nprint(len(code))",
         options: ["1234", "4", "1"],
         answer: 1,
@@ -1311,8 +1311,8 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-2",
         type: "choice",
-        prompt: "In Lock the robot, what should the robot do with a weak passcode?",
-        options: ["Drive into the vault", "Beep to reject it and read the next code", "Restart the program"],
+        prompt: "In Treasure vault, what should the robot do with a weak passcode?",
+        options: ["Unlock the vault", "Beep to reject it and read the next code", "Restart the program"],
         answer: 1,
       },
     ],

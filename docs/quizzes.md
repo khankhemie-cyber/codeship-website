@@ -40,7 +40,7 @@ All quizzes are in `src/data/quizzes.ts`: two per program for Semester 1 (week 4
 | Developers | 22 | 6 JavaScript questions |
 | Engineers | 22 | 6 Python questions |
 
-Every quiz ends with two Robot Lab questions (ids `robot-lab-1` and `robot-lab-2`) about that semester's Robot Lab level at /tools/robots/ (Explorers: Toy to the bin; Builders: Meet my robot; Developers: Focus timer; Engineers: Lock the robot).
+Every quiz ends with two Robot Lab questions (ids `robot-lab-1` and `robot-lab-2`) about that semester's Robot Lab level at /tools/robots/ (Explorers: Egg hunt; Builders: Dance party hello; Developers: Rocket countdown; Engineers: Treasure vault).
 
 Each question is one of:
 

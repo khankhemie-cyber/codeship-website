@@ -15,7 +15,7 @@ function test(name, fn) {
 const assert = (c, m) => { if (!c) throw new Error(m); };
 
 const SOLUTIONS = {
-  "colour-sort": `
+  "fruit-factory": `
 import math
 x, y, h = 70, 50, 180
 
@@ -38,7 +38,7 @@ def go_to(tx, ty):
     forward(dist)
     x, y = tx, ty
 
-zone_y = {"red": 19, "blue": 50, "yellow": 81}
+crate_y = {"red": 19, "orange": 50, "yellow": 81}
 for row in [19, 50, 81]:
     go_to(41, row)
     face(180)
@@ -46,18 +46,18 @@ for row in [19, 50, 81]:
     print("Found", c)
     pick_up()
     go_to(70, row)
-    go_to(70, zone_y[c])
-    go_to(127, zone_y[c])
+    go_to(70, crate_y[c])
+    go_to(127, crate_y[c])
     face(0)
     drop()
-    go_to(100, zone_y[c])
+    go_to(100, crate_y[c])
 `,
-  "survey": `
+  "volcano-survey": `
 for i in range(18):
     forward(10)
-    record("light", light())
+    record("temp", temperature())
 `,
-  "lock-the-robot": `
+  "treasure-vault": `
 def is_strong(code):
     has_letter = any(ch.isalpha() for ch in code)
     has_digit = any(ch.isdigit() for ch in code)
@@ -68,14 +68,15 @@ code = next_code()
 while code != "":
     if is_strong(code):
         print("Accepted")
-        forward(100)
+        unlock()
+        forward(90)
         break
     else:
         print("Rejected:", code)
         beep()
     code = next_code()
 `,
-  "help-desk-robot": `
+  "space-station": `
 actions = {"forward": forward, "left": turn_left, "right": turn_right}
 message = next_message()
 while message != "":
@@ -83,20 +84,31 @@ while message != "":
     word = parts[0]
     if word == "stop":
         break
-    if word in actions and len(parts) == 2 and parts[1].isdigit():
+    if word == "photo":
+        photo()
+    elif word in actions and len(parts) == 2 and parts[1].isdigit():
         actions[word](int(parts[1]))
     else:
         display("Sorry, I can't help")
     message = next_message()
 `,
-  "snack-stand": `
-stones = 4
-size = 22
-distance_cm = stones * size
-print("Distance:", distance_cm)
-forward(distance_cm)
+  "solar-farm": `
+record("power", power())
+forward(120)
+turn_right(90)
+forward(55)
+turn_right(90)
+forward(105)
+record("power", power())
 `,
-  "focus-timer": `
+  "beach-toss": `
+towels = 4
+length = 22
+distance_cm = towels * length
+print("Distance:", distance_cm)
+toss(distance_cm)
+`,
+  "rocket-countdown": `
 time_left = 5
 def tick():
     global time_left
@@ -105,12 +117,20 @@ def tick():
     time_left -= 1
 while time_left > 0:
     tick()
-beep()
-forward(100)
+launch()
+backward(35)
 `,
-  "bin-stop": `
+  "coral-reef": `
 while not obstacle():
     forward(2)
+led("blue")
+`,
+  "paint-a-square": `
+pen_down("purple")
+for i in range(4):
+    forward(30)
+    turn_left(90)
+pen_up()
 beep()
 `,
 };

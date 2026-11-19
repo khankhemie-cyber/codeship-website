@@ -18,8 +18,16 @@ export type Pt = { x: number; y: number };
 export type Rect = { x: number; y: number; w: number; h: number };
 export type Zone = Rect & { colour: ColourName; label?: string; id?: string };
 export type LightZone = Rect & { level: number; label?: string };
-export type Item = { id: string; x: number; y: number; colour: ColourName; label?: string };
-export type Place = Pt & { label: string; kind?: "flower" | "house" | "flag" | "spot" };
+export type Item = { id: string; x: number; y: number; colour: ColourName; label?: string; kind?: ItemKind };
+export type ItemKind = "block" | "package" | "fruit" | "flag" | "snack";
+/** Things the robot collects (or cleans) just by driving over them. */
+export type Collectible = Pt & { id: string; kind: "egg" | "gem" | "panel" | "treasure" | "star" };
+/** Things the robot sprays with water (spray()) when it faces them from close by. */
+export type Target = Pt & { id: string; kind: "fire" | "plant" };
+export const NOTES = ["C", "D", "E", "F", "G", "A", "B", "C2"] as const;
+export type Note = (typeof NOTES)[number];
+export const PEN_COLOURS = ["red", "blue", "green", "yellow", "purple", "orange", "black"] as const;
+export type Place = Pt & { label: string; kind?: "flower" | "house" | "flag" | "spot"; id?: string; /** Seconds the robot must stay still here to finish it (flowers bloom). */ hold?: number };
 export type RobotKind = "scout" | "racer" | "rover";
 
 export type World = {
@@ -45,6 +53,15 @@ export type World = {
   codes?: string[];
   /** Chat messages a person sends the robot, in order (next_message()). */
   messages?: string[];
+  collectibles?: Collectible[];
+  targets?: Target[];
+  /** Locked doors: solid until unlock() is called. */
+  doors?: Rect[];
+  /** Temperature in °C (temperature()), with hotter or colder patches. */
+  temp?: number;
+  heatZones?: (Rect & { temp: number })[];
+  /** The robot starts holding this item. */
+  startCarrying?: string;
   /** Distance sensor wobble in cm (0 = perfect). Deterministic, so runs repeat exactly. */
   distanceNoise: number;
   /** Show a 10 cm grid. */
@@ -76,11 +93,23 @@ export type Frame = {
   items: Record<string, Pt>;
   sensors: Sensors;
   bumped: boolean;
+  /** Ids of collectibles, targets and held places finished so far. */
+  done: string[];
+  /** Pen colour while the pen is down. */
+  pen: string | null;
+  /** A thrown snack in flight: position on the mat and height above it (cm). */
+  ball: { x: number; y: number; z: number } | null;
+  spraying: boolean;
+  /** When launch() was called (-1 = not yet). */
+  launchAt: number;
+  unlocked: boolean;
+  /** When the last photo was taken (-1 = none yet). */
+  photoAt: number;
 };
 
 export type LogLine = { t: number; text: string };
 export type DataRow = { t: number; name: string; value: number | string };
-export type SoundEvent = { t: number; kind: "beep" | "clap" };
+export type SoundEvent = { t: number; kind: "beep" | "clap" | "note" | "launch" | "spray" | "toss" | "photo" | "unlock" | "collect"; note?: Note };
 
 export type RunStats = {
   distance: number;
@@ -97,6 +126,18 @@ export type RunStats = {
   /** When each passcode / message was read. */
   codeReads: number[];
   messageReads: number[];
+  collected: { id: string; t: number }[];
+  sprayed: { id: string; t: number }[];
+  notes: { note: Note; t: number }[];
+  tosses: { x: number; y: number; t: number }[];
+  launches: number[];
+  /** When unlock() was called, and how many passcodes had been read by then. */
+  unlocks: { t: number; codesRead: number }[];
+  photos: number[];
+  /** Centimetres driven with the pen down. */
+  inked: number;
+  /** Where the pen first went down. */
+  penStart: Pt | null;
 };
 
 export type Trace = {
@@ -122,6 +163,9 @@ const LINE_SENSOR_SIDE = 1.1;
 const DISTANCE_MAX = 200;
 const OBSTACLE_CM = 15;
 const REACH = 7; // how far in front of the robot's edge it can grab or see an item
+const COLLECT = 3; // how close (beyond the robot's edge) a collectible has to be
+const SPRAY_REACH = 30; // the hose reaches this far in front of the robot
+const TOSS_MAX = 150;
 
 export class TimeUp extends Error {
   constructor() {
@@ -212,7 +256,18 @@ export class Sim {
   log: LogLine[] = [];
   data: DataRow[] = [];
   sounds: SoundEvent[] = [];
-  stats: RunStats = { distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1, turned: 0, missedPickUps: 0, codeReads: [], messageReads: [] };
+  stats: RunStats = {
+    distance: 0, bumps: 0, beeps: 0, pickUps: 0, drops: [], firstMoveAt: -1, turned: 0, missedPickUps: 0, codeReads: [], messageReads: [],
+    collected: [], sprayed: [], notes: [], tosses: [], launches: [], unlocks: [], photos: [], inked: 0, penStart: null,
+  };
+  done = new Set<string>();
+  pen: string | null = null;
+  ball: { x: number; y: number; z: number } | null = null;
+  spraying = false;
+  launchAt = -1;
+  unlocked = false;
+  photoAt = -1;
+  private stillSince = 0;
   private clapsHeard = 0;
   private rand: () => number;
   readonly radius: number;
@@ -225,6 +280,7 @@ export class Sim {
     this.items = new Map(world.items.map((it) => [it.id, { x: it.x, y: it.y }]));
     this.radius = ROBOT_RADIUS[world.robot];
     this.rand = mulberry32(20270112);
+    if (world.startCarrying) this.carrying = world.startCarrying;
     for (const c of world.claps) this.sounds.push({ t: c, kind: "clap" });
     this.snap();
   }
@@ -266,7 +322,7 @@ export class Sim {
       { x: -10, y: 0, w: 10, h: W.h },
       { x: W.w, y: 0, w: 10, h: W.h },
     ];
-    for (const r of [...W.walls, ...edges]) best = Math.min(best, rayToRect(front, dx, dy, r));
+    for (const r of [...this.solids(), ...edges]) best = Math.min(best, rayToRect(front, dx, dy, r));
     return Math.min(DISTANCE_MAX, best);
   }
 
@@ -295,6 +351,21 @@ export class Sim {
       }
     }
     return bestId;
+  }
+
+  private solids(): Rect[] {
+    return this.unlocked ? this.world.walls : [...this.world.walls, ...(this.world.doors ?? [])];
+  }
+
+  temperature(): number {
+    let t = this.world.temp ?? 20;
+    for (const z of this.world.heatZones ?? []) if (inRect(this, z)) t = z.temp;
+    return t;
+  }
+
+  /** Watts from the solar panels: 40 for each clean one. */
+  power(): number {
+    return (this.world.collectibles ?? []).filter((c) => c.kind === "panel" && this.done.has(c.id)).length * 40;
   }
 
   lightLevel(): number {
@@ -331,6 +402,13 @@ export class Sim {
       if (p.x !== it.x || p.y !== it.y) moved[it.id] = { x: round1(p.x), y: round1(p.y) };
     }
     this.frames.push({
+      done: [...this.done],
+      pen: this.pen,
+      ball: this.ball,
+      spraying: this.spraying,
+      launchAt: this.launchAt,
+      unlocked: this.unlocked,
+      photoAt: this.photoAt,
       t: Math.round(this.t * 1000) / 1000,
       x: round1(this.x),
       y: round1(this.y),
@@ -344,11 +422,24 @@ export class Sim {
     });
   }
 
-  private tick(dt: number) {
+  private tick(dt: number, moved = false) {
     this.t += dt;
     if (this.carrying) {
       const p = this.sensorPoint(this.radius + 2.5, 0);
       this.items.set(this.carrying, p);
+    }
+    for (const c of this.world.collectibles ?? []) {
+      if (!this.done.has(c.id) && Math.hypot(c.x - this.x, c.y - this.y) <= this.radius + COLLECT) {
+        this.done.add(c.id);
+        this.stats.collected.push({ id: c.id, t: this.t });
+        this.sounds.push({ t: this.t, kind: "collect" });
+      }
+    }
+    // held places (a flower blooms when the robot stays beside it long enough)
+    if (moved) this.stillSince = this.t;
+    for (const p of this.world.places) {
+      if (!p.hold || !p.id || this.done.has(p.id)) continue;
+      if (Math.hypot(p.x - this.x, p.y - this.y) <= this.radius + 4 && this.t - this.stillSince >= p.hold - 1e-6) this.done.add(p.id);
     }
     this.snap();
     if (this.t > TIME_LIMIT) throw new TimeUp();
@@ -362,7 +453,7 @@ export class Sim {
     const r = this.radius;
     const W = this.world;
     if (x - r < 0 || y - r < 0 || x + r > W.w || y + r > W.h) return true;
-    return W.walls.some((w) => circleHitsRect({ x, y }, r, w));
+    return this.solids().some((w) => circleHitsRect({ x, y }, r, w));
   }
 
   // ---------- the robot API (each call advances time) ----------
@@ -396,8 +487,9 @@ export class Sim {
       this.x = nx;
       this.y = ny;
       this.stats.distance += step;
+      if (this.pen) this.stats.inked += step;
       remaining -= step;
-      this.tick((step / this.speed));
+      this.tick(step / this.speed, true);
     }
     return true;
   }
@@ -412,7 +504,7 @@ export class Sim {
       this.heading = (((this.heading + step * dir) % 360) + 360) % 360;
       this.stats.turned += step;
       remaining -= step;
-      this.tick(step / TURN_SPEED);
+      this.tick(step / TURN_SPEED, true);
     }
   }
 
@@ -479,6 +571,88 @@ export class Sim {
     return true;
   }
 
+  penDown(colour: unknown = "blue") {
+    const c = String(colour ?? "blue").toLowerCase();
+    if (!(PEN_COLOURS as readonly string[]).includes(c)) throw new RobotError(`The pen can be ${PEN_COLOURS.join(", ")}. "${colour}" isn't one of them.`);
+    this.pen = c;
+    if (!this.stats.penStart) this.stats.penStart = { x: this.x, y: this.y };
+    this.tick(0.1);
+  }
+
+  penUp() {
+    this.pen = null;
+    this.tick(0.1);
+  }
+
+  play(note: unknown) {
+    const n = String(note ?? "").toUpperCase() as Note;
+    if (!(NOTES as readonly string[]).includes(n)) throw new RobotError(`play() knows the notes ${NOTES.join(", ")}. "${note}" isn't one of them.`);
+    this.sounds.push({ t: this.t, kind: "note", note: n });
+    this.stats.notes.push({ note: n, t: this.t });
+    this.wait(0.45);
+  }
+
+  /** Throw the snack the robot is holding (or a snack from its basket) cm forward. */
+  toss(cm: unknown) {
+    const d = Math.max(0, Math.min(TOSS_MAX, this.num(cm, "toss")));
+    const h = rad(this.heading);
+    const from = this.sensorPoint(this.radius + 1, 0);
+    const to = { x: from.x + Math.cos(h) * d, y: from.y - Math.sin(h) * d };
+    this.sounds.push({ t: this.t, kind: "toss" });
+    const flight = 0.4 + d / 100;
+    const steps = Math.max(4, Math.round(flight / FRAME_DT));
+    for (let k = 1; k <= steps; k++) {
+      const f = k / steps;
+      this.ball = { x: round1(from.x + (to.x - from.x) * f), y: round1(from.y + (to.y - from.y) * f), z: round1(4 * (5 + d * 0.1) * f * (1 - f)) };
+      this.tick(flight / steps);
+    }
+    this.stats.tosses.push({ x: round1(to.x), y: round1(to.y), t: this.t });
+    this.ball = { x: round1(to.x), y: round1(to.y), z: 0 };
+    this.tick(0.2);
+  }
+
+  /** Spray water straight ahead (reaches about 30 cm). */
+  spray() {
+    this.sounds.push({ t: this.t, kind: "spray" });
+    this.spraying = true;
+    const h = rad(this.heading);
+    for (const tg of this.world.targets ?? []) {
+      if (this.done.has(tg.id)) continue;
+      const dx = tg.x - this.x;
+      const dy = tg.y - this.y;
+      const along = dx * Math.cos(h) - dy * Math.sin(h);
+      const side = Math.abs(dx * Math.sin(h) + dy * Math.cos(h));
+      if (along > 0 && along <= this.radius + SPRAY_REACH && side <= 8) {
+        this.done.add(tg.id);
+        this.stats.sprayed.push({ id: tg.id, t: this.t });
+      }
+    }
+    this.wait(1);
+    this.spraying = false;
+    this.tick(0.05);
+  }
+
+  launch() {
+    if (this.launchAt < 0) this.launchAt = this.t;
+    this.stats.launches.push(this.t);
+    this.sounds.push({ t: this.t, kind: "launch" });
+    this.wait(0.5);
+  }
+
+  unlock() {
+    this.unlocked = true;
+    this.stats.unlocks.push({ t: this.t, codesRead: this.stats.codeReads.length });
+    this.sounds.push({ t: this.t, kind: "unlock" });
+    this.wait(0.6);
+  }
+
+  photo() {
+    this.photoAt = this.t;
+    this.stats.photos.push(this.t);
+    this.sounds.push({ t: this.t, kind: "photo" });
+    this.wait(0.5);
+  }
+
   /** Wait until the next clap. Returns false (after a short wait) if nobody claps again. */
   waitForClap(): boolean {
     const next = this.world.claps[this.clapsHeard];
@@ -524,6 +698,16 @@ export class Sim {
 
   // Sensor reads take a moment, like a real robot, so a loop that only
   // reads sensors still moves the clock and can't spin forever.
+  readTemperature(): number {
+    this.tick(0.02);
+    return this.temperature();
+  }
+
+  readPower(): number {
+    this.tick(0.02);
+    return this.power();
+  }
+
   read<K extends keyof Sensors>(key: K): Sensors[K] {
     this.tick(0.02);
     const s = this.sensors();
@@ -585,6 +769,16 @@ export function robotApi(sim: Sim) {
     record: (name: string, value: unknown) => s.record(name, value),
     nextCode: () => s.nextCode(),
     nextMessage: () => s.nextMessage(),
+    penDown: (colour?: string) => s.penDown(colour),
+    penUp: () => s.penUp(),
+    play: (note: string) => s.play(note),
+    toss: (cm: number) => s.toss(cm),
+    spray: () => s.spray(),
+    launch: () => s.launch(),
+    unlock: () => s.unlock(),
+    photo: () => s.photo(),
+    temperature: () => s.readTemperature(),
+    power: () => s.readPower(),
     print: (...parts: unknown[]) => s.print(parts.map(String).join(" ")),
   };
 }
@@ -619,6 +813,16 @@ export const PYTHON_NAMES: Record<string, keyof RobotApi> = {
   record: "record",
   next_code: "nextCode",
   next_message: "nextMessage",
+  pen_down: "penDown",
+  pen_up: "penUp",
+  play: "play",
+  toss: "toss",
+  spray: "spray",
+  launch: "launch",
+  unlock: "unlock",
+  photo: "photo",
+  temperature: "temperature",
+  power: "power",
 };
 
 /** The JavaScript names, in the order the reference card lists them. */

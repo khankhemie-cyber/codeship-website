@@ -27,6 +27,9 @@ const LED_OPTIONS: [string, string][] = [
 ];
 const COLOUR_OPTIONS: [string, string][] = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "grey", "black", "white"].map((c) => [c, c]);
 
+const NOTE_OPTIONS: [string, string][] = ["C", "D", "E", "F", "G", "A", "B", "C2"].map((n) => [n === "C2" ? "high C" : n, n]);
+const PEN_OPTIONS: [string, string][] = ["red", "blue", "green", "yellow", "purple", "orange", "black"].map((c) => [c, c]);
+
 const SENSE_OPTIONS: [string, string][] = [
   ["obstacle ahead", "obstacle()"],
   ["left sensor sees the line", "lineLeft()"],
@@ -54,8 +57,12 @@ export const BLOCK_DEFS: Json[] = [
   { type: "robot_drop", message0: "drop", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act },
   { type: "robot_beep", message0: "beep", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act },
   { type: "robot_led", message0: "light %1", args0: [{ type: "field_dropdown", name: "C", options: LED_OPTIONS.slice(1).concat([LED_OPTIONS[0]]) }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act },
+  { type: "robot_play", message0: "play note %1", args0: [{ type: "field_dropdown", name: "N", options: NOTE_OPTIONS }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Play a musical note." },
+  { type: "robot_pen_down", message0: "pen down %1", args0: [{ type: "field_dropdown", name: "C", options: PEN_OPTIONS }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Paint a line wherever the robot drives." },
+  { type: "robot_pen_up", message0: "pen up", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Stop painting." },
+  { type: "robot_spray", message0: "spray water", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Spray water straight ahead. It reaches about 3 squares." },
   { type: "robot_display", message0: "show %1", args0: [{ type: "field_input", name: "T", text: "Hi!" }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act },
-  { type: "robot_record", message0: "record %1 reading", args0: [{ type: "field_dropdown", name: "S", options: [["light", "light"], ["distance", "distance"]] }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Save a reading to the Data tab." },
+  { type: "robot_record", message0: "record %1 reading", args0: [{ type: "field_dropdown", name: "S", options: [["light", "light"], ["distance", "distance"], ["temperature", "temperature"], ["power", "power"]] }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Save a reading to the Data tab." },
 
   { type: "robot_wait", message0: "wait %1 seconds", args0: [num("N", 1, 0, 60)], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.control },
   { type: "robot_wait_clap", message0: "wait for a clap", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.control },
@@ -91,6 +98,10 @@ const ICON_PATHS: Record<string, string> = {
   repeat: '<path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12"/><path d="m7 22-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/>',
   forever: '<path d="M12 12c-2-2.7-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.3 6-4zm0 0c2 2.7 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.3-6 4z"/>',
   branch: '<path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+  note: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+  pen: '<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',
+  penup: '<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M3 3l18 18"/>',
+  water: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
   eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
 };
 
@@ -113,6 +124,10 @@ const BLOCK_ICONS: Record<string, string> = {
   robot_beep: "beep",
   robot_led: "bulb",
   robot_display: "screen",
+  robot_play: "note",
+  robot_pen_down: "pen",
+  robot_pen_up: "penup",
+  robot_spray: "water",
   robot_record: "chart",
   robot_wait: "clock",
   robot_wait_clap: "clap",
@@ -144,7 +159,7 @@ export const TOOLBOX = {
   contents: [
     { kind: "category", name: "Start", colour: BLOCK_COLOURS.start, contents: [{ kind: "block", type: "robot_start" }] },
     { kind: "category", name: "Move", colour: BLOCK_COLOURS.move, contents: ["robot_forward", "robot_backward", "robot_turn_left", "robot_turn_right", "robot_speed"].map((type) => ({ kind: "block", type })) },
-    { kind: "category", name: "Do", colour: BLOCK_COLOURS.act, contents: ["robot_pick_up", "robot_drop", "robot_beep", "robot_led", "robot_display", "robot_record"].map((type) => ({ kind: "block", type })) },
+    { kind: "category", name: "Do", colour: BLOCK_COLOURS.act, contents: ["robot_pick_up", "robot_drop", "robot_beep", "robot_play", "robot_led", "robot_display", "robot_pen_down", "robot_pen_up", "robot_spray", "robot_record"].map((type) => ({ kind: "block", type })) },
     { kind: "category", name: "Control", colour: BLOCK_COLOURS.control, contents: ["robot_wait", "robot_wait_clap", "robot_repeat", "robot_forever", "robot_until", "robot_if", "robot_if_else"].map((type) => ({ kind: "block", type })) },
     { kind: "category", name: "Sense", colour: BLOCK_COLOURS.sense, contents: ["robot_sense", "robot_compare", "robot_colour_is", "robot_not"].map((type) => ({ kind: "block", type })) },
   ],
@@ -212,10 +227,18 @@ function statement(b: B, ind: string): string {
       return `${ind}beep();\n`;
     case "robot_led":
       return `${ind}led(${str(f.C ?? "red")});\n`;
+    case "robot_play":
+      return `${ind}play(${str(f.N ?? "C")});\n`;
+    case "robot_pen_down":
+      return `${ind}penDown(${str(f.C ?? "red")});\n`;
+    case "robot_pen_up":
+      return `${ind}penUp();\n`;
+    case "robot_spray":
+      return `${ind}spray();\n`;
     case "robot_display":
       return `${ind}display(${str(f.T)});\n`;
     case "robot_record":
-      return `${ind}record(${str(f.S)}, ${f.S === "distance" ? "distance()" : "light()"});\n`;
+      return `${ind}record(${str(f.S)}, ${f.S === "distance" ? "distance()" : f.S === "temperature" ? "temperature()" : f.S === "power" ? "power()" : "light()"});\n`;
     case "robot_wait":
       return `${ind}wait(${n(f.N)});\n`;
     case "robot_wait_clap":

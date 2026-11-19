@@ -60,33 +60,19 @@ for (const m of MISSIONS) {
   });
 }
 
-test("blocks: Explorers toy-bin stack passes", () => {
-  const code = blocksToJs(ws(blk("robot_forward", { N: 32 }), blk("robot_pick_up"), blk("robot_forward", { N: 40 }), blk("robot_drop")));
-  const m = missionById("toy-bin");
+test("blocks: Explorers egg-hunt stack passes", () => {
+  const code = blocksToJs(ws(blk("robot_forward", { N: 95 }), blk("robot_beep")));
+  const m = missionById("egg-hunt");
   const { trace, error } = runJs(code, m.world);
   assert(!error, error);
   assert(m.check(trace, m.world).ok, code);
 });
-test("blocks: repeat until + sense passes Stop at the bin", () => {
+test("blocks: repeat until + sense passes Submarine at the reef", () => {
   const code = blocksToJs(ws(
     blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: blk("robot_forward", { N: 2 }) } }),
-    blk("robot_beep"),
+    blk("robot_led", { C: "blue" }),
   ));
-  const m = missionById("bin-stop");
-  const { trace, error } = runJs(code, m.world);
-  assert(!error, error);
-  assert(m.check(trace, m.world).ok, code);
-});
-test("blocks: if/else on light passes Lights in the tunnel", () => {
-  const code = blocksToJs(ws(blk("robot_repeat", { N: 66 }, { DO: { block: chain([
-    blk("robot_forward", { N: 2 }),
-    blk("robot_if_else", null, {
-      COND: { block: blk("robot_sense", { S: "light() < 30" }) },
-      DO: { block: blk("robot_led", { C: "yellow" }) },
-      ELSE: { block: blk("robot_led", { C: "off" }) },
-    }),
-  ]) } })));
-  const m = missionById("day-night");
+  const m = missionById("coral-reef");
   const { trace, error } = runJs(code, m.world);
   assert(!error, error);
   assert(m.check(trace, m.world).ok, code);
@@ -100,19 +86,32 @@ test("blocks: generated code is readable JavaScript", () => {
 });
 // Common wrong answers get the right "not yet" message.
 const WRONG = [
-  ["lock-the-robot", `forward(100);`, /moved before the strong passcode|read 0 of 3/],
-  ["lock-the-robot", `let c = nextCode(); while (c !== "") { if (c.length >= 4) { forward(100); break; } beep(); c = nextCode(); }`, /moved before the strong passcode/],
-  ["help-desk-robot", `const a = { forward: (n) => forward(n), left: (n) => turnLeft(n) }; let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (a[w]) a[w](Number(n)); else display("Sorry"); m = nextMessage(); }`, /kept going after "stop"/],
-  ["help-desk-robot", `let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (w === "stop") break; if (w === "forward") forward(Number(n)); if (w === "left") turnLeft(Number(n)); m = nextMessage(); }`, /polite refusal/],
-  ["focus-timer", `for (const n of [5, 4, 3, 2, 1]) display(n); beep(); forward(100);`, /Wait 1 second/],
-  ["snack-stand", `forward(88);`, /Print the distance/],
-  ["snack-stand", `const d = 4 * 20; console.log(d); forward(d);`, /Print the distance|stopped 8 cm/],
-  ["pet-routine", `forward(45); turnLeft(180); forward(90);`, /Food bowl 1 of 2, bed 1 of 2/],
-  ["meet-my-robot", `display("Hi"); led("red"); beep(); beep(); turnLeft(180);`, /turned 180 degrees/],
-  ["show-and-tell", `forward(95); beep(); turnLeft(180); forward(95);`, /turn your light on/],
-  ["hallway-helper", `while (!obstacle()) forward(2);`, /Light on in the dark/],
-  ["recycling-helper", `forward(5);`, /0 of 4 items in the right bin/],
+  ["treasure-vault", `unlock(); forward(90);`, /opened for a weak passcode/],
+  ["treasure-vault", `let c = nextCode(); while (c !== "") { if (c.length >= 4) { unlock(); forward(90); break; } beep(); c = nextCode(); }`, /opened for a weak passcode/],
+  ["space-station", `const a = { forward: (n) => forward(n), left: (n) => turnLeft(n) }; let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (w === "photo") photo(); else if (a[w]) a[w](Number(n)); else display("Sorry"); m = nextMessage(); }`, /kept going after "stop"/],
+  ["space-station", `let m = nextMessage(); while (m !== "") { const [w, n] = m.split(" "); if (w === "stop") break; if (w === "forward") forward(Number(n)); if (w === "left") turnLeft(Number(n)); if (w === "photo") photo(); m = nextMessage(); }`, /polite refusal/],
+  ["rocket-countdown", `for (const n of [5, 4, 3, 2, 1]) display(n); launch(); backward(35);`, /Wait 1 second/],
+  ["rocket-countdown", `let t = 5; while (t > 0) { display(t); wait(1); t--; } backward(35);`, /launch\(\)/],
+  ["beach-toss", `toss(88);`, /Print the distance/],
+  ["beach-toss", `const d = 4 * 20; console.log(d); toss(d);`, /Print the distance|short/],
+  ["beach-toss", `console.log(88); toss(70);`, /18 cm short/],
+  ["puppy-walk", `for (let i = 0; i < 4; i++) { forward(70); turnLeft(90); }`, /1 of 2 laps/],
+  ["puppy-walk", `forward(40); turnLeft(90); forward(60);`, /Splash/],
+  ["dance-party", `display("Hi"); led("red"); beep(); turnLeft(360);`, /2 different light colours/],
+  ["paint-a-square", `for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } beep();`, /pen down first/],
+  ["paint-a-square", `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); }`, /Beep to show it/],
+  ["clap-concert", `forward(55); play("C"); play("E"); play("G");`, /before the clap/],
+  ["egg-hunt", `forward(60); beep();`, /2 of 3 eggs|3 eggs!/],
+  ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(40);`, /spray/],
+  ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(80);`, /bumped the building/],
+  ["museum-night", `while (!obstacle()) forward(2);`, /turn left/],
+  ["museum-night", `let t = 0; while (true) { if (obstacle()) { if (t === 1) break; turnLeft(90); t++; } else forward(2); } photo();`, /Light on in the dark/],
+  ["museum-night", `let t = 0; while (true) { if (light() < 30) led("white"); else led("off"); if (obstacle()) { if (t === 1) break; turnLeft(90); t++; } else forward(2); }`, /photo\(\)/],
+  ["crystal-mine", `forward(40); turnLeft(90); forward(50); turnRight(90); forward(83);`, /print the total cost/],
+  ["solar-farm", `forward(120); turnRight(90); forward(55); turnRight(90); forward(105); record("power", power());`, /before and after|once before/],
+  ["mars-flag", `while (distance() > 14) { forward(2); }`, /drop\(\) the flag|Aim for 5 to 20/],
 ];
+
 for (const [id, code, expect] of WRONG) {
   test(`${id}: wrong answer is caught (${String(expect).slice(1, 30)}...)`, () => {
     const m = missionById(id);
@@ -127,16 +126,16 @@ for (const [id, code, expect] of WRONG) {
 test("blocks: every Explorers and Builders level can be solved with blocks", () => {
   const f = (N) => blk("robot_forward", { N }), L = (N) => blk("robot_turn_left", { N }), R = (N) => blk("robot_turn_right", { N });
   const STACKS = {
-    "toy-bin": [f(32), blk("robot_pick_up"), f(40), blk("robot_drop")],
-    "kindness-delivery": [blk("robot_wait_clap"), f(80), blk("robot_beep")],
-    "bin-stop": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_beep")],
-    "neighbourhood": [f(50), L(90), f(55), R(90), f(45)],
-    "show-and-tell": [f(95), blk("robot_led", { C: "green" }), blk("robot_beep"), L(180), f(95)],
-    "meet-my-robot": [blk("robot_display", { T: "Hi I'm Bolt" }), blk("robot_led", { C: "blue" }), blk("robot_beep"), blk("robot_beep"), L(360)],
-    "day-night": [blk("robot_repeat", { N: 66 }, { DO: { block: chain([f(2), blk("robot_if_else", null, { COND: { block: blk("robot_sense", { S: "light() < 30" }) }, DO: { block: blk("robot_led", { C: "yellow" }) }, ELSE: { block: blk("robot_led", { C: "off" }) } })]) } })],
-    "pet-routine": [blk("robot_repeat", { N: 2 }, { DO: { block: chain([f(45), blk("robot_beep"), L(180), f(90), blk("robot_wait", { N: 1 }), L(180), f(45)]) } })],
-    "pollinator": [f(25), blk("robot_wait", { N: 1 }), f(15), L(90), f(35), R(90), f(30), blk("robot_wait", { N: 1 }), f(30), R(90), f(20), blk("robot_wait", { N: 1 }), f(15), L(90), f(30), blk("robot_wait", { N: 1 })],
-    "community-helper": [blk("robot_pick_up"), f(80), L(90), f(40), blk("robot_drop"), blk("robot_beep")],
+    "egg-hunt": [f(95), blk("robot_beep")],
+    "clap-concert": [blk("robot_wait_clap"), f(55), blk("robot_play", { N: "C" }), blk("robot_play", { N: "E" }), blk("robot_play", { N: "G" })],
+    "coral-reef": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_led", { C: "blue" })],
+    "snowy-igloo": [f(50), L(90), f(55), R(90), f(45)],
+    "paint-a-square": [blk("robot_pen_down", { C: "red" }), blk("robot_repeat", { N: 4 }, { DO: { block: chain([f(30), L(90)]) } }), blk("robot_pen_up"), blk("robot_beep")],
+    "dance-party": [blk("robot_display", { T: "Hi I'm Bolt" }), blk("robot_led", { C: "blue" }), blk("robot_beep"), blk("robot_led", { C: "purple" }), L(360)],
+    "night-train": [blk("robot_repeat", { N: 72 }, { DO: { block: chain([f(2), blk("robot_if_else", null, { COND: { block: blk("robot_sense", { S: "light() < 30" }) }, DO: { block: blk("robot_led", { C: "yellow" }) }, ELSE: { block: blk("robot_led", { C: "off" }) } })]) } })],
+    "puppy-walk": [blk("robot_repeat", { N: 8 }, { DO: { block: chain([f(70), L(90)]) } })],
+    "bloom-garden": [f(30), blk("robot_wait", { N: 1 }), L(90), f(35), blk("robot_wait", { N: 1 }), R(90), f(50), blk("robot_wait", { N: 1 }), R(90), f(35), L(90), f(50), blk("robot_wait", { N: 1 })],
+    "fire-rescue": [blk("robot_beep"), f(85), L(90), f(40), blk("robot_spray")],
   };
   for (const [id, list] of Object.entries(STACKS)) {
     const m = missionById(id);
@@ -149,22 +148,31 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
   assert(covered, "an Explorers or Builders level has no blocks solution");
 });
 
-test("toy-bin: counting 4 squares onto the toy still picks it up (CEO report 2026-11-18)", () => {
-  const m = missionById("toy-bin");
+// Pick-up reach (CEO report 2026-11-18): a toy 4 squares away, on a plain mat.
+const toyWorld = () => ({ ...missionById("sandbox").world, lines: [], walls: [], zones: [], start: { x: 15, y: 30, heading: 0 }, robot: "scout", items: [{ id: "toy", x: 55, y: 30, colour: "yellow" }] });
+test("pick-up: counting 4 squares onto the toy still picks it up", () => {
   for (const first of [25, 30, 32, 35, 40, 42]) {
-    const { trace } = runJs(`forward(${first}); pickUp(); forward(40); drop();`, m.world);
+    const { trace } = runJs(`forward(${first}); pickUp();`, toyWorld());
     assert(trace.stats.pickUps === 1, `forward(${first}) then pickUp() missed`);
   }
 });
-test("toy-bin: a pick-up that misses explains why", () => {
-  const m = missionById("toy-bin");
-  const { trace } = runJs("forward(10); pickUp();", m.world);
-  assert(/wasn't in front of it/.test(m.check(trace, m.world).message), m.check(trace, m.world).message);
+test("pick-up: a miss is counted", () => {
+  const { trace } = runJs("forward(10); pickUp();", toyWorld());
+  assert(trace.stats.missedPickUps === 1, "miss not counted");
 });
 test("pick-up never grabs an object behind the robot", () => {
-  const m = missionById("toy-bin");
-  const { trace } = runJs("forward(60); pickUp();", m.world);
+  const { trace } = runJs("forward(60); pickUp();", toyWorld());
   assert(trace.stats.pickUps === 0, "grabbed the toy from behind");
+});
+test("new actions: pen, notes, toss, spray, launch, unlock, photo, temperature, power", () => {
+  const w = toyWorld();
+  const { trace, error } = runJs('penDown("blue"); forward(10); penUp(); play("G"); toss(50); spray(); launch(); unlock(); photo(); console.log(temperature(), power());', w);
+  assert(!error, error);
+  const st = trace.stats;
+  assert(Math.round(st.inked) === 10 && st.notes.length === 1 && st.tosses.length === 1 && st.launches.length === 1 && st.unlocks.length === 1 && st.photos.length === 1, JSON.stringify(st));
+  assert(trace.log[0].text === "20 0", trace.log[0].text);
+  assert(/notes C, D/.test(runJs('play("H");', w).error), "bad note not explained");
+  assert(/pen can be/.test(runJs('penDown("pink");', w).error), "bad pen colour not explained");
 });
 test("time limit stops a loop that never ends", () => {
   const { trace, error } = runJs("while (true) { turnLeft(10); }", missionById("sandbox").world);
@@ -188,13 +196,13 @@ test("bad LED colour explains the choices", () => {
   assert(/can be off, red/.test(error), error);
 });
 test("bumping a wall stops the move and counts a bump", () => {
-  const { trace } = runJs("forward(500);", missionById("bin-stop").world);
+  const { trace } = runJs("forward(500);", missionById("coral-reef").world);
   assert(trace.stats.bumps === 1, `bumps ${trace.stats.bumps}`);
 });
 test("runs are deterministic (noisy sensor too)", () => {
-  const w = missionById("wall-stop").world;
-  const a = JSON.stringify(runJs(JS["wall-stop"], w).trace);
-  const b = JSON.stringify(runJs(JS["wall-stop"], w).trace);
+  const w = missionById("mars-flag").world;
+  const a = JSON.stringify(runJs(JS["mars-flag"], w).trace);
+  const b = JSON.stringify(runJs(JS["mars-flag"], w).trace);
   assert(a === b, "two runs differ");
 });
 test("line follower goes round the Free build oval", () => {
