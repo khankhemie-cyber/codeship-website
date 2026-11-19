@@ -1,111 +1,14 @@
 /**
- * Robot Lab missions. Each one is a mat (World), a goal the page checks after
- * the run, and starter code. Missions are tagged with the program and
- * semester whose Robot Labs use them (curriculum/robotics in codeship-ops).
- * Project and program names must match the curriculum index exactly.
+ * Robot Lab missions: one per Robot Lab class. Explorers and Builders have 4
+ * per semester, Developers and Engineers 6 (CEO, 2026-11-18/19), plus the
+ * capstone. Each semester has its own world; the last lab of each semester
+ * is the full challenge. Project names match the curriculum index exactly.
  */
 
-import type { Trace, World, Zone, Pt } from "./sim";
+import { base, inZone, itemAt, last, notYet, numbersIn, pass, sweptAround, type Mission, type Zone, type Lang, type Program, type Pt, SEMESTERS } from "./kit";
+import { EXPLORER_LABS, BUILDER_LABS, DEVELOPER_LABS, ENGINEER_LABS } from "./labs";
 
-export type Program = "Explorers" | "Builders" | "Developers" | "Engineers" | "Everyone";
-export type Lang = "blocks" | "js" | "py";
-
-export type GoalResult = { ok: boolean; message: string };
-
-/** How the mat is drawn. Decoration only: the simulator never sees it. */
-export type Theme =
-  | "farm" | "stage" | "ocean" | "snow" | "studio"
-  | "disco" | "rail" | "park" | "garden" | "city"
-  | "launch" | "beach" | "mars" | "mine" | "museum"
-  | "cove" | "factory" | "station" | "volcano" | "solar"
-  | "lab";
-export type DecorKind =
-  | "hen" | "hay" | "fence" | "barn" | "speaker" | "crowd" | "coral" | "seaweed" | "fish" | "chest"
-  | "pine" | "snowman" | "penguin" | "easel" | "paint" | "discoball" | "mountain" | "duck" | "bench"
-  | "tree" | "bush" | "rock" | "bee" | "hive" | "lamp" | "building" | "hydrant" | "rocket" | "palm"
-  | "umbrella" | "friend" | "crater" | "crystal" | "cart" | "painting" | "statue" | "ship" | "barrel"
-  | "conveyor" | "window" | "console" | "lava" | "turbine" | "station";
-export type ZoneIcon = "basket" | "star" | "igloo" | "house" | "school" | "park" | "bin" | "station" | "deck" | "crate" | "lab" | "door";
-export type Scene = {
-  theme: Theme;
-  decor?: { kind: DecorKind; x: number; y: number; r?: number; w?: number; h?: number; colour?: string }[];
-  /** Picture drawn in each zone, by zone id. */
-  zoneIcons?: Record<string, ZoneIcon>;
-  /** How tape lines look: a road, a railway, a snowy trail or plain tape. */
-  path?: "road" | "rail" | "trail" | "tape";
-  /** Wall style. */
-  wall?: "brick" | "coral" | "building" | "canyon" | "rockface" | "door" | "pond" | "gallery";
-  /** A puppy trots behind the robot. */
-  follower?: "puppy";
-};
-
-export type Semester = "S1" | "S2" | "S3" | "S4" | "Capstone";
-export const SEMESTERS: Semester[] = ["S1", "S2", "S3", "S4", "Capstone"];
-
-export type Mission = {
-  id: string;
-  /** Which block of the program this level belongs to (the sandbox has none). */
-  semester?: Semester;
-  scene: Scene;
-  /** Short skill tags for the mission card. */
-  skills: string[];
-  title: string;
-  program: Program;
-  /** Where it fits, e.g. "S1 My Helpful Robot". */
-  fits: string;
-  goal: string;
-  hint: string;
-  world: World;
-  check: (trace: Trace, world: World) => GoalResult;
-  starter: { js: string; py: string };
-};
-
-const base = (w: Partial<World> & Pick<World, "w" | "h" | "start" | "robot">): World => ({
-  lines: [],
-  zones: [],
-  walls: [],
-  items: [],
-  places: [],
-  light: 80,
-  lightZones: [],
-  claps: [],
-  distanceNoise: 0,
-  grid: true,
-  ...w,
-});
-
-const inZone = (p: Pt, z: Zone) => p.x >= z.x && p.x <= z.x + z.w && p.y >= z.y && p.y <= z.y + z.h;
-const last = (t: Trace) => t.frames[t.frames.length - 1];
-
-function itemAt(trace: Trace, world: World, id: string): Pt {
-  const f = last(trace);
-  if (f.items[id]) return f.items[id];
-  const it = world.items.find((i) => i.id === id)!;
-  return { x: it.x, y: it.y };
-}
-
-/** Total angle (degrees) the robot travelled round a centre point. */
-function sweptAround(trace: Trace, c: Pt) {
-  let total = 0;
-  let prev: number | null = null;
-  for (const f of trace.frames) {
-    const a = Math.atan2(f.y - c.y, f.x - c.x);
-    if (prev !== null) {
-      let d = a - prev;
-      while (d > Math.PI) d -= Math.PI * 2;
-      while (d < -Math.PI) d += Math.PI * 2;
-      total += d;
-    }
-    prev = a;
-  }
-  return Math.abs((total * 180) / Math.PI);
-}
-
-const numbersIn = (text: string) => text.split(/[^0-9.]+/).filter(Boolean).map(Number);
-
-const pass = (message: string): GoalResult => ({ ok: true, message });
-const notYet = (message: string): GoalResult => ({ ok: false, message });
-
+export * from "./kit";
 // ---------------------------------------------------------------- missions
 // 20 levels, each in its own world with its own robot job (redesigned 2026-11-19).
 // The coding idea for each semester is unchanged.
@@ -788,36 +691,38 @@ const crateZones: Zone[] = [
   { id: "apples", x: 120, y: 5, w: 35, h: 28, colour: "red", label: "Apples" },
   { id: "oranges", x: 120, y: 36, w: 35, h: 28, colour: "orange", label: "Oranges" },
   { id: "bananas", x: 120, y: 67, w: 35, h: 28, colour: "yellow", label: "Bananas" },
+  { id: "check", x: 120, y: 98, w: 35, h: 28, colour: "grey", label: "Check" },
 ];
 const factory: Mission = {
   semester: "S2",
-  scene: { theme: "factory", decor: [{ kind: "conveyor", x: 22, y: 6, h: 88 }], zoneIcons: { apples: "crate", oranges: "crate", bananas: "crate" } },
+  scene: { theme: "factory", decor: [{ kind: "conveyor", x: 22, y: 6, h: 118 }], zoneIcons: { apples: "crate", oranges: "crate", bananas: "crate", check: "crate" } },
   skills: ["Dictionaries", "Functions", "Classifying"],
   id: "fruit-factory",
   title: "Fruit packing factory",
   program: "Engineers",
   fits: "S2 Smart Sorting AI",
-  goal: "Pick up each fruit from the conveyor, check its colour with item_colour(), and pack it in the matching crate.",
-  hint: "Use a dictionary to look up which crate each colour goes to. Write a go_to(x, y) function first.",
+  goal: "Pick up each of the 4 fruits from the conveyor, check its colour with item_colour(), and pack it in the matching crate. A colour your dictionary doesn't know goes to the Check crate.",
+  hint: "Reuse go_to() and your dictionary, with .get(colour, ...) for the Check crate. Loop over the 4 rows.",
   world: base({
     w: 160,
-    h: 100,
+    h: 130,
     robot: "rover",
     start: { x: 70, y: 50, heading: 180 },
     items: [
       { id: "b1", x: 30, y: 19, colour: "yellow", kind: "fruit" },
       { id: "b2", x: 30, y: 50, colour: "red", kind: "fruit" },
       { id: "b3", x: 30, y: 81, colour: "orange", kind: "fruit" },
+      { id: "b4", x: 30, y: 112, colour: "purple", kind: "fruit" },
     ],
     zones: crateZones,
   }),
   check(trace, world) {
     let right = 0;
     for (const it of world.items) {
-      const z = crateZones.find((s) => s.colour === it.colour)!;
+      const z = crateZones.find((s) => s.colour === it.colour) ?? crateZones[3];
       if (inZone(itemAt(trace, world, it.id), z)) right++;
     }
-    return right === 3 ? pass("All 3 fruits packed in the right crates.") : notYet(`${right} of 3 fruits in the right crate.`);
+    return right === 4 ? pass("All 4 fruits packed, and the unknown one sent for checking. Smart sorting!") : notYet(`${right} of 4 fruits in the right crate.`);
   },
   starter: { js: "// Fruit packing factory\nconsole.log(itemColour());\n", py: "# Fruit packing factory\nprint(item_colour())\n" },
 };
@@ -861,8 +766,8 @@ const volcano: Mission = {
   title: "Volcano heat survey",
   program: "Engineers",
   fits: "S4 Data Detective",
-  goal: 'Drive across the lava field and record at least 10 temperature readings with record("temp", temperature()). Then open the Data tab and find the hottest stretch.',
-  hint: 'In a loop: forward a little, then record("temp", temperature()). Download the CSV and work out the mean, max and min.',
+  goal: 'Survey the whole lava field: record at least 10 temperature readings, keep them in a list, then print the hottest reading and the mean. Open the Data tab to find the hottest stretch.',
+  hint: 'In a loop: forward(10), then record("temp", temperature()) and add it to your list. At the end print max() and the mean.',
   world: base({
     w: 200,
     h: 60,
@@ -881,7 +786,12 @@ const volcano: Mission = {
     if (temps.length < 10) return notYet(`${temps.length} readings recorded. Record at least 10.`);
     if (new Set(temps.map((d) => d.value)).size < 3) return notYet("Your readings are all the same. Record temperature() as you drive.");
     if (trace.stats.distance < 150) return notYet("Drive further so your readings cover the whole lava field.");
-    return pass(`${temps.length} readings recorded. Open the Data tab to find the hottest stretch.`);
+    const values = temps.map((d) => d.value as number);
+    const max = Math.max(...values);
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    if (!trace.log.some((l) => numbersIn(l.text).includes(max))) return notYet("Print the hottest reading with max().");
+    if (!trace.log.some((l) => numbersIn(l.text).some((n) => Math.abs(n - mean) <= 0.6))) return notYet("Now print the mean of your readings.");
+    return pass(`${temps.length} readings, hottest ${max} °C, mean ${mean.toFixed(1)} °C. Your data tells the story.`);
   },
   starter: { js: '// Volcano heat survey\nrecord("temp", temperature());\n', py: '# Volcano heat survey\nrecord("temp", temperature())\n' },
 };
@@ -961,13 +871,27 @@ const sandbox: Mission = {
 
 
 
-export const MISSIONS: Mission[] = [
+const FULL: Mission[] = [
   eggHunt, concert, reef, igloo, painting,
   disco, nightTrain, puppy, garden, fireRescue,
   rocket, beachToss, marsEdge, mine, museum,
   vault, factory, station, volcano, solar,
+];
+const LABS_PER_SEMESTER: Record<Program, number> = { Explorers: 4, Builders: 4, Developers: 6, Engineers: 6, Everyone: 0 };
+const LABS = [...EXPLORER_LABS, ...BUILDER_LABS, ...DEVELOPER_LABS, ...ENGINEER_LABS];
+
+/** Every mission, in teaching order: program, then semester, then lab. The full level is the last lab of each semester. */
+export const MISSIONS: Mission[] = [
+  ...(["Explorers", "Builders", "Developers", "Engineers"] as Program[]).flatMap((p) =>
+    SEMESTERS.flatMap((sem) => [
+      ...LABS.filter((m) => m.program === p && m.semester === sem).sort((x, y) => (x.lab ?? 0) - (y.lab ?? 0)),
+      ...FULL.filter((m) => m.program === p && m.semester === sem).map((m) => ({ ...m, lab: LABS_PER_SEMESTER[p] })),
+    ]),
+  ),
   sandbox,
 ];
+
+export const labsPerSemester = (p: Program) => LABS_PER_SEMESTER[p];
 
 /** "Level 3 · S3" for a mission, from its place in its program. */
 export function levelOf(m: Mission): number {

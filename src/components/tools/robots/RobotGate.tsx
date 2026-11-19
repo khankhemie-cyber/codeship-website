@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ClassPasswordForm from "@/components/ClassPasswordForm";
 import type { ProgramSlug } from "@/data/programs";
+import type { Program } from "./kit";
 
 const RobotLab = dynamic(() => import("./RobotLab"), { ssr: false, loading: () => <div className="min-h-[100dvh] bg-[#001532]" /> });
 
 /**
- * Robot Lab is for enrolled students: any program's class password opens it
- * (the same password as that program's workbook and quizzes, checked on the
- * server, which sets an HttpOnly cookie). A device that already unlocked a
- * workbook, quiz or arcade level goes straight in.
+ * Robot Lab is for enrolled students: a program's class password opens that
+ * program's missions (the same password as its workbook and quizzes, checked
+ * on the server, which sets an HttpOnly cookie per program). A device that
+ * already unlocked a program's workbook, quiz or arcade levels goes straight
+ * in to that program.
  */
 
 const PROGRAMS: { slug: ProgramSlug; level: string; grades: string; colour: string }[] = [
@@ -23,6 +25,7 @@ const PROGRAMS: { slug: ProgramSlug; level: string; grades: string; colour: stri
 
 export default function RobotGate() {
   const [status, setStatus] = useState<"checking" | "locked" | "open">("checking");
+  const [open, setOpen] = useState<string[]>([]);
   const [picked, setPicked] = useState<ProgramSlug>("explorers");
 
   useEffect(() => {
@@ -34,15 +37,17 @@ export default function RobotGate() {
           .then((d: { ok?: boolean }) => Boolean(d.ok))
           .catch(() => false),
       ),
-    ).then((open) => {
-      if (!cancelled) setStatus(open.some(Boolean) ? "open" : "locked");
+    ).then((ok) => {
+      if (cancelled) return;
+      setOpen(PROGRAMS.filter((_, i) => ok[i]).map((p) => p.level));
+      setStatus(ok.some(Boolean) ? "open" : "locked");
     });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  if (status === "open") return <RobotLab />;
+  if (status === "open") return <RobotLab programs={open as Program[]} />;
   if (status === "checking") return <div className="min-h-[100dvh] bg-[#001532]" aria-busy="true" />;
 
   const p = PROGRAMS.find((x) => x.slug === picked)!;
@@ -78,7 +83,10 @@ export default function RobotGate() {
             ))}
           </div>
           <div className="mt-5 text-[#001532] [&>div]:max-w-none [&>div]:rounded-2xl">
-            <ClassPasswordForm key={picked} program={picked} level={p.level} action="Open Robot Lab" onUnlock={() => setStatus("open")} />
+            <ClassPasswordForm key={picked} program={picked} level={p.level} action="Open Robot Lab" onUnlock={() => {
+                setOpen([p.level]);
+                setStatus("open");
+              }} />
           </div>
           <p className="mt-6 text-sm text-white/60">
             Not a CODEship student yet? <a href="/programs/" className="font-bold text-[#F4D734] hover:underline">See our programs</a>.

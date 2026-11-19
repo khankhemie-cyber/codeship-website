@@ -28,14 +28,16 @@ const PROJECTS = {
   Developers: ["Homework Timer & Focus Tool", "Healthy Snack Calculator", "Fact or Fake? Media-Literacy Quiz", "Budget Buddy", "Problem-Solver App"],
   Engineers: ["Password Strength Checker", "Smart Sorting AI", "Chatbot for Good", "Data Detective", "Innovation Challenge"],
 };
+const LABS = { Explorers: 4, Builders: 4, Developers: 6, Engineers: 6 };
 for (const [program, projects] of Object.entries(PROJECTS)) {
-  test(`${program}: one level for each of S1, S2, S3, S4 and the capstone`, () => {
+  test(`${program}: ${LABS[program]} Robot Lab missions in each of S1 to S4 and the capstone`, () => {
     const list = MISSIONS.filter((m) => m.program === program);
-    assert(list.length === 5, `${list.length} levels`);
+    assert(list.length === LABS[program] * 5, `${list.length} missions`);
     SEMESTERS.forEach((sem, i) => {
       const found = list.filter((m) => m.semester === sem);
-      assert(found.length === 1, `${sem}: ${found.length} levels`);
-      assert(found[0].fits.endsWith(projects[i]), `${sem} fits "${found[0].fits}", curriculum project is "${projects[i]}"`);
+      assert(found.length === LABS[program], `${sem}: ${found.length} missions`);
+      assert(found.map((m) => m.lab).join(",") === Array.from({ length: LABS[program] }, (_, k) => k + 1).join(","), `${sem}: labs ${found.map((m) => m.lab)}`);
+      for (const m of found) assert(m.fits.endsWith(projects[i]), `${m.id} fits "${m.fits}", curriculum project is "${projects[i]}"`);
     });
   });
 }
@@ -144,8 +146,14 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
     const r = m.check(trace, m.world);
     assert(r.ok, `${id}: ${r.message}`);
   }
-  const covered = MISSIONS.filter((m) => m.program === "Explorers" || m.program === "Builders").every((m) => STACKS[m.id]);
-  assert(covered, "an Explorers or Builders level has no blocks solution");
+  // The other Explorers and Builders missions: their reference solution only uses what blocks can make.
+  const BLOCK_CALLS = new Set(["forward", "backward", "turnLeft", "turnRight", "setSpeed", "pickUp", "drop", "beep", "play", "led", "display", "penDown", "penUp", "spray", "record", "wait", "waitForClap", "obstacle", "lineLeft", "lineRight", "onLine", "light", "clapped", "distance", "colour", "itemColour", "temperature", "power"]);
+  for (const m of MISSIONS.filter((x) => (x.program === "Explorers" || x.program === "Builders") && !STACKS[x.id])) {
+    const calls = [...JS[m.id].matchAll(/([A-Za-z_]\w*)\s*\(/g)].map((x) => x[1]).filter((n) => n !== "for" && n !== "while" && n !== "if");
+    const bad = calls.filter((n) => !BLOCK_CALLS.has(n));
+    assert(!bad.length, `${m.id}: not possible in blocks: ${bad.join(", ")}`);
+    assert(!/function|=>|const |\[/.test(JS[m.id]), `${m.id}: solution uses code that blocks can't make`);
+  }
 });
 
 // Pick-up reach (CEO report 2026-11-18): a toy 4 squares away, on a plain mat.
