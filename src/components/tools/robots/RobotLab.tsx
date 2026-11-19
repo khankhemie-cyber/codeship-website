@@ -6,7 +6,7 @@ import { DEFAULT_LANG, MISSIONS, levelOf, missionById, type GoalResult, type Lan
 import { REFERENCE } from "./reference";
 import { EMPTY_WORKSPACE, blockIcon, blocksToJs } from "./robotBlocks";
 import Stage, { FLOOR } from "./Stage";
-import type { Frame, Trace } from "./sim";
+import type { Frame, SoundEvent, Trace } from "./sim";
 import { Sim } from "./sim";
 import { Icon } from "../launchpad/icons";
 import { deflateRaw, fromBase64Url, inflateRaw, toBase64Url } from "../shared/linkCodec";
@@ -90,37 +90,62 @@ const iconBtn = `inline-flex h-9 w-9 items-center justify-center rounded-lg bord
 // ---------------------------------------------------------------- sound
 
 let audio: AudioContext | null = null;
-function sound(kind: "beep" | "clap" | "win") {
+const NOTE_HZ: Record<string, number> = { C: 523.25, D: 587.33, E: 659.25, F: 698.46, G: 783.99, A: 880, B: 987.77, C2: 1046.5 };
+function tone(ac: AudioContext, at: number, freq: number, dur: number, type: OscillatorType, vol: number, glideTo?: number) {
+  const o = ac.createOscillator();
+  const g = ac.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, at);
+  if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, at + dur);
+  g.gain.setValueAtTime(vol, at);
+  g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+  o.connect(g).connect(ac.destination);
+  o.start(at);
+  o.stop(at + dur + 0.02);
+}
+function noise(ac: AudioContext, at: number, dur: number, vol: number) {
+  const len = Math.floor(ac.sampleRate * dur);
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+  const src = ac.createBufferSource();
+  const g = ac.createGain();
+  g.gain.value = vol;
+  src.buffer = buf;
+  src.connect(g).connect(ac.destination);
+  src.start(at);
+}
+function sound(kind: SoundEvent["kind"] | "win", note?: string) {
   try {
     audio ??= new AudioContext();
     const ac = audio;
     const now = ac.currentTime;
-    if (kind === "clap") {
-      const len = Math.floor(ac.sampleRate * 0.12);
-      const buf = ac.createBuffer(1, len, ac.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-      const src = ac.createBufferSource();
-      const g = ac.createGain();
-      g.gain.value = 0.35;
-      src.buffer = buf;
-      src.connect(g).connect(ac.destination);
-      src.start(now);
-      return;
+    switch (kind) {
+      case "clap":
+        return noise(ac, now, 0.12, 0.35);
+      case "beep":
+        return tone(ac, now, 880, 0.2, "square", 0.07);
+      case "note":
+        return tone(ac, now, NOTE_HZ[note ?? "C"] ?? 523, 0.42, "triangle", 0.16);
+      case "collect":
+        tone(ac, now, 1046, 0.12, "sine", 0.1);
+        return tone(ac, now + 0.08, 1568, 0.18, "sine", 0.1);
+      case "launch":
+        noise(ac, now, 1.6, 0.25);
+        return tone(ac, now, 90, 1.6, "sawtooth", 0.06, 400);
+      case "spray":
+        return noise(ac, now, 0.9, 0.12);
+      case "toss":
+        return tone(ac, now, 500, 0.4, "sine", 0.08, 1200);
+      case "photo":
+        return noise(ac, now, 0.05, 0.3);
+      case "unlock":
+        tone(ac, now, 660, 0.15, "square", 0.06);
+        return tone(ac, now + 0.15, 990, 0.25, "square", 0.06);
+      case "win":
+        [523, 659, 784, 1047].forEach((f, i) => tone(ac, now + i * 0.11, f, 0.2, "triangle", 0.12));
+        return;
     }
-    const notes = kind === "beep" ? [880] : [523, 659, 784, 1047];
-    notes.forEach((f, i) => {
-      const o = ac.createOscillator();
-      const g = ac.createGain();
-      o.type = kind === "beep" ? "square" : "triangle";
-      o.frequency.value = f;
-      const t0 = now + i * 0.11;
-      g.gain.setValueAtTime(kind === "beep" ? 0.07 : 0.12, t0);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.2);
-      o.connect(g).connect(ac.destination);
-      o.start(t0);
-      o.stop(t0 + 0.22);
-    });
   } catch {}
 }
 
@@ -219,7 +244,7 @@ function Player({ mission, trace, playKey, speed, setSpeed, result, onEnd, onNex
         const prev = tRef.current;
         const next = Math.min(trace.endTime, prev + dt * speedRef.current);
         while (soundIdx < trace.sounds.length && trace.sounds[soundIdx].t <= next) {
-          if (trace.sounds[soundIdx].t >= prev - 0.001) sound(trace.sounds[soundIdx].kind);
+          if (trace.sounds[soundIdx].t >= prev - 0.001) sound(trace.sounds[soundIdx].kind, trace.sounds[soundIdx].note);
           soundIdx++;
         }
         tRef.current = next;
@@ -258,7 +283,7 @@ function Player({ mission, trace, playKey, speed, setSpeed, result, onEnd, onNex
   return (
     <div className="flex flex-col gap-3">
       <div className="relative rounded-2xl bg-[var(--rl-stage)] p-2 sm:p-3">
-        <Stage world={mission.world} scene={mission.scene} frame={frame} trail={trail} clapNow={clapNow} />
+        <Stage world={mission.world} scene={mission.scene} frame={frame} trail={trail} frames={trace?.frames} index={i} sounds={trace?.sounds} clapNow={clapNow} />
         {result?.ok && atEnd && (
           <>
             <Confetti />
