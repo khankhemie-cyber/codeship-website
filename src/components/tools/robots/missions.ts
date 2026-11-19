@@ -114,7 +114,8 @@ const toyBin: Mission = {
     const bin = world.zones[0];
     const toy = itemAt(trace, world, "toy");
     if (last(trace).carrying === "toy") return notYet("The robot is still holding the toy. Add a drop.");
-    if (trace.stats.pickUps === 0) return notYet("The robot never picked up the toy. Drive closer, then pick up.");
+    if (trace.stats.pickUps === 0)
+      return notYet(trace.stats.missedPickUps ? "The robot tried to pick up, but the toy wasn't in front of it. Change the forward number so the robot stops right at the toy." : "The robot never picked up the toy. Drive to it, then pick up.");
     return inZone(toy, bin) ? pass("The toy is in the bin. Helpful robot!") : notYet("The toy was dropped outside the bin. Try a different distance.");
   },
   starter: {
