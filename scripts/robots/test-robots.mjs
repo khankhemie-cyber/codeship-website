@@ -69,10 +69,11 @@ test("blocks: Explorers egg-hunt stack passes", () => {
   assert(!error, error);
   assert(m.check(trace, m.world).ok, code);
 });
-test("blocks: repeat until + sense passes Submarine at the reef", () => {
+test("blocks: repeat until + sense passes the Recycling run", () => {
   const code = blocksToJs(ws(
     blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: blk("robot_forward", { N: 2 }) } }),
-    blk("robot_led", { C: "blue" }),
+    blk("robot_drop"),
+    blk("robot_led", { C: "green" }),
   ));
   const m = missionById("coral-reef");
   const { trace, error } = runJs(code, m.world);
@@ -130,7 +131,7 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
   const STACKS = {
     "egg-hunt": [f(95), blk("robot_beep")],
     "clap-concert": [blk("robot_wait_clap"), f(55), blk("robot_play", { N: "C" }), blk("robot_play", { N: "E" }), blk("robot_play", { N: "G" })],
-    "coral-reef": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_led", { C: "blue" })],
+    "coral-reef": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_drop"), blk("robot_led", { C: "green" })],
     "snowy-igloo": [f(50), L(90), f(55), R(90), f(45)],
     "paint-a-square": [blk("robot_pen_down", { C: "red" }), blk("robot_repeat", { N: 4 }, { DO: { block: chain([f(30), L(90)]) } }), blk("robot_pen_up"), blk("robot_beep")],
     "dance-party": [blk("robot_display", { T: "Hi I'm Bolt" }), blk("robot_led", { C: "blue" }), blk("robot_beep"), blk("robot_led", { C: "purple" }), L(360)],

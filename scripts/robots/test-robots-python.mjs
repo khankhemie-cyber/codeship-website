@@ -129,7 +129,8 @@ backward(35)
   "coral-reef": `
 while not obstacle():
     forward(2)
-led("blue")
+drop()
+led("green")
 `,
   "paint-a-square": `
 pen_down("purple")

@@ -14,9 +14,9 @@ for (const row of ${JSON.stringify(rows)}) {
   const cy = crateY[c] ?? 50;
   goTo(70, row); goTo(70, cy); goTo(127, cy); face(0); drop(); goTo(100, cy);
 }`;
-const VAULT = (rule) => `function ok(c) { return ${rule}; }
+const VAULT = (rule, go = "forward(90);") => `function ok(c) { return ${rule}; }
 let c = nextCode();
-while (c !== "") { if (ok(c)) { unlock(); forward(90); break; } else { beep(); } c = nextCode(); }`;
+while (c !== "") { if (ok(c)) { unlock(); ${go} break; } else { beep(); } c = nextCode(); }`;
 const CHAT = `const actions = { forward: (n) => forward(n), left: (n) => turnLeft(n), right: (n) => turnRight(n) };
 let m = nextMessage();
 while (m !== "") {
@@ -35,75 +35,74 @@ while (true) {
 
 export const LAB_JS = {
   // Explorers
-  "farm-hello": `forward(30);`,
-  "farm-first-egg": `forward(58);`,
-  "farm-backward": `backward(55);`,
-  "stage-warmup": `play("C"); play("D"); play("E");`,
-  "stage-clap": `waitForClap(); beep();`,
-  "stage-lights": `waitForClap(); led("red"); play("G"); led("blue"); play("C2");`,
-  "reef-loop": `for (let i = 0; i < 4; i++) { forward(10); }`,
-  "reef-rock": `while (!(obstacle())) { forward(2); }`,
-  "reef-corner": `while (!(obstacle())) { forward(2); } turnLeft(90); while (!(obstacle())) { forward(2); }`,
-  "snow-left": `turnLeft(90); forward(45);`,
-  "snow-right": `forward(40); turnRight(90); forward(40);`,
-  "snow-zigzag": `forward(30); turnLeft(90); forward(30); turnRight(90); forward(30);`,
-  "paint-line": `penDown("blue"); forward(50); penUp();`,
-  "paint-corner": `penDown("green"); forward(30); turnLeft(90); forward(30); penUp();`,
-  "paint-three-sides": `penDown("purple"); for (let i = 0; i < 3; i++) { forward(30); turnLeft(90); } penUp();`,
+  "farm-rooster": `forward(30); beep();`,
+  "farm-backward": `backward(40);`,
+  "farm-piglets": `forward(55); wait(2); backward(55);`,
+  "music-hello": `play("C"); play("D"); play("E");`,
+  "gym-clap": `waitForClap(); forward(50);`,
+  "party-surprise": `waitForClap(); led("red"); led("green"); beep();`,
+  "lagoon-pearls": `for (let i = 0; i < 4; i++) { forward(10); }`,
+  "kelp-bottle": `while (!(obstacle())) { forward(2); } pickUp();`,
+  "deep-corner": `while (!(obstacle())) { forward(2); } turnLeft(90); while (!(obstacle())) { forward(2); }`,
+  "snow-left": `turnLeft(90); forward(35);`,
+  "ice-rink": `forward(40); turnRight(90); forward(40);`,
+  "village-mitten": `turnLeft(180); forward(40);`,
+  "chalk-line": `penDown("orange"); forward(50); penUp();`,
+  "paper-stripes": `penDown("red"); forward(40); penUp(); turnLeft(90); forward(15); penDown("blue"); turnLeft(90); forward(40); penUp();`,
+  "canvas-three-sides": `penDown("purple"); for (let i = 0; i < 3; i++) { forward(30); turnLeft(90); } penUp();`,
   // Builders
-  "disco-name": `display("Pixel");`,
-  "disco-colours": `led("red"); wait(0.5); led("green"); wait(0.5); led("purple");`,
-  "disco-spin": `turnLeft(360); turnRight(360); beep();`,
-  "train-into": `forward(70); led("yellow");`,
-  "train-if": `for (let i = 0; i < 55; i++) { forward(2); if (light() < 30) { led("yellow"); } }`,
-  "train-night": `for (let i = 0; i < 66; i++) { forward(2); if (light() < 30) { led("yellow"); } else { led("off"); } }`,
-  "puppy-tree": `for (let i = 0; i < 3; i++) { forward(20); }`,
-  "puppy-square": `for (let i = 0; i < 4; i++) { forward(50); turnLeft(90); }`,
-  "puppy-stairs": `for (let i = 0; i < 3; i++) { forward(20); turnLeft(90); forward(20); turnRight(90); }`,
-  "garden-one": `forward(40); wait(1);`,
-  "garden-two": `forward(35); wait(1); forward(50); wait(1);`,
-  "garden-sunflower": `forward(50); wait(3); forward(50); wait(1);`,
-  "fire-siren": `led("red"); beep(); led("blue"); beep();`,
-  "fire-straight": `beep(); forward(75); spray();`,
-  "fire-two": `beep(); forward(30); turnLeft(90); spray(); turnRight(90); forward(55); turnLeft(90); forward(40); spray();`,
+  "dressing-name": `display("Pixel");`,
+  "rooftop-colours": `led("red"); wait(1); led("green"); wait(1); led("purple"); wait(1);`,
+  "classroom-intro": `display("Pixel"); play("C"); play("G"); led("blue");`,
+  "meadow-shade": `while (!(light() < 30)) { forward(2); } led("yellow");`,
+  "firefly-forest": `for (let i = 0; i < 55; i++) { forward(2); if (light() < 30) { led("yellow"); } }`,
+  "owl-watch": `for (let i = 0; i < 26; i++) { forward(5); if (light() < 30) { play("C"); } }`,
+  "dogpark-tree": `for (let i = 0; i < 3; i++) { forward(20); }`,
+  "snowpark-lap": `for (let i = 0; i < 4; i++) { forward(50); turnLeft(90); }`,
+  "hill-stairs": `for (let i = 0; i < 3; i++) { forward(20); turnLeft(90); forward(20); turnRight(90); }`,
+  "greenhouse-bloom": `forward(40); wait(1);`,
+  "window-sprinkler": `forward(30); turnLeft(90); spray(); turnRight(90); forward(50); turnLeft(90); spray();`,
+  "sunflower-wait": `forward(50); wait(3); forward(50); wait(1);`,
+  "firehall-siren": `for (let i = 0; i < 3; i++) { led("red"); beep(); led("blue"); beep(); } forward(55);`,
+  "street-kitten": `forward(64); pickUp(); backward(72); drop();`,
+  "crosswalk-wait": `while (!(onLine())) { forward(1); } wait(3); forward(60);`,
   // Developers
-  "rocket-crew": `let crew = 4; display(crew);`,
-  "rocket-countup": `let n = 1; while (n <= 3) { display(n); wait(1); n = n + 1; }`,
-  "rocket-blink": `function blink() { led("red"); wait(0.5); led("off"); wait(0.5); } blink(); blink(); blink();`,
-  "rocket-three": `let time = 3; while (time > 0) { display(time); wait(1); time = time - 1; } launch();`,
-  "rocket-fuel": `let fuel = 100; function burn() { fuel = fuel - 25; display(fuel); wait(1); } while (fuel > 0) { burn(); } launch();`,
-  "toss-50": `toss(50);`,
-  "toss-add": `const d = 30 + 25; console.log(d); toss(d);`,
-  "toss-multiply": `const towels = 2; const length = 30; const d = towels * length; console.log("Distance:", d); toss(d);`,
-  "toss-divide": `const mat = 140; const d = mat / 2; console.log(d); toss(d);`,
-  "toss-change": `const towels = 3; const length = 25; const d = towels * length; console.log(d); toss(d);`,
-  "mars-read": `for (let i = 0; i < 3; i++) { console.log(distance()); }`,
-  "mars-bool": `while (!obstacle()) { forward(2); }`,
-  "mars-30": `while (distance() > 30) { forward(2); }`,
-  "mars-wobble": `function smallest() { let m = 999; for (let i = 0; i < 3; i++) { m = Math.min(m, distance()); } return m; }
-while (smallest() > 16) { forward(2); }`,
-  "mars-rock": `while (!obstacle()) { forward(2); } turnRight(90); forward(40); turnLeft(90); forward(90);`,
-  "mine-array": `const route = [40, 50, 25]; for (const d of route) { forward(d); }`,
-  "mine-turns": `const route = [["forward", 50], ["left", 90], ["forward", 70]];
+  "control-crew": `let crew = 4; display(crew);`,
+  "hangar-trip": `const trip = 50; forward(trip); wait(1); backward(trip);`,
+  "lab-beacon": `function blink() { led("red"); wait(0.5); led("off"); wait(0.5); } blink(); blink(); blink();`,
+  "bridge-signal": `function flash(colour) { led(colour); wait(0.5); led("off"); wait(0.2); } flash("red"); flash("green"); flash("blue");`,
+  "depot-fuel": `function fuelFor(cm) { return cm * 2; } display(fuelFor(40)); forward(40);`,
+  "boardwalk-toss": `toss(50);`,
+  "pier-add": `const d = 30 + 25; console.log(d); toss(d);`,
+  "snackbar-total": `const total = 3 * 4; display(total); console.log(total);`,
+  "cove-halfway": `const tower = 120; forward(tower / 2);`,
+  "picnic-share": `display(17 % 5); console.log(Math.floor(17 / 5));`,
+  "dunes-read": `for (let i = 0; i < 3; i++) { console.log(distance()); }`,
+  "craters-bool": `while (!obstacle()) { forward(2); }`,
+  "volcano-30": `while (distance() > 30) { forward(2); }`,
+  "ash-rock": `while (!obstacle()) { forward(2); } turnRight(90); forward(40); turnLeft(90); forward(90);`,
+  "polar-samples": `for (let i = 0; i < 33; i++) { forward(5); if (colour() === "red") beep(); }`,
+  "tunnel-array": `const route = [40, 50, 25]; for (const d of route) { forward(d); }`,
+  "vault-turns": `const route = [["forward", 50], ["left", 90], ["forward", 70]];
 for (const [m, a] of route) { if (m === "forward") forward(a); if (m === "left") turnLeft(a); if (m === "right") turnRight(a); }`,
-  "mine-cost": `const route = [["forward", 115]]; let cost = 0;
+  "cave-cost": `const route = [["forward", 115]]; let cost = 0;
 for (const [m, a] of route) { if (m === "forward") { forward(a); cost += a; } }
 console.log("Cost:", cost);`,
-  "mine-budget": `const route = [["left", 90], ["forward", 60], ["right", 90], ["forward", 110]]; let cost = 0;
+  "lava-budget": `const route = [["left", 90], ["forward", 60], ["right", 90], ["forward", 110]]; let cost = 0;
 for (const [m, a] of route) { if (m === "forward") { forward(a); cost += a; } if (m === "left") turnLeft(a); if (m === "right") turnRight(a); }
 console.log("Cost:", cost);`,
-  "mine-square": `let cost = 0; for (let i = 0; i < 4; i++) { forward(50); cost += 50; turnLeft(90); } console.log("Cost:", cost);`,
-  "museum-wall": `while (!obstacle()) { forward(2); }`,
-  "museum-light": `while (!obstacle()) { if (light() < 30) { led("white"); } else { led("off"); } forward(2); }`,
-  "museum-photo": `let taken = false; while (!obstacle()) { forward(2); if (colour() === "yellow" && !taken) { photo(); taken = true; } }`,
-  "museum-corner": WALL_LOOP(1),
-  "museum-u": WALL_LOOP(2),
+  "cavern-square": `let cost = 0; for (let i = 0; i < 4; i++) { forward(50); cost += 50; turnLeft(90); } console.log("Cost:", cost);`,
+  "hall-wall": `let steps = 0; while (!obstacle()) { forward(2); steps++; } beep(); backward(steps * 2);`,
+  "dino-light": `while (!obstacle()) { if (light() < 30) { led("white"); } else { led("off"); } forward(2); }`,
+  "sculpture-photo": `let taken = false; while (!obstacle()) { forward(2); if (colour() === "yellow" && !taken) { photo(); taken = true; } }`,
+  "school-corner": WALL_LOOP(1),
+  "glasshouse-u": WALL_LOOP(2).replace("turnLeft(90)", "turnRight(90)"),
   // Engineers
-  "vault-read": `const code = nextCode(); console.log(code.length);`,
-  "vault-length": VAULT(`c.length >= 12`),
-  "vault-digit": VAULT(`c.length >= 12 && /[0-9]/.test(c)`),
-  "vault-strong": VAULT(`c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c)`),
-  "vault-lockout": `function strong(c) { return c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c); }
+  "deck-read": `const code = nextCode(); console.log(code.length);`,
+  "cave-length": VAULT(`c.length >= 12`, "forward(148);"),
+  "dock-digit": VAULT(`c.length >= 12 && /[0-9]/.test(c)`, "forward(72);"),
+  "beach-strong": VAULT(`c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c)`, "forward(92); turnRight(90); forward(48);"),
+  "fort-lockout": `function strong(c) { return c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c); }
 let weak = 0; let c = nextCode();
 while (c !== "") {
   if (strong(c)) { unlock(); forward(90); break; }
@@ -111,25 +110,25 @@ while (c !== "") {
   if (weak >= 3) { display("Locked"); break; }
   c = nextCode();
 }`,
-  "fruit-read": `console.log(itemColour());`,
-  "fruit-one": SORT([50], { red: 19, orange: 50, yellow: 81 }),
-  "fruit-goto": `${GO_TO(70, 50, 180)}
+  "qa-colour": `console.log(itemColour());`,
+  "warehouse-lookup": SORT([50], { red: 19, orange: 50, yellow: 81 }),
+  "loading-goto": `${GO_TO(70, 50, 180)}
 goTo(31, 19); goTo(131, 19); goTo(131, 81);`,
-  "fruit-two": SORT([19, 81], { red: 19, orange: 50, yellow: 81 }),
-  "fruit-unknown": SORT([19, 50], { red: 19 }),
-  "chat-read": `let m = nextMessage(); while (m !== "") { console.log(m); m = nextMessage(); }`,
-  "chat-split": CHAT,
-  "chat-dict": CHAT,
-  "chat-refuse": CHAT,
-  "chat-stop": CHAT,
-  "lava-one": `record("temp", temperature());`,
-  "lava-five": SURVEY(5, ""),
-  "lava-max": SURVEY(17, "console.log(Math.max(...r));"),
-  "lava-mean": SURVEY(17, "console.log(r.reduce((a, b) => a + b, 0) / r.length);"),
-  "lava-hotspot": `while (temperature() <= 150) { forward(2); } beep();`,
-  "solar-baseline": `record("power", power());`,
-  "solar-row": `forward(120);`,
-  "solar-before-after": `record("power", power()); forward(60); record("power", power());`,
-  "solar-all": `forward(120); turnRight(90); forward(55); turnRight(90); forward(105);`,
-  "solar-efficient": `forward(100); turnRight(90); forward(30); turnRight(90); forward(70); turnLeft(90); forward(30); turnLeft(90); forward(70); console.log(300);`,
+  "market-two": SORT([19, 81], { red: 19, orange: 50, yellow: 81 }),
+  "greenhouse-unknown": SORT([19, 50], { red: 19 }),
+  "control-read": `let m = nextMessage(); while (m !== "") { console.log(m); m = nextMessage(); }`,
+  "bridge-split": CHAT,
+  "lab-intents": CHAT,
+  "observatory-refuse": CHAT,
+  "airlock-stop": CHAT,
+  "ash-one": `record("temp", temperature());`,
+  "lake-five": SURVEY(5, ""),
+  "dunes-max": `const r = []; for (let row = 0; row < 2; row++) { for (let i = 0; i < 8; i++) { forward(15); const t = temperature(); r.push(t); record("temp", t); } if (row === 0) { turnRight(90); forward(40); turnRight(90); } } console.log(Math.max(...r));`,
+  "craters-mean": `const r = []; for (let side = 0; side < 4; side++) { for (let i = 0; i < 3; i++) { forward(30); const t = temperature(); r.push(t); record("temp", t); } turnLeft(90); } console.log(r.reduce((a, b) => a + b, 0) / r.length);`,
+  "cavern-hotspot": `while (!obstacle()) { forward(2); } turnLeft(90); while (temperature() <= 150) { forward(2); } beep();`,
+  "roof-baseline": `record("power", power());`,
+  "windfarm-row": `forward(120);`,
+  "meadow-before-after": `record("power", power()); forward(60); record("power", power());`,
+  "hill-all": `forward(110); turnRight(90); forward(60);`,
+  "sunflower-efficient": `forward(95); turnRight(90); forward(30); turnRight(90); forward(60); turnLeft(90); forward(30); turnLeft(90); forward(60); console.log(275);`,
 };

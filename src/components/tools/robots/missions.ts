@@ -34,6 +34,7 @@ const eggHunt: Mission = {
   title: "Egg hunt",
   program: "Explorers",
   fits: "S1 My Helpful Robot",
+  story: { who: "Farmer Rosa", face: "👩‍🌾", says: "Big job today! The hens laid 3 eggs in the grass. Collect them all, park in the basket, and beep when you're done." },
   goal: "Help the farmer: drive over all 3 eggs to collect them, stop in the basket, then beep to say you're done.",
   hint: "Count the squares. Each square is 10 cm. The robot collects an egg just by driving over it.",
   world: base({
@@ -76,6 +77,7 @@ const concert: Mission = {
   title: "Clap-start concert",
   program: "Explorers",
   fits: "S2 Kindness Cards",
+  story: { who: "Maestro Mo", face: "🐱", says: "It's concert night! When the crowd claps, roll into the spotlight and play your song. 3 notes, superstar!" },
   goal: "Wait for the clap. Then drive into the spotlight and play 3 notes for your friends in the crowd.",
   hint: "Start with wait for a clap. The clap is the event that starts the show. Then forward, then 3 play note blocks.",
   world: base({
@@ -101,39 +103,44 @@ const concert: Mission = {
 const reef: Mission = {
   semester: "S3",
   scene: {
-    theme: "ocean",
+    theme: "beach",
     wall: "coral",
     decor: [
-      { kind: "seaweed", x: 30, y: 52 },
-      { kind: "seaweed", x: 66, y: 8 },
-      { kind: "seaweed", x: 96, y: 54 },
-      { kind: "fish", x: 112, y: 15 },
-      { kind: "fish", x: 116, y: 44 },
-      { kind: "chest", x: 52, y: 50 },
+      { kind: "shell", x: 30, y: 52 },
+      { kind: "starfish", x: 66, y: 8 },
+      { kind: "umbrella", x: 40, y: 10 },
+      { kind: "palm", x: 96, y: 54 },
     ],
+    zoneIcons: { bin: "bin" },
   },
   skills: ["Sensors", "Loops"],
   id: "coral-reef",
-  title: "Submarine at the reef",
+  title: "Recycling run",
   program: "Explorers",
   fits: "S3 Recycling Sorter",
-  goal: "Drive the submarine to the coral reef and stop before you bump it. Then switch on your light so the shy fish can see you.",
-  hint: "Use repeat until: keep going forward a little until the sensor sees the reef close by. Then light on.",
+  story: { who: "Shelly the crab", face: "🦀", says: "You found the bottle! Now bring it to the blue recycling bin. Stop before you bump the bin, drop the bottle in, and flash green: it's recycled!" },
+  goal: "Drive until the bin is close (no bumps), drop the bottle, then turn your light green.",
+  hint: "repeat until obstacle ahead: forward 2. Then drop. Then light green.",
   world: base({
     w: 150,
     h: 60,
     robot: "scout",
     start: { x: 12, y: 30, heading: 0 },
-    walls: [{ x: 128, y: 4, w: 16, h: 52 }],
+    walls: [{ x: 128, y: 14, w: 16, h: 32 }],
+    items: [{ id: "bottle", x: 12, y: 30, colour: "blue", kind: "bottle" }],
+    startCarrying: "bottle",
+    zones: [{ id: "bin", x: 100, y: 14, w: 28, h: 32, colour: "blue", label: "Recycling" }],
   }),
-  check(trace) {
+  check(trace, world) {
     const f = last(trace);
-    if (trace.stats.bumps > 0) return notYet("Bump! The submarine touched the coral. Stop when the sensor sees it.");
-    if (!f.sensors.obstacle) return notYet("Keep going until the reef is close. Use repeat until.");
-    if (f.led === "off") return notYet("You stopped in time. Now switch on your light for the fish.");
-    return pass("Stopped safely, and the fish came out to say hello!");
+    if (trace.stats.bumps > 0) return notYet("Bump! You touched the bin. Let the sensor tell you when to stop.");
+    if (!f.sensors.obstacle) return notYet("Keep going until the bin is close. Use repeat until.");
+    if (f.carrying) return notYet("You're at the bin. Now drop the bottle in.");
+    if (!inZone(itemAt(trace, world, "bottle"), world.zones[0])) return notYet("Drop the bottle right next to the bin.");
+    if (f.led !== "green") return notYet("Bottle in! Now flash your light green.");
+    return pass("Recycled! Shelly is doing a sideways happy dance.");
   },
-  starter: { js: "// Submarine at the reef\nforward(10);\n", py: "# Submarine at the reef\nforward(10)\n" },
+  starter: { js: "// Recycling run\nforward(10);\n", py: "# Recycling run\nforward(10)\n" },
 };
 
 const igloo: Mission = {
@@ -156,6 +163,7 @@ const igloo: Mission = {
   title: "Snowy path to the igloo",
   program: "Explorers",
   fits: "S4 My Neighbourhood Map",
+  story: { who: "Pip the penguin", face: "🐧", says: "My friends are waiting at the igloo! Follow the snowy path from the cabin. Watch the corners: left or right?" },
   goal: "Follow the snowy path from the cabin to the igloo. Turn left and right at the corners.",
   hint: "Forward, then turn. Count squares for each part of the path. Left and right are the robot's left and right.",
   world: base({
@@ -193,6 +201,7 @@ const painting: Mission = {
   title: "Paint a picture",
   program: "Explorers",
   fits: "Capstone Show-and-Tell App",
+  story: { who: "Ms. Dot", face: "👩‍🎨", says: "Art show today! Paint a whole square: 4 sides, 4 turns. Then beep so everyone comes to look." },
   goal: "Put the pen down and paint a square picture: forward and turn, 4 times. Then beep to show it to everyone.",
   hint: "A square has 4 sides the same length and 4 quarter turns (90). Pen down first, then repeat 4 times: forward 30, turn left 90.",
   world: base({ w: 120, h: 80, robot: "scout", start: { x: 40, y: 58, heading: 0 }, grid: true }),
@@ -219,6 +228,7 @@ const disco: Mission = {
   title: "Dance party hello",
   program: "Builders",
   fits: "S1 All About Me Page",
+  story: { who: "DJ Zara", face: "🎧", says: "Last show of the season! Show your name, flash 2 colours, beep, and spin all the way round. The crowd is going wild!" },
   goal: "Introduce your robot at the dance party: show its name on the screen, flash 2 different light colours, beep, and spin all the way round.",
   hint: "A full spin is 360. The dance floor glows the colour of your robot's light, so try a few colours.",
   world: base({ w: 100, h: 60, robot: "scout", start: { x: 50, y: 32, heading: 90 }, grid: false }),
@@ -254,6 +264,7 @@ const nightTrain: Mission = {
   title: "Train through the tunnels",
   program: "Builders",
   fits: "S2 Weather Helper",
+  story: { who: "Conductor Kofi", face: "🧑‍✈️", says: "The big trip! This track has tunnels AND bright stations. Headlight on in the dark, off in the light, all the way to the end." },
   goal: "Drive the train to the station. If it's dark (a tunnel), turn the headlight on. If it's bright, turn it off.",
   hint: "Same idea as the Weather Helper: if the light is low, then do one thing; else do another. Check the light after every small step.",
   world: base({
@@ -310,6 +321,7 @@ const puppy: Mission = {
   title: "Walk the puppy",
   program: "Builders",
   fits: "S3 Class Pet Care Guide",
+  story: { who: "Biscuit the puppy", face: "🐶", says: "The best walk ever: TWO laps round the duck pond, then home. Can your loop do it without getting my paws wet?" },
   goal: "The class puppy needs its walk: go all the way round the pond 2 times and finish back where you started. Use a repeat loop.",
   hint: "One lap is 4 sides and 4 left turns. Put forward 70 and turn left 90 inside repeat 4, then repeat that 2 times (or repeat 8).",
   world: base({
@@ -353,6 +365,7 @@ const garden: Mission = {
   title: "Make the garden bloom",
   program: "Builders",
   fits: "S4 Save the Bees Awareness Site",
+  story: { who: "Bea the bee", face: "🐝", says: "The whole garden is waiting! Visit all 4 buds and wait 1 second on each. Then my bee friends can come home." },
   goal: "Water the 4 flower buds: stop on each one for 1 second and it blooms. The bees will come back!",
   hint: "Forward to a bud, wait 1, then on to the next. Plan the turns: left, right, right, left.",
   world: base({
@@ -394,6 +407,7 @@ const fireRescue: Mission = {
   title: "Fire rescue",
   program: "Builders",
   fits: "Capstone Community Helper Website",
+  story: { who: "Captain Ada", face: "👩‍🚒", says: "Emergency! Sound the siren, follow the roads to the burning building, and spray water. You've trained for this!" },
   goal: "Be a community helper: sound the siren (beep), drive the fire truck along the roads to the burning building, and spray water to put the fire out.",
   hint: "Plan the route first: how far along the road, which way to turn, how far up. Stop a little before the building, then spray.",
   world: base({
@@ -425,6 +439,7 @@ const rocket: Mission = {
   title: "Rocket countdown",
   program: "Developers",
   fits: "S1 Homework Timer & Focus Tool",
+  story: { who: "Commander Lin", face: "👩‍🚀", says: "Launch day! Count down from 5 on the big screen, launch the rocket, then back away to the viewing deck. T-minus 5..." },
   goal: "Count down 5, 4, 3, 2, 1 on the robot's screen, one number per second. Then launch() the rocket and reverse onto the viewing deck.",
   hint: "Store the time in a variable. Write a function that shows it, waits 1 second and subtracts 1. Call it while the time is above 0.",
   world: base({
@@ -468,6 +483,7 @@ const beachToss: Mission = {
   title: "Beach snack toss",
   program: "Developers",
   fits: "S2 Healthy Snack Calculator",
+  story: { who: "Lifeguard Sam", face: "🏄", says: "Beach day! My friend is 4 towels away. Do the maths in your code, print it, and toss the snack. No sandy sandwiches!" },
   goal: `Your friend is 4 beach towels away and each towel is ${TOWEL} cm long. Calculate the distance in your code, print it, then toss() the snack so it lands in their hands (within 4 cm).`,
   hint: "Use variables for the number of towels and their length, multiply them, print the answer, then toss(distance). The robot doesn't need to move.",
   world: base({
@@ -514,6 +530,7 @@ const marsEdge: Mission = {
   title: "Plant the flag on Mars",
   program: "Developers",
   fits: "S3 Fact or Fake? Media-Literacy Quiz",
+  story: { who: "Dr. Ortiz", face: "👨‍🔬", says: "A dust storm is making your sensor wobble! Get close to the canyon wall without touching it, then plant our flag." },
   goal: "Drive the rover to the canyon wall and stop 5 to 20 cm away without touching it, then drop() the flag. A dust storm makes the distance sensor wobble by a few cm.",
   hint: "One reading can be wrong. Take three readings and use the smallest (or the average) before you decide, just like checking a source.",
   world: base({
@@ -558,6 +575,7 @@ const mine: Mission = {
   title: "Crystal mine",
   program: "Developers",
   fits: "S4 Budget Buddy",
+  story: { who: "Miner Jo", face: "⛏️", says: "The big haul! 3 crystals, one mine cart, and a tiny battery. Plan carefully and print what it cost." },
   goal: `Collect all 3 crystals and park at the mine cart. The battery only lasts ${MINE_BUDGET} cm of driving, so print your total cost too.`,
   hint: "Store your route in an array, loop through it, and add up the cost of each forward move. Print the total.",
   world: base({
@@ -611,6 +629,7 @@ const museum: Mission = {
   title: "Night at the museum",
   program: "Developers",
   fits: "Capstone Problem-Solver App",
+  story: { who: "Guard Gus", face: "💂", says: "Final patrol! Use everything you know: walls, dark halls, the photo spot. Get me to the Masterpiece room." },
   goal: "Solve a real problem: guide the night guard robot through the museum to the Masterpiece room. Turn left when a wall is ahead, light the way in the dark rooms (off where it's bright), then take a photo() of the masterpiece.",
   hint: "One loop does it all: check the light, then if obstacle() turn left, else step forward. Count your turns so you know when you've arrived.",
   world: base({
@@ -659,6 +678,7 @@ const vault: Mission = {
   title: "Treasure vault",
   program: "Engineers",
   fits: "S1 Password Strength Checker",
+  story: { who: "Captain Mira", face: "⚓", says: "The crew is setting the treasure vault passcode, and pirates are sneaking in guesses too! Reject every weak one. Only a truly strong passcode opens this door." },
   goal: "Pirates are trying passcodes on the vault. Read each with next_code(), beep to reject weak ones, and only unlock() after a strong one (12 or more characters with letters, numbers and a symbol). Then drive in and grab the treasure.",
   hint: "Write an is_strong(code) function first. Then loop: read a code, check it, beep or unlock. An empty code means nobody is left.",
   world: base({
@@ -701,6 +721,7 @@ const factory: Mission = {
   title: "Fruit packing factory",
   program: "Engineers",
   fits: "S2 Smart Sorting AI",
+  story: { who: "Engineer Raj", face: "👨‍🏭", says: "Full shift at the factory! 4 fruits on the belt, one you've never seen. Pack them all, and send the stranger for a check." },
   goal: "Pick up each of the 4 fruits from the conveyor, check its colour with item_colour(), and pack it in the matching crate. A colour your dictionary doesn't know goes to the Check crate.",
   hint: "Reuse go_to() and your dictionary, with .get(colour, ...) for the Check crate. Loop over the 4 rows.",
   world: base({
@@ -735,6 +756,7 @@ const station: Mission = {
   title: "Space station helper",
   program: "Engineers",
   fits: "S3 Chatbot for Good",
+  story: { who: "Astronaut Kai", face: "👨‍🚀", says: "Live from the space station! I'll chat with your robot. Move when I ask, take photos, politely say no to anything unsafe, and STOP when I say stop." },
   goal: 'An astronaut is chatting to your robot. Read each message with next_message(), use a dictionary of intents ("forward 40", "left 90", "photo"), politely refuse anything else on the screen, and stop when told "stop".',
   hint: 'Split each message into a word and maybe a number. Look the word up in a dictionary of actions. If it is not there, display a polite "Sorry".',
   world: base({
@@ -766,6 +788,7 @@ const volcano: Mission = {
   title: "Volcano heat survey",
   program: "Engineers",
   fits: "S4 Data Detective",
+  story: { who: "Dr. Amara", face: "🌋", says: "The big survey! Measure the whole lava field. I need the hottest spot AND the average for my report." },
   goal: 'Survey the whole lava field: record at least 10 temperature readings, keep them in a list, then print the hottest reading and the mean. Open the Data tab to find the hottest stretch.',
   hint: 'In a loop: forward(10), then record("temp", temperature()) and add it to your list. At the end print max() and the mean.',
   world: base({
@@ -812,6 +835,7 @@ const solar: Mission = {
   title: "Solar farm clean-up",
   program: "Engineers",
   fits: "Capstone Innovation Challenge",
+  story: { who: "Engineer Noor", face: "👩‍🔧", says: "Pitch day! Measure, clean all 6 panels, measure again. Show the judges your fix really works." },
   goal: 'Prototype a fix for a real problem (SDG 7, clean energy): dusty panels make less power. Record power() before you start, drive over all 6 panels to clean them, then record power() again for your pitch.',
   hint: "Drive along the top row, turn, and come back along the bottom row. Use record(\"power\", power()) at the start and at the end.",
   world: base({
@@ -842,6 +866,7 @@ const sandbox: Mission = {
   skills: ["Anything goes"],
   id: "sandbox",
   title: "Free build",
+  story: { who: "CODEship Robot", face: "🤖", says: "Free play! Build anything you like. What will you invent?" },
   program: "Everyone",
   fits: "Any Robot Lab",
   goal: "No goal: try anything. There's a line track, a wall, coloured zones and blocks to move.",

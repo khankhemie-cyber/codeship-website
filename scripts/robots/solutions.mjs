@@ -7,7 +7,7 @@ export const JS = {
   ...LAB_JS,
   "egg-hunt": `forward(95); beep();`,
   "clap-concert": `waitForClap(); forward(55); play("C"); play("E"); play("G");`,
-  "coral-reef": `while (!obstacle()) { forward(2); } led("blue");`,
+  "coral-reef": `while (!obstacle()) { forward(2); } drop(); led("green");`,
   "snowy-igloo": `forward(50); turnLeft(90); forward(55); turnRight(90); forward(45);`,
   "paint-a-square": `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } penUp(); beep();`,
   "dance-party": `display("Hi, I'm Bolt"); led("blue"); beep(); led("purple"); turnLeft(360);`,

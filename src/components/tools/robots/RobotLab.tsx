@@ -925,7 +925,21 @@ export default function RobotLab({ programs }: { programs: Program[] }) {
                   </span>
                 )}
               </h2>
-              <p className="text-sm text-[var(--rl-muted)]">{mission.goal}</p>
+              {mission.story && (
+                <div className="mt-2 flex items-start gap-2">
+                  <span aria-hidden className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FFF4C2] text-xl ring-2 ring-[#F0D030]">
+                    {mission.story.face}
+                  </span>
+                  <p className="relative rounded-2xl rounded-tl-sm bg-[#FFF9DB] px-3 py-2 text-sm leading-snug text-[#3A2E00] ring-1 ring-[#F0D030]/60">
+                    <span className="font-bold">{mission.story.who}: </span>
+                    {mission.story.says}
+                  </p>
+                </div>
+              )}
+              <p className="mt-2 text-sm text-[var(--rl-muted)]">
+                <span className="font-bold text-[var(--rl-text,inherit)]">Your mission: </span>
+                {mission.goal}
+              </p>
             </div>
           </div>
 

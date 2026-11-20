@@ -20,14 +20,25 @@ export type Theme =
   | "disco" | "rail" | "park" | "garden" | "city"
   | "launch" | "beach" | "mars" | "mine" | "museum"
   | "cove" | "factory" | "station" | "volcano" | "solar"
-  | "lab";
+  | "lab"
+  // more places, so every mission has its own scene
+  | "dawn" | "barn" | "pigpen" | "practice" | "gym" | "party" | "lagoon" | "kelp" | "deep"
+  | "snowpark" | "ice" | "village" | "sidewalk" | "paper" | "canvas"
+  | "dressing" | "rooftop" | "classroom" | "meadow" | "nightrail" | "dogpark" | "hill" | "greenhouse"
+  | "sunflowers" | "firehall" | "street" | "control" | "hangar" | "boardwalk" | "snackbar" | "pier"
+  | "dunes" | "craters" | "tunnel" | "cavern" | "gemvault" | "hall" | "dinohall" | "sculpture"
+  | "deck" | "cave" | "warehouse" | "lab2" | "bridge" | "garden2" | "ashfield" | "lavalake" | "rooftopsolar" | "windfarm";
 export type DecorKind =
   | "hen" | "hay" | "fence" | "barn" | "speaker" | "crowd" | "coral" | "seaweed" | "fish" | "chest"
   | "pine" | "snowman" | "penguin" | "easel" | "paint" | "discoball" | "mountain" | "duck" | "bench"
   | "tree" | "bush" | "rock" | "bee" | "hive" | "lamp" | "building" | "hydrant" | "rocket" | "palm"
   | "umbrella" | "friend" | "crater" | "crystal" | "cart" | "painting" | "statue" | "ship" | "barrel"
-  | "conveyor" | "window" | "console" | "lava" | "turbine" | "station";
+  | "conveyor" | "window" | "console" | "lava" | "turbine" | "station"
+  | "rooster" | "pig" | "trough" | "tractor" | "balloon" | "mirror" | "desk" | "kitten" | "sun" | "moon"
+  | "cloud" | "dino" | "lighthouse" | "cactus" | "flower" | "plant" | "chalk" | "cone" | "shell" | "starfish" | "dish";
 export type ZoneIcon = "basket" | "star" | "igloo" | "house" | "school" | "park" | "bin" | "station" | "deck" | "crate" | "lab" | "door";
+/** Who tells the story of a mission (shown in a speech bubble). */
+export type Story = { who: string; face: string; says: string };
 export type Scene = {
   theme: Theme;
   decor?: { kind: DecorKind; x: number; y: number; r?: number; w?: number; h?: number; colour?: string }[];
@@ -60,6 +71,8 @@ export type Mission = {
   world: World;
   check: (trace: Trace, world: World) => GoalResult;
   starter: { js: string; py: string };
+  /** A character sets up the mission in a few friendly lines. */
+  story?: Story;
   /** Which Robot Lab class of the semester this mission is for (1 to 4, or 1 to 6). */
   lab?: number;
 };
