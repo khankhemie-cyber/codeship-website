@@ -63,7 +63,7 @@ for (const m of MISSIONS) {
 }
 
 test("blocks: Explorers egg-hunt stack passes", () => {
-  const code = blocksToJs(ws(blk("robot_forward", { N: 95 }), blk("robot_beep")));
+  const code = blocksToJs(ws(blk("robot_forward", { N: 20 }), blk("robot_beep"), blk("robot_forward", { N: 20 }), blk("robot_beep"), blk("robot_forward", { N: 20 }), blk("robot_beep"), blk("robot_forward", { N: 35 })));
   const m = missionById("egg-hunt");
   const { trace, error } = runJs(code, m.world);
   assert(!error, error);
@@ -104,7 +104,7 @@ const WRONG = [
   ["paint-a-square", `for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } beep();`, /pen down first/],
   ["paint-a-square", `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); }`, /Beep to show it/],
   ["clap-concert", `forward(55); play("C"); play("E"); play("G");`, /before the clap/],
-  ["egg-hunt", `forward(60); beep();`, /2 of 3 eggs|3 eggs!/],
+  ["egg-hunt", `forward(95); beep();`, /counted 0 of 3 eggs/],
   ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(40);`, /spray/],
   ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(80);`, /bumped the building/],
   ["museum-night", `while (!obstacle()) forward(2);`, /turn left/],
@@ -129,7 +129,7 @@ for (const [id, code, expect] of WRONG) {
 test("blocks: every Explorers and Builders level can be solved with blocks", () => {
   const f = (N) => blk("robot_forward", { N }), L = (N) => blk("robot_turn_left", { N }), R = (N) => blk("robot_turn_right", { N });
   const STACKS = {
-    "egg-hunt": [f(95), blk("robot_beep")],
+    "egg-hunt": [f(20), blk("robot_beep"), f(20), blk("robot_beep"), f(20), blk("robot_beep"), f(35)],
     "clap-concert": [blk("robot_wait_clap"), f(55), blk("robot_play", { N: "C" }), blk("robot_play", { N: "E" }), blk("robot_play", { N: "G" })],
     "coral-reef": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_drop"), blk("robot_led", { C: "green" })],
     "snowy-igloo": [f(50), L(90), f(55), R(90), f(45)],
