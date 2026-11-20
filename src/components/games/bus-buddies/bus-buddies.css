@@ -1,0 +1,101 @@
+/* Bus Buddies Road Trip: character and world animation. All of it stops
+   under prefers-reduced-motion (see the end of this file). */
+.bb-root { -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.bb-root button { touch-action: manipulation; }
+
+.bb-lid { transform: scaleY(0); animation: bb-blink 4.6s infinite; }
+.bb-codey .bb-lid { animation-delay: -1.7s; }
+.bb-duck .bb-lid { animation-duration: 3.4s; }
+@keyframes bb-blink { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+.bb-blink-top { animation: bb-blink-top 4.6s infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes bb-blink-top { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
+
+.bb-talk { animation: bb-talk 0.22s ease-in-out infinite alternate; }
+@keyframes bb-talk { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+.bb-beak-talk { animation: bb-beak 0.18s ease-in-out infinite alternate; }
+@keyframes bb-beak { from { transform: rotate(0deg); } to { transform: rotate(-9deg); } }
+.bb-jaw-talk { animation: bb-jaw 0.18s ease-in-out infinite alternate; }
+@keyframes bb-jaw { from { transform: rotate(0deg); } to { transform: rotate(12deg) translateY(2px); } }
+
+.bb-speaking { animation: bb-speak 0.5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes bb-speak { from { transform: translateY(0) scale(1); } to { transform: translateY(-3%) scale(1.02); } }
+
+.bb-bina .bb-bina-body { transform-origin: 120px 140px; }
+.bb-mood-happy .bb-bina-body { animation: bb-bounce 0.45s ease-in-out 4 alternate; }
+@keyframes bb-bounce { from { transform: translateY(0); } to { transform: translateY(-10px) scaleY(1.02); } }
+.bb-mood-confused .bb-bina-body { animation: bb-wobble 0.5s ease-in-out 3; }
+@keyframes bb-wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+.bb-driving .bb-wheel { animation: bb-spin 0.6s linear infinite; }
+.bb-driving .bb-bina-body { animation: bb-rumble 0.3s ease-in-out infinite alternate; }
+@keyframes bb-rumble { from { transform: translateY(0); } to { transform: translateY(-2px); } }
+@keyframes bb-spin { to { transform: rotate(360deg); } }
+
+/* Map: the bus moves by CSS transitions on its transform. */
+.bb-bus { transition: transform 0.55s cubic-bezier(.45,.05,.3,1); }
+.bb-bus-inner { transform-origin: 0 0; }
+.bb-bus.bb-wobble .bb-bus-inner { animation: bb-wobble-top 0.45s ease-in-out 3; }
+@keyframes bb-wobble-top { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+.bb-bus.bb-happy .bb-bus-inner { animation: bb-hop-top 0.35s ease-in-out 4 alternate; }
+@keyframes bb-hop-top { from { transform: scale(1); } to { transform: scale(1.14); } }
+
+.bb-sway { animation: bb-sway 3.2s ease-in-out infinite alternate; }
+@keyframes bb-sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+.bb-bob { animation: bb-bob 2.4s ease-in-out infinite alternate; }
+@keyframes bb-bob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+.bb-hop { animation: bb-hop 0.4s ease-in-out 4 alternate; }
+@keyframes bb-hop { from { transform: translateY(0); } to { transform: translateY(-14px) rotate(-4deg); } }
+.bb-flag { animation: bb-flag 0.9s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: left center; }
+@keyframes bb-flag { from { transform: skewY(0); } to { transform: skewY(8deg); } }
+
+.bb-cloud { animation-name: bb-cloud; animation-timing-function: linear; animation-iteration-count: infinite; }
+@keyframes bb-cloud { from { transform: translateX(-120px); } to { transform: translateX(var(--bb-w, 700px)); } }
+.bb-zzz { animation: bb-zzz 2.6s ease-in-out infinite; }
+@keyframes bb-zzz { 0% { transform: translateY(6px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-10px); opacity: 0; } }
+
+/* Idle personalities */
+.bb-turtle .bb-turtle-head { animation: bb-turtle 3.6s ease-in-out infinite; transform-origin: 70px 70px; }
+@keyframes bb-turtle { 0%, 60%, 100% { transform: translate(0, 0); } 75% { transform: translate(-6px, 4px); } }
+.bb-duck { animation: bb-giggle 2.2s ease-in-out infinite; transform-origin: 50% 95%; }
+@keyframes bb-giggle { 0%, 70%, 100% { transform: rotate(0) translateY(0); } 76% { transform: rotate(-5deg) translateY(-6%); } 84% { transform: rotate(5deg) translateY(-3%); } 90% { transform: rotate(-3deg) translateY(-5%); } }
+.bb-owl.bb-asleep { animation: bb-breathe 3s ease-in-out infinite alternate; transform-origin: 50% 95%; }
+@keyframes bb-breathe { from { transform: scale(1); } to { transform: scale(1.04, 0.97); } }
+.bb-waiting-pass { animation: bb-wave 1.1s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-wave { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+.bb-boarding { animation: bb-board 0.7s ease-in forwards; transform-box: fill-box; transform-origin: center; }
+@keyframes bb-board { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-30px) scale(1.1); } 100% { transform: translateY(0) scale(0); opacity: 0; } }
+
+/* Blocks (pop-in first, so a glow that comes later wins) */
+.bb-pop-in { animation: bb-pop-in 0.25s cubic-bezier(.3,1.6,.6,1); }
+@keyframes bb-pop-in { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.bb-block { transition: transform 0.15s ease, box-shadow 0.2s ease; }
+.bb-block:active { transform: scale(0.94); }
+.bb-running { box-shadow: 0 0 0 5px #fff, 0 0 0 10px #F0D030, 0 0 30px 10px #F0D030aa; transform: translateY(-6px) scale(1.08); }
+.bb-blame { animation: bb-blame 0.9s ease-in-out infinite alternate; }
+@keyframes bb-blame { from { box-shadow: 0 0 0 4px #fff, 0 0 0 9px #FF9F43; } to { box-shadow: 0 0 0 4px #fff, 0 0 0 14px #FF9F43aa, 0 0 34px 12px #FF9F4388; } }
+.bb-pulse { animation: bb-pulse 0.9s ease-in-out infinite alternate; }
+@keyframes bb-pulse { from { transform: scale(1); box-shadow: 0 0 0 0 #F0D030; } to { transform: scale(1.08); box-shadow: 0 0 0 8px #F0D03099; } }
+.bb-ghost { animation: bb-ghost 1s ease-in-out infinite alternate; }
+@keyframes bb-ghost { from { opacity: 0.35; } to { opacity: 0.95; } }
+.bb-go:not(:disabled) { animation: bb-go 1.6s ease-in-out infinite; }
+@keyframes bb-go { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+/* Hold-to-open ring for the Grown-up corner */
+.bb-hold-ring { transition: stroke-dashoffset 0.1s linear; }
+
+/* Confetti */
+.bb-confetti { position: absolute; top: -20px; width: 12px; height: 18px; border-radius: 3px; animation: bb-fall linear forwards; }
+@keyframes bb-fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+.bb-float { animation: bb-float 3s ease-in-out infinite alternate; }
+@keyframes bb-float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.bb-drive-in { animation: bb-drive-in 1.4s cubic-bezier(.2,.8,.3,1); }
+@keyframes bb-drive-in { from { transform: translateX(-120%); } to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-root *, .bb-root *::before, .bb-root *::after {
+    animation: none !important;
+    transition-duration: 0.01s !important;
+  }
+  .bb-root .bb-lid { transform: scaleY(0); }
+  .bb-root .bb-confetti { display: none; }
+}

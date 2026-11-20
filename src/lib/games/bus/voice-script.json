@@ -8,6 +8,11 @@
     "owl": { "name": "Olive the Owl", "style": "Sleepy and gentle" }
   },
   "lines": [
+    { "id": "common.welcome", "chapter": 0, "character": "codey", "text": "Hi, friend! Tap the big green button to play!" },
+    { "id": "common.pick_chapter", "chapter": 0, "character": "codey", "text": "Tap a stop on the map to start a trip." },
+    { "id": "common.coming_soon", "chapter": 0, "character": "codey", "text": "That trip is coming soon!" },
+    { "id": "common.sticker_book", "chapter": 0, "character": "codey", "text": "Look at all your stickers!" },
+    { "id": "common.full", "chapter": 0, "character": "bina", "text": "Wait! That's too many blocks!" },
     { "id": "common.go", "chapter": 0, "character": "codey", "text": "Press the green GO button!" },
     { "id": "common.add_blocks", "chapter": 0, "character": "codey", "text": "Tap the arrows to tell Bina where to drive." },
     { "id": "common.try_again", "chapter": 0, "character": "codey", "text": "Let's fix it together. Try again!" },
@@ -32,7 +37,7 @@
     { "id": "ch1.l1.prompt", "chapter": 1, "character": "codey", "text": "Drive forward two times to reach Tuck." },
     { "id": "ch1.l2.prompt", "chapter": 1, "character": "codey", "text": "Dot is around the corner. Turn to find her!" },
     { "id": "ch1.l3.prompt", "chapter": 1, "character": "codey", "text": "Olive is sleepy. Honk to wake her up!" },
-    { "id": "ch1.l4.prompt", "chapter": 1, "character": "codey", "text": "Pick up everyone, then drive to school." },
+    { "id": "ch1.l4.prompt", "chapter": 1, "character": "codey", "text": "Everyone is on board! Now drive to the park gate." },
     { "id": "ch1.turtle.join", "chapter": 1, "character": "turtle", "text": "Um... hi. Can I ride too?" },
     { "id": "ch1.turtle.thanks", "chapter": 1, "character": "turtle", "text": "Thank you... for waiting for me." },
     { "id": "ch1.duck.join", "chapter": 1, "character": "duck", "text": "Quack! Hee hee! Room for me?" },

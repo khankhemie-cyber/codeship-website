@@ -1,0 +1,23 @@
+# Bus Buddies Road Trip (/ship-it/bus-buddies/): every level can be solved,
+# wrong programs fail gently on the right block, hints lead to the answer,
+# and every spoken line ID exists in the voice script.
+name: Bus Buddies
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Levels and engine
+        run: npm run test:bus
