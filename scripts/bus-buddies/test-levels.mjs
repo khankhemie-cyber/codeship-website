@@ -5,7 +5,7 @@
 import "../blocks/ts-resolve.mjs";
 import fs from "node:fs";
 const { LEVELS, CHAPTERS } = await import("../../src/lib/games/bus/levels.ts");
-const { run, nextCorrect, findChar } = await import("../../src/lib/games/bus/engine.ts");
+const { run, nextCorrect, findChar, headings } = await import("../../src/lib/games/bus/engine.ts");
 const script = JSON.parse(fs.readFileSync(new URL("../../src/lib/games/bus/voice-script.json", import.meta.url)));
 const lineIds = new Set(script.lines.map((l) => l.id));
 
@@ -82,6 +82,11 @@ test("1-4: turning the wrong way into the cows", () => {
 test("turns keep a continuous angle (no long spins)", () => {
   const r = run(LEVELS[1], ["left", "left", "right"]);
   eq(r.frames.map((f) => f.angle), [0, -90, 0], "angles");
+});
+test("block pictures point where Bina drives: 1-1 Forward points right", () => {
+  eq(headings(LEVELS[0], []), [1], "empty program: palette arrow faces right");
+  eq(headings(LEVELS[1], ["forward", "left", "forward"]), [1, 1, 0, 0], "after a left turn the arrows point up");
+  eq(headings(LEVELS[2], ["right", "right", "right", "right"]), [1, 2, 3, 4, 5], "no wrap-around spin");
 });
 test("ready chapters have intro/outro lines that exist", () => {
   for (const c of CHAPTERS.filter((c) => c.ready)) for (const id of [...c.intro, ...c.outro]) assert(lineIds.has(id), `missing ${id}`);

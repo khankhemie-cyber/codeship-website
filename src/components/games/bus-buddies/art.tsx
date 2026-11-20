@@ -451,10 +451,21 @@ export const BLOCK_STYLE: Record<Block, { color: string; label: string }> = {
   pickup: { color: "#43A047", label: "Pick up" },
 };
 
-export function BlockIcon({ block }: { block: Block }) {
+/**
+ * A block's picture. Moves are drawn on screen as Bina will make them: `dir`
+ * is the way she faces when the block runs (0 up, 1 right, 2 down, 3 left),
+ * so Forward points where she will actually drive.
+ */
+export function BlockIcon({ block, dir = 0 }: { block: Block; dir?: number }) {
   const s = { stroke: "#fff", strokeWidth: 7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
+  const turns = block === "forward" || block === "left" || block === "right";
   return (
-    <svg viewBox="0 0 60 60" className="h-full w-full" aria-hidden>
+    <svg
+      viewBox="0 0 60 60"
+      className="h-full w-full transition-transform duration-300"
+      style={turns ? { transform: `rotate(${dir * 90}deg)` } : undefined}
+      aria-hidden
+    >
       {block === "forward" ? (
         <g {...s}>
           <path d="M30 50 V12" />

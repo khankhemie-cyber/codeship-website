@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { CHAPTERS, LEVELS, levelById, levelsIn, type Block, type Level, type PassengerId } from "@/lib/games/bus/levels";
-import { DX, DY, findChar, nextCorrect, run, startState, stateAfter, type Frame } from "@/lib/games/bus/engine";
+import { DX, DY, findChar, headings, nextCorrect, run, startState, stateAfter, type Frame } from "@/lib/games/bus/engine";
 import { BLOCK_STYLE, BinaFace, BinaSide, BinaTop, BlockIcon, C, Clouds, Codey, PassengerArt, StickerArt, Tile } from "./art";
 import { lineSpeaker, lineText, preloadChapter, say, setMuted, sfx, stopTalking, useVoiceState, type Speaker } from "./sound";
 import { completeLevel, resetProgress, useBusProgress } from "./store";
@@ -485,6 +485,7 @@ function Play({ level, onNext, onChapter }: { level: Level; onNext: () => void; 
   };
 
   const full = program.length >= level.maxBlocks;
+  const dirs = useMemo(() => headings(level, program), [level, program]);
   const edit = (next: Block[]) => {
     if (running || won) return;
     resetBus();
@@ -615,7 +616,7 @@ function Play({ level, onNext, onChapter }: { level: Level; onNext: () => void; 
             <div className="w-28 shrink-0" aria-label={`On the bus: ${aboard.length ? aboard.join(", ") : "nobody yet"}`}>
               <BinaSide riders={aboard} mood={bus.mood === "happy" ? "happy" : bus.mood === "wobble" ? "confused" : "idle"} />
             </div>
-            <ProgramStrip program={program} max={level.maxBlocks} active={active} blame={blame} hintIndex={hint && hint.index < program.length ? hint.index : null} onRemove={(i) => {
+            <ProgramStrip program={program} dirs={dirs} max={level.maxBlocks} active={active} blame={blame} hintIndex={hint && hint.index < program.length ? hint.index : null} onRemove={(i) => {
               sfx.remove();
               edit(program.filter((_, j) => j !== i));
             }} />
@@ -633,7 +634,7 @@ function Play({ level, onNext, onChapter }: { level: Level; onNext: () => void; 
                   className={`focus-ring bb-block h-20 w-20 rounded-2xl p-2 shadow-[0_6px_0_rgba(0,0,0,0.25)] disabled:opacity-50 ${hint?.block === b ? "bb-pulse" : ""}`}
                   style={{ background: BLOCK_STYLE[b].color }}
                 >
-                  <BlockIcon block={b} />
+                  <BlockIcon block={b} dir={dirs[program.length]} />
                 </button>
               ))}
             </div>
@@ -675,6 +676,7 @@ function Play({ level, onNext, onChapter }: { level: Level; onNext: () => void; 
 
 function ProgramStrip({
   program,
+  dirs,
   max,
   active,
   blame,
@@ -682,6 +684,7 @@ function ProgramStrip({
   onRemove,
 }: {
   program: Block[];
+  dirs: number[];
   max: number;
   active: number | null;
   blame: number | null;
@@ -708,7 +711,7 @@ function ProgramStrip({
               }`}
               style={{ background: BLOCK_STYLE[b].color }}
             >
-              <BlockIcon block={b} />
+              <BlockIcon block={b} dir={dirs[i]} />
             </button>
           </li>
         );

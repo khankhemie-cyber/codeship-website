@@ -171,3 +171,21 @@ export function stateAfter(level: Level, program: Block[]) {
   const last = r.frames[r.frames.length - 1];
   return last ? { x: last.x, y: last.y, dir: last.dir, angle: last.angle } : r.start;
 }
+
+/**
+ * The way Bina faces when each block runs, plus (last) the way she faces
+ * after the whole program: what the block pictures are drawn with. Counted
+ * in quarter turns clockwise from up, without wrapping (so -1 is left and 5
+ * is right), so a picture never spins the long way round.
+ */
+export function headings(level: Level, program: Block[]): number[] {
+  let turns: number = level.start.dir;
+  const out: number[] = [];
+  for (const b of program) {
+    out.push(turns);
+    if (b === "left") turns--;
+    if (b === "right") turns++;
+  }
+  out.push(turns);
+  return out;
+}
