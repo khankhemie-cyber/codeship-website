@@ -11,7 +11,6 @@ import { useTrialPhase } from "@/components/trial/useTrialPhase";
 // Primary destinations, in the order a parent typically explores the site.
 const navLinks = [
   { href: "/programs", label: "Programs" },
-  { href: "/locations", label: "Locations" },
   { href: "/ship-it", label: "Ship It! Arcade" },
   { href: "/schools", label: "For Schools" },
   { href: "/about", label: "About" },
