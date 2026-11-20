@@ -81,41 +81,32 @@ export const EXPLORER_LABS: Mission[] = [
   }),
   ES1(2, {
     id: "farm-backward",
-    title: "Back into the barn",
-    story: { who: "Farmer Rosa", face: "👩‍🌾", says: "Time to tidy up! Your parking spot is behind you, in the barn. Robots can drive backwards too, you know." },
-    goal: "Drive backward into your parking spot in the barn.",
-    hint: "Use backward. The spot is 4 squares behind you.",
-    scene: { theme: "barn", decor: [{ kind: "tractor", x: 78, y: 12 }, { kind: "hay", x: 88, y: 40, r: 5 }, { kind: "hen", x: 50, y: 42 }] },
-    world: base({ w: 100, h: 50, robot: "scout", start: { x: 55, y: 25, heading: 0 }, zones: [{ id: "spot", x: 4, y: 13, w: 22, h: 24, colour: "blue", label: "Your spot" }] }),
-    check: (trace, world) =>
-      inZone(last(trace), world.zones[0]) ? pass("Parked perfectly! Backwards is a real robot skill.") : notYet(trace.stats.distance === 0 ? "Your spot is behind you. Try backward." : "Not in your spot yet. Count the squares behind you."),
-    starter: blank("Back into the barn"),
+    title: "Hay for the barn",
+    story: { who: "Farmer Rosa", face: "👩‍🌾", says: "Rain is coming! Grab the hay bale in front of you, then drive BACKWARD into the barn and put it down. Robots can drive backwards too!" },
+    goal: "Drive to the hay, pick it up, drive backward into the barn, then drop it.",
+    hint: "forward 10, pick up, backward, drop. Count the squares back to the barn.",
+    scene: { theme: "barn", decor: [{ kind: "tractor", x: 78, y: 10 }, { kind: "hen", x: 50, y: 42 }, { kind: "cloud", x: 88, y: 6 }] },
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 60, y: 25, heading: 0 }, items: [{ id: "hay", x: 80, y: 25, colour: "yellow", label: "Hay" }], zones: [{ id: "barn", x: 4, y: 12, w: 30, h: 26, colour: "blue", label: "Barn" }] }),
+    check(trace, world) {
+      if (!trace.stats.pickUps) return notYet("Drive up to the hay and pick it up.");
+      return inZone(itemAt(trace, world, "hay"), world.zones[0]) ? pass("The hay is safe and dry. Thank you, robot!") : notYet("You've got the hay! Now drive backward into the barn and drop it.");
+    },
+    starter: blank("Hay for the barn"),
   }),
   ES1(3, {
     id: "farm-piglets",
-    title: "Lunch for the piglets",
-    story: { who: "Peanut the piglet", face: "🐷", says: "Oink oink! We're hungry! Bring the food to our trough, wait while we eat, then drive back home." },
-    goal: "Drive to the trough, wait 2 seconds while the piglets eat, then drive backward home.",
-    hint: "Three steps in order: forward, wait 2, backward.",
-    scene: { theme: "pigpen", decor: [{ kind: "trough", x: 68, y: 9 }, { kind: "pig", x: 60, y: 4 }, { kind: "pig", x: 80, y: 4 }, { kind: "fence", x: 0, y: 47, w: 100 }] },
-    world: base({
-      w: 100,
-      h: 50,
-      robot: "scout",
-      start: { x: 15, y: 28, heading: 0 },
-      zones: [
-        { id: "home", x: 4, y: 16, w: 22, h: 24, colour: "green", label: "Home" },
-        { id: "trough", x: 58, y: 16, w: 22, h: 24, colour: "yellow", label: "Trough" },
-      ],
-    }),
-    check(trace, world) {
-      const [home, trough] = world.zones;
-      const at = trace.frames.filter((f) => inZone(f, trough));
-      if (!at.length) return notYet("Drive to the trough first.");
-      if (at[at.length - 1].t - at[0].t < 1.9) return notYet("The piglets need time to eat. Wait 2 seconds at the trough.");
-      return inZone(last(trace), home) ? pass("Full tummies! Oink, oink, thank you!") : notYet("Yum! Now drive backward home.");
+    title: "Count the piglets",
+    story: { who: "Peanut the piglet", face: "🐷", says: "Oink! It's bedtime and Mama Pig wants to count us. There are 5 piglets. Beep once for each one. Not too many, not too few!" },
+    goal: "Count the piglets: beep exactly 5 times. No driving needed!",
+    hint: "Point at each piglet with your finger and add one beep block for each.",
+    scene: { theme: "pigpen", decor: [{ kind: "pig", x: 20, y: 10 }, { kind: "pig", x: 40, y: 8 }, { kind: "pig", x: 60, y: 10 }, { kind: "pig", x: 80, y: 8 }, { kind: "pig", x: 70, y: 40 }, { kind: "trough", x: 20, y: 40 }, { kind: "fence", x: 0, y: 47, w: 100 }] },
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 45, y: 32, heading: 90 } }),
+    check(trace) {
+      const n = trace.stats.beeps;
+      if (n === 5) return pass("1, 2, 3, 4, 5! All the piglets are counted. Goodnight, piglets!");
+      return notYet(n < 5 ? `You beeped ${n} times. Count again: there are 5 piglets.` : `You beeped ${n} times. That's too many! There are 5 piglets.`);
     },
-    starter: blank("Lunch for the piglets"),
+    starter: blank("Count the piglets"),
   }),
 
   ES2(1, {
@@ -134,17 +125,34 @@ export const EXPLORER_LABS: Mission[] = [
   }),
   ES2(2, {
     id: "gym-clap",
-    title: "The clap race",
-    story: { who: "Coach Kim", face: "🏃‍♀️", says: "On your marks... get set... wait for my clap! Then zoom to the finish line. No starting early!" },
-    goal: "Wait for the clap, then drive to the finish line.",
-    hint: "wait for a clap first, then forward. The finish is 5 squares away.",
-    scene: { theme: "gym", decor: [{ kind: "cone", x: 30, y: 6 }, { kind: "cone", x: 80, y: 6 }, { kind: "cone", x: 30, y: 44 }, { kind: "cone", x: 80, y: 44 }] },
-    world: base({ w: 100, h: 50, robot: "scout", start: { x: 15, y: 25, heading: 0 }, claps: [2.5], zones: [{ id: "finish", x: 58, y: 10, w: 18, h: 30, colour: "green", label: "Finish" }] }),
+    title: "Musical stepping stones",
+    story: { who: "Coach Kim", face: "🏃‍♀️", says: "These coloured spots are magic: each one makes music! Stop on each spot and play its note. Red is C, yellow is E, blue is G." },
+    goal: "Drive to each spot and play its note: C on red, E on yellow, G on blue.",
+    hint: "forward 20, play C. forward 20, play E. forward 20, play G.",
+    scene: { theme: "gym", decor: [{ kind: "cone", x: 10, y: 6 }, { kind: "cone", x: 90, y: 44 }, { kind: "speaker", x: 92, y: 10 }] },
+    world: base({
+      w: 100,
+      h: 50,
+      robot: "scout",
+      start: { x: 10, y: 25, heading: 0 },
+      zones: [
+        { id: "c", x: 23, y: 17, w: 14, h: 16, colour: "red", label: "C" },
+        { id: "e", x: 43, y: 17, w: 14, h: 16, colour: "yellow", label: "E" },
+        { id: "g", x: 63, y: 17, w: 14, h: 16, colour: "blue", label: "G" },
+      ],
+    }),
     check(trace, world) {
-      if (trace.stats.firstMoveAt >= 0 && trace.stats.firstMoveAt < 2.49) return notYet("False start! Wait for Coach Kim's clap.");
-      return inZone(last(trace), world.zones[0]) ? pass("A perfect start, right on the clap. You win!") : notYet("Good waiting! Now drive all the way to the finish line.");
+      const want: Record<string, string> = { c: "C", e: "E", g: "G" };
+      for (const z of world.zones) {
+        const ok = trace.stats.notes.some((n) => {
+          const f = trace.frames.find((fr) => fr.t >= n.t - 0.001);
+          return n.note === want[z.id!] && f && inZone(f, z);
+        });
+        if (!ok) return notYet(`Stop on the ${z.colour} spot and play ${want[z.id!]}.`);
+      }
+      return pass("C, E, G! You played a song with your wheels.");
     },
-    starter: blank("The clap race"),
+    starter: blank("Musical stepping stones"),
   }),
   ES2(3, {
     id: "party-surprise",
@@ -261,18 +269,18 @@ export const EXPLORER_LABS: Mission[] = [
   ES4(3, {
     id: "village-mitten",
     title: "The lost mitten",
-    story: { who: "Pip the penguin", face: "🐧", says: "Oh no, I lost my red mitten! It's behind you. Turn all the way around, then drive to it." },
-    goal: "Turn around (turn 180), then drive over the mitten to pick it up.",
-    hint: "Two quarter turns make a half turn: turn left 180. Then forward.",
-    scene: { theme: "village", decor: [{ kind: "lamp", x: 20, y: 8 }, { kind: "lamp", x: 80, y: 8 }, { kind: "pine", x: 90, y: 42, r: 5 }] },
-    world: base({ w: 100, h: 50, robot: "scout", start: { x: 65, y: 25, heading: 0 }, collectibles: [{ id: "m1", x: 25, y: 25, kind: "mitten" }] }),
-    check(trace) {
+    story: { who: "Pip the penguin", face: "🐧", says: "Oh no, I dropped my red mitten! It's behind you. Turn all the way around, pick it up, then turn around again and bring it back to me." },
+    goal: "Turn around, drive to the mitten and pick it up. Turn around again, drive back and drop it by Pip.",
+    hint: "turn left 180, forward, pick up, turn left 180, forward, drop.",
+    scene: { theme: "village", decor: [{ kind: "lamp", x: 20, y: 8 }, { kind: "lamp", x: 80, y: 8 }, { kind: "penguin", x: 92, y: 25 }] },
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 65, y: 25, heading: 0 }, items: [{ id: "mitten", x: 25, y: 25, colour: "red", label: "Mitten" }], zones: [{ id: "pip", x: 70, y: 13, w: 18, h: 24, colour: "blue", label: "Pip" }] }),
+    check(trace, world) {
       if (trace.stats.turned < 170) return notYet("The mitten is behind you. Turn all the way around first.");
-      return trace.stats.collected.length ? pass("You found it! Pip's flipper is warm again.") : notYet("Good turn! Now drive to the mitten.");
+      if (!trace.stats.pickUps) return notYet("Drive to the mitten and pick it up.");
+      return inZone(itemAt(trace, world, "mitten"), world.zones[0]) ? pass("Pip's flipper is warm again! Two half turns, like a pro.") : notYet("Got it! Now turn around again, drive back and drop it by Pip.");
     },
     starter: blank("The lost mitten"),
   }),
-
   EC(1, {
     id: "chalk-line",
     title: "Chalk line",
@@ -310,14 +318,24 @@ export const EXPLORER_LABS: Mission[] = [
   }),
   EC(3, {
     id: "canvas-three-sides",
-    title: "Three sides",
-    story: { who: "Ms. Dot", face: "👩‍🎨", says: "I started a box picture. Can you paint 3 sides with a repeat loop? We'll finish it next time!" },
-    goal: "Paint 3 sides of a square: repeat 3 times, forward 30, turn left 90.",
-    hint: "pen down, then repeat 3 times: forward 30, turn left 90.",
+    title: "Dotted line",
+    story: { who: "Ms. Dot", face: "👩‍🎨", says: "My name is Ms. Dot, so I LOVE dots! Make a dotted line: pen down, drive a little, pen up, drive a little. A repeat loop can do it 4 times." },
+    goal: "Draw 4 dashes with gaps between them: repeat 4 times (pen down, forward 10, pen up, forward 10).",
+    hint: "repeat 4 times: pen down, forward 10, pen up, forward 10.",
     scene: { theme: "canvas", decor: [{ kind: "easel", x: 100, y: 18 }, { kind: "paint", x: 12, y: 70, colour: "#8E24AA" }] },
-    world: base({ w: 120, h: 80, robot: "scout", start: { x: 40, y: 60, heading: 0 } }),
-    check: penCheck(85, 265, false, "3 sides painted with a loop. One more side and it's a square!"),
-    starter: blank("Three sides"),
+    world: base({ w: 120, h: 80, robot: "scout", start: { x: 20, y: 45, heading: 0 } }),
+    check(trace) {
+      let dashes = 0;
+      for (let i = 1; i < trace.frames.length; i++) {
+        const a = trace.frames[i - 1];
+        const b = trace.frames[i];
+        if (!a.pen && b.pen) dashes++;
+      }
+      if (!dashes) return notYet("Put the pen down to start a dash.");
+      if (trace.stats.inked < 30) return notYet("Drive with the pen down to paint each dash.");
+      return dashes >= 4 ? pass("Dash, gap, dash, gap! Ms. Dot loves your dotted line.") : notYet(`${dashes} of 4 dashes. Lift the pen between dashes, and repeat 4 times.`);
+    },
+    starter: blank("Dotted line"),
   }),
 ];
 
@@ -364,21 +382,25 @@ export const BUILDER_LABS: Mission[] = [
   }),
   BS1(3, {
     id: "classroom-intro",
-    title: "Meet the class",
-    story: { who: "Mr. Patel", face: "👨‍🏫", says: "Our class has a new robot! Introduce yourself: show your name, play your 2 favourite notes, and glow in your favourite colour." },
-    goal: "Show your name, play 2 notes, and turn on your favourite light colour.",
-    hint: "Any order is fine. Use show, play note, play note, light.",
+    title: "Three favourites",
+    story: { who: "Mr. Patel", face: "👨‍🏫", says: "Tell the class 3 favourite things, and use a DIFFERENT robot output for each one: your favourite food on the screen, your favourite note as a sound, and your favourite colour as a light. Hold each one for 1 second." },
+    goal: "Show your favourite food, wait 1. Play your favourite note. Glow your favourite colour, wait 1.",
+    hint: "show Pizza, wait 1, play note G, light blue, wait 1.",
     scene: { theme: "classroom", decor: [{ kind: "desk", x: 15, y: 12 }, { kind: "desk", x: 85, y: 12 }, { kind: "desk", x: 15, y: 48 }, { kind: "desk", x: 85, y: 48 }] },
     world: base({ w: 100, h: 60, robot: "scout", start: { x: 50, y: 32, heading: 90 } }),
     check(trace) {
-      if (!trace.frames.some((f) => f.display.trim().length >= 2)) return notYet("Show your name on the screen.");
-      if (trace.stats.notes.length < 2) return notYet("Play your 2 favourite notes.");
-      if (!trace.frames.some((f) => f.led !== "off")) return notYet("Glow in your favourite colour.");
-      return pass("Nice to meet you! The whole class clapped.");
+      const shownAt = trace.frames.find((f) => f.display.trim().length >= 2)?.t ?? Infinity;
+      const noteAt = trace.stats.notes[0]?.t ?? Infinity;
+      const lightAt = trace.frames.find((f) => f.led !== "off")?.t ?? Infinity;
+      if (shownAt === Infinity) return notYet("First, show your favourite food on the screen.");
+      if (noteAt === Infinity) return notYet("Next, play your favourite note.");
+      if (lightAt === Infinity) return notYet("Last, glow in your favourite colour.");
+      if (!(shownAt < noteAt && noteAt <= lightAt)) return notYet("Go in order: screen, then sound, then light.");
+      if (noteAt - shownAt < 0.9 || last(trace).t - lightAt < 0.9) return notYet("Hold the food and the colour for 1 second each, so the class can see.");
+      return pass("Screen, sound and light: three outputs, three favourites. The class loved it!");
     },
-    starter: blank("Meet the class"),
+    starter: blank("Three favourites"),
   }),
-
   BS2(1, {
     id: "meadow-shade",
     title: "Find the shade",
@@ -397,25 +419,28 @@ export const BUILDER_LABS: Mission[] = [
   }),
   BS2(2, {
     id: "firefly-forest",
-    title: "Firefly forest",
-    story: { who: "Flick the firefly", face: "✨", says: "Our forest gets dark under the big trees. IF it's dark, glow like me! Drive all the way to the camp." },
-    goal: "Drive to the camp. If it's dark, turn your light on.",
-    hint: "Inside a repeat: forward 2, then if it is dark, light on.",
+    title: "Night crickets",
+    story: { who: "Chirp the cricket", face: "🦗", says: "Crickets only sing in the dark! Drive all the way to the camp. IF it's dark under the trees, play a chirp note. In the sunshine, stay quiet." },
+    goal: "Drive to the camp. Play a note only while it is dark.",
+    hint: "Inside a repeat: forward 5, then if it is dark, play a note.",
     scene: { theme: "garden2", decor: [{ kind: "tree", x: 60, y: 6, r: 7 }, { kind: "tree", x: 76, y: 44, r: 7 }], zoneIcons: { camp: "house" } },
     world: base({ w: 140, h: 50, robot: "scout", start: { x: 10, y: 25, heading: 0 }, light: 85, lightZones: [{ x: 50, y: 0, w: 40, h: 50, level: 10, label: "Under the trees" }], zones: [{ id: "camp", x: 112, y: 12, w: 26, h: 26, colour: "orange", label: "Camp" }] }),
     check(trace, world) {
       if (!inZone(last(trace), world.zones[0])) return notYet("Keep driving all the way to the camp.");
-      return lightMatch(trace, world, true) >= 0.9 ? pass("You glowed under the trees, just like Flick!") : notYet("It was dark under the trees and your light was off. Use if it is dark.");
+      const dark = (x: number) => world.lightZones.some((z) => x >= z.x && x <= z.x + z.w);
+      const at = trace.sounds.map((x) => trace.frames.find((f) => f.t >= x.t - 0.001)!).filter(Boolean);
+      if (at.some((f) => !dark(f.x))) return notYet("Shh! You chirped in the sunshine. Only chirp in the dark.");
+      return at.length ? pass("Chirp, chirp! The crickets sang under the trees.") : notYet("It was dark under the trees, but you didn't chirp. Use if it is dark.");
     },
-    starter: blank("Firefly forest"),
+    starter: blank("Night crickets"),
   }),
   BS2(3, {
     id: "owl-watch",
-    title: "Owl watch",
-    story: { who: "Snowy the owl", face: "🦉", says: "Owls only hoot when it's dark! Drive across the snowy field. If it's dark, play a hoot note. If it's bright, stay quiet so you don't wake the birds." },
-    goal: "Drive to the end. Play a note in the dark parts only. Stay quiet where it's bright.",
-    hint: "Inside a repeat: forward 5, then if it is dark, play a note.",
-    scene: { theme: "snowpark", decor: [{ kind: "moon", x: 90, y: 8, r: 4 }, { kind: "pine", x: 50, y: 44, r: 6 }, { kind: "pine", x: 130, y: 6, r: 6 }, { kind: "snowman", x: 95, y: 42 }] },
+    title: "Shadow painter",
+    story: { who: "Pablo the painter", face: "🧑‍🎨", says: "Let's paint the shadows! Drive across the park. IF it's dark, put your pen down. ELSE, lift it up. When you're done, only the shady parts will be painted!" },
+    goal: "Drive to the end. Paint only in the dark parts: if it is dark, pen down; else, pen up.",
+    hint: "Inside a repeat: forward 2, then if it is dark: pen down purple, else: pen up.",
+    scene: { theme: "park", decor: [{ kind: "tree", x: 50, y: 6, r: 7 }, { kind: "tree", x: 130, y: 44, r: 7 }, { kind: "easel", x: 150, y: 10 }] },
     world: base({
       w: 160,
       h: 50,
@@ -423,19 +448,25 @@ export const BUILDER_LABS: Mission[] = [
       start: { x: 10, y: 25, heading: 0 },
       light: 85,
       lightZones: [
-        { x: 30, y: 0, w: 40, h: 50, level: 10, label: "Dark" },
-        { x: 110, y: 0, w: 40, h: 50, level: 10, label: "Dark" },
+        { x: 30, y: 0, w: 40, h: 50, level: 15, label: "Shade" },
+        { x: 110, y: 0, w: 30, h: 50, level: 15, label: "Shade" },
       ],
     }),
     check(trace, world) {
-      if (last(trace).x < 140) return notYet("Keep driving to the end of the field.");
-      const dark = (x: number) => world.lightZones.some((z) => x >= z.x && x <= z.x + z.w);
-      const at = trace.sounds.map((s) => trace.frames.find((f) => f.t >= s.t - 0.001)!).filter(Boolean);
-      if (at.some((f) => !dark(f.x))) return notYet("Shh! You hooted where it was bright. Only hoot in the dark.");
-      const parts = new Set(at.map((f) => (f.x < 90 ? 1 : 2)));
-      return parts.size === 2 ? pass("Hoo-hoo! Snowy heard you in both dark places.") : notYet(`Hoot in both dark places. You hooted in ${parts.size}.`);
+      if (last(trace).x < 140) return notYet("Keep driving to the end of the park.");
+      const dark = (x: number) => world.lightZones.some((z) => x >= z.x - 3 && x <= z.x + z.w + 3);
+      let inShade = 0;
+      for (let i = 1; i < trace.frames.length; i++) {
+        const a = trace.frames[i - 1];
+        const b = trace.frames[i];
+        if (a.pen && b.pen && b.x !== a.x) {
+          if (!dark(b.x)) return notYet("You painted in the sunshine! Lift the pen up when it's bright (else: pen up).");
+          inShade += Math.abs(b.x - a.x);
+        }
+      }
+      return inShade >= 55 ? pass("Two shadow paintings! If and else worked together.") : notYet("Paint the shady parts: if it is dark, pen down.");
     },
-    starter: blank("Owl watch"),
+    starter: blank("Shadow painter"),
   }),
 
   BS3(1, {
@@ -451,19 +482,20 @@ export const BUILDER_LABS: Mission[] = [
   }),
   BS3(2, {
     id: "snowpark-lap",
-    title: "Snowman lap",
-    story: { who: "Biscuit the puppy", face: "🐶", says: "Snow day! Someone built a snowman on the frozen pond. Let's run ONE lap around the pond and come back to the start. A square has 4 sides that are all the same." },
-    goal: "Go once round the frozen pond with repeat 4 times: forward 50, turn left 90.",
-    hint: "repeat 4 times: forward 50, turn left 90.",
-    scene: { theme: "ice", follower: "puppy", wall: "pond", decor: [{ kind: "snowman", x: 40, y: 50 }, { kind: "penguin", x: 82, y: 10 }] },
-    world: base({ w: 90, h: 90, robot: "scout", start: { x: 15, y: 75, heading: 0 }, walls: [{ x: 33, y: 43, w: 14, h: 14 }] }),
+    title: "Triangle trail",
+    story: { who: "Biscuit the puppy", face: "🐶", says: "Snow day! Someone made a triangle trail round the frozen pond. A triangle has 3 sides and 3 turns. Can your loop make it?" },
+    goal: "Go once round the pond on a triangle: repeat 3 times (forward 50, turn left 120). Finish where you started.",
+    hint: "repeat 3 times: forward 50, turn left 120.",
+    scene: { theme: "ice", follower: "puppy", wall: "pond", decor: [{ kind: "penguin", x: 82, y: 10 }, { kind: "snowman", x: 80, y: 70 }] },
+    world: base({ w: 90, h: 90, robot: "scout", start: { x: 15, y: 75, heading: 0 }, walls: [{ x: 34, y: 55, w: 12, h: 12 }] }),
     check(trace, world) {
       if (trace.stats.bumps > 0) return notYet("Oops, you slid onto the ice! Go round the pond.");
-      if (sweptAround(trace, { x: 40, y: 50 }) < 350) return notYet("Run all the way round the pond.");
+      if (trace.stats.turned < 350) return notYet("A triangle has 3 turns of 120. Repeat 3 times.");
+      if (sweptAround(trace, { x: 40, y: 61 }) < 350) return notYet("Go all the way round the pond.");
       const f = last(trace);
-      return Math.hypot(f.x - world.start.x, f.y - world.start.y) <= 8 ? pass("One lap in the snow! Biscuit has snow on his nose.") : notYet("Finish back where you started.");
+      return Math.hypot(f.x - world.start.x, f.y - world.start.y) <= 8 ? pass("A perfect triangle! Biscuit made triangle paw prints.") : notYet("Finish back where you started.");
     },
-    starter: blank("Snowman lap"),
+    starter: blank("Triangle trail"),
   }),
   BS3(3, {
     id: "hill-stairs",
@@ -516,18 +548,28 @@ export const BUILDER_LABS: Mission[] = [
   }),
   BS4(3, {
     id: "sunflower-wait",
-    title: "Slow sunflower",
-    story: { who: "Bea the bee", face: "🐝", says: "Sunflowers are slow! The big one needs 3 seconds. The little bud next to it only needs 1." },
-    goal: "Wait 3 seconds on the sunflower, then 1 second on the little bud.",
-    hint: "forward, wait 3, forward, wait 1.",
-    scene: { theme: "sunflowers", decor: [{ kind: "flower", x: 20, y: 8, colour: "#FDD835" }, { kind: "flower", x: 130, y: 44, colour: "#FDD835" }, { kind: "hive", x: 130, y: 10 }] },
-    world: base({ w: 140, h: 50, robot: "scout", start: { x: 10, y: 25, heading: 0 }, places: [{ id: "f1", x: 60, y: 25, label: "Sunflower", kind: "flower", hold: 3 }, { id: "f2", x: 110, y: 25, label: "Bud", kind: "flower", hold: 1 }] }),
+    title: "Follow the sun",
+    story: { who: "Bea the bee", face: "🐝", says: "Did you know sunflowers turn to follow the sun? Be a sunflower! Turn right 45, wait 2 seconds, and do it 3 times, from morning to evening." },
+    goal: "Turn right 45 and wait 2 seconds, 3 times. No driving!",
+    hint: "turn right 45, wait 2, turn right 45, wait 2, turn right 45, wait 2.",
+    scene: { theme: "sunflowers", decor: [{ kind: "sun", x: 88, y: 8, r: 5 }, { kind: "flower", x: 20, y: 8, colour: "#FDD835" }, { kind: "flower", x: 15, y: 44, colour: "#FDD835" }, { kind: "hive", x: 85, y: 44 }] },
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 50, y: 25, heading: 90 } }),
     check(trace) {
-      const d = last(trace).done;
-      if (!d.includes("f1")) return notYet("The sunflower needs 3 whole seconds.");
-      return d.includes("f2") ? pass("Big and little, both blooming! Bea says bzz-tastic!") : notYet("Now the little bud: wait 1 second on it.");
+      if (trace.stats.distance > 2) return notYet("Sunflowers don't walk! Stay in one spot and just turn.");
+      if (trace.stats.turned < 130) return notYet("Turn right 45, 3 times, to follow the sun across the sky.");
+      const runs: number[] = [];
+      let from = trace.frames[0];
+      for (const f of trace.frames) {
+        if (f.heading !== from.heading) {
+          runs.push(f.t - from.t);
+          from = f;
+        }
+      }
+      runs.push(last(trace).t - from.t);
+      const pauses = runs.slice(1).filter((d) => d >= 1.9).length;
+      return pauses >= 3 ? pass("Morning, noon and evening. You followed the sun all day!") : notYet("Wait 2 seconds after each turn, so the sun can move.");
     },
-    starter: blank("Slow sunflower"),
+    starter: blank("Follow the sun"),
   }),
 
   BC(1, {
@@ -615,13 +657,6 @@ function mineCheck(gems: number, opts: { cart?: boolean; budget?: number; print?
     return pass(win.replace("{used}", String(used)));
   };
 }
-const stopBetween = (lo: number, hi: number, praise: string) => (trace: Trace) => {
-  const d = last(trace).sensors.distance;
-  if (trace.stats.bumps > 0) return notYet("Bump. The rover touched the wall.");
-  if (d > hi) return notYet(`Stopped ${d} cm away. That's too far: aim for ${lo} to ${hi} cm.`);
-  if (d < lo) return notYet(`Stopped ${d} cm away. That's too close: aim for ${lo} to ${hi} cm.`);
-  return pass(praise.replace("{d}", String(d)));
-};
 const marsWorld = (noise = 0) => base({ w: 200, h: 50, robot: "racer", start: { x: 15, y: 25, heading: 0 }, walls: [{ x: 172, y: 0, w: 28, h: 50 }], distanceNoise: noise });
 const corridor = (extra: Partial<World> = {}) => base({ w: 170, h: 50, robot: "racer", start: { x: 12, y: 25, heading: 0 }, light: 85, walls: [{ x: 0, y: 0, w: 170, h: 6 }, { x: 156, y: 6, w: 14, h: 44 }], ...extra });
 const TOSS_FROM = 22;
@@ -721,19 +756,19 @@ export const DEVELOPER_LABS: Mission[] = [
   }),
   DS2(2, {
     id: "pier-add",
-    title: "Snack for the fisher",
-    story: { who: "Grandma Rose", face: "🎣", says: "I'm fishing at the end of the pier! You're 30 cm from the railing, and I'm 25 cm past it. Add them up in your code, print it, then toss me a sandwich." },
-    goal: "Calculate 30 + 25 in your code, print it, then toss() that far.",
-    hint: "const d = 30 + 25; console.log(d); toss(d);",
-    scene: { theme: "pier", decor: [{ kind: "friend", x: TOSS_FROM + 59, y: 30 }, { kind: "fish", x: 40, y: 52 }, { kind: "fish", x: 110, y: 8 }] },
-    world: base({ w: 130, h: 60, robot: "racer", start: { x: 15, y: 30, heading: 0 }, zones: [{ x: 0, y: 18, w: 130, h: 24, colour: "orange" }] }),
+    title: "High tide",
+    story: { who: "Grandma Rose", face: "🎣", says: "The pier is 90 cm long, but the tide is coming in and the last 25 cm is under water! Work out how far you can drive and stay dry: subtract in your code, print it, then drive exactly that far." },
+    goal: "Calculate 90 - 25 in your code, print it, then drive forward that far.",
+    hint: "const dry = 90 - 25; console.log(dry); forward(dry);",
+    scene: { theme: "pier", decor: [{ kind: "fish", x: 40, y: 52 }, { kind: "fish", x: 110, y: 8 }, { kind: "lighthouse", x: 120, y: 48 }] },
+    world: base({ w: 130, h: 60, robot: "racer", start: { x: 15, y: 30, heading: 0 }, zones: [{ x: 0, y: 18, w: 88, h: 24, colour: "orange", label: "Dry" }, { x: 88, y: 18, w: 27, h: 24, colour: "blue", label: "Under water" }] }),
     check(trace) {
-      if (!printed(trace, 55)) return notYet("Print the distance you calculated, so you can check it.");
-      const t = trace.stats.tosses[trace.stats.tosses.length - 1];
-      if (!t) return notYet("Now toss() the sandwich.");
-      return Math.abs(t.x - (TOSS_FROM + 55)) <= 4 ? pass("30 + 25 = 55. Grandma Rose caught it! And she caught a fish too.") : notYet("Missed! Check your addition.");
+      if (!printed(trace, 65)) return notYet("Print the dry distance you calculated, so you can check it.");
+      const d = trace.stats.distance;
+      if (d > 66) return notYet("Splash! You drove into the water. Check your subtraction.");
+      return d >= 64 ? pass("90 - 25 = 65. Right to the edge, and your wheels are dry!") : notYet("Now drive forward that far.");
     },
-    starter: starter("Snack for the fisher", "const railing = 30;\n", "railing = 30\n"),
+    starter: starter("High tide", "const pier = 90;\n", "pier = 90\n"),
   }),
   DS2(3, {
     id: "snackbar-total",
@@ -806,14 +841,20 @@ export const DEVELOPER_LABS: Mission[] = [
   }),
   DS3(3, {
     id: "volcano-30",
-    title: "Safe distance",
-    story: { who: "Dr. Ortiz", face: "👨‍🔬", says: "This is Olympus Mons, the biggest volcano in the solar system! Park between 25 and 35 cm from the rock wall: close enough for pictures, far enough to stay safe." },
-    goal: "Stop between 25 and 35 cm from the wall.",
-    hint: "while (distance() > 30) { forward(2); }",
+    title: "Back away!",
+    story: { who: "Dr. Ortiz", face: "👨‍🔬", says: "Whoa, the rover rolled right up to Olympus Mons, the biggest volcano in the solar system! It's too close. Back away until the distance sensor reads at least 30 cm." },
+    goal: "Drive backward until distance() is 30 cm or more. Stop between 30 and 36 cm.",
+    hint: "while (distance() < 30) { backward(2); }",
     scene: { theme: "volcano", wall: "rockface", decor: [{ kind: "lava", x: 186, y: 10, r: 5 }, { kind: "rock", x: 60, y: 42, r: 3 }] },
-    world: marsWorld(),
-    check: stopBetween(25, 35, "{d} cm from the wall. Safe, and what a view!"),
-    starter: starter("Safe distance", "forward(10);\n", "forward(10)\n"),
+    world: base({ w: 200, h: 50, robot: "racer", start: { x: 160, y: 25, heading: 0 }, walls: [{ x: 172, y: 0, w: 28, h: 50 }] }),
+    check(trace) {
+      const d = last(trace).sensors.distance;
+      if (trace.stats.bumps > 0) return notYet("Bump! You're already close. Go backward, not forward.");
+      if (d < 30) return notYet(`Still only ${d} cm away. Keep backing away until it reads 30 or more.`);
+      if (d > 36) return notYet(`${d} cm. That's further than needed: stop as soon as it reads 30.`);
+      return pass(`${d} cm. Safe, and you only backed up as far as you needed!`);
+    },
+    starter: starter("Back away!", "console.log(distance());\n", "print(distance())\n"),
   }),
   DS3(4, {
     id: "ash-rock",
@@ -892,22 +933,26 @@ export const DEVELOPER_LABS: Mission[] = [
   }),
   DS4(4, {
     id: "lava-budget",
-    title: "Battery budget",
-    story: { who: "Miner Jo", face: "⛏️", says: "Careful: there's a lava pool in the way, and the battery's low. Only 175 cm left! Plan a route that gets the crystal and reaches the cart." },
-    goal: "Get the crystal and park at the cart using no more than 175 cm of driving.",
-    hint: "Add up your route BEFORE you drive it. Go up first, then across.",
-    scene: { theme: "lavalake", wall: "rockface", decor: [{ kind: "lava", x: 59, y: 82, r: 7 }, { kind: "crystal", x: 140, y: 100, colour: "#26C6DA" }], zoneIcons: { cart: "crate" } },
+    title: "Which way is cheaper?",
+    story: { who: "Miner Jo", face: "⛏️", says: "Careful: there's a lava pool in the way, and the battery's low. There are two ways round to the mine cart. Store both routes as arrays, add up each one, print both totals, then drive the cheaper one. Only 175 cm of battery left!" },
+    goal: "Store route A and route B as arrays. Print the total of each, then drive the cheaper one to the cart.",
+    hint: 'A: [["left", 90], ["forward", 60], ["right", 90], ["forward", 110]]. B: [["left", 90], ["forward", 75], ["right", 90], ["forward", 110], ["right", 90], ["forward", 15]]. Write a function cost(route).',
+    scene: { theme: "lavalake", wall: "rockface", decor: [{ kind: "lava", x: 59, y: 82, r: 7 }], zoneIcons: { cart: "crate" } },
     world: base({
       w: 150,
       h: 110,
       robot: "racer",
       start: { x: 20, y: 90, heading: 0 },
       walls: [{ x: 48, y: 44, w: 22, h: 66 }],
-      collectibles: [{ id: "g1", x: 100, y: 30, kind: "gem" }],
       zones: [{ id: "cart", x: 116, y: 15, w: 30, h: 30, colour: "orange", label: "Mine cart" }],
     }),
-    check: mineCheck(1, { cart: true, budget: 175 }, "{used} of 175 cm. Under budget, and no toasted wheels!"),
-    starter: routeStarter("Battery budget"),
+    check(trace, world) {
+      if (!printed(trace, 170) || !printed(trace, 200)) return notYet("Print the total of BOTH routes before you choose.");
+      const used = Math.round(trace.stats.distance);
+      if (!inZone(last(trace), world.zones[0])) return notYet("Now drive the cheaper route to the mine cart.");
+      return used <= 175 ? pass(`Route A: 170 cm, route B: 200 cm. You picked the cheaper one and saved 30 cm of battery!`) : notYet(`You drove ${used} cm. That's the expensive route! Drive the cheaper one.`);
+    },
+    starter: routeStarter("Which way is cheaper?"),
   }),
   DS4(5, {
     id: "cavern-square",
@@ -1003,17 +1048,20 @@ export const DEVELOPER_LABS: Mission[] = [
   }),
   DC(5, {
     id: "glasshouse-u",
-    title: "The glass house",
-    story: { who: "Curator Ines", face: "👩‍💼", says: "The glass house wing bends the OTHER way: two right turns, all the way down to the Sculpture room. Can you change your loop to fit?" },
-    goal: "If a wall is ahead, turn right; else step forward. Take two right turns and reach the Sculpture room.",
-    hint: "Same idea as The corner, but turnRight. After 2 turns, the next wall means you've arrived.",
-    scene: { theme: "greenhouse", wall: "gallery", decor: [{ kind: "plant", x: 140, y: 100 }, { kind: "plant", x: 150, y: 20 }], zoneIcons: { room: "star" } },
-    world: base({ w: 160, h: 110, robot: "racer", start: { x: 15, y: 15, heading: 0 }, light: 85, walls: [{ x: 0, y: 30, w: 125, h: 50 }], zones: [{ id: "room", x: 0, y: 82, w: 40, h: 28, colour: "purple", label: "Sculpture room" }] }),
+    title: "Full patrol lap",
+    story: { who: "Curator Ines", face: "👩‍💼", says: "Tonight, patrol the WHOLE glass house: all the way round the outside, past every wall, and stop back where you started. Count your corners so you know when the lap is done." },
+    goal: "Use if wall ahead → turn left, else → forward. Count your turns and stop after one full lap, back near the start.",
+    hint: "After 3 turns, the next wall means the lap is done. Stop there.",
+    scene: { theme: "greenhouse", decor: [{ kind: "plant", x: 80, y: 55 }, { kind: "plant", x: 60, y: 50 }, { kind: "plant", x: 100, y: 60 }] },
+    world: base({ w: 160, h: 110, robot: "racer", start: { x: 15, y: 95, heading: 0 }, light: 85 }),
     check(trace, world) {
       if (trace.stats.bumps > 0) return notYet("Bump! Turn before you touch a wall.");
-      return inZone(last(trace), world.zones[0]) ? pass("Two right turns, one loop. You adapted your code to a new building!") : notYet("Keep going: turn right at each wall to reach the Sculpture room.");
+      if (trace.stats.turned < 265) return notYet("Keep going round. A full lap passes all 4 walls.");
+      if (sweptAround(trace, { x: 80, y: 55 }) < 300) return notYet("Go all the way round the glass house.");
+      const f = last(trace);
+      return Math.hypot(f.x - world.start.x, f.y - world.start.y) <= 15 ? pass("One full lap, counted by your code. Ines can lock up now!") : notYet("You kept going! Count your turns and stop when you're back at the start.");
     },
-    starter: starter("The glass house", "forward(10);\n", "forward(10)\n"),
+    starter: starter("Full patrol lap", "let turns = 0;\nforward(10);\n", "turns = 0\nforward(10)\n"),
   }),
 ];
 
@@ -1113,13 +1161,24 @@ export const ENGINEER_LABS: Mission[] = [
   }),
   GS1(3, {
     id: "dock-digit",
-    title: "Add a number",
-    story: { who: "Quartermaster Ben", face: "🧔", says: "The crew keep picking long words with no numbers. Pirates guess words easily! New rule for the dock gate: 12 or more characters AND at least one number. The chest is up past the gate." },
-    goal: "Reject passcodes that break either rule. unlock() for the first one with 12+ characters and a number.",
-    hint: "any(ch.isdigit() for ch in code) is True if the code has a number.",
+    title: "Strength meter",
+    story: { who: "Quartermaster Ben", face: "🧔", says: "No doors today. The crew wants a strength meter! For each passcode, show weak (under 12 characters), ok (long but no number) or strong (long AND has a number). Leave each answer up for 1 second." },
+    goal: "For each of the 3 passcodes, display weak, ok or strong using if / elif / else. Wait 1 second after each.",
+    hint: 'if len(code) < 12: display("weak") elif not any(ch.isdigit() for ch in code): display("ok") else: display("strong")',
     scene: { theme: "boardwalk", decor: [{ kind: "ship", x: 40, y: 62 }, { kind: "barrel", x: 60, y: 8 }] },
-    world: vaultWorld(["seashell5", "seashells-and-sand", "seashells-and-sand5"], "up"),
-    check: vaultCheck(3, "Two rules, both checked with and. The dock is safe."),
+    world: base({ w: 100, h: 70, robot: "rover", start: { x: 50, y: 40, heading: 90 }, codes: ["seashell5", "seashells-and-sand", "seashells-and-sand5"] }),
+    check(trace) {
+      const reads = trace.stats.codeReads;
+      if (reads.length < 3) return notYet(`You read ${reads.length} of 3 passcodes. Use next_code() in a loop.`);
+      if (trace.stats.unlocks.length) return notYet("No doors today! Just rate each passcode.");
+      const want = [/weak/i, /^ok|ok$|medium/i, /strong/i];
+      for (let i = 0; i < 3; i++) {
+        const end = reads[i + 1] ?? Infinity;
+        const shown = trace.frames.filter((f) => f.t >= reads[i] && f.t < end).map((f) => f.display);
+        if (!shown.some((d) => want[i].test(d))) return notYet(`Passcode ${i + 1} should show "${["weak", "ok", "strong"][i]}". Check your if / elif / else.`);
+      }
+      return pass("weak, ok, strong. Your meter tells the crew exactly how good each passcode is.");
+    },
     starter: vaultStarter,
   }),
   GS1(4, {
@@ -1194,17 +1253,26 @@ export const ENGINEER_LABS: Mission[] = [
   }),
   GS2(4, {
     id: "market-two",
-    title: "The fruit stand",
-    story: { who: "Mr. Okafor", face: "👨‍🌾", says: "Two fruits just came off my truck. Use your go_to() and your dictionary to pack both. With a loop, it works for 2 fruits or 200!" },
-    goal: "Pack both fruits in the right crates using a loop, go_to() and your dictionary.",
-    hint: "Loop over the rows. For each: go to the fruit, read the colour, pick up, look up the crate, deliver.",
-    scene: { theme: "snackbar", decor: [{ kind: "umbrella", x: 70, y: 10 }, { kind: "flower", x: 90, y: 92 }], zoneIcons: { apples: "crate", oranges: "crate", bananas: "crate" } },
-    world: factoryWorld([
-      { id: "b1", x: 30, y: 19, colour: "yellow", kind: "fruit" },
-      { id: "b2", x: 30, y: 81, colour: "orange", kind: "fruit" },
-    ]),
-    check: sortCheck({ red: "apples", orange: "oranges", yellow: "bananas" }, "Banana and orange, both packed. Mr. Okafor owes you a smoothie!"),
-    starter: starter("The fruit stand", "console.log(itemColour());\n", "print(item_colour())\n"),
+    title: "Stock count",
+    story: { who: "Mr. Okafor", face: "👨‍🌾", says: "Before I open my fruit stand, I need a stock count. Visit each fruit, read its colour, and count them in a dictionary, like {'red': 2}. Then print it for me. No packing today!" },
+    goal: "Visit all 3 fruits, count each colour in a dictionary, and print the dictionary.",
+    hint: "counts = {}. For each fruit: counts[colour] = counts.get(colour, 0) + 1. Then print(counts).",
+    scene: { theme: "snackbar", decor: [{ kind: "umbrella", x: 110, y: 15 }, { kind: "flower", x: 90, y: 92 }] },
+    world: factoryWorld(
+      [
+        { id: "b1", x: 30, y: 19, colour: "red", kind: "fruit" },
+        { id: "b2", x: 30, y: 50, colour: "yellow", kind: "fruit" },
+        { id: "b3", x: 30, y: 81, colour: "red", kind: "fruit" },
+      ],
+      [],
+    ),
+    check(trace) {
+      if (trace.stats.pickUps) return notYet("No packing today! Just count. Leave the fruit where it is.");
+      const text = trace.log.map((l) => l.text).join(" ");
+      if (!/red\D{0,6}2/.test(text) || !/yellow\D{0,6}1/.test(text)) return notYet("Print your counts. There should be 2 red and 1 yellow.");
+      return pass("2 red, 1 yellow. Stock count done, and a dictionary did the counting!");
+    },
+    starter: starter("Stock count", "const counts = {};\nconsole.log(counts);\n", "counts = {}\nprint(counts)\n"),
   }),
   GS2(5, {
     id: "greenhouse-unknown",
@@ -1446,14 +1514,20 @@ export const ENGINEER_LABS: Mission[] = [
   }),
   GC(4, {
     id: "hill-all",
-    title: "Whole hillside",
-    story: { who: "Engineer Noor", face: "👩‍🔧", says: "The hillside farm is shaped like a big L: panels along the top, then down the side of the hill. Plan a route that cleans all 5." },
-    goal: "Clean all 5 panels.",
-    hint: "Along the top, turn right, then down the side.",
+    title: "Power after every panel",
+    story: { who: "Engineer Noor", face: "👩‍🔧", says: "The hillside farm is shaped like a big L. This time, record power() before you start AND after every panel you clean. Then the Data tab will show a staircase going up: proof that every panel matters." },
+    goal: "Record power() at the start and after each of the 5 panels. Your readings should go up each time.",
+    hint: "record, then for each panel: drive to it and record. Turn right at the corner.",
     scene: { theme: "hill", decor: [{ kind: "turbine", x: 160, y: 50 }] },
     world: solarWorld([{ x: 45, y: 20 }, { x: 85, y: 20 }, { x: 125, y: 20 }, { x: 125, y: 50 }, { x: 125, y: 80 }]),
-    check: (trace) => (trace.stats.collected.length === 5 ? pass("Every panel on the hill is clean!") : notYet(`${trace.stats.collected.length} of 5 panels clean.`)),
-    starter: starter("Whole hillside", "forward(20);\n", "forward(20)\n"),
+    check(trace) {
+      const p = powerData(trace);
+      if (trace.stats.collected.length < 5) return notYet(`${trace.stats.collected.length} of 5 panels clean.`);
+      if (p.length < 6) return notYet(`${p.length} of 6 readings. Record once at the start and once after each panel.`);
+      const steps = p.slice(1).filter((v, i) => v > p[i]).length;
+      return steps >= 5 ? pass(`${p[0]} W up to ${p[p.length - 1]} W in 5 steps. A perfect staircase of evidence!`) : notYet("Record right after each panel, so every reading is higher than the last.");
+    },
+    starter: solarStarter,
   }),
   GC(5, {
     id: "sunflower-efficient",

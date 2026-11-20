@@ -24,7 +24,7 @@ const eggHunt: Mission = {
       { kind: "barn", x: 14, y: 50, r: 7 },
       { kind: "hen", x: 45, y: 14 },
       { kind: "hen", x: 72, y: 48 },
-      { kind: "hay", x: 112, y: 52, r: 5 },
+      { kind: "hay", x: 40, y: 52, r: 5 },
       { kind: "hen", x: 104, y: 9 },
     ],
     zoneIcons: { basket: "basket" },
@@ -34,29 +34,27 @@ const eggHunt: Mission = {
   title: "Egg hunt",
   program: "Explorers",
   fits: "S1 My Helpful Robot",
-  story: { who: "Farmer Rosa", face: "👩‍🌾", says: "Big job today! The hens laid 3 eggs in the grass. Collect them all, park in the basket, and beep when you're done." },
-  goal: "Help the farmer: drive over all 3 eggs to collect them, stop in the basket, then beep to say you're done.",
-  hint: "Count the squares. Each square is 10 cm. The robot collects an egg just by driving over it.",
+  story: { who: "Farmer Rosa", face: "👩‍🌾", says: "Big job today! The hens laid 3 eggs, 2 squares apart. Stop on each egg and beep to count it: 1, 2, 3! Then drive on and park in the basket." },
+  goal: "Stop on each egg and beep once to count it. Then park in the basket.",
+  hint: "forward 20, beep, forward 20, beep, forward 20, beep, then count the squares to the basket.",
   world: base({
     w: 130,
     h: 60,
     robot: "scout",
     start: { x: 12, y: 30, heading: 0 },
     collectibles: [
-      { id: "e1", x: 35, y: 30, kind: "egg" },
-      { id: "e2", x: 55, y: 30, kind: "egg" },
-      { id: "e3", x: 75, y: 30, kind: "egg" },
+      { id: "e1", x: 32, y: 30, kind: "egg" },
+      { id: "e2", x: 52, y: 30, kind: "egg" },
+      { id: "e3", x: 72, y: 30, kind: "egg" },
     ],
     zones: [{ id: "basket", x: 95, y: 15, w: 30, h: 30, colour: "yellow", label: "Basket" }],
   }),
   check(trace, world) {
-    const eggs = trace.stats.collected.length;
     const basket = world.zones[0];
-    if (eggs < 3) return notYet(`${eggs} of 3 eggs collected. Drive further, right over every egg.`);
-    if (!inZone(last(trace), basket)) return notYet("All 3 eggs! Now stop inside the basket. Count the squares to it.");
-    const arrived = trace.frames.find((f) => inZone(f, basket))!.t;
-    if (!trace.sounds.some((s) => s.kind === "beep" && s.t >= arrived)) return notYet("In the basket! Beep to tell the farmer.");
-    return pass("3 eggs in the basket. Thank you, helpful robot!");
+    const counted = (world.collectibles ?? []).filter((e) => trace.sounds.some((x) => x.kind === "beep" && Math.abs((trace.frames.find((f) => f.t >= x.t - 0.001) ?? last(trace)).x - e.x) <= 5)).length;
+    if (counted < 3) return notYet(`You counted ${counted} of 3 eggs. Stop ON each egg and beep once.`);
+    if (!inZone(last(trace), basket)) return notYet("1, 2, 3 eggs! Now drive on and park in the basket.");
+    return pass("3 eggs counted and in the basket. Thank you, helpful robot!");
   },
   starter: { js: "// Egg hunt\nforward(10);\n", py: "# Egg hunt\nforward(10)\n" },
 };
