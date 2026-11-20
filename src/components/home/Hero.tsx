@@ -8,10 +8,10 @@ import { startDates } from "@/lib/booking";
 
 /** The cube's four sides, in spin order. */
 const FACES = [
-  { src: "/previews/blocks.jpg", alt: "", label: "Block coding", sub: "Explorers · K–Grade 1" },
-  { src: "/previews/launchpad.jpg", alt: "", label: "HTML & CSS", sub: "Builders · Grades 2–3" },
-  { src: "/previews/python.jpg", alt: "", label: "Python", sub: "Engineers · Grades 6–8" },
-  { src: null, alt: "", label: "Free trial class", sub: "November only" },
+  { src: "/previews/bus.jpg", pos: "object-left-top", alt: "", label: "Block coding", sub: "Explorers · K–Grade 1" },
+  { src: "/previews/robots.jpg", pos: "object-right", alt: "", label: "Robotics", sub: "Online Robot Labs · K–Grade 8" },
+  { src: "/previews/rover.jpg", pos: "object-center", alt: "", label: "JavaScript", sub: "Developers · Grades 4–8" },
+  { src: null, pos: "", alt: "", label: "Free trial class", sub: "November only" },
 ];
 
 /** In-page chapters, the hero's quick way into the page. */
@@ -113,7 +113,7 @@ export default function Hero() {
                     {FACES.map((f, i) => (
                       <div key={f.label} className={`cube-face cube-face-${i}`}>
                         {f.src ? (
-                          <Image src={f.src} alt={f.alt} fill sizes="300px" className="object-cover object-left-top" priority={i === 0} />
+                          <Image src={f.src} alt={f.alt} fill sizes="300px" className={`object-cover ${f.pos}`} priority={i === 0} />
                         ) : (
                           <div className="flex h-full w-full flex-col items-center justify-center bg-[#001532] text-center">
                             <span className="font-display text-6xl font-extrabold text-[#F4D734] sm:text-7xl">1</span>

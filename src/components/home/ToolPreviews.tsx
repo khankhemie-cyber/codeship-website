@@ -6,33 +6,41 @@ import Reveal from "@/components/ui/Reveal";
 import { useTrialPhase } from "@/components/trial/useTrialPhase";
 
 /**
- * A few seconds of each student tool, recorded from the real apps in
- * /tools. Only the clips are shown here; the tools themselves stay
- * link-only for enrolled students (see src/app/tools/layout.tsx).
+ * A few seconds of each student game and lab, recorded from the real apps
+ * (Ship It! Arcade at /ship-it and Robot Lab at /tools/robots). Clips and
+ * posters live in public/previews/<key>.mp4 and .jpg, 960x570.
  */
 const TOOLS = [
   {
-    key: "blocks",
-    name: "CODEship Blocks",
+    key: "bus",
+    name: "Bus Buddies Road Trip",
     kind: "Block coding",
     who: "Explorers · K–Grade 1",
-    blurb: "Snap blocks together, press the green flag, and watch your character come alive.",
+    blurb: "Put picture blocks in order, press Go, and drive Bina the Bus to pick up friends. No reading needed.",
     glow: "#F4D734",
   },
   {
-    key: "launchpad",
-    name: "CODEship Launchpad",
-    kind: "HTML, CSS & JavaScript",
-    who: "Builders & Developers · Grades 2–5",
-    blurb: "Write real web code on one side and see the page change on the other, live.",
+    key: "robots",
+    name: "CODEship Robot Lab",
+    kind: "Robotics",
+    who: "Online Robot Labs · K–Grade 8",
+    blurb: "Program a robot with blocks, JavaScript or Python, then watch it drive, paint and sense its way through each mission.",
     glow: "#19B3C4",
   },
   {
-    key: "python",
-    name: "CODEship Python",
-    kind: "Python",
+    key: "rover",
+    name: "Rover Rescue",
+    kind: "JavaScript",
+    who: "Developers & Engineers · Grades 4–8",
+    blurb: "Type real JavaScript loops to guide a stranded moon rover home, one gem at a time.",
+    glow: "#6E8BFF",
+  },
+  {
+    key: "bot",
+    name: "Bot Trainer",
+    kind: "Python & AI",
     who: "Engineers · Grades 6–8",
-    blurb: "Type real Python, press Run, and read what your program says back.",
+    blurb: "Warm up with Python, then train Sortie the sorting robot and see how AI really learns.",
     glow: "#9B6BE0",
   },
 ] as const;
