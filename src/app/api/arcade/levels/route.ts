@@ -4,6 +4,7 @@ import type { ProgramSlug } from "@/data/programs";
 import { ROVER_PAID_LEVELS } from "@/lib/games/paid/rover";
 import { RULE_CHALLENGES_PAID } from "@/lib/games/paid/bot";
 import { PROMPT_PAID_LEVELS } from "@/lib/games/paid/prompt";
+import { BUS_PAID_LEVELS } from "@/lib/games/paid/bus";
 
 export const runtime = "edge";
 
@@ -17,6 +18,8 @@ const PAID: Record<string, { programs: ProgramSlug[]; levels: unknown[] }> = {
   bot: { programs: ["engineers"], levels: RULE_CHALLENGES_PAID },
   // Ages 7–10: either class password unlocks it.
   prompt: { programs: ["builders", "developers"], levels: PROMPT_PAID_LEVELS },
+  // Bus Buddies Road Trip (ages 4–6): levels 11–20.
+  bus: { programs: ["explorers"], levels: BUS_PAID_LEVELS },
 };
 
 const headers = {

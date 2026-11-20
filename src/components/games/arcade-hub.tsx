@@ -8,6 +8,7 @@ import { ROVER_CATALOG } from "@/lib/games/rover";
 import { PY_ROUNDS, RULE_CATALOG, TRAIN_ROUNDS } from "@/lib/games/bot";
 import { MISSIONS } from "@/lib/games/studio";
 import { PROMPT_CATALOG } from "@/lib/games/prompt";
+import { BUS_FREE_LEVELS, BUS_LEVEL_IDS } from "@/lib/games/bus/levels";
 import { Pill, RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
 import { FREE_LEVELS } from "./level-lock";
 
@@ -23,9 +24,25 @@ interface ArcadeGame {
   gradient: string;
   glow: string;
   teaches: string[];
+  /** Free levels, when not the arcade default (FREE_LEVELS). */
+  free?: number;
 }
 
 const ARCADE_GAMES: ArcadeGame[] = [
+  {
+    game: "bus",
+    title: "Bus Buddies Road Trip",
+    emoji: "🚌",
+    href: "/ship-it/bus-buddies/",
+    grades: "Ages 4–6",
+    language: "Picture blocks · no reading needed",
+    pitch: "Put picture blocks in order to drive Bina the Bus. Pick up friends, cross the Big Lake and get to a surprise party.",
+    levels: BUS_LEVEL_IDS,
+    gradient: "from-[#a8781a] via-[#5e4a2a] to-[#1b1e33]",
+    glow: "shadow-[0_30px_80px_-30px_rgba(240,208,48,0.7)]",
+    teaches: ["Sequencing", "Debugging", "Waiting", "Loops", "Planning a route"],
+    free: BUS_FREE_LEVELS,
+  },
   {
     game: "rover",
     title: "Rover Rescue",
@@ -151,7 +168,7 @@ export function ArcadeHub() {
       <section className="relative mx-auto max-w-6xl px-4 pb-6 pt-12 md:px-6 md:pt-16">
         <div className="grid items-end gap-10 md:grid-cols-[1.3fr_1fr]">
           <div>
-            <Pill tone="yellow">Free to start · No sign-up · Ages 7–14</Pill>
+            <Pill tone="yellow">Free to start · No sign-up · Ages 4–14</Pill>
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-4 font-display text-5xl font-extrabold leading-[0.95] text-white md:text-7xl">
               Ship It! <span className="bg-gradient-to-r from-amber to-pink-400 bg-clip-text text-transparent">Arcade</span>
             </motion.h1>
@@ -184,7 +201,7 @@ export function ArcadeHub() {
         <h2 id="games-heading" className="sr-only">
           Choose a game
         </h2>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {ARCADE_GAMES.map((g, i) => {
             const stars = starsIn(p, g);
             const max = g.levels.length * 3;
@@ -220,8 +237,8 @@ export function ArcadeHub() {
                       <div className="h-full rounded-full bg-gradient-to-r from-amber to-emerald-300 transition-all" style={{ width: `${(stars / max) * 100}%` }} />
                     </div>
                     <p className="mt-3 text-[11px] font-semibold text-white/55">
-                      {g.levels.length > FREE_LEVELS
-                        ? `Levels 1–${FREE_LEVELS} free · 🔑 class password unlocks all ${g.levels.length}`
+                      {g.levels.length > (g.free ?? FREE_LEVELS)
+                        ? `Levels 1–${g.free ?? FREE_LEVELS} free · 🔑 class password unlocks all ${g.levels.length}`
                         : `All ${g.levels.length} levels free`}
                     </p>
                     <span className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-amber py-3 font-display text-xl font-extrabold text-navy transition group-hover:brightness-110">

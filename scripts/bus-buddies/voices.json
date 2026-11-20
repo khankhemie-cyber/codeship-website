@@ -1,0 +1,31 @@
+{
+  "_readme": "Voice settings for Bus Buddies. `candidates` builds the voice sample page (node scripts/bus-buddies/generate-voices.mjs --samples). `picked` is the voice each character uses in the game. Fill it with `--pick bina=A,codey=B,...` after listening to the samples.",
+  "provider": "elevenlabs",
+  "ttsModel": "eleven_multilingual_v2",
+  "designModel": "eleven_multilingual_ttv_v2",
+  "outputFormat": "mp3_22050_32",
+  "defaultSettings": { "stability": 0.55, "similarity_boost": 0.75, "style": 0.25, "use_speaker_boost": true, "speed": 0.88 },
+  "candidates": {
+    "bina": {
+      "design": "A bright, bubbly, cheerful young woman's cartoon voice for a friendly talking bus in a preschool show. Slightly sing-song and playful, warm smile in every word, neutral North American accent, speaks slowly and very clearly for small children.",
+      "library": ["Jessica"]
+    },
+    "codey": {
+      "design": "A warm, calm, kind man in his thirties narrating a preschool storybook. Gentle and encouraging, friendly and reassuring, neutral North American accent, slow relaxed pace, very clear pronunciation.",
+      "library": ["Brian"]
+    },
+    "turtle": {
+      "design": "A soft, slow, shy cartoon turtle in a preschool show. Quiet, a little hesitant, sweet and kind, gentle small voice, speaks slowly with small pauses, clear words.",
+      "library": []
+    },
+    "duck": {
+      "design": "A giggly, quick, bouncy cartoon duckling in a preschool show. High, bright and playful, laughs easily, full of energy but every word still clear, North American accent.",
+      "library": []
+    },
+    "owl": {
+      "design": "A sleepy, gentle, drowsy cartoon owl in a preschool show. Soft and soothing, kind grandmotherly warmth, slow and yawning, quiet but clear.",
+      "library": []
+    }
+  },
+  "picked": {}
+}

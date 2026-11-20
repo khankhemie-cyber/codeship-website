@@ -1,0 +1,210 @@
+/* Bus Buddies Road Trip: character and world animation. All of it stops
+   under prefers-reduced-motion (see the end of this file). */
+.bb-root { -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.bb-root button { touch-action: manipulation; }
+
+/* ---------------- Characters ----------------
+   Every moving part uses its own box as the origin (fill-box), so the
+   percentages below are points on that part. */
+:where(.bb-char) :where([class^="bb-"], [class*=" bb-"]) { transform-box: fill-box; }
+
+/* Eyes: blink, and look around now and then */
+.bb-lid { transform: scaleY(0); transform-box: view-box; animation: bb-blink 4.6s infinite; }
+.bb-duck .bb-lid { animation-duration: 3.4s; }
+@keyframes bb-blink { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+.bb-look { animation: bb-look 7s ease-in-out infinite; }
+@keyframes bb-look {
+  0%, 28%, 100% { transform: translate(0, 0); }
+  34%, 50% { transform: translate(var(--lk), 0); }
+  56%, 72% { transform: translate(calc(var(--lk) * -1), calc(var(--lk) * 0.3)); }
+  78%, 92% { transform: translate(0, calc(var(--lk) * -0.4)); }
+}
+.bb-talking .bb-look, .bb-m-happy .bb-look { animation: none; }
+
+/* Faces */
+.bb-mouth-talk { animation: bb-mouth 0.2s ease-in-out infinite alternate; transform-box: view-box; }
+@keyframes bb-mouth { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+.bb-talking .bb-brow { animation: bb-brow 0.7s ease-in-out infinite alternate; }
+@keyframes bb-brow { from { transform: translateY(0); } to { transform: translateY(-14%); } }
+.bb-m-happy .bb-cheeks { animation: bb-blush 0.8s ease-in-out infinite alternate; }
+@keyframes bb-blush { from { opacity: .6; } to { opacity: 1; } }
+.bb-beak-talk { animation: bb-beak 0.18s ease-in-out infinite alternate; transform-box: view-box; }
+@keyframes bb-beak { from { transform: rotate(0deg); } to { transform: rotate(-9deg); } }
+.bb-jaw-talk { animation: bb-jaw 0.18s ease-in-out infinite alternate; transform-box: view-box; }
+@keyframes bb-jaw { from { transform: rotate(0deg); } to { transform: rotate(14deg) translateY(2px); } }
+.bb-jaw-open { transform-box: view-box; transform: rotate(12deg) translateY(2px); }
+
+/* Whole body: breathing when idle, hopping when happy, wobbling on an oops, bobbing while talking */
+.bb-char .bb-body { transform-origin: 50% 100%; animation: bb-breathe 2.6s ease-in-out infinite alternate; }
+@keyframes bb-breathe { from { transform: scale(1, 1); } to { transform: scale(1.025, 0.975); } }
+.bb-m-oops .bb-body { animation: bb-wobble 0.5s ease-in-out 3; }
+@keyframes bb-wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+.bb-m-happy .bb-body { animation: bb-hop 0.42s cubic-bezier(.3,.6,.4,1) 6 alternate; }
+@keyframes bb-hop { 0% { transform: translateY(0) scale(1.06, 0.94); } 100% { transform: translateY(-14%) scale(0.97, 1.04); } }
+.bb-talking .bb-body { animation: bb-talk-bob 0.36s ease-in-out infinite alternate; }
+@keyframes bb-talk-bob { from { transform: translateY(0) rotate(0); } to { transform: translateY(-4%) rotate(-1.5deg); } }
+.bb-speaking { animation: bb-speak 0.5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes bb-speak { from { transform: translateY(0) scale(1); } to { transform: translateY(-3%) scale(1.02); } }
+
+/* Tuck the Turtle: head peeks in and out, little legs paddle */
+.bb-turtle-head { transform-origin: 0% 100%; animation: bb-peek 4.2s ease-in-out infinite; }
+@keyframes bb-peek { 0%, 55%, 100% { transform: translate(0, 0) rotate(0); } 65%, 75% { transform: translate(-10%, 8%) rotate(-6deg); } 85% { transform: translate(0, -3%) rotate(5deg); } }
+.bb-m-happy .bb-turtle-head, .bb-talking .bb-turtle-head { animation: bb-nod 0.5s ease-in-out infinite alternate; }
+@keyframes bb-nod { from { transform: rotate(-5deg); } to { transform: rotate(6deg) translateY(-4%); } }
+.bb-leg { transform-origin: 50% 0%; animation: bb-paddle 0.9s ease-in-out infinite alternate; }
+.bb-leg-b { animation-delay: -0.45s; }
+@keyframes bb-paddle { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+.bb-tail { transform-origin: 100% 50%; animation: bb-tail 0.8s ease-in-out infinite alternate; }
+@keyframes bb-tail { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+
+/* Dot the Duck: bouncy head, flappy wings, tapping feet */
+.bb-duck-head { transform-origin: 50% 100%; animation: bb-duck-head 1.6s ease-in-out infinite; }
+@keyframes bb-duck-head { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg) translateY(-3%); } 50% { transform: rotate(0); } 75% { transform: rotate(5deg) translateY(-2%); } }
+.bb-wing { transform-origin: 90% 10%; animation: bb-flap 3s ease-in-out infinite; }
+.bb-wing-r { transform-origin: 10% 10%; animation-name: bb-flap-r; }
+@keyframes bb-flap { 0%, 70%, 100% { transform: rotate(0); } 75%, 85% { transform: rotate(35deg); } 80%, 90% { transform: rotate(-5deg); } }
+@keyframes bb-flap-r { 0%, 70%, 100% { transform: rotate(0); } 75%, 85% { transform: rotate(-35deg); } 80%, 90% { transform: rotate(5deg); } }
+.bb-m-happy .bb-wing, .bb-talking .bb-wing { animation-duration: 0.5s; }
+.bb-tuft { transform-origin: 50% 100%; animation: bb-tail 0.6s ease-in-out infinite alternate; }
+.bb-bow { transform-origin: 100% 50%; animation: bb-tail 1.2s ease-in-out infinite alternate; }
+.bb-foot-a, .bb-foot-b { transform-origin: 50% 100%; animation: bb-tap 0.5s ease-in-out infinite alternate; }
+.bb-foot-b { animation-delay: -0.25s; }
+@keyframes bb-tap { from { transform: translateY(0); } to { transform: translateY(-25%); } }
+
+/* Olive the Owl: slow head tilts, wing flutters, nightcap pom swings */
+.bb-owl-head { transform-origin: 50% 85%; animation: bb-tilt 5s ease-in-out infinite; }
+@keyframes bb-tilt { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-8deg); } 60% { transform: rotate(6deg); } }
+.bb-asleep .bb-owl-head { animation: bb-doze 3.2s ease-in-out infinite alternate; }
+@keyframes bb-doze { from { transform: rotate(4deg) translateY(0); } to { transform: rotate(10deg) translateY(4%); } }
+.bb-owl-wing { transform-origin: 70% 5%; animation: bb-owl-flap 4.4s ease-in-out infinite; }
+.bb-owl-wing-r { transform-origin: 30% 5%; animation-name: bb-owl-flap-r; }
+@keyframes bb-owl-flap { 0%, 80%, 100% { transform: rotate(0); } 86%, 94% { transform: rotate(25deg); } 90% { transform: rotate(5deg); } }
+@keyframes bb-owl-flap-r { 0%, 80%, 100% { transform: rotate(0); } 86%, 94% { transform: rotate(-25deg); } 90% { transform: rotate(-5deg); } }
+.bb-asleep .bb-owl-wing { animation: none; }
+.bb-m-happy .bb-owl-wing { animation-duration: 0.7s; }
+.bb-pom { transform-origin: 0% 0%; animation: bb-tail 1.4s ease-in-out infinite alternate; }
+.bb-asleep .bb-body { animation: bb-breathe 3.2s ease-in-out infinite alternate; }
+.bb-zzz { animation: bb-zzz 2.6s ease-in-out infinite; }
+@keyframes bb-zzz { 0% { transform: translateY(6px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-10px); opacity: 0; } }
+
+/* Captain Codey: waves hello, tilts his head */
+.bb-codey-head { transform-origin: 50% 90%; animation: bb-codey-head 4s ease-in-out infinite; }
+@keyframes bb-codey-head { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(-4deg); } 70% { transform: rotate(3deg); } }
+.bb-wave-arm { transform-origin: 0% 100%; animation: bb-wave-arm 4s ease-in-out infinite; }
+@keyframes bb-wave-arm { 0%, 60%, 100% { transform: rotate(0); } 66%, 78%, 90% { transform: rotate(-18deg); } 72%, 84% { transform: rotate(10deg); } }
+.bb-talking .bb-wave-arm { animation: bb-gesture 0.8s ease-in-out infinite alternate; }
+@keyframes bb-gesture { from { transform: rotate(-6deg); } to { transform: rotate(12deg); } }
+.bb-m-happy .bb-wave-arm { animation-duration: 1.2s; }
+
+/* Bina the Bus: rocks on her springs, antenna and mirror wiggle */
+.bb-bina .bb-bina-body { transform-origin: 50% 100%; animation: bb-bus-idle 2.4s ease-in-out infinite alternate; }
+@keyframes bb-bus-idle { from { transform: translateY(0) rotate(0); } to { transform: translateY(-2.5%) rotate(-0.8deg); } }
+.bb-bina.bb-talking .bb-bina-body { animation: bb-talk-bob 0.34s ease-in-out infinite alternate; }
+.bb-bina.bb-m-happy .bb-bina-body { animation: bb-hop 0.42s cubic-bezier(.3,.6,.4,1) 6 alternate; }
+.bb-bina.bb-m-oops .bb-bina-body { animation: bb-wobble 0.5s ease-in-out 3; }
+.bb-bina.bb-driving .bb-bina-body { animation: bb-rumble 0.24s ease-in-out infinite alternate; }
+@keyframes bb-rumble { from { transform: translateY(0) rotate(0); } to { transform: translateY(-2%) rotate(0.4deg); } }
+.bb-antenna { transform-origin: 80% 100%; animation: bb-antenna 1.2s ease-in-out infinite alternate; }
+@keyframes bb-antenna { from { transform: rotate(-10deg); } to { transform: rotate(12deg); } }
+.bb-driving .bb-antenna, .bb-m-happy .bb-antenna { animation-duration: 0.3s; }
+.bb-mirror { transform-origin: 0% 50%; animation: bb-tail 1.6s ease-in-out infinite alternate; }
+.bb-headlight { animation: bb-glow 1.8s ease-in-out infinite alternate; }
+@keyframes bb-glow { from { opacity: .6; } to { opacity: 1; } }
+.bb-wheel { transform-box: view-box; }
+.bb-driving .bb-wheel { animation: bb-spin 0.5s linear infinite; }
+@keyframes bb-spin { to { transform: rotate(360deg); } }
+.bb-puff { transform-origin: 50% 50%; animation: bb-puff 0.9s ease-out infinite; opacity: 0; }
+.bb-puff-2 { animation-delay: -0.45s; }
+@keyframes bb-puff { 0% { transform: translate(0, 0) scale(0.5); opacity: .9; } 100% { transform: translate(-260%, -140%) scale(2); opacity: 0; } }
+.bb-bina-top { animation: bb-top-breathe 1.8s ease-in-out infinite alternate; }
+@keyframes bb-top-breathe { from { transform: scale(1); } to { transform: scale(1.035, 0.985); } }
+
+/* Map: the bus moves by CSS transitions on its transform. */
+.bb-bus { transition: transform 0.55s cubic-bezier(.45,.05,.3,1); }
+.bb-bus-inner { transform-origin: 0 0; }
+.bb-bus.bb-wobble .bb-bus-inner { animation: bb-wobble-top 0.45s ease-in-out 3; }
+@keyframes bb-wobble-top { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+.bb-bus.bb-happy .bb-bus-inner { animation: bb-hop-top 0.35s ease-in-out 4 alternate; }
+@keyframes bb-hop-top { from { transform: scale(1); } to { transform: scale(1.14); } }
+
+.bb-sway { animation: bb-sway 3.2s ease-in-out infinite alternate; }
+@keyframes bb-sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+.bb-bob { animation: bb-bob 2.4s ease-in-out infinite alternate; }
+@keyframes bb-bob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+.bb-hop { animation: bb-cow-hop 0.4s ease-in-out 4 alternate; }
+@keyframes bb-cow-hop { from { transform: translateY(0); } to { transform: translateY(-14px) rotate(-4deg); } }
+.bb-flag { animation: bb-flag 0.9s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: left center; }
+@keyframes bb-flag { from { transform: skewY(0); } to { transform: skewY(8deg); } }
+
+.bb-cloud { animation-name: bb-cloud; animation-timing-function: linear; animation-iteration-count: infinite; }
+@keyframes bb-cloud { from { transform: translateX(-120px); } to { transform: translateX(var(--bb-w, 700px)); } }
+
+.bb-waiting-pass { animation: bb-sway-small 1.6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-sway-small { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+.bb-boarding { animation: bb-board 0.7s ease-in forwards; transform-box: fill-box; transform-origin: center; }
+@keyframes bb-board { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-30px) scale(1.1); } 100% { transform: translateY(0) scale(0); opacity: 0; } }
+
+/* Map pieces */
+.bb-bus.bb-bus-ferry { transition-duration: 1.2s; }
+.bb-ripple { animation: bb-ripple 3s ease-in-out infinite alternate; }
+@keyframes bb-ripple { from { transform: translateX(-4px); opacity: .35; } to { transform: translateX(4px); opacity: .7; } }
+.bb-bob-water { animation: bb-bob-water 2.4s ease-in-out infinite alternate; }
+@keyframes bb-bob-water { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-4px) rotate(3deg); } }
+.bb-bob-boat { animation: bb-bob-water 1.8s ease-in-out infinite alternate; }
+.bb-digger-arm { animation: bb-dig 2.4s ease-in-out infinite alternate; }
+@keyframes bb-dig { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
+.bb-light-on { animation: bb-glow 0.9s ease-in-out infinite alternate; }
+.bb-waddle { animation: bb-waddle 0.45s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-waddle { from { transform: rotate(-10deg) translateY(0); } to { transform: rotate(10deg) translateY(-2px); } }
+.bb-ducklings { animation: bb-cross 2.6s ease-in-out infinite alternate; }
+@keyframes bb-cross { from { transform: translateX(-10px); } to { transform: translateX(10px); } }
+.bb-star-spin { animation: bb-star 4s linear infinite; }
+@keyframes bb-star { to { transform: rotate(360deg); } }
+.bb-fountain { animation: bb-fountain 0.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-fountain { from { transform: scaleY(0.85); } to { transform: scaleY(1.1); } }
+.bb-pop-in-svg { animation: bb-pop-in 0.35s cubic-bezier(.3,1.6,.6,1); }
+.bb-balloon { animation: bb-balloon 2.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+.bb-balloon-2 { animation-delay: -0.9s; }
+.bb-balloon-3 { animation-delay: -1.8s; }
+@keyframes bb-balloon { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-6%) rotate(4deg); } }
+.bb-flame { animation: bb-flame 0.3s ease-in-out infinite alternate; transform-box: view-box; }
+@keyframes bb-flame { from { transform: scale(0.85, 1); } to { transform: scale(1.1, 1.15); } }
+.bb-sparkle { animation: bb-glow 0.5s ease-in-out infinite alternate; }
+.bb-notes { animation: bb-notes 1.2s ease-out infinite; }
+@keyframes bb-notes { 0% { transform: translate(-50%, 10px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(-30%, -24px) rotate(12deg); opacity: 0; } }
+
+/* Blocks (pop-in first, so a glow that comes later wins) */
+.bb-pop-in { animation: bb-pop-in 0.25s cubic-bezier(.3,1.6,.6,1); }
+@keyframes bb-pop-in { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.bb-block { transition: transform 0.15s ease, box-shadow 0.2s ease; }
+.bb-block:active { transform: scale(0.94); }
+.bb-running { box-shadow: 0 0 0 5px #fff, 0 0 0 10px #F0D030, 0 0 30px 10px #F0D030aa; transform: translateY(-6px) scale(1.08); }
+.bb-blame { animation: bb-blame 0.9s ease-in-out infinite alternate; }
+@keyframes bb-blame { from { box-shadow: 0 0 0 4px #fff, 0 0 0 9px #FF9F43; } to { box-shadow: 0 0 0 4px #fff, 0 0 0 14px #FF9F43aa, 0 0 34px 12px #FF9F4388; } }
+.bb-pulse { animation: bb-pulse 0.9s ease-in-out infinite alternate; }
+@keyframes bb-pulse { from { transform: scale(1); box-shadow: 0 0 0 0 #F0D030; } to { transform: scale(1.08); box-shadow: 0 0 0 8px #F0D03099; } }
+.bb-ghost { animation: bb-ghost 1s ease-in-out infinite alternate; }
+@keyframes bb-ghost { from { opacity: 0.35; } to { opacity: 0.95; } }
+.bb-go:not(:disabled) { animation: bb-go 1.6s ease-in-out infinite; }
+@keyframes bb-go { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+/* Hold-to-open ring for the Grown-up corner */
+.bb-hold-ring { transition: stroke-dashoffset 0.1s linear; }
+
+/* Confetti */
+.bb-confetti { position: absolute; top: -20px; width: 12px; height: 18px; border-radius: 3px; animation: bb-fall linear forwards; }
+@keyframes bb-fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+.bb-float { animation: bb-float 3s ease-in-out infinite alternate; }
+@keyframes bb-float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.bb-drive-in { animation: bb-drive-in 1.4s cubic-bezier(.2,.8,.3,1); }
+@keyframes bb-drive-in { from { transform: translateX(-120%); } to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-root *, .bb-root *::before, .bb-root *::after {
+    animation: none !important;
+    transition-duration: 0.01s !important;
+  }
+  .bb-root .bb-lid { transform: scaleY(0); }
+  .bb-root .bb-confetti { display: none; }
+}
