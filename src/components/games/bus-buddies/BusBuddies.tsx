@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { CHAPTERS, LEVELS, levelById, levelsIn, type Block, type Level, type PassengerId } from "@/lib/games/bus/levels";
 import { DX, DY, findChar, headings, nextCorrect, run, startState, stateAfter, type Frame } from "@/lib/games/bus/engine";
+import type { Mood } from "./characters";
 import { BLOCK_STYLE, BinaFace, BinaSide, BinaTop, BlockIcon, C, Clouds, Codey, PassengerArt, StickerArt, Tile } from "./art";
 import { lineSpeaker, lineText, preloadChapter, say, setMuted, sfx, stopTalking, useVoiceState, type Speaker } from "./sound";
 import { completeLevel, resetProgress, useBusProgress } from "./store";
@@ -183,10 +184,17 @@ function TopBar({ onHome }: { onHome: (() => void) | null }) {
 /* Talking: speaker portrait + speech bubble                             */
 /* ================================================================== */
 
-function Portrait({ who, talking }: { who: Speaker; talking: boolean }) {
-  if (who === "codey") return <Codey talking={talking} />;
-  if (who === "bina") return <BinaFace talking={talking} />;
-  return <PassengerArt id={who} talking={talking} />;
+/** How a character looks while saying a line: oops lines look worried, happy lines smile. */
+function lineMood(id: string): Mood {
+  if (/oops|too_short|full|missed|owl\.sleep/.test(id)) return "oops";
+  if (/happy|great|sticker|join|cheer|thanks|reward|honk/.test(id)) return "happy";
+  return "idle";
+}
+
+function Portrait({ who, talking, mood }: { who: Speaker; talking: boolean; mood: Mood }) {
+  if (who === "codey") return <Codey talking={talking} mood={mood} />;
+  if (who === "bina") return <BinaFace talking={talking} mood={mood} />;
+  return <PassengerArt id={who} talking={talking} mood={mood} />;
 }
 
 /** Shows whoever is speaking, with the line in a bubble; a repeat button replays `promptId`. */
@@ -198,7 +206,7 @@ function Talker({ fallback, promptId }: { fallback: string; promptId?: string })
   return (
     <div className="flex items-center gap-2 sm:gap-3">
       <div className={`h-20 w-20 shrink-0 rounded-full bg-white/90 p-1 shadow-md sm:h-24 sm:w-24 ${talking ? "bb-speaking" : ""}`}>
-        <Portrait who={who} talking={talking} />
+        <Portrait who={who} talking={talking} mood={lineMood(id)} />
       </div>
       <div className="relative min-h-[64px] flex-1 rounded-3xl bg-white px-4 py-3 text-lg font-bold leading-snug text-[#001432] shadow-md sm:text-xl" aria-live="polite">
         <span className="absolute -left-2 top-1/2 h-4 w-4 -translate-y-1/2 rotate-45 bg-white" aria-hidden />
@@ -404,7 +412,7 @@ function Scene({ chapter, kind, onDone }: { chapter: number; kind: "intro" | "ou
         </div>
         <div className="flex items-end justify-center gap-4 pb-6">
           <div className="bb-drive-in w-[min(560px,70%)]">
-            <BinaSide talking={who === "bina" && !!v.speaker} mood={kind === "outro" ? "happy" : "idle"} riders={riders} driving={!ended && kind === "intro" && i === 0} />
+            <BinaSide talking={who === "bina" && !!v.speaker} mood={kind === "outro" ? "happy" : who === "bina" ? lineMood(lines[i]) : "idle"} riders={riders} driving={!ended && kind === "intro" && i === 0} />
           </div>
         </div>
       </div>
@@ -614,7 +622,7 @@ function Play({ level, onNext, onChapter }: { level: Level; onNext: () => void; 
 
           <div className="flex items-center gap-2 rounded-3xl bg-white/60 p-2">
             <div className="w-28 shrink-0" aria-label={`On the bus: ${aboard.length ? aboard.join(", ") : "nobody yet"}`}>
-              <BinaSide riders={aboard} mood={bus.mood === "happy" ? "happy" : bus.mood === "wobble" ? "confused" : "idle"} />
+              <BinaSide riders={aboard} mood={bus.mood === "happy" ? "happy" : bus.mood === "wobble" ? "oops" : "idle"} />
             </div>
             <ProgramStrip program={program} dirs={dirs} max={level.maxBlocks} active={active} blame={blame} hintIndex={hint && hint.index < program.length ? hint.index : null} onRemove={(i) => {
               sfx.remove();
@@ -757,10 +765,11 @@ function MapView({
           if (aboard.includes(p.id) && boarding !== p.id) return null;
           const at = findChar(level, p.stop)!;
           const asleep = p.needs === "honk" && !woken.includes(p.id);
+          const close = Math.abs(bus.x - at.x) + Math.abs(bus.y - at.y) <= 1.01;
           return (
             <svg key={p.id} x={at.x * 100 + 12} y={at.y * 100 - 18} width="76" height="76" viewBox="0 0 100 100" overflow="visible">
               <g className={boarding === p.id ? "bb-boarding" : asleep ? "" : "bb-waiting-pass"}>
-                <PassengerArt id={p.id} asleep={asleep} />
+                <PassengerArt id={p.id} asleep={asleep} mood={close && !asleep ? "happy" : "idle"} />
               </g>
             </svg>
           );

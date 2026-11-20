@@ -10,6 +10,14 @@
  * Every line ID (prompt, lines) is a line in voice-script.json.
  */
 
+/**
+ * The first 10 levels (in play order) are free for everyone. The rest unlock
+ * with the Explorers (K–Grade 1) class password, like the other Ship It!
+ * Arcade games (which give 5 free; see components/games/level-lock.tsx).
+ */
+export const BUS_FREE_LEVELS = 10;
+export const BUS_PROGRAM = "explorers" as const;
+
 export type Block = "forward" | "left" | "right" | "honk" | "wait" | "pickup";
 export type Dir = 0 | 1 | 2 | 3; // 0 north (up), 1 east, 2 south, 3 west
 export type PassengerId = "turtle" | "duck" | "owl";
