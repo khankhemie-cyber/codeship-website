@@ -37,7 +37,61 @@ const LED: Record<LedColour, string> = {
 const PEN: Record<string, string> = { red: "#E53935", blue: "#1E6FE0", green: "#2E9E44", yellow: "#F2C200", purple: "#8E24AA", orange: "#F57C00", black: "#1A1A1A" };
 
 /** Base colours per world. `dark` worlds get light labels. */
-const THEME: Record<Theme, { base: string; accent: string; grid: string; dark?: boolean }> = {
+type Pattern = "speckle" | "planksH" | "planksV" | "tiles" | "checker" | "water" | "grass" | "concrete" | "mud" | "carpet" | "court" | "lined" | "stars" | "panels" | "ice" | "dunes" | "glass" | "cobbles";
+/** More places: a palette and a pattern each, so every mission can have its own scene. */
+const SPEC: Partial<Record<Theme, { base: string; accent: string; grid: string; dark?: boolean; pattern: Pattern; sky?: [string, string] }>> = {
+  dawn: { base: "#E9D7A0", accent: "#D9C27C", grid: "rgba(120,80,20,0.15)", pattern: "speckle", sky: ["#FF9E7A", "#FFD27A"] },
+  barn: { base: "#A86F3E", accent: "#966033", grid: "rgba(50,25,0,0.18)", pattern: "planksV" },
+  pigpen: { base: "#8D6E52", accent: "#7A5C42", grid: "rgba(40,20,0,0.18)", pattern: "mud" },
+  practice: { base: "#6A4C93", accent: "#5C4083", grid: "rgba(255,255,255,0.10)", dark: true, pattern: "carpet" },
+  gym: { base: "#D9A86C", accent: "#CC9A5C", grid: "rgba(80,50,10,0.14)", pattern: "court" },
+  party: { base: "#FCE4EC", accent: "#F8BBD0", grid: "rgba(150,40,90,0.12)", pattern: "checker" },
+  lagoon: { base: "#4FC3D9", accent: "#7DD8E6", grid: "rgba(255,255,255,0.18)", pattern: "water" },
+  kelp: { base: "#1E7A6B", accent: "#26907D", grid: "rgba(255,255,255,0.12)", dark: true, pattern: "water" },
+  deep: { base: "#0D2B55", accent: "#123A6E", grid: "rgba(255,255,255,0.10)", dark: true, pattern: "water" },
+  snowpark: { base: "#F3F8FC", accent: "#DDEAF5", grid: "rgba(60,100,150,0.12)", pattern: "speckle" },
+  ice: { base: "#CFE9F7", accent: "#B5DCF2", grid: "rgba(40,90,140,0.14)", pattern: "ice" },
+  village: { base: "#E9EEF2", accent: "#C9D2DA", grid: "rgba(60,80,100,0.14)", pattern: "cobbles" },
+  sidewalk: { base: "#BFC3C7", accent: "#AEB3B8", grid: "rgba(40,40,50,0.18)", pattern: "concrete" },
+  paper: { base: "#FFFFFF", accent: "#E3F2FD", grid: "rgba(30,90,180,0.15)", pattern: "lined" },
+  canvas: { base: "#F2E8D5", accent: "#E8DCC2", grid: "rgba(90,70,40,0.12)", pattern: "speckle" },
+  dressing: { base: "#4E342E", accent: "#5D4037", grid: "rgba(255,255,255,0.08)", dark: true, pattern: "planksH" },
+  rooftop: { base: "#263238", accent: "#37474F", grid: "rgba(255,255,255,0.08)", dark: true, pattern: "stars" },
+  classroom: { base: "#E8EEF4", accent: "#D7E1EB", grid: "rgba(40,60,100,0.12)", pattern: "tiles" },
+  meadow: { base: "#C5E1A5", accent: "#AED581", grid: "rgba(40,90,30,0.12)", pattern: "grass" },
+  nightrail: { base: "#5B6B4A", accent: "#4E5D3F", grid: "rgba(255,255,255,0.08)", dark: true, pattern: "grass" },
+  dogpark: { base: "#B5DD8E", accent: "#9ED06F", grid: "rgba(40,90,30,0.13)", pattern: "grass" },
+  hill: { base: "#9CCC65", accent: "#8BC34A", grid: "rgba(30,80,20,0.15)", pattern: "dunes" },
+  greenhouse: { base: "#DCEDC8", accent: "#C5E1A5", grid: "rgba(40,90,30,0.12)", pattern: "glass" },
+  sunflowers: { base: "#D4E157", accent: "#C0CA33", grid: "rgba(80,90,10,0.15)", pattern: "grass" },
+  firehall: { base: "#B71C1C", accent: "#A31717", grid: "rgba(255,255,255,0.10)", dark: true, pattern: "tiles" },
+  street: { base: "#B0B6BE", accent: "#9EA5AE", grid: "rgba(30,30,40,0.12)", pattern: "concrete" },
+  control: { base: "#14213D", accent: "#1D2D50", grid: "rgba(140,190,255,0.12)", dark: true, pattern: "panels" },
+  hangar: { base: "#9AA4AE", accent: "#8A949E", grid: "rgba(20,30,40,0.14)", pattern: "concrete" },
+  boardwalk: { base: "#C49A6C", accent: "#B48A5C", grid: "rgba(60,30,0,0.15)", pattern: "planksV" },
+  snackbar: { base: "#FFF3E0", accent: "#FFE0B2", grid: "rgba(150,90,20,0.12)", pattern: "checker" },
+  pier: { base: "#3E8EC4", accent: "#5AA5D6", grid: "rgba(255,255,255,0.12)", pattern: "water" },
+  dunes: { base: "#D9844F", accent: "#C8733F", grid: "rgba(60,15,0,0.15)", pattern: "dunes" },
+  craters: { base: "#A9543A", accent: "#97472F", grid: "rgba(60,15,0,0.16)", pattern: "speckle" },
+  tunnel: { base: "#6D5A4B", accent: "#5E4C3E", grid: "rgba(255,230,200,0.10)", dark: true, pattern: "speckle" },
+  cavern: { base: "#3C3348", accent: "#4A3F58", grid: "rgba(255,230,255,0.10)", dark: true, pattern: "speckle" },
+  gemvault: { base: "#2C3E50", accent: "#34495E", grid: "rgba(150,230,255,0.12)", dark: true, pattern: "speckle" },
+  hall: { base: "#E8E2D6", accent: "#D8D0C0", grid: "rgba(60,50,40,0.10)", pattern: "planksH" },
+  dinohall: { base: "#E3D5B8", accent: "#D4C4A2", grid: "rgba(90,70,40,0.12)", pattern: "tiles" },
+  sculpture: { base: "#ECEFF1", accent: "#CFD8DC", grid: "rgba(40,50,60,0.10)", pattern: "checker" },
+  deck: { base: "#9C7350", accent: "#8A6443", grid: "rgba(50,25,0,0.18)", pattern: "planksH" },
+  cave: { base: "#4B4237", accent: "#3D352C", grid: "rgba(255,230,200,0.10)", dark: true, pattern: "speckle" },
+  warehouse: { base: "#C9C2B4", accent: "#B8B0A0", grid: "rgba(40,30,20,0.12)", pattern: "concrete" },
+  lab2: { base: "#E0F2F1", accent: "#B2DFDB", grid: "rgba(0,90,80,0.12)", pattern: "tiles" },
+  bridge: { base: "#1A2238", accent: "#232E4A", grid: "rgba(140,190,255,0.12)", dark: true, pattern: "panels" },
+  garden2: { base: "#A5D6A7", accent: "#81C784", grid: "rgba(30,90,30,0.12)", pattern: "grass" },
+  ashfield: { base: "#55504C", accent: "#48433F", grid: "rgba(255,200,160,0.10)", dark: true, pattern: "speckle" },
+  lavalake: { base: "#2B2422", accent: "#3A2E2A", grid: "rgba(255,200,160,0.10)", dark: true, pattern: "speckle" },
+  rooftopsolar: { base: "#8D8D8D", accent: "#7E7E7E", grid: "rgba(20,20,20,0.15)", pattern: "concrete" },
+  windfarm: { base: "#B9DD8C", accent: "#A4D06E", grid: "rgba(40,90,30,0.12)", pattern: "grass" },
+};
+
+const THEME: Record<string, { base: string; accent: string; grid: string; dark?: boolean }> = {
   farm: { base: "#E8D7A4", accent: "#D7BF7E", grid: "rgba(120,80,20,0.16)" },
   stage: { base: "#B9814C", accent: "#A56E3C", grid: "rgba(60,30,0,0.16)" },
   ocean: { base: "#1F6FA8", accent: "#2C86C2", grid: "rgba(255,255,255,0.12)", dark: true },
@@ -105,7 +159,160 @@ function ellipse(ctx: C, x: number, y: number, rx: number, ry: number, fill: str
 
 // ---------------------------------------------------------------- ground
 
+function drawPattern(ctx: C, sp: NonNullable<(typeof SPEC)[Theme]>, w: number, h: number, s: number, t: number, seed: number) {
+  const rnd = seeded(seed);
+  const area = (w * h) / (s * s);
+  ctx.fillStyle = sp.base;
+  ctx.fillRect(0, 0, w, h);
+  const line = (x1: number, y1: number, x2: number, y2: number, col: string, lw: number) => {
+    ctx.strokeStyle = col;
+    ctx.lineWidth = Math.max(1, lw);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  };
+  switch (sp.pattern) {
+    case "speckle":
+      for (let i = 0; i < area / 22; i++) ellipse(ctx, rnd() * w, rnd() * h, s * (0.6 + rnd() * 1.6), s * (0.3 + rnd() * 0.8), sp.accent, rnd() * 3);
+      break;
+    case "grass":
+      for (let i = 0; i < area / 10; i++) {
+        const x = rnd() * w;
+        const y = rnd() * h;
+        line(x, y, x + (rnd() - 0.5) * s, y - s * (0.8 + rnd()), sp.accent, s * 0.3);
+      }
+      break;
+    case "mud":
+      for (let i = 0; i < area / 120; i++) ellipse(ctx, rnd() * w, rnd() * h, s * (3 + rnd() * 5), s * (1.5 + rnd() * 2.5), "rgba(90,60,35,0.55)", rnd());
+      for (let i = 0; i < area / 260; i++) ellipse(ctx, rnd() * w, rnd() * h, s * (2 + rnd() * 2), s * (1 + rnd()), "rgba(150,190,220,0.45)", rnd());
+      break;
+    case "planksH":
+    case "planksV": {
+      const p = 6 * s;
+      const horiz = sp.pattern === "planksH";
+      for (let k = 0; k * p < (horiz ? h : w); k++) {
+        ctx.fillStyle = k % 2 ? sp.base : sp.accent;
+        if (horiz) ctx.fillRect(0, k * p, w, p);
+        else ctx.fillRect(k * p, 0, p, h);
+        if (horiz) line(0, k * p, w, k * p, "rgba(0,0,0,0.25)", s * 0.2);
+        else line(k * p, 0, k * p, h, "rgba(0,0,0,0.25)", s * 0.2);
+      }
+      break;
+    }
+    case "tiles":
+    case "checker": {
+      const tile = 10 * s;
+      for (let y = 0; y < h; y += tile)
+        for (let x = 0; x < w; x += tile) {
+          if (sp.pattern === "checker" && (Math.round(x / tile) + Math.round(y / tile)) % 2) {
+            ctx.fillStyle = sp.accent;
+            ctx.fillRect(x, y, tile, tile);
+          }
+          if (sp.pattern === "tiles") {
+            ctx.strokeStyle = sp.accent;
+            ctx.lineWidth = Math.max(1, s * 0.3);
+            ctx.strokeRect(x, y, tile, tile);
+          }
+        }
+      break;
+    }
+    case "water":
+      for (let i = 0; i < 16; i++) {
+        const x = ((rnd() * w + t * 6 * s) % (w + 20 * s)) - 10 * s;
+        ellipse(ctx, x, rnd() * h, s * (6 + rnd() * 8), s * (1 + rnd()), sp.accent, 0.2);
+      }
+      for (let i = 0; i < 10; i++) {
+        const rise = (t * 0.3 + rnd()) % 1;
+        circle(ctx, rnd() * w, h - rise * h, s * (0.4 + rnd() * 0.5), "rgba(255,255,255,0.35)");
+      }
+      break;
+    case "concrete":
+      for (let x = 0; x < w; x += 20 * s) line(x, 0, x, h, sp.accent, s * 0.25);
+      for (let y = 0; y < h; y += 20 * s) line(0, y, w, y, sp.accent, s * 0.25);
+      for (let i = 0; i < area / 40; i++) circle(ctx, rnd() * w, rnd() * h, s * 0.25, "rgba(0,0,0,0.12)");
+      break;
+    case "carpet":
+      for (let y = 0; y < h; y += 3 * s) for (let x = ((y / (3 * s)) % 2) * 1.5 * s; x < w; x += 3 * s) circle(ctx, x, y, s * 0.35, sp.accent);
+      break;
+    case "court":
+      ctx.strokeStyle = "rgba(255,255,255,0.75)";
+      ctx.lineWidth = Math.max(1.5, s * 0.6);
+      ctx.strokeRect(3 * s, 3 * s, w - 6 * s, h - 6 * s);
+      line(w / 2, 3 * s, w / 2, h - 3 * s, "rgba(255,255,255,0.75)", s * 0.6);
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, 8 * s, 0, Math.PI * 2);
+      ctx.stroke();
+      for (let x = 0; x < w; x += 6 * s) line(x, 0, x, h, "rgba(80,50,10,0.12)", s * 0.2);
+      break;
+    case "lined":
+      for (let y = 6 * s; y < h; y += 6 * s) line(0, y, w, y, sp.accent, s * 0.35);
+      line(8 * s, 0, 8 * s, h, "rgba(229,57,53,0.45)", s * 0.35);
+      break;
+    case "stars":
+      for (let i = 0; i < area / 18; i++) circle(ctx, rnd() * w, rnd() * h, s * (0.15 + rnd() * 0.3), `rgba(255,255,255,${0.3 + 0.5 * Math.abs(Math.sin(t * 2 + i))})`);
+      for (let x = 0; x < w; x += 12 * s) {
+        const bh = (6 + rnd() * 10) * s;
+        ctx.fillStyle = sp.accent;
+        ctx.fillRect(x, h - bh, 10 * s, bh);
+        for (let k = 0; k < 4; k++) if (rnd() > 0.4) {
+          ctx.fillStyle = "#FFE082";
+          ctx.fillRect(x + (1 + (k % 2) * 5) * s, h - bh + (1.5 + Math.floor(k / 2) * 3) * s, 2 * s, 1.5 * s);
+        }
+      }
+      break;
+    case "panels": {
+      const p = 20 * s;
+      for (let y = 0; y < h; y += p)
+        for (let x = 0; x < w; x += p) {
+          ctx.strokeStyle = sp.grid;
+          ctx.lineWidth = Math.max(1, s * 0.3);
+          roundRect(ctx, x + s, y + s, p - 2 * s, p - 2 * s, s);
+          ctx.stroke();
+        }
+      for (let i = 0; i < 10; i++) circle(ctx, rnd() * w, rnd() * h, s * 0.5, Math.sin(t * 3 + i) > 0 ? "#4DD0E1" : "#FFB74D");
+      break;
+    }
+    case "ice":
+      for (let i = 0; i < area / 70; i++) {
+        const x = rnd() * w;
+        const y = rnd() * h;
+        ctx.strokeStyle = "rgba(255,255,255,0.8)";
+        ctx.lineWidth = Math.max(1, s * 0.3);
+        ctx.beginPath();
+        ctx.arc(x, y, s * (4 + rnd() * 8), rnd() * 6, rnd() * 6 + 1.2);
+        ctx.stroke();
+      }
+      break;
+    case "dunes":
+      for (let k = 0; k < 9; k++) {
+        ctx.strokeStyle = sp.accent;
+        ctx.lineWidth = Math.max(1, s * 0.8);
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 4 * s) ctx.lineTo(x, (k / 8) * h + Math.sin(x / (14 * s) + k) * 3 * s);
+        ctx.stroke();
+      }
+      break;
+    case "glass":
+      for (let x = 0; x < w; x += 15 * s) line(x, 0, x, h, "rgba(255,255,255,0.7)", s * 0.5);
+      for (let y = 0; y < h; y += 15 * s) line(0, y, w, y, "rgba(255,255,255,0.7)", s * 0.5);
+      break;
+    case "cobbles":
+      for (let y = 0; y < h; y += 4 * s) for (let x = ((y / (4 * s)) % 2) * 2.5 * s; x < w; x += 5 * s) ellipse(ctx, x, y, 2.2 * s, 1.6 * s, sp.accent);
+      break;
+  }
+  if (sp.sky) {
+    const g = ctx.createLinearGradient(0, 0, 0, 10 * s);
+    g.addColorStop(0, sp.sky[0]);
+    g.addColorStop(1, sp.sky[1] + "00");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, 10 * s);
+  }
+}
+
 function drawGround(ctx: C, scene: Scene, world: World, w: number, h: number, s: number, t: number) {
+  const sp = SPEC[scene.theme];
+  if (sp) return drawPattern(ctx, sp, w, h, s, t, scene.theme.length * 31 + world.w);
   const th = THEME[scene.theme];
   ctx.fillStyle = th.base;
   ctx.fillRect(0, 0, w, h);
@@ -346,7 +553,7 @@ function drawGround(ctx: C, scene: Scene, world: World, w: number, h: number, s:
 }
 
 function drawGrid(ctx: C, world: World, scene: Scene, w: number, h: number, s: number) {
-  ctx.strokeStyle = THEME[scene.theme].grid;
+  ctx.strokeStyle = (SPEC[scene.theme] ?? THEME[scene.theme]).grid;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let x = 10; x < world.w; x += 10) {
@@ -1140,6 +1347,217 @@ function drawDecor(ctx: C, d: Decor, s: number, t: number, frame: Frame) {
       for (const k of [-6, -1, 4]) ctx.fillRect(x + k * s, y - 1 * s, 3 * s, 3 * s);
       break;
     }
+    case "rooster": {
+      shadow(3 * s, 2.4 * s);
+      ellipse(ctx, x, y, 3.2 * s, 2.4 * s, "#FFF3E0");
+      for (const [dx, c] of [[-3.4, "#2E7D32"], [-3.8, "#1565C0"], [-3.2, "#E65100"]] as const) ellipse(ctx, x + dx * s, y - 1.2 * s, 1.6 * s, 0.6 * s, c, -0.8);
+      circle(ctx, x + 2.8 * s, y - 1.6 * s, 1.6 * s, "#FFF3E0");
+      for (const dx of [2.2, 2.9, 3.6]) circle(ctx, x + dx * s, y - 3.1 * s, 0.6 * s, "#E53935");
+      ctx.fillStyle = "#FFA000";
+      ctx.beginPath();
+      ctx.moveTo(x + 4.2 * s, y - 1.8 * s);
+      ctx.lineTo(x + 5.5 * s, y - 1.4 * s);
+      ctx.lineTo(x + 4.2 * s, y - 1 * s);
+      ctx.fill();
+      circle(ctx, x + 3.2 * s, y - 1.9 * s, 0.3 * s, "#010F2A");
+      break;
+    }
+    case "pig":
+      shadow(3.4 * s, 2.6 * s);
+      ellipse(ctx, x, y, 3.6 * s, 2.6 * s, "#F8BBD0");
+      circle(ctx, x + 3.2 * s, y, 1.8 * s, "#F8BBD0");
+      ellipse(ctx, x + 4.6 * s, y, 0.8 * s, 0.9 * s, "#F48FB1");
+      ellipse(ctx, x + 2.6 * s, y - 1.6 * s, 0.7 * s, 0.5 * s, "#F06292", 0.4);
+      circle(ctx, x + 3.4 * s, y - 0.7 * s, 0.25 * s, "#010F2A");
+      ctx.strokeStyle = "#F48FB1";
+      ctx.lineWidth = Math.max(1, s * 0.4);
+      ctx.beginPath();
+      ctx.arc(x - 3.8 * s, y, 0.8 * s, 0, Math.PI * 1.5);
+      ctx.stroke();
+      break;
+    case "trough":
+      shadow(7 * s, 2.4 * s);
+      ctx.fillStyle = "#8D6E63";
+      roundRect(ctx, x - 7 * s, y - 2 * s, 14 * s, 4 * s, s);
+      ctx.fill();
+      ctx.fillStyle = "#FFCC80";
+      roundRect(ctx, x - 6 * s, y - 1.2 * s, 12 * s, 2.4 * s, s * 0.6);
+      ctx.fill();
+      break;
+    case "tractor":
+      shadow(7 * s, 5 * s);
+      ctx.fillStyle = "#43A047";
+      roundRect(ctx, x - 5 * s, y - 3.5 * s, 10 * s, 7 * s, s);
+      ctx.fill();
+      ctx.fillStyle = "#C8E6C9";
+      ctx.fillRect(x - 3 * s, y - 2.5 * s, 3.5 * s, 5 * s);
+      for (const [dx, dy, r] of [[-4, -4, 1.8], [-4, 4, 1.8], [4, -3.6, 1.2], [4, 3.6, 1.2]] as const) circle(ctx, x + dx * s, y + dy * s, r * s, "#212121");
+      break;
+    case "balloon": {
+      const bob = Math.sin(t * 2 + d.x) * s * 0.6;
+      ctx.strokeStyle = "rgba(0,0,0,0.35)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y + 3 * s + bob);
+      ctx.lineTo(x + s, y + 7 * s);
+      ctx.stroke();
+      ellipse(ctx, x, y + bob, 2.4 * s, 3 * s, d.colour ?? "#EC407A");
+      ellipse(ctx, x - 0.8 * s, y - 1 * s + bob, 0.6 * s, 0.9 * s, "rgba(255,255,255,0.6)");
+      break;
+    }
+    case "mirror": {
+      const mw = (d.w ?? 30) * s;
+      ctx.fillStyle = "#B0BEC5";
+      roundRect(ctx, x, y, mw, 6 * s, s);
+      ctx.fill();
+      ctx.fillStyle = "#E3F2FD";
+      roundRect(ctx, x + s, y + s, mw - 2 * s, 4 * s, s * 0.6);
+      ctx.fill();
+      for (let k = x + 2 * s; k < x + mw; k += 4 * s) circle(ctx, k, y, 0.9 * s, Math.sin(t * 4 + k) > -0.2 ? "#FFF59D" : "#FBC02D");
+      break;
+    }
+    case "desk":
+      shadow(6 * s, 4 * s);
+      ctx.fillStyle = "#BCAAA4";
+      roundRect(ctx, x - 6 * s, y - 4 * s, 12 * s, 8 * s, s);
+      ctx.fill();
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(x - 3 * s, y - 2 * s, 5 * s, 3.5 * s);
+      ctx.fillStyle = "#FFB300";
+      ctx.fillRect(x + 3 * s, y - 2.5 * s, 0.8 * s, 4 * s);
+      break;
+    case "kitten":
+      ellipse(ctx, x, y, 2.4 * s, 1.8 * s, "#FFB74D");
+      circle(ctx, x + 2 * s, y - 0.4 * s, 1.4 * s, "#FFB74D");
+      for (const k of [-0.6, 0.6]) {
+        ctx.fillStyle = "#FFB74D";
+        ctx.beginPath();
+        ctx.moveTo(x + 2 * s + k * s, y - 1.4 * s);
+        ctx.lineTo(x + 2 * s + k * 1.6 * s, y - 2.8 * s);
+        ctx.lineTo(x + 2 * s + k * 0.2 * s, y - 1.8 * s);
+        ctx.fill();
+      }
+      circle(ctx, x + 2.5 * s, y - 0.6 * s, 0.25 * s, "#010F2A");
+      break;
+    case "sun": {
+      const r2 = (d.r ?? 5) * s;
+      for (let k = 0; k < 10; k++) {
+        const a = (k / 10) * Math.PI * 2 + t * 0.3;
+        ctx.strokeStyle = "#FFB300";
+        ctx.lineWidth = Math.max(1.5, s * 0.6);
+        ctx.beginPath();
+        ctx.moveTo(x + Math.cos(a) * r2 * 1.2, y + Math.sin(a) * r2 * 1.2);
+        ctx.lineTo(x + Math.cos(a) * r2 * 1.6, y + Math.sin(a) * r2 * 1.6);
+        ctx.stroke();
+      }
+      circle(ctx, x, y, r2, "#FFD54F");
+      break;
+    }
+    case "moon":
+      circle(ctx, x, y, r, "#FFF8E1");
+      circle(ctx, x + r * 0.45, y - r * 0.2, r * 0.85, (SPEC.nightrail?.base ?? "#263238"));
+      break;
+    case "cloud": {
+      const drift = Math.sin(t * 0.4 + d.x) * 2 * s;
+      for (const [dx, dy, rr] of [[-3, 0, 3], [0, -1.5, 3.6], [3.2, 0, 3], [0, 1.2, 3]] as const) circle(ctx, x + dx * s + drift, y + dy * s, rr * s, "rgba(255,255,255,0.92)");
+      break;
+    }
+    case "dino": {
+      shadow(8 * s, 4 * s);
+      ctx.strokeStyle = "#F5F0E6";
+      ctx.lineWidth = Math.max(1.5, s * 0.7);
+      ctx.beginPath();
+      ctx.moveTo(x - 10 * s, y + 1 * s);
+      ctx.quadraticCurveTo(x - 4 * s, y - 3 * s, x + 2 * s, y - 2 * s);
+      ctx.quadraticCurveTo(x + 6 * s, y - 2 * s, x + 7 * s, y - 6 * s);
+      ctx.stroke();
+      for (let k = -6; k <= 2; k += 2) {
+        ctx.beginPath();
+        ctx.moveTo(x + k * s, y - 2 * s);
+        ctx.lineTo(x + k * s, y + 2.5 * s);
+        ctx.stroke();
+      }
+      circle(ctx, x + 7.5 * s, y - 6.5 * s, 1.6 * s, "#F5F0E6");
+      break;
+    }
+    case "lighthouse":
+      shadow(4 * s, 4 * s);
+      circle(ctx, x, y, 4 * s, "#FFFFFF");
+      ctx.strokeStyle = "#E53935";
+      ctx.lineWidth = Math.max(1.5, s * 1.2);
+      ctx.beginPath();
+      ctx.arc(x, y, 2.8 * s, 0, Math.PI * 2);
+      ctx.stroke();
+      circle(ctx, x, y, 1.4 * s, "#FFE082");
+      ctx.fillStyle = "rgba(255,236,150,0.35)";
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.arc(x, y, 30 * s, t * 0.8, t * 0.8 + 0.35);
+      ctx.fill();
+      break;
+    case "cactus":
+      shadow(2.4 * s, 2 * s);
+      circle(ctx, x, y, 2.2 * s, "#558B2F");
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2;
+        circle(ctx, x + Math.cos(a) * 2.4 * s, y + Math.sin(a) * 2.4 * s, 0.3 * s, "#F1F8E9");
+      }
+      circle(ctx, x, y, 0.8 * s, "#EC407A");
+      break;
+    case "flower":
+      for (let k = 0; k < 5; k++) {
+        const a = (k / 5) * Math.PI * 2;
+        circle(ctx, x + Math.cos(a) * 1.4 * s, y + Math.sin(a) * 1.4 * s, 1.1 * s, d.colour ?? "#EC407A");
+      }
+      circle(ctx, x, y, 0.8 * s, "#FDD835");
+      break;
+    case "plant":
+      for (let k = 0; k < 5; k++) ellipse(ctx, x, y, 3 * s, 1 * s, "#43A047", (k / 5) * Math.PI);
+      break;
+    case "chalk":
+      ctx.fillStyle = d.colour ?? "#F48FB1";
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(0.5);
+      roundRect(ctx, -2.5 * s, -0.6 * s, 5 * s, 1.2 * s, 0.6 * s);
+      ctx.fill();
+      ctx.restore();
+      break;
+    case "cone":
+      shadow(2 * s, 2 * s);
+      circle(ctx, x, y, 2.2 * s, "#FB8C00");
+      circle(ctx, x, y, 1.3 * s, "#FFFFFF");
+      circle(ctx, x, y, 0.7 * s, "#FB8C00");
+      break;
+    case "shell":
+      ctx.fillStyle = d.colour ?? "#FFCCBC";
+      ctx.beginPath();
+      ctx.moveTo(x, y + 1.6 * s);
+      ctx.arc(x, y + 1.6 * s, 2.6 * s, Math.PI * 1.1, Math.PI * 1.9);
+      ctx.fill();
+      break;
+    case "starfish":
+      ctx.fillStyle = d.colour ?? "#FF7043";
+      ctx.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const a = -Math.PI / 2 + (i * Math.PI) / 5;
+        const rr = (i % 2 ? 0.9 : 2.6) * s;
+        ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+      }
+      ctx.fill();
+      break;
+    case "dish": {
+      shadow(4 * s, 4 * s);
+      circle(ctx, x, y, 4 * s, "#ECEFF1");
+      circle(ctx, x, y, 3 * s, "#CFD8DC");
+      ctx.strokeStyle = "#607D8B";
+      ctx.lineWidth = Math.max(1, s * 0.4);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + Math.cos(t * 0.5) * 4 * s, y + Math.sin(t * 0.5) * 4 * s);
+      ctx.stroke();
+      break;
+    }
     case "mountain":
       break;
   }
@@ -1244,7 +1662,7 @@ function drawWall(ctx: C, wall: Rect, style: Scene["wall"], s: number, t: number
       ctx.font = `800 ${Math.max(10, 4 * s)}px system-ui, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("CODEship Museum", x + w / 2, y + h / 2 - 4 * s);
+      if (w > 70 && h > 30) ctx.fillText("CODEship Museum", x + w / 2, y + h / 2 - 4 * s);
       ctx.textAlign = "left";
       break;
     }
@@ -1332,6 +1750,33 @@ function drawCollectible(ctx: C, c: Collectible, done: boolean, s: number, t: nu
       ctx.beginPath();
       ctx.ellipse(x, y, 1.9 * s, 2.5 * s, 0, 0, Math.PI * 2);
       ctx.stroke();
+      break;
+    case "pearl":
+      if (done) break;
+      circle(ctx, x, y, 2 * s, "#F5F5F5");
+      circle(ctx, x - 0.6 * s, y - 0.6 * s, 0.7 * s, "#FFFFFF");
+      ctx.strokeStyle = "rgba(180,190,210,0.9)";
+      ctx.lineWidth = Math.max(1, s * 0.3);
+      ctx.beginPath();
+      ctx.arc(x, y, 2 * s, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    case "ball":
+      if (done) break;
+      circle(ctx, x, y, 2.4 * s, "#E53935");
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.lineWidth = Math.max(1, s * 0.5);
+      ctx.beginPath();
+      ctx.arc(x, y, 2.4 * s, -0.5, 0.9);
+      ctx.stroke();
+      circle(ctx, x - 0.8 * s, y - 0.8 * s, 0.6 * s, "rgba(255,255,255,0.6)");
+      break;
+    case "mitten":
+      if (done) break;
+      ellipse(ctx, x, y, 2.2 * s, 2.8 * s, "#E53935");
+      ellipse(ctx, x + 2 * s, y - 0.6 * s, 0.9 * s, 1.4 * s, "#E53935", 0.4);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(x - 2.2 * s, y + 1.8 * s, 4.4 * s, 1 * s);
       break;
     case "gem":
     case "star": {
@@ -1426,7 +1871,12 @@ function drawTarget(ctx: C, tg: Target, done: boolean, s: number, t: number) {
   const x = tg.x * s;
   const y = tg.y * s;
   ctx.save();
-  if (tg.kind === "fire") {
+  if (tg.kind === "plant") {
+    const wet = done;
+    for (let k = 0; k < 6; k++) ellipse(ctx, x, y, 3.4 * s, 1.1 * s, wet ? "#2E7D32" : "#A1887F", (k / 6) * Math.PI);
+    circle(ctx, x, y, 1.2 * s, wet ? "#EC407A" : "#8D6E63");
+    if (wet) for (let k = 0; k < 3; k++) circle(ctx, x + (k - 1) * 2.5 * s, y + 3.5 * s, 0.6 * s, "rgba(79,195,247,0.85)");
+  } else if (tg.kind === "fire") {
     if (!done) {
       for (let k = -2; k <= 2; k++) {
         const fl = (4 + Math.sin(t * 12 + k * 2) * 1.4 + (2 - Math.abs(k)) * 1.5) * s;
@@ -1487,10 +1937,31 @@ function drawItem(ctx: C, it: Item, x: number, y: number, s: number) {
       ctx.stroke();
       circle(ctx, px - 2.6 * s, py - 0.7 * s, 0.5 * s, "#5D4037");
     } else {
-      circle(ctx, px, py, 2.6 * s, it.colour === "red" ? "#E53935" : "#FB8C00");
+      circle(ctx, px, py, 2.6 * s, it.colour === "red" ? "#E53935" : it.colour === "purple" ? "#6A1B9A" : "#FB8C00");
       circle(ctx, px - 0.8 * s, py - 0.8 * s, 0.8 * s, "rgba(255,255,255,0.45)");
       ellipse(ctx, px + 0.6 * s, py - 2.6 * s, 1.1 * s, 0.5 * s, "#43A047", -0.5);
     }
+  } else if (it.kind === "bottle") {
+    ellipse(ctx, px + 0.6 * s, py + 0.8 * s, 2.8 * s, 1.4 * s, "rgba(0,0,0,0.18)");
+    ctx.fillStyle = "rgba(129,212,250,0.9)";
+    roundRect(ctx, px - 2.8 * s, py - 1.2 * s, 4.4 * s, 2.4 * s, s);
+    ctx.fill();
+    ctx.fillStyle = "#1E88E5";
+    ctx.fillRect(px + 1.6 * s, py - 0.6 * s, 1.4 * s, 1.2 * s);
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fillRect(px - 2 * s, py - 0.8 * s, 2.4 * s, 0.5 * s);
+  } else if (it.kind === "kitten") {
+    ctx.translate(px, py);
+    ctx.scale(1.2, 1.2);
+    ellipse(ctx, 0, 0, 2.4 * s, 1.8 * s, "#FFB74D");
+    circle(ctx, 2 * s, -0.4 * s, 1.4 * s, "#FFB74D");
+    circle(ctx, 2.5 * s, -0.6 * s, 0.25 * s, "#010F2A");
+    ctx.strokeStyle = "#FFB74D";
+    ctx.lineWidth = Math.max(1, s * 0.5);
+    ctx.beginPath();
+    ctx.moveTo(-2.2 * s, 0);
+    ctx.quadraticCurveTo(-4 * s, -1 * s, -3.6 * s, -2.4 * s);
+    ctx.stroke();
   } else if (it.kind === "flag") {
     ctx.translate(px, py);
     ctx.scale(1.8, 1.8);
@@ -1768,10 +2239,16 @@ export default function Stage({ world, scene, frame, trail = [], frames, index =
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const t = frame.t;
-    const th = THEME[scene.theme];
+    const th = SPEC[scene.theme] ?? THEME[scene.theme];
     const done = new Set(frame.done);
 
     drawGround(ctx, scene, world, width, height, s, t);
+    if (scene.theme !== "volcano")
+      for (const z of world.heatZones ?? []) {
+        const heat = Math.min(1, Math.max(0, (z.temp - 25) / 160));
+        ctx.fillStyle = `rgba(255,${Math.round(110 - heat * 80)},20,${0.05 + heat * 0.35})`;
+        ctx.fillRect(z.x * s, z.y * s, z.w * s, z.h * s);
+      }
     if (world.grid) drawGrid(ctx, world, scene, width, height, s);
 
     for (const z of world.zones) {
@@ -1989,7 +2466,7 @@ export default function Stage({ world, scene, frame, trail = [], frames, index =
     // progress counter for things to collect
     const cols = world.collectibles ?? [];
     if (cols.length && !thumbnail) {
-      const names: Record<string, string> = { egg: "Eggs", gem: "Crystals", panel: "Clean panels", treasure: "Treasure", star: "Stars" };
+      const names: Record<string, string> = { egg: "Eggs", gem: "Crystals", panel: "Clean panels", treasure: "Treasure", star: "Stars", pearl: "Pearls", mitten: "Mittens", ball: "Balls" };
       const got = cols.filter((c) => done.has(c.id)).length;
       ctx.font = `800 ${Math.max(11, 3.2 * s)}px system-ui, sans-serif`;
       const text = `${names[cols[0].kind]} ${got} / ${cols.length}`;

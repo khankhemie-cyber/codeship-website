@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { DEFAULT_LANG, MISSIONS, levelOf, missionById, type GoalResult, type Lang, type Mission, type Program } from "./missions";
+import { DEFAULT_LANG, MISSIONS, SEMESTERS, labsPerSemester, type GoalResult, type Lang, type Mission, type Program } from "./missions";
 import { REFERENCE } from "./reference";
 import { EMPTY_WORKSPACE, blockIcon, blocksToJs } from "./robotBlocks";
 import Stage, { FLOOR } from "./Stage";
@@ -438,25 +438,35 @@ function DataView({ trace }: { trace: Trace | null }) {
 
 // ---------------------------------------------------------------- mission gallery
 
-function MissionGallery({ current, done, onPick, onClose }: { current: string; done: string[]; onPick: (m: Mission) => void; onClose: () => void }) {
+const SEMESTER_NAME: Record<string, string> = { S1: "Semester 1", S2: "Semester 2", S3: "Semester 3", S4: "Semester 4", Capstone: "Capstone" };
+
+/** "Semester 1 · Lab 2 of 4" for a mission. */
+export function labLabel(m: Mission) {
+  if (!m.semester) return "";
+  return `${SEMESTER_NAME[m.semester]} · Lab ${m.lab} of ${labsPerSemester(m.program)}`;
+}
+
+function MissionGallery({ missions, current, done, onPick, onClose }: { missions: Mission[]; current: string; done: string[]; onPick: (m: Mission) => void; onClose: () => void }) {
+  const programs = PROGRAMS.filter((p) => missions.some((m) => m.program === p));
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#000814]/70 p-3 backdrop-blur-sm sm:p-8" role="dialog" aria-modal="true" aria-label="Choose a mission">
       <div className="w-full max-w-6xl rounded-2xl bg-[var(--rl-bg)] p-4 text-[var(--rl-text)] shadow-2xl ring-1 ring-[var(--rl-border)] sm:p-6">
         <div className="mb-5 flex items-start gap-3">
           <div>
             <h2 className="font-display text-2xl font-extrabold">Choose a mission</h2>
-            <p className="text-sm text-[var(--rl-muted)]">Code a robot to do a real job. Every mission works in Blocks, JavaScript or Python.</p>
+            <p className="text-sm text-[var(--rl-muted)]">One mission for each Robot Lab class. The last one in each semester is the big challenge.</p>
           </div>
           <button onClick={onClose} className={`${iconBtn} ml-auto shrink-0`} aria-label="Close">
             <Icon name="x" />
           </button>
         </div>
-        {PROGRAMS.map((p) => {
-          const list = MISSIONS.filter((m) => m.program === p);
+        {programs.map((p) => {
+          const list = missions.filter((m) => m.program === p);
           const st = PROGRAM_STYLE[p];
+          const groups = p === "Everyone" ? [list] : SEMESTERS.map((sem) => list.filter((m) => m.semester === sem));
           return (
-            <section key={p} className="mb-6" aria-label={st.label}>
-              <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider">
+            <section key={p} className="mb-7" aria-label={st.label}>
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider">
                 <span className="inline-block h-3 w-3 rounded-full" style={{ background: st.colour }} />
                 {st.label} <span className="font-semibold normal-case tracking-normal text-[var(--rl-muted)]">· {st.grades}</span>
                 {p !== "Everyone" && (
@@ -468,45 +478,55 @@ function MissionGallery({ current, done, onPick, onClose }: { current: string; d
                   </span>
                 )}
               </h3>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {list.map((m) => {
-                  const isDone = done.includes(m.id);
-                  return (
-                    <button
-                      key={m.id}
-                      onClick={() => onPick(m)}
-                      className={`group flex flex-col overflow-hidden rounded-2xl border bg-[var(--rl-surface)] text-left transition hover:-translate-y-0.5 hover:shadow-xl ${m.id === current ? "border-[#D58401] ring-2 ring-[#D58401]" : "border-[var(--rl-border)]"} ${focusRing}`}
-                    >
-                      <div className="relative p-3" style={{ background: st.colour }}>
-                        <div className="overflow-hidden rounded-lg ring-2 ring-white/30">
-                          <Stage world={m.world} scene={m.scene} frame={new Sim(m.world).frames[0]} thumbnail />
-                        </div>
-                        {m.semester && (
-                          <span className="absolute left-4 top-4 rounded-full bg-[#001532]/85 px-2 py-0.5 text-xs font-extrabold text-white shadow">
-                            Level {levelOf(m)} · {m.semester === "Capstone" ? "Capstone" : m.semester}
-                          </span>
-                        )}
-                        {isDone && (
-                          <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-[#2EB84B] px-2 py-0.5 text-xs font-bold text-white shadow">
-                            <Icon name="check" className="h-3.5 w-3.5" /> Done
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-1 flex-col gap-1 p-3.5">
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="font-display text-lg font-extrabold leading-tight">{m.title}</span>
-                          <span className="shrink-0 rounded-full bg-[var(--rl-hover)] px-2 py-0.5 text-[11px] font-bold">{st.grades}</span>
-                        </div>
-                        <span className="text-[13px] text-[var(--rl-muted)]">{m.goal}</span>
-                        <span className="mt-auto pt-2 text-xs font-bold text-[#D58401]">
-                          {m.skills.join(" · ")}
-                          {p !== "Everyone" ? ` · ${m.fits}` : ""}
+              {groups.map((group, gi) =>
+                group.length ? (
+                  <div key={gi} className="mb-4">
+                    {group[0].semester && (
+                      <h4 className="mb-2 flex items-baseline gap-2 text-[13px] font-extrabold">
+                        {SEMESTER_NAME[group[0].semester]}
+                        <span className="font-semibold text-[var(--rl-muted)]">· {group[0].fits.replace(/^(S\d|Capstone) /, "")}</span>
+                        <span className="ml-auto text-xs font-bold text-[var(--rl-muted)]">
+                          {group.filter((m) => done.includes(m.id)).length} of {group.length} done
                         </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      </h4>
+                    )}
+                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+                      {group.map((m) => {
+                        const isDone = done.includes(m.id);
+                        const challenge = m.semester && m.lab === labsPerSemester(m.program);
+                        return (
+                          <button
+                            key={m.id}
+                            onClick={() => onPick(m)}
+                            title={m.goal}
+                            className={`group flex flex-col overflow-hidden rounded-xl border bg-[var(--rl-surface)] text-left transition hover:-translate-y-0.5 hover:shadow-xl ${m.id === current ? "border-[#D58401] ring-2 ring-[#D58401]" : "border-[var(--rl-border)]"} ${focusRing}`}
+                          >
+                            <div className="relative p-1.5" style={{ background: st.colour }}>
+                              <div className="overflow-hidden rounded-md ring-1 ring-white/30">
+                                <Stage world={m.world} scene={m.scene} frame={new Sim(m.world).frames[0]} thumbnail />
+                              </div>
+                              {m.semester && (
+                                <span className={`absolute left-2.5 top-2.5 rounded-full px-1.5 py-0.5 text-[10px] font-extrabold shadow ${challenge ? "bg-[#F0D030] text-[#001532]" : "bg-[#001532]/85 text-white"}`}>
+                                  {challenge ? "★ Challenge" : `Lab ${m.lab}`}
+                                </span>
+                              )}
+                              {isDone && (
+                                <span className="absolute right-2.5 top-2.5 inline-flex items-center rounded-full bg-[#2EB84B] p-0.5 text-white shadow" aria-label="Done">
+                                  <Icon name="check" className="h-3.5 w-3.5" />
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex flex-1 flex-col gap-0.5 p-2">
+                              <span className="font-display text-[13px] font-extrabold leading-tight">{m.title}</span>
+                              <span className="line-clamp-2 text-[11px] leading-snug text-[var(--rl-muted)]">{m.goal}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null,
+              )}
             </section>
           );
         })}
@@ -519,9 +539,12 @@ function MissionGallery({ current, done, onPick, onClose }: { current: string; d
 
 type Status = "idle" | "loading" | "running" | "playing" | "done";
 
-export default function RobotLab() {
+export default function RobotLab({ programs }: { programs: Program[] }) {
+  // Each class password opens its own program's missions (plus Free build).
+  const available = useMemo(() => MISSIONS.filter((m) => m.program === "Everyone" || programs.includes(m.program)), [programs]);
+  const pick = (id: string | null | undefined) => available.find((m) => m.id === id) ?? available[0];
   const [saved, setSaved] = useState<Saved>(FRESH);
-  const [mission, setMission] = useState<Mission>(MISSIONS[0]);
+  const [mission, setMission] = useState<Mission>(() => MISSIONS.find((m) => programs.includes(m.program)) ?? MISSIONS[0]);
   const [lang, setLang] = useState<Lang>("blocks");
   const [docKey, setDocKey] = useState("init");
   const [code, setCode] = useState("");
@@ -599,7 +622,7 @@ export default function RobotLab() {
       try {
         const bytes = await inflateRaw(fromBase64Url(location.hash.slice(i + SHARE_KEY.length)));
         const p = JSON.parse(new TextDecoder().decode(bytes));
-        const m = missionById(p.m);
+        const m = pick(p.m);
         const l: Lang = ["blocks", "js", "py"].includes(p.l) ? p.l : DEFAULT_LANG[m.program];
         open(m, l, s, l === "blocks" ? p.b : p.c);
         setNotice("Opened a shared robot program. Your changes save in this browser.");
@@ -613,7 +636,7 @@ export default function RobotLab() {
     fromHash().then((ok) => {
       if (!ok) {
         const params = new URLSearchParams(location.search);
-        const m = missionById(params.get("m") ?? s.mission);
+        const m = pick(params.get("m") ?? s.mission);
         const l = (params.get("lang") as Lang) ?? (params.get("m") ? DEFAULT_LANG[m.program] : s.lang);
         open(m, ["blocks", "js", "py"].includes(l) ? l : "blocks", s);
         if (!s.seen && !params.get("m")) setGallery(true);
@@ -727,8 +750,8 @@ export default function RobotLab() {
   }, [mission]);
 
   const nextMission = () => {
-    const i = MISSIONS.findIndex((m) => m.id === mission.id);
-    const m = MISSIONS[(i + 1) % MISSIONS.length];
+    const i = available.findIndex((m) => m.id === mission.id);
+    const m = available[(i + 1) % available.length];
     open(m, m.program === mission.program ? lang : DEFAULT_LANG[m.program]);
   };
 
@@ -761,7 +784,7 @@ export default function RobotLab() {
     if (file.name.endsWith(".json")) {
       try {
         const p = JSON.parse(text);
-        open(missionById(p.mission ?? mission.id), "blocks", saved, p.blocks);
+        open(pick(p.mission ?? mission.id), "blocks", saved, p.blocks);
         saveBlocks(p.blocks);
       } catch {
         setNotice("That file isn't a Robot Lab blocks file.");
@@ -892,7 +915,7 @@ export default function RobotLab() {
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#D58401]">
                 {st.label} · {st.grades}
-                {mission.semester ? ` · Level ${levelOf(mission)} of 5 · ${mission.fits}` : ""}
+                {mission.semester ? ` · ${labLabel(mission)} · ${mission.fits.replace(/^(S\d|Capstone) /, "")}` : ""}
               </p>
               <h2 className="font-display text-lg font-extrabold leading-tight">
                 {mission.title}
@@ -902,7 +925,21 @@ export default function RobotLab() {
                   </span>
                 )}
               </h2>
-              <p className="text-sm text-[var(--rl-muted)]">{mission.goal}</p>
+              {mission.story && (
+                <div className="mt-2 flex items-start gap-2">
+                  <span aria-hidden className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FFF4C2] text-xl ring-2 ring-[#F0D030]">
+                    {mission.story.face}
+                  </span>
+                  <p className="relative rounded-2xl rounded-tl-sm bg-[#FFF9DB] px-3 py-2 text-sm leading-snug text-[#3A2E00] ring-1 ring-[#F0D030]/60">
+                    <span className="font-bold">{mission.story.who}: </span>
+                    {mission.story.says}
+                  </p>
+                </div>
+              )}
+              <p className="mt-2 text-sm text-[var(--rl-muted)]">
+                <span className="font-bold text-[var(--rl-text,inherit)]">Your mission: </span>
+                {mission.goal}
+              </p>
             </div>
           </div>
 
@@ -983,6 +1020,7 @@ export default function RobotLab() {
 
       {gallery && ready && (
         <MissionGallery
+          missions={available}
           current={mission.id}
           done={saved.done}
           onClose={() => {

@@ -19,9 +19,9 @@ export type Rect = { x: number; y: number; w: number; h: number };
 export type Zone = Rect & { colour: ColourName; label?: string; id?: string };
 export type LightZone = Rect & { level: number; label?: string };
 export type Item = { id: string; x: number; y: number; colour: ColourName; label?: string; kind?: ItemKind };
-export type ItemKind = "block" | "package" | "fruit" | "flag" | "snack";
+export type ItemKind = "block" | "package" | "fruit" | "flag" | "snack" | "bottle" | "kitten";
 /** Things the robot collects (or cleans) just by driving over them. */
-export type Collectible = Pt & { id: string; kind: "egg" | "gem" | "panel" | "treasure" | "star" };
+export type Collectible = Pt & { id: string; kind: "egg" | "gem" | "panel" | "treasure" | "star" | "pearl" | "mitten" | "ball" };
 /** Things the robot sprays with water (spray()) when it faces them from close by. */
 export type Target = Pt & { id: string; kind: "fire" | "plant" };
 export const NOTES = ["C", "D", "E", "F", "G", "A", "B", "C2"] as const;

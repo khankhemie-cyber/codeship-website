@@ -1,10 +1,13 @@
 // Reference solutions for every Robot Lab mission (JavaScript, as the Blocks
 // and JavaScript modes run it). The acceptance tests prove each mission can be
 // passed. Not shipped to students.
+import { LAB_JS } from "./lab-solutions.mjs";
+
 export const JS = {
+  ...LAB_JS,
   "egg-hunt": `forward(95); beep();`,
   "clap-concert": `waitForClap(); forward(55); play("C"); play("E"); play("G");`,
-  "coral-reef": `while (!obstacle()) { forward(2); } led("blue");`,
+  "coral-reef": `while (!obstacle()) { forward(2); } drop(); led("green");`,
   "snowy-igloo": `forward(50); turnLeft(90); forward(55); turnRight(90); forward(45);`,
   "paint-a-square": `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } penUp(); beep();`,
   "dance-party": `display("Hi, I'm Bolt"); led("blue"); beep(); led("purple"); turnLeft(360);`,
@@ -40,10 +43,11 @@ function face(target) { let d = ((target - h) % 360 + 540) % 360 - 180; if (d > 
 function goTo(tx, ty) { const dx = tx - x, dy = ty - y; const dist = Math.hypot(dx, dy); if (dist < 0.01) return;
   face(Math.atan2(-dy, dx) * 180 / Math.PI); forward(dist); x = tx; y = ty; }
 const crateY = { red: 19, orange: 50, yellow: 81 };
-for (const row of [19, 50, 81]) {
+for (const row of [19, 50, 81, 112]) {
   goTo(41, row); face(180);
   const c = itemColour(); pickUp();
-  goTo(70, row); goTo(70, crateY[c]); goTo(127, crateY[c]); face(0); drop(); goTo(100, crateY[c]);
+  const cy = crateY[c] ?? 112;
+  goTo(70, row); goTo(70, cy); goTo(127, cy); face(0); drop(); goTo(100, cy);
 }`,
   "space-station": `const actions = { forward: (n) => forward(n), left: (n) => turnLeft(n), right: (n) => turnRight(n), photo: () => photo() };
 let m = nextMessage();
@@ -55,7 +59,8 @@ while (m !== "") {
   else display("Sorry, I can't help");
   m = nextMessage();
 }`,
-  "volcano-survey": `for (let i = 0; i < 17; i++) { forward(10); record("temp", temperature()); }`,
+  "volcano-survey": `const r = []; for (let i = 0; i < 17; i++) { forward(10); const t = temperature(); r.push(t); record("temp", t); }
+console.log("Hottest:", Math.max(...r)); console.log("Mean:", r.reduce((a, b) => a + b, 0) / r.length);`,
   "solar-farm": `record("power", power()); forward(120); turnRight(90); forward(55); turnRight(90); forward(105); record("power", power());`,
   "sandbox": `forward(5);`,
 };

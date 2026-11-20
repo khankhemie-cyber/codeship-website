@@ -39,23 +39,29 @@ def go_to(tx, ty):
     x, y = tx, ty
 
 crate_y = {"red": 19, "orange": 50, "yellow": 81}
-for row in [19, 50, 81]:
+for row in [19, 50, 81, 112]:
     go_to(41, row)
     face(180)
     c = item_colour()
     print("Found", c)
     pick_up()
+    cy = crate_y.get(c, 112)
     go_to(70, row)
-    go_to(70, crate_y[c])
-    go_to(127, crate_y[c])
+    go_to(70, cy)
+    go_to(127, cy)
     face(0)
     drop()
-    go_to(100, crate_y[c])
+    go_to(100, cy)
 `,
   "volcano-survey": `
+readings = []
 for i in range(18):
     forward(10)
-    record("temp", temperature())
+    t = temperature()
+    readings.append(t)
+    record("temp", t)
+print("Hottest:", max(readings))
+print("Mean:", sum(readings) / len(readings))
 `,
   "treasure-vault": `
 def is_strong(code):
@@ -123,7 +129,8 @@ backward(35)
   "coral-reef": `
 while not obstacle():
     forward(2)
-led("blue")
+drop()
+led("green")
 `,
   "paint-a-square": `
 pen_down("purple")
