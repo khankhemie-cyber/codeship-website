@@ -1052,8 +1052,8 @@ export const DEVELOPER_LABS: Mission[] = [
     story: { who: "Curator Ines", face: "👩‍💼", says: "Tonight, patrol the WHOLE glass house: all the way round the outside, past every wall, and stop back where you started. Count your corners so you know when the lap is done." },
     goal: "Use if wall ahead → turn left, else → forward. Count your turns and stop after one full lap, back near the start.",
     hint: "After 3 turns, the next wall means the lap is done. Stop there.",
-    scene: { theme: "greenhouse", decor: [{ kind: "plant", x: 80, y: 55 }, { kind: "plant", x: 60, y: 50 }, { kind: "plant", x: 100, y: 60 }] },
-    world: base({ w: 160, h: 110, robot: "racer", start: { x: 15, y: 95, heading: 0 }, light: 85 }),
+    scene: { theme: "greenhouse", wall: "building", decor: [{ kind: "plant", x: 30, y: 55 }, { kind: "plant", x: 130, y: 55 }] },
+    world: base({ w: 160, h: 110, robot: "racer", start: { x: 15, y: 95, heading: 0 }, light: 85, walls: [{ x: 50, y: 35, w: 60, h: 40 }] }),
     check(trace, world) {
       if (trace.stats.bumps > 0) return notYet("Bump! Turn before you touch a wall.");
       if (trace.stats.turned < 265) return notYet("Keep going round. A full lap passes all 4 walls.");
