@@ -1,50 +1,759 @@
 {
   "_readme": "Every spoken line in Bus Buddies Road Trip. Edit a line's text here, then run `node scripts/bus-buddies/generate-voices.mjs` to rebuild only the lines that changed. `chapter` decides which audio pack the line is loaded with (0 = shared, loaded with every chapter). Keep lines short: under 10 words where possible.",
   "characters": {
-    "bina": { "name": "Bina the Bus", "style": "Bright, bubbly, slightly sing-song" },
-    "codey": { "name": "Captain Codey", "style": "Warm, calm, encouraging narrator" },
-    "turtle": { "name": "Tuck the Turtle", "style": "Soft and slow, a little shy" },
-    "duck": { "name": "Dot the Duck", "style": "Giggly and quick" },
-    "owl": { "name": "Olive the Owl", "style": "Sleepy and gentle" }
+    "bina": {
+      "name": "Bina the Bus",
+      "style": "Bright, bubbly, slightly sing-song"
+    },
+    "codey": {
+      "name": "Captain Codey",
+      "style": "Warm, calm, encouraging narrator"
+    },
+    "turtle": {
+      "name": "Tuck the Turtle",
+      "style": "Soft and slow, a little shy"
+    },
+    "duck": {
+      "name": "Dot the Duck",
+      "style": "Giggly and quick"
+    },
+    "owl": {
+      "name": "Olive the Owl",
+      "style": "Sleepy and gentle"
+    }
   },
   "lines": [
-    { "id": "common.welcome", "chapter": 0, "character": "codey", "text": "Hi, friend! Tap the big green button to play!" },
-    { "id": "common.pick_chapter", "chapter": 0, "character": "codey", "text": "Tap a stop on the map to start a trip." },
-    { "id": "common.coming_soon", "chapter": 0, "character": "codey", "text": "That trip is coming soon!" },
-    { "id": "common.sticker_book", "chapter": 0, "character": "codey", "text": "Look at all your stickers!" },
-    { "id": "common.full", "chapter": 0, "character": "bina", "text": "Wait! That's too many blocks!" },
-    { "id": "common.go", "chapter": 0, "character": "codey", "text": "Press the green GO button!" },
-    { "id": "common.add_blocks", "chapter": 0, "character": "codey", "text": "Tap the arrows to tell Bina where to drive." },
-    { "id": "common.try_again", "chapter": 0, "character": "codey", "text": "Let's fix it together. Try again!" },
-    { "id": "common.hint_offer", "chapter": 0, "character": "codey", "text": "Want a hint? Follow the sparkly arrow." },
-    { "id": "common.help_offer", "chapter": 0, "character": "codey", "text": "I can add the next block for you." },
-    { "id": "common.help_done", "chapter": 0, "character": "codey", "text": "There! Now you try the rest." },
-    { "id": "common.great_job", "chapter": 0, "character": "codey", "text": "Great job! You made a program!" },
-    { "id": "common.sticker", "chapter": 0, "character": "codey", "text": "You earned a sticker for your book!" },
-    { "id": "common.too_short", "chapter": 0, "character": "bina", "text": "Hmm, we're not there yet. More road!" },
-    { "id": "common.oops_grass", "chapter": 0, "character": "bina", "text": "Oops! Buses can't drive on grass!" },
-    { "id": "common.oops_cows", "chapter": 0, "character": "bina", "text": "Oops! That's a cow field! Moo!" },
-    { "id": "common.oops_flowers", "chapter": 0, "character": "bina", "text": "Whoa! Not the flower garden!" },
-    { "id": "common.oops_edge", "chapter": 0, "character": "bina", "text": "Uh oh! The road ends here!" },
-    { "id": "common.oops_missed", "chapter": 0, "character": "bina", "text": "Wait! We drove past a friend!" },
-    { "id": "common.happy", "chapter": 0, "character": "bina", "text": "Beep beep! We did it!" },
-    { "id": "common.honk", "chapter": 0, "character": "bina", "text": "Honk honk! Hello!" },
-
-    { "id": "ch1.intro.1", "chapter": 1, "character": "codey", "text": "Good morning! I'm Captain Codey." },
-    { "id": "ch1.intro.2", "chapter": 1, "character": "bina", "text": "And I'm Bina the Bus! Beep beep!" },
-    { "id": "ch1.intro.3", "chapter": 1, "character": "codey", "text": "Our friends are waiting at their bus stops." },
-    { "id": "ch1.intro.4", "chapter": 1, "character": "bina", "text": "You tell me where to go!" },
-    { "id": "ch1.l1.prompt", "chapter": 1, "character": "codey", "text": "Drive forward two times to reach Tuck." },
-    { "id": "ch1.l2.prompt", "chapter": 1, "character": "codey", "text": "Dot is around the corner. Turn to find her!" },
-    { "id": "ch1.l3.prompt", "chapter": 1, "character": "codey", "text": "Olive is sleepy. Honk to wake her up!" },
-    { "id": "ch1.l4.prompt", "chapter": 1, "character": "codey", "text": "Everyone is on board! Now drive to the park gate." },
-    { "id": "ch1.turtle.join", "chapter": 1, "character": "turtle", "text": "Um... hi. Can I ride too?" },
-    { "id": "ch1.turtle.thanks", "chapter": 1, "character": "turtle", "text": "Thank you... for waiting for me." },
-    { "id": "ch1.duck.join", "chapter": 1, "character": "duck", "text": "Quack! Hee hee! Room for me?" },
-    { "id": "ch1.duck.cheer", "chapter": 1, "character": "duck", "text": "Wheee! Faster, Bina! Hee hee!" },
-    { "id": "ch1.owl.sleep", "chapter": 1, "character": "owl", "text": "Zzz... five more minutes..." },
-    { "id": "ch1.owl.join", "chapter": 1, "character": "owl", "text": "Oh! Is it morning already? Yawn." },
-    { "id": "ch1.reward.1", "chapter": 1, "character": "bina", "text": "All my buddies are on board!" },
-    { "id": "ch1.reward.2", "chapter": 1, "character": "codey", "text": "You put the steps in order. That's coding!" }
+    {
+      "id": "common.welcome",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Hi, friend! Tap the big green button to play!"
+    },
+    {
+      "id": "common.pick_chapter",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Tap a stop on the map to start a trip."
+    },
+    {
+      "id": "common.coming_soon",
+      "chapter": 0,
+      "character": "codey",
+      "text": "That trip is coming soon!"
+    },
+    {
+      "id": "common.sticker_book",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Look at all your stickers!"
+    },
+    {
+      "id": "common.full",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Wait! That's too many blocks!"
+    },
+    {
+      "id": "common.go",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Press the green GO button!"
+    },
+    {
+      "id": "common.add_blocks",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Tap the arrows to tell Bina where to drive."
+    },
+    {
+      "id": "common.try_again",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Let's fix it together. Try again!"
+    },
+    {
+      "id": "common.hint_offer",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Want a hint? Follow the sparkly arrow."
+    },
+    {
+      "id": "common.help_offer",
+      "chapter": 0,
+      "character": "codey",
+      "text": "I can add the next block for you."
+    },
+    {
+      "id": "common.help_done",
+      "chapter": 0,
+      "character": "codey",
+      "text": "There! Now you try the rest."
+    },
+    {
+      "id": "common.great_job",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Great job! You made a program!"
+    },
+    {
+      "id": "common.sticker",
+      "chapter": 0,
+      "character": "codey",
+      "text": "You earned a sticker for your book!"
+    },
+    {
+      "id": "common.too_short",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Hmm, we're not there yet. More road!"
+    },
+    {
+      "id": "common.oops_grass",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Oops! Buses can't drive on grass!"
+    },
+    {
+      "id": "common.oops_cows",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Oops! That's a cow field! Moo!"
+    },
+    {
+      "id": "common.oops_flowers",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Whoa! Not the flower garden!"
+    },
+    {
+      "id": "common.oops_edge",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Uh oh! The road ends here!"
+    },
+    {
+      "id": "common.oops_missed",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Wait! We drove past a friend!"
+    },
+    {
+      "id": "common.happy",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Beep beep! We did it!"
+    },
+    {
+      "id": "common.honk",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Honk honk! Hello!"
+    },
+    {
+      "id": "ch1.intro.1",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Good morning! I'm Captain Codey."
+    },
+    {
+      "id": "ch1.intro.2",
+      "chapter": 1,
+      "character": "bina",
+      "text": "And I'm Bina the Bus! Beep beep!"
+    },
+    {
+      "id": "ch1.intro.3",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Our friends are waiting at their bus stops."
+    },
+    {
+      "id": "ch1.intro.4",
+      "chapter": 1,
+      "character": "bina",
+      "text": "You tell me where to go!"
+    },
+    {
+      "id": "ch1.l1.prompt",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Drive forward two times to reach Tuck."
+    },
+    {
+      "id": "ch1.l2.prompt",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Dot is around the corner. Turn to find her!"
+    },
+    {
+      "id": "ch1.l3.prompt",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Olive is sleepy. Honk to wake her up!"
+    },
+    {
+      "id": "ch1.l4.prompt",
+      "chapter": 1,
+      "character": "codey",
+      "text": "Everyone is on board! Now drive to the park gate."
+    },
+    {
+      "id": "ch1.turtle.join",
+      "chapter": 1,
+      "character": "turtle",
+      "text": "Um... hi. Can I ride too?"
+    },
+    {
+      "id": "ch1.turtle.thanks",
+      "chapter": 1,
+      "character": "turtle",
+      "text": "Thank you... for waiting for me."
+    },
+    {
+      "id": "ch1.duck.join",
+      "chapter": 1,
+      "character": "duck",
+      "text": "Quack! Hee hee! Room for me?"
+    },
+    {
+      "id": "ch1.duck.cheer",
+      "chapter": 1,
+      "character": "duck",
+      "text": "Wheee! Faster, Bina! Hee hee!"
+    },
+    {
+      "id": "ch1.owl.sleep",
+      "chapter": 1,
+      "character": "owl",
+      "text": "Zzz... five more minutes..."
+    },
+    {
+      "id": "ch1.owl.join",
+      "chapter": 1,
+      "character": "owl",
+      "text": "Oh! Is it morning already? Yawn."
+    },
+    {
+      "id": "ch1.reward.1",
+      "chapter": 1,
+      "character": "bina",
+      "text": "All my buddies are on board!"
+    },
+    {
+      "id": "ch1.reward.2",
+      "chapter": 1,
+      "character": "codey",
+      "text": "You put the steps in order. That's coding!"
+    },
+    {
+      "id": "common.oops_water",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Splash! Buses can't swim!"
+    },
+    {
+      "id": "common.oops_roadwork",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Road work! We can't go that way."
+    },
+    {
+      "id": "common.oops_rocks",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Bump! Big rocks there!"
+    },
+    {
+      "id": "common.oops_red",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Stop! The light is red!"
+    },
+    {
+      "id": "common.oops_ducks",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Wait! Baby ducks are crossing!"
+    },
+    {
+      "id": "common.bridge_too_long",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Too much water for a bridge!"
+    },
+    {
+      "id": "common.ferry_dock",
+      "chapter": 0,
+      "character": "codey",
+      "text": "The ferry only stops at the dock."
+    },
+    {
+      "id": "common.dead_end",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Uh oh! This road goes nowhere!"
+    },
+    {
+      "id": "common.which_way",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Which way? Close a road with a cone!"
+    },
+    {
+      "id": "common.pickup_hint",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Use Pick Up to grab it!"
+    },
+    {
+      "id": "common.cones_tap",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Tap a road to put a cone on it."
+    },
+    {
+      "id": "common.cones_full",
+      "chapter": 0,
+      "character": "codey",
+      "text": "No more cones! Tap one to move it."
+    },
+    {
+      "id": "common.bridge_build",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Clink, clank! A bridge!"
+    },
+    {
+      "id": "common.ferry_coming",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Here comes the ferry! Toot toot!"
+    },
+    {
+      "id": "common.wait",
+      "chapter": 0,
+      "character": "bina",
+      "text": "Tick, tock..."
+    },
+    {
+      "id": "common.repeat_tip",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Put blocks inside Repeat to do them again."
+    },
+    {
+      "id": "common.locked",
+      "chapter": 0,
+      "character": "codey",
+      "text": "Ask a grown-up to open this trip."
+    },
+    {
+      "id": "ch2.intro.1",
+      "chapter": 2,
+      "character": "codey",
+      "text": "Next stop: the Big Lake!"
+    },
+    {
+      "id": "ch2.intro.2",
+      "chapter": 2,
+      "character": "bina",
+      "text": "Water! But buses can't swim!"
+    },
+    {
+      "id": "ch2.intro.3",
+      "chapter": 2,
+      "character": "codey",
+      "text": "We can build a bridge, or take the ferry."
+    },
+    {
+      "id": "ch2.intro.4",
+      "chapter": 2,
+      "character": "duck",
+      "text": "Quack! I love the lake! Hee hee!"
+    },
+    {
+      "id": "ch2.l1.prompt",
+      "chapter": 2,
+      "character": "codey",
+      "text": "A little stream! Build a bridge, then drive across."
+    },
+    {
+      "id": "ch2.l2.prompt",
+      "chapter": 2,
+      "character": "codey",
+      "text": "The lake is too big. Call the ferry at the dock!"
+    },
+    {
+      "id": "ch2.l3.prompt",
+      "chapter": 2,
+      "character": "codey",
+      "text": "A stream and a lake. Bridge or ferry?"
+    },
+    {
+      "id": "ch2.l4.prompt",
+      "chapter": 2,
+      "character": "codey",
+      "text": "Go get the picnic basket. Use Pick Up!"
+    },
+    {
+      "id": "ch2.bridge.yay",
+      "chapter": 2,
+      "character": "turtle",
+      "text": "A bridge... just for us. Wow."
+    },
+    {
+      "id": "ch2.ferry.yay",
+      "chapter": 2,
+      "character": "duck",
+      "text": "We rode a boat! Hee hee hee!"
+    },
+    {
+      "id": "ch2.basket.got",
+      "chapter": 2,
+      "character": "bina",
+      "text": "Got the picnic basket! Yum!"
+    },
+    {
+      "id": "ch2.picnic.yay",
+      "chapter": 2,
+      "character": "owl",
+      "text": "A picnic... and then a nap."
+    },
+    {
+      "id": "ch2.reward.1",
+      "chapter": 2,
+      "character": "bina",
+      "text": "We crossed the Big Lake!"
+    },
+    {
+      "id": "ch2.reward.2",
+      "chapter": 2,
+      "character": "codey",
+      "text": "You picked the right tool each time!"
+    },
+    {
+      "id": "ch3.intro.1",
+      "chapter": 3,
+      "character": "codey",
+      "text": "Uh oh! Road work ahead!"
+    },
+    {
+      "id": "ch3.intro.2",
+      "chapter": 3,
+      "character": "bina",
+      "text": "So many roads! Which way do I go?"
+    },
+    {
+      "id": "ch3.intro.3",
+      "chapter": 3,
+      "character": "codey",
+      "text": "Put cones on the wrong roads."
+    },
+    {
+      "id": "ch3.intro.4",
+      "chapter": 3,
+      "character": "turtle",
+      "text": "Slow and careful. I like that."
+    },
+    {
+      "id": "ch3.l1.prompt",
+      "chapter": 3,
+      "character": "codey",
+      "text": "Close the wrong road with a cone. Then press GO."
+    },
+    {
+      "id": "ch3.l2.prompt",
+      "chapter": 3,
+      "character": "codey",
+      "text": "Two wrong roads. Use two cones!"
+    },
+    {
+      "id": "ch3.l3.prompt",
+      "chapter": 3,
+      "character": "codey",
+      "text": "Drive around the digger to the flag."
+    },
+    {
+      "id": "ch3.cones.yay",
+      "chapter": 3,
+      "character": "bina",
+      "text": "The cones showed me the way!"
+    },
+    {
+      "id": "ch3.reward.1",
+      "chapter": 3,
+      "character": "bina",
+      "text": "We made it past the road work!"
+    },
+    {
+      "id": "ch3.reward.2",
+      "chapter": 3,
+      "character": "codey",
+      "text": "You planned the whole road. Great thinking!"
+    },
+    {
+      "id": "ch4.intro.1",
+      "chapter": 4,
+      "character": "codey",
+      "text": "Welcome to Traffic Light Town!"
+    },
+    {
+      "id": "ch4.intro.2",
+      "chapter": 4,
+      "character": "bina",
+      "text": "Red means stop. Green means go!"
+    },
+    {
+      "id": "ch4.intro.3",
+      "chapter": 4,
+      "character": "codey",
+      "text": "If the light is red, use Wait."
+    },
+    {
+      "id": "ch4.intro.4",
+      "chapter": 4,
+      "character": "owl",
+      "text": "I'll watch the lights for you."
+    },
+    {
+      "id": "ch4.l1.prompt",
+      "chapter": 4,
+      "character": "codey",
+      "text": "The light is red. Wait, then go!"
+    },
+    {
+      "id": "ch4.l2.prompt",
+      "chapter": 4,
+      "character": "codey",
+      "text": "A long red light. Count the dots!"
+    },
+    {
+      "id": "ch4.l3.prompt",
+      "chapter": 4,
+      "character": "codey",
+      "text": "Baby ducks, then a red light. Wait for both!"
+    },
+    {
+      "id": "ch4.green.yay",
+      "chapter": 4,
+      "character": "bina",
+      "text": "Green light! Zoom zoom!"
+    },
+    {
+      "id": "ch4.ducks.yay",
+      "chapter": 4,
+      "character": "duck",
+      "text": "Bye bye, little ducks! Hee hee!"
+    },
+    {
+      "id": "ch4.reward.1",
+      "chapter": 4,
+      "character": "bina",
+      "text": "I stopped at every red light!"
+    },
+    {
+      "id": "ch4.reward.2",
+      "chapter": 4,
+      "character": "codey",
+      "text": "If it's red, then wait. Smart driving!"
+    },
+    {
+      "id": "ch5.intro.1",
+      "chapter": 5,
+      "character": "codey",
+      "text": "Look! Mountain Loop!"
+    },
+    {
+      "id": "ch5.intro.2",
+      "chapter": 5,
+      "character": "bina",
+      "text": "The road goes round and round!"
+    },
+    {
+      "id": "ch5.intro.3",
+      "chapter": 5,
+      "character": "codey",
+      "text": "Repeat does the same steps again."
+    },
+    {
+      "id": "ch5.intro.4",
+      "chapter": 5,
+      "character": "owl",
+      "text": "Again and again... like counting sheep."
+    },
+    {
+      "id": "ch5.l1.prompt",
+      "chapter": 5,
+      "character": "codey",
+      "text": "A long road! Put Forward inside Repeat."
+    },
+    {
+      "id": "ch5.l2.prompt",
+      "chapter": 5,
+      "character": "codey",
+      "text": "Zigzag up! Find the steps that repeat."
+    },
+    {
+      "id": "ch5.l3.prompt",
+      "chapter": 5,
+      "character": "codey",
+      "text": "Three secret presents. Drive, drive, pick up. Again!"
+    },
+    {
+      "id": "ch5.gift.got",
+      "chapter": 5,
+      "character": "duck",
+      "text": "Shh! A present for the party!"
+    },
+    {
+      "id": "ch5.balloons.got",
+      "chapter": 5,
+      "character": "turtle",
+      "text": "Shh... balloons. Don't tell Bina."
+    },
+    {
+      "id": "ch5.flowers.got",
+      "chapter": 5,
+      "character": "owl",
+      "text": "Shh. Flowers. It's a secret."
+    },
+    {
+      "id": "ch5.loop.yay",
+      "chapter": 5,
+      "character": "bina",
+      "text": "Short program, long road!"
+    },
+    {
+      "id": "ch5.peak.yay",
+      "chapter": 5,
+      "character": "bina",
+      "text": "We're on top of the mountain!"
+    },
+    {
+      "id": "ch5.secret",
+      "chapter": 5,
+      "character": "bina",
+      "text": "What are you all whispering about?"
+    },
+    {
+      "id": "ch5.reward.1",
+      "chapter": 5,
+      "character": "bina",
+      "text": "Round and round, and we did it!"
+    },
+    {
+      "id": "ch5.reward.2",
+      "chapter": 5,
+      "character": "codey",
+      "text": "Repeat made it short. That's a loop!"
+    },
+    {
+      "id": "ch6.intro.1",
+      "chapter": 6,
+      "character": "duck",
+      "text": "Psst! Today is Bina's birthday!"
+    },
+    {
+      "id": "ch6.intro.2",
+      "chapter": 6,
+      "character": "turtle",
+      "text": "Shh... it's a surprise party."
+    },
+    {
+      "id": "ch6.intro.3",
+      "chapter": 6,
+      "character": "codey",
+      "text": "Let's drive to the party barn!"
+    },
+    {
+      "id": "ch6.intro.4",
+      "chapter": 6,
+      "character": "bina",
+      "text": "Ooh! Where are we going?"
+    },
+    {
+      "id": "ch6.l1.prompt",
+      "chapter": 6,
+      "character": "codey",
+      "text": "Pick up the cake. Watch the light!"
+    },
+    {
+      "id": "ch6.l2.prompt",
+      "chapter": 6,
+      "character": "codey",
+      "text": "Bridge the river. Then pick up the party hats!"
+    },
+    {
+      "id": "ch6.l3.prompt",
+      "chapter": 6,
+      "character": "codey",
+      "text": "Last trip! Ferry, light, and the party barn!"
+    },
+    {
+      "id": "ch6.cake.got",
+      "chapter": 6,
+      "character": "bina",
+      "text": "A cake! Who is it for?"
+    },
+    {
+      "id": "ch6.hats.got",
+      "chapter": 6,
+      "character": "duck",
+      "text": "Party hats! Hee hee! Shh!"
+    },
+    {
+      "id": "ch6.shh",
+      "chapter": 6,
+      "character": "turtle",
+      "text": "Shh... almost there."
+    },
+    {
+      "id": "ch6.arrive",
+      "chapter": 6,
+      "character": "bina",
+      "text": "A party barn? For me?"
+    },
+    {
+      "id": "ch6.party.1",
+      "chapter": 6,
+      "character": "duck",
+      "text": "Surprise! Happy birthday, Bina!"
+    },
+    {
+      "id": "ch6.party.2",
+      "chapter": 6,
+      "character": "bina",
+      "text": "Beep beep! Best birthday ever!"
+    },
+    {
+      "id": "ch6.song.1",
+      "chapter": 6,
+      "character": "duck",
+      "text": "Beep beep, hooray, it's Bina's day!"
+    },
+    {
+      "id": "ch6.song.2",
+      "chapter": 6,
+      "character": "turtle",
+      "text": "Slow or fast, we ride together."
+    },
+    {
+      "id": "ch6.song.3",
+      "chapter": 6,
+      "character": "owl",
+      "text": "Morning, noon, and sleepy night..."
+    },
+    {
+      "id": "ch6.song.4",
+      "chapter": 6,
+      "character": "bina",
+      "text": "Best buddies on the road! Beep beep!"
+    },
+    {
+      "id": "ch6.party.3",
+      "chapter": 6,
+      "character": "codey",
+      "text": "You coded the whole trip. Hooray for you!"
+    }
   ]
 }

@@ -9,7 +9,7 @@
  * and a wobble).
  */
 import { useId } from "react";
-import type { PassengerId } from "@/lib/games/bus/levels";
+import type { PassengerId, ThingId } from "@/lib/games/bus/levels";
 
 export type Mood = "idle" | "happy" | "oops";
 
@@ -279,7 +279,107 @@ export function Owl(props: CharProps & { asleep?: boolean }) {
 export function PassengerArt({ id, talking, asleep, mood }: { id: PassengerId; talking?: boolean; asleep?: boolean; mood?: Mood }) {
   if (id === "turtle") return <Turtle talking={talking} mood={mood} />;
   if (id === "duck") return <Duck talking={talking} mood={mood} />;
-  return <Owl talking={talking} asleep={asleep} mood={mood} />;
+  if (id === "owl") return <Owl talking={talking} asleep={asleep} mood={mood} />;
+  return <ThingArt id={id} mood={mood} />;
+}
+
+/* ------------------------------------------------------------------ */
+/* Things to pick up (they bob and sparkle, like the friends breathe)   */
+/* ------------------------------------------------------------------ */
+
+export function ThingArt({ id, mood }: { id: ThingId; mood?: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" className={rootClass("bb-thing", { mood })} aria-hidden overflow="visible">
+      <ellipse className="bb-shadow" cx="50" cy="92" rx="26" ry="5" fill="#00143222" />
+      <g className="bb-body">
+        {id === "basket" ? (
+          <g>
+            <path d="M28 48 Q50 10 72 48" stroke="#8D6E63" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M18 48 H82 L74 88 H26 Z" fill="#D7A86E" />
+            <path d="M22 60 H78 M24 72 H76 M36 48 L34 88 M50 48 V88 M64 48 L66 88" stroke="#B5844A" strokeWidth="3" />
+            <path d="M18 48 H82 L80 56 H20 Z" fill={C.red} />
+            <path d="M24 48 h8 v8 h-8 Z M40 48 h8 v8 h-8 Z M56 48 h8 v8 h-8 Z M72 48 h8 v8 h-8 Z" fill="#fff" />
+            <circle cx="40" cy="42" r="7" fill={C.red} />
+            <circle cx="58" cy="40" r="7" fill="#7CB342" />
+          </g>
+        ) : null}
+        {id === "cake" ? (
+          <g>
+            <ellipse cx="50" cy="84" rx="36" ry="7" fill="#E0E0E0" />
+            <rect x="20" y="52" width="60" height="32" rx="8" fill="#FFB3C7" />
+            <path d="M20 60 q7 8 15 0 q7 8 15 0 q7 8 15 0 q7 8 15 0" stroke="#fff" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <rect x="28" y="32" width="44" height="22" rx="7" fill="#FFF1C9" />
+            <path d="M28 38 q5 6 11 0 q5 6 11 0 q5 6 11 0 q5 6 11 0" stroke={C.pink} strokeWidth="5" fill="none" strokeLinecap="round" />
+            {[38, 50, 62].map((x) => (
+              <g key={x}>
+                <rect x={x - 2.5} y="18" width="5" height="15" rx="2" fill={x === 50 ? C.teal : C.purple} />
+                <path className="bb-flame" d={`M${x} 6 q5 7 0 11 q-5 -4 0 -11 Z`} fill="#FFB300" style={{ transformOrigin: `${x}px 17px` }} />
+              </g>
+            ))}
+          </g>
+        ) : null}
+        {id === "balloons" ? (
+          <g>
+            <path d="M50 92 Q46 76 34 56 M50 92 Q52 74 52 48 M50 92 Q58 76 68 58" stroke="#90A4AE" strokeWidth="2" fill="none" />
+            <g className="bb-balloon">
+              <ellipse cx="32" cy="38" rx="15" ry="18" fill={C.red} />
+              <path d="M26 30 q2 -6 8 -7" stroke="#fff" strokeWidth="3" fill="none" opacity=".6" strokeLinecap="round" />
+            </g>
+            <g className="bb-balloon bb-balloon-2">
+              <ellipse cx="68" cy="40" rx="15" ry="18" fill={C.teal} />
+              <path d="M62 32 q2 -6 8 -7" stroke="#fff" strokeWidth="3" fill="none" opacity=".6" strokeLinecap="round" />
+            </g>
+            <g className="bb-balloon bb-balloon-3">
+              <ellipse cx="52" cy="28" rx="16" ry="19" fill={C.gold} />
+              <path d="M45 20 q2 -6 8 -7" stroke="#fff" strokeWidth="3" fill="none" opacity=".6" strokeLinecap="round" />
+            </g>
+          </g>
+        ) : null}
+        {id === "gift" ? (
+          <g>
+            <rect x="22" y="44" width="56" height="44" rx="6" fill={C.purple} />
+            <rect x="18" y="36" width="64" height="14" rx="5" fill="#9C7FD8" />
+            <rect x="45" y="36" width="10" height="52" fill={C.gold} />
+            <path d="M50 36 q-20 -18 -22 -4 q4 8 22 4 Z M50 36 q20 -18 22 -4 q-4 8 -22 4 Z" fill={C.gold} />
+            <path d="M28 54 l4 4" stroke="#fff" strokeWidth="3" opacity=".5" strokeLinecap="round" />
+          </g>
+        ) : null}
+        {id === "flowers" ? (
+          <g>
+            <path d="M50 86 V52 M50 70 Q36 60 32 48 M50 70 Q64 60 68 48" stroke="#43A047" strokeWidth="4" fill="none" />
+            <path d="M36 78 L50 92 L64 78 L58 66 H42 Z" fill={C.teal} />
+            {[
+              [50, 40, C.pink],
+              [32, 44, C.gold],
+              [68, 44, C.red],
+            ].map(([x, y, c]) => (
+              <g key={String(x)}>
+                {[0, 72, 144, 216, 288].map((a) => (
+                  <circle key={a} cx={(x as number) + 8 * Math.cos((a * Math.PI) / 180)} cy={(y as number) + 8 * Math.sin((a * Math.PI) / 180)} r="6.5" fill={c as string} />
+                ))}
+                <circle cx={x as number} cy={y as number} r="5" fill="#FFF59D" />
+              </g>
+            ))}
+          </g>
+        ) : null}
+        {id === "hat" ? (
+          <g>
+            <path d="M22 86 L36 40 L50 86 Z" fill={C.teal} />
+            <path d="M50 86 L64 34 L78 86 Z" fill={C.pink} />
+            <path d="M26 74 h20 M29 62 h14 M54 74 h20 M57 60 h14" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+            <circle cx="36" cy="38" r="6" fill={C.gold} />
+            <circle cx="64" cy="32" r="6" fill={C.gold} />
+          </g>
+        ) : null}
+      </g>
+      {mood === "happy" ? (
+        <g className="bb-sparkle" fill="#fff">
+          <path d="M84 20 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z" />
+          <path d="M14 30 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 Z" />
+        </g>
+      ) : null}
+    </svg>
+  );
 }
 
 /* ------------------------------------------------------------------ */

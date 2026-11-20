@@ -41,9 +41,11 @@ interface VoiceState {
   /** Line being spoken right now, and by whom. */
   lineId: string | null;
   speaker: Speaker | null;
+  /** True once the voice files exist (the manifest lists lines). */
+  hasVoices: boolean;
 }
 
-let state: VoiceState = { muted: false, lineId: null, speaker: null };
+let state: VoiceState = { muted: false, lineId: null, speaker: null, hasVoices: false };
 const listeners = new Set<() => void>();
 const set = (patch: Partial<VoiceState>) => {
   state = { ...state, ...patch };
@@ -93,6 +95,7 @@ function loadManifest() {
       .then((r) => (r.ok ? r.json() : { lines: {} }))
       .then((m: { lines?: Record<string, { file: string }> }) => {
         manifest = m.lines ?? {};
+        if (Object.keys(manifest).length) set({ hasVoices: true });
       })
       .catch(() => {
         manifest = {};
@@ -114,6 +117,11 @@ function audioFor(id: string): HTMLAudioElement | null {
 }
 
 /** Fetch this chapter's lines (and the shared ones) ahead of time. */
+/** Load the voice list early (e.g. to know whether voices exist). */
+export function initVoices() {
+  void loadManifest();
+}
+
 export async function preloadChapter(chapter: number) {
   await loadManifest();
   for (const l of LINES.values()) if (l.chapter === chapter || l.chapter === 0) audioFor(l.id);
@@ -265,4 +273,35 @@ export const sfx = {
   },
   sticker: () => [880, 1175, 1568].forEach((f, i) => tone(f, i * 0.07, 0.25, "sine", 0.1)),
   splash: () => noise(0, 0.7, 0.25, 1600),
+  tick: () => {
+    tone(1200, 0, 0.05, "square", 0.05);
+    tone(900, 0.25, 0.05, "square", 0.05);
+  },
+  build: () => [0, 0.12, 0.24].forEach((t, i) => tone(300 + i * 80, t, 0.1, "square", 0.06)),
+  ferryHorn: () => {
+    tone(196, 0, 0.5, "sawtooth", 0.06);
+    tone(147, 0, 0.5, "sine", 0.1);
+  },
+  cone: () => tone(880, 0, 0.08, "triangle", 0.1, 660),
+  /**
+   * The party song: an original tune (CODEship's own), about 9 seconds.
+   * Melody on a bright triangle, with a soft bass.
+   */
+  song: () => {
+    const N: Record<string, number> = { C4: 262, D4: 294, E4: 330, F4: 349, G4: 392, A4: 440, B4: 494, C5: 523, D5: 587, E5: 659 };
+    const beat = 0.3;
+    const tune: [string, number][] = [
+      ["G4", 1], ["G4", 1], ["E4", 1], ["G4", 1], ["A4", 1], ["G4", 1], ["E4", 2],
+      ["F4", 1], ["F4", 1], ["D4", 1], ["F4", 1], ["G4", 1], ["F4", 1], ["E4", 2],
+      ["E4", 1], ["G4", 1], ["C5", 1], ["B4", 1], ["A4", 1], ["C5", 1], ["E5", 2],
+      ["D5", 1], ["B4", 1], ["G4", 1], ["B4", 1], ["C5", 4],
+    ];
+    let t = 0;
+    for (const [n, len] of tune) {
+      tone(N[n], t, beat * len * 0.9, "triangle", 0.12);
+      t += beat * len;
+    }
+    const bass = ["C4", "C4", "G4", "G4", "F4", "F4", "C4", "C4", "C4", "A4", "F4", "G4", "G4", "G4", "C4", "C4"];
+    bass.forEach((n, i) => tone(N[n] / 2, i * beat * 2, beat * 1.6, "sine", 0.08));
+  },
 };

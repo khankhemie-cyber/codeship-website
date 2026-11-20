@@ -144,6 +144,35 @@
 .bb-boarding { animation: bb-board 0.7s ease-in forwards; transform-box: fill-box; transform-origin: center; }
 @keyframes bb-board { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-30px) scale(1.1); } 100% { transform: translateY(0) scale(0); opacity: 0; } }
 
+/* Map pieces */
+.bb-bus.bb-bus-ferry { transition-duration: 1.2s; }
+.bb-ripple { animation: bb-ripple 3s ease-in-out infinite alternate; }
+@keyframes bb-ripple { from { transform: translateX(-4px); opacity: .35; } to { transform: translateX(4px); opacity: .7; } }
+.bb-bob-water { animation: bb-bob-water 2.4s ease-in-out infinite alternate; }
+@keyframes bb-bob-water { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-4px) rotate(3deg); } }
+.bb-bob-boat { animation: bb-bob-water 1.8s ease-in-out infinite alternate; }
+.bb-digger-arm { animation: bb-dig 2.4s ease-in-out infinite alternate; }
+@keyframes bb-dig { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
+.bb-light-on { animation: bb-glow 0.9s ease-in-out infinite alternate; }
+.bb-waddle { animation: bb-waddle 0.45s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-waddle { from { transform: rotate(-10deg) translateY(0); } to { transform: rotate(10deg) translateY(-2px); } }
+.bb-ducklings { animation: bb-cross 2.6s ease-in-out infinite alternate; }
+@keyframes bb-cross { from { transform: translateX(-10px); } to { transform: translateX(10px); } }
+.bb-star-spin { animation: bb-star 4s linear infinite; }
+@keyframes bb-star { to { transform: rotate(360deg); } }
+.bb-fountain { animation: bb-fountain 0.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes bb-fountain { from { transform: scaleY(0.85); } to { transform: scaleY(1.1); } }
+.bb-pop-in-svg { animation: bb-pop-in 0.35s cubic-bezier(.3,1.6,.6,1); }
+.bb-balloon { animation: bb-balloon 2.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+.bb-balloon-2 { animation-delay: -0.9s; }
+.bb-balloon-3 { animation-delay: -1.8s; }
+@keyframes bb-balloon { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-6%) rotate(4deg); } }
+.bb-flame { animation: bb-flame 0.3s ease-in-out infinite alternate; transform-box: view-box; }
+@keyframes bb-flame { from { transform: scale(0.85, 1); } to { transform: scale(1.1, 1.15); } }
+.bb-sparkle { animation: bb-glow 0.5s ease-in-out infinite alternate; }
+.bb-notes { animation: bb-notes 1.2s ease-out infinite; }
+@keyframes bb-notes { 0% { transform: translate(-50%, 10px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(-30%, -24px) rotate(12deg); opacity: 0; } }
+
 /* Blocks (pop-in first, so a glow that comes later wins) */
 .bb-pop-in { animation: bb-pop-in 0.25s cubic-bezier(.3,1.6,.6,1); }
 @keyframes bb-pop-in { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }

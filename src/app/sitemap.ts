@@ -41,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/locations`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/program-finder`, changeFrequency: "yearly", priority: 0.7 },
     { url: `${BASE_URL}/ship-it`, changeFrequency: "monthly", priority: 0.8 },
-    ...["rover-rescue", "app-studio", "bot-trainer", "prompt-pilot"].map((game) => ({
+    ...["bus-buddies", "rover-rescue", "app-studio", "bot-trainer", "prompt-pilot"].map((game) => ({
       url: `${BASE_URL}/ship-it/${game}`,
       changeFrequency: "monthly" as const,
       priority: 0.6,

@@ -6,6 +6,7 @@
  * write is wrapped, so the game still plays when storage is blocked.
  */
 import { useSyncExternalStore } from "react";
+import { completeLevel as arcadeComplete } from "@/lib/games/progress";
 
 export interface BusProgress {
   done: string[];
@@ -49,6 +50,8 @@ export function useBusProgress(): BusProgress {
 }
 
 export function completeLevel(levelId: string, stickerId: string) {
+  // Also counts toward the Ship It! Arcade stars and XP (no fail states here, so a finished level is 3 stars).
+  arcadeComplete("bus", levelId, 3);
   const p = load();
   save({
     done: p.done.includes(levelId) ? p.done : [...p.done, levelId],

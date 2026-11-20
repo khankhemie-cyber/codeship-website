@@ -97,12 +97,15 @@ export function UnlockModal({
   onClose,
   program: programs,
   onUnlock,
+  free = FREE_LEVELS,
 }: {
   open: boolean;
   onClose: () => void;
   /** One program, or several when any of their class passwords unlocks the game. */
   program: Programs;
   onUnlock: () => void;
+  /** How many levels this game gives free (default FREE_LEVELS). */
+  free?: number;
 }) {
   const list = asList(programs);
   const [picked, setPicked] = useState<ProgramSlug>(list[0]);
@@ -117,7 +120,7 @@ export function UnlockModal({
         <p className="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-amber">Class levels</p>
         <h3 className="mt-1 font-display text-3xl font-extrabold">You finished the free levels!</h3>
         <p className="mt-2 text-sm text-white/70">
-          The first {FREE_LEVELS} levels are free for everyone. The rest are part of{" "}
+          The first {free} levels are free for everyone. The rest are part of{" "}
           {list.length > 1 ? "our CODEship programs" : `the ${p?.level ?? "CODEship"} program`}. Enter your class password to keep going.
         </p>
       </div>
