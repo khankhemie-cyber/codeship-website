@@ -1,7 +1,7 @@
 import { FLAT_PRICE_CAD } from "@/config/offering";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { PHONE_E164 } from "@/config/contact";
-import { CAREER_AREAS, JOB_DATE_POSTED, JOB_VALID_THROUGH, LOCATION_TERMS, ROLE_DETAILS, WORK_AUTHORIZATION, type CareerRole } from "@/config/careers";
+import { CAREER_AREAS, CLASSROOM, JOB_DATE_POSTED, JOB_VALID_THROUGH, LOCATION_TERMS, ROLE_DETAILS, WORK_AUTHORIZATION, type CareerRole } from "@/config/careers";
 
 export function organizationSchema() {
   return {
@@ -302,6 +302,10 @@ export function jobPostingSchema(role: CareerRole) {
     `<p><strong>About the role</strong></p>`,
     `<p>${role.about}</p>`,
     list([`Pay: $${role.hourlyRate} per hour (CAD)`, ...ROLE_DETAILS.map((d) => `${d.label}: ${d.value}`)]),
+    `<p><strong>What you'll do</strong></p>`,
+    list(role.duties),
+    `<p><strong>In the classroom</strong></p>`,
+    list(CLASSROOM),
     `<p><strong>Locations and travel</strong></p>`,
     list(LOCATION_TERMS),
     `<p><strong>Requirements</strong></p>`,
@@ -320,6 +324,7 @@ export function jobPostingSchema(role: CareerRole) {
     validThrough: `${JOB_VALID_THROUGH}T23:59:59-05:00`,
     employmentType: "CONTRACTOR",
     eligibilityToWorkRequirement: WORK_AUTHORIZATION,
+    responsibilities: role.duties.join(". ") + ".",
     hiringOrganization: {
       "@type": "Organization",
       name: "CODEship Academy",

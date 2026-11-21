@@ -43,6 +43,8 @@ export interface CareerRole {
   tagline: string;
   /** "About the role" paragraph. */
   about: string;
+  /** "What you'll do": verb-led duties. */
+  duties: string[];
   requirements: string[];
   assets: string[];
 }
@@ -58,6 +60,28 @@ export const ROLE_DETAILS = [
   { label: "Start", value: "Immediately" },
   { label: "Hours", value: "About 2–4 hours a week, with more classes and shifts available" },
   { label: "Format", value: "Online, or in person at partner sites" },
+  { label: "Students", value: "Ages 4 to 16, up to 20 per class" },
+];
+
+/** Who and what instructors teach with. Shared by both roles. */
+export const CLASSROOM = [
+  "Students aged 4 to 16",
+  "Classes of up to 20 students",
+  "Robotics kits: Makebot, LEGO SPIKE, Edison V3 and micro:bit",
+  "CODEship's own coding software and lessons",
+];
+
+/** Steps from application to start. */
+export const HIRING_STEPS: { title: string; body?: string }[] = [
+  { title: "Screening" },
+  { title: "First interview" },
+  { title: "Second interview" },
+  { title: "Offer", body: "Provide a current Vulnerable Sector Check before you start." },
+];
+
+export const WHY_CODESHIP = [
+  { title: "Flexible scheduling", body: "About 2–4 hours a week to start, with more classes and shifts available." },
+  { title: "Grow your teaching career", body: "The opportunity to grow as a teacher of coding, programming and robotics." },
 ];
 
 export const LOCATION_TERMS = [
@@ -74,6 +98,14 @@ export const ROLES: CareerRole[] = [
     tagline: "Lead and manage classes, online and at partner sites.",
     about:
       "As Senior Instructor, you lead and manage CODEship classes, online or at our partner sites.",
+    duties: [
+      "Lead and manage classes",
+      "Prepare lessons",
+      "Set up the classroom and equipment",
+      "Mark student projects",
+      "Prepare report and progress cards",
+      "Send updates to parents",
+    ],
     requirements: [
       "A background in coding, programming and robotics",
       "English speaking",
@@ -89,6 +121,12 @@ export const ROLES: CareerRole[] = [
     tagline: "Support the lead instructor in class. Less experience required.",
     about:
       "As Assistant Instructor, you support the lead instructor in CODEship classes, online or at our partner sites. The role is open to people who are junior in the field: less experience is required.",
+    duties: [
+      "Support the lead instructor in class",
+      "Help with lesson preparation and classroom setup",
+      "Help mark student projects and prepare report and progress cards",
+      "Help with updates to parents",
+    ],
     requirements: [
       "An interest or background in coding, programming or robotics",
       "English speaking",

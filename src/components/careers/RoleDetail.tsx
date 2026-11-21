@@ -1,7 +1,7 @@
 import ApplyButton from "@/components/careers/ApplyButton";
 import { ROLE_ACCENTS, Rate } from "@/components/careers/RoleCard";
 import { CheckList } from "@/components/ui/Page";
-import { LOCATION_TERMS, ROLE_DETAILS, type CareerRole } from "@/config/careers";
+import { CLASSROOM, HIRING_STEPS, LOCATION_TERMS, ROLE_DETAILS, type CareerRole } from "@/config/careers";
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -20,6 +20,12 @@ export default function RoleDetail({ role }: { role: CareerRole }) {
         <Block title="About the role">
           <p className="text-lg text-gray-700 leading-relaxed">{role.about}</p>
         </Block>
+        <Block title="What you'll do">
+          <CheckList items={role.duties} />
+        </Block>
+        <Block title="In the classroom">
+          <CheckList items={CLASSROOM} />
+        </Block>
         <Block title="Requirements">
           <CheckList items={role.requirements} />
         </Block>
@@ -28,6 +34,19 @@ export default function RoleDetail({ role }: { role: CareerRole }) {
         </Block>
         <Block title="Locations and travel">
           <CheckList items={LOCATION_TERMS} />
+        </Block>
+        <Block title="Hiring process">
+          <ol className="space-y-3">
+            {HIRING_STEPS.map((step, i) => (
+              <li key={step.title} className="flex items-start gap-4 text-base text-gray-700">
+                <span className="font-display font-extrabold text-[#0F6F7C] w-6 shrink-0">{i + 1}</span>
+                <span>
+                  <span className="font-bold text-[#001532]">{step.title}</span>
+                  {step.body && <span className="block text-gray-600 mt-0.5">{step.body}</span>}
+                </span>
+              </li>
+            ))}
+          </ol>
         </Block>
       </div>
 

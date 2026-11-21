@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import ApplicationForm from "@/components/careers/ApplicationForm";
 import LocationPanel from "@/components/careers/LocationPanel";
+import HiringProcess from "@/components/careers/HiringProcess";
 import RoleCard from "@/components/careers/RoleCard";
+import WhyCodeship from "@/components/careers/WhyCodeship";
 import { PageHero, Section, SectionHeader } from "@/components/ui/Page";
 import { CAREER_AREAS_TEXT, ROLES } from "@/config/careers";
 import { pageMetadata } from "@/lib/pageMetadata";
@@ -28,7 +30,7 @@ export default function CareersPage() {
         crumbs={crumbs}
         eyebrow="Careers"
         title="Teach coding and robotics with CODEship Academy"
-        lead={`CODEship Academy teaches coding, AI and STEM to kids from Kindergarten to Grade 8. We are hiring instructors for classes online and at partner sites in ${CAREER_AREAS_TEXT}.`}
+        lead={`CODEship Academy teaches coding, AI and STEM to students aged 4 to 16. We are hiring instructors for classes online and at partner sites in ${CAREER_AREAS_TEXT}.`}
       />
 
       <Section id="roles">
@@ -41,6 +43,16 @@ export default function CareersPage() {
         <div className="mt-6">
           <LocationPanel />
         </div>
+      </Section>
+
+      <Section tone="sand">
+        <SectionHeader eyebrow="Why CODEship" title="Why teach with us" />
+        <WhyCodeship />
+      </Section>
+
+      <Section tone="navy">
+        <SectionHeader dark eyebrow="Hiring process" title="From application to your first class" />
+        <HiringProcess dark />
       </Section>
 
       <Section tone="white" narrow id="apply">
