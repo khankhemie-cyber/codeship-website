@@ -1,7 +1,7 @@
 import { FLAT_PRICE_CAD } from "@/config/offering";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { PHONE_E164 } from "@/config/contact";
-import { CAREER_AREAS, JOB_DATE_POSTED, JOB_VALID_THROUGH, LOCATION_TERMS, ROLE_TERMS, type CareerRole } from "@/config/careers";
+import { CAREER_AREAS, JOB_DATE_POSTED, JOB_VALID_THROUGH, LOCATION_TERMS, ROLE_DETAILS, WORK_AUTHORIZATION, type CareerRole } from "@/config/careers";
 
 export function organizationSchema() {
   return {
@@ -299,9 +299,10 @@ export function websiteSchema() {
 export function jobPostingSchema(role: CareerRole) {
   const list = (items: string[]) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
   const description = [
-    `<p>${role.summary}</p>`,
-    list(ROLE_TERMS),
-    `<p><strong>Location</strong></p>`,
+    `<p><strong>About the role</strong></p>`,
+    `<p>${role.about}</p>`,
+    list([`Pay: $${role.hourlyRate} per hour (CAD)`, ...ROLE_DETAILS.map((d) => `${d.label}: ${d.value}`)]),
+    `<p><strong>Locations and travel</strong></p>`,
     list(LOCATION_TERMS),
     `<p><strong>Requirements</strong></p>`,
     list(role.requirements),
@@ -318,6 +319,7 @@ export function jobPostingSchema(role: CareerRole) {
     datePosted: JOB_DATE_POSTED,
     validThrough: `${JOB_VALID_THROUGH}T23:59:59-05:00`,
     employmentType: "CONTRACTOR",
+    eligibilityToWorkRequirement: WORK_AUTHORIZATION,
     hiringOrganization: {
       "@type": "Organization",
       name: "CODEship Academy",

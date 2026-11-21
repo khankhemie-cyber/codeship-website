@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { CAREER_AREAS, CAREERS_EMAIL, CAREERS_FORMSPREE_ID, ROLES, type RoleSlug } from "@/config/careers";
 
+const CONFIRMATIONS = [
+  { name: "Work authorization", text: "I am legally able to work in Canada without sponsorship." },
+  { name: "Vulnerable Sector Check", text: "I am able to obtain a current Vulnerable Sector Check." },
+];
+
 /** Fired by ApplyButton so the form can preselect the role a visitor chose. */
 export const ROLE_EVENT = "careers:select-role";
 
@@ -206,16 +211,15 @@ export default function ApplicationForm({ defaultRole }: { defaultRole?: RoleSlu
         />
       </div>
 
-      <label className="flex items-start gap-3 text-base text-gray-800 cursor-pointer">
-        <input
-          type="checkbox"
-          name="Vulnerable Sector Check"
-          value="I am able to obtain a current Vulnerable Sector Check."
-          required
-          className="h-5 w-5 mt-0.5 shrink-0 accent-[#0F6F7C]"
-        />
-        <span>I am able to obtain a current Vulnerable Sector Check.</span>
-      </label>
+      <fieldset className="space-y-3">
+        <legend className={labelClass}>Confirm</legend>
+        {CONFIRMATIONS.map((c) => (
+          <label key={c.name} className="flex items-start gap-3 text-base text-gray-800 cursor-pointer">
+            <input type="checkbox" name={c.name} value={c.text} required className="h-5 w-5 mt-0.5 shrink-0 accent-[#0F6F7C]" />
+            <span>{c.text}</span>
+          </label>
+        ))}
+      </fieldset>
 
       {status === "error" && (
         <div ref={statusRef} tabIndex={-1} role="alert" className="border-l-4 border-red-600 bg-red-50 p-4 text-base text-red-800 outline-none">

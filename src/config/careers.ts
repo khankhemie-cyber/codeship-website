@@ -39,15 +39,25 @@ export interface CareerRole {
   title: string;
   /** CAD per hour. */
   hourlyRate: number;
-  summary: string;
+  /** One line for the careers list. */
+  tagline: string;
+  /** "About the role" paragraph. */
+  about: string;
   requirements: string[];
   assets: string[];
 }
 
-export const ROLE_TERMS = [
-  "Contract position (not permanent)",
-  "Start immediately",
-  "Approximately 2–4 hours a week, with the opportunity to take on more classes and shifts",
+/** Applies to every role. Shown as a requirement and as a required box on the form. */
+export const WORK_AUTHORIZATION = "Legally able to work in Canada without sponsorship";
+
+export const VSC_REQUIREMENT = "A current Vulnerable Sector Check, provided before you start";
+
+/** The at-a-glance facts shared by both roles (pay is added per role). */
+export const ROLE_DETAILS = [
+  { label: "Type", value: "Contract (not permanent)" },
+  { label: "Start", value: "Immediately" },
+  { label: "Hours", value: "About 2–4 hours a week, with more classes and shifts available" },
+  { label: "Format", value: "Online, or in person at partner sites" },
 ];
 
 export const LOCATION_TERMS = [
@@ -61,11 +71,14 @@ export const ROLES: CareerRole[] = [
     slug: "senior-instructor",
     title: "Senior Instructor",
     hourlyRate: 35,
-    summary: "Leads and manages classes.",
+    tagline: "Lead and manage classes, online and at partner sites.",
+    about:
+      "As Senior Instructor, you lead and manage CODEship classes, online or at our partner sites.",
     requirements: [
-      "Background in coding, programming and robotics",
+      "A background in coding, programming and robotics",
       "English speaking",
-      "Must provide a current Vulnerable Sector Check before starting",
+      WORK_AUTHORIZATION,
+      VSC_REQUIREMENT,
     ],
     assets: ["Experience working with children", "Teaching experience"],
   },
@@ -73,11 +86,14 @@ export const ROLES: CareerRole[] = [
     slug: "assistant-instructor",
     title: "Assistant Instructor",
     hourlyRate: 20,
-    summary: "Supports the lead instructor in classes. Can be junior in the field; less experience required.",
+    tagline: "Support the lead instructor in class. Less experience required.",
+    about:
+      "As Assistant Instructor, you support the lead instructor in CODEship classes, online or at our partner sites. The role is open to people who are junior in the field: less experience is required.",
     requirements: [
-      "Interest or background in coding, programming or robotics",
+      "An interest or background in coding, programming or robotics",
       "English speaking",
-      "Must provide a current Vulnerable Sector Check before starting",
+      WORK_AUTHORIZATION,
+      VSC_REQUIREMENT,
     ],
     assets: ["Experience working with children", "Teaching experience"],
   },

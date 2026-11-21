@@ -28,18 +28,18 @@ export default function CareersPage() {
         crumbs={crumbs}
         eyebrow="Careers"
         title="Teach coding and robotics with CODEship Academy"
-        lead={`We are hiring instructors for classes online and at partner sites in ${CAREER_AREAS_TEXT}. Both roles are contract positions starting immediately.`}
+        lead={`CODEship Academy teaches coding, AI and STEM to kids from Kindergarten to Grade 8. We are hiring instructors for classes online and at partner sites in ${CAREER_AREAS_TEXT}.`}
       />
 
       <Section id="roles">
-        <SectionHeader eyebrow="Open roles" title="Instructor positions" />
+        <SectionHeader eyebrow="Open roles" title="Instructor positions" lead="Both roles are contract positions starting immediately." />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {ROLES.map((role) => (
-            <RoleCard key={role.slug} role={role} detailsHref={`/careers/${role.slug}`} />
+            <RoleCard key={role.slug} role={role} />
           ))}
         </div>
         <div className="mt-6">
-          <LocationPanel title="Both roles: locations and travel" />
+          <LocationPanel />
         </div>
       </Section>
 
