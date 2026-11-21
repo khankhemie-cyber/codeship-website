@@ -4,6 +4,7 @@ import { PROGRAMS } from "@/data/programs";
 import { PROGRAM_ORDER } from "@/lib/payment-links";
 import { GUYANA_CAMPAIGNS } from "@/data/guyanaCampaigns";
 import { TRINIDAD_CAMPAIGNS } from "@/data/trinidadCampaigns";
+import { ROLES } from "@/config/careers";
 
 const cities = [
   "oshawa", "toronto", "mississauga", "brampton", "markham",
@@ -37,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/franchise/regional-model`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/about`, changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE_URL}/contact`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/careers`, changeFrequency: "monthly", priority: 0.6 },
+    ...ROLES.map((r) => ({
+      url: `${BASE_URL}/careers/${r.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: `${BASE_URL}/resources`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/locations`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/program-finder`, changeFrequency: "yearly", priority: 0.7 },
