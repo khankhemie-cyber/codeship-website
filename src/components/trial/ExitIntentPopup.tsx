@@ -42,6 +42,7 @@ const EXCLUDED_PREFIXES = [
   "/politiques",
   "/schools",
   "/franchise",
+  "/careers",
   "/quizzes",
   "/workbooks",
 ];

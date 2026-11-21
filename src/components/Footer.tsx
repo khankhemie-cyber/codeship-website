@@ -30,6 +30,7 @@ const COLUMNS = [
     title: "Company",
     links: [
       { href: "/about", label: "About us" },
+      { href: "/careers", label: "Careers" },
       { href: "/locations", label: "Locations" },
       { href: "/contact", label: "Contact" },
       { href: "/policies/refund", label: "Refund policy" },

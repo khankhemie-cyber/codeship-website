@@ -16,9 +16,12 @@ const navLinks = [
   { href: "/about", label: "About" },
 ];
 
-// Secondary link, grouped with the CTA on the right so it doesn't compete
+// Secondary links, grouped with the CTA on the right so they don't compete
 // with the main destinations.
-const contactLink = { href: "/contact", label: "Contact" };
+const utilityLinks = [
+  { href: "/careers", label: "Careers" },
+  { href: "/contact", label: "Contact" },
+];
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -138,7 +141,7 @@ export default function Navigation() {
 
               {/* Utility group: Contact + primary CTA */}
               <div className="ml-3 xl:ml-5 pl-3 xl:pl-5 border-l border-[#001532]/10 flex items-center gap-1 xl:gap-2">
-                <ul onMouseLeave={() => setHovered(null)}>{renderDesktopLink(contactLink)}</ul>
+                <ul className="flex items-center" onMouseLeave={() => setHovered(null)}>{utilityLinks.map(renderDesktopLink)}</ul>
                 <Link
                   href={cta.href}
                   className="group inline-flex items-center gap-2 whitespace-nowrap bg-[#F4D734] text-[#001532] font-bold pl-4 pr-3.5 xl:pl-5 xl:pr-4 py-2.5 text-[15px] shadow-[inset_0_-2px_0_rgba(0,21,50,0.12)] hover:bg-[#E6C51E] hover:shadow-[0_6px_18px_-6px_rgba(244,215,52,0.9)] transition-[background-color,box-shadow] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#001532]"
@@ -186,7 +189,7 @@ export default function Navigation() {
                   animate="shown"
                   variants={{ shown: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } } }}
                 >
-                  {[...navLinks, contactLink].map((link) => {
+                  {[...navLinks, ...utilityLinks].map((link) => {
                     const active = isActive(pathname, link.href);
                     return (
                       <motion.li

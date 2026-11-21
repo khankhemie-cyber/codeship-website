@@ -1,6 +1,7 @@
 import { FLAT_PRICE_CAD } from "@/config/offering";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { PHONE_E164 } from "@/config/contact";
+import { CAREER_AREAS, JOB_DATE_POSTED, JOB_VALID_THROUGH, LOCATION_TERMS, ROLE_TERMS, type CareerRole } from "@/config/careers";
 
 export function organizationSchema() {
   return {
@@ -286,5 +287,65 @@ export function websiteSchema() {
     url: "https://www.codeshipacademy.com",
     inLanguage: "en-CA",
     publisher: { "@type": "Organization", name: "CODEship Academy", url: "https://www.codeshipacademy.com" },
+  };
+}
+
+/**
+ * Google for Jobs JobPosting for one /careers role. Hybrid: in-person at the
+ * partner-site areas (jobLocation) plus online (TELECOMMUTE, Canada only).
+ * Durham Region is given the Oshawa address, where Durham-based hires may
+ * also have shifts; the other areas are listed by town.
+ */
+export function jobPostingSchema(role: CareerRole) {
+  const list = (items: string[]) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
+  const description = [
+    `<p>${role.summary}</p>`,
+    list(ROLE_TERMS),
+    `<p><strong>Location</strong></p>`,
+    list(LOCATION_TERMS),
+    `<p><strong>Requirements</strong></p>`,
+    list(role.requirements),
+    `<p><strong>Assets</strong></p>`,
+    list(role.assets),
+  ].join("");
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: role.title,
+    description,
+    identifier: { "@type": "PropertyValue", name: "CODEship Academy", value: role.slug },
+    datePosted: JOB_DATE_POSTED,
+    validThrough: `${JOB_VALID_THROUGH}T23:59:59-05:00`,
+    employmentType: "CONTRACTOR",
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "CODEship Academy",
+      sameAs: "https://www.codeshipacademy.com",
+      logo: "https://www.codeshipacademy.com/logo-nav.png",
+    },
+    jobLocation: CAREER_AREAS.map((area) => ({
+      "@type": "Place",
+      name: area,
+      address:
+        area === "Durham Region"
+          ? {
+              "@type": "PostalAddress",
+              streetAddress: IN_PERSON_VENUE.street,
+              addressLocality: IN_PERSON_VENUE.city,
+              addressRegion: "ON",
+              addressCountry: "CA",
+            }
+          : { "@type": "PostalAddress", addressLocality: area, addressRegion: "ON", addressCountry: "CA" },
+    })),
+    jobLocationType: "TELECOMMUTE",
+    applicantLocationRequirements: { "@type": "Country", name: "Canada" },
+    baseSalary: {
+      "@type": "MonetaryAmount",
+      currency: "CAD",
+      value: { "@type": "QuantitativeValue", value: role.hourlyRate, unitText: "HOUR" },
+    },
+    directApply: true,
+    url: `https://www.codeshipacademy.com/careers/${role.slug}/`,
   };
 }
