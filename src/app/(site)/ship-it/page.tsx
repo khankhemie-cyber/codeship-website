@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { itemListSchema } from "@/lib/schema";
 
 const GAMES = [
-  { name: "Byte Bay", url: "https://www.codeshipacademy.com/ship-it/byte-bay/", description: "Grades 4–8. 3D open-world town: climb, build your house, and program robots with real Python or JavaScript." },
+  { name: "Port CODEship", url: "https://www.codeshipacademy.com/ship-it/port-codeship/", description: "Grades 4–8. 3D open-world town: climb, build your house, and program robots with real Python or JavaScript." },
   { name: "Bus Buddies Road Trip", url: "https://www.codeshipacademy.com/ship-it/bus-buddies/", description: "Ages 4–6. Picture-block coding game: sequencing, loops and debugging. No reading needed." },
   { name: "Rover Rescue", url: "https://www.codeshipacademy.com/ship-it/rover-rescue/", description: "Grades 4–8. Type real JavaScript to guide a moon rover: loops, functions, conditionals, variables." },
   { name: "Prompt Pilot", url: "https://www.codeshipacademy.com/ship-it/prompt-pilot/", description: "Ages 7–10. Learn to prompt an AI clearly, ask for sources and catch AI mistakes." },

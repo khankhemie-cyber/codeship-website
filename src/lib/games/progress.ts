@@ -9,7 +9,7 @@
  */
 import { useSyncExternalStore } from "react";
 
-export type GameId = "rover" | "bot" | "studio" | "prompt" | "bus" | "bay";
+export type GameId = "rover" | "bot" | "studio" | "prompt" | "bus" | "port";
 
 export interface Progress {
   /** A fun coder name the player picks (never a real name — we say so in the UI). */

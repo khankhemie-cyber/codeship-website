@@ -15,7 +15,7 @@
     "test:playground": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/playground/test-playground.mjs",
     "test:robots": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/robots/test-robots.mjs",
     "test:robots:python": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/robots/test-robots-python.mjs",
-    "test:bay": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/byte-bay/test-missions.mjs",
+    "test:port": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/port-codeship/test-missions.mjs",
     "test:bus": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/bus-buddies/test-levels.mjs"
   },
   "dependencies": {

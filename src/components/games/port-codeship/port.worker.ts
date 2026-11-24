@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /**
- * Runs Byte Bay programs off the main thread, so a loop that never ends can't
+ * Runs Port CODEship programs off the main thread, so a loop that never ends can't
  * freeze the 3D world: the page terminates this worker if a run takes too long
  * and starts a new one.
  *
@@ -9,8 +9,8 @@
  */
 
 import pyodidePackage from "pyodide/package.json";
-import type { Lang, MissionId } from "@/lib/games/bay/missions";
-import { createPythonRunner, runJs, type PyodideLike, type PythonRunner } from "@/lib/games/bay/runner";
+import type { Lang, MissionId } from "@/lib/games/port/missions";
+import { createPythonRunner, runJs, type PyodideLike, type PythonRunner } from "@/lib/games/port/runner";
 
 const ctx = self as unknown as DedicatedWorkerGlobalScope;
 const PYODIDE_DIR = `/py/pyodide-${pyodidePackage.version}/`;

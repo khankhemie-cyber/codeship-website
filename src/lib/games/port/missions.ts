@@ -1,8 +1,8 @@
 /**
- * Byte Bay: the coding missions and the simulators that run students' code.
+ * Port CODEship: the coding missions and the simulators that run students' code.
  *
  * Pure TypeScript with no browser or Three.js imports, so the same code runs in
- * the game's Web Worker and in the Node tests (scripts/byte-bay/test-missions.mjs).
+ * the game's Web Worker and in the Node tests (scripts/port-codeship/test-missions.mjs).
  *
  * A run works like Robot Lab: the student's program calls the mission's
  * functions (place(), go_to_aisle(2), pick_up()…). Each call updates the
@@ -14,7 +14,7 @@
 export type Lang = "py" | "js";
 export type MissionId = "home" | "market" | "beach";
 
-export class BayError extends Error {
+export class BotError extends Error {
   name = "BotError";
 }
 export class TimeUp extends Error {}
@@ -185,8 +185,8 @@ function base() {
 
 function int(name: string, v: unknown, min: number, max: number): number {
   const n = Number(v);
-  if (!Number.isInteger(n)) throw new BayError(`${name} needs a whole number, like ${name}(${min}). You gave ${JSON.stringify(v)}.`);
-  if (n < min || n > max) throw new BayError(`${name}(${n}) is out of range. Use a number from ${min} to ${max}.`);
+  if (!Number.isInteger(n)) throw new BotError(`${name} needs a whole number, like ${name}(${min}). You gave ${JSON.stringify(v)}.`);
+  if (n < min || n > max) throw new BotError(`${name}(${n}) is out of range. Use a number from ${min} to ${max}.`);
   return n;
 }
 
@@ -207,7 +207,7 @@ export function homeSim(world: HomeWorld): Sim {
       const nx = x + dx * count;
       const nz = z + dz * count;
       if (nx < 0 || nz < 0 || nx >= PLOT_W || nz >= PLOT_D)
-        throw new BayError(`move(${count}) would drive the Builder Bot off your plot. The plot is ${PLOT_W} blocks wide and ${PLOT_D} deep.`);
+        throw new BotError(`move(${count}) would drive the Builder Bot off your plot. The plot is ${PLOT_W} blocks wide and ${PLOT_D} deep.`);
       x = nx;
       z = nz;
       step({ t: "move", x, z });
@@ -221,18 +221,18 @@ export function homeSim(world: HomeWorld): Sim {
       step({ t: "turn", dir });
     },
     up() {
-      if (y >= PLOT_H - 1) throw new BayError(`The Builder Bot can only build ${PLOT_H} blocks high.`);
+      if (y >= PLOT_H - 1) throw new BotError(`The Builder Bot can only build ${PLOT_H} blocks high.`);
       y += 1;
       step({ t: "lift", y });
     },
     down() {
-      if (y <= 0) throw new BayError("The Builder Bot is already on the ground.");
+      if (y <= 0) throw new BotError("The Builder Bot is already on the ground.");
       y -= 1;
       step({ t: "lift", y });
     },
     set_color(c: unknown) {
       if (!BLOCK_COLORS.includes(c as BlockColor))
-        throw new BayError(`set_color(${JSON.stringify(c)}): pick one of ${BLOCK_COLORS.map((b) => `"${b}"`).join(", ")}.`);
+        throw new BotError(`set_color(${JSON.stringify(c)}): pick one of ${BLOCK_COLORS.map((b) => `"${b}"`).join(", ")}.`);
       color = c as BlockColor;
     },
     place() {
@@ -282,7 +282,7 @@ export function marketSim(world: MarketWorld): Sim {
     },
     next_order() {
       if (current !== null) return current;
-      if (next >= world.orders.length) throw new BayError("There are no customers waiting. Use has_customer() to check first.");
+      if (next >= world.orders.length) throw new BotError("There are no customers waiting. Use has_customer() to check first.");
       current = world.orders[next++];
       step({ t: "customer", n: next, want: current });
       return current;
@@ -298,20 +298,20 @@ export function marketSim(world: MarketWorld): Sim {
     },
     raise_to(l: unknown) {
       const n = int("raise_to", l, 1, 4);
-      if (aisle === 0) throw new BayError("Drive the ladder to an aisle first with go_to_aisle().");
+      if (aisle === 0) throw new BotError("Drive the ladder to an aisle first with go_to_aisle().");
       level = n;
       step({ t: "raise", level });
     },
     pick() {
-      if (aisle === 0 || level === 0) throw new BayError("The ladder is not at a shelf. Use go_to_aisle() and raise_to() first.");
-      if (holding) throw new BayError(`The ladder's basket already holds ${holding}. Deliver it first.`);
+      if (aisle === 0 || level === 0) throw new BotError("The ladder is not at a shelf. Use go_to_aisle() and raise_to() first.");
+      if (holding) throw new BotError(`The ladder's basket already holds ${holding}. Deliver it first.`);
       holding = AISLES[aisle - 1][level - 1];
       step({ t: "pick", product: holding, aisle, level });
       return holding;
     },
     deliver() {
-      if (!holding) throw new BayError("The basket is empty. pick() something first.");
-      if (current === null) throw new BayError("Nobody is waiting. Call next_order() to serve the next customer.");
+      if (!holding) throw new BotError("The basket is empty. pick() something first.");
+      if (current === null) throw new BotError("Nobody is waiting. Call next_order() to serve the next customer.");
       const ok = holding === current;
       if (!ok) mistakes.push(`Customer ${next} asked for ${current} but got ${holding}.`);
       else served++;
@@ -368,9 +368,9 @@ export function beachSim(world: BeachWorld): Sim {
       return i < 0 ? null : left[i].kind;
     },
     pick_up() {
-      if (holding) throw new BayError(`The claw is already holding a ${holding.kind}. Use drop_in() first.`);
+      if (holding) throw new BotError(`The claw is already holding a ${holding.kind}. Use drop_in() first.`);
       const i = nearest();
-      if (i < 0) throw new BayError("There is no litter left to pick up. Check has_litter() first.");
+      if (i < 0) throw new BotError("There is no litter left to pick up. Check has_litter() first.");
       holding = left.splice(i, 1)[0];
       x = holding.x;
       z = holding.z;
@@ -378,8 +378,8 @@ export function beachSim(world: BeachWorld): Sim {
       step({ t: "pick", id: holding.id, kind: holding.kind });
     },
     drop_in(bin: unknown) {
-      if (!BINS.includes(bin as BinName)) throw new BayError(`drop_in(${JSON.stringify(bin)}): the bins are "recycling", "compost" and "garbage".`);
-      if (!holding) throw new BayError("The claw is empty. pick_up() some litter first.");
+      if (!BINS.includes(bin as BinName)) throw new BotError(`drop_in(${JSON.stringify(bin)}): the bins are "recycling", "compost" and "garbage".`);
+      if (!holding) throw new BotError("The claw is empty. pick_up() some litter first.");
       const p = BIN_POS[bin as BinName];
       x = p.x;
       z = p.z;

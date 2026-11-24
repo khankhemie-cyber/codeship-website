@@ -1,11 +1,12 @@
-// Byte Bay mission tests: every mission's reference solution must pass every
+// Port CODEship mission tests: every mission's reference solution must pass every
 // test world in JavaScript and in Python (through the real Pyodide), and the
 // starter code must not pass on its own.
-//   npm run test:bay
+//   npm run test:port
 import "../blocks/ts-resolve.mjs";
 import { loadPyodide } from "pyodide";
-const { runJs, createPythonRunner } = await import("../../src/lib/games/bay/runner.ts");
-const { MISSIONS, testWorlds, makeLitter } = await import("../../src/lib/games/bay/missions.ts");
+const { runJs, createPythonRunner } = await import("../../src/lib/games/port/runner.ts");
+const { MISSIONS, testWorlds, makeLitter, AISLES } = await import("../../src/lib/games/port/missions.ts");
+const { STARTER_BLOCKS, blocksToJs, blocksToPy, build } = await import("../../src/lib/games/port/blocks.ts");
 
 const runPy = createPythonRunner(await loadPyodide());
 let failed = 0, passed = 0;
@@ -138,6 +139,51 @@ test("market: wrong product is reported", () => {
 test("market: missing map entry gives a useful python error", () => {
   const r = runPy("market", MISSIONS.market.starter.py, { orders: ["eggs"] });
   assert(/KeyError: 'eggs'/.test(r.error ?? ""), r.error);
+});
+
+// Blocks: full solutions built from blocks must pass, as JavaScript and as the Python we show.
+const { chain, blk, ws } = build;
+const repeat = (n, ...body) => blk("port_repeat", { N: n }, { DO: chain(...body) });
+const BLOCK_SOLUTIONS = {
+  home: ws(chain(blk("port_start"), blk("port_color", { C: "stone" }), repeat(3, repeat(2, repeat(5, blk("port_place"), blk("port_move", { N: 1 })), blk("port_turn", { D: "right" }), repeat(4, blk("port_place"), blk("port_move", { N: 1 })), blk("port_turn", { D: "right" })), blk("port_layer", { D: "up" })))),
+  market: ws(chain(
+    blk("port_start"),
+    blk("port_map", undefined, { DO: chain(...AISLES.flatMap((row, a) => row.map((p, l) => blk("port_map_entry", { P: p, A: a + 1, L: l + 1 })))) }),
+    blk("port_while", undefined, { COND: blk("port_customer"), DO: chain(blk("port_next_order"), blk("port_go_order"), blk("port_pick"), blk("port_deliver")) }),
+  )),
+  beach: ws(chain(
+    blk("port_start"),
+    blk("port_while", undefined, { COND: blk("port_litter"), DO: chain(
+      blk("port_scan"), blk("port_pick_up"),
+      blk("port_if_else", undefined, { COND: blk("port_item_is", { K: "apple core" }), DO: blk("port_drop_in", { B: "compost" }), ELSE:
+        blk("port_if_else", undefined, { COND: blk("port_item_is", { K: "banana peel" }), DO: blk("port_drop_in", { B: "compost" }), ELSE:
+          blk("port_if_else", undefined, { COND: blk("port_item_is", { K: "chip bag" }), DO: blk("port_drop_in", { B: "garbage" }), ELSE:
+            blk("port_if_else", undefined, { COND: blk("port_item_is", { K: "straw" }), DO: blk("port_drop_in", { B: "garbage" }), ELSE: blk("port_drop_in", { B: "recycling" }) }) }) }) }),
+    ) }),
+  )),
+};
+for (const id of Object.keys(MISSIONS)) {
+  const worlds = [LIVE[id], ...testWorlds(id)];
+  test(`${id} blocks: solution passes as JavaScript and as Python`, () => {
+    for (const [lang, code, run] of [["js", blocksToJs(BLOCK_SOLUTIONS[id]), runJs], ["py", blocksToPy(BLOCK_SOLUTIONS[id]), runPy]]) {
+      worlds.forEach((w, i) => {
+        const r = run(id, code, w);
+        assert(!r.error && !r.stopped, `${lang} world ${i}: ${r.error || r.stopped}\n${code}`);
+        assert(r.check.passed, `${lang} world ${i}: ${r.check.message}`);
+      });
+    }
+  });
+  test(`${id} blocks: starter runs in both languages but does not pass yet`, () => {
+    for (const [code, run] of [[blocksToJs(STARTER_BLOCKS[id]), runJs], [blocksToPy(STARTER_BLOCKS[id]), runPy]]) {
+      const results = worlds.map((w) => run(id, code, w));
+      assert(results[0].steps.length > 0, "starter makes no moves:\n" + code);
+      assert(results.some((r) => !r.check.passed || r.error), "starter already passes");
+    }
+  });
+}
+test("blocks: a product missing from the shelf map gets a clear message", () => {
+  const r = runJs("market", blocksToJs(STARTER_BLOCKS.market), { orders: ["eggs"] });
+  assert(/eggs is not in your shelf map/.test(r.error ?? ""), r.error);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

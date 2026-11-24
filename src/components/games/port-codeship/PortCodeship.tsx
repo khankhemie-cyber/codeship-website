@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Byte Bay: a 3D open-world coding game for Ship It! Arcade.
+ * Port CODEship: a 3D open-world coding game for Ship It! Arcade.
  *
  * Explore the town, climb anything, and solve everyday problems either by
  * hand or by writing real Python or JavaScript that drives the town's bots.
@@ -10,6 +10,7 @@
  */
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CodeEditor, type CodeEditorHandle } from "@/components/games/code-editor";
 import { completeLevel, getProgress, setCoderName } from "@/lib/games/progress";
@@ -32,8 +33,18 @@ import {
   type LitterKind,
   type MarketStep,
   type MissionId,
-} from "@/lib/games/bay/missions";
-import type { RunOutcome } from "@/lib/games/bay/runner";
+} from "@/lib/games/port/missions";
+import type { RunOutcome } from "@/lib/games/port/runner";
+import { STARTER_BLOCKS, blocksToJs, blocksToPy } from "@/lib/games/port/blocks";
+
+// Blockly only loads when someone opens the blocks view.
+const PortBlocksEditor = dynamic(() => import("./PortBlocksEditor"), {
+  ssr: false,
+  loading: () => <div className="grid h-full place-items-center text-sm text-white/70">Loading blocks…</div>,
+});
+
+/** How the code panel shows code: drag-and-drop blocks, or typed Python / JavaScript. */
+type Editor = "blocks" | Lang;
 import type { EngineSave, Focus, Game, Look } from "./engine/Game";
 import type { BeachBotStyle } from "./engine/models";
 import { BEACH_TERMINAL, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type NpcId } from "./engine/layout";
@@ -41,13 +52,15 @@ import { BEACH_TERMINAL, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type Np
 // ---------------------------------------------------------------------------
 // Save data
 
-type MissionState = { status: "locked" | "active" | "done"; stars: number; method?: "hand" | "code" | "mixed"; code: Record<Lang, string> };
+type MissionState = { status: "locked" | "active" | "done"; stars: number; method?: "hand" | "code" | "mixed"; code: Record<Lang, string>; blocks?: unknown };
 
 type Save = {
   v: 1;
   name: string;
   look: Look;
   lang: Lang;
+  /** Blocks or typed code; older saves without it start in blocks. */
+  editor?: Editor;
   engine: Partial<EngineSave>;
   intro: boolean;
   missions: Record<MissionId, MissionState>;
@@ -61,7 +74,7 @@ type Save = {
   lowGraphics: boolean;
 };
 
-const KEY = "codeship-byte-bay-v1";
+const KEY = "codeship-port-v1";
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
 
 function freshSave(name: string, look: Look): Save {
@@ -71,6 +84,7 @@ function freshSave(name: string, look: Look): Save {
     name,
     look,
     lang: "py",
+    editor: "blocks",
     engine: {},
     intro: false,
     missions: { home: m("home"), market: m("market"), beach: m("beach") },
@@ -130,13 +144,13 @@ type Dialog = { who: string; text: string; choices: { label: string; act: () => 
 type Feed = { id: number; who: string; text: string; tone: "good" | "bad" | "info" };
 type Result = { ok: boolean; title: string; detail: string; error?: string | null; output: string[] };
 
-export default function ByteBay() {
+export default function PortCodeship() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const miniRef = useRef<HTMLCanvasElement>(null);
   const bigMapRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<Game | null>(null);
   const saveRef = useRef<Save | null>(null);
-  const carryRef = useRef<{ kind: "litter" | "product"; name: string; id?: number } | null>(null);
+  const carryRef = useRef<{ kind: "litter" | "product"; name: string; litter?: Litter } | null>(null);
   const busyRef = useRef(false);
   const workerRef = useRef<Worker | null>(null);
   const runIdRef = useRef(0);
@@ -168,6 +182,8 @@ export default function ByteBay() {
   const [confirmNew, setConfirmNew] = useState(false);
   const [webglError, setWebglError] = useState(false);
   const [carry, setCarryState] = useState<string | null>(null);
+  const [looking, setLooking] = useState(false);
+  const [goalHidden, setGoalHidden] = useState(false);
 
   const update = useCallback((fn: (s: Save) => Save) => {
     const cur = saveRef.current;
@@ -235,7 +251,7 @@ export default function ByteBay() {
     setResult(null);
     setShowHint(false);
     gameRef.current?.setEnabled(false);
-    if (saveRef.current?.lang === "py") workerRef.current?.postMessage({ type: "warm" });
+    if (saveRef.current?.editor === "py") workerRef.current?.postMessage({ type: "warm" });
   }, []);
 
   const closeDialog = useCallback(() => {
@@ -262,8 +278,8 @@ export default function ByteBay() {
           ...(nextId && q.missions[nextId].status === "locked" ? { [nextId]: { ...q.missions[nextId], status: "active" } } : {}),
         },
       }));
-      completeLevel("bay", id, stars);
-      if (prev.status !== "done") say("Byte Bay", `Mission complete: ${MISSIONS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
+      completeLevel("port", id, stars);
+      if (prev.status !== "done") say("Port CODEship", `Mission complete: ${MISSIONS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
     },
     [say, update]
   );
@@ -279,7 +295,7 @@ export default function ByteBay() {
       if (id === "npc:ada") {
         if (!s.intro) {
           const lines = [
-            `Welcome to Byte Bay, ${s.name}! I'm Captain Ada. Everything in this town runs on code, and the townsfolk could use a coder like you.`,
+            `Welcome to Port CODEship, ${s.name}! I'm Captain Ada. This is the CODEship's home port, and everything here runs on code. The townsfolk could use a coder like you.`,
             "First things first: you need a home. Your plot is just east of the square. Follow the gold marker.",
             "You can build it block by block by hand (press B on your plot), or program the Builder Bot at the terminal to do it for you. Your choice!",
             "One more tip: you can climb almost anything. Walk into a wall and keep moving forward. Climb the 3 lookout towers to see the whole town.",
@@ -294,7 +310,14 @@ export default function ByteBay() {
               closeDialog();
             }
           };
-          showDialog({ who: "Captain Ada", text: lines[0], choices: [{ label: "Next", act: step }] });
+          showDialog({
+            who: "Captain Ada",
+            text: lines[0],
+            choices: [
+              { label: "Next", act: step },
+              { label: "Skip, I'll explore", act: () => { i = lines.length; step(); } },
+            ],
+          });
           return;
         }
         const next = m.home.status !== "done" ? "Your house won't build itself… unless you code it to! Head east to your plot." : m.market.status !== "done" ? "Mrs. Ali at the Fresh Market needs help. It's west along Main Street." : m.beach.status !== "done" ? "Kofi says the beach is a mess. Head south down Harbour Road." : "You've helped everyone so far. Try lighting all the lookouts and finding every bit hidden on the rooftops!";
@@ -403,7 +426,7 @@ export default function ByteBay() {
         if (!l) return;
         g.removeLitter(l.id);
         update((q) => ({ ...q, litter: q.litter.filter((x) => x.id !== l.id) }));
-        setCarry({ kind: "litter", name: l.kind, id: l.id });
+        setCarry({ kind: "litter", name: l.kind, litter: l });
         return;
       }
       if (kind === "bin") {
@@ -439,7 +462,7 @@ export default function ByteBay() {
           g.setEnabled(true);
           update((q) => ({ ...q, engine: g.getSave() }));
           const lit = g.getSave().lit.length;
-          say("Byte Bay", `${LOOKOUTS.find((l) => l.id === a)?.name} lookout lit! (${lit}/${LOOKOUTS.length})`, "good");
+          say("Port CODEship", `${LOOKOUTS.find((l) => l.id === a)?.name} lookout lit! (${lit}/${LOOKOUTS.length})`, "good");
         });
       }
     },
@@ -451,7 +474,7 @@ export default function ByteBay() {
 
   const ensureWorker = useCallback(() => {
     if (!workerRef.current) {
-      const w = new Worker(new URL("./bay.worker.ts", import.meta.url), { type: "module" });
+      const w = new Worker(new URL("./port.worker.ts", import.meta.url), { type: "module" });
       w.addEventListener("message", (e: MessageEvent) => {
         if (e.data?.type === "status") setPyStatus(e.data.text);
       });
@@ -515,12 +538,18 @@ export default function ByteBay() {
     const g = gameRef.current;
     if (!s || !g || !panel || running) return;
     const id = panel;
-    const code = s.missions[id].code[s.lang];
+    const blocksMode = (s.editor ?? "blocks") === "blocks";
+    const lang: Lang = blocksMode ? "js" : s.lang;
+    const code = blocksMode ? blocksToJs(s.missions[id].blocks ?? STARTER_BLOCKS[id]) : s.missions[id].code[s.lang];
+    if (!code.trim()) {
+      setResult({ ok: false, title: "Nothing to run yet", detail: 'Snap your blocks under "when Run is pressed".', output: [] });
+      return;
+    }
     setRunning(true);
     setResult(null);
     if (id === "beach" && s.litter.length === 0) addTide(8);
     const worlds = [liveWorld(id), ...testWorlds(id)];
-    const out = await runInWorker(id, s.lang, code, worlds);
+    const out = await runInWorker(id, lang, code, worlds);
     if (typeof out === "string") {
       setRunning(false);
       setResult({ ok: false, title: "Program stopped", detail: out, output: [] });
@@ -565,7 +594,7 @@ export default function ByteBay() {
     } else {
       r = { ok: true, title: `${MISSIONS[id].bot} programmed! ★★★`, detail: live.check.message + " It also passed every test.", output: live.output };
       finishMission(id, "code");
-      if (id === "beach") update((q) => ({ ...q, beachCode: { lang: s.lang, code } }));
+      if (id === "beach") update((q) => ({ ...q, beachCode: { lang, code } }));
     }
     setRunning(false);
     setResult(r);
@@ -618,7 +647,7 @@ export default function ByteBay() {
             focus: (f) => setFocus(f),
             bits: (b) => {
               setBits(b);
-              say("Byte Bay", `Found a bit! (${b.length}/${g.totalBits})`, "good");
+              say("Port CODEship", `Found a bit! (${b.length}/${g.totalBits})`, "good");
               const s = saveRef.current;
               if (s) {
                 const next = { ...s, engine: g.getSave() };
@@ -632,12 +661,13 @@ export default function ByteBay() {
               if (s && s.missions.home.status === "active" && missingWalls(blocks).length === 0 && !busyRef.current) finishMission("home", "hand");
             },
             buildMode: (on) => setBuilding(on),
+            mouseLook: (on) => setLooking(on),
             say: (who, text, tone) => say(who, text, tone),
           },
           existingSave?.look ?? { shirt: SHIRTS[0], skin: SKINS[2], hair: HAIRS[0] }
         );
         gameRef.current = g;
-        if (process.env.NODE_ENV !== "production") (window as unknown as { __bay?: Game }).__bay = g;
+        if (process.env.NODE_ENV !== "production") (window as unknown as { __port?: Game }).__port = g;
         g.attract();
         setReady(true);
       } catch {
@@ -699,18 +729,18 @@ export default function ByteBay() {
     }
     if (m.beach.status !== "done") return { text: `Clean up the beach: ${save.litter.length} pieces of litter. By hand, or build a Beach Bot.`, target: m.beach.status === "active" && save.litter.length < 18 ? BEACH_TERMINAL : NPCS.kofi };
     const lit = gameRef.current?.getSave().lit.length ?? 0;
-    return { text: `Free roam! Light all the lookouts (${lit}/${LOOKOUTS.length}) and find every bit. More of Byte Bay opens soon.`, target: null };
+    return { text: `Free roam! Light all the lookouts (${lit}/${LOOKOUTS.length}) and find every bit. More of Port CODEship opens soon.`, target: null };
   }, [save, carry]);
 
   useEffect(() => {
     const g = gameRef.current;
     if (!g || !save) return;
-    g.setMarker(objective.target);
+    g.setMarker(goalHidden ? null : objective.target);
     g.setNpcAlert("ada", !save.intro);
     g.setNpcAlert("ali", save.missions.market.status === "active" && save.marketServed === 0);
     g.setNpcAlert("kofi", save.missions.beach.status === "active" && save.cleanedByHand === 0 && !save.beachCode);
     g.setNpcAlert("rosa", save.missions.home.status === "active");
-  }, [objective, save]);
+  }, [objective, save, goalHidden]);
 
   // Minimap and big map
   useEffect(() => {
@@ -748,13 +778,21 @@ export default function ByteBay() {
       if (e.code === "KeyM" && !panel && !dialog) {
         setMapOpen((o) => !o);
       }
+      if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
       if (e.code === "Escape") {
+        // The Esc that turns off mouse-look shouldn't also open the menu.
+        if (gameRef.current?.justUnlocked()) return;
         if (mapOpen) setMapOpen(false);
+        else if (dialog) closeDialog();
+        else if (workshop) {
+          setWorkshop(false);
+          gameRef.current?.setEnabled(true);
+        }
         else if (panel) {
           setPanel(null);
           gameRef.current?.setEnabled(true);
         } else if (building) gameRef.current?.toggleBuild(false);
-        else if (!dialog && !workshop) {
+        else {
           setPaused((p) => {
             gameRef.current?.setEnabled(p);
             return !p;
@@ -764,7 +802,22 @@ export default function ByteBay() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [screen, panel, dialog, mapOpen, building, workshop]);
+    // dropCarry only reads refs and stable setters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen, panel, dialog, mapOpen, building, workshop, closeDialog]);
+
+  /** Put down whatever you're carrying: litter goes back on the sand, products back on the shelf. */
+  function dropCarry() {
+    const c = carryRef.current;
+    if (!c) return;
+    if (c.kind === "litter" && c.litter) {
+      const back = c.litter;
+      update((q) => ({ ...q, litter: [...q.litter, back] }));
+      gameRef.current?.setLitter(saveRef.current!.litter);
+      say("You", `Put the ${c.name} back down. You can come back to it any time.`, "info");
+    } else say("You", `Put the ${c.name} back on the shelf.`, "info");
+    setCarry(null);
+  }
 
   const closePanel = () => {
     setPanel(null);
@@ -778,10 +831,20 @@ export default function ByteBay() {
     update((q) => ({ ...q, missions: { ...q.missions, [panel]: { ...q.missions[panel], code: { ...q.missions[panel].code, [lang]: v } } } }));
   };
 
-  const setLang = (lang: Lang) => {
-    update((q) => ({ ...q, lang }));
-    if (lang === "py") ensureWorker().postMessage({ type: "warm" });
+  const editor: Editor = save?.editor ?? "blocks";
+  const [blocksVersion, setBlocksVersion] = useState(0);
+  const setEditor = (e: Editor) => {
+    update((q) => ({ ...q, editor: e, lang: e === "blocks" ? q.lang : e }));
+    if (e === "py") ensureWorker().postMessage({ type: "warm" });
   };
+  const resetCode = () => {
+    if (!panel) return;
+    if (editor === "blocks") {
+      update((q) => ({ ...q, missions: { ...q.missions, [panel]: { ...q.missions[panel], blocks: undefined } } }));
+      setBlocksVersion((v) => v + 1);
+    } else setCode(MISSIONS[panel].starter[saveRef.current!.lang]);
+  };
+
 
   // -------------------------------------------------------------------------
   // Render
@@ -791,12 +854,12 @@ export default function ByteBay() {
 
   return (
     <div className="fixed inset-0 z-[30] select-none overflow-hidden bg-[#0d1b2a] font-sans text-white">
-      <canvas ref={canvasRef} tabIndex={0} className="block h-full w-full touch-none outline-none" aria-label="Byte Bay 3D world" />
+      <canvas ref={canvasRef} tabIndex={0} className="block h-full w-full touch-none outline-none" aria-label="Port CODEship 3D world" />
 
       {webglError && (
         <div className="absolute inset-0 grid place-items-center bg-[#0d1b2a] p-6 text-center">
           <div className="max-w-md">
-            <h1 className="text-2xl font-bold">Byte Bay needs 3D graphics</h1>
+            <h1 className="text-2xl font-bold">Port CODEship needs 3D graphics</h1>
             <p className="mt-2 text-white/80">This browser couldn&apos;t start WebGL. Try Chrome or Edge, or turn on hardware acceleration in your browser settings.</p>
             <Link href="/ship-it/" className="mt-4 inline-block rounded-full bg-amber px-5 py-2 font-bold text-navy">Back to the Arcade</Link>
           </div>
@@ -809,7 +872,7 @@ export default function ByteBay() {
           <div className="mx-auto flex min-h-full max-w-xl flex-col justify-center gap-5">
             <div>
               <Link href="/ship-it/" className="text-sm font-semibold text-white/70 hover:text-white">← Ship It! Arcade</Link>
-              <h1 className="mt-2 text-5xl font-extrabold tracking-tight drop-shadow sm:text-6xl">Byte Bay</h1>
+              <h1 className="mt-2 text-5xl font-extrabold tracking-tight drop-shadow sm:text-6xl">Port CODEship</h1>
               <p className="mt-2 text-lg text-white/90 drop-shadow">Explore a whole town, climb anything, and fix real problems with real code: Python or JavaScript.</p>
             </div>
             <div className="rounded-2xl bg-[#0d1b2a]/85 p-5 shadow-2xl ring-1 ring-white/10 backdrop-blur">
@@ -854,9 +917,14 @@ export default function ByteBay() {
       {playing && (
         <>
           {/* Objective + bits */}
-          <div className="pointer-events-none absolute left-3 top-3 max-w-[min(420px,calc(100vw-170px))] rounded-xl bg-[#0d1b2a]/80 px-4 py-3 shadow-lg ring-1 ring-white/10">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-amber">Objective</div>
-            <p className="text-sm leading-snug sm:text-base">{objective.text}</p>
+          <div className="absolute left-3 top-3 max-w-[min(420px,calc(100vw-170px))] rounded-xl bg-[#0d1b2a]/80 px-4 py-3 shadow-lg ring-1 ring-white/10">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber">{goalHidden ? "Exploring freely" : "Objective"}</div>
+              <button onClick={() => setGoalHidden((h) => !h)} className="rounded-md bg-white/10 px-2 py-0.5 text-[11px] font-bold hover:bg-white/20">
+                {goalHidden ? "Show goal" : "Hide goal"}
+              </button>
+            </div>
+            {!goalHidden && <p className="text-sm leading-snug sm:text-base">{objective.text}</p>}
             <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-white/70">
               <span>◆ {bits.length}/{gameRef.current?.totalBits ?? 0} bits</span>
               {(["home", "market", "beach"] as MissionId[]).map((id) => (
@@ -886,7 +954,19 @@ export default function ByteBay() {
               </div>
             </div>
           )}
-          {carry && <div className="pointer-events-none absolute bottom-40 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-navy sm:bottom-36">Carrying: {carry}</div>}
+          {carry && !dialog && !panel && (
+            <div className="absolute bottom-40 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/90 py-1 pl-3 pr-1 text-sm font-bold text-navy sm:bottom-36">
+              Carrying: {carry}
+              <button onClick={dropCarry} className="rounded-full bg-navy px-3 py-1 text-xs text-white">Put down (G)</button>
+            </div>
+          )}
+
+          {/* Mouse-look hint */}
+          {!touch && !panel && !dialog && !building && !paused && !mapOpen && !watching && (
+            <div className="pointer-events-none absolute left-1/2 top-3 hidden -translate-x-1/2 rounded-full bg-[#0d1b2a]/75 px-3 py-1 text-xs font-semibold text-white/85 md:block">
+              {looking ? "Move the mouse to look around · Esc frees your mouse" : "Click the world to look around with your mouse"}
+            </div>
+          )}
 
           {/* Feed */}
           <div className="pointer-events-none absolute bottom-24 left-3 flex max-w-[min(380px,70vw)] flex-col gap-1.5 sm:bottom-4">
@@ -919,6 +999,7 @@ export default function ByteBay() {
           {watching && (
             <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[#0d1b2a]/90 px-4 py-2 shadow-xl ring-1 ring-white/20">
               <span className="text-sm font-semibold">{MISSIONS[watching].bot} is running your code…</span>
+              <button onClick={() => { if (gameRef.current) gameRef.current.timeScale = 1000; }} className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold">Finish now</button>
               {[1, 3, 8].map((v) => (
                 <button key={v} onClick={() => { setSpeed(v); if (gameRef.current) gameRef.current.timeScale = v; }} className={`rounded-full px-3 py-1 text-sm font-bold ${speed === v ? "bg-amber text-navy" : "bg-white/10"}`}>
                   {v}×
@@ -941,7 +1022,10 @@ export default function ByteBay() {
           {dialog && (
             <div className="absolute inset-x-0 bottom-0 flex justify-center p-3 sm:p-6">
               <div className="w-full max-w-2xl rounded-2xl bg-[#0d1b2a]/95 p-5 shadow-2xl ring-1 ring-white/15">
-                <div className="text-sm font-extrabold uppercase tracking-wider text-amber">{dialog.who}</div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="text-sm font-extrabold uppercase tracking-wider text-amber">{dialog.who}</div>
+                  <button onClick={closeDialog} aria-label="Leave the conversation" className="rounded-md bg-white/10 px-2 py-0.5 text-xs font-bold hover:bg-white/20">Leave (Esc)</button>
+                </div>
                 <p className="mt-1 text-base leading-relaxed sm:text-lg">{dialog.text}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {dialog.choices.map((c, i) => (
@@ -975,7 +1059,7 @@ export default function ByteBay() {
 
           {/* Code panel */}
           {mission && save && (
-            <div className="absolute inset-y-0 right-0 flex w-full flex-col bg-[#111427]/97 shadow-2xl ring-1 ring-white/10 sm:w-[min(640px,60vw)]">
+            <div className="absolute inset-y-0 right-0 flex w-full flex-col bg-[#111427]/95 backdrop-blur shadow-2xl ring-1 ring-white/10 sm:w-[min(780px,68vw)]">
               <div className="flex items-start justify-between gap-3 border-b border-white/10 p-4">
                 <div className="min-w-0">
                   <div className="text-xs font-bold uppercase tracking-wider text-amber">{mission.bot} terminal</div>
@@ -986,18 +1070,38 @@ export default function ByteBay() {
               </div>
               <div className="flex-1 overflow-y-auto p-4">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
-                  <div className="flex rounded-lg bg-white/10 p-1" role="group" aria-label="Language">
-                    {(["py", "js"] as Lang[]).map((l) => (
-                      <button key={l} onClick={() => setLang(l)} className={`rounded-md px-3 py-1 text-sm font-bold ${save.lang === l ? "bg-amber text-navy" : "text-white/80"}`}>
-                        {l === "py" ? "Python" : "JavaScript"}
+                  <div className="flex rounded-lg bg-white/10 p-1" role="group" aria-label="How to code">
+                    {(["blocks", "py", "js"] as Editor[]).map((l) => (
+                      <button key={l} onClick={() => setEditor(l)} aria-pressed={editor === l} className={`rounded-md px-3 py-1 text-sm font-bold ${editor === l ? "bg-amber text-navy" : "text-white/80"}`}>
+                        {l === "blocks" ? "Blocks" : l === "py" ? "Python" : "JavaScript"}
                       </button>
                     ))}
                   </div>
-                  <button onClick={() => setCode(mission.starter[save.lang])} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset code</button>
+                  <button onClick={resetCode} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset</button>
                   <button onClick={() => setShowHint((h) => !h)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">{showHint ? "Hide hint" : "Hint"}</button>
                 </div>
                 {showHint && <p className="mb-3 rounded-lg bg-amber/15 p-3 text-sm text-amber">{mission.hint}</p>}
-                <CodeEditor ref={editorRef} value={save.missions[mission.id].code[save.lang]} onChange={setCode} commands={API_NAMES[mission.id]} label={`${mission.bot} code`} minLines={14} />
+                {editor === "blocks" ? (
+                  <>
+                    <div className="h-[min(460px,55vh)] overflow-hidden rounded-2xl ring-1 ring-white/10">
+                      <PortBlocksEditor
+                        mission={mission.id}
+                        value={save.missions[mission.id].blocks}
+                        version={blocksVersion}
+                        onChange={(w) => update((q) => ({ ...q, missions: { ...q.missions, [mission.id]: { ...q.missions[mission.id], blocks: w } } }))}
+                      />
+                    </div>
+                    <p className="mt-2 text-xs text-white/60">Drag blocks from the left and snap them under &ldquo;when Run is pressed&rdquo;. Drag a block back to the left to delete it.</p>
+                    <details className="mt-2">
+                      <summary className="cursor-pointer text-sm font-semibold text-white/80">See your blocks as Python</summary>
+                      <div className="mt-2">
+                        <CodeEditor value={blocksToPy(save.missions[mission.id].blocks ?? STARTER_BLOCKS[mission.id])} onChange={() => {}} readOnly commands={API_NAMES[mission.id]} label="Your blocks as Python" minLines={4} />
+                      </div>
+                    </details>
+                  </>
+                ) : (
+                  <CodeEditor ref={editorRef} value={save.missions[mission.id].code[save.lang]} onChange={setCode} commands={API_NAMES[mission.id]} label={`${mission.bot} code`} minLines={14} />
+                )}
                 <div className="mt-3 flex items-center gap-3">
                   <button onClick={runCode} disabled={running} className="rounded-xl bg-emerald-400 px-6 py-2.5 text-lg font-extrabold text-[#06130b] disabled:opacity-50">
                     {running ? "Running…" : "▶ Run"}
@@ -1012,8 +1116,8 @@ export default function ByteBay() {
                     {result.output.length > 0 && <pre className="mt-2 max-h-40 overflow-auto rounded-lg bg-black/40 p-3 font-mono text-xs text-white/80">{result.output.join("\n")}</pre>}
                   </div>
                 )}
-                <h3 className="mt-5 text-sm font-bold uppercase tracking-wider text-white/60">Bot commands (click to add)</h3>
-                <ul className="mt-2 grid gap-1.5">
+                {editor !== "blocks" && <h3 className="mt-5 text-sm font-bold uppercase tracking-wider text-white/60">Bot commands (click to add)</h3>}
+                <ul className={`mt-2 grid gap-1.5 ${editor === "blocks" ? "hidden" : ""}`}>
                   {mission.api.map((a) => (
                     <li key={a.sig}>
                       <button
@@ -1035,7 +1139,7 @@ export default function ByteBay() {
             <div className="absolute inset-0 grid place-items-center bg-black/60 p-4" onClick={() => setMapOpen(false)}>
               <div className="rounded-2xl bg-[#0d1b2a] p-3 shadow-2xl ring-1 ring-white/15" onClick={(e) => e.stopPropagation()}>
                 <div className="mb-2 flex items-center justify-between gap-4">
-                  <h2 className="font-extrabold">Map of Byte Bay</h2>
+                  <h2 className="font-extrabold">Map of Port CODEship</h2>
                   <button onClick={() => setMapOpen(false)} className="rounded-lg bg-white/10 px-3 py-1 text-sm font-bold">Close (M)</button>
                 </div>
                 <canvas ref={bigMapRef} width={640} height={600} className="block h-auto max-h-[75vh] w-[min(640px,85vw)] rounded-lg" />
@@ -1117,11 +1221,13 @@ function Choice({ label, options, value, onPick }: { label: string; options: [st
 function Controls() {
   const rows: [string, string][] = [
     ["W A S D / arrows", "Move"],
-    ["Drag mouse", "Look around (scroll to zoom)"],
+    ["Click the world", "Look around with the mouse (Esc frees it)"],
+    ["Drag / trackpad swipe", "Turn the view (scroll to zoom)"],
     ["Space", "Jump (off a wall, too)"],
     ["Shift", "Sprint"],
     ["Walk into a wall", "Climb it (W up, S down)"],
     ["E", "Talk, use, pick up"],
+    ["G", "Put down what you're carrying"],
     ["B", "Build mode on your plot"],
     ["M / Esc", "Map / menu"],
   ];

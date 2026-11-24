@@ -1,5 +1,5 @@
 /**
- * Byte Bay movement: axis-aligned boxes for everything solid, and a player
+ * Port CODEship movement: axis-aligned boxes for everything solid, and a player
  * controller that walks, jumps, swims and climbs any wall marked climbable
  * (buildings, towers, shelves, your own house).
  */

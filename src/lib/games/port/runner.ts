@@ -1,17 +1,17 @@
 /**
- * Byte Bay: runs a student's JavaScript or Python against a mission simulator.
+ * Port CODEship: runs a student's JavaScript or Python against a mission simulator.
  * Shared by the game's worker and the Node tests, so the tests run exactly
  * what students run.
  */
 
-import { API_NAMES, BayError, TimeUp, makeSim, type MissionId, type SimResult } from "./missions";
+import { API_NAMES, BotError, TimeUp, makeSim, type MissionId, type SimResult } from "./missions";
 
 export type RunOutcome = SimResult & { error: string | null };
 
 const WRAPPER_LINES = 2;
 
 function friendlyJs(err: unknown, names: string[]): string {
-  if (err instanceof BayError) return `BotError: ${err.message}`;
+  if (err instanceof BotError) return `BotError: ${err.message}`;
   const e = err as Error;
   const name = e?.name || "Error";
   let message = e?.message || String(err);
@@ -65,12 +65,12 @@ def _student_frames_only(tb):
         tb = tb.tb_next
     return tb
 
-def run_bay_code(source, names):
-    import baybot
+def run_port_code(source, names):
+    import portbot
     ns = {"__name__": "__main__", "__file__": FILENAME, "__builtins__": builtins}
     for name in names:
         if name != "print":
-            ns[name] = getattr(baybot, name)
+            ns[name] = getattr(portbot, name)
     linecache.cache[FILENAME] = (len(source), None, source.splitlines(True), FILENAME)
     try:
         code = compile(source, FILENAME, "exec", dont_inherit=True)
@@ -80,11 +80,11 @@ def run_bay_code(source, names):
     except BaseException as e:
         if isinstance(e, SystemExit) and e.code in (None, 0):
             return None
-        if baybot._stopped():
+        if portbot._stopped():
             return None
         tb = _student_frames_only(e.__traceback__)
         lines = "".join(traceback.format_exception(type(e), e, tb)).rstrip().splitlines()
-        msg = baybot._bot_error()
+        msg = portbot._bot_error()
         if msg:
             lines = lines[:-1] + ["BotError: " + msg]
         return "\\n".join(lines)
@@ -118,14 +118,14 @@ export function createPythonRunner(py: PyodideLike): PythonRunner {
         return r === undefined ? null : r;
       } catch (err) {
         if (err instanceof TimeUp) stopped = err.message;
-        else if (err instanceof BayError) botError = err.message;
+        else if (err instanceof BotError) botError = err.message;
         throw err;
       }
     };
   }
-  py.registerJsModule("baybot", mod);
+  py.registerJsModule("portbot", mod);
   py.runPython(RUNNER);
-  const run = py.globals.get("run_bay_code") as (src: string, names: string[]) => string | null | undefined;
+  const run = py.globals.get("run_port_code") as (src: string, names: string[]) => string | null | undefined;
 
   return (mission, code, world) => {
     const sim = makeSim(mission, world);

@@ -1,8 +1,8 @@
 /**
- * Byte Bay 3D engine: the town, the player, the camera, the bots that play
+ * Port CODEship 3D engine: the town, the player, the camera, the bots that play
  * back students' code, and hand-building at the home plot.
  *
- * The React shell (ByteBay.tsx) owns quests, dialogue and saving. The engine
+ * The React shell (PortCodeship.tsx) owns quests, dialogue and saving. The engine
  * tells it what the player can interact with (hooks.label decides what's
  * available) and plays back mission steps on request.
  */
@@ -21,7 +21,7 @@ import {
   type HomeStep,
   type Litter,
   type MarketStep,
-} from "@/lib/games/bay/missions";
+} from "@/lib/games/port/missions";
 import {
   AISLE_X,
   BEACH_ORIGIN,
@@ -85,6 +85,8 @@ export interface Hooks {
   bits(collected: number[]): void;
   blocksChanged(blocks: Block[]): void;
   buildMode(on: boolean): void;
+  /** Mouse-look turned on (pointer locked) or off. */
+  mouseLook(on: boolean): void;
   say(who: string, text: string, tone?: "good" | "bad" | "info"): void;
 }
 
@@ -340,7 +342,7 @@ export class Game {
     this.solid(box(-2.6, 0, -2.6, 2.6, 0.8, 2.6, false));
     this.solid(box(-0.4, 0, -0.4, 0.4, 2.4, 0.4, true));
     // Welcome sign
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.6), new THREE.MeshStandardMaterial({ map: textTexture(["Welcome to", "BYTE BAY"], { h: 200, font: 52 }) }));
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.6), new THREE.MeshStandardMaterial({ map: textTexture(["Welcome to", "PORT CODESHIP"], { h: 200, font: 52 }) }));
     sign.position.set(0, 3.2, -14.6);
     this.scene.add(sign);
     this.scene.add(cube(0.2, 2.6, 0.2, mat(0x5b4636), -2.2, 1.3, -14.7), cube(0.2, 2.6, 0.2, mat(0x5b4636), 2.2, 1.3, -14.7));
@@ -661,12 +663,45 @@ export class Game {
   private onKeyUp = (e: KeyboardEvent) => this.keys.delete(e.code);
   private onBlur = () => this.keys.clear();
 
+  private unlockedAt = 0;
+  private get locked() {
+    return typeof document !== "undefined" && document.pointerLockElement === this.canvas;
+  }
+  /** True right after mouse-look ended: the same Esc press shouldn't also open the menu. */
+  justUnlocked() {
+    return performance.now() - this.unlockedAt < 400;
+  }
+  private onLockChange = () => {
+    if (!this.locked) this.unlockedAt = performance.now();
+    this.hooks.mouseLook(this.locked);
+  };
+  /** Free the mouse cursor (for menus, the code panel and build mode). */
+  releaseMouse() {
+    if (this.locked) document.exitPointerLock();
+  }
+
   private onPointerDown = (e: PointerEvent) => {
     if (!this.enabled) return;
+    // A mouse click on the world turns on mouse-look, so the view turns while you walk.
+    if (e.pointerType === "mouse" && !this.building && !this.locked && e.button === 0) {
+      try {
+        const r = this.canvas.requestPointerLock() as unknown as Promise<void> | undefined;
+        r?.catch?.(() => {});
+      } catch {
+        /* pointer lock unavailable: drag-to-look still works */
+      }
+    }
+    if (this.locked) return;
     this.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: 0, button: e.button };
     this.canvas.setPointerCapture(e.pointerId);
   };
   private onPointerMove = (e: PointerEvent) => {
+    if (this.locked) {
+      if (!this.enabled) return;
+      this.camYaw -= e.movementX * 0.0035;
+      this.camPitch = Math.max(-0.15, Math.min(1.25, this.camPitch + e.movementY * 0.0028));
+      return;
+    }
     const r = this.canvas.getBoundingClientRect();
     this.pointerNdc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     if (!this.drag || this.drag.id !== e.pointerId) return;
@@ -692,7 +727,9 @@ export class Game {
   private onWheel = (e: WheelEvent) => {
     if (!this.enabled) return;
     e.preventDefault();
-    this.camDist = Math.max(3, Math.min(16, this.camDist + e.deltaY * 0.01));
+    // Trackpads: swipe sideways to turn the view, up/down (or the wheel) to zoom.
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) this.camYaw -= e.deltaX * 0.004;
+    else this.camDist = Math.max(3, Math.min(16, this.camDist + e.deltaY * 0.01));
   };
   private onContext = (e: Event) => e.preventDefault();
 
@@ -707,6 +744,7 @@ export class Game {
     this.canvas.addEventListener("wheel", this.onWheel, { passive: false });
     this.canvas.addEventListener("contextmenu", this.onContext);
     window.addEventListener("resize", this.resize);
+    document.addEventListener("pointerlockchange", this.onLockChange);
   }
 
   setTouch(x: number, y: number) {
@@ -724,6 +762,7 @@ export class Game {
   setEnabled(on: boolean) {
     this.enabled = on;
     if (!on) {
+      this.releaseMouse();
       this.keys.clear();
       this.touch = { x: 0, y: 0, jump: false, sprint: false };
     }
@@ -1138,6 +1177,7 @@ export class Game {
       return;
     }
     if (want && this.hooks.label("build") === null) return;
+    if (want) this.releaseMouse();
     this.building = want;
     this.ghost.visible = false;
     this.hooks.buildMode(want);
@@ -1465,6 +1505,8 @@ export class Game {
     window.removeEventListener("keyup", this.onKeyUp);
     window.removeEventListener("blur", this.onBlur);
     window.removeEventListener("resize", this.resize);
+    document.removeEventListener("pointerlockchange", this.onLockChange);
+    this.releaseMouse();
     this.canvas.removeEventListener("pointerdown", this.onPointerDown);
     this.canvas.removeEventListener("pointermove", this.onPointerMove);
     this.canvas.removeEventListener("pointerup", this.onPointerUp);

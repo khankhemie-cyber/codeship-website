@@ -1,5 +1,5 @@
 /**
- * Byte Bay models: blocky low-poly people and bots, built from boxes so they
+ * Port CODEship models: blocky low-poly people and bots, built from boxes so they
  * cost almost nothing to draw, plus canvas textures for facades and signs.
  */
 

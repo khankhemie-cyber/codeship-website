@@ -1,11 +1,11 @@
 /**
- * Byte Bay town layout: one place for every position in the world, used by
+ * Port CODEship town layout: one place for every position in the world, used by
  * the 3D scene, the collision boxes and the minimap.
  *
  * Coordinates are metres. +x is east, +z is south (towards the beach), y is up.
  */
 
-import { rng } from "@/lib/games/bay/missions";
+import { rng } from "@/lib/games/port/missions";
 
 export type Rect = { x0: number; z0: number; x1: number; z1: number };
 export type Building = Rect & { h: number; color: number; roof: number };
