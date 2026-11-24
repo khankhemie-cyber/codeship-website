@@ -51,6 +51,23 @@ const TOPIC_COLOR: Record<Topic, string> = { Blocks: BRAND.yellow, JavaScript: B
 
 const ARCADE_GAMES: ArcadeGame[] = [
   {
+    game: "port",
+    title: "Port CODEship",
+    emoji: "⚓",
+    href: "/ship-it/port-codeship/",
+    grades: "Grades 4–8",
+    language: "3D open world · Python or JavaScript",
+    pitch: "Explore a 3D seaside town, climb anything, and build your house. Then code robots in real Python or JavaScript to help the shop, clean the beach and more.",
+    levels: ["home", "market", "beach"],
+    teaches: ["Loops", "Functions", "Dictionaries", "while loops", "if / elif / else", "Automation"],
+    free: 1,
+    thumb: "/arcade/port.jpg",
+    gradeRange: [4, 8],
+    topic: "Python",
+    accent: BRAND.teal,
+    isNew: true,
+  },
+  {
     game: "bus",
     title: "Bus Buddies Road Trip",
     emoji: "🚌",
@@ -179,7 +196,7 @@ function NameTag() {
 
 function freeLine(g: ArcadeGame) {
   const free = g.free ?? FREE_LEVELS;
-  return g.levels.length > free ? `Levels 1–${free} free · class password unlocks all ${g.levels.length}` : `All ${g.levels.length} levels free`;
+  return g.levels.length > free ? `${free === 1 ? "Level 1" : `Levels 1–${free}`} free · class password unlocks all ${g.levels.length}` : `All ${g.levels.length} levels free`;
 }
 
 function Chip({ active, onClick, children, color = BRAND.navy, ink = "#fff" }: { active: boolean; onClick: () => void; children: React.ReactNode; color?: string; ink?: string }) {
