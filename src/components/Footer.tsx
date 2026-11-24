@@ -106,7 +106,7 @@ export default function Footer() {
             </Link>{" "}
             · <CookieSettingsButton className="hover:text-[#F4D734]" />
           </p>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-400 mt-2">
             Franchise information is not an offering. Offerings are made only by disclosure document.
           </p>
         </div>

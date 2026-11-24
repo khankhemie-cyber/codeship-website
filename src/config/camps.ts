@@ -20,5 +20,5 @@ export const MARCH_BREAK_CAMP = {
   priceLabel: "CAD $450",
   spots: 30,
   url: "https://buy.stripe.com/dRm00d8Qr83H0oN6PGdAk0t",
-  image: "/images/camp.jpg",
+  image: "/images/camp.webp",
 } as const;

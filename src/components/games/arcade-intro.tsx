@@ -16,11 +16,11 @@ export const BRAND = {
 
 /** Game screens that float around the title, with how fast each drifts on scroll. */
 const TILES = [
-  { src: "/arcade/bus.jpg", cls: "left-[3%] top-[3%] sm:top-[12%] w-28 sm:w-56 -rotate-6", speed: -260, ring: BRAND.yellow },
-  { src: "/arcade/rover.jpg", cls: "right-[4%] top-[3%] sm:top-[8%] w-28 sm:w-52 rotate-6", speed: -380, ring: BRAND.purple },
-  { src: "/arcade/prompt.jpg", cls: "left-[6%] bottom-[12%] w-36 sm:w-48 rotate-3 hidden sm:block", speed: -180, ring: BRAND.teal },
-  { src: "/arcade/studio.jpg", cls: "right-[7%] bottom-[14%] w-40 sm:w-56 -rotate-3 hidden sm:block", speed: -300, ring: BRAND.yellow },
-  { src: "/arcade/bot.jpg", cls: "left-[1%] top-[46%] w-32 lg:w-40 rotate-2 hidden lg:block", speed: -440, ring: BRAND.teal },
+  { src: "/arcade/bus.webp", cls: "left-[3%] top-[3%] sm:top-[12%] w-28 sm:w-56 -rotate-6", speed: -260, ring: BRAND.yellow },
+  { src: "/arcade/rover.webp", cls: "right-[4%] top-[3%] sm:top-[8%] w-28 sm:w-52 rotate-6", speed: -380, ring: BRAND.purple },
+  { src: "/arcade/prompt.webp", cls: "left-[6%] bottom-[12%] w-36 sm:w-48 rotate-3 hidden sm:block", speed: -180, ring: BRAND.teal },
+  { src: "/arcade/studio.webp", cls: "right-[7%] bottom-[14%] w-40 sm:w-56 -rotate-3 hidden sm:block", speed: -300, ring: BRAND.yellow },
+  { src: "/arcade/bot.webp", cls: "left-[1%] top-[46%] w-32 lg:w-40 rotate-2 hidden lg:block", speed: -440, ring: BRAND.teal },
 ];
 
 const EMOJI = [

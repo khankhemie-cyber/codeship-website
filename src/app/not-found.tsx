@@ -24,14 +24,14 @@ const suggestions = [
     detail: "K–Grade 8 coding, AI & STEM classes.",
   },
   {
-    href: "/program-finder/",
-    title: "Program Finder",
-    detail: "Find the right level for your child.",
+    href: "/ship-it/",
+    title: "Ship It! Arcade",
+    detail: "Free coding games for ages 4–14.",
   },
   {
-    href: "/tools/playground/",
-    title: "Coding Playground",
-    detail: "Free games and puzzles to practise coding.",
+    href: "/programs/camps/#march-break",
+    title: "March Break Camp",
+    detail: "Mar 15–19, 2027 in Oshawa. Sign-up open.",
   },
   {
     href: "/contact/",
