@@ -186,5 +186,19 @@ test("blocks: a product missing from the shelf map gets a clear message", () => 
   assert(/eggs is not in your shelf map/.test(r.error ?? ""), r.error);
 });
 
+// Parent sign-up form checks (the gate after the first challenge or 15 minutes).
+const { validateSignup } = await import("../../src/lib/arcadeSignupForm.ts");
+test("sign-up: a complete form passes and is cleaned up", () => {
+  const r = validateSignup({ parentName: "  Sam ", email: "Parent@Example.com", grade: "Grade 4", consent: true, game: "port-codeship" });
+  assert(r.ok && r.value.email === "parent@example.com" && r.value.parentName === "Sam", JSON.stringify(r));
+});
+test("sign-up: missing consent, bad email or grade are refused", () => {
+  const base = { parentName: "Sam", email: "a@b.co", grade: "Grade 4", consent: true };
+  assert(!validateSignup({ ...base, consent: false }).ok, "consent");
+  assert(!validateSignup({ ...base, email: "nope" }).ok, "email");
+  assert(!validateSignup({ ...base, grade: "Grade 99" }).ok, "grade");
+  assert(!validateSignup({ ...base, parentName: " " }).ok, "name");
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

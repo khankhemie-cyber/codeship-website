@@ -47,6 +47,7 @@ const PortBlocksEditor = dynamic(() => import("./PortBlocksEditor"), {
 type Editor = "blocks" | Lang;
 import type { EngineSave, Focus, Game, Look } from "./engine/Game";
 import type { BeachBotStyle } from "./engine/models";
+import SignupGate from "./SignupGate";
 import { BEACH_TERMINAL, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type NpcId } from "./engine/layout";
 
 // ---------------------------------------------------------------------------
@@ -72,7 +73,14 @@ type Save = {
   beachBot: BeachBotStyle;
   beachCode: { lang: Lang; code: string } | null;
   lowGraphics: boolean;
+  /** Seconds of active play, for the sign-up prompt. */
+  playSeconds?: number;
+  /** Set once a parent signed up or a class password was entered on this device. */
+  signedUp?: "parent" | "student";
 };
+
+/** Sign-up is asked for after the first finished challenge or this much play. */
+const FREE_PLAY_SECONDS = 15 * 60;
 
 const KEY = "codeship-port-v1";
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
@@ -684,6 +692,7 @@ export default function PortCodeship() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const gateBlocking = useRef(false);
   const interactRef = useRef(interact);
   interactRef.current = interact;
 
@@ -714,6 +723,54 @@ export default function PortCodeship() {
       if (g && saveRef.current) update((q) => ({ ...q, engine: g.getSave() }));
     }, 5000);
     return () => window.clearInterval(t);
+  }, [screen, update]);
+
+  // Sign-up: needed after the first finished challenge or 15 minutes of play.
+  const missionsDone = save ? (Object.values(save.missions) as MissionState[]).filter((m) => m.status === "done").length : 0;
+  const gateReason: "challenge" | "time" | null =
+    !save || save.signedUp ? null : missionsDone > 0 ? "challenge" : (save.playSeconds ?? 0) >= FREE_PLAY_SECONDS ? "time" : null;
+  const gateOpen = screen === "play" && gateReason !== null && !watching;
+  gateBlocking.current = gateOpen;
+
+  useEffect(() => {
+    if (gateOpen) {
+      setPanel(null);
+      setDialog(null);
+      setPaused(false);
+      setMapOpen(false);
+      gameRef.current?.toggleBuild(false);
+      gameRef.current?.setEnabled(false);
+    }
+  }, [gateOpen]);
+
+  // Count active play time (tab visible, nothing blocking the game).
+  useEffect(() => {
+    if (screen !== "play") return;
+    const t = window.setInterval(() => {
+      const s = saveRef.current;
+      if (!s || s.signedUp || document.visibilityState !== "visible" || !gameRef.current?.enabled) return;
+      update((q) => ({ ...q, playSeconds: (q.playSeconds ?? 0) + 5 }));
+    }, 5000);
+    return () => window.clearInterval(t);
+  }, [screen, update]);
+
+  // Enrolled students who already used their class password here skip sign-up.
+  useEffect(() => {
+    if (screen !== "play" || !saveRef.current || saveRef.current.signedUp) return;
+    let cancelled = false;
+    Promise.all(
+      ["explorers", "builders", "developers", "engineers"].map((p) =>
+        fetch(`/api/workbooks/session/?program=${p}`, { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : { ok: false }))
+          .then((d: { ok?: boolean }) => Boolean(d.ok))
+          .catch(() => false)
+      )
+    ).then((ok) => {
+      if (!cancelled && ok.some(Boolean)) update((q) => ({ ...q, signedUp: "student" }));
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [screen, update]);
 
   // Quest marker, NPC alerts and the objective line.
@@ -775,13 +832,14 @@ export default function PortCodeship() {
         }
         return;
       }
+      if (gateBlocking.current) return;
       if (e.code === "KeyM" && !panel && !dialog) {
         setMapOpen((o) => !o);
       }
       if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
-        if (gameRef.current?.justUnlocked()) return;
+        if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
         if (mapOpen) setMapOpen(false);
         else if (dialog) closeDialog();
         else if (workshop) {
@@ -1146,6 +1204,17 @@ export default function PortCodeship() {
                 <p className="mt-2 text-xs text-white/70">Gold dot: your objective. Triangles: lookouts (gold when lit).</p>
               </div>
             </div>
+          )}
+
+          {gateOpen && gateReason && (
+            <SignupGate
+              reason={gateReason}
+              onDone={(how) => {
+                update((q) => ({ ...q, signedUp: how }));
+                say("Port CODEship", how === "parent" ? "Thanks for signing up! Keep exploring." : "Welcome back, CODEship student!", "good");
+                gameRef.current?.setEnabled(true);
+              }}
+            />
           )}
 
           {/* Pause menu */}
