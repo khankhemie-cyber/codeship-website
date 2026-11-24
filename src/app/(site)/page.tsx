@@ -71,7 +71,7 @@ const steps = [
   { label: "Share", desc: "Each child shows what they made. Confidence grows every week.", image: IMAGES.camp },
 ];
 
-const STEP_COLORS = ["#F4D734", "#5FD3E0", "#C9B6F2"];
+const STEP_COLORS = ["#F4D734", "#138A9A", "#6E43A8"];
 
 const reasons = [
   { title: "Small groups", desc: "Every child gets real attention from the instructor." },
