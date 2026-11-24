@@ -31,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     })),
     { url: `${BASE_URL}/schools`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/partners/aba-clinics`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/franchise`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/franchise/mobile-model`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/franchise/studio-model`, changeFrequency: "monthly", priority: 0.7 },
