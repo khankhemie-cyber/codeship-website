@@ -61,7 +61,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     levels: BUS_LEVEL_IDS,
     teaches: ["Sequencing", "Debugging", "Waiting", "Loops", "Planning a route"],
     free: BUS_FREE_LEVELS,
-    thumb: "/arcade/bus.jpg",
+    thumb: "/arcade/bus.webp",
     gradeRange: [0, 1],
     topic: "Blocks",
     accent: BRAND.yellow,
@@ -77,7 +77,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     pitch: "A rover is stranded on the moon. Type real JavaScript to guide it home. Each mission unlocks a new coding superpower.",
     levels: ROVER_CATALOG.map((l) => l.id),
     teaches: ["Sequencing", "Loops", "Functions", "Conditionals", "While loops", "Variables", "Debugging"],
-    thumb: "/arcade/rover.jpg",
+    thumb: "/arcade/rover.webp",
     gradeRange: [4, 8],
     topic: "JavaScript",
     accent: BRAND.purple,
@@ -92,7 +92,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     pitch: "Team up with Astro, an AI copilot. Learn to ask clear questions, ask for sources, catch AI mistakes, and grow your own ideas.",
     levels: PROMPT_CATALOG.map((m) => m.id),
     teaches: ["Clear prompts", "Asking for sources", "Fact-checking AI", "Growing ideas", "Spotting gaps"],
-    thumb: "/arcade/prompt.jpg",
+    thumb: "/arcade/prompt.webp",
     gradeRange: [2, 5],
     topic: "AI",
     accent: BRAND.teal,
@@ -107,7 +107,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     pitch: "Build your own app. Add buttons and variables, make them react to taps, see the real code, then download your app to share.",
     levels: MISSIONS.map((m) => m.id),
     teaches: ["Events", "Variables", "Lists", "User input", "Conditions", "Shipping an app"],
-    thumb: "/arcade/studio.jpg",
+    thumb: "/arcade/studio.webp",
     gradeRange: [4, 8],
     topic: "JavaScript",
     accent: BRAND.yellow,
@@ -122,7 +122,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     pitch: "Warm up with Python, then train Sortie the sorting robot with data and discover how AI really learns, and how it gets biased.",
     levels: [...PY_ROUNDS.map((r) => r.id), ...TRAIN_ROUNDS.map((r) => r.id), ...RULE_CATALOG.map((r) => r.id)],
     teaches: ["Python basics", "Lists & loops", "Training data", "AI bias", "if / elif / else"],
-    thumb: "/arcade/bot.jpg",
+    thumb: "/arcade/bot.webp",
     gradeRange: [6, 8],
     topic: "Python",
     accent: BRAND.navy,
@@ -326,7 +326,7 @@ export function ArcadeHub() {
           <h2 id="games-heading" className="font-display text-3xl font-extrabold md:text-4xl">
             Choose a game
           </h2>
-          <p className="text-sm font-semibold text-gray-500">
+          <p className="text-sm font-semibold text-gray-600">
             {filtering ? `${shown.length} of ${ARCADE_GAMES.length} games` : `${ARCADE_GAMES.length} games`}
           </p>
         </div>
@@ -420,7 +420,7 @@ export function ArcadeHub() {
           <h2 id="badges-heading" className="font-display text-3xl font-extrabold">
             Badge wall
           </h2>
-          <p className="text-sm font-semibold text-gray-500">
+          <p className="text-sm font-semibold text-gray-600">
             {p.badges.length} / {BADGES.length} unlocked · each badge is worth +100 XP
           </p>
         </div>

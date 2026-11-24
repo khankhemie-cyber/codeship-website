@@ -43,7 +43,7 @@ function Intro({ armed, onDone }: { armed: boolean; onDone: () => void }) {
       exit={{ y: "-100%", transition: { duration: 0.8, ease: EASE } }}
     >
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: EASE }}>
-        <Image src="/logo-header.png" alt="" width={742} height={302} priority className="h-24 w-auto sm:h-32" />
+        <Image src="/logo-header.webp" alt="" width={742} height={302} priority className="h-24 w-auto sm:h-32" />
       </motion.div>
       <div className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-[#001532]/10">
         <motion.div

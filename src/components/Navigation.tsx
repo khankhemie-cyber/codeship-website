@@ -144,7 +144,7 @@ export default function Navigation() {
             {/* Logo */}
             <Link href="/" className="flex shrink-0 items-center" aria-label="CODEship Academy home">
               <Image
-                src={overHero ? "/logo-header-white.png" : "/logo-header.png"}
+                src={overHero ? "/logo-header-white.webp" : "/logo-header.webp"}
                 alt="CODEship Academy: Dream. Code. Achieve."
                 width={742}
                 height={302}

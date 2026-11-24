@@ -116,7 +116,7 @@ export default function HomePage() {
       </Section>
 
       {/* ── March Break camp ── */}
-      <section className="relative overflow-hidden bg-[#138A9A] py-16 sm:py-20">
+      <section className="relative overflow-hidden bg-[#0F6F7C] py-16 sm:py-20">
         <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#6E43A8]/40" aria-hidden="true" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border-8 border-white/20">
@@ -127,12 +127,12 @@ export default function HomePage() {
               Sign-up open
             </p>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-4 leading-tight">March Break camp</h2>
-            <p className="text-lg sm:text-xl text-white/90 mt-4">
+            <p className="text-lg sm:text-xl text-white mt-4">
               Five days of coding, AI and robotics. Kids build something new every day and show it off on Friday.
             </p>
             <ul className="mt-6 flex flex-wrap gap-2">
               {[`${CAMP.days}, ${CAMP.dates}`, CAMP.hours, CAMP.ages, `${CAMP.priceLabel} for the week`].map((t) => (
-                <li key={t} className="rounded-full bg-white/15 px-4 py-2 text-base font-semibold">
+                <li key={t} className="rounded-full bg-[#001532]/35 px-4 py-2 text-base font-semibold">
                   {t}
                 </li>
               ))}
@@ -143,7 +143,7 @@ export default function HomePage() {
               </SplitButton>
               <Link
                 href="/programs/camps#march-break"
-                className="inline-flex items-center rounded-full border-2 border-white px-7 py-[14px] text-lg font-bold text-white hover:bg-white hover:text-[#138A9A] transition-colors"
+                className="inline-flex items-center rounded-full border-2 border-white px-7 py-[14px] text-lg font-bold text-white hover:bg-white hover:text-[#0F6F7C] transition-colors"
               >
                 Camp details
               </Link>
