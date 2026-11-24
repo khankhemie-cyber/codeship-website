@@ -75,11 +75,11 @@ type Save = {
   lowGraphics: boolean;
   /** Seconds of active play, for the sign-up prompt. */
   playSeconds?: number;
-  /** Set once a parent signed up or a class password was entered on this device. */
-  signedUp?: "parent" | "student";
+  /** Set once a class password (from an enrolled course) was entered on this device. */
+  signedUp?: "student";
 };
 
-/** Sign-up is asked for after the first finished challenge or this much play. */
+/** A course sign-up is needed after the first finished challenge or this much play. */
 const FREE_PLAY_SECONDS = 15 * 60;
 
 const KEY = "codeship-port-v1";
@@ -725,7 +725,7 @@ export default function PortCodeship() {
     return () => window.clearInterval(t);
   }, [screen, update]);
 
-  // Sign-up: needed after the first finished challenge or 15 minutes of play.
+  // Course sign-up: needed after the first finished challenge or 15 minutes of play.
   const missionsDone = save ? (Object.values(save.missions) as MissionState[]).filter((m) => m.status === "done").length : 0;
   const gateReason: "challenge" | "time" | null =
     !save || save.signedUp ? null : missionsDone > 0 ? "challenge" : (save.playSeconds ?? 0) >= FREE_PLAY_SECONDS ? "time" : null;
@@ -1209,9 +1209,9 @@ export default function PortCodeship() {
           {gateOpen && gateReason && (
             <SignupGate
               reason={gateReason}
-              onDone={(how) => {
-                update((q) => ({ ...q, signedUp: how }));
-                say("Port CODEship", how === "parent" ? "Thanks for signing up! Keep exploring." : "Welcome back, CODEship student!", "good");
+              onDone={() => {
+                update((q) => ({ ...q, signedUp: "student" }));
+                say("Port CODEship", "Welcome, CODEship student! Keep exploring.", "good");
                 gameRef.current?.setEnabled(true);
               }}
             />

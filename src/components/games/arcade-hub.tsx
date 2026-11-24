@@ -60,7 +60,7 @@ const ARCADE_GAMES: ArcadeGame[] = [
     pitch: "Explore a 3D seaside town, climb anything, and build your house. Then code robots in real Python or JavaScript to help the shop, clean the beach and more.",
     levels: ["home", "market", "beach"],
     teaches: ["Loops", "Functions", "Dictionaries", "while loops", "if / elif / else", "Automation"],
-    free: 3,
+    free: 1,
     thumb: "/arcade/port.jpg",
     gradeRange: [4, 8],
     topic: "Python",
@@ -196,7 +196,7 @@ function NameTag() {
 
 function freeLine(g: ArcadeGame) {
   const free = g.free ?? FREE_LEVELS;
-  return g.levels.length > free ? `Levels 1–${free} free · class password unlocks all ${g.levels.length}` : `All ${g.levels.length} levels free`;
+  return g.levels.length > free ? `${free === 1 ? "Level 1" : `Levels 1–${free}`} free · class password unlocks all ${g.levels.length}` : `All ${g.levels.length} levels free`;
 }
 
 function Chip({ active, onClick, children, color = BRAND.navy, ink = "#fff" }: { active: boolean; onClick: () => void; children: React.ReactNode; color?: string; ink?: string }) {
