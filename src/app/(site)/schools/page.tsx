@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import FAQAccordion from "@/components/FAQAccordion";
 import SchoolContactForm from "@/components/SchoolContactForm";
 import { PageHero, Section, SectionHeader, CheckList } from "@/components/ui/Page";
@@ -87,6 +88,10 @@ export default function SchoolsPage() {
           <div className="bg-[#001532] p-8">
             <h2 className="text-2xl font-extrabold text-white mb-6">What schools get</h2>
             <CheckList items={benefits} dark />
+            <p className="text-base text-gray-200 mt-6">
+              Run an ABA clinic or autism program?{" "}
+              <Link href="/partners/aba-clinics" className="text-[#F4D734] font-semibold underline">See clinic partnerships</Link>
+            </p>
           </div>
         </div>
       </Section>

@@ -1,3 +1,5 @@
+import { abaArticles } from "./abaArticles";
+
 /** A published study or report an article cites. Rendered as a References list and as schema.org citations. */
 export interface ArticleSource {
   /** Title exactly as published. */
@@ -15,7 +17,7 @@ export interface Article {
   slug: string;
   title: string;
   metaDescription: string;
-  category: "parent" | "school" | "franchise" | "coding" | "ai" | "stem";
+  category: "parent" | "school" | "franchise" | "coding" | "ai" | "stem" | "partners";
   readTime: number;
   publishDate: string;
   /** Defaults to publishDate if omitted. Bump on any substantive content refresh. */
@@ -2670,6 +2672,7 @@ export const articles: Article[] = [
       },
     ],
   },
+  ...abaArticles,
 ];
 
 export const articlesBySlug = Object.fromEntries(articles.map((a) => [a.slug, a]));

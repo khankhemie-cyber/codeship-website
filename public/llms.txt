@@ -48,6 +48,13 @@
 - [Should kids still learn to code in the age of AI?](https://www.codeshipacademy.com/resources/should-kids-still-learn-to-code-ai-2026)
 - [Coding in kindergarten to Grade 2: what new research shows](https://www.codeshipacademy.com/resources/coding-kindergarten-grade-2-research-2026)
 
+## ABA clinics and autism: coding & robotics partnerships
+
+- [Partner with CODEship: ABA clinics](https://www.codeshipacademy.com/partners/aba-clinics): small-group coding, AI and robotics for autistic children, co-designed with the clinic's BCBA; in clinic (Oshawa/Durham Region), at CODEship classes, or live online across Canada. Inquiry form on the page.
+- [ABA and coding: how behaviour analysis and robotics work together (2025-2026 research)](https://www.codeshipacademy.com/resources/aba-and-coding-robotics-research-2026)
+- [Autism in Canada: 2025-2026 data and why every child needs access to coding](https://www.codeshipacademy.com/resources/autism-in-canada-2026-data-inclusive-coding)
+- [How ABA clinics can add coding and robotics: a partnership checklist](https://www.codeshipacademy.com/resources/aba-clinic-coding-robotics-partnership-checklist)
+
 ## Locations
 
 - [All locations](https://www.codeshipacademy.com/locations)
@@ -69,6 +76,7 @@
 
 - [About](https://www.codeshipacademy.com/about)
 - [Schools & partnerships](https://www.codeshipacademy.com/schools) (after-school clubs, PA Day and in-class workshops)
+- [ABA clinic partnerships](https://www.codeshipacademy.com/partners/aba-clinics)
 - [Franchise opportunities](https://www.codeshipacademy.com/franchise)
 - [Ship It! Arcade](https://www.codeshipacademy.com/ship-it): 5 free browser coding games for ages 4-14 (Bus Buddies Road Trip, Rover Rescue, Prompt Pilot, App Studio, Bot Trainer); no sign-up, works on Chromebooks
 - [Resources & articles](https://www.codeshipacademy.com/resources)

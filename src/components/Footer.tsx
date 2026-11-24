@@ -21,6 +21,7 @@ const COLUMNS = [
       { href: "/programs/camps", label: "Camps" },
       { href: "/programs/birthday-parties", label: "Birthday parties" },
       { href: "/schools", label: "For schools" },
+      { href: "/partners/aba-clinics", label: "For ABA clinics" },
       { href: "/resources", label: "Parent resources" },
       { href: "/ship-it", label: "Ship It! Arcade: free coding games" },
       { href: "/franchise", label: "Franchise" },
