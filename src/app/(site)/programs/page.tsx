@@ -1,3 +1,4 @@
+import { IMAGES } from "@/config/images";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,29 +32,29 @@ const more = [
     title: "Camps",
     desc: "Summer, March Break and PA Day camps.",
     href: "/programs/camps",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80",
-    alt: "Children working together at a coding camp",
+    image: IMAGES.camp.src,
+    alt: IMAGES.camp.alt,
   },
   {
     title: "Birthday parties",
     desc: "Two hours. Every guest builds a game.",
     href: "/programs/birthday-parties",
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
-    alt: "Children celebrating at a coding birthday party",
+    image: IMAGES.robotBubbles.src,
+    alt: IMAGES.robotBubbles.alt,
   },
   {
     title: "AI & robotics",
     desc: "Hands-on AI and robot projects for ages 8–16.",
     href: "/programs/ai-robotics",
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80",
-    alt: "A child programming a robot",
+    image: IMAGES.robotsTablet.src,
+    alt: IMAGES.robotsTablet.alt,
   },
   {
     title: "For schools",
     desc: "Clubs, workshops and PA Day programs.",
     href: "/schools",
-    image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80",
-    alt: "Students in a school coding workshop",
+    image: IMAGES.heroRobot.src,
+    alt: IMAGES.heroRobot.alt,
   },
 ];
 

@@ -28,8 +28,8 @@ export const IN_PERSON_VENUE = {
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Core21%2C+21+Simcoe+St+S%2C+Oshawa%2C+ON",
 } as const;
 
-/** Oshawa runs every program on Saturdays, 9:00 AM–12:30 PM. See IN_PERSON_SATURDAY_AGENDA below. */
-export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-12:30"];
+/** Oshawa runs every program on Saturdays, 9:00 AM–1:30 PM. See IN_PERSON_SATURDAY_AGENDA below. */
+export const IN_PERSON_OPENING_HOURS = ["Sa 09:00-13:30"];
 
 export type LocationStatus = "open" | "waitlist";
 
@@ -93,7 +93,8 @@ export const ONLINE: Record<
 /**
  * In-person Saturday schedule, run at the Oshawa location (Core21, 21 Simcoe St South).
  * Explorers and Builders run at the same time, 9:00–10:00 AM; Developers and
- * Engineers run together, 11:30 AM–12:30 PM.
+ * Engineers run together, 11:30 AM–12:30 PM. Engineers also have a second
+ * class, 12:30–1:30 PM (see IN_PERSON_EXTRA_SLOTS).
  */
 export const IN_PERSON_SATURDAY_SCHEDULE: Record<
   ProgramSlug,
@@ -115,4 +116,13 @@ export const IN_PERSON_SATURDAY_AGENDA: Array<
   { type: "break", start: "10:00 AM", end: "11:30 AM", length: "90 min" },
   { type: "class", program: "developers", start: "11:30 AM", end: "12:30 PM" },
   { type: "class", program: "engineers", start: "11:30 AM", end: "12:30 PM" },
+  { type: "class", program: "engineers", start: "12:30 PM", end: "1:30 PM" },
 ];
+
+/**
+ * Extra Saturday classes beyond each level's main slot. Parents pick one at
+ * Stripe checkout (the Engineers link's "January 2027 class" question).
+ */
+export const IN_PERSON_EXTRA_SLOTS: Partial<Record<ProgramSlug, { start: string; end: string }[]>> = {
+  engineers: [{ start: "12:30 PM", end: "1:30 PM" }],
+};

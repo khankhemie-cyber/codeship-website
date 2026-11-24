@@ -22,12 +22,12 @@ const testimonials = [
 /** Three parent quotes in a calm, readable grid. */
 export default function TestimonialMarquee() {
   return (
-    <section className="py-16 sm:py-20 bg-white">
+    <section className="py-16 sm:py-20 bg-[#FAF8F4]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001532] text-center mb-12">What parents say</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t) => (
-            <figure key={t.name} className="bg-[#FAF8F4] p-7 flex flex-col">
+            <figure key={t.name} className="rounded-3xl bg-[#FFF8E1] p-7 flex flex-col">
               <div className="flex gap-1 mb-4" role="img" aria-label="5 out of 5 stars">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-[#F4D734]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">

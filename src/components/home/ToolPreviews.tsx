@@ -82,7 +82,7 @@ export default function ToolPreviews() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734]">02 · Inside the tools</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734]">Inside the tools</p>
           <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-3 leading-tight">
             Kids code in tools we built for them.
           </h2>

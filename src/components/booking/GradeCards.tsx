@@ -19,9 +19,9 @@ export default function GradeCards() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {PROGRAMS.map((p) => (
-        <div key={p.slug} className="group h-full bg-white shadow-sm hover:shadow-xl transition-shadow flex flex-col">
+        <div key={p.slug} className="group h-full overflow-hidden rounded-3xl bg-white shadow-md ring-1 ring-black/5 hover:shadow-xl transition-shadow flex flex-col">
           {/* Photo with the level's colour band */}
-          <div className="relative h-40 overflow-hidden">
+          <div className="relative h-48 overflow-hidden">
             <Image
               src={LEVEL_PHOTO[p.slug].src}
               alt={LEVEL_PHOTO[p.slug].alt}
@@ -30,7 +30,7 @@ export default function GradeCards() {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
             <div
-              className="absolute left-0 bottom-0 flex items-center gap-2 px-4 py-2"
+              className="absolute left-3 bottom-3 flex items-center gap-2 rounded-full px-4 py-2 shadow"
               style={{ backgroundColor: LEVEL_ACCENT[p.slug], color: ON_ACCENT[p.slug] }}
             >
               <LevelIcon slug={p.slug} className="h-5 w-5" />
@@ -62,7 +62,7 @@ export default function GradeCards() {
 
             <Link
               href={`/register/${p.slug}`}
-              className="bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 text-center hover:bg-[#E6C51E] transition-colors"
+              className="rounded-full bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 text-center hover:bg-[#E6C51E] transition-colors"
             >
               Enroll in {p.level}
             </Link>

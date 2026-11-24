@@ -15,42 +15,42 @@ export type VariantId = "a" | "b";
  */
 export const VARIANTS: Record<LPSlug, Record<VariantId, Variant>> = {
   explorers: {
-    a: { heroImage: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", ctaLabel: "Register Now" },
+    a: { heroImage: "/images/kids-building.jpg", ctaLabel: "Register Now" },
     b: {
       headline: "Give your 5–7 year old a head start on real coding.",
-      heroImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80",
+      heroImage: "/images/lego.jpg",
       ctaLabel: "Reserve My Child's Spot",
     },
   },
   builders: {
-    a: { heroImage: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&q=80", ctaLabel: "Register Now" },
+    a: { heroImage: "/images/kid-laptop.jpg", ctaLabel: "Register Now" },
     b: {
       headline: "From blank page to a real website your child built.",
-      heroImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80",
+      heroImage: "/images/girl-coding.jpg",
       ctaLabel: "Reserve My Child's Spot",
     },
   },
   developers: {
-    a: { heroImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", ctaLabel: "Register Now" },
+    a: { heroImage: "/images/girl-headphones.jpg", ctaLabel: "Register Now" },
     b: {
       headline: "Your Grade 4–5 coder, solving real problems in JavaScript.",
-      heroImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&q=80",
+      heroImage: "/images/robots-tablet.jpg",
       ctaLabel: "Reserve My Child's Spot",
     },
   },
   engineers: {
-    a: { heroImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&q=80", ctaLabel: "Register Now" },
+    a: { heroImage: "/images/robots-tablet.jpg", ctaLabel: "Register Now" },
     b: {
       headline: "Python, AI, and cybersecurity, for grades 6–8.",
-      heroImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80",
+      heroImage: "/images/girl-headphones.jpg",
       ctaLabel: "Reserve My Child's Spot",
     },
   },
   "quebec-fr": {
-    a: { heroImage: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", ctaLabel: "Inscrivez-vous maintenant" },
+    a: { heroImage: "/images/kids-building.jpg", ctaLabel: "Inscrivez-vous maintenant" },
     b: {
       headline: "La première expérience de codage de votre enfant: en français.",
-      heroImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80",
+      heroImage: "/images/lego.jpg",
       ctaLabel: "Réservez la place de mon enfant",
     },
   },

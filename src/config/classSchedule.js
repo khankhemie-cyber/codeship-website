@@ -90,7 +90,7 @@ export const CLASS_SCHEDULE = {
   engineers: {
     inperson: {
       days: "Saturdays",
-      time: "11:30 AM–12:30 PM ET",
+      time: "11:30 AM–12:30 PM or 12:30–1:30 PM ET",
       starts: {
         january: "Weekly, Jan 16 to Mar 6, 2027",
       },

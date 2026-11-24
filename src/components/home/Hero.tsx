@@ -1,163 +1,99 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTrialPhase } from "@/components/trial/useTrialPhase";
 import { startDates } from "@/lib/booking";
-
-/** The cube's four sides, in spin order. */
-const FACES = [
-  { src: "/previews/bus.jpg", pos: "object-left-top", alt: "", label: "Block coding", sub: "Explorers · K–Grade 1" },
-  { src: "/previews/robots.jpg", pos: "object-right", alt: "", label: "Robotics", sub: "Online Robot Labs · K–Grade 8" },
-  { src: "/previews/rover.jpg", pos: "object-center", alt: "", label: "JavaScript", sub: "Developers · Grades 4–8" },
-  { src: null, pos: "", alt: "", label: "Free trial class", sub: "November only" },
-];
-
-/** In-page chapters, the hero's quick way into the page. */
-export const CHAPTERS = [
-  { href: "#free-trial", label: "Free trial" },
-  { href: "#tools", label: "Inside the tools" },
-  { href: "#book", label: "Pick a grade" },
-  { href: "#faq", label: "Questions" },
-];
+import { IMAGES } from "@/config/images";
+import { PRICE_LABEL } from "@/config/offering";
 
 /**
- * Home hero: one object on a dark stage, a short promise and two
- * clear next steps. The cube shows a sliver of each student tool; it turns on
- * its own and leans toward the pointer. Motion stops for reduced-motion users.
+ * Home hero: a bright, photo-led opening. Real kids building and coding on
+ * the right, a short promise and one main action on the left.
  */
 export default function Hero() {
   const phase = useTrialPhase();
-  const stage = useRef<HTMLDivElement>(null);
-
-  const lean = (e: React.PointerEvent) => {
-    const el = stage.current;
-    if (!el || e.pointerType !== "mouse") return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--lean-x", `${((e.clientY - r.top) / r.height - 0.5) * -14}deg`);
-    el.style.setProperty("--lean-y", `${((e.clientX - r.left) / r.width - 0.5) * 18}deg`);
-  };
-  const settle = () => {
-    stage.current?.style.setProperty("--lean-x", "0deg");
-    stage.current?.style.setProperty("--lean-y", "0deg");
-  };
-
   const trial = phase !== "closed";
 
   return (
-    <section
-      className="relative overflow-hidden bg-[#000B1C] text-white"
-      onPointerMove={lean}
-      onPointerLeave={settle}
-    >
-      <div className="absolute inset-0 bg-dotgrid-dark opacity-60" aria-hidden="true" />
+    <section className="relative overflow-hidden bg-[#FFF8E1]">
+      {/* Soft shapes */}
+      <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-[#F4D734]/40 blur-3xl" aria-hidden="true" />
+      <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-[#5FD3E0]/30 blur-3xl" aria-hidden="true" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10 lg:pt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pt-16 lg:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 items-center">
           {/* Message */}
-          <div className="lg:col-span-6 animate-fade-in-up">
-            {trial ? (
-              <Link
-                href="#free-trial"
-                className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734] border-b-2 border-[#F4D734]/40 pb-1 hover:border-[#F4D734] transition-colors"
-              >
-                November only · Free trial class
-              </Link>
-            ) : (
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#5FD3E0]">Coding · AI · STEM</p>
-            )}
-
-            <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.05] tracking-tight mt-6">
-              {trial ? (
-                <>
-                  Your child&apos;s first coding class is <span className="text-[#F4D734]">on us.</span>
-                </>
-              ) : (
-                "Coding classes for curious kids."
-              )}
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-300 mt-6 leading-relaxed max-w-xl">
-              {trial
-                ? "Try one free class this November. Kindergarten to Grade 8, in person in Oshawa or live online. Kids build games, websites and AI projects from day one."
-                : "Kindergarten to Grade 8. Kids build games, websites, robots and AI projects. In person or live online."}
+          <div className="animate-fade-in-up">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#001532] shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-[#138A9A]" aria-hidden="true" />
+              Coding · AI · Robotics for K–Grade 8
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.05] tracking-tight text-[#001532] mt-6">
+              Where kids <span className="relative whitespace-nowrap">
+                <span className="relative z-10">build</span>
+                <span className="absolute inset-x-0 bottom-1 h-4 -z-0 bg-[#F4D734] rounded" aria-hidden="true" />
+              </span>{" "}
+              games, robots and AI.
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-700 mt-6 leading-relaxed max-w-xl">
+              Small, friendly classes in Oshawa on Saturdays, or live online after school. Beginners welcome: every level starts from the basics.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href={trial ? "#free-trial" : "#book"}
-                className="inline-flex items-center bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
+                className="inline-flex items-center rounded-full bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] shadow-lg shadow-[#F4D734]/40 hover:bg-[#E6C51E] transition-colors"
               >
-                {trial ? "Claim a free class" : "Enroll now"}
+                {trial ? "Book a free class" : "Enroll for January"}
               </Link>
               <Link
-                href="#tools"
-                className="inline-flex items-center border-2 border-white/60 px-7 py-[14px] text-lg font-semibold text-white hover:bg-white hover:text-[#001532] transition-colors"
+                href="/programs/camps#march-break"
+                className="inline-flex items-center rounded-full border-2 border-[#001532] px-7 py-[14px] text-lg font-bold text-[#001532] hover:bg-[#001532] hover:text-white transition-colors"
               >
-                Peek inside our tools
+                March Break camp
               </Link>
             </div>
-            <p className="mt-5 text-sm text-gray-400">
+            <p className="mt-5 text-base text-gray-600">
               {trial
-                ? "Book by Nov 30 · Class taken in November 2026 · 1 free class per student"
-                : `January semester starts ${startDates("inperson", "january")} in person and ${startDates("online", "january")} online.`}
+                ? "Free trial: book by Nov 30, class taken in November."
+                : `January semester starts ${startDates("inperson", "january")} in person, ${startDates("online", "january")} online.`}
             </p>
+
+            {/* Quick facts */}
+            <ul className="mt-8 grid grid-cols-3 gap-3 max-w-lg">
+              {[
+                ["K–8", "4 levels by grade"],
+                [PRICE_LABEL.replace("CAD ", ""), "8 weekly classes"],
+                ["2 ways", "In person or online"],
+              ].map(([big, small]) => (
+                <li key={small} className="rounded-2xl bg-white p-3 text-center shadow-sm">
+                  <p className="font-display text-2xl font-extrabold text-[#001532]">{big}</p>
+                  <p className="text-sm text-gray-600 leading-tight mt-1">{small}</p>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* The cube */}
-          <div className="lg:col-span-6 flex flex-col items-center">
-            <div ref={stage} className="cube-stage relative flex h-[320px] w-full items-center justify-center sm:h-[400px]">
-              <div className="cube-lean">
-                <div className="cube-float">
-                  <div className="cube" aria-hidden="true">
-                    {FACES.map((f, i) => (
-                      <div key={f.label} className={`cube-face cube-face-${i}`}>
-                        {f.src ? (
-                          <Image src={f.src} alt={f.alt} fill sizes="300px" className={`object-cover ${f.pos}`} priority={i === 0} />
-                        ) : (
-                          <div className="flex h-full w-full flex-col items-center justify-center bg-[#001532] text-center">
-                            <span className="font-display text-6xl font-extrabold text-[#F4D734] sm:text-7xl">1</span>
-                            <span className="mt-1 text-sm font-bold uppercase tracking-[0.2em] text-white">free class</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    <div className="cube-face cube-face-top" />
-                    <div className="cube-face cube-face-bottom" />
-                  </div>
-                </div>
-              </div>
-              {/* Reflection on the floor */}
-              <div className="cube-floor absolute bottom-2 left-1/2 h-16 w-72 -translate-x-1/2 rounded-[50%] blur-2xl" aria-hidden="true" />
+          {/* Photo collage */}
+          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div className="absolute -right-4 -top-4 h-full w-full rounded-[2.5rem] bg-[#138A9A] rotate-3" aria-hidden="true" />
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] border-8 border-white shadow-2xl">
+              <Image src={IMAGES.heroRobot.src} alt={IMAGES.heroRobot.alt} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
-            {/* What the cube is showing right now */}
-            <div className="relative h-14 w-full text-center" aria-hidden="true">
-              {FACES.map((f, i) => (
-                <div key={f.label} className={`cube-caption cube-caption-${i} absolute inset-x-0`}>
-                  <p className="font-display text-lg font-bold">{f.label}</p>
-                  <p className="text-sm uppercase tracking-[0.2em] text-gray-400">{f.sub}</p>
-                </div>
-              ))}
+            <div className="absolute -bottom-8 -left-4 sm:-left-8 h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-full border-[6px] border-white shadow-xl">
+              <Image src={IMAGES.kidLaptop.src} alt={IMAGES.kidLaptop.alt} fill sizes="160px" className="object-cover" />
+            </div>
+            <div className="absolute -top-6 left-6 sm:left-10 h-24 w-24 sm:h-28 sm:w-28 overflow-hidden rounded-full border-[6px] border-white shadow-xl">
+              <Image src={IMAGES.kidsBuilding.src} alt={IMAGES.kidsBuilding.alt} fill sizes="112px" className="object-cover" />
+            </div>
+            <div className="absolute -bottom-6 right-4 sm:right-8 rounded-2xl bg-white px-5 py-3 shadow-xl">
+              <p className="text-sm font-bold uppercase tracking-wider text-[#0F6F7C]">{trial ? "November only" : "March Break"}</p>
+              <p className="font-display text-xl font-extrabold text-[#001532]">{trial ? "1 free class" : "Camp open"}</p>
             </div>
           </div>
         </div>
-
-        {/* Chapters */}
-        <nav aria-label="On this page" className="mt-12 border-t border-white/10 pt-6">
-          <ol className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
-            {CHAPTERS.map((c, i) => (
-              <li key={c.href}>
-                <Link href={c.href} className="group flex items-baseline gap-3 text-gray-400 hover:text-white transition-colors">
-                  <span className="text-xs font-bold tracking-widest text-[#F4D734]/70 group-hover:text-[#F4D734]">0{i + 1}</span>
-                  <span className="relative font-display text-base font-bold uppercase tracking-wider">
-                    {c.label}
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#F4D734] transition-all duration-300 group-hover:w-full" />
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </nav>
       </div>
     </section>
   );

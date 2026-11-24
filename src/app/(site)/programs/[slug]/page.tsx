@@ -22,10 +22,10 @@ export async function generateStaticParams() {
 }
 
 const PROGRAM_OG_IMAGE: Record<ProgramSlug, string> = {
-  explorers: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80",
-  builders: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&q=80",
-  developers: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&q=80",
-  engineers: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80",
+  explorers: "/images/robots-girl.jpg",
+  builders: "/images/girl-headphones.jpg",
+  developers: "/images/kid-laptop.jpg",
+  engineers: "/images/girl-coding.jpg",
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

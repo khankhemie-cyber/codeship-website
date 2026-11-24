@@ -1,3 +1,4 @@
+import { IMAGES } from "@/config/images";
 import type { ProgramSlug } from "@/data/locations";
 
 /**
@@ -78,20 +79,8 @@ export function LevelIcon({ slug, className = "" }: { slug: ProgramSlug; classNa
 
 /** Photos of kids for each level; the same classroom set used across the site. */
 export const LEVEL_PHOTO: Record<ProgramSlug, { src: string; alt: string }> = {
-  explorers: {
-    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80",
-    alt: "Young children learning together in a classroom",
-  },
-  builders: {
-    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80",
-    alt: "Kids working on a project together",
-  },
-  developers: {
-    src: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80",
-    alt: "Students focused on a coding lesson",
-  },
-  engineers: {
-    src: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80",
-    alt: "A robot built and programmed by students",
-  },
+  explorers: IMAGES.robotsGirl,
+  builders: IMAGES.girlHeadphones,
+  developers: IMAGES.kidLaptop,
+  engineers: IMAGES.girlCoding,
 };

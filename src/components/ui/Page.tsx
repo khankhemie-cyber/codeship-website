@@ -113,7 +113,7 @@ export function ButtonLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center px-7 py-3.5 text-lg font-bold transition-colors ${styles}`}
+      className={`inline-flex items-center justify-center rounded-full px-7 py-3.5 text-lg font-bold transition-colors ${styles}`}
     >
       {children}
     </Link>
