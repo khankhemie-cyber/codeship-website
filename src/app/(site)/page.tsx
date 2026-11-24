@@ -4,6 +4,7 @@ import Link from "next/link";
 import FAQAccordion from "@/components/FAQAccordion";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
 import GradeCards from "@/components/booking/GradeCards";
+import CSB100Callout from "@/components/home/CSB100Callout";
 import Hero from "@/components/home/Hero";
 import Semesters from "@/components/home/Semesters";
 import ToolPreviews from "@/components/home/ToolPreviews";
@@ -100,6 +101,8 @@ export default function HomePage() {
       />
 
       <Hero />
+
+      <CSB100Callout />
 
       <FreeTrial />
 
