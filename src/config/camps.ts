@@ -12,6 +12,10 @@ export const MARCH_BREAK_CAMP = {
   days: "Monday to Friday",
   hours: "9:00 AM–4:00 PM",
   ages: "Ages 6–14",
+  ageRange: [6, 14] as [number, number],
+  /** ISO times, Eastern (EDT starts Mar 14, 2027). */
+  startISO: "2027-03-15T09:00:00-04:00",
+  endISO: "2027-03-19T16:00:00-04:00",
   priceCad: 450,
   priceLabel: "CAD $450",
   spots: 30,

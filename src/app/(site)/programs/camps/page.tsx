@@ -4,7 +4,8 @@ import { PageHero, Section, SectionHeader, ButtonLink } from "@/components/ui/Pa
 import { pageMetadata } from "@/lib/pageMetadata";
 import { MARCH_BREAK_CAMP as CAMP } from "@/config/camps";
 import { IN_PERSON_VENUE } from "@/data/locations";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, campEventSchema, faqSchema, speakableSchema } from "@/lib/schema";
+import FAQAccordion from "@/components/FAQAccordion";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Camps in Oshawa | Summer, March Break & PA Day",
@@ -24,12 +25,55 @@ const camps = [
   { title: "PA Day workshops", when: "School PA days", length: "Full or half day", desc: "One focused day of building on a day off school." },
 ];
 
+const campFaqs = [
+  {
+    question: "When is the CODEship March Break camp?",
+    answer: `${CAMP.days}, ${CAMP.dates}, ${CAMP.hours}, at Core21, 21 Simcoe St South, Oshawa.`,
+  },
+  {
+    question: "How much does March Break camp cost?",
+    answer: `${CAMP.priceLabel} for the full week (5 days). Sign up and pay online; your child's spot is secured once payment is complete.`,
+  },
+  {
+    question: "What ages is the March Break camp for?",
+    answer: "Ages 6 to 14. No coding experience is needed.",
+  },
+  {
+    question: "What will kids do at March Break camp?",
+    answer: "Kids spend five days on coding, AI and robotics projects, building something new each day, and show off what they built on Friday.",
+  },
+  {
+    question: "How many spots are there?",
+    answer: `${CAMP.spots} spots for the week. Sign-up closes when the camp is full.`,
+  },
+];
+
 const tracks = ["Game design", "Websites", "AI projects", "Robotics", "App prototypes", "Animation"];
 
 export default function CampsPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(crumbs)) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            campEventSchema({
+              name: `CODEship ${CAMP.title} 2027 (Oshawa)`,
+              description: "Five days of coding, AI and robotics projects for ages 6 to 14 at Core21 in Oshawa.",
+              startDate: CAMP.startISO,
+              endDate: CAMP.endISO,
+              price: CAMP.priceCad,
+              url: CAMP.url,
+              pageUrl: "https://www.codeshipacademy.com/programs/camps",
+              image: CAMP.image,
+              ages: CAMP.ageRange,
+            }),
+          ),
+        }}
+      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(campFaqs)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema()) }} />
       <PageHero
         crumbs={crumbs}
         eyebrow="Camps"
@@ -104,6 +148,11 @@ export default function CampsPage() {
             </span>
           ))}
         </div>
+      </Section>
+
+      <Section narrow tone="cream">
+        <SectionHeader center title="March Break camp questions" />
+        <FAQAccordion faqs={campFaqs} />
       </Section>
 
       <section className="bg-[#001532]">

@@ -39,7 +39,7 @@ function Intro({ armed, onDone }: { armed: boolean; onDone: () => void }) {
       key="intro"
       aria-hidden="true"
       suppressHydrationWarning
-      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-white"
+      className="cs-intro fixed inset-0 z-[70] flex flex-col items-center justify-center bg-white"
       exit={{ y: "-100%", transition: { duration: 0.8, ease: EASE } }}
     >
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: EASE }}>
@@ -104,6 +104,9 @@ export default function Hero() {
           />
         )}
       </AnimatePresence>
+      <noscript>
+        <style>{`.cs-intro{display:none!important}.cs-hero-line,.cs-hero-fade{transform:none!important;opacity:1!important}`}</style>
+      </noscript>
       {/* Hides the loader before first paint for returning or reduced-motion visitors. */}
       <script
         dangerouslySetInnerHTML={{
@@ -140,7 +143,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, ease: EASE }}
-          className="flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-white/80"
+          className="cs-hero-fade flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-white/80"
         >
           <span className="h-2 w-2 rounded-full bg-[#5FD3E0]" aria-hidden="true" />
           Coding · AI · Robotics · K–Grade 8
@@ -151,7 +154,7 @@ export default function Hero() {
           {LINES.map((line, n) => (
             <span key={line} className="block overflow-hidden pb-1">
               <motion.span
-                className="block"
+                className="cs-hero-line block"
                 initial={{ y: "105%" }}
                 animate={ready ? { y: "0%" } : undefined}
                 transition={{ duration: 0.9, ease: EASE, delay: 0.1 + n * 0.12 }}
@@ -162,7 +165,7 @@ export default function Hero() {
                   </>
                 ) : (
                   line
-                )}
+                )}{" "}
               </motion.span>
             </span>
           ))}
@@ -172,7 +175,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}
-          className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
+          className="cs-hero-fade mt-8 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
         >
           <div>
             <p className="max-w-xl text-lg text-white/85 sm:text-xl">

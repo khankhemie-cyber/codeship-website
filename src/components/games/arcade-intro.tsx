@@ -110,7 +110,7 @@ export function ArcadeIntro({ games }: { games: number }) {
           transition={{ type: "spring", stiffness: 120, damping: 14 }}
           className="mt-6 font-display text-6xl font-extrabold leading-[0.9] drop-shadow-[0_6px_0_rgba(0,0,0,0.25)] sm:text-8xl lg:text-9xl"
         >
-          Ship It!
+          Ship It!{" "}
           <span className="block" style={{ color: BRAND.yellow }}>
             Arcade
           </span>

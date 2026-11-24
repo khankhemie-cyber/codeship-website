@@ -1,5 +1,5 @@
 import { FLAT_PRICE_CAD } from "@/config/offering";
-import { IN_PERSON_VENUE } from "@/data/locations";
+import { IN_PERSON_VENUE, IN_PERSON_EXTRA_SLOTS, type ProgramSlug } from "@/data/locations";
 import { PHONE_E164 } from "@/config/contact";
 
 export function organizationSchema() {
@@ -157,7 +157,8 @@ function parseOnlineWindow(window: string): { start: string; end: string } {
 
 /** Course schema for a /programs/:slug page, in-person + online CourseInstances, no invented facts. */
 export function courseSchema(program: CourseProgram, source: CourseInstanceSource) {
-  const inPersonInstances = source.inPersonCities.map((city) => ({
+  const slots = [source.inPersonSchedule, ...(IN_PERSON_EXTRA_SLOTS[program.slug as ProgramSlug] ?? [])];
+  const inPersonInstances = source.inPersonCities.flatMap((city) => slots.map((slot) => ({
     "@type": "CourseInstance",
     courseMode: "Blended",
     location: {
@@ -174,10 +175,10 @@ export function courseSchema(program: CourseProgram, source: CourseInstanceSourc
       "@type": "Schedule",
       repeatFrequency: "Weekly",
       byDay: "https://schema.org/Saturday",
-      startTime: to24Hour(source.inPersonSchedule.start),
-      endTime: to24Hour(source.inPersonSchedule.end),
+      startTime: to24Hour(slot.start),
+      endTime: to24Hour(slot.end),
     },
-  }));
+  })));
 
   const onlineTimes = parseOnlineWindow(source.online.window);
   const onlineInstance = {
@@ -286,5 +287,51 @@ export function websiteSchema() {
     url: "https://www.codeshipacademy.com",
     inLanguage: "en-CA",
     publisher: { "@type": "Organization", name: "CODEship Academy", url: "https://www.codeshipacademy.com" },
+  };
+}
+
+/** Event schema for a camp week with a real sign-up link and price. */
+export function campEventSchema(camp: {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  price: number;
+  url: string;
+  pageUrl: string;
+  image: string;
+  ages: [number, number];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: camp.name,
+    description: camp.description,
+    startDate: camp.startDate,
+    endDate: camp.endDate,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    image: [`https://www.codeshipacademy.com${camp.image}`],
+    location: {
+      "@type": "Place",
+      name: IN_PERSON_VENUE.building,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: IN_PERSON_VENUE.street,
+        addressLocality: IN_PERSON_VENUE.city,
+        addressRegion: "ON",
+        addressCountry: "CA",
+      },
+    },
+    organizer: { "@type": "Organization", name: "CODEship Academy", url: "https://www.codeshipacademy.com" },
+    typicalAgeRange: `${camp.ages[0]}-${camp.ages[1]}`,
+    offers: {
+      "@type": "Offer",
+      price: camp.price,
+      priceCurrency: "CAD",
+      availability: "https://schema.org/InStock",
+      url: camp.url,
+    },
+    url: camp.pageUrl,
   };
 }
