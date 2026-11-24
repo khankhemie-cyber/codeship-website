@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
+import SplitButton from "@/components/ui/SplitButton";
 
 /** Brand colours, used across the arcade. */
 export const BRAND = {
@@ -117,15 +118,11 @@ export function ArcadeIntro({ games }: { games: number }) {
         <p className="mx-auto mt-6 max-w-lg text-lg text-white/85 sm:text-xl">
           {games} free coding games. Blocks, JavaScript, Python and AI. No sign-up, nothing to install.
         </p>
-        <motion.a
-          href="#games"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          className="focus-ring mt-9 inline-flex items-center gap-3 rounded-full px-10 py-5 font-display text-2xl font-extrabold shadow-[0_8px_0_#B89A00] transition-shadow hover:shadow-[0_5px_0_#B89A00]"
-          style={{ backgroundColor: BRAND.yellow, color: BRAND.navy }}
-        >
-          ▶ Press start
-        </motion.a>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-9 flex justify-center">
+          <SplitButton href="#games" tone="light" size="lg">
+            ▶ Press start
+          </SplitButton>
+        </motion.div>
         <motion.p
           animate={still ? undefined : { opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.6, repeat: Infinity }}

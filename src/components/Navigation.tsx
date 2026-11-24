@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { useTrialPhase } from "@/components/trial/useTrialPhase";
+import SplitButton from "@/components/ui/SplitButton";
 
 // The logo PNG has an opaque white background, so the bar stays solid white.
 // Primary destinations, in the order a parent typically explores the site.
@@ -40,6 +41,7 @@ export default function Navigation() {
   const trialOpen = useTrialPhase() === "open";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
 
   // While the November trial runs, the header CTA invites a free class;
@@ -48,8 +50,18 @@ export default function Navigation() {
     ? { href: "/#free-trial", label: "Book a free class" }
     : { href: "/#book", label: "Enroll Now" };
 
+  // Solid once the page moves; slides away while scrolling down and comes
+  // back as soon as the visitor scrolls up.
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 24);
+    let lastY = window.scrollY;
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setIsScrolled(y > 24);
+      if (Math.abs(y - lastY) > 6) {
+        setIsHidden(y > 240 && y > lastY);
+        lastY = y;
+      }
+    };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -69,9 +81,18 @@ export default function Navigation() {
     };
   }, [isOpen]);
 
+  // On the home page the bar starts see-through over the photo hero.
+  const overHero = pathname === "/" && !isScrolled && !isOpen;
+
   const linkClass = (active: boolean) =>
-    `relative z-10 block whitespace-nowrap px-2.5 xl:px-3.5 py-2 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F6F7C] ${
-      active ? "text-[#0F6F7C]" : "text-[#001532]/80 hover:text-[#001532]"
+    `relative z-10 block whitespace-nowrap pl-5 pr-2.5 xl:pr-3.5 py-2 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F6F7C] ${
+      overHero
+        ? active
+          ? "text-white"
+          : "text-white/85 hover:text-white"
+        : active
+          ? "text-[#0F6F7C]"
+          : "text-[#001532]/80 hover:text-[#001532]"
     }`;
 
   const renderDesktopLink = (link: { href: string; label: string }) => {
@@ -82,8 +103,8 @@ export default function Navigation() {
           <motion.span
             layoutId="nav-hover"
             aria-hidden="true"
-            className="absolute inset-0 bg-[#001532]/[0.05]"
-            transition={{ duration: 0.25, ease: EASE }}
+            className={`absolute left-2 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full ${overHero ? "bg-white" : "bg-[#6E43A8]"}`}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
           />
         )}
         <Link href={link.href} aria-current={active ? "page" : undefined} className={linkClass(active)}>
@@ -93,7 +114,7 @@ export default function Navigation() {
           <motion.span
             layoutId="nav-active"
             aria-hidden="true"
-            className="absolute left-2.5 right-2.5 xl:left-3.5 xl:right-3.5 -bottom-px h-0.5 bg-[#0F6F7C]"
+            className={`absolute left-5 right-2.5 xl:right-3.5 -bottom-px h-0.5 ${overHero ? "bg-white" : "bg-[#0F6F7C]"}`}
           />
         )}
       </li>
@@ -104,10 +125,14 @@ export default function Navigation() {
     <MotionConfig reducedMotion="user">
       <nav
         aria-label="Main"
-        className={`fixed top-0 left-0 right-0 z-50 border-b transition-[background-color,box-shadow,border-color] duration-500 ${
-          isScrolled || isOpen
-            ? "bg-white border-[#001532]/[0.08] shadow-[0_8px_30px_-12px_rgba(0,21,50,0.18)]"
-            : "bg-white border-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 border-b transition-[background-color,box-shadow,border-color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isHidden && !isOpen ? "-translate-y-full" : "translate-y-0"
+        } ${
+          overHero
+            ? "bg-transparent border-transparent"
+            : isScrolled || isOpen
+              ? "bg-white border-[#001532]/[0.08] shadow-[0_8px_30px_-12px_rgba(0,21,50,0.18)]"
+              : "bg-white border-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,7 +144,7 @@ export default function Navigation() {
             {/* Logo */}
             <Link href="/" className="flex shrink-0 items-center" aria-label="CODEship Academy home">
               <Image
-                src="/logo-header.png"
+                src={overHero ? "/logo-header-white.png" : "/logo-header.png"}
                 alt="CODEship Academy: Dream. Code. Achieve."
                 width={742}
                 height={302}
@@ -137,21 +162,17 @@ export default function Navigation() {
               </ul>
 
               {/* Utility group: Contact + primary CTA */}
-              <div className="ml-3 xl:ml-5 pl-3 xl:pl-5 border-l border-[#001532]/10 flex items-center gap-1 xl:gap-2">
+              <div className={`ml-3 xl:ml-5 pl-3 xl:pl-5 border-l flex items-center gap-1 xl:gap-2 ${overHero ? "border-white/20" : "border-[#001532]/10"}`}>
                 <ul onMouseLeave={() => setHovered(null)}>{renderDesktopLink(contactLink)}</ul>
-                <Link
-                  href={cta.href}
-                  className="group inline-flex items-center gap-2 whitespace-nowrap bg-[#F4D734] text-[#001532] font-bold pl-4 pr-3.5 xl:pl-5 xl:pr-4 py-2.5 text-[15px] shadow-[inset_0_-2px_0_rgba(0,21,50,0.12)] hover:bg-[#E6C51E] hover:shadow-[0_6px_18px_-6px_rgba(244,215,52,0.9)] transition-[background-color,box-shadow] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#001532]"
-                >
+                <SplitButton href={cta.href} tone={overHero ? "light" : "dark"} size="sm">
                   {cta.label}
-                  <Arrow className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                </Link>
+                </SplitButton>
               </div>
             </div>
 
             {/* Mobile hamburger */}
             <button
-              className="lg:hidden -mr-2 p-2 text-[#001532]"
+              className={`lg:hidden -mr-2 p-2 ${overHero ? "text-white" : "text-[#001532]"}`}
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
@@ -220,7 +241,7 @@ export default function Navigation() {
                   )}
                   <Link
                     href={cta.href}
-                    className="flex items-center justify-center gap-2 bg-[#F4D734] text-[#001532] font-bold text-lg px-4 py-4 hover:bg-[#E6C51E] transition-colors"
+                    className="flex items-center justify-center gap-2 rounded-full bg-[#001532] text-white font-bold text-lg px-4 py-4 hover:bg-[#6E43A8] transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {cta.label}

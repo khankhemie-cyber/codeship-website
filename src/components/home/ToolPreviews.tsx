@@ -82,7 +82,7 @@ export default function ToolPreviews() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#F4D734]">Inside the tools</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#5FD3E0]">Inside the tools</p>
           <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-3 leading-tight">
             Kids code in tools we built for them.
           </h2>
@@ -180,7 +180,7 @@ export default function ToolPreviews() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <Link
                 href={trial ? "#free-trial" : "#book"}
-                className="inline-flex items-center bg-[#F4D734] px-7 py-3.5 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
+                className="inline-flex items-center rounded-full bg-white px-7 py-3.5 text-lg font-bold text-[#001532] hover:bg-[#5FD3E0] transition-colors"
               >
                 {trial ? "Try it in a free class" : "Enroll your child"}
               </Link>

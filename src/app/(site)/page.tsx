@@ -8,8 +8,8 @@ import Hero from "@/components/home/Hero";
 import Semesters from "@/components/home/Semesters";
 import ToolPreviews from "@/components/home/ToolPreviews";
 import FreeTrial from "@/components/trial/FreeTrial";
-import TrialBanner from "@/components/trial/TrialBanner";
 import { Section, SectionHeader, BookingBand } from "@/components/ui/Page";
+import SplitButton from "@/components/ui/SplitButton";
 import { IMAGES } from "@/config/images";
 import { MARCH_BREAK_CAMP as CAMP } from "@/config/camps";
 import { websiteSchema, faqSchema } from "@/lib/schema";
@@ -71,7 +71,7 @@ const steps = [
   { label: "Share", desc: "Each child shows what they made. Confidence grows every week.", image: IMAGES.camp },
 ];
 
-const STEP_COLORS = ["#F4D734", "#138A9A", "#6E43A8"];
+const STEP_COLORS = ["#138A9A", "#6E43A8", "#001532"];
 
 const reasons = [
   { title: "Small groups", desc: "Every child gets real attention from the instructor." },
@@ -99,8 +99,6 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaqs)) }}
       />
 
-      <TrialBanner />
-
       <Hero />
 
       <FreeTrial />
@@ -119,13 +117,13 @@ export default function HomePage() {
 
       {/* ── March Break camp ── */}
       <section className="relative overflow-hidden bg-[#138A9A] py-16 sm:py-20">
-        <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#F4D734]/30" aria-hidden="true" />
+        <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#6E43A8]/40" aria-hidden="true" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border-8 border-white/20">
             <Image src={CAMP.image} alt={IMAGES.camp.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
           </div>
           <div className="text-white">
-            <p className="inline-block rounded-full bg-[#F4D734] px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-[#001532]">
+            <p className="inline-block rounded-full bg-white px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-[#0F6F7C]">
               Sign-up open
             </p>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-4 leading-tight">March Break camp</h2>
@@ -140,12 +138,9 @@ export default function HomePage() {
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href={CAMP.url}
-                className="inline-flex items-center rounded-full bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors"
-              >
+              <SplitButton href={CAMP.url} external tone="light">
                 Sign up for camp
-              </a>
+              </SplitButton>
               <Link
                 href="/programs/camps#march-break"
                 className="inline-flex items-center rounded-full border-2 border-white px-7 py-[14px] text-lg font-bold text-white hover:bg-white hover:text-[#138A9A] transition-colors"
@@ -168,7 +163,7 @@ export default function HomePage() {
                 <div className="absolute inset-4 overflow-hidden rounded-full border-[6px] border-white shadow-lg">
                   <Image src={s.image.src} alt={s.image.alt} fill className="object-cover" sizes="(max-width: 768px) 80vw, 320px" />
                 </div>
-                <span className="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-[#001532] font-display text-2xl font-extrabold text-white shadow-lg" aria-hidden="true">
+                <span className="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white font-display text-2xl font-extrabold text-[#001532] shadow-lg" aria-hidden="true">
                   {i + 1}
                 </span>
               </div>
@@ -185,7 +180,7 @@ export default function HomePage() {
       <Section tone="white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative order-2 lg:order-1">
-            <div className="absolute -left-4 -bottom-4 h-full w-full rounded-[2.5rem] bg-[#F4D734] -rotate-2" aria-hidden="true" />
+            <div className="absolute -left-4 -bottom-4 h-full w-full rounded-[2.5rem] bg-[#6E43A8] -rotate-2" aria-hidden="true" />
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] border-8 border-white shadow-xl">
               <Image src={IMAGES.kidsBuilding.src} alt={IMAGES.kidsBuilding.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
             </div>
@@ -195,7 +190,7 @@ export default function HomePage() {
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-5 -mt-4">
               {reasons.map((r) => (
                 <li key={r.title} className="rounded-2xl bg-[#FAF8F4] p-5">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F4D734] text-[#001532]" aria-hidden="true">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#138A9A] text-white" aria-hidden="true">
                     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -220,7 +215,7 @@ export default function HomePage() {
               <div className="relative h-44 overflow-hidden">
                 <Image src={w.image.src} alt={w.image.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 25vw" />
                 {w.tag && (
-                  <span className="absolute left-3 top-3 rounded-full bg-[#F4D734] px-3 py-1 text-sm font-bold text-[#001532]">{w.tag}</span>
+                  <span className="absolute left-3 top-3 rounded-full bg-[#6E43A8] px-3 py-1 text-sm font-bold text-white">{w.tag}</span>
                 )}
               </div>
               <div className="p-5">

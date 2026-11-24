@@ -1,100 +1,244 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
+import SplitButton from "@/components/ui/SplitButton";
 import { useTrialPhase } from "@/components/trial/useTrialPhase";
 import { startDates } from "@/lib/booking";
 import { IMAGES } from "@/config/images";
-import { PRICE_LABEL } from "@/config/offering";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/** Scenes that cycle behind the fixed headline. */
+const SCENES = [
+  { img: IMAGES.heroRobot, label: "Robotics", tint: "#6E43A8" },
+  { img: IMAGES.kidLaptop, label: "JavaScript", tint: "#138A9A" },
+  { img: IMAGES.robotsTablet, label: "Coding robots", tint: "#6E43A8" },
+  { img: IMAGES.camp, label: "Camps", tint: "#138A9A" },
+  { img: IMAGES.girlCoding, label: "Python + AI", tint: "#6E43A8" },
+  { img: IMAGES.kidsBuilding, label: "Building", tint: "#138A9A" },
+];
+const SCENE_MS = 4500;
+const INTRO_KEY = "codeship-intro-seen";
+
+const LINES = ["Where kids build", "games, robots", "and AI."];
 
 /**
- * Home hero: a bright, photo-led opening. Real kids building and coding on
- * the right, a short promise and one main action on the left.
+ * The first-visit loader: the logo on a light screen and a filling bar, then
+ * the screen lifts away like a curtain. Shown once per browser session.
+ */
+function Intro({ armed, onDone }: { armed: boolean; onDone: () => void }) {
+  useEffect(() => {
+    if (!armed) return;
+    const t = window.setTimeout(onDone, 1500);
+    return () => window.clearTimeout(t);
+  }, [armed, onDone]);
+  return (
+    <motion.div
+      key="intro"
+      aria-hidden="true"
+      suppressHydrationWarning
+      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-white"
+      exit={{ y: "-100%", transition: { duration: 0.8, ease: EASE } }}
+    >
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: EASE }}>
+        <Image src="/logo-header.png" alt="" width={742} height={302} priority className="h-24 w-auto sm:h-32" />
+      </motion.div>
+      <div className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-[#001532]/10">
+        <motion.div
+          className="h-full rounded-full bg-gradient-to-r from-[#138A9A] via-[#6E43A8] to-[#F4D734]"
+          initial={{ width: "0%" }}
+          animate={armed ? { width: "100%" } : undefined}
+          transition={{ duration: 1.3, ease: "easeInOut" }}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+/**
+ * Home hero: full-screen photos of kids coding and building cycle behind a
+ * headline and button that never move. The site nav sits on top of it.
  */
 export default function Hero() {
   const phase = useTrialPhase();
   const trial = phase !== "closed";
+  const still = useReducedMotion();
+  const [intro, setIntro] = useState<"pending" | "show" | "done">("pending");
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(INTRO_KEY) === "1";
+    } catch {
+      seen = true;
+    }
+    setIntro(seen || still ? "done" : "show");
+  }, [still]);
+
+  useEffect(() => {
+    if (still) return;
+    const t = window.setInterval(() => setI((n) => (n + 1) % SCENES.length), SCENE_MS);
+    return () => window.clearInterval(t);
+  }, [still]);
+
+  const ready = intro === "done";
+  const scene = SCENES[i];
 
   return (
-    <section className="relative overflow-hidden bg-[#FFF8E1]">
-      {/* Soft shapes */}
-      <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-[#F4D734]/40 blur-3xl" aria-hidden="true" />
-      <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-[#5FD3E0]/30 blur-3xl" aria-hidden="true" />
+    <section className="relative -mt-[76px] flex min-h-[100svh] items-end overflow-hidden bg-[#001532] text-white lg:-mt-24">
+      <AnimatePresence>
+        {intro !== "done" && (
+          <Intro
+            armed={intro === "show"}
+            onDone={() => {
+              try {
+                sessionStorage.setItem(INTRO_KEY, "1");
+              } catch {
+                // Storage blocked: the intro just plays again next visit.
+              }
+              setIntro("done");
+            }}
+          />
+        )}
+      </AnimatePresence>
+      {/* Hides the loader before first paint for returning or reduced-motion visitors. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){var s=document.currentScript,el=s&&s.previousElementSibling;try{if(sessionStorage.getItem("${INTRO_KEY}")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}if(el)el.style.display="none"})()`,
+        }}
+      />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pt-16 lg:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 items-center">
-          {/* Message */}
-          <div className="animate-fade-in-up">
-            <p className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#001532] shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-[#138A9A]" aria-hidden="true" />
-              Coding · AI · Robotics for K–Grade 8
+      {/* Cycling scenes */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={scene.img.src}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+        >
+          <motion.div
+            className="absolute inset-0"
+            initial={{ scale: 1.12 }}
+            animate={{ scale: still ? 1.12 : 1 }}
+            transition={{ duration: SCENE_MS / 1000 + 1.2, ease: "linear" }}
+          >
+            <Image src={scene.img.src} alt="" fill priority={i === 0} sizes="100vw" className="object-cover" />
+          </motion.div>
+          <div className="absolute inset-0 mix-blend-multiply opacity-40" style={{ backgroundColor: scene.tint }} />
+        </motion.div>
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#001532] via-[#001532]/55 to-[#001532]/40" aria-hidden="true" />
+
+      {/* Fixed message */}
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-36 sm:pb-20 lg:pb-24">
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-white/80"
+        >
+          <span className="h-2 w-2 rounded-full bg-[#5FD3E0]" aria-hidden="true" />
+          Coding · AI · Robotics · K–Grade 8
+          {trial && <span className="rounded-full bg-[#6E43A8] px-3 py-1 text-xs tracking-wider text-white">November · 1 free class</span>}
+        </motion.p>
+
+        <h1 className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
+          {LINES.map((line, n) => (
+            <span key={line} className="block overflow-hidden pb-1">
+              <motion.span
+                className="block"
+                initial={{ y: "105%" }}
+                animate={ready ? { y: "0%" } : undefined}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.1 + n * 0.12 }}
+              >
+                {n === 0 ? (
+                  <>
+                    Where kids <span className="text-[#5FD3E0]">build</span>
+                  </>
+                ) : (
+                  line
+                )}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}
+          className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
+        >
+          <div>
+            <p className="max-w-xl text-lg text-white/85 sm:text-xl">
+              Small, friendly classes in Oshawa on Saturdays, or live online after school. Beginners welcome.
             </p>
-
-            <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.05] tracking-tight text-[#001532] mt-6">
-              Where kids <span className="relative whitespace-nowrap">
-                <span className="relative z-10">build</span>
-                <span className="absolute inset-x-0 bottom-1 h-4 -z-0 bg-[#F4D734] rounded" aria-hidden="true" />
-              </span>{" "}
-              games, robots and AI.
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-700 mt-6 leading-relaxed max-w-xl">
-              Small, friendly classes in Oshawa on Saturdays, or live online after school. Beginners welcome: every level starts from the basics.
-            </p>
-
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href={trial ? "#free-trial" : "#book"}
-                className="inline-flex items-center rounded-full bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] shadow-lg shadow-[#F4D734]/40 hover:bg-[#E6C51E] transition-colors"
-              >
+              <SplitButton href={trial ? "#free-trial" : "#book"} tone="light">
                 {trial ? "Book a free class" : "Enroll for January"}
-              </Link>
-              <Link
-                href="/programs/camps#march-break"
-                className="inline-flex items-center rounded-full border-2 border-[#001532] px-7 py-[14px] text-lg font-bold text-[#001532] hover:bg-[#001532] hover:text-white transition-colors"
-              >
-                March Break camp
-              </Link>
+              </SplitButton>
+              <a href="/programs/camps/#march-break" className="text-lg font-semibold text-white underline decoration-[#5FD3E0] decoration-2 underline-offset-8 hover:decoration-white">
+                March Break camp is open
+              </a>
             </div>
-            <p className="mt-5 text-base text-gray-600">
+            <p className="mt-5 text-sm text-white/60">
               {trial
                 ? "Free trial: book by Nov 30, class taken in November."
-                : `January semester starts ${startDates("inperson", "january")} in person, ${startDates("online", "january")} online.`}
+                : `January starts ${startDates("inperson", "january")} in person, ${startDates("online", "january")} online.`}
             </p>
+          </div>
 
-            {/* Quick facts */}
-            <ul className="mt-8 grid grid-cols-3 gap-3 max-w-lg">
-              {[
-                ["K–8", "4 levels by grade"],
-                [PRICE_LABEL.replace("CAD ", ""), "8 weekly classes"],
-                ["2 ways", "In person or online"],
-              ].map(([big, small]) => (
-                <li key={small} className="rounded-2xl bg-white p-3 text-center shadow-sm">
-                  <p className="font-display text-2xl font-extrabold text-[#001532]">{big}</p>
-                  <p className="text-sm text-gray-600 leading-tight mt-1">{small}</p>
-                </li>
+          {/* What's on screen now */}
+          <div className="flex items-center gap-4" aria-hidden="true">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={scene.label}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35 }}
+                className="min-w-[8rem] text-right text-sm font-bold uppercase tracking-[0.2em] text-white/80"
+              >
+                {scene.label}
+              </motion.p>
+            </AnimatePresence>
+            <div className="flex gap-1.5">
+              {SCENES.map((s, n) => (
+                <span key={s.label} className="relative h-1 w-6 overflow-hidden rounded-full bg-white/25">
+                  {n === i && (
+                    <motion.span
+                      className="absolute inset-y-0 left-0 bg-white"
+                      initial={{ width: "0%" }}
+                      animate={{ width: still ? "100%" : "100%" }}
+                      transition={{ duration: still ? 0 : SCENE_MS / 1000, ease: "linear" }}
+                    />
+                  )}
+                  {n < i && <span className="absolute inset-0 bg-white/70" />}
+                </span>
               ))}
-            </ul>
-          </div>
-
-          {/* Photo collage */}
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
-            <div className="absolute -right-4 -top-4 h-full w-full rounded-[2.5rem] bg-[#138A9A] rotate-3" aria-hidden="true" />
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] border-8 border-white shadow-2xl">
-              <Image src={IMAGES.heroRobot.src} alt={IMAGES.heroRobot.alt} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-            </div>
-            <div className="absolute -bottom-8 -left-4 sm:-left-8 h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-full border-[6px] border-white shadow-xl">
-              <Image src={IMAGES.kidLaptop.src} alt={IMAGES.kidLaptop.alt} fill sizes="160px" className="object-cover" />
-            </div>
-            <div className="absolute -top-6 left-6 sm:left-10 h-24 w-24 sm:h-28 sm:w-28 overflow-hidden rounded-full border-[6px] border-white shadow-xl">
-              <Image src={IMAGES.kidsBuilding.src} alt={IMAGES.kidsBuilding.alt} fill sizes="112px" className="object-cover" />
-            </div>
-            <div className="absolute -bottom-6 right-4 sm:right-8 rounded-2xl bg-white px-5 py-3 shadow-xl">
-              <p className="text-sm font-bold uppercase tracking-wider text-[#0F6F7C]">{trial ? "November only" : "March Break"}</p>
-              <p className="font-display text-xl font-extrabold text-[#001532]">{trial ? "1 free class" : "Camp open"}</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Scroll cue */}
+      <motion.a
+        href={trial ? "#free-trial" : "#book"}
+        aria-label="Scroll down"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-white/70 hover:text-white md:block"
+        animate={still ? undefined : { y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg viewBox="0 0 40 60" className="h-12 w-8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M20 4c8 6 10 16 2 22s-8 18-2 28" />
+          <path d="M14 48l6 7 6-7" />
+        </svg>
+      </motion.a>
     </section>
   );
 }

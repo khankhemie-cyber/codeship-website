@@ -17,7 +17,7 @@ function Row({ label, value, open = false }: { label: string; value: string; ope
 /** Small "Open now" marker for the semester taking registrations. */
 export function OpenTag() {
   return (
-    <span className="ml-2 inline-block bg-[#F4D734] px-1.5 py-0.5 align-middle text-xs font-bold uppercase tracking-wider text-[#001532]">
+    <span className="ml-2 inline-block rounded bg-[#E3F4F5] text-[#0F6F7C] px-1.5 py-0.5 align-middle text-xs font-bold uppercase tracking-wider">
       Open now
     </span>
   );
@@ -28,7 +28,7 @@ export default function Semesters() {
   return (
     <div
       id="semesters"
-      className="scroll-mt-28 mt-12 overflow-hidden rounded-3xl bg-white shadow-[0_20px_50px_-25px_rgba(0,21,50,0.25)] ring-1 ring-black/5 border-t-8 border-[#F4D734]"
+      className="scroll-mt-28 mt-12 overflow-hidden rounded-3xl bg-white shadow-[0_20px_50px_-25px_rgba(0,21,50,0.25)] ring-1 ring-black/5 border-t-8 border-[#138A9A]"
     >
       <div className="px-6 sm:px-10 pt-8 pb-2 flex flex-wrap items-end justify-between gap-3">
         <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#001532]">
@@ -54,7 +54,7 @@ export default function Semesters() {
           </dl>
           <Link
             href="#book"
-            className="mt-6 inline-flex items-center rounded-full bg-[#F4D734] px-6 py-3 text-base font-semibold text-[#001532] hover:bg-[#E6C51E] transition-colors"
+            className="mt-6 inline-flex items-center rounded-full bg-[#001532] px-6 py-3 text-base font-semibold text-white hover:bg-[#6E43A8] transition-colors"
           >
             Enroll In Person
           </Link>

@@ -62,7 +62,7 @@ export default function GradeCards() {
 
             <Link
               href={`/register/${p.slug}`}
-              className="rounded-full bg-[#F4D734] text-[#001532] text-lg font-bold px-4 py-3 text-center hover:bg-[#E6C51E] transition-colors"
+              className="rounded-full bg-[#001532] text-white text-lg font-bold px-4 py-3 text-center hover:bg-[#6E43A8] transition-colors"
             >
               Enroll in {p.level}
             </Link>
