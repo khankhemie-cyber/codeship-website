@@ -74,6 +74,9 @@ export default function LocationsPage() {
               <li>
                 <span className="font-bold">Developers &amp; Engineers:</span> {saturdayTime("developers")}
               </li>
+              <li>
+                <span className="font-bold">Engineers (second class):</span> 12:30–1:30 PM
+              </li>
             </ul>
             <div className="mt-6">
               <ButtonLink href="/locations/oshawa">See Oshawa Classes</ButtonLink>

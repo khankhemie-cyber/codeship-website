@@ -1,5 +1,5 @@
 import { PROGRAMS, type Program } from "@/data/programs";
-import { IN_PERSON_SATURDAY_SCHEDULE } from "@/data/locations";
+import { IN_PERSON_SATURDAY_SCHEDULE, IN_PERSON_EXTRA_SLOTS } from "@/data/locations";
 import { CLASS_SCHEDULE, START_OPTIONS } from "@/config/classSchedule";
 
 export type OpenStart = "january";
@@ -22,14 +22,23 @@ function shortTime(t: string) {
 }
 
 /** Saturday time slots with the levels that share each one, in run order. */
-export const SATURDAY_SLOTS = PROGRAMS.reduce<{ time: string; programs: Program[] }[]>((slots, p) => {
-  const { start, end } = IN_PERSON_SATURDAY_SCHEDULE[p.slug];
-  const time = `${shortTime(start)} to ${shortTime(end)}`;
-  const slot = slots.find((s) => s.time === time);
-  if (slot) slot.programs.push(p);
-  else slots.push({ time, programs: [p] });
-  return slots;
-}, []);
+export const SATURDAY_SLOTS = PROGRAMS.flatMap((p) =>
+  [IN_PERSON_SATURDAY_SCHEDULE[p.slug], ...(IN_PERSON_EXTRA_SLOTS[p.slug] ?? [])].map((t) => ({ p, ...t })),
+)
+  .sort((a, b) => minutes(a.start) - minutes(b.start))
+  .reduce<{ time: string; programs: Program[] }[]>((slots, { p, start, end }) => {
+    const time = `${shortTime(start)} to ${shortTime(end)}`;
+    const slot = slots.find((s) => s.time === time);
+    if (slot) slot.programs.push(p);
+    else slots.push({ time, programs: [p] });
+    return slots;
+  }, []);
+
+/** "12:30 PM" -> minutes after midnight, for sorting. */
+function minutes(t: string) {
+  const [, h, m, ap] = t.match(/(\d+):(\d+)\s*(AM|PM)/)!;
+  return ((+h % 12) + (ap === "PM" ? 12 : 0)) * 60 + +m;
+}
 
 /** Saturday class time for one level, e.g. "9:00–10:00 AM". */
 export function saturdayTime(slug: Program["slug"]) {
