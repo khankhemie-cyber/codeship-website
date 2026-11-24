@@ -67,7 +67,7 @@ export default function NotFound() {
               className="mt-8 mx-auto max-w-md text-left text-sm sm:text-base font-mono bg-black/30 border border-white/10 px-5 py-4 text-gray-300 overflow-x-auto"
             >
               <span className="text-[#5FC3CF]">if</span> (page === <span className="text-[#F4D734]">undefined</span>) {"{\n"}
-              {"  "}goHome(); <span className="text-gray-500">{"// 🚀"}</span>
+              {"  "}goHome(); <span className="text-gray-500">{"// let's go"}</span>
               {"\n}"}
             </pre>
 

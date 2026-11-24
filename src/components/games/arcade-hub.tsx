@@ -13,6 +13,7 @@ import { BUS_FREE_LEVELS, BUS_LEVEL_IDS } from "@/lib/games/bus/levels";
 import { RewardLayer, XpMeter, useDevFact } from "./arcade-kit";
 import { FREE_LEVELS } from "./level-lock";
 import { ArcadeIntro, BRAND } from "./arcade-intro";
+import { Art, StarIcon } from "./art";
 
 interface ArcadeGame {
   game: GameId;
@@ -210,7 +211,7 @@ function GameCard({ g, stars, featured = false }: { g: ArcadeGame; stars: number
         {g.isNew && <span className="absolute left-3 top-3 rounded-full bg-[#F4D734] px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-[#001532] shadow">New</span>}
         <span className="absolute inset-x-0 bottom-0 h-1.5" style={{ backgroundColor: g.accent }} aria-hidden />
         <span className="absolute right-3 top-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-3xl shadow-lg transition group-hover:rotate-6" aria-hidden>
-          {g.emoji}
+          <Art e={g.emoji} size={36} />
         </span>
       </div>
       <div className={`flex flex-1 flex-col p-6 ${featured ? "md:p-8 md:justify-center" : ""}`}>
@@ -230,7 +231,7 @@ function GameCard({ g, stars, featured = false }: { g: ArcadeGame; stars: number
           {stars > 0 && (
             <div className="mb-3">
               <div className="flex justify-between text-xs font-semibold text-gray-500">
-                <span>★ {stars} / {max} stars</span>
+                <span className="inline-flex items-center gap-1"><StarIcon /> {stars} / {max} stars</span>
                 <span>{Math.round((stars / max) * 100)}%</span>
               </div>
               <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-100">
@@ -302,7 +303,7 @@ export function ArcadeHub() {
           >
             <div className="flex items-center gap-4">
               <span className="flex h-16 w-16 items-center justify-center rounded-2xl text-4xl" style={{ backgroundColor: `${BRAND.yellow}33` }} aria-hidden>
-                {current.emoji}
+                <Art e={current.emoji} size={44} />
               </span>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/60">Your rank · {index + 1}</p>
@@ -315,7 +316,7 @@ export function ArcadeHub() {
             <div className="mt-5">
               <NameTag />
             </div>
-            <p className="mt-4 text-xs text-white/60">🔒 Progress saves on this device only. No account, no personal info.</p>
+            <p className="mt-4 text-xs text-white/60">Progress saves on this device only. No account, no personal info.</p>
           </motion.div>
         </div>
       </section>
@@ -359,7 +360,7 @@ export function ArcadeHub() {
 
         {!filtering && (
           <motion.div className="mt-8" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }}>
-            <p className="mb-3 text-sm font-bold uppercase tracking-widest" style={{ color: BRAND.purple }}>★ Featured · New game</p>
+            <p className="mb-3 text-sm font-bold uppercase tracking-widest" style={{ color: BRAND.purple }}>Featured · New game</p>
             <GameCard g={featured} stars={starsIn(p, featured)} featured />
           </motion.div>
         )}
@@ -436,8 +437,8 @@ export function ArcadeHub() {
                 transition={{ delay: (BADGES.indexOf(b) % 7) * 0.04 }}
                 className={`rounded-2xl p-4 text-center ${has ? "bg-[#FFF4C7] ring-2 ring-amber" : "bg-white ring-1 ring-black/5"}`}
               >
-                <span className={`text-4xl ${has ? "" : "opacity-30 grayscale"}`} aria-hidden>
-                  {b.emoji}
+                <span className={`inline-flex ${has ? "" : "opacity-35 grayscale"}`}>
+                  <Art e={b.emoji} size={44} />
                 </span>
                 <p className={`mt-2 text-sm font-bold ${has ? "text-[#001532]" : "text-gray-500"}`}>{b.title}</p>
                 <p className="mt-0.5 text-xs leading-snug text-gray-500">{b.description}</p>
@@ -473,7 +474,7 @@ export function ArcadeHub() {
               {ARCADE_GAMES.map((g) => (
                 <div key={g.game}>
                   <dt className="font-bold">
-                    {g.emoji} {g.title} <span className="font-normal text-gray-500">· {g.grades}</span>
+                    {g.title} <span className="font-normal text-gray-500">· {g.grades}</span>
                   </dt>
                   <dd className="text-gray-600">{g.teaches.join(" · ")}</dd>
                 </div>

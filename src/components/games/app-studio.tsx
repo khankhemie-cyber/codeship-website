@@ -33,6 +33,7 @@ import { addXp, completeLevel, earnBadge, starsFor, useProgress } from "@/lib/ga
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { highlight } from "./code-editor";
 import { LockBadge, UnlockModal, useLevelAccess } from "./level-lock";
+import { Art, ArtText } from "./art";
 
 const STORE = "codeship-app-studio-v1";
 const HELPER_NAMES = ["clearScreen", "addTitle", "addText", "addPicture", "addButton", "addTextBox", "addList", "addMeter", "addDivider", "randomNumber", "showMessage", "render"];
@@ -189,7 +190,7 @@ function Phone({
   }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-[360px]">
+    <div className="keep-dark relative mx-auto w-full max-w-[360px]">
       <div className="rounded-[44px] border-[10px] border-[#0b0c16] bg-[#0b0c16] shadow-[0_40px_100px_-30px_rgba(63,81,181,0.75),0_0_0_2px_rgba(255,255,255,0.08)]">
         <div className={`relative h-[540px] overflow-hidden rounded-[34px] sm:h-[600px] ${app.dark ? "bg-[#14162a]" : "bg-[#f7f7fb]"}`}>
           {/* status bar */}
@@ -207,7 +208,7 @@ function Phone({
           <div className="h-[calc(100%-76px)] overflow-y-auto px-4 pb-16 pt-4" onClick={() => !playing && onSelect(null)}>
             {app.comps.length === 0 ? (
               <div className={`mt-20 text-center text-sm ${app.dark ? "text-white/40" : "text-[#1f2336]/40"}`}>
-                <p className="text-4xl">📱</p>
+                <Art e="📱" size={56} className="mx-auto" />
                 <p className="mt-2">Your app is empty.<br />Add blocks from the left!</p>
               </div>
             ) : null}
@@ -255,7 +256,7 @@ function Phone({
                           </span>
                         ) : null}
                         {c.type === "button" && (c.actions?.length ?? 0) > 0 ? (
-                          <span className="absolute -top-2 left-1 rounded-full bg-sky-500 px-2 py-0.5 text-[10px] font-bold text-white shadow">⚡ {c.actions?.length}</span>
+                          <span className="absolute -top-2 left-1 rounded-full bg-sky-500 px-2 py-0.5 text-[10px] font-bold text-white shadow">{c.actions?.length} actions</span>
                         ) : null}
                       </div>
                     )}
@@ -265,7 +266,7 @@ function Phone({
                           { label: "Move up", icon: "↑", fn: () => onMove(c.id, -1), disabled: i === 0 },
                           { label: "Move down", icon: "↓", fn: () => onMove(c.id, 1), disabled: i === app.comps.length - 1 },
                           { label: "Duplicate", icon: "⧉", fn: () => onDuplicate(c.id), disabled: false },
-                          { label: "Delete", icon: "🗑", fn: () => onDelete(c.id), disabled: false },
+                          { label: "Delete", icon: "✕", fn: () => onDelete(c.id), disabled: false },
                         ].map((b) => (
                           <button
                             key={b.label}
@@ -277,7 +278,7 @@ function Phone({
                               e.stopPropagation();
                               b.fn();
                             }}
-                            className="focus-ring flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2d48] text-sm text-white shadow-lg hover:bg-amber hover:text-navy disabled:opacity-30"
+                            className="keep-dark focus-ring flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2d48] text-sm text-white shadow-lg hover:bg-amber hover:text-navy disabled:opacity-30"
                           >
                             {b.icon}
                           </button>
@@ -354,12 +355,12 @@ function VarSelect({ app, type, value, onChange, label, goData }: { app: AppProj
 }
 
 const ACTION_KINDS: { kind: Action["kind"]; label: string }[] = [
-  { kind: "change", label: "➕ Change a number" },
-  { kind: "set", label: "✏️ Set a variable" },
-  { kind: "random", label: "🎲 Random number" },
-  { kind: "addToList", label: "📥 Add to a list" },
-  { kind: "clearList", label: "🧹 Clear a list" },
-  { kind: "toast", label: "💬 Show a message" },
+  { kind: "change", label: "Change a number" },
+  { kind: "set", label: "Set a variable" },
+  { kind: "random", label: "Random number" },
+  { kind: "addToList", label: "Add to a list" },
+  { kind: "clearList", label: "Clear a list" },
+  { kind: "toast", label: "Show a message" },
 ];
 
 function defaultAction(kind: Action["kind"], app: AppProject): Action {
@@ -449,7 +450,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
     return (
       <div className="space-y-5">
         <div>
-          <p className="text-sm text-white/60">👆 Tap any block on the phone to edit it — or style your whole app here.</p>
+          <p className="text-sm text-white/60">Tap any block on the phone to edit it, or style your whole app here.</p>
         </div>
         <div>
           <label className={labelCls} htmlFor="app-name">App name</label>
@@ -460,7 +461,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
           <div className="grid grid-cols-8 gap-1">
             {EMOJIS.slice(0, 32).map((e) => (
               <button key={e} type="button" aria-label={`Icon ${e}`} aria-pressed={app.icon === e} onClick={() => update((a) => ({ ...a, icon: e }))} className={`focus-ring rounded-lg p-1 text-xl ${app.icon === e ? "bg-amber/30 ring-1 ring-amber" : "hover:bg-white/10"}`}>
-                {e}
+                <Art e={e} size={26} />
               </button>
             ))}
           </div>
@@ -475,7 +476,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
         </div>
         <div>
           <p className={labelCls}>Mode</p>
-          <Segmented label="Light or dark" value={app.dark ? "dark" : "light"} options={[{ v: "light", l: "☀️ Light" }, { v: "dark", l: "🌙 Dark" }]} onChange={(v) => update((a) => ({ ...a, dark: v === "dark" }))} />
+          <Segmented label="Light or dark" value={app.dark ? "dark" : "light"} options={[{ v: "light", l: "Light" }, { v: "dark", l: "Dark" }]} onChange={(v) => update((a) => ({ ...a, dark: v === "dark" }))} />
         </div>
       </div>
     );
@@ -493,7 +494,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-2">
-        <span className="text-2xl" aria-hidden>{meta.emoji}</span>
+        <Art e={meta.emoji} size={36} />
         <div>
           <p className="font-display text-2xl leading-none text-white">{meta.label}</p>
           <p className="text-xs text-white/50">{meta.tip}</p>
@@ -514,7 +515,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
               ))}
             </div>
           ) : (
-            <p className="mt-2 text-[11px] text-white/45">💡 Tip: create a variable, then type {"{score}"} to show its live value.</p>
+            <p className="mt-2 text-[11px] text-white/45">Tip: create a variable, then type {"{score}"} to show its live value.</p>
           )}
         </div>
       ) : null}
@@ -558,7 +559,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
             <Segmented label="Button style" value={comp.variant ?? "solid"} options={[{ v: "solid", l: "Solid" }, { v: "outline", l: "Outline" }]} onChange={(v) => set({ variant: v })} />
           </div>
           <div className="rounded-2xl border border-sky-400/30 bg-sky-400/5 p-3">
-            <p className="text-sm font-bold text-sky-200">⚡ When tapped, do this:</p>
+            <p className="text-sm font-bold text-sky-200">When tapped, do this:</p>
             <p className="mt-0.5 text-[11px] text-white/45">Actions run top to bottom — just like lines of code.</p>
             <div className="mt-3 space-y-2">
               {(comp.actions ?? []).map((a, i) => (
@@ -625,7 +626,7 @@ function Inspector({ app, comp, update, goData }: { app: AppProject; comp: Comp 
 
       <div className="rounded-2xl border border-violet-400/30 bg-violet-400/5 p-3">
         <label className="flex cursor-pointer items-center justify-between gap-2 text-sm font-bold text-violet-200">
-          <span>🔀 Only show when…</span>
+          <span>Only show when…</span>
           <input
             type="checkbox"
             className="h-4 w-4 accent-violet-400"
@@ -673,13 +674,13 @@ function DataPanel({ app, state, update }: { app: AppProject; state: State; upda
   return (
     <div className="space-y-5">
       <p className="text-sm text-white/60">
-        📦 <strong className="text-white">Variables</strong> are labelled boxes your app uses to remember things — a score, a name, a list of moods.
+        <strong className="text-white">Variables</strong> are labelled boxes your app uses to remember things — a score, a name, a list of moods.
       </p>
       <form onSubmit={add} className="rounded-2xl border border-white/10 bg-[#0f1120]/60 p-3">
         <label className={labelCls} htmlFor="var-name">New variable</label>
         <input id="var-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. score" className={field} autoComplete="off" />
         <div className="mt-2">
-          <Segmented label="Variable type" value={type} options={[{ v: "number", l: "🔢 Number" }, { v: "text", l: "🔤 Text" }, { v: "list", l: "📋 List" }]} onChange={setType} />
+          <Segmented label="Variable type" value={type} options={[{ v: "number", l: "Number" }, { v: "text", l: "Text" }, { v: "list", l: "List" }]} onChange={setType} />
         </div>
         {name && clean !== name ? <p className="mt-2 text-[11px] text-white/50">Code name: <code className="text-violet-200">{clean || "—"}</code> (no spaces or symbols allowed)</p> : null}
         {exists ? <p className="mt-2 text-[11px] text-orange-300">You already have a variable called {clean}.</p> : null}
@@ -908,7 +909,7 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
     download(app);
     const b = earnBadge("shipped-it");
     if (b) celebrate({ badge: b });
-    else celebrate({ message: "📦 App downloaded! Open the file in any browser." });
+    else celebrate({ message: "App downloaded! Open the file in any browser." });
   };
 
   return (
@@ -919,16 +920,16 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
         <button type="button" onClick={onExit} className="focus-ring rounded-lg px-3 py-1.5 text-sm font-semibold text-white/70 hover:bg-white/10">
           ← My apps
         </button>
-        <span className="text-xl" aria-hidden>{app.icon}</span>
+        <Art e={app.icon} size={28} />
         <input aria-label="App name" value={app.name} maxLength={28} onChange={(e) => update((a) => ({ ...a, name: e.target.value }))} className="min-w-0 max-w-[220px] flex-1 rounded-lg bg-transparent px-2 py-1 font-display text-2xl text-white outline-none hover:bg-white/5 focus:bg-white/10" />
-        <span className="hidden text-xs text-emerald-300/80 sm:inline">✓ Saved on this device</span>
+        <span className="hidden text-xs text-emerald-300/80 sm:inline">Saved on this device</span>
         <div className="ml-auto flex items-center gap-2">
           <button type="button" onClick={undo} disabled={!history.length} className="focus-ring rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white disabled:opacity-30" title="Undo (Ctrl+Z)">
             ↶ Undo
           </button>
           <div role="radiogroup" aria-label="Mode" className="flex rounded-xl border border-white/15 p-1">
             <button type="button" role="radio" aria-checked={!playing} onClick={() => setPlaying(false)} className={`focus-ring rounded-lg px-3 py-1.5 text-sm font-bold ${!playing ? "bg-white/15 text-white" : "text-white/55"}`}>
-              ✏️ Build
+              Build
             </button>
             <button
               type="button"
@@ -945,7 +946,7 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
             </button>
           </div>
           <button type="button" onClick={ship} className="focus-ring rounded-xl bg-amber px-4 py-2 text-sm font-extrabold text-navy shadow-[0_8px_24px_-8px_rgba(255,215,64,0.8)]">
-            🚀 Download app
+            Download app
           </button>
         </div>
       </div>
@@ -967,9 +968,9 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
                       whileTap={{ scale: 0.95 }}
                       onClick={() => addComp(p.type)}
                       title={p.tip}
-                      className="focus-ring flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-[#24284a] px-2 py-3 text-xs font-bold text-white hover:border-amber/50"
+                      className="focus-ring flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-xs font-bold text-white hover:border-amber/50"
                     >
-                      <span className="text-2xl" aria-hidden>{p.emoji}</span>
+                      <Art e={p.emoji} size={32} />
                       {p.label}
                     </motion.button>
                   ))}
@@ -981,7 +982,7 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
           {mission ? (
             <div className="rounded-3xl border border-amber/25 bg-gradient-to-b from-amber/10 to-transparent p-4">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber">
-                {mission.emoji} Mission: {mission.title}
+                Mission: {mission.title}
               </p>
               <ol className="mt-3 space-y-2">
                 {mission.goals.map((g, i) => {
@@ -995,16 +996,16 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
                         </motion.span>
                         <span className={done ? "text-white/45 line-through" : "font-semibold text-white"}>{g.label}</span>
                       </div>
-                      {current ? <p className="ml-7 mt-1 text-xs text-amber/90">💡 {g.tip}</p> : null}
+                      {current ? <p className="ml-7 mt-1 text-xs text-amber/90"><ArtText text={g.tip} /></p> : null}
                     </li>
                   );
                 })}
               </ol>
-              {!nextGoal ? <p className="mt-3 text-sm font-bold text-emerald-300">🏆 Mission complete! Keep remixing — add your own ideas.</p> : null}
+              {!nextGoal ? <p className="mt-3 text-sm font-bold text-emerald-300">Mission complete! Keep remixing and add your own ideas.</p> : null}
             </div>
           ) : (
             <div className="rounded-3xl border border-white/10 bg-[#1b1e33] p-4 text-sm text-white/60">
-              <p className="font-bold text-white">🧪 Free build</p>
+              <p className="font-bold text-white">Free build</p>
               <p className="mt-1">No rules — make anything! Ideas: a quiz, a score keeper for gym class, a chore tracker, a story with choices.</p>
             </div>
           )}
@@ -1021,7 +1022,7 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
                 </button>
               </>
             ) : (
-              <span className="rounded-full bg-white/10 px-3 py-1 font-semibold text-white/60">✏️ Build mode — tap a block to edit it</span>
+              <span className="rounded-full bg-white/10 px-3 py-1 font-semibold text-white/60">Build mode: tap a block to edit it</span>
             )}
           </div>
           <Phone
@@ -1046,8 +1047,8 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
         <aside className="order-3 rounded-3xl border border-white/10 bg-[#1b1e33]" aria-label="Inspector">
           <div role="tablist" aria-label="Panels" className="flex border-b border-white/10 p-2">
             {([
-              ["design", "🎨 Design"],
-              ["data", "📦 Data"],
+              ["design", "Design"],
+              ["data", "Data"],
               ["code", "</> Code"],
             ] as const).map(([id, label]) => (
               <button
@@ -1071,11 +1072,11 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
                   <p className="text-sm text-white/60">
                     This is the <strong className="text-white">real JavaScript</strong> behind your app. It updates as you build! Click <em>Download app</em> to get a file you can open in any browser.
                   </p>
-                  <pre className="mt-3 overflow-x-auto rounded-2xl border border-white/10 bg-[#0f1120] p-4 font-mono text-[12px] leading-5" dangerouslySetInnerHTML={{ __html: highlight(code, HELPER_NAMES) }} />
+                  <pre className="keep-dark mt-3 overflow-x-auto rounded-2xl border border-white/10 bg-[#0f1120] p-4 font-mono text-[12px] leading-5" dangerouslySetInnerHTML={{ __html: highlight(code, HELPER_NAMES) }} />
                   <button type="button" onClick={() => setShowHelpers((v) => !v)} aria-expanded={showHelpers} className="focus-ring mt-3 text-xs font-semibold text-sky-300 hover:underline">
                     {showHelpers ? "Hide" : "Show"} the building-block functions →
                   </button>
-                  {showHelpers ? <pre className="mt-2 overflow-x-auto rounded-2xl border border-white/10 bg-[#0f1120] p-4 font-mono text-[12px] leading-5" dangerouslySetInnerHTML={{ __html: highlight(HELPERS.trim(), HELPER_NAMES) }} /> : null}
+                  {showHelpers ? <pre className="keep-dark mt-2 overflow-x-auto rounded-2xl border border-white/10 bg-[#0f1120] p-4 font-mono text-[12px] leading-5" dangerouslySetInnerHTML={{ __html: highlight(HELPERS.trim(), HELPER_NAMES) }} /> : null}
                 </div>
               ) : null}
             </div>
@@ -1086,11 +1087,11 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
       <Modal open={missionWin} onClose={() => setMissionWin(false)} label="Mission complete">
         {mission ? (
           <div className="text-center">
-            <p className="text-6xl">{mission.emoji}</p>
+            <Art e={mission.emoji} size={80} className="mx-auto" />
             <p className="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-300">Mission complete</p>
             <h3 className="mt-1 font-display text-5xl">You built an app!</h3>
             <Stars count={3} size="text-4xl" animate />
-            <p className="mt-3 text-sm text-white/75">Try it out, then download it and show your family. Real developers call that <em>shipping</em>! 🚀</p>
+            <p className="mt-3 text-sm text-white/75">Try it out, then download it and show your family. Real developers call that <em>shipping</em>!</p>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row">
               <button
                 type="button"
@@ -1111,7 +1112,7 @@ function Editor({ project, onSave, onExit, allProjects }: { project: AppProject;
                 }}
                 className="focus-ring flex-1 rounded-2xl bg-amber px-4 py-3 font-bold text-navy"
               >
-                🚀 Download it
+                Download it
               </button>
             </div>
           </div>
@@ -1148,7 +1149,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <button type="button" onClick={() => create()} className="focus-ring rounded-2xl bg-amber px-6 py-3 font-display text-2xl text-navy shadow-[0_10px_30px_-10px_rgba(255,215,64,0.8)]">
-                ✨ Start a free build
+                Start a free build
               </button>
               <a href="#missions" className="focus-ring rounded-2xl border border-white/20 px-6 py-3 font-bold text-white hover:bg-white/10">
                 Take a guided mission ↓
@@ -1156,10 +1157,10 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
             </div>
           </div>
           <div className="hidden justify-center md:flex" aria-hidden>
-            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-48 rounded-[28px] border-[6px] border-[#0b0c16] bg-[#f7f7fb] shadow-2xl">
-              <div className="rounded-t-[22px] bg-[#F59E0B] px-3 pb-2 pt-4 text-sm font-extrabold text-white">🍪 Cookie Clicker</div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="keep-dark w-48 rounded-[28px] border-[6px] border-[#0b0c16] bg-[#f7f7fb] shadow-2xl">
+              <div className="rounded-t-[22px] bg-[#F59E0B] px-3 pb-2 pt-4 text-sm font-extrabold text-white"><Art e="🍪" size={18} /> Cookie Clicker</div>
               <div className="space-y-2 p-3 text-center text-[#1f2336]">
-                <p className="text-5xl">🍪</p>
+                <Art e="🍪" size={56} className="mx-auto" />
                 <p className="text-sm font-bold">Score: 7</p>
                 <div className="rounded-xl bg-[#F59E0B] py-2 text-xs font-extrabold text-white">Tap me!</div>
                 <div className="h-2 overflow-hidden rounded-full bg-[#e6e7f0]"><div className="h-full w-[70%] bg-[#F59E0B]" /></div>
@@ -1188,7 +1189,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
               className="focus-ring group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#1b1e33] text-left hover:border-white/30"
             >
               <div className="flex h-28 items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${m.theme}, ${m.theme}55)` }} aria-hidden>
-                <motion.span whileHover={{ rotate: [0, -10, 10, 0] }}>{m.emoji}</motion.span>
+                <motion.span whileHover={{ rotate: [0, -10, 10, 0] }}><Art e={m.emoji} size={64} /></motion.span>
               </div>
               <div className="flex flex-1 flex-col p-4">
                 <div className="flex items-center justify-between">
@@ -1223,7 +1224,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
             .map((proj) => (
               <li key={proj.id} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#1b1e33] p-3">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: proj.theme }} aria-hidden>
-                  {proj.icon}
+                  <Art e={proj.icon} size={30} />
                 </span>
                 <button type="button" onClick={() => open(proj.id)} className="focus-ring min-w-0 flex-1 rounded-lg text-left">
                   <span className="block truncate font-bold text-white">{proj.name || "Untitled"}</span>
@@ -1232,7 +1233,7 @@ function Gallery({ projects, open, create, remove }: { projects: AppProject[]; o
                   </span>
                 </button>
                 <button type="button" onClick={() => setConfirm(proj)} aria-label={`Delete ${proj.name}`} className="focus-ring rounded-lg px-2 py-1 text-white/30 hover:bg-red-400/15 hover:text-red-300">
-                  🗑
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" /></svg>
                 </button>
               </li>
             ))}

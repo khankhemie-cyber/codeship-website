@@ -15,6 +15,7 @@ import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate, useDevFact } from "./arcade-kit";
 import { CodeEditor, highlight, type CodeEditorHandle } from "./code-editor";
 import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess, usePaidLevels } from "./level-lock";
+import { Art, ArtText, StarIcon } from "./art";
 
 const COMMANDS = ["move", "turnLeft", "turnRight", "collect", "pathAhead", "gemHere", "atGoal", "say"];
 const SPEEDS = [
@@ -146,7 +147,7 @@ function Board({
   const cols = level.map[0].length;
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden rounded-3xl border border-white/10 bg-[#0c0d1a] p-2 shadow-[0_30px_80px_-30px_rgba(63,81,181,0.6)]"
+      className="relative mx-auto w-full overflow-hidden rounded-3xl border-4 border-white bg-[#9CC3E6] p-2 shadow-[0_20px_50px_-25px_rgba(0,21,50,0.45)]"
       style={{ maxWidth: Math.min(560, cols * 64) }}
     >
       <div className="relative" style={{ aspectRatio: `${cols} / ${rows}` }}>
@@ -160,11 +161,11 @@ function Board({
                   key={key}
                   className={`relative flex items-center justify-center ${
                     wall
-                      ? "m-[1px] rounded-md bg-[#0c0d1a]"
-                      : "m-[1px] rounded-md bg-gradient-to-br from-[#36407a] to-[#2a3163] shadow-[inset_0_-3px_0_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)]"
+                      ? "m-[1px] rounded-lg bg-[#7FA9D1] shadow-[inset_0_3px_0_rgba(0,21,50,0.12)]"
+                      : "m-[1px] rounded-lg bg-gradient-to-br from-[#FFFDF7] to-[#EDE6D8] shadow-[inset_0_-3px_0_rgba(0,21,50,0.12)]"
                   }`}
                 >
-                  {ch === "o" ? <span className="h-1.5 w-1.5 rounded-full bg-amber/40" /> : null}
+                  {ch === "o" ? <span className="h-1.5 w-1.5 rounded-full bg-[#C9BBA0]" /> : null}
                   {ch === "*" && !frame.collected.includes(key) ? <GemSprite /> : null}
                   {ch === "G" ? <BeaconSprite lit={frame.r === r && frame.c === c} /> : null}
                 </div>
@@ -237,7 +238,7 @@ function LevelSelect({
           <p className="mt-1 font-display text-4xl text-amber">
             {total} <span className="text-white/40">/ {ROVER_CATALOG.length * 3}</span>
           </p>
-          <p className="mt-1 text-xs text-white/60">★ reach the beacon · ★ grab every gem · ★ use par lines or fewer</p>
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-white/60"><StarIcon /> reach the beacon <StarIcon /> grab every gem <StarIcon /> use par lines or fewer</p>
         </div>
       </div>
 
@@ -265,7 +266,7 @@ function LevelSelect({
               >
                 <span className="flex items-center justify-between">
                   <span className="font-display text-3xl leading-none text-white/30">{String(i + 1).padStart(2, "0")}</span>
-                  {paid ? <span aria-hidden>🔑</span> : locked ? <span aria-hidden>🔒</span> : <Stars count={stars} size="text-base" />}
+                  {paid ? <Art e="🔑" size={20} /> : locked ? <Art e="🔒" size={20} /> : <Stars count={stars} size="text-base" />}
                 </span>
                 <span className="mt-3 text-[11px] font-bold uppercase tracking-[0.15em] text-sky-300">{l.concept}</span>
                 <span className="mt-0.5 text-lg font-bold text-white">{l.title}</span>
@@ -388,7 +389,7 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
           ...l,
           res.error
             ? `⚠️ ${res.error}`
-            : "🛰️ The program finished, but the rover isn't on the beacon yet. Add more steps!",
+            : "The program finished, but the rover isn't on the beacon yet. Add more steps!",
         ]);
       }
     },
@@ -449,18 +450,18 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
         <section className="flex min-w-0 flex-col gap-4" aria-label="Mission and code">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#262a48] to-[#1c1f35] p-5">
             <div className="flex flex-wrap items-center gap-2">
-              <Pill tone="blue">💡 {level.concept}</Pill>
+              <Pill tone="blue">{level.concept}</Pill>
               <Pill tone="yellow">Par: {level.par} lines</Pill>
             </div>
             <h2 className="mt-3 font-display text-4xl leading-none text-white">{level.title}</h2>
-            <p className="mt-2 font-semibold text-amber">🎯 {level.mission}</p>
+            <p className="mt-2 flex items-center gap-2 font-semibold text-amber"><Art e="🎯" size={22} /> {level.mission}</p>
             <details className="group mt-3 rounded-2xl bg-black/20 p-3 open:pb-4" open={index < 9}>
               <summary className="cursor-pointer list-none text-sm font-bold text-sky-200 marker:hidden">
                 <span className="mr-1 inline-block transition group-open:rotate-90">▸</span> Learn it: {level.concept}
               </summary>
               <p className="mt-2 text-sm leading-relaxed text-white/80">{level.lesson}</p>
               <pre
-                className="mt-3 overflow-x-auto rounded-xl bg-[#0f1120] p-3 font-mono text-[13px] leading-6"
+                className="keep-dark mt-3 overflow-x-auto rounded-xl bg-[#0f1120] p-3 font-mono text-[13px] leading-6"
                 dangerouslySetInnerHTML={{ __html: highlight(level.example, COMMANDS) }}
               />
             </details>
@@ -508,7 +509,7 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
               ↺ Reset rover
             </button>
             <button type="button" onClick={() => setShowHint((v) => !v)} className="focus-ring rounded-2xl border border-white/15 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10" aria-expanded={showHint}>
-              💡 Hint
+              Hint
             </button>
             <div className="ml-auto flex items-center gap-1 rounded-2xl border border-white/10 p-1" role="radiogroup" aria-label="Rover speed">
               {SPEEDS.map((s, i) => (
@@ -522,7 +523,7 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
                   onClick={() => setSpeed(i)}
                   className={`focus-ring rounded-xl px-2.5 py-1.5 text-lg ${speed === i ? "bg-white/15" : "opacity-60 hover:opacity-100"}`}
                 >
-                  {s.label}
+                  <Art e={s.label} size={22} alt={s.title} />
                 </button>
               ))}
             </div>
@@ -530,15 +531,15 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
 
           {showHint ? (
             <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-amber/30 bg-amber/10 p-3 text-sm text-amber">
-              💡 {level.hint}
+              <Art e="💡" size={22} className="mr-1" /> {level.hint}
             </motion.p>
           ) : null}
 
           <div className="min-h-[96px] rounded-2xl border border-white/10 bg-black/30 p-3 font-mono text-xs leading-relaxed text-white/80" aria-live="polite" aria-label="Rover console">
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Console</p>
-            {log.length ? log.slice(-6).map((l, i) => <p key={i} className={l.startsWith("⚠️") ? "text-orange-300" : ""}>{l}</p>) : <p className="text-white/40">Write your code, then press Run. Errors show up here — they’re clues, not failures!</p>}
+            {log.length ? log.slice(-6).map((l, i) => <p key={i} className={l.startsWith("⚠️") ? "text-orange-300" : ""}><ArtText text={l} /></p>) : <p className="text-white/40">Write your code, then press Run. Errors show up here — they’re clues, not failures!</p>}
           </div>
-          <p className="text-xs text-white/40">🧠 {fact}</p>
+          <p className="text-xs text-white/40">Did you know? {fact}</p>
         </section>
       </div>
 
@@ -551,10 +552,10 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
               <Stars count={outcome.stars} size="text-5xl" animate />
             </div>
             <ul className="mx-auto mt-4 max-w-xs space-y-1 text-left text-sm text-white/80">
-              <li>✅ Reached the beacon</li>
-              <li>{outcome.stars >= 2 ? "✅" : "⬜"} Collected every gem</li>
+              <li className="flex items-center gap-2"><Art e="✅" size={20} /> Reached the beacon</li>
+              <li className="flex items-center gap-2">{outcome.stars >= 2 ? <Art e="✅" size={20} /> : <span className="inline-block h-5 w-5 rounded-md border-2 border-white/20" />} Collected every gem</li>
               <li>
-                {outcome.stars === 3 ? "✅" : "⬜"} {outcome.lines} lines (par {level.par})
+                {outcome.stars === 3 ? <Art e="✅" size={20} /> : <span className="inline-block h-5 w-5 rounded-md border-2 border-white/20" />} {outcome.lines} lines (par {level.par})
               </li>
             </ul>
             {outcome.stars < 3 ? (
@@ -573,7 +574,7 @@ function Play({ index, level, onBack, onNext }: { index: number; level: RoverLev
                 </button>
               ) : (
                 <button type="button" onClick={onBack} className="focus-ring flex-1 rounded-2xl bg-amber px-4 py-3 font-bold text-navy">
-                  🏆 All missions
+                  <Art e="🏆" size={20} /> All missions
                 </button>
               )}
             </div>

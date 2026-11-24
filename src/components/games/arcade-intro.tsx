@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import SplitButton from "@/components/ui/SplitButton";
+import { Art } from "./art";
 
 /** Brand colours, used across the arcade. */
 export const BRAND = {
@@ -88,8 +89,8 @@ export function ArcadeIntro({ games }: { games: number }) {
           </Floater>
         ))}
         {EMOJI.map((m) => (
-          <Floater key={m.e} speed={still ? 0 : m.speed} progress={progress} className={`${m.cls} hidden sm:block text-4xl drop-shadow-lg`}>
-            {m.e}
+          <Floater key={m.e} speed={still ? 0 : m.speed} progress={progress} className={`${m.cls} hidden sm:block drop-shadow-lg`}>
+            <Art e={m.e} size={56} />
           </Floater>
         ))}
       </div>
@@ -120,7 +121,7 @@ export function ArcadeIntro({ games }: { games: number }) {
         </p>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-9 flex justify-center">
           <SplitButton href="#games" tone="light" size="lg">
-            ▶ Press start
+            Press start
           </SplitButton>
         </motion.div>
         <motion.p
