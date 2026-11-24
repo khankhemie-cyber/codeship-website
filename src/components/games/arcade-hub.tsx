@@ -51,6 +51,23 @@ const TOPIC_COLOR: Record<Topic, string> = { Blocks: BRAND.yellow, JavaScript: B
 
 const ARCADE_GAMES: ArcadeGame[] = [
   {
+    game: "bay",
+    title: "Byte Bay",
+    emoji: "🏝️",
+    href: "/ship-it/byte-bay/",
+    grades: "Grades 4–8",
+    language: "3D open world · Python or JavaScript",
+    pitch: "Explore a 3D seaside town, climb anything, and build your house. Then code robots in real Python or JavaScript to help the shop, clean the beach and more.",
+    levels: ["home", "market", "beach"],
+    teaches: ["Loops", "Functions", "Dictionaries", "while loops", "if / elif / else", "Automation"],
+    free: 3,
+    thumb: "/arcade/bay.jpg",
+    gradeRange: [4, 8],
+    topic: "Python",
+    accent: BRAND.teal,
+    isNew: true,
+  },
+  {
     game: "bus",
     title: "Bus Buddies Road Trip",
     emoji: "🚌",
