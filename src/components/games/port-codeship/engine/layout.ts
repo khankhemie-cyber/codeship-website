@@ -33,7 +33,8 @@ export const PLOT_TERMINAL = { x: 32, z: 10.5 };
 
 /** The Fresh Market hall. Aisles run north–south. */
 export const MARKET: Rect = { x0: -64, z0: 10, x1: -34, z1: 34 };
-export const AISLE_X = [-58, -52, -46, -40];
+/** Aisle 1 is on the left as you walk in from Main Street (you face south, so left is east). */
+export const AISLE_X = [-40, -46, -52, -58];
 /** Shelf units face north (towards the counter); one unit per aisle. */
 export const SHELF_Z = 21;
 export const SHELF_DEPTH = 1.2;

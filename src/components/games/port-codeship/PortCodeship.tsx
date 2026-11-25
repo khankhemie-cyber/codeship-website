@@ -191,6 +191,12 @@ export default function PortCodeship() {
   const [webglError, setWebglError] = useState(false);
   const [carry, setCarryState] = useState<string | null>(null);
   const [looking, setLooking] = useState(false);
+  const [sprint, setSprintState] = useState(false);
+  const toggleSprint = () =>
+    setSprintState((on) => {
+      if (gameRef.current) gameRef.current.sprintLock = !on;
+      return !on;
+    });
   const [goalHidden, setGoalHidden] = useState(false);
 
   const update = useCallback((fn: (s: Save) => Save) => {
@@ -845,6 +851,7 @@ export default function PortCodeship() {
       }
       if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
       if (e.code === "KeyZ" && building) gameRef.current?.undoBuild();
+      if (e.code === "KeyR" && !e.repeat && !panel && !dialog) toggleSprint();
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
         if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
@@ -1040,6 +1047,7 @@ export default function PortCodeship() {
               <canvas ref={miniRef} width={150} height={150} className="block h-[110px] w-[110px] sm:h-[150px] sm:w-[150px]" />
             </button>
             <div className="flex gap-2">
+              <HudButton onClick={toggleSprint} pressed={sprint}>{sprint ? "Sprint: on" : "Sprint: off"} (R)</HudButton>
               <HudButton onClick={() => setMapOpen(true)}>Map (M)</HudButton>
               <HudButton onClick={() => { setPaused(true); gameRef.current?.setEnabled(false); }}>Menu</HudButton>
             </div>
@@ -1129,6 +1137,8 @@ export default function PortCodeship() {
               onButton={(b, d) => gameRef.current?.setTouchButton(b, d)}
               onAct={() => gameRef.current?.pressInteract()}
               onBuild={() => gameRef.current?.toggleBuild()}
+              sprint={sprint}
+              onSprint={toggleSprint}
             />
           )}
 
@@ -1340,9 +1350,13 @@ export default function PortCodeship() {
 // ---------------------------------------------------------------------------
 // Small pieces
 
-function HudButton({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+function HudButton({ children, onClick, pressed }: { children: React.ReactNode; onClick: () => void; pressed?: boolean }) {
   return (
-    <button onClick={onClick} className="rounded-full bg-[#0d1b2a]/85 px-3 py-1.5 text-xs font-bold shadow ring-1 ring-white/15 hover:bg-[#0d1b2a]">
+    <button
+      onClick={onClick}
+      aria-pressed={pressed}
+      className={`rounded-full px-3 py-1.5 text-xs font-bold shadow ring-1 ring-white/15 ${pressed ? "bg-amber text-navy" : "bg-[#0d1b2a]/85 hover:bg-[#0d1b2a]"}`}
+    >
       {children}
     </button>
   );
@@ -1382,7 +1396,7 @@ function Controls() {
     ["Click the world", "Look around with the mouse (Esc frees it)"],
     ["Drag / trackpad swipe", "Turn the view (scroll to zoom)"],
     ["Space", "Jump (off a wall, too)"],
-    ["Shift", "Sprint"],
+    ["Shift (hold) / R", "Sprint (R or the Sprint button turns it on and off)"],
     ["Walk into a wall", "Climb it (W up, S down)"],
     ["E", "Talk, use, pick up"],
     ["G", "Put down what you're carrying"],
@@ -1404,7 +1418,21 @@ function Controls() {
   );
 }
 
-function TouchControls({ onMove, onButton, onAct, onBuild }: { onMove: (x: number, y: number) => void; onButton: (b: "jump" | "sprint", d: boolean) => void; onAct: () => void; onBuild: () => void }) {
+function TouchControls({
+  onMove,
+  onButton,
+  onAct,
+  onBuild,
+  sprint,
+  onSprint,
+}: {
+  onMove: (x: number, y: number) => void;
+  onButton: (b: "jump" | "sprint", d: boolean) => void;
+  onAct: () => void;
+  onBuild: () => void;
+  sprint: boolean;
+  onSprint: () => void;
+}) {
   const base = useRef<HTMLDivElement>(null);
   const [knob, setKnob] = useState({ x: 0, y: 0 });
   const move = (e: React.PointerEvent) => {
@@ -1438,6 +1466,9 @@ function TouchControls({ onMove, onButton, onAct, onBuild }: { onMove: (x: numbe
         <div className="absolute h-14 w-14 rounded-full bg-white/70" style={{ left: `calc(50% - 28px + ${knob.x * 40}px)`, top: `calc(50% - 28px + ${knob.y * 40}px)` }} />
       </div>
       <div className="absolute bottom-6 right-6 grid grid-cols-2 gap-3">
+        <button className={`col-span-2 h-12 touch-none rounded-full font-bold ring-2 ring-white/40 ${sprint ? "bg-amber text-navy" : "bg-white/20"}`} onPointerDown={onSprint} aria-pressed={sprint}>
+          {sprint ? "Sprint on" : "Sprint"}
+        </button>
         <button className="h-16 w-16 touch-none rounded-full bg-white/20 font-bold ring-2 ring-white/40" onPointerDown={onBuild}>B</button>
         <button className="h-16 w-16 touch-none rounded-full bg-amber/90 font-bold text-navy" onPointerDown={onAct}>E</button>
         <button className="col-span-2 h-14 touch-none rounded-full bg-white/25 font-bold ring-2 ring-white/40" onPointerDown={() => onButton("jump", true)} onPointerUp={() => onButton("jump", false)} onPointerLeave={() => onButton("jump", false)}>
