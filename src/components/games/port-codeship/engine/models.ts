@@ -36,6 +36,8 @@ export type Avatar = {
   legR: THREE.Group;
   hand: THREE.Group;
   phase: number;
+  /** Holding something in both hands: arms stay out in front, around the item. */
+  carrying?: boolean;
 };
 
 function limb(w: number, h: number, m: THREE.Material, x: number, y: number) {
@@ -72,7 +74,8 @@ export function makeAvatar(c: { shirt: number; skin: number; hair: number; pants
   head.add(cube(0.12, 0.14, 0.05, eye, -0.2, 0.02, 0.51, false));
   head.add(cube(0.12, 0.14, 0.05, eye, 0.2, 0.02, 0.51, false));
   const hand = new THREE.Group();
-  hand.position.set(0, 1.15, 0.38);
+  // Where a carried item sits: between the hands when the arms are held out.
+  hand.position.set(0, 1.12, 0.56);
   body.add(hand);
   return { root, body, head, armL, armR, legL, legR, hand, phase: 0 };
 }
@@ -113,6 +116,16 @@ export function animateAvatar(a: Avatar, dt: number, speed: number, mode: "walk"
   a.armR.rotation.x = -s * amp;
   a.legL.rotation.x = -s * amp;
   a.legR.rotation.x = s * amp;
+  if (a.carrying) {
+    // Arms out in front holding the item; they don't swing through it.
+    a.armL.rotation.x = -1.2;
+    a.armR.rotation.x = -1.2;
+    a.armL.rotation.z = -0.12;
+    a.armR.rotation.z = 0.12;
+    return;
+  }
+  a.armL.rotation.z = 0;
+  a.armR.rotation.z = 0;
   if (speed < 0.2) {
     const t = performance.now() / 1000;
     a.armL.rotation.x = Math.sin(t * 1.5) * 0.05;
