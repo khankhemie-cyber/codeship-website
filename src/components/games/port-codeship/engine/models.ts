@@ -253,7 +253,10 @@ export function makePalm() {
 }
 
 /** A label floating over things (aisle signs, names). */
-export function textTexture(lines: string[], opts: { w?: number; h?: number; bg?: string; fg?: string; title?: string; font?: number } = {}) {
+export function textTexture(
+  lines: string[],
+  opts: { w?: number; h?: number; bg?: string; fg?: string; title?: string; font?: number; align?: "center" | "left" } = {}
+) {
   const w = opts.w ?? 512;
   const h = opts.h ?? 256;
   const c = document.createElement("canvas");
@@ -262,18 +265,26 @@ export function textTexture(lines: string[], opts: { w?: number; h?: number; bg?
   const g = c.getContext("2d")!;
   g.fillStyle = opts.bg ?? "#0d1b2a";
   g.fillRect(0, 0, w, h);
-  g.fillStyle = opts.fg ?? "#ffffff";
-  g.textAlign = "center";
   g.textBaseline = "middle";
-  let y = 0;
   const fs = opts.font ?? 40;
   const all = opts.title ? [opts.title, ...lines] : lines;
   const lh = h / all.length;
+  const pad = w * 0.06;
+  const maxW = w - pad * 2;
   all.forEach((line, i) => {
-    g.font = `${i === 0 && opts.title ? 800 : 600} ${i === 0 && opts.title ? fs * 1.15 : fs}px "Trebuchet MS", system-ui, sans-serif`;
-    g.fillStyle = i === 0 && opts.title ? "#f5c35a" : opts.fg ?? "#ffffff";
-    y = lh * i + lh / 2;
-    g.fillText(line, w / 2, y);
+    const isTitle = i === 0 && !!opts.title;
+    // Shrink a line until it fits, so long words are never cut off at the edges.
+    let size = Math.min(isTitle ? fs * 1.15 : fs, lh * 0.8);
+    const font = () => `${isTitle ? 800 : 600} ${size}px "Trebuchet MS", system-ui, sans-serif`;
+    g.font = font();
+    while (size > 10 && g.measureText(line).width > maxW) {
+      size -= 2;
+      g.font = font();
+    }
+    g.fillStyle = isTitle ? "#f5c35a" : opts.fg ?? "#ffffff";
+    const left = opts.align === "left" && !isTitle;
+    g.textAlign = left ? "left" : "center";
+    g.fillText(line, left ? pad : w / 2, lh * i + lh / 2);
   });
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;

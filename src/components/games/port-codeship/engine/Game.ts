@@ -138,7 +138,6 @@ export class Game {
   private camTarget = new THREE.Vector3();
   private drag: { id: number; x: number; y: number; moved: number; button: number } | null = null;
   private cinematic: ((dt: number) => boolean) | null = null;
-  private occluders: THREE.Object3D[] = [];
 
   // World state
   private focus: Focus = null;
@@ -303,7 +302,7 @@ export class Game {
 
   private solid(b: Box, mesh?: THREE.Object3D) {
     this.col.add(b);
-    if (mesh) this.occluders.push(mesh);
+    void mesh;
     return b;
   }
 
@@ -427,7 +426,7 @@ export class Game {
     this.solid(box(x0 - 0.6, H, z0 - 0.6, x1 + 0.6, H + 0.5, z1 + 0.6), roof);
     // Awning stripes and sign
     for (let i = 0; i < 10; i++) this.scene.add(cube((x1 - x0) / 10, 0.15, 1.6, mat(i % 2 ? 0xffffff : 0xc0392b), x0 + (i + 0.5) * ((x1 - x0) / 10), H - 0.6, z0 - 0.7));
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.6), new THREE.MeshStandardMaterial({ map: textTexture([], { title: "FRESH MARKET", h: 140, font: 70 }) }));
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.6), new THREE.MeshStandardMaterial({ map: textTexture([], { title: "FRESH MARKET", w: 1024, h: 180, font: 120 }) }));
     sign.position.set((x0 + x1) / 2, H + 1.3, z0 - 0.3);
     sign.rotation.y = Math.PI;
     this.scene.add(sign);
@@ -440,20 +439,23 @@ export class Game {
       this.scene.add(cube(SHELF_W, SHELF_H, 0.15, shelfMat, ax, SHELF_H / 2, zf + SHELF_DEPTH));
       for (const sx of [-SHELF_W / 2, SHELF_W / 2]) this.scene.add(cube(0.12, SHELF_H, SHELF_DEPTH, shelfMat, ax + sx, SHELF_H / 2, zf + SHELF_DEPTH / 2));
       for (let lv = 0; lv < 4; lv++) {
-        const y = lv * 1.0 + 0.1;
+        // Plank height; level 1 is raised a little so its label fits underneath.
+        const y = lv * 1.0 + 0.32;
         this.scene.add(cube(SHELF_W, 0.08, SHELF_DEPTH, shelfMat, ax, y, zf + SHELF_DEPTH / 2));
         const product = AISLES[ai][lv];
         const pm = mat(PRODUCT_COLORS[product] ?? 0xffffff, { rough: 0.6 });
         for (let k = 0; k < 6; k++) this.scene.add(cube(0.55, 0.6, 0.5, pm, ax - SHELF_W / 2 + 0.5 + k * 0.8, y + 0.34, zf + 0.45, false));
-        const label = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.28), new THREE.MeshBasicMaterial({ map: textTexture([`${lv + 1} · ${product}`], { w: 256, h: 52, font: 30, bg: "#ffffff", fg: "#0d1b2a" }) }));
-        label.position.set(ax, y + 0.04, zf - 0.01);
+        // Shelf label on the front edge, centred under its products.
+        const label = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.3), new THREE.MeshBasicMaterial({ map: textTexture([`Shelf ${lv + 1}: ${product}`], { w: 512, h: 70, font: 44, bg: "#ffffff", fg: "#0d1b2a" }) }));
+        label.position.set(ax, y - 0.2, zf - 0.02);
         label.rotation.y = Math.PI;
         this.scene.add(label);
       }
       this.scene.add(cube(SHELF_W, 0.1, SHELF_DEPTH, shelfMat, ax, SHELF_H, zf + SHELF_DEPTH / 2));
       this.solid(box(ax - SHELF_W / 2, 0, zf, ax + SHELF_W / 2, SHELF_H, zf + SHELF_DEPTH, true, `shelf:${ai + 1}`));
-      const lines = AISLES[ai].map((p, i) => `${i + 1}  ${p}`).reverse();
-      const board = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 2.2), new THREE.MeshStandardMaterial({ map: textTexture(lines, { title: `AISLE ${ai + 1}`, w: 384, h: 300, font: 38 }) }));
+      // Top line is the top shelf, so the sign reads in the same order as the shelves.
+      const lines = AISLES[ai].map((p, i) => `Shelf ${i + 1}:  ${p}`).reverse();
+      const board = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 2.2), new THREE.MeshStandardMaterial({ map: textTexture(lines, { title: `AISLE ${ai + 1}`, w: 512, h: 352, font: 52, align: "left" }) }));
       board.position.set(ax, SHELF_H + 1.35, zf - 0.02);
       board.rotation.y = Math.PI;
       this.scene.add(board);
@@ -747,6 +749,9 @@ export class Game {
     document.addEventListener("pointerlockchange", this.onLockChange);
   }
 
+  /** Sprint toggle (on-screen button): run without holding Shift. */
+  sprintLock = false;
+
   setTouch(x: number, y: number) {
     this.touch.x = x;
     this.touch.y = y;
@@ -831,7 +836,7 @@ export class Game {
       fwd: climbing ? fwd : len > 0.1 ? mag : 0,
       side: climbing ? side : 0,
       jump: this.enabled && !this.cinematic && (k.has("Space") || this.touch.jump),
-      sprint: k.has("ShiftLeft") || k.has("ShiftRight") || this.touch.sprint,
+      sprint: this.sprintLock || k.has("ShiftLeft") || k.has("ShiftRight") || this.touch.sprint,
     };
   }
 
@@ -925,18 +930,56 @@ export class Game {
     if (this.camTarget.distanceTo(target) > 8) this.camTarget.copy(target);
     const cp = Math.cos(this.camPitch);
     const dir = new THREE.Vector3(Math.sin(this.camYaw) * cp, Math.sin(this.camPitch), Math.cos(this.camYaw) * cp);
-    let dist = this.camDist;
-    // Keep buildings from blocking the view.
-    this.raycaster.set(this.camTarget, dir);
-    this.raycaster.far = dist;
-    const near = this.occluders.filter((o) => o.position.distanceToSquared(this.camTarget) < 60 * 60);
-    const hit = this.raycaster.intersectObjects(near, false)[0];
-    if (hit) dist = Math.max(1.2, hit.distance - 0.3);
-    const pos = this.camTarget.clone().addScaledVector(dir, dist);
+    // Keep the camera out of walls: test the line from the player's head to
+    // the camera against every solid box (buildings, walls, shelves, blocks…),
+    // padded so the lens never touches a surface.
+    const want = this.camDist;
+    const hitAt = this.cameraHit(this.camTarget, dir, want, 0.35);
+    const blocked = Math.max(0.9, hitAt - 0.15);
+    // Pull in instantly when something is in the way; ease back out after,
+    // so the view doesn't jump back and forth along a wall.
+    if (blocked < this.camCur) this.camCur = blocked;
+    else this.camCur += (Math.min(blocked, want) - this.camCur) * (1 - Math.exp(-dt * 5));
+    const pos = this.camTarget.clone().addScaledVector(dir, this.camCur);
     const g = groundHeight(pos.x, pos.z);
     if (pos.y < Math.max(g, WATER_Y) + 0.4) pos.y = Math.max(g, WATER_Y) + 0.4;
     this.camera.position.copy(pos);
     this.camera.lookAt(this.camTarget);
+  }
+
+  private camCur = 7;
+
+  /** Distance along a ray to the nearest solid box (grown by `pad`), up to `max`. */
+  private cameraHit(o: THREE.Vector3, d: THREE.Vector3, max: number, pad: number) {
+    const ex = o.x + d.x * max;
+    const ez = o.z + d.z * max;
+    const boxes = this.col.query(Math.min(o.x, ex) - 1, Math.min(o.z, ez) - 1, Math.max(o.x, ex) + 1, Math.max(o.z, ez) + 1);
+    let best = max;
+    for (const b of boxes) {
+      const lo = [b.minX - pad, b.minY - pad, b.minZ - pad];
+      const hi = [b.maxX + pad, b.maxY + pad, b.maxZ + pad];
+      const org = [o.x, o.y, o.z];
+      // Ignore a box the player's head is already inside (e.g. hugging a wall).
+      if (org.every((v, i) => v > lo[i] && v < hi[i])) continue;
+      const dv = [d.x, d.y, d.z];
+      let t0 = 0;
+      let t1 = best;
+      let ok = true;
+      for (let i = 0; i < 3 && ok; i++) {
+        if (Math.abs(dv[i]) < 1e-6) {
+          if (org[i] < lo[i] || org[i] > hi[i]) ok = false;
+          continue;
+        }
+        let a = (lo[i] - org[i]) / dv[i];
+        let c = (hi[i] - org[i]) / dv[i];
+        if (a > c) [a, c] = [c, a];
+        t0 = Math.max(t0, a);
+        t1 = Math.min(t1, c);
+        if (t0 > t1) ok = false;
+      }
+      if (ok && t0 < best) best = t0;
+    }
+    return best;
   }
 
   private updateFocus() {
@@ -1212,6 +1255,17 @@ export class Game {
       const n = hit.face!.normal;
       cell = { x: c.x + Math.round(n.x), y: c.y + Math.round(n.y), z: c.z + Math.round(n.z) };
     }
+    if (this.eraser) {
+      // The eraser highlights the block it would remove.
+      if (!this.ghostRemove) {
+        this.ghost.visible = false;
+        return;
+      }
+      const [rx, ry, rz] = this.ghostRemove.split(",").map(Number);
+      this.ghost.visible = true;
+      this.ghost.position.copy(this.blockWorld(rx, ry, rz));
+      return;
+    }
     if (cell.x < 0 || cell.z < 0 || cell.y < 0 || cell.x >= PLOT_W || cell.z >= PLOT_D || cell.y >= PLOT_H) {
       this.ghost.visible = false;
       return;
@@ -1226,20 +1280,95 @@ export class Game {
   }
 
   private placeAtGhost() {
+    if (this.eraser) return this.removeAtGhost();
     const c = this.ghostCell;
     if (!c) return;
-    const mesh = this.addBlock({ ...c, c: this.buildColor });
+    const b: Block = { ...c, c: this.buildColor };
+    const mesh = this.addBlock(b);
     if (mesh) {
       mesh.scale.setScalar(0.2);
       this.tween(0.12, (k) => mesh.scale.setScalar(0.2 + 0.8 * k));
+      this.history.push({ kind: "place", b });
       this.hooks.blocksChanged(this.getBlocks());
     }
   }
 
   private removeAtGhost() {
     if (!this.ghostRemove) return;
-    const [x, y, z] = this.ghostRemove.split(",").map(Number);
-    if (this.removeBlock(x, y, z)) this.hooks.blocksChanged(this.getBlocks());
+    const e = this.blocks.get(this.ghostRemove);
+    if (e && this.removeBlock(e.b.x, e.b.y, e.b.z)) {
+      this.history.push({ kind: "remove", b: e.b });
+      this.hooks.blocksChanged(this.getBlocks());
+    }
+  }
+
+  // ---- Fixing builds without starting over ----
+
+  /** Hand-building steps that Undo can take back, newest last. */
+  private history: { kind: "place" | "remove"; b: Block }[] = [];
+  /** Blocks the Builder Bot placed on its last run. */
+  private lastRun: Block[] = [];
+  private eraser = false;
+
+  /** Eraser on: a click removes the block under the cursor. */
+  setEraser(on: boolean) {
+    this.eraser = on;
+    const m = this.ghost.material as THREE.MeshBasicMaterial;
+    if (on) m.color.set(0xff4d4d);
+    else this.setBuildColor(this.buildColor);
+  }
+
+  get canUndo() {
+    return this.history.length > 0;
+  }
+
+  get lastRunCount() {
+    return this.lastRun.filter((b) => this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b).length;
+  }
+
+  /** Takes back the last block you placed or removed by hand. */
+  undoBuild() {
+    const h = this.history.pop();
+    if (!h) return false;
+    if (h.kind === "place") this.removeBlock(h.b.x, h.b.y, h.b.z);
+    else this.addBlock(h.b);
+    this.hooks.blocksChanged(this.getBlocks());
+    return true;
+  }
+
+  /** Removes only the blocks the Builder Bot placed on its last run. */
+  undoLastRun() {
+    let n = 0;
+    for (const b of this.lastRun) {
+      if (this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b && this.removeBlock(b.x, b.y, b.z)) n++;
+    }
+    this.lastRun = [];
+    this.resetBuilder();
+    this.hooks.blocksChanged(this.getBlocks());
+    return n;
+  }
+
+  /** Empties the plot. */
+  clearBlocks() {
+    this.setBlocks([]);
+    this.history = [];
+    this.lastRun = [];
+    this.resetBuilder();
+    this.hooks.blocksChanged([]);
+  }
+
+  /** Puts the Ladder Bot back by the counter with an empty basket. */
+  resetMarket() {
+    if (this.counterItem) this.scene.remove(this.counterItem);
+    this.counterItem = null;
+    for (const c of [...this.ladderLift.children]) if (c.userData.product) this.ladderLift.remove(c);
+    this.ladder.position.x = COUNTER.x;
+    this.ladderLift.position.y = 0.4;
+  }
+
+  /** Parks the Beach Bot back on the boardwalk. */
+  resetBeachBot() {
+    this.parkBeachBot();
   }
 
   private resetBuilder() {
@@ -1250,6 +1379,7 @@ export class Game {
 
   async playHome(steps: HomeStep[]) {
     this.resetBuilder();
+    this.lastRun = [];
     let cx = 0;
     let cz = 0;
     let cy = 0;
@@ -1276,8 +1406,10 @@ export class Game {
         cy = s.y;
         await this.tween(0.16, (k) => (bot.position.y = from + (cy + 1 - from) * ease(k)));
       } else if (s.t === "place") {
-        const mesh = this.addBlock({ x: s.x, y: s.y, z: s.z, c: s.c });
+        const placed: Block = { x: s.x, y: s.y, z: s.z, c: s.c };
+        const mesh = this.addBlock(placed);
         if (mesh) {
+          this.lastRun.push(placed);
           mesh.scale.setScalar(0.1);
           await this.tween(0.08, (k) => mesh.scale.setScalar(0.1 + 0.9 * k));
         }
@@ -1317,6 +1449,7 @@ export class Game {
       else if (s.t === "raise") await raise(s.level);
       else if (s.t === "pick") {
         held = cube(0.45, 0.5, 0.35, mat(PRODUCT_COLORS[s.product] ?? 0xffffff));
+        held.userData.product = true;
         held.position.set(0, 0.3, 0.45);
         this.ladderLift.add(held);
         await this.tween(0.25, (k) => held && (held.position.y = 0.6 - 0.3 * k));

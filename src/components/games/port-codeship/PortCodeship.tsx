@@ -191,6 +191,12 @@ export default function PortCodeship() {
   const [webglError, setWebglError] = useState(false);
   const [carry, setCarryState] = useState<string | null>(null);
   const [looking, setLooking] = useState(false);
+  const [sprint, setSprintState] = useState(false);
+  const toggleSprint = () =>
+    setSprintState((on) => {
+      if (gameRef.current) gameRef.current.sprintLock = !on;
+      return !on;
+    });
   const [goalHidden, setGoalHidden] = useState(false);
 
   const update = useCallback((fn: (s: Save) => Save) => {
@@ -668,7 +674,14 @@ export default function PortCodeship() {
               const s = saveRef.current;
               if (s && s.missions.home.status === "active" && missingWalls(blocks).length === 0 && !busyRef.current) finishMission("home", "hand");
             },
-            buildMode: (on) => setBuilding(on),
+            buildMode: (on) => {
+              setBuilding(on);
+              setConfirming(null);
+              if (!on) {
+                setEraserState(false);
+                g.setEraser(false);
+              }
+            },
             mouseLook: (on) => setLooking(on),
             say: (who, text, tone) => say(who, text, tone),
           },
@@ -837,6 +850,8 @@ export default function PortCodeship() {
         setMapOpen((o) => !o);
       }
       if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
+      if (e.code === "KeyZ" && building) gameRef.current?.undoBuild();
+      if (e.code === "KeyR" && !e.repeat && !panel && !dialog) toggleSprint();
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
         if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
@@ -878,6 +893,7 @@ export default function PortCodeship() {
   }
 
   const closePanel = () => {
+    setConfirming(null);
     setPanel(null);
     setResult(null);
     gameRef.current?.setEnabled(true);
@@ -891,6 +907,39 @@ export default function PortCodeship() {
 
   const editor: Editor = save?.editor ?? "blocks";
   const [blocksVersion, setBlocksVersion] = useState(0);
+  /** Which "are you sure?" step is showing: restarting a challenge or clearing the plot. */
+  const [confirming, setConfirming] = useState<"restart" | "clear" | null>(null);
+  const [eraser, setEraserState] = useState(false);
+
+  const setEraser = (on: boolean) => {
+    setEraserState(on);
+    gameRef.current?.setEraser(on);
+  };
+
+  /** Starts a challenge over: its world goes back to the beginning. Stars already earned are kept. */
+  const restartChallenge = (id: MissionId) => {
+    const g = gameRef.current;
+    if (!g) return;
+    setConfirming(null);
+    setResult(null);
+    if (id === "home") {
+      g.clearBlocks();
+      update((q) => ({ ...q, blocks: [] }));
+      say("Rosa", "Plot cleared. Let's build it again!", "info");
+    } else if (id === "market") {
+      if (carryRef.current?.kind === "product") setCarry(null);
+      g.resetMarket();
+      update((q) => ({ ...q, marketServed: 0 }));
+      say("Mrs. Ali", "Let's start again: I need cereal, flour and mangoes.", "info");
+    } else {
+      if (carryRef.current?.kind === "litter") setCarry(null);
+      const litter = makeLitter(18, (Date.now() % 100000) + 1, saveRef.current!.nextLitterId);
+      g.resetBeachBot();
+      g.setLitter(litter);
+      update((q) => ({ ...q, litter, nextLitterId: q.nextLitterId + 18, cleanedByHand: 0 }));
+      say("Kofi", "Fresh beach, fresh litter. Ready when you are!", "info");
+    }
+  };
   const setEditor = (e: Editor) => {
     update((q) => ({ ...q, editor: e, lang: e === "blocks" ? q.lang : e }));
     if (e === "py") ensureWorker().postMessage({ type: "warm" });
@@ -998,6 +1047,7 @@ export default function PortCodeship() {
               <canvas ref={miniRef} width={150} height={150} className="block h-[110px] w-[110px] sm:h-[150px] sm:w-[150px]" />
             </button>
             <div className="flex gap-2">
+              <HudButton onClick={toggleSprint} pressed={sprint}>{sprint ? "Sprint: on" : "Sprint: off"} (R)</HudButton>
               <HudButton onClick={() => setMapOpen(true)}>Map (M)</HudButton>
               <HudButton onClick={() => { setPaused(true); gameRef.current?.setEnabled(false); }}>Menu</HudButton>
             </div>
@@ -1048,7 +1098,21 @@ export default function PortCodeship() {
                   style={{ background: BLOCK_SWATCH[c] }}
                 />
               ))}
-              <span className="text-xs text-white/70">Click: place · Right-click / Shift-click: remove · Drag: look · {save?.blocks.length ?? 0} blocks</span>
+              <button onClick={() => setEraser(!eraser)} aria-pressed={eraser} className={`rounded-lg px-3 py-1.5 text-sm font-bold ${eraser ? "bg-rose-500" : "bg-white/10 hover:bg-white/20"}`}>
+                {eraser ? "Eraser on" : "Eraser"}
+              </button>
+              <button onClick={() => gameRef.current?.undoBuild()} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Undo (Z)</button>
+              {confirming === "clear" ? (
+                <>
+                  <button onClick={() => { gameRef.current?.clearBlocks(); update((q) => ({ ...q, blocks: [] })); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 text-sm font-bold">Yes, clear all</button>
+                  <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold">Cancel</button>
+                </>
+              ) : (
+                <button onClick={() => setConfirming("clear")} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Clear all</button>
+              )}
+              <span className="w-full text-center text-xs text-white/70">
+                {eraser ? "Click a block to remove it" : "Click: place · Right-click / Shift-click: remove"} · Drag: look · {save?.blocks.length ?? 0} blocks
+              </span>
               <button onClick={() => gameRef.current?.toggleBuild(false)} className="rounded-lg bg-amber px-3 py-1.5 text-sm font-bold text-navy">Done (B)</button>
             </div>
           )}
@@ -1073,6 +1137,8 @@ export default function PortCodeship() {
               onButton={(b, d) => gameRef.current?.setTouchButton(b, d)}
               onAct={() => gameRef.current?.pressInteract()}
               onBuild={() => gameRef.current?.toggleBuild()}
+              sprint={sprint}
+              onSprint={toggleSprint}
             />
           )}
 
@@ -1135,10 +1201,43 @@ export default function PortCodeship() {
                       </button>
                     ))}
                   </div>
-                  <button onClick={resetCode} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset</button>
+                  <button onClick={resetCode} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset code</button>
                   <button onClick={() => setShowHint((h) => !h)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">{showHint ? "Hide hint" : "Hint"}</button>
                 </div>
                 {showHint && <p className="mb-3 rounded-lg bg-amber/15 p-3 text-sm text-amber">{mission.hint}</p>}
+                <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-white/5 p-2 text-sm">
+                  {mission.id === "home" && (
+                    <>
+                      <button
+                        onClick={() => {
+                          const n = gameRef.current?.undoLastRun() ?? 0;
+                          say("Rosa", n ? `Took away the ${n} blocks from the bot's last run.` : "The bot's last run has nothing left to take away.", "info");
+                        }}
+                        className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20"
+                      >
+                        Undo last run
+                      </button>
+                      {confirming === "clear" ? (
+                        <>
+                          <span className="font-semibold">Remove every block on your plot?</span>
+                          <button onClick={() => { gameRef.current?.clearBlocks(); update((q) => ({ ...q, blocks: [] })); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 font-bold">Yes, clear</button>
+                          <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">Cancel</button>
+                        </>
+                      ) : (
+                        <button onClick={() => setConfirming("clear")} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20">Clear all blocks</button>
+                      )}
+                    </>
+                  )}
+                  {confirming === "restart" ? (
+                    <>
+                      <span className="font-semibold">Start this challenge over? Your code and stars stay.</span>
+                      <button onClick={() => restartChallenge(mission.id)} className="rounded-lg bg-rose-500 px-3 py-1.5 font-bold">Yes, restart</button>
+                      <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">Cancel</button>
+                    </>
+                  ) : (
+                    <button onClick={() => setConfirming("restart")} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20">Restart challenge</button>
+                  )}
+                </div>
                 {editor === "blocks" ? (
                   <>
                     <div className="h-[min(460px,55vh)] overflow-hidden rounded-2xl ring-1 ring-white/10">
@@ -1251,9 +1350,13 @@ export default function PortCodeship() {
 // ---------------------------------------------------------------------------
 // Small pieces
 
-function HudButton({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+function HudButton({ children, onClick, pressed }: { children: React.ReactNode; onClick: () => void; pressed?: boolean }) {
   return (
-    <button onClick={onClick} className="rounded-full bg-[#0d1b2a]/85 px-3 py-1.5 text-xs font-bold shadow ring-1 ring-white/15 hover:bg-[#0d1b2a]">
+    <button
+      onClick={onClick}
+      aria-pressed={pressed}
+      className={`rounded-full px-3 py-1.5 text-xs font-bold shadow ring-1 ring-white/15 ${pressed ? "bg-amber text-navy" : "bg-[#0d1b2a]/85 hover:bg-[#0d1b2a]"}`}
+    >
       {children}
     </button>
   );
@@ -1293,7 +1396,7 @@ function Controls() {
     ["Click the world", "Look around with the mouse (Esc frees it)"],
     ["Drag / trackpad swipe", "Turn the view (scroll to zoom)"],
     ["Space", "Jump (off a wall, too)"],
-    ["Shift", "Sprint"],
+    ["Shift (hold) / R", "Sprint (R or the Sprint button turns it on and off)"],
     ["Walk into a wall", "Climb it (W up, S down)"],
     ["E", "Talk, use, pick up"],
     ["G", "Put down what you're carrying"],
@@ -1315,7 +1418,21 @@ function Controls() {
   );
 }
 
-function TouchControls({ onMove, onButton, onAct, onBuild }: { onMove: (x: number, y: number) => void; onButton: (b: "jump" | "sprint", d: boolean) => void; onAct: () => void; onBuild: () => void }) {
+function TouchControls({
+  onMove,
+  onButton,
+  onAct,
+  onBuild,
+  sprint,
+  onSprint,
+}: {
+  onMove: (x: number, y: number) => void;
+  onButton: (b: "jump" | "sprint", d: boolean) => void;
+  onAct: () => void;
+  onBuild: () => void;
+  sprint: boolean;
+  onSprint: () => void;
+}) {
   const base = useRef<HTMLDivElement>(null);
   const [knob, setKnob] = useState({ x: 0, y: 0 });
   const move = (e: React.PointerEvent) => {
@@ -1349,6 +1466,9 @@ function TouchControls({ onMove, onButton, onAct, onBuild }: { onMove: (x: numbe
         <div className="absolute h-14 w-14 rounded-full bg-white/70" style={{ left: `calc(50% - 28px + ${knob.x * 40}px)`, top: `calc(50% - 28px + ${knob.y * 40}px)` }} />
       </div>
       <div className="absolute bottom-6 right-6 grid grid-cols-2 gap-3">
+        <button className={`col-span-2 h-12 touch-none rounded-full font-bold ring-2 ring-white/40 ${sprint ? "bg-amber text-navy" : "bg-white/20"}`} onPointerDown={onSprint} aria-pressed={sprint}>
+          {sprint ? "Sprint on" : "Sprint"}
+        </button>
         <button className="h-16 w-16 touch-none rounded-full bg-white/20 font-bold ring-2 ring-white/40" onPointerDown={onBuild}>B</button>
         <button className="h-16 w-16 touch-none rounded-full bg-amber/90 font-bold text-navy" onPointerDown={onAct}>E</button>
         <button className="col-span-2 h-14 touch-none rounded-full bg-white/25 font-bold ring-2 ring-white/40" onPointerDown={() => onButton("jump", true)} onPointerUp={() => onButton("jump", false)} onPointerLeave={() => onButton("jump", false)}>
