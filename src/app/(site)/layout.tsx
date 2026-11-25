@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SkipLink from "@/components/SkipLink";
 import ExitIntentPopup from "@/components/trial/ExitIntentPopup";
+import CampEntryPopup from "@/components/camps/CampEntryPopup";
 import { organizationSchema } from "@/lib/schema";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <Navigation />
       <main id="main" tabIndex={-1} className="pt-[76px] lg:pt-24 focus:outline-none">{children}</main>
       <Footer />
+      <CampEntryPopup />
       <ExitIntentPopup />
     </>
   );

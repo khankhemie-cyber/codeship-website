@@ -10,7 +10,7 @@ import Semesters from "@/components/home/Semesters";
 import ToolPreviews from "@/components/home/ToolPreviews";
 import FreeTrial from "@/components/trial/FreeTrial";
 import { Section, SectionHeader, BookingBand } from "@/components/ui/Page";
-import SplitButton from "@/components/ui/SplitButton";
+import { CampPriceText, CampSignupButton, EarlyBirdNote } from "@/components/camps/CampPrice";
 import { IMAGES } from "@/config/images";
 import { MARCH_BREAK_CAMP as CAMP } from "@/config/camps";
 import { websiteSchema, faqSchema } from "@/lib/schema";
@@ -48,7 +48,7 @@ const homeFaqs = [
   {
     question: "Do you run a March Break camp?",
     answer:
-      "Yes. March Break camp runs Monday to Friday, March 15 to 19, 2027, 9:00 AM to 4:00 PM at Core21 in Oshawa. It is for ages 6 to 14 and costs CAD $450 for the week. Sign-up is open now.",
+      "Yes. March Break camp runs Monday to Friday, March 15 to 19, 2027, 9:00 AM to 4:00 PM at Core21 in Oshawa. It is for ages 6 to 14 and costs CAD $240 per day, or CAD $220 per day with early bird pricing until December 31, 2026. Book the full week or only the days you need.",
   },
   {
     question: "Does my child need coding experience?",
@@ -131,19 +131,20 @@ export default function HomePage() {
             </p>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-4 leading-tight">March Break camp</h2>
             <p className="text-lg sm:text-xl text-white mt-4">
-              Five days of coding, AI and robotics. Kids build something new every day and show it off on Friday.
+              Coding, AI and robotics. Book the full week or just the days you need. Kids build something new every day and show it off on Friday.
             </p>
+            <EarlyBirdNote className="mt-4 inline-block rounded-full bg-[#F4D734] px-4 py-2 text-base font-bold text-[#001532]" />
             <ul className="mt-6 flex flex-wrap gap-2">
-              {[`${CAMP.days}, ${CAMP.dates}`, CAMP.hours, CAMP.ages, `${CAMP.priceLabel} for the week`].map((t) => (
-                <li key={t} className="rounded-full bg-[#001532]/35 px-4 py-2 text-base font-semibold">
+              {[`${CAMP.days}, ${CAMP.dates}`, CAMP.hours, CAMP.ages, <CampPriceText key="price" />].map((t, i) => (
+                <li key={i} className="rounded-full bg-[#001532]/35 px-4 py-2 text-base font-semibold">
                   {t}
                 </li>
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-4">
-              <SplitButton href={CAMP.url} external tone="light">
+              <CampSignupButton source="home_camp_band" tone="light">
                 Sign up for camp
-              </SplitButton>
+              </CampSignupButton>
               <Link
                 href="/programs/camps#march-break"
                 className="inline-flex items-center rounded-full border-2 border-white px-7 py-[14px] text-lg font-bold text-white hover:bg-white hover:text-[#0F6F7C] transition-colors"
