@@ -143,7 +143,7 @@ export class Game {
   private focus: Focus = null;
   private interactables: { id: string; x: number; y: number; z: number; r: number }[] = [];
   private npcs = new Map<NpcId, { av: Avatar; alert: THREE.Mesh }>();
-  private wanderers: { av: Avatar; path: { x: number; z: number }[]; i: number; t: number }[] = [];
+  private wanderers: { av: Avatar; path: { x: number; z: number }[]; i: number; t: number; box?: Box }[] = [];
   private bits: { id: number; mesh: THREE.Mesh; x: number; y: number; z: number }[] = [];
   private collected = new Set<number>();
   private lit = new Set<string>();
@@ -329,22 +329,43 @@ export class Game {
         this.col.add(box(ax, b.h + 0.3, az, ax + 1.4, b.h + 1.2, az + 1.2, true));
       }
     }
-    // Plaza fountain
-    const basin = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.4, 0.8, 24), mat(0xc8bba0));
-    basin.position.set(PLAZA.x, 0.4, PLAZA.z);
-    basin.castShadow = basin.receiveShadow = true;
-    this.scene.add(basin);
-    const pool = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.1, 24), mat(0x4fb8d8, { rough: 0.1 }));
-    pool.position.set(PLAZA.x, 0.78, PLAZA.z);
-    this.scene.add(pool);
-    this.scene.add(cube(0.8, 2.4, 0.8, mat(0xc8bba0), PLAZA.x, 1.2, PLAZA.z));
-    this.solid(box(-2.6, 0, -2.6, 2.6, 0.8, 2.6, false));
+    // Plaza fountain: a hollow basin you can hop into and wade through.
+    const stone = mat(0xc8bba0);
+    const outer = new THREE.Mesh(new THREE.CylinderGeometry(3.4, 3.4, 0.8, 32, 1, true), stone);
+    outer.position.set(PLAZA.x, 0.4, PLAZA.z);
+    const inner = new THREE.Mesh(new THREE.CylinderGeometry(2.85, 2.85, 0.8, 32, 1, true), new THREE.MeshStandardMaterial({ color: 0xb5a88c, side: THREE.BackSide }));
+    inner.position.copy(outer.position);
+    const rim = new THREE.Mesh(new THREE.RingGeometry(2.85, 3.4, 32), stone);
+    rim.rotation.x = -Math.PI / 2;
+    rim.position.set(PLAZA.x, 0.8, PLAZA.z);
+    const floorDisc = new THREE.Mesh(new THREE.CircleGeometry(2.85, 32), mat(0x6fa9b8));
+    floorDisc.rotation.x = -Math.PI / 2;
+    floorDisc.position.set(PLAZA.x, 0.25, PLAZA.z);
+    const water = new THREE.Mesh(new THREE.CircleGeometry(2.85, 32), new THREE.MeshStandardMaterial({ color: 0x4fb8d8, transparent: true, opacity: 0.55, roughness: 0.1, depthWrite: false }));
+    water.rotation.x = -Math.PI / 2;
+    water.position.set(PLAZA.x, 0.62, PLAZA.z);
+    for (const m of [outer, inner, rim, floorDisc]) {
+      m.castShadow = m === outer;
+      m.receiveShadow = true;
+    }
+    this.scene.add(outer, inner, rim, floorDisc, water);
+    this.scene.add(cube(0.8, 2.4, 0.8, stone, PLAZA.x, 1.2, PLAZA.z));
+    // The rim is a ring of small boxes; the pool floor sits a little above the plaza.
+    for (let i = 0; i < 20; i++) {
+      const a = (i / 20) * Math.PI * 2;
+      const cx = PLAZA.x + Math.cos(a) * 3.12;
+      const cz = PLAZA.z + Math.sin(a) * 3.12;
+      this.col.add(box(cx - 0.42, 0, cz - 0.42, cx + 0.42, 0.8, cz + 0.42, false));
+    }
+    this.col.add(box(PLAZA.x - 2.4, 0, PLAZA.z - 2.4, PLAZA.x + 2.4, 0.25, PLAZA.z + 2.4, false));
     this.solid(box(-0.4, 0, -0.4, 0.4, 2.4, 0.4, true));
-    // Welcome sign
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.6), new THREE.MeshStandardMaterial({ map: textTexture(["Welcome to", "PORT CODESHIP"], { h: 200, font: 52 }) }));
-    sign.position.set(0, 3.2, -14.6);
+    // Welcome sign: a solid board on two posts (you can climb it, not walk through it).
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 1.6), new THREE.MeshStandardMaterial({ map: textTexture(["Welcome to", "PORT CODESHIP"], { h: 200, font: 52 }) }));
+    sign.position.set(0, 1.9, -14.44);
     this.scene.add(sign);
-    this.scene.add(cube(0.2, 2.6, 0.2, mat(0x5b4636), -2.2, 1.3, -14.7), cube(0.2, 2.6, 0.2, mat(0x5b4636), 2.2, 1.3, -14.7));
+    this.scene.add(cube(4.6, 1.8, 0.25, mat(0x0d1b2a), 0, 1.9, -14.6));
+    this.scene.add(cube(0.2, 2.8, 0.2, mat(0x5b4636), -2.4, 1.4, -14.6), cube(0.2, 2.8, 0.2, mat(0x5b4636), 2.4, 1.4, -14.6));
+    this.col.add(box(-2.5, 0, -14.75, 2.5, 2.8, -14.45, true));
     // Trees and palms
     for (const t of trees()) {
       const g = t.s < 0 ? makePalm() : makeTree(t.s);
@@ -359,11 +380,16 @@ export class Game {
       if (Math.abs(x) < 18) continue;
       for (const z of [-5.2, 5.2]) {
         this.scene.add(cube(0.16, 4, 0.16, mat(0x2c3e50), x, 2, z));
+        this.col.add(box(x - 0.15, 0, z - 0.15, x + 0.15, 4, z + 0.15, false));
         this.scene.add(cube(0.5, 0.25, 0.5, mat(0xfff3c4, { emissive: 0x6d5a1e }), x, 4.1, z));
       }
     }
     // Park benches
-    for (let i = 0; i < 4; i++) this.scene.add(cube(1.8, 0.45, 0.6, mat(0x8a5a36), PARK.x0 + 6 + i * 9, 0.45, PARK.z1 - 2));
+    for (let i = 0; i < 4; i++) {
+      const bx = PARK.x0 + 6 + i * 9;
+      this.scene.add(cube(1.8, 0.45, 0.6, mat(0x8a5a36), bx, 0.45, PARK.z1 - 2));
+      this.col.add(box(bx - 0.9, 0, PARK.z1 - 2.3, bx + 0.9, 0.68, PARK.z1 - 1.7, false));
+    }
     // Collectible bits
     const bitGeo = new THREE.OctahedronGeometry(0.35);
     const bitMat = mat(0x39d0f0, { emissive: 0x1a8fb0, rough: 0.2 });
@@ -395,6 +421,7 @@ export class Game {
     this.scene.add(grid);
     const term = makeTerminal();
     term.position.set(PLOT_TERMINAL.x, 0, PLOT_TERMINAL.z);
+    this.col.add(box(PLOT_TERMINAL.x - 0.45, 0, PLOT_TERMINAL.z - 0.45, PLOT_TERMINAL.x + 0.45, 1.6, PLOT_TERMINAL.z + 0.45, false));
     term.rotation.y = -Math.PI / 2;
     this.scene.add(term);
     this.interactables.push({ id: "term:home", x: PLOT_TERMINAL.x, y: 0, z: PLOT_TERMINAL.z, r: 2.2 });
@@ -403,6 +430,7 @@ export class Game {
     sign.rotation.y = Math.PI;
     this.scene.add(sign);
     this.scene.add(cube(0.15, 2.2, 0.15, post, PLOT.x + PLOT.w / 2, 1.1, PLOT.z - 1.25));
+    this.col.add(box(PLOT.x + PLOT.w / 2 - 0.12, 0, PLOT.z - 1.37, PLOT.x + PLOT.w / 2 + 0.12, 3.1, PLOT.z - 1.13, false));
   }
 
   private buildMarket() {
@@ -410,18 +438,26 @@ export class Game {
     const wall = mat(0xe9dcc4);
     const H = 7.5;
     // Back and side walls, open front with pillars.
-    this.scene.add(cube(x1 - x0, H, 0.5, wall, (x0 + x1) / 2, H / 2, z1, false));
+    this.scene.add(cube(x1 - x0, H, 0.5, wall, (x0 + x1) / 2, H / 2, z1));
     this.solid(box(x0, 0, z1 - 0.25, x1, H, z1 + 0.25));
     for (const x of [x0, x1]) {
-      this.scene.add(cube(0.5, H, z1 - z0, wall, x, H / 2, (z0 + z1) / 2, false));
+      this.scene.add(cube(0.5, H, z1 - z0, wall, x, H / 2, (z0 + z1) / 2));
       this.solid(box(x - 0.25, 0, z0, x + 0.25, H, z1));
     }
     for (const x of [x0 + 0.4, -49 - 6, -49 + 6, x1 - 0.4]) {
       this.scene.add(cube(0.6, H, 0.6, mat(0xc0392b), x, H / 2, z0));
       this.solid(box(x - 0.3, 0, z0 - 0.3, x + 0.3, H, z0 + 0.3));
     }
-    // The roof and walls don't cast shadows, so the shop floor stays bright.
-    const roof = cube(x1 - x0 + 1.2, 0.5, z1 - z0 + 1.2, mat(0x7a5c4d), (x0 + x1) / 2, H + 0.25, (z0 + z1) / 2, false);
+    // Walls and roof block the sun like real ones; ceiling lamps light the shop floor.
+    const roof = cube(x1 - x0 + 1.2, 0.5, z1 - z0 + 1.2, mat(0x7a5c4d), (x0 + x1) / 2, H + 0.25, (z0 + z1) / 2);
+    // Only two real lights (each light costs every pixel on screen); the rest are glowing panels.
+    for (const lx of [x0 + 7, (x0 + x1) / 2, x1 - 7])
+      for (const lz of [z0 + 6, z1 - 7]) this.scene.add(cube(1.2, 0.15, 1.2, mat(0xfff7e0, { emissive: 0xfff1c0 }), lx, H - 0.1, lz, false));
+    for (const lx of [x0 + 9, x1 - 9]) {
+      const lamp = new THREE.PointLight(0xfff1d6, 60, 30, 1.2);
+      lamp.position.set(lx, H - 0.8, (z0 + z1) / 2);
+      this.scene.add(lamp);
+    }
     this.scene.add(roof);
     this.solid(box(x0 - 0.6, H, z0 - 0.6, x1 + 0.6, H + 0.5, z1 + 0.6), roof);
     // Awning stripes and sign
@@ -467,8 +503,13 @@ export class Game {
     // Counter
     this.scene.add(cube(3, 1.1, 1, mat(0x8e6e4e), COUNTER.x, 0.55, COUNTER.z));
     this.solid(box(COUNTER.x - 1.5, 0, COUNTER.z - 0.5, COUNTER.x + 1.5, 1.1, COUNTER.z + 0.5, false));
+    // Cash register: where you buy things with your coins.
+    this.scene.add(cube(0.6, 0.35, 0.45, mat(0x2c3e50), COUNTER.x + 1.05, 1.28, COUNTER.z));
+    this.scene.add(cube(0.45, 0.22, 0.05, mat(0x39d0a8, { emissive: 0x1f8f74 }), COUNTER.x + 1.05, 1.5, COUNTER.z - 0.2, false));
+    this.interactables.push({ id: "shop:market", x: COUNTER.x + 1.05, y: 0, z: COUNTER.z - 1.4, r: 1.6 });
     const term = makeTerminal();
     term.position.set(MARKET_TERMINAL.x, 0, MARKET_TERMINAL.z);
+    this.col.add(box(MARKET_TERMINAL.x - 0.45, 0, MARKET_TERMINAL.z - 0.45, MARKET_TERMINAL.x + 0.45, 1.6, MARKET_TERMINAL.z + 0.45, false));
     term.rotation.y = Math.PI;
     this.scene.add(term);
     this.interactables.push({ id: "term:market", x: MARKET_TERMINAL.x, y: 0, z: MARKET_TERMINAL.z, r: 2.2 });
@@ -508,6 +549,7 @@ export class Game {
     this.scene.add(cube(2.8, 0.15, 2.8, mat(0xe74c3c), lx, 4.9, lz));
     const term = makeTerminal();
     term.position.set(BEACH_TERMINAL.x, 0.3, BEACH_TERMINAL.z);
+    this.col.add(box(BEACH_TERMINAL.x - 0.45, 0.3, BEACH_TERMINAL.z - 0.45, BEACH_TERMINAL.x + 0.45, 1.9, BEACH_TERMINAL.z + 0.45, false));
     this.scene.add(term);
     this.interactables.push({ id: "term:beach", x: BEACH_TERMINAL.x, y: 0, z: BEACH_TERMINAL.z, r: 2.2 });
     // Umbrellas
@@ -574,7 +616,7 @@ export class Game {
       av.root.add(alert);
       this.npcs.set(id, { av, alert });
       this.interactables.push({ id: `npc:${id}`, x: n.x, y: 0, z: n.z, r: 3 });
-      this.col.add(box(n.x - 0.3, 0, n.z - 0.3, n.x + 0.3, 1.8, n.z + 0.3, false));
+      this.col.add(box(n.x - 0.38, 0, n.z - 0.38, n.x + 0.38, 1.85, n.z + 0.38, false));
     }
     const looks = [
       { shirt: 0x8e44ad, skin: 0xf1c27d, hair: 0x3b2314 },
@@ -877,14 +919,26 @@ export class Game {
       const a = w.path[w.i];
       const b = w.path[(w.i + 1) % w.path.length];
       const len = Math.hypot(b.x - a.x, b.z - a.z);
-      w.t += (dt * 1.6) / len;
+      // Stop and wait if the player is standing just ahead.
+      const wx = w.av.root.position.x;
+      const wz = w.av.root.position.z;
+      const fx = (b.x - a.x) / len;
+      const fz = (b.z - a.z) / len;
+      const ahead = (p.x - wx) * fx + (p.z - wz) * fz;
+      const sideways = Math.abs((p.x - wx) * fz - (p.z - wz) * fx);
+      const blocked = ahead > 0 && ahead < 1.6 && sideways < 0.9 && Math.abs(p.y) < 1;
+      if (!blocked) w.t += (dt * 1.6) / len;
       if (w.t >= 1) {
         w.t = 0;
         w.i = (w.i + 1) % w.path.length;
       }
       w.av.root.position.set(a.x + (b.x - a.x) * w.t, 0, a.z + (b.z - a.z) * w.t);
       w.av.root.rotation.y = Math.atan2(b.x - a.x, b.z - a.z);
-      animateAvatar(w.av, dt, 1.6, "walk");
+      animateAvatar(w.av, dt, blocked ? 0 : 1.6, blocked ? "idle" : "walk");
+      // A solid box that moves with them, so you can't walk through people.
+      const q = w.av.root.position;
+      if (w.box) this.col.remove(w.box);
+      w.box = this.col.add(box(q.x - 0.35, 0, q.z - 0.35, q.x + 0.35, 1.85, q.z + 0.35, false));
     }
 
     // Bits
@@ -921,6 +975,7 @@ export class Game {
 
   private updateCamera(dt: number) {
     if (this.cinematic) {
+      this.avatar.root.visible = true;
       if (!this.cinematic(dt)) this.cinematic = null;
       return;
     }
@@ -941,6 +996,8 @@ export class Game {
     if (blocked < this.camCur) this.camCur = blocked;
     else this.camCur += (Math.min(blocked, want) - this.camCur) * (1 - Math.exp(-dt * 5));
     const pos = this.camTarget.clone().addScaledVector(dir, this.camCur);
+    // Squeezed right up behind the player (against a wall): hide them so they don't fill the screen.
+    this.avatar.root.visible = this.camCur > 1.25;
     const g = groundHeight(pos.x, pos.z);
     if (pos.y < Math.max(g, WATER_Y) + 0.4) pos.y = Math.max(g, WATER_Y) + 0.4;
     this.camera.position.copy(pos);
@@ -1038,17 +1095,22 @@ export class Game {
     this.avatar = makeAvatar({ ...look, pants: 0x34495e });
     this.avatar.root.position.copy(pos);
     this.scene.add(this.avatar.root);
-    if (this.carry) this.avatar.hand.add(this.carry);
+    if (this.carry) {
+      this.avatar.hand.add(this.carry);
+      this.avatar.carrying = true;
+    }
   }
 
   setCarry(item: { kind: "litter" | "product"; name: string } | null) {
     if (this.carry) this.carry.parent?.remove(this.carry);
     this.carry = null;
+    this.avatar.carrying = false;
     if (!item) return;
     const obj = item.kind === "litter" ? makeLitter(item.name) : cube(0.5, 0.55, 0.4, mat(PRODUCT_COLORS[item.name] ?? 0xffffff));
-    obj.position.set(0, 0, 0.05);
+    obj.position.set(0, 0, 0);
     this.carry = obj;
     this.avatar.hand.add(obj);
+    this.avatar.carrying = true;
   }
 
   load(save: Partial<EngineSave>) {

@@ -48,6 +48,7 @@ type Editor = "blocks" | Lang;
 import type { EngineSave, Focus, Game, Look } from "./engine/Game";
 import type { BeachBotStyle } from "./engine/models";
 import SignupGate from "./SignupGate";
+import ShopPanel, { FOOD_PRICES } from "./ShopPanel";
 import { BEACH_TERMINAL, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type NpcId } from "./engine/layout";
 
 // ---------------------------------------------------------------------------
@@ -73,6 +74,14 @@ type Save = {
   beachBot: BeachBotStyle;
   beachCode: { lang: Lang; code: string } | null;
   lowGraphics: boolean;
+  /** Coins earned by finishing challenges, finding bits, cleaning up… */
+  coins?: number;
+  /** One-time rewards already paid out (so replaying can't farm them). */
+  earned?: string[];
+  /** Food bought at the Fresh Market, by product. */
+  pantry?: Record<string, number>;
+  /** Block colours bought for hand-building (brick, wood and stone are free). */
+  colors?: BlockColor[];
   /** Seconds of active play, for the sign-up prompt. */
   playSeconds?: number;
   /** Set once a class password (from an enrolled course) was entered on this device. */
@@ -83,6 +92,17 @@ type Save = {
 const FREE_PLAY_SECONDS = 15 * 60;
 
 const KEY = "codeship-port-v1";
+
+/** Hand-building colours: free ones, and what the others cost to unlock. */
+const FREE_COLORS: BlockColor[] = ["brick", "wood", "stone"];
+const COLOR_PRICES: Partial<Record<BlockColor, number>> = { white: 30, teal: 40, yellow: 40, glass: 60 };
+
+/** Every challenge in Port CODEship, in order, for the tracker. */
+const CHALLENGES: { id: MissionId; where: string; how: string; unlock: string }[] = [
+  { id: "home", where: "Your plot, east of the Town Square.", how: "Build 6 × 5 walls, 3 blocks high: by hand (B) or code the Builder Bot.", unlock: "Talk to Captain Ada in the Town Square to start." },
+  { id: "market", where: "Fresh Market, west on Main Street.", how: "Bring Mrs. Ali cereal, flour and mangoes, or code the Ladder Bot.", unlock: "Unlocks when your house is built." },
+  { id: "beach", where: "The beach, south down Harbour Road.", how: "Sort every piece of litter into the right bin, or design and code a Beach Bot.", unlock: "Unlocks after the Fresh Market." },
+];
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
 
 function freshSave(name: string, look: Look): Save {
@@ -191,6 +211,8 @@ export default function PortCodeship() {
   const [webglError, setWebglError] = useState(false);
   const [carry, setCarryState] = useState<string | null>(null);
   const [looking, setLooking] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [trackerOpen, setTrackerOpen] = useState(false);
   const [sprint, setSprintState] = useState(false);
   const toggleSprint = () =>
     setSprintState((on) => {
@@ -230,6 +252,7 @@ export default function PortCodeship() {
     const [kind, a, b] = id.split(":");
     const m = s.missions;
     if (id === "build") return s.intro ? "" : null;
+    if (id === "shop:market") return `Shop at the Fresh Market (${s.coins ?? 0} coins)`;
     if (kind === "npc") {
       const n = NPCS[a as NpcId];
       if (a === "ali" && carrying?.kind === "product") return `Give ${carrying.name} to Mrs. Ali`;
@@ -278,6 +301,18 @@ export default function PortCodeship() {
     setDialog(d);
   }, []);
 
+  /** Adds coins. A `key` makes it a one-time reward. */
+  const earn = useCallback(
+    (amount: number, why: string, key?: string) => {
+      const s = saveRef.current;
+      if (!s || amount <= 0) return;
+      if (key && s.earned?.includes(key)) return;
+      update((q) => ({ ...q, coins: (q.coins ?? 0) + amount, earned: key ? [...(q.earned ?? []), key] : q.earned }));
+      say("Coins", `+${amount} for ${why}`, "good");
+    },
+    [say, update]
+  );
+
   const finishMission = useCallback(
     (id: MissionId, method: "hand" | "code" | "mixed") => {
       const s = saveRef.current!;
@@ -293,9 +328,10 @@ export default function PortCodeship() {
         },
       }));
       completeLevel("port", id, stars);
+      if (stars > prev.stars) earn((stars - prev.stars) * 50, `${"★".repeat(stars)} on ${MISSIONS[id].title}`);
       if (prev.status !== "done") say("Port CODEship", `Mission complete: ${MISSIONS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
     },
-    [say, update]
+    [earn, say, update]
   );
 
   const interact = useCallback(
@@ -365,6 +401,7 @@ export default function PortCodeship() {
             setCarry(null);
             const served = s.marketServed + 1;
             update((q) => ({ ...q, marketServed: served }));
+            earn(5, `bringing Mrs. Ali the ${carrying.name}`, `ali:${served}`);
             if (served >= ALI_ORDERS.length) {
               finishMission("market", "hand");
               showDialog({
@@ -429,6 +466,11 @@ export default function PortCodeship() {
         openPanel(a as MissionId);
         return;
       }
+      if (id === "shop:market") {
+        g.setEnabled(false);
+        setShopOpen(true);
+        return;
+      }
       if (kind === "grab") {
         const product = AISLES[Number(a) - 1][Number(b) - 1];
         setCarry({ kind: "product", name: product });
@@ -452,6 +494,7 @@ export default function PortCodeship() {
           return;
         }
         setCarry(null);
+        earn(2, `putting the ${c.name} in ${a}`);
         const cleaned = s.cleanedByHand + 1;
         update((q) => ({ ...q, cleanedByHand: cleaned }));
         const left = saveRef.current!.litter.length;
@@ -477,10 +520,11 @@ export default function PortCodeship() {
           update((q) => ({ ...q, engine: g.getSave() }));
           const lit = g.getSave().lit.length;
           say("Port CODEship", `${LOOKOUTS.find((l) => l.id === a)?.name} lookout lit! (${lit}/${LOOKOUTS.length})`, "good");
+          earn(25, `lighting the ${LOOKOUTS.find((l) => l.id === a)?.name}`, `lookout:${a}`);
         });
       }
     },
-    [closeDialog, finishMission, openPanel, say, setCarry, showDialog, update]
+    [closeDialog, earn, finishMission, openPanel, say, setCarry, showDialog, update]
   );
 
   // -------------------------------------------------------------------------
@@ -633,11 +677,13 @@ export default function PortCodeship() {
         await g.playBeach(out[0].steps as BeachStep[]);
         busyRef.current = false;
         const picked = new Set((out[0].steps as BeachStep[]).filter((st) => st.t === "pick").map((st) => (st as { id: number }).id));
+        // Automation pays: the bot earns while you do other things.
+        if (picked.size) earn(picked.size, `your Beach Bot cleaning ${picked.size} pieces`);
         update((q) => ({ ...q, litter: q.litter.filter((l) => !picked.has(l.id)) }));
       }
     }, 90000);
     return () => window.clearInterval(t);
-  }, [addTide, runInWorker, say, screen, update]);
+  }, [addTide, earn, runInWorker, say, screen, update]);
 
   // -------------------------------------------------------------------------
   // Engine lifecycle
@@ -668,6 +714,8 @@ export default function PortCodeship() {
                 saveRef.current = next;
                 writeSave(next);
               }
+              const id = b[b.length - 1];
+              if (id !== undefined) earn(10, "finding a bit", `bit:${id}`);
             },
             blocksChanged: (blocks) => {
               update((q) => ({ ...q, blocks }));
@@ -709,9 +757,21 @@ export default function PortCodeship() {
   const interactRef = useRef(interact);
   interactRef.current = interact;
 
-  const start = (s: Save) => {
+  const start = (loaded: Save) => {
     const g = gameRef.current;
     if (!g) return;
+    let s = loaded;
+    if (s.coins === undefined) {
+      // Saves from before coins existed: pay out what they already earned.
+      const ms = Object.values(s.missions) as MissionState[];
+      const bitIds = s.engine.bits ?? [];
+      const lit = s.engine.lit ?? [];
+      s = {
+        ...s,
+        coins: ms.reduce((n, m) => n + m.stars * 50, 0) + bitIds.length * 10 + lit.length * 25,
+        earned: [...bitIds.map((b) => `bit:${b}`), ...lit.map((l) => `lookout:${l}`), ...Array.from({ length: s.marketServed }, (_, i) => `ali:${i + 1}`)],
+      };
+    }
     saveRef.current = s;
     setSaveState(s);
     writeSave(s);
@@ -846,6 +906,12 @@ export default function PortCodeship() {
         return;
       }
       if (gateBlocking.current) return;
+      if (e.code === "KeyJ" && !panel && !dialog && !shopOpen) {
+        setTrackerOpen((o) => {
+          gameRef.current?.setEnabled(o);
+          return !o;
+        });
+      }
       if (e.code === "KeyM" && !panel && !dialog) {
         setMapOpen((o) => !o);
       }
@@ -855,6 +921,12 @@ export default function PortCodeship() {
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
         if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
+        if (shopOpen || trackerOpen) {
+          setShopOpen(false);
+          setTrackerOpen(false);
+          gameRef.current?.setEnabled(true);
+          return;
+        }
         if (mapOpen) setMapOpen(false);
         else if (dialog) closeDialog();
         else if (workshop) {
@@ -877,7 +949,7 @@ export default function PortCodeship() {
     return () => window.removeEventListener("keydown", onKey);
     // dropCarry only reads refs and stable setters.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen, panel, dialog, mapOpen, building, workshop, closeDialog]);
+  }, [screen, panel, dialog, mapOpen, building, workshop, closeDialog, shopOpen, trackerOpen]);
 
   /** Put down whatever you're carrying: litter goes back on the sand, products back on the shelf. */
   function dropCarry() {
@@ -1032,14 +1104,30 @@ export default function PortCodeship() {
               </button>
             </div>
             {!goalHidden && <p className="text-sm leading-snug sm:text-base">{objective.text}</p>}
-            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-white/70">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/80">
+              <button onClick={() => { setTrackerOpen(true); gameRef.current?.setEnabled(false); }} className="rounded-md bg-amber px-2 py-0.5 font-bold text-navy">
+                Challenges {missionsDone}/{CHALLENGES.length} (J)
+              </button>
+              <span className="inline-flex items-center gap-1 font-bold text-amber">
+                <span className="inline-block h-3 w-3 rounded-full bg-amber ring-2 ring-amber/40" aria-hidden /> {save?.coins ?? 0} coins
+              </span>
               <span>◆ {bits.length}/{gameRef.current?.totalBits ?? 0} bits</span>
-              {(["home", "market", "beach"] as MissionId[]).map((id) => (
-                <span key={id} className="hidden sm:inline">
-                  {MISSIONS[id].bot}: {save?.missions[id].status === "done" ? "★".repeat(save.missions[id].stars) + "☆".repeat(3 - save.missions[id].stars) : save?.missions[id].status === "active" ? "in progress" : "locked"}
-                </span>
-              ))}
             </div>
+            {save?.missions.market.status === "active" && !goalHidden && (
+              <div className="mt-2 rounded-lg bg-white/10 p-2 text-xs">
+                <div className="font-bold text-amber">Mrs. Ali&apos;s shopping list</div>
+                <ul className="mt-1 grid gap-0.5">
+                  {ALI_ORDERS.map((item, i) => (
+                    <li key={item} className={i < save.marketServed ? "text-emerald-300 line-through" : ""}>
+                      {i < save.marketServed ? "✓" : "☐"} {item}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-1 text-white/70">
+                  Read the aisle signs, walk into the shelf and hold W to climb, press E to grab, then bring it to Mrs. Ali and press E. Or program the Ladder Bot at the terminal.
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="absolute right-3 top-3 flex flex-col items-end gap-2">
@@ -1089,15 +1177,28 @@ export default function PortCodeship() {
           {building && (
             <div className="absolute bottom-4 left-1/2 flex max-w-[calc(100vw-24px)] -translate-x-1/2 flex-wrap items-center justify-center gap-2 rounded-2xl bg-[#0d1b2a]/90 p-3 shadow-xl ring-1 ring-white/15">
               <span className="text-sm font-bold">Build mode</span>
-              {BLOCK_COLORS.map((c) => (
-                <button
-                  key={c}
-                  aria-label={`${c} blocks`}
-                  onClick={() => { setBuildColorState(c); gameRef.current?.setBuildColor(c); }}
-                  className={`h-8 w-8 rounded-md ring-2 ${buildColor === c ? "ring-amber" : "ring-white/20"}`}
-                  style={{ background: BLOCK_SWATCH[c] }}
-                />
-              ))}
+              {BLOCK_COLORS.map((c) => {
+                const owned = FREE_COLORS.includes(c) || (save?.colors ?? []).includes(c);
+                return (
+                  <button
+                    key={c}
+                    aria-label={owned ? `${c} blocks` : `${c} blocks, locked: buy at the Fresh Market for ${COLOR_PRICES[c]} coins`}
+                    title={owned ? c : `Buy ${c} blocks at the Fresh Market (${COLOR_PRICES[c]} coins)`}
+                    onClick={() => {
+                      if (!owned) {
+                        say("Rosa", `${c[0].toUpperCase() + c.slice(1)} blocks cost ${COLOR_PRICES[c]} coins. Buy them at the Fresh Market's register.`, "info");
+                        return;
+                      }
+                      setBuildColorState(c);
+                      gameRef.current?.setBuildColor(c);
+                    }}
+                    className={`relative h-8 w-8 rounded-md ring-2 ${buildColor === c ? "ring-amber" : "ring-white/20"} ${owned ? "" : "opacity-40"}`}
+                    style={{ background: BLOCK_SWATCH[c] }}
+                  >
+                    {!owned && <span className="absolute inset-0 grid place-items-center text-[10px] font-black text-navy">🔒</span>}
+                  </button>
+                );
+              })}
               <button onClick={() => setEraser(!eraser)} aria-pressed={eraser} className={`rounded-lg px-3 py-1.5 text-sm font-bold ${eraser ? "bg-rose-500" : "bg-white/10 hover:bg-white/20"}`}>
                 {eraser ? "Eraser on" : "Eraser"}
               </button>
@@ -1287,6 +1388,71 @@ export default function PortCodeship() {
                     </li>
                   ))}
                 </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Fresh Market register */}
+          {shopOpen && save && (
+            <ShopPanel
+              coins={save.coins ?? 0}
+              pantry={save.pantry ?? {}}
+              owned={[...FREE_COLORS, ...(save.colors ?? [])]}
+              onBuyFood={(item) => {
+                const price = FOOD_PRICES[item];
+                if ((saveRef.current?.coins ?? 0) < price) return say("Cashier", `You need ${price} coins for ${item}. Finish challenges and find bits to earn more.`, "bad");
+                update((q) => ({ ...q, coins: (q.coins ?? 0) - price, pantry: { ...(q.pantry ?? {}), [item]: ((q.pantry ?? {})[item] ?? 0) + 1 } }));
+                say("Cashier", `Bought ${item} for ${price} coins. It's in your fridge at home.`, "good");
+              }}
+              onBuyColor={(c) => {
+                const price = COLOR_PRICES[c] ?? 0;
+                if ((saveRef.current?.coins ?? 0) < price) return say("Cashier", `You need ${price} coins for ${c} blocks.`, "bad");
+                update((q) => ({ ...q, coins: (q.coins ?? 0) - price, colors: [...(q.colors ?? []), c] }));
+                say("Cashier", `${c[0].toUpperCase() + c.slice(1)} blocks unlocked! Use them in build mode (B).`, "good");
+              }}
+              onClose={() => {
+                setShopOpen(false);
+                gameRef.current?.setEnabled(true);
+              }}
+            />
+          )}
+
+          {/* Challenge tracker */}
+          {trackerOpen && save && (
+            <div className="absolute inset-0 z-40 grid place-items-center bg-black/60 p-4" onClick={() => { setTrackerOpen(false); gameRef.current?.setEnabled(true); }}>
+              <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-[#0d1b2a] p-5 shadow-2xl ring-1 ring-white/15" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-2xl font-extrabold">Challenges</h2>
+                    <p className="text-sm text-white/75">
+                      {missionsDone} of {CHALLENGES.length} done · {(Object.values(save.missions) as MissionState[]).reduce((n, m) => n + m.stars, 0)} of {CHALLENGES.length * 3} stars
+                    </p>
+                  </div>
+                  <button onClick={() => { setTrackerOpen(false); gameRef.current?.setEnabled(true); }} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold">Close (J)</button>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10" aria-hidden>
+                  <div className="h-full bg-amber" style={{ width: `${(missionsDone / CHALLENGES.length) * 100}%` }} />
+                </div>
+                <ol className="mt-4 grid gap-3">
+                  {CHALLENGES.map((c, i) => {
+                    const m = save.missions[c.id];
+                    return (
+                      <li key={c.id} className={`rounded-xl p-3 ring-1 ${m.status === "done" ? "bg-emerald-900/40 ring-emerald-400/30" : m.status === "active" ? "bg-amber/10 ring-amber/40" : "bg-white/5 ring-white/10"}`}>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="font-bold">{i + 1}. {MISSIONS[c.id].title}</div>
+                          <div className="text-sm font-bold">
+                            {m.status === "done" ? <span className="text-amber">{"★".repeat(m.stars)}{"☆".repeat(3 - m.stars)}</span> : m.status === "active" ? <span className="text-amber">To do</span> : <span className="text-white/50">Locked</span>}
+                          </div>
+                        </div>
+                        <p className="mt-1 text-sm text-white/75">{c.where}</p>
+                        <p className="mt-1 text-sm text-white/75">{m.status === "locked" ? c.unlock : c.how}</p>
+                      </li>
+                    );
+                  })}
+                </ol>
+                <p className="mt-4 text-sm text-white/70">
+                  Stars: ★ by hand, ★★ partly coded, ★★★ coded and passes every test. Extras: {gameRef.current?.getSave().lit.length ?? 0}/{LOOKOUTS.length} lookouts lit, {bits.length}/{gameRef.current?.totalBits ?? 0} bits found.
+                </p>
               </div>
             </div>
           )}

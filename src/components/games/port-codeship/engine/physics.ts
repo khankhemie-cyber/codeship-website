@@ -236,6 +236,20 @@ export class Player {
     }
 
     this.y += up * dt;
+    // A roof edge or ledge that sticks out above us: pull up onto it instead
+    // of pushing our hands through it.
+    if (up > 0) {
+      const reach = this.y + 2.3;
+      const over = this.col
+        .query(this.x - R, this.z - R, this.x + R, this.z + R)
+        .find((q) => q !== b && this.x + R > q.minX && this.x - R < q.maxX && this.z + R > q.minZ && this.z - R < q.maxZ && q.minY > this.y + 1 && q.minY < reach);
+      if (over) {
+        const tx = this.x - this.nx * (R * 2 + 0.25);
+        const tz = this.z - this.nz * (R * 2 + 0.25);
+        if (this.headroom(tx, over.maxY + 0.01, tz)) return this.mantle(over);
+        this.y = over.minY - 2.3;
+      }
+    }
     let nx = this.x + right.x * side * dt;
     let nz = this.z + right.z * side * dt;
     // Stay glued to the face we're on.
