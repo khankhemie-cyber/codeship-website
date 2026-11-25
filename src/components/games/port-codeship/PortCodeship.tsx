@@ -94,8 +94,7 @@ type Save = {
   signedUp?: "student";
 };
 
-/** A course sign-up is needed after the first finished challenge or this much play. */
-const FREE_PLAY_SECONDS = 15 * 60;
+
 
 const KEY = "codeship-port-v1";
 
@@ -227,6 +226,8 @@ export default function PortCodeship() {
   /** Which building the player is inside (null outdoors), for the map. */
   const [indoorHere, setIndoorHere] = useState<InteriorId | null>(null);
   const [fade, setFade] = useState(false);
+  /** The "challenges are for students" box. */
+  const [lockOpen, setLockOpen] = useState(false);
   const [sprint, setSprintState] = useState(false);
   const toggleSprint = () =>
     setSprintState((on) => {
@@ -265,7 +266,7 @@ export default function PortCodeship() {
     const carrying = carryRef.current;
     const [kind, a, b] = id.split(":");
     const m = s.missions;
-    if (id === "build") return s.intro ? "" : null;
+    if (id === "build") return s.intro && s.signedUp === "student" ? "" : null;
     if (id === "shop:market") return `Shop at the Fresh Market (${s.coins ?? 0} coins)`;
     if (kind === "door") return `Go into the ${INTERIORS[a as InteriorId].name}`;
     if (kind === "exit") return "Go back outside";
@@ -299,13 +300,24 @@ export default function PortCodeship() {
     return null;
   }, []);
 
+  /** Challenges are for CODEship students. Anyone else gets the sign-up box. */
+  const requireStudent = useCallback(() => {
+    if (saveRef.current?.signedUp === "student") return true;
+    setDialog(null);
+    gameRef.current?.toggleBuild(false);
+    gameRef.current?.setEnabled(false);
+    setLockOpen(true);
+    return false;
+  }, []);
+
   const openPanel = useCallback((id: MissionId) => {
+    if (!requireStudent()) return;
     setPanel(id);
     setResult(null);
     setShowHint(false);
     gameRef.current?.setEnabled(false);
     if (saveRef.current?.editor === "py") workerRef.current?.postMessage({ type: "warm" });
-  }, []);
+  }, [requireStudent]);
 
   const closeDialog = useCallback(() => {
     setDialog(null);
@@ -405,7 +417,7 @@ export default function PortCodeship() {
             : "Hi neighbour! The walls need to be 6 blocks by 5, and 3 blocks high: 54 blocks. By hand, press B and click. Or program the Builder Bot at the terminal: a loop does it in a few lines.",
           choices: [
             ...(s.intro ? [{ label: "Program the Builder Bot", act: () => { closeDialog(); openPanel("home"); } }] : []),
-            ...(s.intro ? [{ label: "Build by hand", act: () => { closeDialog(); g.toggleBuild(true); } }] : []),
+            ...(s.intro ? [{ label: "Build by hand", act: () => { closeDialog(); if (requireStudent()) g.toggleBuild(true); } }] : []),
             { label: "Bye", act: closeDialog },
           ],
         });
@@ -468,7 +480,7 @@ export default function PortCodeship() {
             who: "Kofi",
             text: s.beachCode ? "Your Beach Bot cleans up every time the tide comes in. Best beach on the island!" : "The beach is clean… for now. The tide keeps bringing more. A Beach Bot would clean up every tide without you lifting a finger.",
             choices: [
-              { label: s.beachCode ? "Improve the Beach Bot" : "Build a Beach Bot", act: () => { closeDialog(); setWorkshop(true); g.setEnabled(false); } },
+              { label: s.beachCode ? "Improve the Beach Bot" : "Build a Beach Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
               { label: "Bye", act: closeDialog },
             ],
           });
@@ -478,7 +490,7 @@ export default function PortCodeship() {
           who: "Kofi",
           text: `Look at this beach! ${s.litter.length} pieces of litter, and every tide washes up more. Some goes in recycling, some in compost, and the rest in garbage. You could clean it up by hand… or design a robot and code it to clean up for good.`,
           choices: [
-            { label: "Build a robot", act: () => { closeDialog(); setWorkshop(true); g.setEnabled(false); } },
+            { label: "Build a robot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
             { label: "Clean by hand", act: () => { closeDialog(); say("Tip", "Walk up to litter and press E to pick it up, then take it to the right bin on the boardwalk.", "info"); } },
           ],
         });
@@ -516,7 +528,7 @@ export default function PortCodeship() {
           who,
           text: st.status === "done" ? "Thanks to you, everything runs smoothly here. You can always improve the code at the terminal." : ask,
           choices: [
-            { label: "Do it by hand", act: () => { closeDialog(); g.setEnabled(false); setHand(mission); } },
+            { label: "Do it by hand", act: () => { closeDialog(); if (requireStudent()) { g.setEnabled(false); setHand(mission); } } },
             { label: "Program it", act: () => { closeDialog(); openPanel(mission); } },
             { label: "Bye", act: closeDialog },
           ],
@@ -541,12 +553,14 @@ export default function PortCodeship() {
         return;
       }
       if (kind === "grab") {
+        if (!requireStudent()) return;
         const product = AISLES[Number(a) - 1][Number(b) - 1];
         setCarry({ kind: "product", name: product });
         say("You", `Got the ${product}. Take it to Mrs. Ali.`, "info");
         return;
       }
       if (kind === "litter") {
+        if (!requireStudent()) return;
         const l = s.litter.find((q) => q.id === Number(a));
         if (!l) return;
         g.removeLitter(l.id);
@@ -573,7 +587,7 @@ export default function PortCodeship() {
             who: "Kofi",
             text: `You did it: ${cleaned} pieces, all by hand! But watch: the next tide will bring more. A Beach Bot could clean up every single tide, forever.`,
             choices: [
-              { label: "Build a Beach Bot", act: () => { closeDialog(); setWorkshop(true); g.setEnabled(false); } },
+              { label: "Build a Beach Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
               { label: "Later", act: closeDialog },
             ],
           });
@@ -593,7 +607,7 @@ export default function PortCodeship() {
         });
       }
     },
-    [closeDialog, earn, finishMission, openPanel, say, setCarry, showDialog, update]
+    [closeDialog, earn, finishMission, openPanel, requireStudent, say, setCarry, showDialog, update]
   );
 
   // -------------------------------------------------------------------------
@@ -877,34 +891,11 @@ export default function PortCodeship() {
     return () => window.clearInterval(t);
   }, [screen, update]);
 
-  // Course sign-up: needed after the first finished challenge or 15 minutes of play.
+  // Challenges are for students: the sign-up box opens when someone else tries one.
   const missionsDone = save ? (Object.values(save.missions) as MissionState[]).filter((m) => m.status === "done").length : 0;
-  const gateReason: "challenge" | "time" | null =
-    !save || save.signedUp ? null : missionsDone > 0 ? "challenge" : (save.playSeconds ?? 0) >= FREE_PLAY_SECONDS ? "time" : null;
-  const gateOpen = screen === "play" && gateReason !== null && !watching;
+  const gateOpen = screen === "play" && lockOpen;
   gateBlocking.current = gateOpen;
-
-  useEffect(() => {
-    if (gateOpen) {
-      setPanel(null);
-      setDialog(null);
-      setPaused(false);
-      setMapOpen(false);
-      gameRef.current?.toggleBuild(false);
-      gameRef.current?.setEnabled(false);
-    }
-  }, [gateOpen]);
-
-  // Count active play time (tab visible, nothing blocking the game).
-  useEffect(() => {
-    if (screen !== "play") return;
-    const t = window.setInterval(() => {
-      const s = saveRef.current;
-      if (!s || s.signedUp || document.visibilityState !== "visible" || !gameRef.current?.enabled) return;
-      update((q) => ({ ...q, playSeconds: (q.playSeconds ?? 0) + 5 }));
-    }, 5000);
-    return () => window.clearInterval(t);
-  }, [screen, update]);
+  const isStudent = save?.signedUp === "student";
 
   // Enrolled students who already used their class password here skip sign-up.
   useEffect(() => {
@@ -1008,6 +999,12 @@ export default function PortCodeship() {
       }
       if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
       if (e.code === "KeyZ" && building) gameRef.current?.undoBuild();
+      // Build mode is part of the house challenge: students only.
+      if (e.code === "KeyB" && !e.repeat && saveRef.current?.intro && saveRef.current.signedUp !== "student" && !panel && !dialog) {
+        gameRef.current?.toggleBuild(false);
+        gameRef.current?.setEnabled(false);
+        setLockOpen(true);
+      }
       if (e.code === "KeyR" && !e.repeat && !panel && !dialog) toggleSprint();
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
@@ -1200,6 +1197,20 @@ export default function PortCodeship() {
               </button>
             </div>
             {!goalHidden && <p className="text-sm leading-snug sm:text-base">{objective.text}</p>}
+            {!isStudent && (
+              <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg bg-amber/15 p-2 text-xs">
+                <span className="font-semibold text-amber">Explore freely! Challenges are for CODEship students.</span>
+                <button
+                  onClick={() => {
+                    gameRef.current?.setEnabled(false);
+                    setLockOpen(true);
+                  }}
+                  className="rounded-md bg-amber px-2 py-0.5 font-bold text-navy"
+                >
+                  Enter class password
+                </button>
+              </div>
+            )}
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/80">
               <button onClick={() => { setTrackerOpen(true); gameRef.current?.setEnabled(false); }} className="rounded-md bg-amber px-2 py-0.5 font-bold text-navy">
                 Challenges {missionsDone}/{CHALLENGES.length} (J)
@@ -1590,12 +1601,16 @@ export default function PortCodeship() {
             </div>
           )}
 
-          {gateOpen && gateReason && (
+          {gateOpen && (
             <SignupGate
-              reason={gateReason}
               onDone={() => {
                 update((q) => ({ ...q, signedUp: "student" }));
-                say("Port CODEship", "Welcome, CODEship student! Keep exploring.", "good");
+                setLockOpen(false);
+                say("Port CODEship", "Welcome, CODEship student! All challenges are open.", "good");
+                gameRef.current?.setEnabled(true);
+              }}
+              onClose={() => {
+                setLockOpen(false);
                 gameRef.current?.setEnabled(true);
               }}
             />

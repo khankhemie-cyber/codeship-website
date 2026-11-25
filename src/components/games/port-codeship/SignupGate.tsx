@@ -13,24 +13,24 @@ const PROGRAMS: { slug: ProgramSlug; level: string; grades: string }[] = [
 ];
 
 /**
- * Shown after a child finishes their first challenge or plays for 15 minutes.
- * To keep playing, the family signs up for a CODEship course; the class
- * password that comes with it unlocks the game on this device (the same
- * password as the program's workbook, quizzes and Arcade levels). Progress is
- * kept, so the child carries on where they stopped.
+ * Shown when someone who isn't a CODEship student tries to start a challenge.
+ * Exploring the town is open to everyone; challenges need a class password
+ * (the same one as the program's workbook, quizzes and Arcade levels), which
+ * families get by signing up for a course. "Keep exploring" closes it.
  */
-export default function SignupGate({ reason, onDone }: { reason: "challenge" | "time"; onDone: () => void }) {
+export default function SignupGate({ onDone, onClose }: { onDone: () => void; onClose: () => void }) {
   const [program, setProgram] = useState<ProgramSlug>("developers");
 
   return (
     <div className="absolute inset-0 z-50 overflow-y-auto bg-[#0d1b2a]/85 p-4 backdrop-blur-sm">
       <div className="mx-auto my-6 w-full max-w-lg rounded-2xl bg-[#0d1b2a] p-6 shadow-2xl ring-1 ring-white/15">
-        <div className="text-xs font-bold uppercase tracking-wider text-amber">Ask a grown-up</div>
-        <h2 className="mt-1 text-2xl font-extrabold">
-          {reason === "challenge" ? "Challenge complete! Want to keep exploring Port CODEship?" : "You've been exploring for 15 minutes!"}
-        </h2>
+        <div className="flex items-start justify-between gap-3">
+          <div className="text-xs font-bold uppercase tracking-wider text-amber">Students only</div>
+          <button onClick={onClose} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Keep exploring</button>
+        </div>
+        <h2 className="mt-1 text-2xl font-extrabold">Challenges are for CODEship students</h2>
         <p className="mt-2 text-white/80">
-          The rest of Port CODEship is for CODEship Academy students. Sign up for a coding course to keep playing, and your progress is saved right where you left off.
+          Anyone can explore Port CODEship. To take on the coding challenges, you need to be a CODEship Academy student. Ask a grown-up to sign you up for a course, or enter your class password below.
         </p>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-2">

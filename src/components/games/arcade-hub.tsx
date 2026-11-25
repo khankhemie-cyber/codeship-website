@@ -59,9 +59,9 @@ const ARCADE_GAMES: ArcadeGame[] = [
     grades: "Grades 4–8",
     language: "3D open world · Python or JavaScript",
     pitch: "Explore a 3D seaside town, climb anything, and build your house. Then code robots in real Python or JavaScript to help the shop, clean the beach and more.",
-    levels: ["home", "market", "beach"],
+    levels: ["home", "market", "beach", "security", "bank", "library"],
     teaches: ["Loops", "Functions", "Dictionaries", "while loops", "if / elif / else", "Automation"],
-    free: 1,
+    free: 0,
     thumb: "/arcade/port.jpg",
     gradeRange: [4, 8],
     topic: "Python",
@@ -197,6 +197,7 @@ function NameTag() {
 
 function freeLine(g: ArcadeGame) {
   const free = g.free ?? FREE_LEVELS;
+  if (free === 0) return `Free to explore · class password unlocks all ${g.levels.length} challenges`;
   return g.levels.length > free ? `${free === 1 ? "Level 1" : `Levels 1–${free}`} free · class password unlocks all ${g.levels.length}` : `All ${g.levels.length} levels free`;
 }
 
