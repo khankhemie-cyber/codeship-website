@@ -1,7 +1,8 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 "use client";
 
 import { useState } from "react";
-import { APPOINTMENTS, BILLS, fewestBills, liveWorld, mayEnter, type BankWorld, type LibraryWorld, type SecurityWorld } from "@/lib/games/port/missions";
+import { APPOINTMENTS, BILLS, fewestBills, mayEnter, type BankWorld, type LibraryWorld, type SecurityWorld } from "@/lib/games/port/missions";
 
 /**
  * The indoor challenges done by hand (1 star). Each one is the same job the
@@ -27,8 +28,8 @@ function Shell({ title, who, children, onClose }: { title: string; who: string; 
   );
 }
 
-export function HandSecurity({ onDone, onClose, say }: Props) {
-  const visitors = (liveWorld("security") as SecurityWorld).visitors;
+export function HandSecurity({ onDone, onClose, say, world }: Props & { world: SecurityWorld }) {
+  const visitors = world.visitors;
   const [i, setI] = useState(0);
   const v = visitors[i];
   const choose = (letIn: boolean) => {
@@ -62,8 +63,8 @@ export function HandSecurity({ onDone, onClose, say }: Props) {
   );
 }
 
-export function HandBank({ onDone, onClose, say }: Props) {
-  const amounts = (liveWorld("bank") as BankWorld).amounts;
+export function HandBank({ onDone, onClose, say, world }: Props & { world: BankWorld }) {
+  const amounts = world.amounts;
   const [c, setC] = useState(0);
   const [given, setGiven] = useState<number[]>([]);
   const owed = amounts[c];
@@ -100,8 +101,8 @@ export function HandBank({ onDone, onClose, say }: Props) {
   );
 }
 
-export function HandLibrary({ onDone, onClose, say, onOrder }: Props & { onOrder: (order: number[]) => void }) {
-  const [order, setOrder] = useState(() => [...(liveWorld("library") as LibraryWorld).books]);
+export function HandLibrary({ onDone, onClose, say, onOrder, world }: Props & { onOrder: (order: number[]) => void; world: LibraryWorld }) {
+  const [order, setOrder] = useState(() => [...world.books]);
   const [picked, setPicked] = useState<number | null>(null);
   const [moves, setMoves] = useState(0);
   const click = (i: number) => {

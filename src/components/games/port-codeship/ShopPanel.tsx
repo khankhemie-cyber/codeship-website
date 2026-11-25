@@ -1,9 +1,10 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 "use client";
 
 import { useState } from "react";
 import { AISLES, type BlockColor } from "@/lib/games/port/missions";
 
-/** Fresh Market prices, in coins. */
+/** Portside Market prices, in coins. */
 export const FOOD_PRICES: Record<string, number> = {
   rice: 3, beans: 3, pasta: 4, flour: 3, milk: 4, cheese: 6, yogurt: 5, eggs: 5,
   apples: 2, bananas: 2, mangoes: 4, oranges: 3, bread: 4, cookies: 5, crackers: 4, cereal: 6,
@@ -16,7 +17,7 @@ const COLORS: { c: BlockColor; price: number; swatch: string }[] = [
 ];
 
 /**
- * The Fresh Market register: spend the coins you earn on groceries for your
+ * The Portside Market register: spend the coins you earn on groceries for your
  * fridge at home, or on new block colours for building.
  */
 export default function ShopPanel({
@@ -42,7 +43,7 @@ export default function ShopPanel({
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-[#0d1b2a] p-5 shadow-2xl ring-1 ring-white/15" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-amber">Fresh Market register</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-amber">Portside Market register</div>
             <h2 className="text-2xl font-extrabold">What would you like?</h2>
             <p className="mt-1 font-bold text-amber">You have {coins} coins</p>
           </div>
@@ -110,7 +111,7 @@ export default function ShopPanel({
             })}
           </div>
         )}
-        <p className="mt-4 text-xs text-white/60">Earn coins by finishing challenges, finding bits, lighting lookouts and cleaning the beach. A coded Beach Bot earns coins every tide.</p>
+        <p className="mt-4 text-xs text-white/60">Earn coins by finishing challenges, finding bits, lighting lookouts and cleaning the beach. A coded Shore Bot earns coins every tide.</p>
       </div>
     </div>
   );

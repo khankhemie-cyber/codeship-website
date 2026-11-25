@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship interiors: the Town Hall, the Port Bank and the Library.
  *

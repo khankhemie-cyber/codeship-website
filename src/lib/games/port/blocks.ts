@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship blocks: drag-and-drop versions of every mission's commands.
  *
@@ -57,7 +58,7 @@ export const BLOCK_DEFS: Json[] = [
   { type: "port_pick", message0: "pick the product", ...stmt, colour: COLOURS.shop },
   { type: "port_deliver", message0: "deliver to the customer", ...stmt, colour: COLOURS.shop },
 
-  // Beach: Beach Bot
+  // Beach: Shore Bot
   { type: "port_litter", message0: "litter is on the beach", output: "Boolean", colour: COLOURS.sense },
   { type: "port_scan", message0: "scan the nearest litter", ...stmt, colour: COLOURS.beach, tooltip: "Remembers what it found as 'item'." },
   { type: "port_item_is", message0: "the item is %1", args0: [dd("K", KINDS)], output: "Boolean", colour: COLOURS.sense },
@@ -103,7 +104,7 @@ export const TOOLBOXES: Record<MissionId, object> = {
   },
   beach: {
     kind: "categoryToolbox",
-    contents: [cat("Start", COLOURS.start, ["port_start"]), cat("Beach Bot", COLOURS.beach, ["port_scan", "port_pick_up", "port_drop_in"]), cat("Check", COLOURS.sense, ["port_litter", "port_item_is"]), CONTROL],
+    contents: [cat("Start", COLOURS.start, ["port_start"]), cat("Shore Bot", COLOURS.beach, ["port_scan", "port_pick_up", "port_drop_in"]), cat("Check", COLOURS.sense, ["port_litter", "port_item_is"]), CONTROL],
   },
   security: {
     kind: "categoryToolbox",
@@ -130,7 +131,7 @@ export const TOOLBOXES: Record<MissionId, object> = {
 };
 
 // ---------------------------------------------------------------------------
-// Starter workspaces (match the typed starter code)
+// Helpers for building workspaces (starter workspaces live in content.ts)
 
 type B = { type: string; fields?: Record<string, unknown>; inputs?: Record<string, { block?: B }>; next?: { block?: B }; x?: number; y?: number };
 
@@ -145,46 +146,6 @@ const blk = (type: string, fields?: Record<string, unknown>, inputs?: Record<str
   ...(inputs ? { inputs: Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, { block: v }])) } : {}),
 });
 const ws = (first: B) => ({ blocks: { languageVersion: 0, blocks: [{ ...first, x: 30, y: 30 }] } });
-
-export const STARTER_BLOCKS: Record<MissionId, unknown> = {
-  home: ws(chain(blk("port_start"), blk("port_color", { C: "brick" }), blk("port_repeat", { N: 5 }, { DO: chain(blk("port_place"), blk("port_move", { N: 1 })) }), blk("port_turn", { D: "right" }))!),
-  market: ws(
-    chain(
-      blk("port_start"),
-      blk("port_map", undefined, { DO: chain(blk("port_map_entry", { P: "rice", A: 1, L: 1 }), blk("port_map_entry", { P: "cereal", A: 4, L: 4 })) }),
-      blk("port_while", undefined, { COND: blk("port_customer"), DO: chain(blk("port_next_order"), blk("port_go_order"), blk("port_pick"), blk("port_deliver")) })
-    )!
-  ),
-  beach: ws(
-    chain(
-      blk("port_start"),
-      blk("port_while", undefined, {
-        COND: blk("port_litter"),
-        DO: chain(blk("port_scan"), blk("port_pick_up"), blk("port_if_else", undefined, { COND: blk("port_item_is", { K: "can" }), DO: blk("port_drop_in", { B: "recycling" }), ELSE: blk("port_drop_in", { B: "garbage" }) })),
-      })
-    )!
-  ),
-  security: ws(
-    chain(
-      blk("port_start"),
-      blk("port_board", undefined, { DO: chain(blk("port_board_name", { N: "Ms. Rivera" }), blk("port_board_name", { N: "Mr. Chen" })) }),
-      blk("port_while", undefined, {
-        COND: blk("port_visitor_waiting"),
-        DO: chain(blk("port_next_visitor"), blk("port_if_else", undefined, { COND: blk("port_on_board"), DO: blk("port_let_in"), ELSE: blk("port_to_desk") })),
-      })
-    )!
-  ),
-  bank: ws(
-    chain(
-      blk("port_start"),
-      blk("port_while", undefined, {
-        COND: blk("port_customer"),
-        DO: chain(blk("port_next_customer"), blk("port_while", undefined, { COND: blk("port_left_at_least", { N: 1 }), DO: blk("port_give", { B: "1" }) })),
-      })
-    )!
-  ),
-  library: ws(chain(blk("port_start"), blk("port_each_pair", undefined, { DO: blk("port_if", undefined, { COND: blk("port_pair_wrong"), DO: blk("port_swap_pair") }) }))!),
-};
 
 /** Exposed for the tests, which build full solutions from the same helpers. */
 export const build = { chain, blk, ws };

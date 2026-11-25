@@ -1,9 +1,10 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 "use client";
 
 import { useEffect, useRef } from "react";
 import * as Blockly from "blockly/core";
 import * as BlocklyEn from "blockly/msg/en";
-import { STARTER_BLOCKS, TOOLBOXES, registerPortBlocks } from "@/lib/games/port/blocks";
+import { TOOLBOXES, registerPortBlocks } from "@/lib/games/port/blocks";
 import type { MissionId } from "@/lib/games/port/missions";
 
 /**
@@ -15,6 +16,8 @@ import type { MissionId } from "@/lib/games/port/missions";
 type Props = {
   mission: MissionId;
   value: unknown;
+  /** The challenge's starter blocks (sent by the server to students). */
+  starter: unknown;
   /** Changing it rebuilds the workspace (e.g. after "Reset"). */
   version: number;
   onChange: (workspace: unknown) => void;
@@ -36,7 +39,7 @@ function patchOnce() {
   }
 }
 
-export default function PortBlocksEditor({ mission, value, version, onChange }: Props) {
+export default function PortBlocksEditor({ mission, value, starter, version, onChange }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const handler = useRef(onChange);
   handler.current = onChange;
@@ -62,9 +65,9 @@ export default function PortBlocksEditor({ mission, value, version, onChange }: 
     let loading = true;
     Blockly.Events.disable();
     try {
-      Blockly.serialization.workspaces.load((value ?? STARTER_BLOCKS[mission]) as object, ws, { recordUndo: false });
+      Blockly.serialization.workspaces.load((value ?? starter) as object, ws, { recordUndo: false });
     } catch {
-      Blockly.serialization.workspaces.load(STARTER_BLOCKS[mission] as object, ws, { recordUndo: false });
+      Blockly.serialization.workspaces.load(starter as object, ws, { recordUndo: false });
     } finally {
       Blockly.Events.enable();
       loading = false;

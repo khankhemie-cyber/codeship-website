@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship movement: axis-aligned boxes for everything solid, and a player
  * controller that walks, jumps, swims and climbs any wall marked climbable
