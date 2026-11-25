@@ -49,7 +49,7 @@ const campFaqs = [
   },
   {
     question: "How many spots are there?",
-    answer: `${CAMP.spots} spots for the week. Sign-up closes when the camp is full.`,
+    answer: `${CAMP.spots} spots. Sign-up closes when the camp is full.`,
   },
 ];
 
@@ -150,7 +150,7 @@ export default function CampsPage() {
       </Section>
 
       <Section tone="white">
-        <SectionHeader center title="Camp tracks" lead="Each camp focuses on one track." />
+        <SectionHeader center title="Camp tracks" lead="Summer camps and PA Day workshops each focus on one track. March Break mixes coding, AI and robotics." />
         <div className="flex flex-wrap justify-center gap-3">
           {tracks.map((t) => (
             <span key={t} className="bg-[#FAF8F4] border border-gray-200 text-[#001532] text-lg font-semibold px-5 py-3">

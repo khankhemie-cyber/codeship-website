@@ -135,7 +135,7 @@ export default function HomePage() {
             </p>
             <EarlyBirdNote className="mt-4 inline-block rounded-full bg-[#F4D734] px-4 py-2 text-base font-bold text-[#001532]" />
             <ul className="mt-6 flex flex-wrap gap-2">
-              {[`${CAMP.days}, ${CAMP.dates}`, CAMP.hours, CAMP.ages, <CampPriceText key="price" />].map((t, i) => (
+              {[`${CAMP.days}, ${CAMP.dates}`, CAMP.hours, CAMP.ages, "Core21, Oshawa", <CampPriceText key="price" />, `Single days ${CAMP.dayPriceLabel}`, `${CAMP.spots} spots`].map((t, i) => (
                 <li key={i} className="rounded-full bg-[#001532]/35 px-4 py-2 text-base font-semibold">
                   {t}
                 </li>

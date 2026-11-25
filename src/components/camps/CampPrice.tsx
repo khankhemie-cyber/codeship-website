@@ -11,7 +11,7 @@ export function CampPriceText({ suffix = true }: { suffix?: boolean }) {
   return (
     <>
       {p.priceLabel} for the week
-      {suffix && p.earlyBird ? ", early bird" : ""}
+      {suffix && p.earlyBird ? ` (early bird to Dec 31; then ${CAMP.priceLabel})` : ""}
     </>
   );
 }
