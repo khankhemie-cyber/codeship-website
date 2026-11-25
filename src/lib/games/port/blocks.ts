@@ -86,6 +86,25 @@ export const BLOCK_DEFS: Json[] = [
   { type: "port_pair_wrong", message0: "left book's number > right book's", output: "Boolean", colour: COLOURS.sense },
   { type: "port_swap_pair", message0: "swap the pair", ...stmt, colour: COLOURS.beach },
   { type: "port_repeat_books", message0: "repeat once for every book", message1: "%1", args1: [{ type: "input_statement", name: "DO" }], ...stmt, colour: COLOURS.control },
+
+  // Lot 2: Lumber Bot
+  { type: "port_each_row", message0: "for each row of the lot", message1: "%1", args1: [{ type: "input_statement", name: "DO" }], ...stmt, colour: COLOURS.control, tooltip: "Rows 0, 1, 2… Remembered as 'row'." },
+  { type: "port_each_col", message0: "for each column in the row", message1: "%1", args1: [{ type: "input_statement", name: "DO" }], ...stmt, colour: COLOURS.control, tooltip: "Columns 0, 1, 2… Remembered as 'col'." },
+  { type: "port_spot_is", message0: "this spot has %1", args0: [{ type: "field_dropdown", name: "S", options: [["a tree", "tree"], ["an old tree", "old tree"], ["nothing", "empty"]] }], output: "Boolean", colour: COLOURS.sense },
+  { type: "port_cut", message0: "cut it down", ...stmt, colour: COLOURS.build },
+  { type: "port_plant", message0: "plant a sapling in the park", ...stmt, colour: COLOURS.beach },
+
+  // Town Hall: Permit Checker
+  { type: "port_app_waiting", message0: "an application is waiting", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_next_app", message0: "open the next application", ...stmt, colour: COLOURS.shop },
+  { type: "port_lot_cleared", message0: "the lot is cleared", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_value", message0: "%1", args0: [{ type: "field_dropdown", name: "V", options: [["lot width", "lot_width()"], ["lot depth", "lot_depth()"], ["building width", "building_width()"], ["building depth", "building_depth()"], ["coins", "coins()"]] }], output: "Number", colour: COLOURS.shop },
+  { type: "port_number", message0: "%1", args0: [num("N", 2, 0, 1000)], output: "Number", colour: COLOURS.shop },
+  { type: "port_arith", message0: "%1 %2 %3", args0: [{ type: "input_value", name: "A", check: "Number" }, { type: "field_dropdown", name: "OP", options: [["+", "+"], ["-", "-"], ["×", "*"]] }, { type: "input_value", name: "B", check: "Number" }], inputsInline: true, output: "Number", colour: COLOURS.shop },
+  { type: "port_compare", message0: "%1 %2 %3", args0: [{ type: "input_value", name: "A", check: "Number" }, { type: "field_dropdown", name: "OP", options: [["≤", "<="], ["<", "<"], ["≥", ">="], [">", ">"], ["=", "=="]] }, { type: "input_value", name: "B", check: "Number" }], inputsInline: true, output: "Boolean", colour: COLOURS.sense },
+  { type: "port_or", message0: "%1 or %2", args0: [{ type: "input_value", name: "A", check: "Boolean" }, { type: "input_value", name: "B", check: "Boolean" }], inputsInline: true, output: "Boolean", colour: COLOURS.sense },
+  { type: "port_approve", message0: "approve the permit", ...stmt, colour: COLOURS.beach },
+  { type: "port_deny", message0: "refuse the permit", ...stmt, colour: COLOURS.build },
 ];
 
 const cat = (name: string, colour: string, types: string[]) => ({ kind: "category", name, colour, contents: types.map((type) => ({ kind: "block", type })) });
@@ -118,6 +137,25 @@ export const TOOLBOXES: Record<MissionId, object> = {
   bank: {
     kind: "categoryToolbox",
     contents: [cat("Start", COLOURS.start, ["port_start"]), cat("Machine", COLOURS.shop, ["port_next_customer", "port_give"]), cat("Check", COLOURS.sense, ["port_customer", "port_left_at_least"]), CONTROL],
+  },
+  lumber: {
+    kind: "categoryToolbox",
+    contents: [
+      cat("Start", COLOURS.start, ["port_start"]),
+      cat("Lot", COLOURS.build, ["port_each_row", "port_each_col", "port_cut", "port_plant"]),
+      cat("Check", COLOURS.sense, ["port_spot_is", "port_not", "port_and", "port_or"]),
+      CONTROL,
+    ],
+  },
+  permit: {
+    kind: "categoryToolbox",
+    contents: [
+      cat("Start", COLOURS.start, ["port_start"]),
+      cat("Desk", COLOURS.shop, ["port_next_app", "port_approve", "port_deny"]),
+      cat("Numbers", COLOURS.shop, ["port_value", "port_number", "port_arith"]),
+      cat("Check", COLOURS.sense, ["port_app_waiting", "port_lot_cleared", "port_compare", "port_and", "port_or", "port_not"]),
+      CONTROL,
+    ],
   },
   library: {
     kind: "categoryToolbox",
@@ -187,8 +225,38 @@ function cond(b: B | undefined, lang: Lang): string {
       return `amount_left() >= ${n(f.N, 1)}`;
     case "port_pair_wrong":
       return "call_number(spot) > call_number(spot + 1)";
+    case "port_spot_is":
+      return `look(row, col) ${lang === "py" ? "==" : "==="} ${q(f.S)}`;
+    case "port_app_waiting":
+      return "has_application()";
+    case "port_lot_cleared":
+      return "lot_cleared()";
+    case "port_or":
+      return `(${cond(b.inputs?.A?.block, lang)}) ${lang === "py" ? "or" : "||"} (${cond(b.inputs?.B?.block, lang)})`;
+    case "port_compare": {
+      const op = String(f.OP ?? "<=");
+      return `${val(b.inputs?.A?.block)} ${lang === "js" && op === "==" ? "===" : op} ${val(b.inputs?.B?.block)}`;
+    }
     default:
       return lang === "py" ? "False" : "false";
+  }
+}
+
+/** A number block as code (the same in Python and JavaScript). */
+function val(b: B | undefined): string {
+  if (!b) return "0";
+  const f = b.fields ?? {};
+  switch (b.type) {
+    case "port_value":
+      return ["lot_width()", "lot_depth()", "building_width()", "building_depth()", "coins()"].includes(String(f.V)) ? String(f.V) : "0";
+    case "port_number":
+      return String(n(f.N, 0));
+    case "port_arith": {
+      const op = ["+", "-", "*"].includes(String(f.OP)) ? String(f.OP) : "+";
+      return `(${val(b.inputs?.A?.block)} ${op} ${val(b.inputs?.B?.block)})`;
+    }
+    default:
+      return "0";
   }
 }
 
@@ -284,6 +352,20 @@ function statement(b: B, ind: string, lang: Lang, ctx: Ctx): string {
       return block(py ? "for spot in range(book_count() - 1)" : "for (let spot = 0; spot < book_count() - 1; spot++)", "DO");
     case "port_swap_pair":
       return call("swap(spot, spot + 1)");
+    case "port_each_row":
+      return block(py ? "for row in range(rows())" : "for (let row = 0; row < rows(); row++)", "DO");
+    case "port_each_col":
+      return block(py ? "for col in range(cols())" : "for (let col = 0; col < cols(); col++)", "DO");
+    case "port_cut":
+      return call("cut(row, col)");
+    case "port_plant":
+      return call("plant_sapling()");
+    case "port_next_app":
+      return call("name = next_application()");
+    case "port_approve":
+      return call("approve()");
+    case "port_deny":
+      return call("deny()");
     case "port_repeat_books": {
       const v = `round${ctx.loop++ || ""}`;
       return block(py ? `for ${v} in range(book_count())` : `for (let ${v} = 0; ${v} < book_count(); ${v}++)`, "DO");

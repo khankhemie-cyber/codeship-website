@@ -13,7 +13,7 @@
  */
 
 export type Lang = "py" | "js";
-export type MissionId = "home" | "market" | "beach" | "security" | "bank" | "library";
+export type MissionId = "home" | "market" | "beach" | "security" | "bank" | "library" | "lumber" | "permit";
 
 export class BotError extends Error {
   name = "BotError";
@@ -600,7 +600,159 @@ export function librarySim(world: LibraryWorld): Sim {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Lot 2: clear the lot (the Lumber Bot)
+
+/** What stands on each spot of Lot 2's grid. Old trees are protected and must never be cut. */
+export type Spot = "tree" | "old tree" | "empty";
+export type LumberWorld = { grid: Spot[][] };
+export type LumberStep =
+  | { t: "cut"; row: number; col: number; ok: boolean }
+  | { t: "plant"; n: number }
+  | { t: "say"; text: string };
+
+/** The trees on Lot 2 as you find it (row 0 is the north edge). It's drawn in the world, so it's public. */
+export const LOT2_GRID: Spot[][] = [
+  ["tree", "tree", "old tree", "tree", "empty"],
+  ["tree", "empty", "tree", "tree", "tree"],
+  ["old tree", "tree", "tree", "empty", "tree"],
+];
+
+export function lumberSim(world: LumberWorld): Sim {
+  const { steps, output, step, print } = base();
+  const grid = world.grid.map((r) => [...r]);
+  let cut = 0;
+  let planted = 0;
+  const mistakes: string[] = [];
+  const spot = (name: string, r: unknown, c: unknown) => {
+    const row = Number(r);
+    const col = Number(c);
+    if (!Number.isInteger(row) || row < 0 || row >= grid.length) throw new BotError(`${name}: row ${JSON.stringify(r)} is off the lot. Rows go from 0 to ${grid.length - 1}.`);
+    if (!Number.isInteger(col) || col < 0 || col >= (grid[0]?.length ?? 0)) throw new BotError(`${name}: column ${JSON.stringify(c)} is off the lot. Columns go from 0 to ${(grid[0]?.length ?? 1) - 1}.`);
+    return [row, col] as const;
+  };
+  const api = {
+    rows() {
+      return grid.length;
+    },
+    cols() {
+      return grid[0]?.length ?? 0;
+    },
+    look(r: unknown, c: unknown) {
+      const [row, col] = spot("look", r, c);
+      return grid[row][col];
+    },
+    cut(r: unknown, c: unknown) {
+      const [row, col] = spot("cut", r, c);
+      const what = grid[row][col];
+      if (what === "empty") throw new BotError(`There's no tree at row ${row}, column ${col}. Use look() first.`);
+      const ok = what === "tree";
+      if (!ok) mistakes.push(`The old tree at row ${row}, column ${col} is protected and was cut down!`);
+      grid[row][col] = "empty";
+      cut++;
+      step({ t: "cut", row, col, ok });
+    },
+    plant_sapling() {
+      planted++;
+      step({ t: "plant", n: planted });
+    },
+    print,
+  };
+  return {
+    api: api as unknown as Sim["api"],
+    steps,
+    output,
+    check() {
+      if (mistakes.length) return { passed: false, message: mistakes[0] };
+      const left = grid.flat().filter((x) => x === "tree").length;
+      if (left) return { passed: false, message: `${left} tree${left === 1 ? " is" : "s are"} still standing on the lot.` };
+      if (planted !== cut) return { passed: false, message: `${cut} trees were cut but ${planted} saplings were planted. Plant one for every tree you cut.` };
+      return { passed: true, message: `Lot cleared: ${cut} trees cut, ${planted} saplings planted, old trees kept.` };
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Town Hall: building permits (the Permit Checker)
+
+export type Application = { name: string; lotW: number; lotD: number; buildW: number; buildD: number; cleared: boolean; coins: number };
+export type PermitWorld = { applications: Application[] };
+export type PermitStep =
+  | { t: "application"; n: number; name: string }
+  | { t: "approve"; name: string; ok: boolean; why: string }
+  | { t: "deny"; name: string; ok: boolean; why: string }
+  | { t: "say"; text: string };
+
+/** The permit fee: 2 coins for every square of the building's floor. */
+export const permitFee = (a: Application) => a.buildW * a.buildD * 2;
+
+/** Why an application must be refused, or null if it should be approved. */
+export function permitProblem(a: Application): string | null {
+  if (!a.cleared) return "the lot isn't cleared";
+  if (a.buildW + 2 > a.lotW || a.buildD + 2 > a.lotD) return "the building doesn't fit with 1 block of space on every side";
+  if (a.coins < permitFee(a)) return `they can't pay the ${permitFee(a)}-coin fee`;
+  return null;
+}
+
+export function permitSim(world: PermitWorld): Sim {
+  const { steps, output, step, print } = base();
+  let next = 0;
+  let current: Application | null = null;
+  let handled = 0;
+  const mistakes: string[] = [];
+  const need = () => {
+    if (!current) throw new BotError("No application is open. Call next_application() first.");
+    return current;
+  };
+  const decide = (approve: boolean) => {
+    const a = need();
+    const problem = permitProblem(a);
+    const ok = approve === (problem === null);
+    if (!ok) mistakes.push(approve ? `${a.name}'s permit was approved, but ${problem}.` : `${a.name}'s permit was refused, but it meets every rule.`);
+    step({ t: approve ? "approve" : "deny", name: a.name, ok, why: problem ?? "meets every rule" });
+    handled++;
+    current = null;
+  };
+  const api = {
+    has_application() {
+      return next < world.applications.length || current !== null;
+    },
+    next_application() {
+      if (current) throw new BotError(`${current.name}'s application is still open. Use approve() or deny() first.`);
+      if (next >= world.applications.length) throw new BotError("No applications left. Check has_application() first.");
+      current = world.applications[next++];
+      step({ t: "application", n: next, name: current.name });
+      return current.name;
+    },
+    lot_width: () => need().lotW,
+    lot_depth: () => need().lotD,
+    building_width: () => need().buildW,
+    building_depth: () => need().buildD,
+    lot_cleared: () => need().cleared,
+    coins: () => need().coins,
+    approve() {
+      decide(true);
+    },
+    deny() {
+      decide(false);
+    },
+    print,
+  };
+  return {
+    api: api as unknown as Sim["api"],
+    steps,
+    output,
+    check() {
+      if (mistakes.length) return { passed: false, message: mistakes[0] };
+      if (handled < world.applications.length) return { passed: false, message: `Only ${handled} of ${world.applications.length} applications were decided.` };
+      return { passed: true, message: `All ${handled} applications were decided correctly.` };
+    },
+  };
+}
+
 export function makeSim(mission: MissionId, world: unknown): Sim {
+  if (mission === "lumber") return lumberSim(world as LumberWorld);
+  if (mission === "permit") return permitSim(world as PermitWorld);
   if (mission === "home") return homeSim(world as HomeWorld);
   if (mission === "market") return marketSim(world as MarketWorld);
   if (mission === "security") return securitySim(world as SecurityWorld);
@@ -631,6 +783,8 @@ export const MISSION_LABELS: Record<MissionId, { title: string; bot: string }> =
   security: { title: "Town Hall security", bot: "Gate Bot" },
   bank: { title: "Bank change machine", bot: "Change Machine" },
   library: { title: "Sort the library books", bot: "Shelf Bot" },
+  lumber: { title: "Clear Lot 2", bot: "Lumber Bot" },
+  permit: { title: "Building permits", bot: "Permit Checker" },
 };
 
 /** Names students can call in each mission, for highlighting and the worker. */
@@ -641,4 +795,6 @@ export const API_NAMES: Record<MissionId, string[]> = {
   security: ["has_visitor", "next_visitor", "has_id", "let_in", "send_to_desk", "print"],
   bank: ["has_customer", "next_customer", "amount_left", "give", "print"],
   library: ["book_count", "call_number", "swap", "print"],
+  lumber: ["rows", "cols", "look", "cut", "plant_sapling", "print"],
+  permit: ["has_application", "next_application", "lot_width", "lot_depth", "building_width", "building_depth", "lot_cleared", "coins", "approve", "deny", "print"],
 };

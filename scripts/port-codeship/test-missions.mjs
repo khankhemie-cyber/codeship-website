@@ -135,7 +135,36 @@ for p in range(n):
 for (let p = 0; p < n; p++) for (let i = 0; i < n - 1; i++) if (call_number(i) > call_number(i + 1)) swap(i, i + 1);`,
 };
 
+SOLUTIONS.lumber = {
+  py: `for row in range(rows()):
+    for col in range(cols()):
+        if look(row, col) == "tree":
+            cut(row, col)
+            plant_sapling()
+`,
+  js: `for (let r = 0; r < rows(); r++) for (let c = 0; c < cols(); c++) if (look(r, c) === "tree") { cut(r, c); plant_sapling(); }`,
+};
+SOLUTIONS.permit = {
+  py: `while has_application():
+    next_application()
+    fee = building_width() * building_depth() * 2
+    fits = building_width() + 2 <= lot_width() and building_depth() + 2 <= lot_depth()
+    if lot_cleared() and fits and coins() >= fee:
+        approve()
+    else:
+        deny()
+`,
+  js: `while (has_application()) {
+  next_application();
+  const fee = building_width() * building_depth() * 2;
+  const fits = building_width() + 2 <= lot_width() && building_depth() + 2 <= lot_depth();
+  if (lot_cleared() && fits && coins() >= fee) approve(); else deny();
+}`,
+};
+
 const LIVE = {
+  lumber: liveWorld("lumber"),
+  permit: liveWorld("permit"),
   security: liveWorld("security"),
   bank: liveWorld("bank"),
   library: liveWorld("library"),
@@ -225,6 +254,46 @@ BLOCK_SOLUTIONS.library = ws(chain(
   blk("port_start"),
   blk("port_repeat_books", undefined, { DO: blk("port_each_pair", undefined, { DO: blk("port_if", undefined, { COND: blk("port_pair_wrong"), DO: blk("port_swap_pair") }) }) }),
 ));
+
+BLOCK_SOLUTIONS.lumber = ws(chain(
+  blk("port_start"),
+  blk("port_each_row", undefined, { DO: blk("port_each_col", undefined, { DO: blk("port_if", undefined, { COND: blk("port_spot_is", { S: "tree" }), DO: chain(blk("port_cut"), blk("port_plant")) }) }) }),
+));
+const v = (V) => blk("port_value", { V });
+const plus2 = (V) => blk("port_arith", { OP: "+" }, { A: v(V), B: blk("port_number", { N: 2 }) });
+BLOCK_SOLUTIONS.permit = ws(chain(
+  blk("port_start"),
+  blk("port_while", undefined, { COND: blk("port_app_waiting"), DO: chain(
+    blk("port_next_app"),
+    blk("port_if_else", undefined, {
+      COND: blk("port_and", undefined, {
+        A: blk("port_and", undefined, {
+          A: blk("port_lot_cleared"),
+          B: blk("port_and", undefined, {
+            A: blk("port_compare", { OP: "<=" }, { A: plus2("building_width()"), B: v("lot_width()") }),
+            B: blk("port_compare", { OP: "<=" }, { A: plus2("building_depth()"), B: v("lot_depth()") }),
+          }),
+        }),
+        B: blk("port_compare", { OP: ">=" }, { A: v("coins()"), B: blk("port_arith", { OP: "*" }, { A: blk("port_arith", { OP: "*" }, { A: v("building_width()"), B: v("building_depth()") }), B: blk("port_number", { N: 2 }) }) }),
+      }),
+      DO: blk("port_approve"),
+      ELSE: blk("port_deny"),
+    }),
+  ) }),
+));
+
+test("lumber: cutting an old tree is caught", () => {
+  const r = runPy("lumber", MISSIONS.lumber.starter.py, liveWorld("lumber"));
+  assert(!r.check.passed && /protected/.test(r.check.message), r.check.message);
+});
+test("lumber: forgetting saplings is explained", () => {
+  const r = runJs("lumber", 'for (let r = 0; r < rows(); r++) for (let c = 0; c < cols(); c++) if (look(r, c) === "tree") cut(r, c);', liveWorld("lumber"));
+  assert(!r.check.passed && /saplings/.test(r.check.message), r.check.message);
+});
+test("permit: approving an unaffordable building is caught", () => {
+  const r = runJs("permit", "while (has_application()) { next_application(); if (lot_cleared() && building_width() + 2 <= lot_width() && building_depth() + 2 <= lot_depth()) approve(); else deny(); }", liveWorld("permit"));
+  assert(!r.check.passed && /fee/.test(r.check.message), r.check.message);
+});
 
 test("security: a walk-in with ID is still sent to the desk", () => {
   const r = runJs("security", "while (has_visitor()) { next_visitor(); if (has_id()) let_in(); else send_to_desk(); }", liveWorld("security"));

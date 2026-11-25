@@ -32,6 +32,14 @@ export const PLAZA = { x: 0, z: 0, r: 16 };
 export const PLOT = { x: 34, z: 12, w: 12, d: 10 };
 export const PLOT_TERMINAL = { x: 32, z: 10.5 };
 
+/** Lot 2, in the east of Maple Park: overgrown until it's cleared, then a second place to build. */
+export const LOT2 = { x: 40, z: -36, w: 12, d: 8 };
+export const LOT2_TERMINAL = { x: 38.2, z: -26.6 };
+/** Where the tree in row r, column c of Lot 2's grid stands. */
+export const lot2Spot = (r: number, c: number) => ({ x: LOT2.x + 1.5 + c * 2.25, z: LOT2.z + 1.6 + r * 2.4 });
+/** Spots in Maple Park where planted saplings grow, in planting order. */
+export const SAPLING_SPOTS = Array.from({ length: 30 }, (_, i) => ({ x: 19 + (i % 6) * 3.4 + (i % 2) * 0.8, z: -36 + Math.floor(i / 6) * 2.6 }));
+
 /** The Portside Market hall. Aisles run north–south. */
 export const MARKET: Rect = { x0: -64, z0: 10, x1: -34, z1: 34 };
 /** Aisle 1 is on the left as you walk in from Main Street (you face south, so left is east). */
@@ -121,10 +129,11 @@ export const NPCS = {
   kofi: { name: "Kofi", x: 18, z: 76, shirt: 0xf39c12, skin: 0x5a3825, hair: 0x111111 },
   rosa: { name: "Rosa", x: 31, z: 14, shirt: 0x27ae60, skin: 0xf1c27d, hair: 0x6d3b1a },
   guard: { name: "Officer Grant", x: R_TH.ox + 2.6, z: R_TH.oz + 2.2, shirt: 0x1c2b4a, skin: 0x5a3825, hair: 0x111111 },
-  clerk: { name: "Ms. Joseph", x: R_TH.ox - 7, z: R_TH.oz - 0.6, shirt: 0x8e44ad, skin: 0xc68642, hair: 0x2b1b14 },
+  clerk: { name: "Ms. Joseph", x: R_TH.ox - 7, z: R_TH.oz + 3.2, shirt: 0x8e44ad, skin: 0xc68642, hair: 0x2b1b14 },
   teller: { name: "Mr. Mensah", x: R_BK.ox - 4, z: R_BK.oz - 4.6, shirt: 0x2e7d32, skin: 0x8d5524, hair: 0x111111 },
   bankguard: { name: "Officer Diaz", x: R_BK.ox + 7.5, z: R_BK.oz + 3.5, shirt: 0x1c2b4a, skin: 0xe0ac69, hair: 0x3b2314 },
   librarian: { name: "Mrs. Thompson", x: R_LB.ox - 6, z: R_LB.oz + 1, shirt: 0xd35400, skin: 0xf1c27d, hair: 0xb0b0b0 },
+  forester: { name: "Mr. Banda", x: 38.4, z: -31, shirt: 0x6d4c35, skin: 0x5a3825, hair: 0x111111 },
 } as const;
 export type NpcId = keyof typeof NPCS;
 
@@ -187,7 +196,13 @@ export function buildings(): Building[] {
 export function trees(): { x: number; z: number; s: number }[] {
   const r = rng(77);
   const out: { x: number; z: number; s: number }[] = [];
-  for (let i = 0; i < 26; i++) out.push({ x: PARK.x0 + 2 + r() * (PARK.x1 - PARK.x0 - 4), z: PARK.z0 + 2 + r() * (PARK.z1 - PARK.z0 - 4), s: 0.8 + r() * 0.6 });
+  for (let i = 0; i < 26; i++) {
+    const t = { x: PARK.x0 + 2 + r() * (PARK.x1 - PARK.x0 - 4), z: PARK.z0 + 2 + r() * (PARK.z1 - PARK.z0 - 4), s: 0.8 + r() * 0.6 };
+    // Keep Lot 2 and the sapling rows clear.
+    const onLot = t.x > LOT2.x - 2 && t.x < LOT2.x + LOT2.w + 1 && t.z > LOT2.z - 1 && t.z < LOT2.z + LOT2.d + 2;
+    const onSaplings = t.x > 17 && t.x < 39 && t.z > -38 && t.z < -24;
+    if (!onLot && !onSaplings) out.push(t);
+  }
   // Palms along the beach.
   for (let x = -56; x <= 56; x += 14) out.push({ x: x + (r() - 0.5) * 4, z: 62 - 1.5, s: -1 });
   return out;

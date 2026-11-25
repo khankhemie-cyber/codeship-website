@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { APPOINTMENTS, BILLS, fewestBills, mayEnter, type BankWorld, type LibraryWorld, type SecurityWorld } from "@/lib/games/port/missions";
+import { APPOINTMENTS, BILLS, fewestBills, mayEnter, permitFee, permitProblem, type BankWorld, type LibraryWorld, type PermitWorld, type SecurityWorld } from "@/lib/games/port/missions";
 
 /**
  * The indoor challenges done by hand (1 star). Each one is the same job the
@@ -136,6 +136,53 @@ export function HandLibrary({ onDone, onClose, say, onOrder, world }: Props & { 
         ))}
       </div>
       <p className="mt-3 text-sm text-white/70">Swaps so far: {moves}</p>
+    </Shell>
+  );
+}
+
+export function HandPermit({ onDone, onClose, say, world }: Props & { world: PermitWorld }) {
+  const apps = world.applications;
+  const [i, setI] = useState(0);
+  const a = apps[i];
+  const fee = permitFee(a);
+  const choose = (approve: boolean) => {
+    const problem = permitProblem(a);
+    if (approve && problem) return say("Ms. Joseph", `Not so fast: ${problem}.`, "bad");
+    if (!approve && !problem) return say("Ms. Joseph", `${a.name} meets every rule. That one should be approved!`, "bad");
+    say("Ms. Joseph", approve ? `Approved: ${a.name}.` : `Refused: ${a.name} (${problem}).`, "good");
+    if (i + 1 >= apps.length) onDone();
+    else setI(i + 1);
+  };
+  const row = (label: string, value: string) => (
+    <div className="flex justify-between gap-3 border-b border-gray-200 py-1"><span className="text-gray-600">{label}</span><strong>{value}</strong></div>
+  );
+  return (
+    <Shell title="Check building permits" who="Ms. Joseph" onClose={onClose}>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="rounded-xl bg-white/5 p-3 text-sm">
+          <div className="font-bold text-amber">Permit rules</div>
+          <ol className="mt-1 list-decimal space-y-1 pl-4">
+            <li>The lot must be cleared.</li>
+            <li>The building must fit with 1 block of space on every side: width + 2 and depth + 2 must fit the lot.</li>
+            <li>The fee is 2 coins per square: width × depth × 2. They must have enough coins.</li>
+          </ol>
+        </div>
+        <div className="rounded-xl bg-white p-4 text-sm text-navy">
+          <div className="text-xs font-bold uppercase text-gray-500">Application {i + 1} of {apps.length}</div>
+          <div className="mt-1 text-xl font-extrabold">{a.name}</div>
+          <div className="mt-2">
+            {row("Lot size", `${a.lotW} × ${a.lotD}`)}
+            {row("Building size", `${a.buildW} × ${a.buildD}`)}
+            {row("Lot cleared?", a.cleared ? "Yes" : "No")}
+            {row("Coins they have", String(a.coins))}
+            {row("Fee", `${a.buildW} × ${a.buildD} × 2 = ${fee}`)}
+          </div>
+          <div className="mt-4 grid gap-2">
+            <button onClick={() => choose(true)} className="rounded-lg bg-emerald-500 px-3 py-2 font-bold text-white">Approve</button>
+            <button onClick={() => choose(false)} className="rounded-lg bg-rose-600 px-3 py-2 font-bold text-white">Deny</button>
+          </div>
+        </div>
+      </div>
     </Shell>
   );
 }

@@ -16,7 +16,10 @@ import {
   type BeachWorld,
   type HomeWorld,
   type LibraryWorld,
+  type LumberWorld,
   type MarketWorld,
+  type PermitWorld,
+  LOT2_GRID,
   type MissionId,
   type MissionInfo,
   type SecurityWorld,
@@ -26,7 +29,18 @@ const { chain, blk, ws } = build;
 void APPOINTMENTS;
 
 /** The world each challenge is played in when you're standing there. */
-function liveWorld(mission: "security" | "bank" | "library"): unknown {
+function liveWorld(mission: "security" | "bank" | "library" | "lumber" | "permit"): unknown {
+  if (mission === "lumber") return { grid: LOT2_GRID } satisfies LumberWorld;
+  if (mission === "permit")
+    return {
+      applications: [
+        { name: "Mr. Patel's bakery", lotW: 12, lotD: 10, buildW: 8, buildD: 6, cleared: true, coins: 200 },
+        { name: "Ms. Diaz's garage", lotW: 8, lotD: 8, buildW: 7, buildD: 5, cleared: true, coins: 120 },
+        { name: "The Lee family's house", lotW: 10, lotD: 9, buildW: 6, buildD: 5, cleared: false, coins: 300 },
+        { name: "Kofi's surf shop", lotW: 9, lotD: 7, buildW: 6, buildD: 4, cleared: true, coins: 40 },
+        { name: "Your Lot 2", lotW: 12, lotD: 8, buildW: 8, buildD: 5, cleared: true, coins: 80 },
+      ],
+    } satisfies PermitWorld;
   if (mission === "security")
     return {
       visitors: [
@@ -45,6 +59,24 @@ function liveWorld(mission: "security" | "bank" | "library"): unknown {
 /** The hidden worlds every solution must also pass, after the live one. */
 function testWorlds(mission: MissionId): unknown[] {
   if (mission === "home") return [{ blocks: [] } satisfies HomeWorld];
+  if (mission === "lumber")
+    return [
+      { grid: [["tree", "old tree"], ["empty", "tree"]] },
+      { grid: [["tree", "tree", "tree", "tree"], ["tree", "tree", "tree", "tree"], ["tree", "tree", "old tree", "tree"], ["empty", "empty", "tree", "tree"]] },
+      { grid: [["old tree", "empty", "old tree"]] },
+    ] satisfies LumberWorld[];
+  if (mission === "permit")
+    return [
+      {
+        applications: [
+          { name: "Corner café", lotW: 10, lotD: 10, buildW: 8, buildD: 8, cleared: true, coins: 128 },
+          { name: "Fire station", lotW: 14, lotD: 12, buildW: 12, buildD: 9, cleared: true, coins: 500 },
+          { name: "Tiny shed", lotW: 4, lotD: 4, buildW: 2, buildD: 2, cleared: true, coins: 7 },
+          { name: "Big school", lotW: 30, lotD: 20, buildW: 20, buildD: 15, cleared: false, coins: 900 },
+        ],
+      },
+      { applications: [] },
+    ] satisfies PermitWorld[];
   if (mission === "market")
     return [
       { orders: ["eggs", "rice", "oranges", "cookies"] },
@@ -296,6 +328,72 @@ for (let i = 0; i < n - 1; i++) {
     },
     hint: "One pass moves the biggest book to the end, but the rest may still be mixed up. Repeat the pass: a loop around your loop (this is called bubble sort).",
   },
+  lumber: {
+    id: "lumber",
+    bot: "Lumber Bot",
+    title: "Clear Lot 2",
+    goal: "Lot 2 is overgrown. Program the Lumber Bot to cut down every tree, but never the protected old trees, and plant one sapling in the park for every tree it cuts. The lot is a grid: rows from north to south, columns from west to east, both starting at 0.",
+    api: [
+      { sig: "rows() / cols()", doc: "How many rows and columns the lot has." },
+      { sig: "look(row, col)", doc: '"tree", "old tree" or "empty".' },
+      { sig: "cut(row, col)", doc: "Cut down the tree there." },
+      { sig: "plant_sapling()", doc: "Plant one new tree in Maple Park." },
+    ],
+    starter: {
+      py: `# Check every spot on the lot, row by row.
+for row in range(rows()):
+    for col in range(cols()):
+        if look(row, col) != "empty":
+            cut(row, col)
+`,
+      js: `// Check every spot on the lot, row by row.
+for (let row = 0; row < rows(); row++) {
+  for (let col = 0; col < cols(); col++) {
+    if (look(row, col) !== "empty") {
+      cut(row, col);
+    }
+  }
+}
+`,
+    },
+    hint: 'Only cut spots that are exactly "tree" (old trees are protected). Then plant_sapling() right after each cut, so the numbers always match.',
+  },
+  permit: {
+    id: "permit",
+    bot: "Permit Checker",
+    title: "Building permits",
+    goal: "Program the Permit Checker at the Town Hall front desk. Approve an application only if: the lot is cleared, the building fits with 1 block of space on every side (building width + 2 ≤ lot width, and the same for depth), and the applicant has enough coins for the fee of 2 coins per floor square (width × depth × 2). Otherwise refuse it.",
+    api: [
+      { sig: "has_application()", doc: "True while applications are waiting." },
+      { sig: "next_application()", doc: "Open the next one; returns who applied." },
+      { sig: "lot_width() / lot_depth()", doc: "Size of their lot, in blocks." },
+      { sig: "building_width() / building_depth()", doc: "Size of what they want to build." },
+      { sig: "lot_cleared()", doc: "True if the lot has been cleared." },
+      { sig: "coins()", doc: "How many coins they have." },
+      { sig: "approve() / deny()", doc: "Stamp the permit." },
+    ],
+    starter: {
+      py: `while has_application():
+    name = next_application()
+    # Only one rule so far. Add the size and fee rules!
+    if lot_cleared():
+        approve()
+    else:
+        deny()
+`,
+      js: `while (has_application()) {
+  const name = next_application();
+  // Only one rule so far. Add the size and fee rules!
+  if (lot_cleared()) {
+    approve();
+  } else {
+    deny();
+  }
+}
+`,
+    },
+    hint: "Work out the fee first: fee = building_width() * building_depth() * 2. Then approve only if all three are true, joined with 'and' (&& in JavaScript).",
+  },
 };
 
 
@@ -337,6 +435,23 @@ const STARTER_BLOCKS: Record<MissionId, unknown> = {
     )!
   ),
   library: ws(chain(blk("port_start"), blk("port_each_pair", undefined, { DO: blk("port_if", undefined, { COND: blk("port_pair_wrong"), DO: blk("port_swap_pair") }) }))!),
+  lumber: ws(
+    chain(
+      blk("port_start"),
+      blk("port_each_row", undefined, {
+        DO: blk("port_each_col", undefined, { DO: blk("port_if", undefined, { COND: blk("port_not", undefined, { A: blk("port_spot_is", { S: "empty" }) }), DO: blk("port_cut") }) }),
+      })
+    )!
+  ),
+  permit: ws(
+    chain(
+      blk("port_start"),
+      blk("port_while", undefined, {
+        COND: blk("port_app_waiting"),
+        DO: chain(blk("port_next_app"), blk("port_if_else", undefined, { COND: blk("port_lot_cleared"), DO: blk("port_approve"), ELSE: blk("port_deny") })),
+      })
+    )!
+  ),
 };
 
 
@@ -344,10 +459,10 @@ export type PortContent = {
   missions: Record<MissionId, MissionInfo>;
   starterBlocks: Record<MissionId, unknown>;
   testWorlds: Record<MissionId, unknown[]>;
-  live: { security: SecurityWorld; bank: BankWorld; library: LibraryWorld };
+  live: { security: SecurityWorld; bank: BankWorld; library: LibraryWorld; lumber: LumberWorld; permit: PermitWorld };
 };
 
-const IDS: MissionId[] = ["home", "market", "beach", "security", "bank", "library"];
+const IDS: MissionId[] = ["home", "market", "beach", "security", "bank", "library", "lumber", "permit"];
 
 /** Everything a student's game needs to play the challenges. */
 export function portContent(): PortContent {
@@ -359,6 +474,8 @@ export function portContent(): PortContent {
       security: liveWorld("security") as SecurityWorld,
       bank: liveWorld("bank") as BankWorld,
       library: liveWorld("library") as LibraryWorld,
+      lumber: liveWorld("lumber") as LumberWorld,
+      permit: liveWorld("permit") as PermitWorld,
     },
   };
 }
