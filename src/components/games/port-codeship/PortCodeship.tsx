@@ -22,6 +22,7 @@ import {
   MISSIONS,
   makeLitter,
   missingWalls,
+  liveWorld as missionLiveWorld,
   testWorlds,
   type BeachStep,
   type BinName,
@@ -32,6 +33,10 @@ import {
   type Litter,
   type LitterKind,
   type MarketStep,
+  type BankStep,
+  type LibraryStep,
+  type LibraryWorld,
+  type SecurityStep,
   type MissionId,
 } from "@/lib/games/port/missions";
 import type { RunOutcome } from "@/lib/games/port/runner";
@@ -49,7 +54,8 @@ import type { EngineSave, Focus, Game, Look } from "./engine/Game";
 import type { BeachBotStyle } from "./engine/models";
 import SignupGate from "./SignupGate";
 import ShopPanel, { FOOD_PRICES } from "./ShopPanel";
-import { BEACH_TERMINAL, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type NpcId } from "./engine/layout";
+import { BEACH_TERMINAL, INTERIORS, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type InteriorId, type NpcId } from "./engine/layout";
+import { HandBank, HandLibrary, HandSecurity } from "./HandChallenges";
 
 // ---------------------------------------------------------------------------
 // Save data
@@ -102,6 +108,9 @@ const CHALLENGES: { id: MissionId; where: string; how: string; unlock: string }[
   { id: "home", where: "Your plot, east of the Town Square.", how: "Build 6 × 5 walls, 3 blocks high: by hand (B) or code the Builder Bot.", unlock: "Talk to Captain Ada in the Town Square to start." },
   { id: "market", where: "Fresh Market, west on Main Street.", how: "Bring Mrs. Ali cereal, flour and mangoes, or code the Ladder Bot.", unlock: "Unlocks when your house is built." },
   { id: "beach", where: "The beach, south down Harbour Road.", how: "Sort every piece of litter into the right bin, or design and code a Beach Bot.", unlock: "Unlocks after the Fresh Market." },
+  { id: "security", where: "Inside the Town Hall, north-west of the Town Square.", how: "Let in only visitors on the appointment board who show photo ID: work the gate with Officer Grant, or code the Gate Bot.", unlock: "Unlocks when your house is built." },
+  { id: "bank", where: "Inside the Port Bank, on Harbour Road.", how: "Pay each customer exactly, in the fewest bills: by hand with Mr. Mensah, or code the Change Machine.", unlock: "Unlocks when your house is built." },
+  { id: "library", where: "Inside the Library, on Harbour Road.", how: "Sort the returns shelf, smallest number first: swap books by hand, or code the Shelf Bot.", unlock: "Unlocks when your house is built." },
 ];
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
 
@@ -115,7 +124,7 @@ function freshSave(name: string, look: Look): Save {
     editor: "blocks",
     engine: {},
     intro: false,
-    missions: { home: m("home"), market: m("market"), beach: m("beach") },
+    missions: { home: m("home"), market: m("market"), beach: m("beach"), security: m("security"), bank: m("bank"), library: m("library") },
     blocks: [],
     marketServed: 0,
     litter: makeLitter(18, 2026),
@@ -213,6 +222,11 @@ export default function PortCodeship() {
   const [looking, setLooking] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [trackerOpen, setTrackerOpen] = useState(false);
+  /** Which indoor challenge is being done by hand. */
+  const [hand, setHand] = useState<"security" | "bank" | "library" | null>(null);
+  /** Which building the player is inside (null outdoors), for the map. */
+  const [indoorHere, setIndoorHere] = useState<InteriorId | null>(null);
+  const [fade, setFade] = useState(false);
   const [sprint, setSprintState] = useState(false);
   const toggleSprint = () =>
     setSprintState((on) => {
@@ -253,6 +267,8 @@ export default function PortCodeship() {
     const m = s.missions;
     if (id === "build") return s.intro ? "" : null;
     if (id === "shop:market") return `Shop at the Fresh Market (${s.coins ?? 0} coins)`;
+    if (kind === "door") return `Go into the ${INTERIORS[a as InteriorId].name}`;
+    if (kind === "exit") return "Go back outside";
     if (kind === "npc") {
       const n = NPCS[a as NpcId];
       if (a === "ali" && carrying?.kind === "product") return `Give ${carrying.name} to Mrs. Ali`;
@@ -325,6 +341,12 @@ export default function PortCodeship() {
           ...q.missions,
           [id]: { ...q.missions[id], status: "done", stars: Math.max(prev.stars, stars), method: stars >= prev.stars ? method : prev.method },
           ...(nextId && q.missions[nextId].status === "locked" ? { [nextId]: { ...q.missions[nextId], status: "active" } } : {}),
+          // Building your house opens the Town Hall, Bank and Library challenges.
+          ...(id === "home"
+            ? Object.fromEntries(
+                (["security", "bank", "library"] as MissionId[]).filter((k) => q.missions[k].status === "locked").map((k) => [k, { ...q.missions[k], status: "active" as const }])
+              )
+            : {}),
         },
       }));
       completeLevel("port", id, stars);
@@ -462,6 +484,53 @@ export default function PortCodeship() {
         });
         return;
       }
+      if (kind === "door" || kind === "exit") {
+        // A quick fade while we move through the doorway.
+        setFade(true);
+        g.setEnabled(false);
+        window.setTimeout(() => {
+          if (kind === "door") g.enterBuilding(a as InteriorId);
+          else g.exitBuilding(a as InteriorId);
+          setIndoorHere(g.whereAmI());
+          window.setTimeout(() => {
+            setFade(false);
+            g.setEnabled(true);
+          }, 120);
+        }, 280);
+        return;
+      }
+      if (id === "npc:guard" || id === "npc:teller" || id === "npc:librarian") {
+        const mission = id === "npc:guard" ? "security" : id === "npc:teller" ? "bank" : "library";
+        const st = m[mission];
+        const who = NPCS[a as NpcId].name;
+        if (st.status === "locked") {
+          showDialog({ who, text: "Welcome! Come and see me once you've settled in: build your house first.", choices: [{ label: "OK", act: closeDialog }] });
+          return;
+        }
+        const ask = {
+          security: "I check everyone coming into the Town Hall. Only people on today's appointment board who show photo ID may go past the gate. It's a lot of checking! Can you help me by hand, or program the Gate Bot at that terminal?",
+          bank: "Customers come to the change machine to collect what they're owed. It must pay exactly, using the fewest bills: 50s, 20s, 10s, 5s and 1s. Want to try by hand, or program the machine?",
+          library: "Look at that returns shelf: the books are all out of order! They go smallest number on the left. You could swap them around by hand, or program the Shelf Bot.",
+        }[mission];
+        showDialog({
+          who,
+          text: st.status === "done" ? "Thanks to you, everything runs smoothly here. You can always improve the code at the terminal." : ask,
+          choices: [
+            { label: "Do it by hand", act: () => { closeDialog(); g.setEnabled(false); setHand(mission); } },
+            { label: "Program it", act: () => { closeDialog(); openPanel(mission); } },
+            { label: "Bye", act: closeDialog },
+          ],
+        });
+        return;
+      }
+      if (id === "npc:clerk") {
+        showDialog({ who: "Ms. Joseph", text: "Welcome to the Town Hall! If you're not on today's appointment board, I can help you here at the front desk. Soon you'll be able to apply for building permits with me too.", choices: [{ label: "Thanks!", act: closeDialog }] });
+        return;
+      }
+      if (id === "npc:bankguard") {
+        showDialog({ who: "Officer Diaz", text: "I keep the Port Bank safe. The vault behind me stays locked, but the change machine is free to use. Mr. Mensah could use a hand with it.", choices: [{ label: "OK", act: closeDialog }] });
+        return;
+      }
       if (kind === "term") {
         openPanel(a as MissionId);
         return;
@@ -576,6 +645,7 @@ export default function PortCodeship() {
     const s = saveRef.current!;
     if (id === "home") return { blocks: gameRef.current?.getBlocks() ?? s.blocks };
     if (id === "market") return { orders: ALI_ORDERS };
+    if (id === "security" || id === "bank" || id === "library") return missionLiveWorld(id);
     return { litter: s.litter };
   }, []);
 
@@ -622,6 +692,9 @@ export default function PortCodeship() {
     g.watch(id);
     if (id === "home") await g.playHome(live.steps as HomeStep[]);
     else if (id === "market") await g.playMarket(live.steps as MarketStep[]);
+    else if (id === "security") await g.playSecurity(live.steps as SecurityStep[]);
+    else if (id === "bank") await g.playBank(live.steps as BankStep[]);
+    else if (id === "library") await g.playLibrary(live.steps as LibraryStep[], (missionLiveWorld("library") as LibraryWorld).books);
     else {
       await g.playBeach(live.steps as BeachStep[]);
       const picked = new Set((live.steps as BeachStep[]).filter((st) => st.t === "pick").map((st) => (st as { id: number }).id));
@@ -643,7 +716,8 @@ export default function PortCodeship() {
       r = { ok: false, title: "Not quite yet", detail: live.check.message, output: live.output };
     } else if (failedTest) {
       const why = failedTest.error ?? failedTest.stopped ?? failedTest.check.message;
-      const where = id === "market" ? "with a new set of customers" : id === "beach" ? "on the next tide" : "on an empty plot";
+      const where =
+        id === "market" || id === "bank" ? "with a new set of customers" : id === "beach" ? "on the next tide" : id === "security" ? "with a different group of visitors" : id === "library" ? "on other shelves of books" : "on an empty plot";
       r = { ok: false, title: "It worked here, but not everywhere", detail: `We also tested your code ${where}: ${why}`, output: live.output };
       if (id === "home") {
         finishMission("home", "mixed");
@@ -761,6 +835,10 @@ export default function PortCodeship() {
     const g = gameRef.current;
     if (!g) return;
     let s = loaded;
+    // Saves from before the Town Hall, Bank and Library: add their challenges.
+    const homeDone = s.missions.home.status === "done";
+    for (const k of ["security", "bank", "library"] as MissionId[])
+      if (!s.missions[k]) s = { ...s, missions: { ...s.missions, [k]: { status: homeDone ? "active" : "locked", stars: 0, code: { ...MISSIONS[k].starter } } } };
     if (s.coins === undefined) {
       // Saves from before coins existed: pay out what they already earned.
       const ms = Object.values(s.missions) as MissionState[];
@@ -779,6 +857,7 @@ export default function PortCodeship() {
     g.setLook(s.look);
     g.load(s.engine);
     g.setBlocks(s.blocks);
+    g.setLibraryBooks((missionLiveWorld("library") as LibraryWorld).books);
     g.setLitter(s.litter);
     g.setBeachBotStyle(s.beachBot);
     g.setLowGraphics(s.lowGraphics);
@@ -858,9 +937,16 @@ export default function PortCodeship() {
       return { text: save.marketServed ? `Mrs. Ali still needs ${want}. Or program the Ladder Bot.` : "Help Mrs. Ali at the Fresh Market (west on Main Street).", target: save.marketServed ? MARKET_TERMINAL : NPCS.ali };
     }
     if (m.beach.status !== "done") return { text: `Clean up the beach: ${save.litter.length} pieces of litter. By hand, or build a Beach Bot.`, target: m.beach.status === "active" && save.litter.length < 18 ? BEACH_TERMINAL : NPCS.kofi };
+    const indoor: { id: MissionId; place: InteriorId; npc: NpcId; text: string }[] = [
+      { id: "security", place: "townhall", npc: "guard", text: "Visit the Town Hall and help Officer Grant run the security gate." },
+      { id: "bank", place: "bank", npc: "teller", text: "Visit the Port Bank and help Mr. Mensah make change." },
+      { id: "library", place: "library", npc: "librarian", text: "Visit the Library and help Mrs. Thompson sort the returns." },
+    ];
+    const nextIndoor = indoor.find((q) => m[q.id].status !== "done");
+    if (nextIndoor) return { text: nextIndoor.text, target: indoorHere === nextIndoor.place ? NPCS[nextIndoor.npc] : INTERIORS[nextIndoor.place].out };
     const lit = gameRef.current?.getSave().lit.length ?? 0;
-    return { text: `Free roam! Light all the lookouts (${lit}/${LOOKOUTS.length}) and find every bit. More of Port CODEship opens soon.`, target: null };
-  }, [save, carry]);
+    return { text: `All challenges done! Light all the lookouts (${lit}/${LOOKOUTS.length}) and find every bit. More of Port CODEship opens soon.`, target: null };
+  }, [save, carry, indoorHere]);
 
   useEffect(() => {
     const g = gameRef.current;
@@ -870,6 +956,9 @@ export default function PortCodeship() {
     g.setNpcAlert("ali", save.missions.market.status === "active" && save.marketServed === 0);
     g.setNpcAlert("kofi", save.missions.beach.status === "active" && save.cleanedByHand === 0 && !save.beachCode);
     g.setNpcAlert("rosa", save.missions.home.status === "active");
+    g.setNpcAlert("guard", save.missions.security.status === "active");
+    g.setNpcAlert("teller", save.missions.bank.status === "active");
+    g.setNpcAlert("librarian", save.missions.library.status === "active");
   }, [objective, save, goalHidden]);
 
   // Minimap and big map
@@ -883,6 +972,8 @@ export default function PortCodeship() {
       last = t;
       const g = gameRef.current;
       if (!g) return;
+      const room = g.whereAmI();
+      setIndoorHere((prev) => (prev === room ? prev : room));
       const markers = objective.target ? [{ x: objective.target.x, z: objective.target.z, color: "#f5c33d" }] : [];
       const mini = miniRef.current?.getContext("2d");
       if (mini) g.drawMap(mini, miniRef.current!.width, miniRef.current!.height, "mini", markers);
@@ -921,6 +1012,11 @@ export default function PortCodeship() {
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
         if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
+        if (hand) {
+          setHand(null);
+          gameRef.current?.setEnabled(true);
+          return;
+        }
         if (shopOpen || trackerOpen) {
           setShopOpen(false);
           setTrackerOpen(false);
@@ -949,7 +1045,7 @@ export default function PortCodeship() {
     return () => window.removeEventListener("keydown", onKey);
     // dropCarry only reads refs and stable setters.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen, panel, dialog, mapOpen, building, workshop, closeDialog, shopOpen, trackerOpen]);
+  }, [screen, panel, dialog, mapOpen, building, workshop, closeDialog, shopOpen, trackerOpen, hand]);
 
   /** Put down whatever you're carrying: litter goes back on the sand, products back on the shelf. */
   function dropCarry() {
@@ -1131,6 +1227,11 @@ export default function PortCodeship() {
           </div>
 
           <div className="absolute right-3 top-3 flex flex-col items-end gap-2">
+            {indoorHere && (
+              <div className="absolute right-0 top-0 grid h-[110px] w-[110px] place-items-center rounded-full bg-[#0d1b2a]/90 p-3 text-center text-xs font-bold ring-2 ring-white/70 sm:h-[150px] sm:w-[150px]">
+                Inside the {INTERIORS[indoorHere].name}
+              </div>
+            )}
             <button onClick={() => setMapOpen(true)} aria-label="Open map" className="overflow-hidden rounded-full shadow-lg ring-2 ring-white/70">
               <canvas ref={miniRef} width={150} height={150} className="block h-[110px] w-[110px] sm:h-[150px] sm:w-[150px]" />
             </button>
@@ -1391,6 +1492,24 @@ export default function PortCodeship() {
               </div>
             </div>
           )}
+
+          {/* Indoor challenges by hand */}
+          {hand && (() => {
+            const close = () => {
+              setHand(null);
+              gameRef.current?.setEnabled(true);
+            };
+            const done = () => {
+              const id = hand;
+              close();
+              finishMission(id, "hand");
+              say("Port CODEship", "Done by hand! Program the bot at the terminal for 3 stars.", "info");
+            };
+            if (hand === "security") return <HandSecurity onDone={done} onClose={close} say={say} />;
+            if (hand === "bank") return <HandBank onDone={done} onClose={close} say={say} />;
+            return <HandLibrary onDone={done} onClose={close} say={say} onOrder={(o) => gameRef.current?.setLibraryBooks(o)} />;
+          })()}
+          <div className={`pointer-events-none absolute inset-0 z-50 bg-black transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`} aria-hidden />
 
           {/* Fresh Market register */}
           {shopOpen && save && (

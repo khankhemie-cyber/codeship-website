@@ -12,7 +12,7 @@
  */
 
 export type Lang = "py" | "js";
-export type MissionId = "home" | "market" | "beach";
+export type MissionId = "home" | "market" | "beach" | "security" | "bank" | "library";
 
 export class BotError extends Error {
   name = "BotError";
@@ -405,10 +405,224 @@ export function beachSim(world: BeachWorld): Sim {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Town Hall: the security gate
+
+/** Who is expected today: posted on the board in the Town Hall lobby. */
+export const APPOINTMENTS = ["Ms. Rivera", "Mr. Chen", "Dr. Okafor", "Mrs. Singh", "Mr. Baptiste"];
+export const WALK_INS = ["Mr. Lopez", "Ms. Kim", "Mr. Grant", "Ms. Haddad"];
+
+export type Visitor = { name: string; id: boolean };
+export type SecurityWorld = { visitors: Visitor[] };
+export type SecurityStep =
+  | { t: "visitor"; n: number; name: string; id: boolean }
+  | { t: "in"; name: string; ok: boolean }
+  | { t: "desk"; name: string; ok: boolean }
+  | { t: "say"; text: string };
+
+/** A visitor may go through the gate only with an appointment AND photo ID. */
+export const mayEnter = (v: Visitor) => APPOINTMENTS.includes(v.name) && v.id;
+
+export function securitySim(world: SecurityWorld): Sim {
+  const { steps, output, step, print } = base();
+  let next = 0;
+  let current: Visitor | null = null;
+  let handled = 0;
+  const mistakes: string[] = [];
+  const decide = (letIn: boolean) => {
+    if (!current) throw new BotError("Nobody is at the gate. Call next_visitor() first.");
+    const ok = mayEnter(current) === letIn;
+    if (!ok)
+      mistakes.push(
+        letIn
+          ? `${current.name} was let in, but ${APPOINTMENTS.includes(current.name) ? "had no photo ID" : "has no appointment today"}.`
+          : `${current.name} has an appointment and photo ID, but was sent to the desk.`
+      );
+    step({ t: letIn ? "in" : "desk", name: current.name, ok });
+    handled++;
+    current = null;
+  };
+  const api = {
+    has_visitor() {
+      return next < world.visitors.length || current !== null;
+    },
+    next_visitor() {
+      if (current) throw new BotError(`${current.name} is still waiting. Use let_in() or send_to_desk() first.`);
+      if (next >= world.visitors.length) throw new BotError("Nobody is waiting. Check has_visitor() first.");
+      current = world.visitors[next++];
+      step({ t: "visitor", n: next, name: current.name, id: current.id });
+      return current.name;
+    },
+    has_id() {
+      if (!current) throw new BotError("Nobody is at the gate. Call next_visitor() first.");
+      return current.id;
+    },
+    let_in() {
+      decide(true);
+    },
+    send_to_desk() {
+      decide(false);
+    },
+    print,
+  };
+  return {
+    api: api as unknown as Sim["api"],
+    steps,
+    output,
+    check() {
+      if (mistakes.length) return { passed: false, message: mistakes[0] };
+      if (handled < world.visitors.length) return { passed: false, message: `Only ${handled} of ${world.visitors.length} visitors were helped. Keep going while has_visitor() is true.` };
+      return { passed: true, message: `All ${handled} visitors were checked correctly.` };
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Bank: the change machine
+
+export const BILLS = [50, 20, 10, 5, 1];
+/** The fewest bills that add up to an amount (biggest first works for these bills). */
+export function fewestBills(amount: number) {
+  let n = 0;
+  for (const b of BILLS) {
+    n += Math.floor(amount / b);
+    amount %= b;
+  }
+  return n;
+}
+
+export type BankWorld = { amounts: number[] };
+export type BankStep =
+  | { t: "customer"; n: number; amount: number }
+  | { t: "give"; bill: number; left: number }
+  | { t: "paid"; n: number; ok: boolean; bills: number; best: number }
+  | { t: "say"; text: string };
+
+export function bankSim(world: BankWorld): Sim {
+  const { steps, output, step, print } = base();
+  let next = 0;
+  let left = 0;
+  let open = false;
+  let used = 0;
+  let served = 0;
+  const mistakes: string[] = [];
+  const close = () => {
+    if (!open) return;
+    const amount = world.amounts[next - 1];
+    if (left > 0) mistakes.push(`Customer ${next} was owed ${amount} but only got ${amount - left}.`);
+    const best = fewestBills(amount);
+    const ok = left === 0 && used === best;
+    if (left === 0 && used > best) mistakes.push(`Customer ${next} got ${amount} in ${used} bills. It can be done with only ${best}.`);
+    if (ok) served++;
+    step({ t: "paid", n: next, ok, bills: used, best });
+    open = false;
+  };
+  const api = {
+    has_customer() {
+      return next < world.amounts.length;
+    },
+    next_customer() {
+      close();
+      if (next >= world.amounts.length) throw new BotError("Nobody is in line. Check has_customer() first.");
+      left = world.amounts[next++];
+      used = 0;
+      open = true;
+      step({ t: "customer", n: next, amount: left });
+      return left;
+    },
+    amount_left() {
+      return open ? left : 0;
+    },
+    give(bill: unknown) {
+      const b = Number(bill);
+      if (!BILLS.includes(b)) throw new BotError(`give(${JSON.stringify(bill)}): the machine only has ${BILLS.join(", ")} coin bills.`);
+      if (!open) throw new BotError("Nobody is being served. Call next_customer() first.");
+      if (b > left) throw new BotError(`give(${b}) is too much: only ${left} is left to pay.`);
+      left -= b;
+      used++;
+      step({ t: "give", bill: b, left });
+    },
+    print,
+  };
+  return {
+    api: api as unknown as Sim["api"],
+    steps,
+    output,
+    check() {
+      close();
+      if (mistakes.length) return { passed: false, message: mistakes[0] };
+      if (served < world.amounts.length) return { passed: false, message: `Only ${served} of ${world.amounts.length} customers were paid. Keep going while has_customer() is true.` };
+      return { passed: true, message: `All ${served} customers got the exact amount in the fewest bills.` };
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Library: sort the returned books
+
+export type LibraryWorld = { books: number[] };
+export type LibraryStep = { t: "swap"; i: number; j: number } | { t: "say"; text: string };
+
+export function librarySim(world: LibraryWorld): Sim {
+  const { steps, output, step, print } = base();
+  const shelf = [...world.books];
+  const spot = (name: string, v: unknown) => {
+    const i = Number(v);
+    if (!Number.isInteger(i) || i < 0 || i >= shelf.length)
+      throw new BotError(`${name}(${JSON.stringify(v)}): there is no book there. Spots go from 0 to ${shelf.length - 1}.`);
+    return i;
+  };
+  const api = {
+    book_count() {
+      return shelf.length;
+    },
+    call_number(i: unknown) {
+      return shelf[spot("call_number", i)];
+    },
+    swap(i: unknown, j: unknown) {
+      const a = spot("swap", i);
+      const b = spot("swap", j);
+      [shelf[a], shelf[b]] = [shelf[b], shelf[a]];
+      step({ t: "swap", i: a, j: b });
+    },
+    print,
+  };
+  return {
+    api: api as unknown as Sim["api"],
+    steps,
+    output,
+    check() {
+      for (let i = 0; i + 1 < shelf.length; i++)
+        if (shelf[i] > shelf[i + 1]) return { passed: false, message: `Not sorted yet: book ${shelf[i]} is to the left of ${shelf[i + 1]} (spots ${i} and ${i + 1}).` };
+      return { passed: true, message: `All ${shelf.length} books are in order.` };
+    },
+  };
+}
+
 export function makeSim(mission: MissionId, world: unknown): Sim {
   if (mission === "home") return homeSim(world as HomeWorld);
   if (mission === "market") return marketSim(world as MarketWorld);
+  if (mission === "security") return securitySim(world as SecurityWorld);
+  if (mission === "bank") return bankSim(world as BankWorld);
+  if (mission === "library") return librarySim(world as LibraryWorld);
   return beachSim(world as BeachWorld);
+}
+
+/** The world each challenge is played in when you're standing there. */
+export function liveWorld(mission: "security" | "bank" | "library"): unknown {
+  if (mission === "security")
+    return {
+      visitors: [
+        { name: "Ms. Rivera", id: true },
+        { name: "Mr. Lopez", id: true },
+        { name: "Mr. Chen", id: false },
+        { name: "Dr. Okafor", id: true },
+        { name: "Ms. Kim", id: false },
+        { name: "Mrs. Singh", id: true },
+      ],
+    } satisfies SecurityWorld;
+  if (mission === "bank") return { amounts: [87, 23, 4] } satisfies BankWorld;
+  return { books: [412, 105, 733, 268, 590, 321, 884, 150] } satisfies LibraryWorld;
 }
 
 /** The hidden worlds every solution must also pass, after the live one. */
@@ -420,6 +634,20 @@ export function testWorlds(mission: MissionId): unknown[] {
       { orders: ["flour", "cereal", "milk"] },
       { orders: ["mangoes"] },
     ] satisfies MarketWorld[];
+  if (mission === "security")
+    return [
+      { visitors: [{ name: "Mr. Baptiste", id: true }, { name: "Ms. Haddad", id: true }, { name: "Mrs. Singh", id: false }, { name: "Mr. Chen", id: true }] },
+      { visitors: [{ name: "Mr. Grant", id: false }, { name: "Dr. Okafor", id: true }] },
+      { visitors: [] },
+    ] satisfies SecurityWorld[];
+  if (mission === "bank") return [{ amounts: [99, 50, 7, 136] }, { amounts: [1, 65, 38] }, { amounts: [] }] satisfies BankWorld[];
+  if (mission === "library")
+    return [
+      { books: [9, 8, 7, 6, 5, 4, 3, 2, 1] },
+      { books: [100, 200, 300] },
+      { books: [530, 112, 530, 87, 941, 300] },
+      { books: [42] },
+    ] satisfies LibraryWorld[];
   return [{ litter: makeLitter(9, 7) }, { litter: makeLitter(14, 42) }, { litter: [] }] satisfies BeachWorld[];
 }
 
@@ -566,6 +794,103 @@ while (has_litter()) {
     },
     hint: "Use elif (Python) or else if (JavaScript) for each bin, or make a dictionary that maps each item to its bin.",
   },
+  security: {
+    id: "security",
+    bot: "Gate Bot",
+    title: "Town Hall security",
+    goal: "Program the security gate. Let a visitor in only if they have an appointment today AND show photo ID. Everyone else goes to the front desk. The appointment board is on the lobby wall.",
+    api: [
+      { sig: "has_visitor()", doc: "True while someone is waiting at the gate." },
+      { sig: "next_visitor()", doc: 'The next visitor\'s name, e.g. "Mr. Chen".' },
+      { sig: "has_id()", doc: "True if this visitor showed photo ID." },
+      { sig: "let_in()", doc: "Open the gate for them." },
+      { sig: "send_to_desk()", doc: "Send them to the front desk instead." },
+    ],
+    starter: {
+      py: `# Who is expected today? Read the board in the lobby.
+appointments = ["Ms. Rivera", "Mr. Chen"]
+
+while has_visitor():
+    name = next_visitor()
+    if name in appointments:
+        let_in()
+    else:
+        send_to_desk()
+`,
+      js: `// Who is expected today? Read the board in the lobby.
+const appointments = ["Ms. Rivera", "Mr. Chen"];
+
+while (has_visitor()) {
+  const name = next_visitor();
+  if (appointments.includes(name)) {
+    let_in();
+  } else {
+    send_to_desk();
+  }
+}
+`,
+    },
+    hint: "Two things must both be true: the name is on the board, and has_id() is True. In Python use 'and', in JavaScript '&&'. And copy every name from the board.",
+  },
+  bank: {
+    id: "bank",
+    bot: "Change Machine",
+    title: "Bank change machine",
+    goal: "Program the change machine to pay each customer exactly what they're owed, using the fewest bills. Bills come in 50, 20, 10, 5 and 1.",
+    api: [
+      { sig: "has_customer()", doc: "True while someone is in line." },
+      { sig: "next_customer()", doc: "Serve the next customer; returns how much they're owed." },
+      { sig: "amount_left()", doc: "How much this customer still needs." },
+      { sig: "give(bill)", doc: "Hand over one bill: 50, 20, 10, 5 or 1." },
+    ],
+    starter: {
+      py: `while has_customer():
+    amount = next_customer()
+    # This pays the right amount... in a LOT of bills.
+    while amount_left() >= 1:
+        give(1)
+`,
+      js: `while (has_customer()) {
+  const amount = next_customer();
+  // This pays the right amount... in a LOT of bills.
+  while (amount_left() >= 1) {
+    give(1);
+  }
+}
+`,
+    },
+    hint: "Try the biggest bill first: while amount_left() is at least 50, give(50). Then do the same for 20, 10, 5 and 1. A list of bills and a for loop keeps it short.",
+  },
+  library: {
+    id: "library",
+    bot: "Shelf Bot",
+    title: "Sort the library books",
+    goal: "Program the Shelf Bot to put the returned books in order, smallest call number on the left. Spots are numbered from 0.",
+    api: [
+      { sig: "book_count()", doc: "How many books are on the shelf." },
+      { sig: "call_number(i)", doc: "The number on the book at spot i." },
+      { sig: "swap(i, j)", doc: "Swap the books at spots i and j." },
+    ],
+    starter: {
+      py: `n = book_count()
+
+# One pass: swap any neighbours that are the wrong way round.
+for i in range(n - 1):
+    if call_number(i) > call_number(i + 1):
+        swap(i, i + 1)
+`,
+      js: `const n = book_count();
+
+// One pass: swap any neighbours that are the wrong way round.
+for (let i = 0; i < n - 1; i++) {
+  if (call_number(i) > call_number(i + 1)) {
+    swap(i, i + 1);
+  }
+}
+`,
+    },
+    hint: "One pass moves the biggest book to the end, but the rest may still be mixed up. Repeat the pass: a loop around your loop (this is called bubble sort).",
+  },
 };
 
 /** Names students can call in each mission, for highlighting and the worker. */
@@ -573,4 +898,7 @@ export const API_NAMES: Record<MissionId, string[]> = {
   home: ["place", "move", "turn_right", "turn_left", "up", "down", "set_color", "remove", "print"],
   market: ["has_customer", "next_order", "go_to_aisle", "raise_to", "pick", "deliver", "print"],
   beach: ["has_litter", "scan", "pick_up", "drop_in", "print"],
+  security: ["has_visitor", "next_visitor", "has_id", "let_in", "send_to_desk", "print"],
+  bank: ["has_customer", "next_customer", "amount_left", "give", "print"],
+  library: ["book_count", "call_number", "swap", "print"],
 };
