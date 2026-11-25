@@ -48,7 +48,7 @@ const homeFaqs = [
   {
     question: "Do you run a March Break camp?",
     answer:
-      "Yes. March Break camp runs Monday to Friday, March 15 to 19, 2027, 9:00 AM to 4:00 PM at Core21 in Oshawa. It is for ages 6 to 14 and costs CAD $240 per day, or CAD $220 per day with early bird pricing until December 31, 2026. Book the full week or only the days you need.",
+      "Yes. March Break camp runs Monday to Friday, March 15 to 19, 2027, 9:00 AM to 4:00 PM at Core21 in Oshawa. It is for ages 7 to 12 and costs CAD $450 for the week, or CAD $400 with early bird pricing until December 31, 2026. Single days are CAD $125 each. Sign-up is open now.",
   },
   {
     question: "Does my child need coding experience?",
@@ -131,7 +131,7 @@ export default function HomePage() {
             </p>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold mt-4 leading-tight">March Break camp</h2>
             <p className="text-lg sm:text-xl text-white mt-4">
-              Coding, AI and robotics. Book the full week or just the days you need. Kids build something new every day and show it off on Friday.
+              Five days of coding, AI and robotics. Kids build something new every day and show it off on Friday.
             </p>
             <EarlyBirdNote className="mt-4 inline-block rounded-full bg-[#F4D734] px-4 py-2 text-base font-bold text-[#001532]" />
             <ul className="mt-6 flex flex-wrap gap-2">

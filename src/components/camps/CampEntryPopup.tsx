@@ -187,30 +187,20 @@ export default function CampEntryPopup() {
                   {pricing.earlyBird ? `Early bird · ends ${CAMP.earlyBirdEndsLabel}` : `March Break · ${CAMP.shortDates}, 2027`}
                 </p>
                 <h2 id="camp-popup-title" className="relative font-display text-[24px] sm:text-[34px] font-extrabold leading-[1.1] mt-2 sm:mt-3 pr-6">
-                  {pricing.earlyBird ? `March Break camp: save $${CAMP.earlyBirdSaving} a day.` : "March Break camp is open."}
+                  {pricing.earlyBird ? `March Break camp: save $${CAMP.earlyBirdSaving}.` : "March Break camp is open."}
                 </h2>
                 <p id="camp-popup-desc" className="relative mt-2 sm:mt-3 text-[15px] sm:text-base text-white/80">
-                  Coding, AI and robotics in Oshawa, {CAMP.hours}, {CAMP.ages.toLowerCase()}. Book the full week or only the days you need.
+                  Five days of coding, AI and robotics in Oshawa, {CAMP.hours}, {CAMP.ages.toLowerCase()}. Kids show off what they built on Friday.
                 </p>
               </div>
 
               <div className="px-5 py-5 sm:px-8 sm:py-6">
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-4xl font-extrabold text-[#001532]">${pricing.priceCad}</span>
-                  <span className="text-base text-gray-500">per day</span>
+                  <span className="text-base text-gray-500">for the week</span>
                   {pricing.earlyBird && <span className="text-base text-gray-400 line-through">${CAMP.priceCad}</span>}
                 </div>
-
-                <p className="mt-4 text-sm font-semibold text-[#001532]">Pick your days at checkout:</p>
-                <ul className="mt-2 grid grid-cols-5 gap-1.5">
-                  {CAMP.campDays.map((d, i) => (
-                    <li key={d.short} className="border border-[#001532]/10 bg-[#FAF8F4] py-2 text-center">
-                      <span className="block text-xs font-bold uppercase tracking-wider text-[#0F6F7C]">{d.short}</span>
-                      <span className="block font-display text-lg font-extrabold text-[#001532]">{15 + i}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-2 text-xs text-gray-500">March 2027 · Core21, 21 Simcoe St South, Oshawa · {CAMP.spots} spots</p>
+                <p className="mt-2 text-sm text-gray-600">Mon–Fri, March 15–19, 2027 · Core21, 21 Simcoe St South, Oshawa · {CAMP.spots} spots</p>
 
                 <a
                   href={pricing.url}
@@ -221,7 +211,18 @@ export default function CampEntryPopup() {
                   }}
                   className="mt-5 flex w-full items-center justify-center rounded-full bg-[#F4D734] px-6 py-4 text-lg font-bold text-[#001532] hover:bg-[#E6C51E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F6F7C]"
                 >
-                  {pricing.earlyBird ? `Save my spot at $${pricing.priceCad}/day →` : "Sign up for March Break →"}
+                  {pricing.earlyBird ? `Save my spot for $${pricing.priceCad} →` : "Sign up for March Break →"}
+                </a>
+
+                <a
+                  href={CAMP.dayUrl}
+                  onClick={() => {
+                    write("local", SIGNED_UP_KEY, "1");
+                    trackEvent("camp_signup_click", { camp: CAMP.slug, source: "entry_popup", pricing: "single_day" });
+                  }}
+                  className="mt-3 block text-center text-sm font-semibold text-[#0F6F7C] underline underline-offset-4 hover:text-[#001532]"
+                >
+                  Only need some days? {CAMP.dayPriceLabel}/day
                 </a>
 
                 <div className="mt-4 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-[#001532]/[0.08] pt-4">
