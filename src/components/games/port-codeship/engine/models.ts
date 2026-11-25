@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship models: blocky low-poly people and bots, built from boxes so they
  * cost almost nothing to draw, plus canvas textures for facades and signs.

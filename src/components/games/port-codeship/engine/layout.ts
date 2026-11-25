@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship town layout: one place for every position in the world, used by
  * the 3D scene, the collision boxes and the minimap.
@@ -31,7 +32,7 @@ export const PLAZA = { x: 0, z: 0, r: 16 };
 export const PLOT = { x: 34, z: 12, w: 12, d: 10 };
 export const PLOT_TERMINAL = { x: 32, z: 10.5 };
 
-/** The Fresh Market hall. Aisles run north–south. */
+/** The Portside Market hall. Aisles run north–south. */
 export const MARKET: Rect = { x0: -64, z0: 10, x1: -34, z1: 34 };
 /** Aisle 1 is on the left as you walk in from Main Street (you face south, so left is east). */
 export const AISLE_X = [-40, -46, -52, -58];
@@ -45,7 +46,7 @@ export const LADDER_Z = 19.6;
 export const COUNTER = { x: -49, z: 12 };
 export const MARKET_TERMINAL = { x: -36.5, z: 11.5 };
 
-/** Beach: bins and the Beach Bot dock sit on the boardwalk. */
+/** Beach: bins and the Shore Bot dock sit on the boardwalk. */
 export const BEACH_ORIGIN = { x: 0, z: 68 };
 export const BOARDWALK: Rect = { x0: -62, z0: 62, x1: 62, z1: 67 };
 export const BEACH_TERMINAL = { x: -9, z: 65 };

@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship 3D engine: the town, the player, the camera, the bots that play
  * back students' code, and hand-building at the home plot.
@@ -75,6 +76,7 @@ import {
 } from "./models";
 import { Colliders, Player, box, type Box, type MoveInput } from "./physics";
 import { Interiors } from "./interiors";
+import { allowedHost } from "./guard";
 import { INTERIORS, type InteriorId } from "./layout";
 import type { BankStep, LibraryStep, MissionId, SecurityStep } from "@/lib/games/port/missions";
 
@@ -183,6 +185,7 @@ export class Game {
   private beachStyle: BeachBotStyle = { wheels: "wheels", color: 0x2fb38f, arm: "claw" };
 
   constructor(private canvas: HTMLCanvasElement, private hooks: Hooks, look: Look) {
+    if (!allowedHost()) throw new Error("Port CODEship only runs on codeshipacademy.com");
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     this.renderer.shadowMap.enabled = true;
@@ -473,7 +476,7 @@ export class Game {
     this.solid(box(x0 - 0.6, H, z0 - 0.6, x1 + 0.6, H + 0.5, z1 + 0.6), roof);
     // Awning stripes and sign
     for (let i = 0; i < 10; i++) this.scene.add(cube((x1 - x0) / 10, 0.15, 1.6, mat(i % 2 ? 0xffffff : 0xc0392b), x0 + (i + 0.5) * ((x1 - x0) / 10), H - 0.6, z0 - 0.7));
-    const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.6), new THREE.MeshStandardMaterial({ map: textTexture([], { title: "FRESH MARKET", w: 1024, h: 180, font: 120 }) }));
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.6), new THREE.MeshStandardMaterial({ map: textTexture([], { title: "PORTSIDE MARKET", w: 1024, h: 180, font: 120 }) }));
     sign.position.set((x0 + x1) / 2, H + 1.3, z0 - 0.3);
     sign.rotation.y = Math.PI;
     this.scene.add(sign);
@@ -697,7 +700,7 @@ export class Game {
     const [mx, mz] = P(MARKET.x0, MARKET.z0);
     g.fillStyle = "#c0392b";
     g.fillRect(mx, mz, (MARKET.x1 - MARKET.x0) * s, (MARKET.z1 - MARKET.z0) * s);
-    label("Fresh Market", (MARKET.x0 + MARKET.x1) / 2, MARKET.z0 + 13);
+    label("Portside Market", (MARKET.x0 + MARKET.x1) / 2, MARKET.z0 + 13);
     label("Your plot", PLOT.x + PLOT.w / 2, PLOT.z + PLOT.d / 2 + 2);
     label("Town Square", 0, 3);
     label("Beach", 0, 84);
@@ -1474,7 +1477,7 @@ export class Game {
     this.ladderLift.position.y = 0.4;
   }
 
-  /** Parks the Beach Bot back on the boardwalk. */
+  /** Parks the Shore Bot back on the boardwalk. */
   resetBeachBot() {
     this.parkBeachBot();
   }
@@ -1582,7 +1585,7 @@ export class Game {
   }
 
   // ---------------------------------------------------------------------------
-  // Beach: litter and the Beach Bot
+  // Beach: litter and the Shore Bot
 
   setLitter(list: Litter[]) {
     for (const [, e] of this.litter) this.scene.remove(e.obj);
@@ -1661,8 +1664,8 @@ export class Game {
         if (held) grip.remove(held);
         held = null;
         await this.tween(0.1, (k) => (arm.rotation.x = -0.5 * (1 - k)));
-        if (!s.ok) this.hooks.say("Beach Bot", `Oops: that went in ${s.bin}.`, "bad");
-      } else if (s.t === "say") this.hooks.say("Beach Bot", s.text, "info");
+        if (!s.ok) this.hooks.say("Shore Bot", `Oops: that went in ${s.bin}.`, "bad");
+      } else if (s.t === "say") this.hooks.say("Shore Bot", s.text, "info");
     }
     const from = bot.position.clone();
     await this.tween(0.6, (k) => bot.position.set(from.x + (BEACH_ORIGIN.x + 7 - from.x) * k, 0, from.z + (BEACH_ORIGIN.z + 1 - from.z) * k));

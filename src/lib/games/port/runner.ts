@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /**
  * Port CODEship: runs a student's JavaScript or Python against a mission simulator.
  * Shared by the game's worker and the Node tests, so the tests run exactly

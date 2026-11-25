@@ -5,8 +5,9 @@
 import "../blocks/ts-resolve.mjs";
 import { loadPyodide } from "pyodide";
 const { runJs, createPythonRunner } = await import("../../src/lib/games/port/runner.ts");
-const { MISSIONS, testWorlds, makeLitter, AISLES, APPOINTMENTS, liveWorld } = await import("../../src/lib/games/port/missions.ts");
-const { STARTER_BLOCKS, blocksToJs, blocksToPy, build } = await import("../../src/lib/games/port/blocks.ts");
+const { makeLitter, AISLES, APPOINTMENTS } = await import("../../src/lib/games/port/missions.ts");
+const { MISSIONS, STARTER_BLOCKS, testWorlds, liveWorld, portContent } = await import("../../src/lib/games/port/content.ts");
+const { blocksToJs, blocksToPy, build } = await import("../../src/lib/games/port/blocks.ts");
 
 const runPy = createPythonRunner(await loadPyodide());
 let failed = 0, passed = 0;
@@ -260,6 +261,21 @@ for (const id of Object.keys(MISSIONS)) {
 test("blocks: a product missing from the shelf map gets a clear message", () => {
   const r = runJs("market", blocksToJs(STARTER_BLOCKS.market), { orders: ["eggs"] });
   assert(/eggs is not in your shelf map/.test(r.error ?? ""), r.error);
+});
+
+// Protection: challenge content must stay out of the game's own (public) files.
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
+test("content.ts is only imported by the server route (and these tests)", () => {
+  const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
+  const offenders = walk("src").filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes("app/api/arcade/port/") && !f.endsWith("lib/games/port/content.ts"))
+    .filter((f) => /^import(?!\s+type)[^;]*games\/port\/content/m.test(readFileSync(f, "utf8")));
+  assert(offenders.length === 0, "imports content at runtime: " + offenders.join(", "));
+});
+test("portContent() has every challenge", () => {
+  const c = JSON.parse(JSON.stringify(portContent()));
+  for (const id of Object.keys(MISSIONS)) assert(c.missions[id] && c.starterBlocks[id] && c.testWorlds[id], id);
+  assert(c.live.library.books.length > 1, "library world");
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

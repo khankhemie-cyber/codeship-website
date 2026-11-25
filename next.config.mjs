@@ -1,5 +1,49 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Port CODEship's own code is scrambled in production browser builds, so a
+ * copy of the downloaded files is hard to read or reuse. Only the game's
+ * folders are scrambled (not libraries or the rest of the site), with light
+ * settings that don't slow the game down.
+ */
+const SCRAMBLED = [path.join(here, "src/components/games/port-codeship"), path.join(here, "src/lib/games/port")];
+const SCRAMBLE_OPTIONS = {
+  compact: true,
+  identifierNamesGenerator: "hexadecimal",
+  stringArray: true,
+  stringArrayThreshold: 0.75,
+  stringArrayEncoding: ["base64"],
+  stringArrayRotate: true,
+  stringArrayShuffle: true,
+  splitStrings: false,
+  controlFlowFlattening: false,
+  deadCodeInjection: false,
+  selfDefending: false,
+  renameGlobals: false,
+  transformObjectKeys: false,
+  numbersToExpressions: false,
+  sourceMap: false,
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack(config, { dev, isServer }) {
+    if (!dev && !isServer) {
+      config.module.rules.push({
+        test: /\.(ts|tsx|js|jsx)$/,
+        include: SCRAMBLED,
+        // These two load other files on demand (the 3D engine, Blockly, Python), and the
+        // bundler must still be able to read those paths, so they stay unscrambled.
+        exclude: [/PortCodeship\.tsx$/, /port\.worker\.ts$/],
+        enforce: "post",
+        use: { loader: path.join(here, "node_modules/webpack-obfuscator/dist/loader/index.js"), options: SCRAMBLE_OPTIONS },
+      });
+    }
+    return config;
+  },
   trailingSlash: true,
   // Inlined into server and client bundles alike, so date-gated UI (the
   // November free trial) renders the same HTML on both before it re-checks

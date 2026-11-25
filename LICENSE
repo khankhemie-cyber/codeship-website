@@ -1,0 +1,16 @@
+Copyright (c) 2026 CODEship Academy. All rights reserved.
+
+This repository, including the CODEship Academy website and the Port CODEship
+game (its source code, 3D world, characters, challenges, text and artwork), is
+proprietary and confidential property of CODEship Academy.
+
+No licence is granted. You may not copy, modify, merge, publish, distribute,
+sublicense, host, sell, or create derivative works from any part of it, in
+whole or in part, without prior written permission from CODEship Academy.
+
+"CODEship", "CODEship Academy" and "Port CODEship" are names and marks of
+CODEship Academy.
+
+Third-party software used by the website (for example Three.js, Blockly,
+Pyodide, Next.js and React) is not covered by this notice: each remains under
+its own open-source licence, listed in THIRD_PARTY_NOTICES.md.

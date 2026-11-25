@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 /// <reference lib="webworker" />
 /**
  * Runs Port CODEship programs off the main thread, so a loop that never ends can't

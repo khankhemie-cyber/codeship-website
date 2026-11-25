@@ -1,3 +1,4 @@
+// © 2026 CODEship Academy. All rights reserved. Proprietary and confidential: see LICENSE.
 "use client";
 
 /**
@@ -19,11 +20,9 @@ import {
   API_NAMES,
   BLOCK_COLORS,
   LITTER_KINDS,
-  MISSIONS,
+  MISSION_LABELS,
   makeLitter,
   missingWalls,
-  liveWorld as missionLiveWorld,
-  testWorlds,
   type BeachStep,
   type BinName,
   type Block,
@@ -35,12 +34,13 @@ import {
   type MarketStep,
   type BankStep,
   type LibraryStep,
-  type LibraryWorld,
   type SecurityStep,
   type MissionId,
 } from "@/lib/games/port/missions";
 import type { RunOutcome } from "@/lib/games/port/runner";
-import { STARTER_BLOCKS, blocksToJs, blocksToPy } from "@/lib/games/port/blocks";
+import { blocksToJs, blocksToPy } from "@/lib/games/port/blocks";
+// Type only: the content itself comes from the server, for students.
+import type { PortContent } from "@/lib/games/port/content";
 
 // Blockly only loads when someone opens the blocks view.
 const PortBlocksEditor = dynamic(() => import("./PortBlocksEditor"), {
@@ -53,6 +53,7 @@ type Editor = "blocks" | Lang;
 import type { EngineSave, Focus, Game, Look } from "./engine/Game";
 import type { BeachBotStyle } from "./engine/models";
 import SignupGate from "./SignupGate";
+import { allowedHost } from "./engine/guard";
 import ShopPanel, { FOOD_PRICES } from "./ShopPanel";
 import { BEACH_TERMINAL, INTERIORS, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type InteriorId, type NpcId } from "./engine/layout";
 import { HandBank, HandLibrary, HandSecurity } from "./HandChallenges";
@@ -84,7 +85,7 @@ type Save = {
   coins?: number;
   /** One-time rewards already paid out (so replaying can't farm them). */
   earned?: string[];
-  /** Food bought at the Fresh Market, by product. */
+  /** Food bought at the Portside Market, by product. */
   pantry?: Record<string, number>;
   /** Block colours bought for hand-building (brick, wood and stone are free). */
   colors?: BlockColor[];
@@ -105,8 +106,8 @@ const COLOR_PRICES: Partial<Record<BlockColor, number>> = { white: 30, teal: 40,
 /** Every challenge in Port CODEship, in order, for the tracker. */
 const CHALLENGES: { id: MissionId; where: string; how: string; unlock: string }[] = [
   { id: "home", where: "Your plot, east of the Town Square.", how: "Build 6 × 5 walls, 3 blocks high: by hand (B) or code the Builder Bot.", unlock: "Talk to Captain Ada in the Town Square to start." },
-  { id: "market", where: "Fresh Market, west on Main Street.", how: "Bring Mrs. Ali cereal, flour and mangoes, or code the Ladder Bot.", unlock: "Unlocks when your house is built." },
-  { id: "beach", where: "The beach, south down Harbour Road.", how: "Sort every piece of litter into the right bin, or design and code a Beach Bot.", unlock: "Unlocks after the Fresh Market." },
+  { id: "market", where: "Portside Market, west on Main Street.", how: "Bring Mrs. Ali cereal, flour and mangoes, or code the Ladder Bot.", unlock: "Unlocks when your house is built." },
+  { id: "beach", where: "The beach, south down Harbour Road.", how: "Sort every piece of litter into the right bin, or design and code a Shore Bot.", unlock: "Unlocks after the Portside Market." },
   { id: "security", where: "Inside the Town Hall, north-west of the Town Square.", how: "Let in only visitors on the appointment board who show photo ID: work the gate with Officer Grant, or code the Gate Bot.", unlock: "Unlocks when your house is built." },
   { id: "bank", where: "Inside the Port Bank, on Harbour Road.", how: "Pay each customer exactly, in the fewest bills: by hand with Mr. Mensah, or code the Change Machine.", unlock: "Unlocks when your house is built." },
   { id: "library", where: "Inside the Library, on Harbour Road.", how: "Sort the returns shelf, smallest number first: swap books by hand, or code the Shelf Bot.", unlock: "Unlocks when your house is built." },
@@ -114,7 +115,8 @@ const CHALLENGES: { id: MissionId; where: string; how: string; unlock: string }[
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
 
 function freshSave(name: string, look: Look): Save {
-  const m = (id: MissionId): MissionState => ({ status: "locked", stars: 0, code: { ...MISSIONS[id].starter } });
+  // Starter code is filled in when a student's challenge content arrives from the server.
+  const m = (): MissionState => ({ status: "locked", stars: 0, code: { py: "", js: "" } });
   return {
     v: 1,
     name,
@@ -123,7 +125,7 @@ function freshSave(name: string, look: Look): Save {
     editor: "blocks",
     engine: {},
     intro: false,
-    missions: { home: m("home"), market: m("market"), beach: m("beach"), security: m("security"), bank: m("bank"), library: m("library") },
+    missions: { home: m(), market: m(), beach: m(), security: m(), bank: m(), library: m() },
     blocks: [],
     marketServed: 0,
     litter: makeLitter(18, 2026),
@@ -217,6 +219,8 @@ export default function PortCodeship() {
   const [touch, setTouch] = useState(false);
   const [confirmNew, setConfirmNew] = useState(false);
   const [webglError, setWebglError] = useState(false);
+  /** Set when the game is loaded from a site other than CODEship Academy's. */
+  const [wrongSite, setWrongSite] = useState(false);
   const [carry, setCarryState] = useState<string | null>(null);
   const [looking, setLooking] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
@@ -226,6 +230,10 @@ export default function PortCodeship() {
   /** Which building the player is inside (null outdoors), for the map. */
   const [indoorHere, setIndoorHere] = useState<InteriorId | null>(null);
   const [fade, setFade] = useState(false);
+  /** Challenge content: sent by the server only to CODEship students. */
+  const [content, setContent] = useState<PortContent | null>(null);
+  const contentRef = useRef<PortContent | null>(null);
+  contentRef.current = content;
   /** The "challenges are for students" box. */
   const [lockOpen, setLockOpen] = useState(false);
   const [sprint, setSprintState] = useState(false);
@@ -267,7 +275,7 @@ export default function PortCodeship() {
     const [kind, a, b] = id.split(":");
     const m = s.missions;
     if (id === "build") return s.intro && s.signedUp === "student" ? "" : null;
-    if (id === "shop:market") return `Shop at the Fresh Market (${s.coins ?? 0} coins)`;
+    if (id === "shop:market") return `Shop at the Portside Market (${s.coins ?? 0} coins)`;
     if (kind === "door") return `Go into the ${INTERIORS[a as InteriorId].name}`;
     if (kind === "exit") return "Go back outside";
     if (kind === "npc") {
@@ -278,7 +286,7 @@ export default function PortCodeship() {
     if (kind === "term") {
       const st = m[a as MissionId]?.status;
       if (!st || st === "locked") return null;
-      return `Program the ${MISSIONS[a as MissionId].bot}`;
+      return `Program the ${MISSION_LABELS[a as MissionId].bot}`;
     }
     if (kind === "grab") {
       if (m.market.status !== "active" || carrying) return null;
@@ -362,8 +370,8 @@ export default function PortCodeship() {
         },
       }));
       completeLevel("port", id, stars);
-      if (stars > prev.stars) earn((stars - prev.stars) * 50, `${"★".repeat(stars)} on ${MISSIONS[id].title}`);
-      if (prev.status !== "done") say("Port CODEship", `Mission complete: ${MISSIONS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
+      if (stars > prev.stars) earn((stars - prev.stars) * 50, `${"★".repeat(stars)} on ${MISSION_LABELS[id].title}`);
+      if (prev.status !== "done") say("Port CODEship", `Mission complete: ${MISSION_LABELS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
     },
     [earn, say, update]
   );
@@ -404,7 +412,7 @@ export default function PortCodeship() {
           });
           return;
         }
-        const next = m.home.status !== "done" ? "Your house won't build itself… unless you code it to! Head east to your plot." : m.market.status !== "done" ? "Mrs. Ali at the Fresh Market needs help. It's west along Main Street." : m.beach.status !== "done" ? "Kofi says the beach is a mess. Head south down Harbour Road." : "You've helped everyone so far. Try lighting all the lookouts and finding every bit hidden on the rooftops!";
+        const next = m.home.status !== "done" ? "Your house won't build itself… unless you code it to! Head east to your plot." : m.market.status !== "done" ? "Mrs. Ali at the Portside Market needs help. It's west along Main Street." : m.beach.status !== "done" ? "Kofi says the beach is a mess. Head south down Harbour Road." : "You've helped everyone so far. Try lighting all the lookouts and finding every bit hidden on the rooftops!";
         showDialog({ who: "Captain Ada", text: next, choices: [{ label: "OK", act: closeDialog }] });
         return;
       }
@@ -425,7 +433,7 @@ export default function PortCodeship() {
       }
       if (id === "npc:ali") {
         if (m.market.status === "locked") {
-          showDialog({ who: "Mrs. Ali", text: "Welcome to the Fresh Market! Come back once you've settled into your new home.", choices: [{ label: "OK", act: closeDialog }] });
+          showDialog({ who: "Mrs. Ali", text: "Welcome to the Portside Market! Come back once you've settled into your new home.", choices: [{ label: "OK", act: closeDialog }] });
           return;
         }
         const carrying = carryRef.current;
@@ -478,9 +486,9 @@ export default function PortCodeship() {
         if (m.beach.status === "done") {
           showDialog({
             who: "Kofi",
-            text: s.beachCode ? "Your Beach Bot cleans up every time the tide comes in. Best beach on the island!" : "The beach is clean… for now. The tide keeps bringing more. A Beach Bot would clean up every tide without you lifting a finger.",
+            text: s.beachCode ? "Your Shore Bot cleans up every time the tide comes in. Best beach on the island!" : "The beach is clean… for now. The tide keeps bringing more. A Shore Bot would clean up every tide without you lifting a finger.",
             choices: [
-              { label: s.beachCode ? "Improve the Beach Bot" : "Build a Beach Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
+              { label: s.beachCode ? "Improve the Shore Bot" : "Build a Shore Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
               { label: "Bye", act: closeDialog },
             ],
           });
@@ -585,9 +593,9 @@ export default function PortCodeship() {
           finishMission("beach", "hand");
           showDialog({
             who: "Kofi",
-            text: `You did it: ${cleaned} pieces, all by hand! But watch: the next tide will bring more. A Beach Bot could clean up every single tide, forever.`,
+            text: `You did it: ${cleaned} pieces, all by hand! But watch: the next tide will bring more. A Shore Bot could clean up every single tide, forever.`,
             choices: [
-              { label: "Build a Beach Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
+              { label: "Build a Shore Bot", act: () => { closeDialog(); if (requireStudent()) { setWorkshop(true); g.setEnabled(false); } } },
               { label: "Later", act: closeDialog },
             ],
           });
@@ -659,7 +667,7 @@ export default function PortCodeship() {
     const s = saveRef.current!;
     if (id === "home") return { blocks: gameRef.current?.getBlocks() ?? s.blocks };
     if (id === "market") return { orders: ALI_ORDERS };
-    if (id === "security" || id === "bank" || id === "library") return missionLiveWorld(id);
+    if (id === "security" || id === "bank" || id === "library") return contentRef.current?.live[id];
     return { litter: s.litter };
   }, []);
 
@@ -682,7 +690,12 @@ export default function PortCodeship() {
     const id = panel;
     const blocksMode = (s.editor ?? "blocks") === "blocks";
     const lang: Lang = blocksMode ? "js" : s.lang;
-    const code = blocksMode ? blocksToJs(s.missions[id].blocks ?? STARTER_BLOCKS[id]) : s.missions[id].code[s.lang];
+    const content = contentRef.current;
+    if (!content) {
+      setResult({ ok: false, title: "Still loading the challenge", detail: "Give it a second, then press Run again.", output: [] });
+      return;
+    }
+    const code = blocksMode ? blocksToJs(s.missions[id].blocks ?? content.starterBlocks[id]) : s.missions[id].code[s.lang];
     if (!code.trim()) {
       setResult({ ok: false, title: "Nothing to run yet", detail: 'Snap your blocks under "when Run is pressed".', output: [] });
       return;
@@ -690,7 +703,7 @@ export default function PortCodeship() {
     setRunning(true);
     setResult(null);
     if (id === "beach" && s.litter.length === 0) addTide(8);
-    const worlds = [liveWorld(id), ...testWorlds(id)];
+    const worlds = [liveWorld(id), ...content.testWorlds[id]];
     const out = await runInWorker(id, lang, code, worlds);
     if (typeof out === "string") {
       setRunning(false);
@@ -708,7 +721,7 @@ export default function PortCodeship() {
     else if (id === "market") await g.playMarket(live.steps as MarketStep[]);
     else if (id === "security") await g.playSecurity(live.steps as SecurityStep[]);
     else if (id === "bank") await g.playBank(live.steps as BankStep[]);
-    else if (id === "library") await g.playLibrary(live.steps as LibraryStep[], (missionLiveWorld("library") as LibraryWorld).books);
+    else if (id === "library") await g.playLibrary(live.steps as LibraryStep[], content.live.library.books);
     else {
       await g.playBeach(live.steps as BeachStep[]);
       const picked = new Set((live.steps as BeachStep[]).filter((st) => st.t === "pick").map((st) => (st as { id: number }).id));
@@ -738,7 +751,7 @@ export default function PortCodeship() {
         r.title = "House complete! Can your code do it alone?";
       }
     } else {
-      r = { ok: true, title: `${MISSIONS[id].bot} programmed! ★★★`, detail: live.check.message + " It also passed every test.", output: live.output };
+      r = { ok: true, title: `${MISSION_LABELS[id].bot} programmed! ★★★`, detail: live.check.message + " It also passed every test.", output: live.output };
       finishMission(id, "code");
       if (id === "beach") update((q) => ({ ...q, beachCode: { lang, code } }));
     }
@@ -760,13 +773,13 @@ export default function PortCodeship() {
       if (s.beachCode && !busyRef.current) {
         const out = await runInWorker("beach", s.beachCode.lang, s.beachCode.code, [{ litter }]);
         if (typeof out === "string" || busyRef.current) return;
-        say("Beach Bot", "Tide's in! Cleaning up…", "good");
+        say("Shore Bot", "Tide's in! Cleaning up…", "good");
         busyRef.current = true;
         await g.playBeach(out[0].steps as BeachStep[]);
         busyRef.current = false;
         const picked = new Set((out[0].steps as BeachStep[]).filter((st) => st.t === "pick").map((st) => (st as { id: number }).id));
         // Automation pays: the bot earns while you do other things.
-        if (picked.size) earn(picked.size, `your Beach Bot cleaning ${picked.size} pieces`);
+        if (picked.size) earn(picked.size, `your Shore Bot cleaning ${picked.size} pieces`);
         update((q) => ({ ...q, litter: q.litter.filter((l) => !picked.has(l.id)) }));
       }
     }, 90000);
@@ -783,6 +796,10 @@ export default function PortCodeship() {
     if (existingSave) setLook(existingSave.look);
     setTouch(window.matchMedia?.("(pointer: coarse)").matches ?? false);
     let disposed = false;
+    if (!allowedHost()) {
+      setWrongSite(true);
+      return;
+    }
     (async () => {
       const { Game } = await import("./engine/Game");
       if (disposed || !canvasRef.current) return;
@@ -852,7 +869,7 @@ export default function PortCodeship() {
     // Saves from before the Town Hall, Bank and Library: add their challenges.
     const homeDone = s.missions.home.status === "done";
     for (const k of ["security", "bank", "library"] as MissionId[])
-      if (!s.missions[k]) s = { ...s, missions: { ...s.missions, [k]: { status: homeDone ? "active" : "locked", stars: 0, code: { ...MISSIONS[k].starter } } } };
+      if (!s.missions[k]) s = { ...s, missions: { ...s.missions, [k]: { status: homeDone ? "active" : "locked", stars: 0, code: { py: "", js: "" } } } };
     if (s.coins === undefined) {
       // Saves from before coins existed: pay out what they already earned.
       const ms = Object.values(s.missions) as MissionState[];
@@ -871,7 +888,6 @@ export default function PortCodeship() {
     g.setLook(s.look);
     g.load(s.engine);
     g.setBlocks(s.blocks);
-    g.setLibraryBooks((missionLiveWorld("library") as LibraryWorld).books);
     g.setLitter(s.litter);
     g.setBeachBotStyle(s.beachBot);
     g.setLowGraphics(s.lowGraphics);
@@ -916,6 +932,42 @@ export default function PortCodeship() {
     };
   }, [screen, update]);
 
+  // Students get the challenge content from the server (it isn't in the game files).
+  // If the server doesn't recognise a class password, challenges stay locked,
+  // whatever this browser's save says.
+  const signedUpNow = save?.signedUp;
+  useEffect(() => {
+    if (screen !== "play" || signedUpNow !== "student" || contentRef.current) return;
+    let cancelled = false;
+    fetch("/api/arcade/port/", { cache: "no-store" })
+      .then(async (r) => {
+        if (cancelled) return;
+        if (r.status === 401) {
+          update((q) => ({ ...q, signedUp: undefined }));
+          return;
+        }
+        const d = (await r.json()) as { ok?: boolean; content?: PortContent };
+        if (!d.ok || !d.content) return;
+        const c = d.content;
+        setContent(c);
+        gameRef.current?.setLibraryBooks(c.live.library.books);
+        // Fill in starter code for any challenge that has none yet.
+        update((q) => ({
+          ...q,
+          missions: Object.fromEntries(
+            (Object.entries(q.missions) as [MissionId, MissionState][]).map(([k, v]) => [
+              k,
+              { ...v, code: { py: v.code?.py || c.missions[k].starter.py, js: v.code?.js || c.missions[k].starter.js } },
+            ])
+          ) as Save["missions"],
+        }));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [screen, signedUpNow, update]);
+
   // Quest marker, NPC alerts and the objective line.
   const objective = useMemo(() => {
     if (!save) return { text: "", target: null as null | { x: number; z: number; y?: number } };
@@ -925,9 +977,9 @@ export default function PortCodeship() {
     if (m.market.status !== "done") {
       if (carry && ALI_ORDERS.includes(carry)) return { text: `Bring the ${carry} to Mrs. Ali.`, target: NPCS.ali };
       const want = ALI_ORDERS[save.marketServed];
-      return { text: save.marketServed ? `Mrs. Ali still needs ${want}. Or program the Ladder Bot.` : "Help Mrs. Ali at the Fresh Market (west on Main Street).", target: save.marketServed ? MARKET_TERMINAL : NPCS.ali };
+      return { text: save.marketServed ? `Mrs. Ali still needs ${want}. Or program the Ladder Bot.` : "Help Mrs. Ali at the Portside Market (west on Main Street).", target: save.marketServed ? MARKET_TERMINAL : NPCS.ali };
     }
-    if (m.beach.status !== "done") return { text: `Clean up the beach: ${save.litter.length} pieces of litter. By hand, or build a Beach Bot.`, target: m.beach.status === "active" && save.litter.length < 18 ? BEACH_TERMINAL : NPCS.kofi };
+    if (m.beach.status !== "done") return { text: `Clean up the beach: ${save.litter.length} pieces of litter. By hand, or build a Shore Bot.`, target: m.beach.status === "active" && save.litter.length < 18 ? BEACH_TERMINAL : NPCS.kofi };
     const indoor: { id: MissionId; place: InteriorId; npc: NpcId; text: string }[] = [
       { id: "security", place: "townhall", npc: "guard", text: "Visit the Town Hall and help Officer Grant run the security gate." },
       { id: "bank", place: "bank", npc: "teller", text: "Visit the Port Bank and help Mr. Mensah make change." },
@@ -1114,21 +1166,32 @@ export default function PortCodeship() {
     if (editor === "blocks") {
       update((q) => ({ ...q, missions: { ...q.missions, [panel]: { ...q.missions[panel], blocks: undefined } } }));
       setBlocksVersion((v) => v + 1);
-    } else setCode(MISSIONS[panel].starter[saveRef.current!.lang]);
+    } else if (contentRef.current) setCode(contentRef.current.missions[panel].starter[saveRef.current!.lang]);
   };
 
 
   // -------------------------------------------------------------------------
   // Render
 
-  const mission = panel ? MISSIONS[panel] : null;
+  const mission = panel && content ? content.missions[panel] : null;
   const playing = screen === "play";
 
   return (
     <div className="fixed inset-0 z-[30] select-none overflow-hidden bg-[#0d1b2a] font-sans text-white">
       <canvas ref={canvasRef} tabIndex={0} className="block h-full w-full touch-none outline-none" aria-label="Port CODEship 3D world" />
 
-      {webglError && (
+      {wrongSite && (
+        <div className="absolute inset-0 z-50 grid place-items-center bg-[#0d1b2a] p-6 text-center">
+          <div className="max-w-md">
+            <h1 className="text-2xl font-bold">Port CODEship lives at CODEship Academy</h1>
+            <p className="mt-2 text-white/80">This game is only available on codeshipacademy.com.</p>
+            <a href="https://www.codeshipacademy.com/ship-it/port-codeship/" className="mt-4 inline-block rounded-full bg-amber px-5 py-2 font-bold text-navy">Play it there</a>
+            <p className="mt-6 text-xs text-white/50">© CODEship Academy. All rights reserved.</p>
+          </div>
+        </div>
+      )}
+
+      {webglError && !wrongSite && (
         <div className="absolute inset-0 grid place-items-center bg-[#0d1b2a] p-6 text-center">
           <div className="max-w-md">
             <h1 className="text-2xl font-bold">Port CODEship needs 3D graphics</h1>
@@ -1182,6 +1245,7 @@ export default function PortCodeship() {
               <Controls />
             </div>
             <p className="text-xs text-white/60">Your progress saves in this browser only. Nothing about you leaves your device.</p>
+            <p className="text-xs text-white/50">© {new Date().getFullYear()} CODEship Academy. Port CODEship and all its code, art and challenges are owned by CODEship Academy. All rights reserved.</p>
           </div>
         </div>
       )}
@@ -1294,11 +1358,11 @@ export default function PortCodeship() {
                 return (
                   <button
                     key={c}
-                    aria-label={owned ? `${c} blocks` : `${c} blocks, locked: buy at the Fresh Market for ${COLOR_PRICES[c]} coins`}
-                    title={owned ? c : `Buy ${c} blocks at the Fresh Market (${COLOR_PRICES[c]} coins)`}
+                    aria-label={owned ? `${c} blocks` : `${c} blocks, locked: buy at the Portside Market for ${COLOR_PRICES[c]} coins`}
+                    title={owned ? c : `Buy ${c} blocks at the Portside Market (${COLOR_PRICES[c]} coins)`}
                     onClick={() => {
                       if (!owned) {
-                        say("Rosa", `${c[0].toUpperCase() + c.slice(1)} blocks cost ${COLOR_PRICES[c]} coins. Buy them at the Fresh Market's register.`, "info");
+                        say("Rosa", `${c[0].toUpperCase() + c.slice(1)} blocks cost ${COLOR_PRICES[c]} coins. Buy them at the Portside Market's register.`, "info");
                         return;
                       }
                       setBuildColorState(c);
@@ -1333,7 +1397,7 @@ export default function PortCodeship() {
           {/* Watching a bot */}
           {watching && (
             <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[#0d1b2a]/90 px-4 py-2 shadow-xl ring-1 ring-white/20">
-              <span className="text-sm font-semibold">{MISSIONS[watching].bot} is running your code…</span>
+              <span className="text-sm font-semibold">{MISSION_LABELS[watching].bot} is running your code…</span>
               <button onClick={() => { if (gameRef.current) gameRef.current.timeScale = 1000; }} className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold">Finish now</button>
               {[1, 3, 8].map((v) => (
                 <button key={v} onClick={() => { setSpeed(v); if (gameRef.current) gameRef.current.timeScale = v; }} className={`rounded-full px-3 py-1 text-sm font-bold ${speed === v ? "bg-amber text-navy" : "bg-white/10"}`}>
@@ -1375,11 +1439,11 @@ export default function PortCodeship() {
             </div>
           )}
 
-          {/* Beach Bot workshop */}
+          {/* Shore Bot workshop */}
           {workshop && save && (
             <div className="absolute inset-0 grid place-items-center bg-black/50 p-4">
               <div className="w-full max-w-lg rounded-2xl bg-[#0d1b2a] p-5 shadow-2xl ring-1 ring-white/15">
-                <h2 className="text-2xl font-extrabold">Design your Beach Bot</h2>
+                <h2 className="text-2xl font-extrabold">Design your Shore Bot</h2>
                 <p className="mt-1 text-sm text-white/75">Pick its parts. Treads handle soft sand but are slower; wheels are fast. Then write the code that tells it what to do.</p>
                 <div className="mt-4 grid gap-4">
                   <Choice label="Drive" options={[["wheels", "Wheels (fast)"], ["treads", "Treads (steady)"]]} value={save.beachBot.wheels} onPick={(v) => { const b = { ...save.beachBot, wheels: v as "wheels" | "treads" }; update((q) => ({ ...q, beachBot: b })); gameRef.current?.setBeachBotStyle(b); }} />
@@ -1390,6 +1454,15 @@ export default function PortCodeship() {
                   <button onClick={() => { setWorkshop(false); openPanel("beach"); }} className="rounded-xl bg-amber px-4 py-2 font-bold text-navy">Write its code</button>
                   <button onClick={() => { setWorkshop(false); gameRef.current?.setEnabled(true); }} className="rounded-xl bg-white/10 px-4 py-2 font-bold">Close</button>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {panel && !content && (
+            <div className="absolute inset-0 z-40 grid place-items-center bg-black/50 p-4">
+              <div className="rounded-2xl bg-[#0d1b2a] p-5 text-center shadow-2xl ring-1 ring-white/15">
+                <p className="font-bold">Loading the challenge…</p>
+                <button onClick={closePanel} className="mt-3 rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold">Close</button>
               </div>
             </div>
           )}
@@ -1457,6 +1530,7 @@ export default function PortCodeship() {
                       <PortBlocksEditor
                         mission={mission.id}
                         value={save.missions[mission.id].blocks}
+                        starter={content?.starterBlocks[mission.id]}
                         version={blocksVersion}
                         onChange={(w) => update((q) => ({ ...q, missions: { ...q.missions, [mission.id]: { ...q.missions[mission.id], blocks: w } } }))}
                       />
@@ -1465,7 +1539,7 @@ export default function PortCodeship() {
                     <details className="mt-2">
                       <summary className="cursor-pointer text-sm font-semibold text-white/80">See your blocks as Python</summary>
                       <div className="mt-2">
-                        <CodeEditor value={blocksToPy(save.missions[mission.id].blocks ?? STARTER_BLOCKS[mission.id])} onChange={() => {}} readOnly commands={API_NAMES[mission.id]} label="Your blocks as Python" minLines={4} />
+                        <CodeEditor value={blocksToPy(save.missions[mission.id].blocks ?? content?.starterBlocks[mission.id])} onChange={() => {}} readOnly commands={API_NAMES[mission.id]} label="Your blocks as Python" minLines={4} />
                       </div>
                     </details>
                   </>
@@ -1516,13 +1590,14 @@ export default function PortCodeship() {
               finishMission(id, "hand");
               say("Port CODEship", "Done by hand! Program the bot at the terminal for 3 stars.", "info");
             };
-            if (hand === "security") return <HandSecurity onDone={done} onClose={close} say={say} />;
-            if (hand === "bank") return <HandBank onDone={done} onClose={close} say={say} />;
-            return <HandLibrary onDone={done} onClose={close} say={say} onOrder={(o) => gameRef.current?.setLibraryBooks(o)} />;
+            if (!content) return null;
+            if (hand === "security") return <HandSecurity onDone={done} onClose={close} say={say} world={content.live.security} />;
+            if (hand === "bank") return <HandBank onDone={done} onClose={close} say={say} world={content.live.bank} />;
+            return <HandLibrary onDone={done} onClose={close} say={say} world={content.live.library} onOrder={(o) => gameRef.current?.setLibraryBooks(o)} />;
           })()}
           <div className={`pointer-events-none absolute inset-0 z-50 bg-black transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`} aria-hidden />
 
-          {/* Fresh Market register */}
+          {/* Portside Market register */}
           {shopOpen && save && (
             <ShopPanel
               coins={save.coins ?? 0}
@@ -1569,7 +1644,7 @@ export default function PortCodeship() {
                     return (
                       <li key={c.id} className={`rounded-xl p-3 ring-1 ${m.status === "done" ? "bg-emerald-900/40 ring-emerald-400/30" : m.status === "active" ? "bg-amber/10 ring-amber/40" : "bg-white/5 ring-white/10"}`}>
                         <div className="flex items-center justify-between gap-2">
-                          <div className="font-bold">{i + 1}. {MISSIONS[c.id].title}</div>
+                          <div className="font-bold">{i + 1}. {MISSION_LABELS[c.id].title}</div>
                           <div className="text-sm font-bold">
                             {m.status === "done" ? <span className="text-amber">{"★".repeat(m.stars)}{"☆".repeat(3 - m.stars)}</span> : m.status === "active" ? <span className="text-amber">To do</span> : <span className="text-white/50">Locked</span>}
                           </div>
