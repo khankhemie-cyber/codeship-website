@@ -33,7 +33,7 @@
 - [Engineers (Grades 6-8)](https://www.codeshipacademy.com/programs/engineers): Python, AI, cybersecurity
 - [Programs overview](https://www.codeshipacademy.com/programs)
 - [Book a class](https://www.codeshipacademy.com/register)
-- [Camps](https://www.codeshipacademy.com/programs/camps): March Break camp 2027, Monday to Friday, March 15-19, 2027, 9:00 AM-4:00 PM, Core21, Oshawa, ages 7-12, CAD $450 for the week (early bird CAD $400 until December 31, 2026) or CAD $125 per single day, sign-up open (30 spots)
+- [Camps](https://www.codeshipacademy.com/programs/camps): March Break camp 2027, Monday to Friday, March 15-19, 2027, 9:00 AM-4:00 PM, Core21, Oshawa, ages 7-12, CAD $450 for the week (early bird CAD $400 until December 31, 2026) or CAD $125 per single day, sign-up open (20 spots)
 - [Birthday parties](https://www.codeshipacademy.com/programs/birthday-parties)
 - [AI & robotics](https://www.codeshipacademy.com/programs/ai-robotics)
 - Price: flat CAD $129 per semester (8 weekly classes) for every program, in-person or online.

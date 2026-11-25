@@ -3,7 +3,7 @@
  * or as single days on a separate link (each day is its own item at checkout;
  * parents set days they don't need to 0).
  * Checkout asks for the child's name and age, the camp, and updates/photo
- * consent. Each link is capped at 30 completed sign-ups.
+ * consent. Each link is capped at 20 completed sign-ups.
  *
  * Two links: early bird (CAD $400 for the week) until Dec 31, 2026, then
  * regular (CAD $450). The site switches by the visitor's clock (see
@@ -34,7 +34,7 @@ export const MARCH_BREAK_CAMP = {
   dayPriceLabel: "CAD $125",
   /** Single days, CAD $125 each; parents pick days at checkout. */
   dayUrl: "https://buy.stripe.com/cNifZb7MnabP1sR6PGdAk0x",
-  spots: 30,
+  spots: 20,
   /** Regular price link (CAD $450 for the week). */
   url: "https://buy.stripe.com/dRm00d8Qr83H0oN6PGdAk0t",
   /** Early bird link (CAD $400 for the week), to be deactivated after Dec 31, 2026. */
