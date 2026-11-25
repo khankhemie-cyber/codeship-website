@@ -668,7 +668,14 @@ export default function PortCodeship() {
               const s = saveRef.current;
               if (s && s.missions.home.status === "active" && missingWalls(blocks).length === 0 && !busyRef.current) finishMission("home", "hand");
             },
-            buildMode: (on) => setBuilding(on),
+            buildMode: (on) => {
+              setBuilding(on);
+              setConfirming(null);
+              if (!on) {
+                setEraserState(false);
+                g.setEraser(false);
+              }
+            },
             mouseLook: (on) => setLooking(on),
             say: (who, text, tone) => say(who, text, tone),
           },
@@ -837,6 +844,7 @@ export default function PortCodeship() {
         setMapOpen((o) => !o);
       }
       if (e.code === "KeyG" && carryRef.current && !panel && !dialog) dropCarry();
+      if (e.code === "KeyZ" && building) gameRef.current?.undoBuild();
       if (e.code === "Escape") {
         // The Esc that turns off mouse-look shouldn't also open the menu.
         if (gameRef.current?.justUnlocked() || gateBlocking.current) return;
@@ -878,6 +886,7 @@ export default function PortCodeship() {
   }
 
   const closePanel = () => {
+    setConfirming(null);
     setPanel(null);
     setResult(null);
     gameRef.current?.setEnabled(true);
@@ -891,6 +900,39 @@ export default function PortCodeship() {
 
   const editor: Editor = save?.editor ?? "blocks";
   const [blocksVersion, setBlocksVersion] = useState(0);
+  /** Which "are you sure?" step is showing: restarting a challenge or clearing the plot. */
+  const [confirming, setConfirming] = useState<"restart" | "clear" | null>(null);
+  const [eraser, setEraserState] = useState(false);
+
+  const setEraser = (on: boolean) => {
+    setEraserState(on);
+    gameRef.current?.setEraser(on);
+  };
+
+  /** Starts a challenge over: its world goes back to the beginning. Stars already earned are kept. */
+  const restartChallenge = (id: MissionId) => {
+    const g = gameRef.current;
+    if (!g) return;
+    setConfirming(null);
+    setResult(null);
+    if (id === "home") {
+      g.clearBlocks();
+      update((q) => ({ ...q, blocks: [] }));
+      say("Rosa", "Plot cleared. Let's build it again!", "info");
+    } else if (id === "market") {
+      if (carryRef.current?.kind === "product") setCarry(null);
+      g.resetMarket();
+      update((q) => ({ ...q, marketServed: 0 }));
+      say("Mrs. Ali", "Let's start again: I need cereal, flour and mangoes.", "info");
+    } else {
+      if (carryRef.current?.kind === "litter") setCarry(null);
+      const litter = makeLitter(18, (Date.now() % 100000) + 1, saveRef.current!.nextLitterId);
+      g.resetBeachBot();
+      g.setLitter(litter);
+      update((q) => ({ ...q, litter, nextLitterId: q.nextLitterId + 18, cleanedByHand: 0 }));
+      say("Kofi", "Fresh beach, fresh litter. Ready when you are!", "info");
+    }
+  };
   const setEditor = (e: Editor) => {
     update((q) => ({ ...q, editor: e, lang: e === "blocks" ? q.lang : e }));
     if (e === "py") ensureWorker().postMessage({ type: "warm" });
@@ -1048,7 +1090,21 @@ export default function PortCodeship() {
                   style={{ background: BLOCK_SWATCH[c] }}
                 />
               ))}
-              <span className="text-xs text-white/70">Click: place · Right-click / Shift-click: remove · Drag: look · {save?.blocks.length ?? 0} blocks</span>
+              <button onClick={() => setEraser(!eraser)} aria-pressed={eraser} className={`rounded-lg px-3 py-1.5 text-sm font-bold ${eraser ? "bg-rose-500" : "bg-white/10 hover:bg-white/20"}`}>
+                {eraser ? "Eraser on" : "Eraser"}
+              </button>
+              <button onClick={() => gameRef.current?.undoBuild()} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Undo (Z)</button>
+              {confirming === "clear" ? (
+                <>
+                  <button onClick={() => { gameRef.current?.clearBlocks(); update((q) => ({ ...q, blocks: [] })); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 text-sm font-bold">Yes, clear all</button>
+                  <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold">Cancel</button>
+                </>
+              ) : (
+                <button onClick={() => setConfirming("clear")} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Clear all</button>
+              )}
+              <span className="w-full text-center text-xs text-white/70">
+                {eraser ? "Click a block to remove it" : "Click: place · Right-click / Shift-click: remove"} · Drag: look · {save?.blocks.length ?? 0} blocks
+              </span>
               <button onClick={() => gameRef.current?.toggleBuild(false)} className="rounded-lg bg-amber px-3 py-1.5 text-sm font-bold text-navy">Done (B)</button>
             </div>
           )}
@@ -1135,10 +1191,43 @@ export default function PortCodeship() {
                       </button>
                     ))}
                   </div>
-                  <button onClick={resetCode} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset</button>
+                  <button onClick={resetCode} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">Reset code</button>
                   <button onClick={() => setShowHint((h) => !h)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20">{showHint ? "Hide hint" : "Hint"}</button>
                 </div>
                 {showHint && <p className="mb-3 rounded-lg bg-amber/15 p-3 text-sm text-amber">{mission.hint}</p>}
+                <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-white/5 p-2 text-sm">
+                  {mission.id === "home" && (
+                    <>
+                      <button
+                        onClick={() => {
+                          const n = gameRef.current?.undoLastRun() ?? 0;
+                          say("Rosa", n ? `Took away the ${n} blocks from the bot's last run.` : "The bot's last run has nothing left to take away.", "info");
+                        }}
+                        className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20"
+                      >
+                        Undo last run
+                      </button>
+                      {confirming === "clear" ? (
+                        <>
+                          <span className="font-semibold">Remove every block on your plot?</span>
+                          <button onClick={() => { gameRef.current?.clearBlocks(); update((q) => ({ ...q, blocks: [] })); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 font-bold">Yes, clear</button>
+                          <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">Cancel</button>
+                        </>
+                      ) : (
+                        <button onClick={() => setConfirming("clear")} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20">Clear all blocks</button>
+                      )}
+                    </>
+                  )}
+                  {confirming === "restart" ? (
+                    <>
+                      <span className="font-semibold">Start this challenge over? Your code and stars stay.</span>
+                      <button onClick={() => restartChallenge(mission.id)} className="rounded-lg bg-rose-500 px-3 py-1.5 font-bold">Yes, restart</button>
+                      <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold">Cancel</button>
+                    </>
+                  ) : (
+                    <button onClick={() => setConfirming("restart")} className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold hover:bg-white/20">Restart challenge</button>
+                  )}
+                </div>
                 {editor === "blocks" ? (
                   <>
                     <div className="h-[min(460px,55vh)] overflow-hidden rounded-2xl ring-1 ring-white/10">

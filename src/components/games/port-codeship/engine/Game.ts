@@ -1212,6 +1212,17 @@ export class Game {
       const n = hit.face!.normal;
       cell = { x: c.x + Math.round(n.x), y: c.y + Math.round(n.y), z: c.z + Math.round(n.z) };
     }
+    if (this.eraser) {
+      // The eraser highlights the block it would remove.
+      if (!this.ghostRemove) {
+        this.ghost.visible = false;
+        return;
+      }
+      const [rx, ry, rz] = this.ghostRemove.split(",").map(Number);
+      this.ghost.visible = true;
+      this.ghost.position.copy(this.blockWorld(rx, ry, rz));
+      return;
+    }
     if (cell.x < 0 || cell.z < 0 || cell.y < 0 || cell.x >= PLOT_W || cell.z >= PLOT_D || cell.y >= PLOT_H) {
       this.ghost.visible = false;
       return;
@@ -1226,20 +1237,95 @@ export class Game {
   }
 
   private placeAtGhost() {
+    if (this.eraser) return this.removeAtGhost();
     const c = this.ghostCell;
     if (!c) return;
-    const mesh = this.addBlock({ ...c, c: this.buildColor });
+    const b: Block = { ...c, c: this.buildColor };
+    const mesh = this.addBlock(b);
     if (mesh) {
       mesh.scale.setScalar(0.2);
       this.tween(0.12, (k) => mesh.scale.setScalar(0.2 + 0.8 * k));
+      this.history.push({ kind: "place", b });
       this.hooks.blocksChanged(this.getBlocks());
     }
   }
 
   private removeAtGhost() {
     if (!this.ghostRemove) return;
-    const [x, y, z] = this.ghostRemove.split(",").map(Number);
-    if (this.removeBlock(x, y, z)) this.hooks.blocksChanged(this.getBlocks());
+    const e = this.blocks.get(this.ghostRemove);
+    if (e && this.removeBlock(e.b.x, e.b.y, e.b.z)) {
+      this.history.push({ kind: "remove", b: e.b });
+      this.hooks.blocksChanged(this.getBlocks());
+    }
+  }
+
+  // ---- Fixing builds without starting over ----
+
+  /** Hand-building steps that Undo can take back, newest last. */
+  private history: { kind: "place" | "remove"; b: Block }[] = [];
+  /** Blocks the Builder Bot placed on its last run. */
+  private lastRun: Block[] = [];
+  private eraser = false;
+
+  /** Eraser on: a click removes the block under the cursor. */
+  setEraser(on: boolean) {
+    this.eraser = on;
+    const m = this.ghost.material as THREE.MeshBasicMaterial;
+    if (on) m.color.set(0xff4d4d);
+    else this.setBuildColor(this.buildColor);
+  }
+
+  get canUndo() {
+    return this.history.length > 0;
+  }
+
+  get lastRunCount() {
+    return this.lastRun.filter((b) => this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b).length;
+  }
+
+  /** Takes back the last block you placed or removed by hand. */
+  undoBuild() {
+    const h = this.history.pop();
+    if (!h) return false;
+    if (h.kind === "place") this.removeBlock(h.b.x, h.b.y, h.b.z);
+    else this.addBlock(h.b);
+    this.hooks.blocksChanged(this.getBlocks());
+    return true;
+  }
+
+  /** Removes only the blocks the Builder Bot placed on its last run. */
+  undoLastRun() {
+    let n = 0;
+    for (const b of this.lastRun) {
+      if (this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b && this.removeBlock(b.x, b.y, b.z)) n++;
+    }
+    this.lastRun = [];
+    this.resetBuilder();
+    this.hooks.blocksChanged(this.getBlocks());
+    return n;
+  }
+
+  /** Empties the plot. */
+  clearBlocks() {
+    this.setBlocks([]);
+    this.history = [];
+    this.lastRun = [];
+    this.resetBuilder();
+    this.hooks.blocksChanged([]);
+  }
+
+  /** Puts the Ladder Bot back by the counter with an empty basket. */
+  resetMarket() {
+    if (this.counterItem) this.scene.remove(this.counterItem);
+    this.counterItem = null;
+    for (const c of [...this.ladderLift.children]) if (c.userData.product) this.ladderLift.remove(c);
+    this.ladder.position.x = COUNTER.x;
+    this.ladderLift.position.y = 0.4;
+  }
+
+  /** Parks the Beach Bot back on the boardwalk. */
+  resetBeachBot() {
+    this.parkBeachBot();
   }
 
   private resetBuilder() {
@@ -1250,6 +1336,7 @@ export class Game {
 
   async playHome(steps: HomeStep[]) {
     this.resetBuilder();
+    this.lastRun = [];
     let cx = 0;
     let cz = 0;
     let cy = 0;
@@ -1276,8 +1363,10 @@ export class Game {
         cy = s.y;
         await this.tween(0.16, (k) => (bot.position.y = from + (cy + 1 - from) * ease(k)));
       } else if (s.t === "place") {
-        const mesh = this.addBlock({ x: s.x, y: s.y, z: s.z, c: s.c });
+        const placed: Block = { x: s.x, y: s.y, z: s.z, c: s.c };
+        const mesh = this.addBlock(placed);
         if (mesh) {
+          this.lastRun.push(placed);
           mesh.scale.setScalar(0.1);
           await this.tween(0.08, (k) => mesh.scale.setScalar(0.1 + 0.9 * k));
         }
@@ -1317,6 +1406,7 @@ export class Game {
       else if (s.t === "raise") await raise(s.level);
       else if (s.t === "pick") {
         held = cube(0.45, 0.5, 0.35, mat(PRODUCT_COLORS[s.product] ?? 0xffffff));
+        held.userData.product = true;
         held.position.set(0, 0.3, 0.45);
         this.ladderLift.add(held);
         await this.tween(0.25, (k) => held && (held.position.y = 0.6 - 0.3 * k));
