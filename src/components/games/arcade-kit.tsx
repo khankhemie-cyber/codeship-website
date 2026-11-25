@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { rankFor, useProgress, type Badge } from "@/lib/games/progress";
 import "./games.css";
+import { Art, StarIcon } from "./art";
 
 /* ------------------------------------------------------------------ */
 /* Reward events — any game can call celebrate(); <RewardLayer/> shows it */
@@ -54,14 +55,12 @@ export function RewardLayer() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 40 }}
             className={`rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur ${
-              c.badge ? "border-amber/60 bg-[#2a2440]/95" : "border-white/10 bg-[#1f2336]/95"
+              c.badge ? "border-amber/60 bg-[#2a2440]/95 arcade-pop" : "border-white/10 bg-[#1f2336]/95 arcade-pop"
             }`}
           >
             {c.badge ? (
               <div className="flex items-center gap-3">
-                <span className="text-4xl" aria-hidden>
-                  {c.badge.emoji}
-                </span>
+                <Art e={c.badge.emoji} size={44} />
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber">Badge unlocked</p>
                   <p className="font-display text-2xl leading-none text-white">{c.badge.title}</p>
@@ -92,7 +91,7 @@ export function XpMeter({ compact = false }: { compact?: boolean }) {
     <div className={compact ? "min-w-[150px]" : "w-full"}>
       <div className="flex items-baseline justify-between gap-3 text-xs font-semibold text-white/80">
         <span>
-          <span aria-hidden>{current.emoji}</span> {current.title}
+          <Art e={current.emoji} size="1.3em" /> {current.title}
         </span>
         <span className="tabular-nums text-amber">{p.xp} XP</span>
       </div>
@@ -113,7 +112,7 @@ export function XpMeter({ compact = false }: { compact?: boolean }) {
       </div>
       {!compact && next ? (
         <p className="mt-1 text-[11px] text-white/55">
-          {next.xp - p.xp} XP to {next.emoji} {next.title}
+          {next.xp - p.xp} XP to {next.title}
         </p>
       ) : null}
     </div>
@@ -131,9 +130,7 @@ export function ArcadeTopBar({ title, emoji, semester }: { title: string; emoji:
           <span aria-hidden>←</span> <span className="hidden sm:inline">Ship It! Arcade</span>
         </Link>
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <span className="text-2xl" aria-hidden>
-            {emoji}
-          </span>
+          <Art e={emoji} size={32} />
           <div className="min-w-0">
             {semester ? (
               <p className="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-amber/90">{semester}</p>
@@ -158,10 +155,10 @@ export function Stars({ count, size = "text-2xl", animate = false }: { count: nu
           initial={animate ? { scale: 0, rotate: -40 } : false}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: animate ? 0.25 + n * 0.22 : 0, type: "spring", stiffness: 260, damping: 14 }}
-          className={n <= count ? "text-amber drop-shadow-[0_0_10px_rgba(255,215,64,0.6)]" : "text-white/15"}
+          className="inline-flex"
           aria-hidden
         >
-          ★
+          <StarIcon on={n <= count} />
         </motion.span>
       ))}
     </span>

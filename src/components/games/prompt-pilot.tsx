@@ -6,6 +6,7 @@ import { PROMPT_CATALOG, PROMPT_FREE_LEVELS, promptStars, type PromptLevel, type
 import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/lib/games/progress";
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess, usePaidLevels } from "./level-lock";
+import { Art, ArtText } from "./art";
 
 /** Ages 7–10 span two programs: either class password unlocks missions 6+. */
 const PROGRAMS = ["builders", "developers"] as const;
@@ -37,18 +38,18 @@ function SpeakButton({ text, label = "Read this out loud" }: { text: string; lab
       title={label}
       className="focus-ring ml-2 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm hover:bg-white/20"
     >
-      🔊
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4z" />
+        <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />
+      </svg>
     </button>
   );
 }
 
 function Astro({ size = "h-12 w-12 text-3xl" }: { size?: string }) {
   return (
-    <span
-      className={`flex shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400/40 to-violet-500/40 shadow-[0_0_24px_-6px_rgba(125,211,252,0.8)] ${size}`}
-      aria-hidden
-    >
-      🤖
+    <span className={`flex shrink-0 items-center justify-center rounded-2xl bg-sky-100 ${size}`} aria-hidden>
+      <Art e="🤖" size="80%" />
     </span>
   );
 }
@@ -80,7 +81,7 @@ function ChatLog({ lines }: { lines: Line[] }) {
                   l.from === "hint" ? "border border-orange-300/40 bg-orange-400/15 text-orange-100" : "bg-white text-navy"
                 }`}
               >
-                {l.text}
+                <ArtText text={l.text} />
                 <SpeakButton text={l.text} />
               </p>
             </motion.div>
@@ -112,7 +113,7 @@ function ChooseStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { k
   return (
     <div className="space-y-3">
       <p className="flex items-start text-lg font-bold text-white">
-        <span>{step.ask}</span>
+        <span><ArtText text={step.ask} /></span>
         <SpeakButton text={step.ask} />
       </p>
       {step.options.map((o, i) => (
@@ -135,7 +136,7 @@ function ChooseStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { k
           }}
           className={`${bigBtn} border-white/15 bg-white/5 text-white hover:border-amber/60 hover:bg-white/10`}
         >
-          “{o.text}”
+          “<ArtText text={o.text} />”
         </motion.button>
       ))}
     </div>
@@ -164,13 +165,13 @@ function BuildStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { ki
   return (
     <div className="space-y-4">
       <p className="flex items-start text-lg font-bold text-white">
-        <span>{step.ask}</span>
+        <span><ArtText text={step.ask} /></span>
         <SpeakButton text={step.ask} />
       </p>
       {step.slots.map((slot, si) => (
         <div key={slot.label} role="radiogroup" aria-label={slot.label}>
           <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.2em] text-sky-300">
-            <span aria-hidden>{slot.emoji}</span> {slot.label}
+            <Art e={slot.emoji} size="1.3em" /> {slot.label}
           </p>
           <div className="flex flex-wrap gap-2">
             {slot.options.map((o, oi) => (
@@ -185,7 +186,7 @@ function BuildStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { ki
                   picks[si] === oi ? "border-amber bg-amber text-navy" : "border-white/15 bg-white/5 text-white hover:border-amber/60"
                 }`}
               >
-                {o.text}
+                <ArtText text={o.text} />
               </button>
             ))}
           </div>
@@ -201,7 +202,7 @@ function BuildStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { ki
         disabled={!ready || finished}
         className="focus-ring w-full rounded-2xl bg-amber px-6 py-4 font-display text-xl font-extrabold text-navy shadow-[0_10px_30px_-10px_rgba(255,215,64,0.8)] disabled:opacity-40"
       >
-        🚀 Send to Astro
+        Send to Astro
       </button>
     </div>
   );
@@ -214,14 +215,14 @@ function SortStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { kin
   return (
     <div className="space-y-4">
       <p className="flex items-start text-lg font-bold text-white">
-        <span>{step.ask}</span>
+        <span><ArtText text={step.ask} /></span>
         <SpeakButton text={step.ask} />
       </p>
       <p className="text-xs font-semibold text-white/45">
         {i + 1} of {step.items.length}
       </p>
       <motion.div key={i} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="rounded-2xl bg-white p-5 text-center text-lg font-bold text-navy shadow-lg">
-        {item.text}
+        <ArtText text={item.text} />
         <SpeakButton text={item.text} />
       </motion.div>
       <div className="grid grid-cols-2 gap-3">
@@ -242,7 +243,7 @@ function SortStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { kin
             }}
             className="focus-ring rounded-2xl border-2 border-white/15 bg-white/5 px-3 py-5 text-lg font-extrabold text-white hover:border-amber/60 hover:bg-white/10"
           >
-            {bin}
+            <ArtText text={bin} />
           </motion.button>
         ))}
       </div>
@@ -256,11 +257,11 @@ function SpotStep({ step, say, miss, done }: StepProps<Extract<PromptStep, { kin
   return (
     <div className="space-y-4">
       <p className="flex items-start text-lg font-bold text-white">
-        <span>{step.ask}</span>
+        <span><ArtText text={step.ask} /></span>
         <SpeakButton text={step.ask} />
       </p>
       <div className="rounded-2xl border border-emerald-300/40 bg-emerald-400/10 p-4 text-base font-semibold text-emerald-100">
-        {step.check}
+        <ArtText text={step.check} />
         <SpeakButton text={step.check} />
       </div>
       <div className="flex items-start gap-2">
@@ -365,16 +366,14 @@ function Mission({ level, index, onBack, onNext, isLast }: { level: PromptLevel;
 
       <div className="mt-4 rounded-3xl border border-white/10 bg-gradient-to-br from-[#263063] to-[#1c1f35] p-5">
         <div className="flex items-center gap-3">
-          <span className="text-4xl" aria-hidden>
-            {level.emoji}
-          </span>
+          <Art e={level.emoji} size={48} />
           <div>
-            <Pill tone="blue">✨ {level.skill}</Pill>
+            <Pill tone="blue">{level.skill}</Pill>
             <h2 className="mt-1 font-display text-3xl font-extrabold leading-none text-white">{level.title}</h2>
           </div>
         </div>
-        <p className="mt-3 flex items-start rounded-2xl bg-black/25 p-3 text-base font-semibold text-amber">
-          <span>💡 Pilot tip: {level.tip}</span>
+        <p className="mt-3 flex items-start rounded-2xl bg-amber/20 p-3 text-base font-semibold text-amber">
+          <span className="flex items-center gap-2"><Art e="💡" size={22} /> Pilot tip: {level.tip}</span>
           <SpeakButton text={level.tip} />
         </p>
         <div className="mt-3 flex gap-1.5" aria-label={`Step ${stepIdx + 1} of ${level.steps.length}`}>
@@ -397,7 +396,7 @@ function Mission({ level, index, onBack, onNext, isLast }: { level: PromptLevel;
             {step.kind === "spot" ? <SpotStep step={step} {...props} /> : null}
           </div>
         ) : (
-          <p className="text-center text-white/60">Mission complete! 🎉</p>
+          <p className="text-center text-white/60">Mission complete!</p>
         )}
       </div>
 
@@ -420,7 +419,7 @@ function Mission({ level, index, onBack, onNext, isLast }: { level: PromptLevel;
                 Mission map
               </button>
               <button type="button" onClick={isLast ? onBack : onNext} className="focus-ring flex-1 rounded-2xl bg-amber px-4 py-3 font-bold text-navy">
-                {isLast ? "🏆 All done!" : "Next mission →"}
+                {isLast ? "All done!" : "Next mission →"}
               </button>
             </div>
           </div>
@@ -478,10 +477,8 @@ function MissionMap({ onPick, isPaid, unlocked, askUnlock }: { onPick: (i: numbe
                 }`}
               >
                 <span className="flex w-full items-center justify-between">
-                  <span className="text-3xl" aria-hidden>
-                    {m.emoji}
-                  </span>
-                  {paid ? <span aria-hidden>🔑</span> : locked ? <span aria-hidden>🔒</span> : <Stars count={stars} size="text-base" />}
+                  <Art e={m.emoji} size={40} />
+                  {paid ? <Art e="🔑" size={20} /> : locked ? <Art e="🔒" size={20} /> : <Stars count={stars} size="text-base" />}
                 </span>
                 <span className="mt-3 text-[11px] font-bold uppercase tracking-[0.15em] text-sky-300">{m.skill}</span>
                 <span className="mt-0.5 text-lg font-bold text-white">{m.title}</span>

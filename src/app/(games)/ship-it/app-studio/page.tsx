@@ -8,5 +8,9 @@ export const metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <AppStudio />;
+  return (
+    <div className="arcade-light">
+      <AppStudio />
+    </div>
+  );
 }

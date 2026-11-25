@@ -20,3 +20,116 @@
     animation: none !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Light theme for the arcade games (Rover Rescue, Prompt Pilot,       */
+/* App Studio, Bot Trainer). The games were built dark; this remaps    */
+/* their shared colour classes to a bright, sky-and-white look.        */
+/* Anything inside .keep-dark (code editors, code samples) is left as  */
+/* it was.                                                             */
+/* ------------------------------------------------------------------ */
+.arcade-light {
+  --al-ink: #001532;
+  --al-ink-2: #26324a;
+  --al-ink-3: #445066;
+  --al-ink-4: #5b6478;
+  --al-line: rgba(0, 21, 50, 0.12);
+  --al-card: #ffffff;
+  min-height: 100vh;
+  color: var(--al-ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #d7f0fb 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, #ece4f8 0%, transparent 55%),
+    #f3f9fd;
+}
+
+/* Surfaces */
+.arcade-light :is(.bg-\[\#1b1e33\], .bg-\[\#161827\], .bg-\[\#161827\]\/90, .bg-\[\#26294a\], .bg-\[\#1f2336\], .bg-\[\#1f2336\]\/95, .bg-\[\#2a2440\]\/95):not(:where(.keep-dark, .keep-dark *)) {
+  background-color: var(--al-card) !important;
+}
+.arcade-light .bg-\[\#161827\]\/90:not(:where(.keep-dark, .keep-dark *)) {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+.arcade-light :is(.bg-\[\#0f1120\], .bg-\[\#0f1120\]\/60):not(:where(.keep-dark, .keep-dark *)) {
+  background-color: #f4f7fb !important;
+}
+.arcade-light .bg-gradient-to-br:is([class*="from-[#2"], [class*="from-[#3"]):not(:where(.keep-dark, .keep-dark *)) {
+  background-image: linear-gradient(135deg, #ffffff, #f2f8fc) !important;
+}
+.arcade-light :is(.bg-white\/5, .bg-white\/10):not(:where(.keep-dark, .keep-dark *)) {
+  background-color: rgba(0, 21, 50, 0.05) !important;
+}
+.arcade-light .bg-white\/15:not(:where(.keep-dark, .keep-dark *)) {
+  background-color: rgba(0, 21, 50, 0.08) !important;
+}
+.arcade-light :is(.bg-black\/20, .bg-black\/25, .bg-black\/30, .bg-black\/40):not(:where(.keep-dark, .keep-dark *)) {
+  background-color: rgba(0, 21, 50, 0.08) !important;
+}
+
+/* Lines */
+.arcade-light :is(.border-white\/5, .border-white\/10, .border-white\/15, .border-white\/20):not(:where(.keep-dark, .keep-dark *)) {
+  border-color: var(--al-line) !important;
+}
+
+/* Cards get a soft lift instead of a glow on light backgrounds */
+.arcade-light :is(.rounded-3xl, .rounded-2xl, .rounded-\[28px\], .rounded-\[32px\]):is(.bg-\[\#1b1e33\], .bg-gradient-to-br):not(:where(.keep-dark, .keep-dark *)) {
+  box-shadow: 0 1px 0 rgba(0, 21, 50, 0.04), 0 12px 30px -18px rgba(0, 21, 50, 0.35);
+}
+
+/* Text */
+.arcade-light :is(.text-white, .text-white\/85, .text-white\/80):not(:where(.keep-dark, .keep-dark *)) {
+  color: var(--al-ink) !important;
+}
+.arcade-light :is(.text-white\/75, .text-white\/70, .text-white\/65):not(:where(.keep-dark, .keep-dark *)) {
+  color: var(--al-ink-2) !important;
+}
+.arcade-light :is(.text-white\/60, .text-white\/55):not(:where(.keep-dark, .keep-dark *)) {
+  color: var(--al-ink-3) !important;
+}
+.arcade-light :is(.text-white\/50, .text-white\/45, .text-white\/40, .text-white\/30):not(:where(.keep-dark, .keep-dark *)) {
+  color: var(--al-ink-4) !important;
+}
+.arcade-light :is(.text-amber, .text-amber\/90):not(:where(.keep-dark, .keep-dark *)) {
+  color: #6e43a8 !important;
+}
+.arcade-light :is(.text-emerald-300, .text-emerald-200):not(:where(.keep-dark, .keep-dark *)) {
+  color: #0f7a4d !important;
+}
+.arcade-light :is(.text-sky-200, .text-sky-300):not(:where(.keep-dark, .keep-dark *)) {
+  color: #0f6f7c !important;
+}
+.arcade-light :is(.text-violet-200, .text-violet-300):not(:where(.keep-dark, .keep-dark *)) {
+  color: #6e43a8 !important;
+}
+.arcade-light .text-orange-300:not(:where(.keep-dark, .keep-dark *)) {
+  color: #b54708 !important;
+}
+.arcade-light :is(.text-pink-300, .text-pink-400):not(:where(.keep-dark, .keep-dark *)) {
+  color: #be185d !important;
+}
+.arcade-light .text-red-300:not(:where(.keep-dark, .keep-dark *)) {
+  color: #b42318 !important;
+}
+.arcade-light :is(input, textarea, select)::placeholder {
+  color: #7b8497;
+}
+/* Coloured buttons keep dark text */
+.arcade-light :is(.bg-amber, .bg-emerald-400) :is(.text-white, .text-navy),
+.arcade-light :is(.bg-amber, .bg-emerald-400):is(.text-white, .text-navy) {
+  color: var(--al-ink) !important;
+}
+
+/* Chunky "pressable" buttons, like a toy */
+.arcade-light .bg-amber:not(:where(.keep-dark, .keep-dark *)) {
+  box-shadow: inset 0 -3px 0 rgba(0, 21, 50, 0.18);
+}
+
+/* Focus ring on light background */
+.arcade-light .focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #138a9a;
+}
+
+/* The games layout paints a dark backdrop under every game; light games cover it. */
+.ship-it:has(.arcade-light) {
+  background-color: #f3f9fd;
+}

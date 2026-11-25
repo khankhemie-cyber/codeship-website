@@ -25,6 +25,7 @@ import { completeLevel, earnBadge, getProgress, starsFor, useProgress } from "@/
 import { ArcadeTopBar, Confetti, Modal, Pill, RewardLayer, Stars, celebrate } from "./arcade-kit";
 import { highlight } from "./code-editor";
 import { FREE_LEVELS, LockBadge, UnlockModal, useLevelAccess, usePaidLevels } from "./level-lock";
+import { Art, ArtText, StarIcon } from "./art";
 
 type Screen =
   | { kind: "hub" }
@@ -40,10 +41,10 @@ function BotAvatar({ mood = "happy", say }: { mood?: "happy" | "thinking" | "pro
         key={mood}
         initial={{ scale: 0.8, rotate: -8 }}
         animate={{ scale: 1, rotate: 0 }}
-        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/40 to-sky-500/30 text-4xl shadow-[0_0_30px_-6px_rgba(167,139,250,0.7)]"
+        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-violet-100"
         aria-hidden
       >
-        {face}
+        <Art e={face} size={52} />
       </motion.div>
       {say ? (
         <motion.p
@@ -52,7 +53,7 @@ function BotAvatar({ mood = "happy", say }: { mood?: "happy" | "thinking" | "pro
           animate={{ opacity: 1, y: 0 }}
           className="relative rounded-2xl rounded-bl-sm bg-white px-4 py-2.5 text-sm font-semibold text-navy shadow-lg"
         >
-          {say}
+          <ArtText text={say} />
         </motion.p>
       ) : null}
     </div>
@@ -152,11 +153,9 @@ function Hub({
             transition={{ delay: ti * 0.08 }}
             className={`rounded-3xl border border-white/10 bg-gradient-to-b ${t.tone} to-transparent p-5`}
           >
-            <p className="text-3xl" aria-hidden>
-              {t.emoji}
-            </p>
+            <Art e={t.emoji} size={48} />
             <h3 className="mt-2 font-display text-3xl text-white">{t.title}</h3>
-            <p className="mt-1 text-sm text-white/65">{t.blurb}</p>
+            <p className="mt-1 text-sm text-white/65"><ArtText text={t.blurb} /></p>
             <ul className="mt-4 space-y-2">
               {t.items.map((i) => (
                 <li key={i.id}>
@@ -165,9 +164,7 @@ function Hub({
                     onClick={isPaid(LEVEL_ORDER.indexOf(i.id)) ? askUnlock : i.open}
                     className="focus-ring group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-[#1b1e33] p-3 text-left transition hover:-translate-y-0.5 hover:border-amber/40"
                   >
-                    <span className="text-2xl" aria-hidden>
-                      {i.emoji}
-                    </span>
+                    <Art e={i.emoji} size={32} />
                     <span className="min-w-0 flex-1">
                       <span className="block font-bold text-white">{i.title}</span>
                       <span className="block truncate text-xs text-white/55">{i.sub}</span>
@@ -255,17 +252,17 @@ function PyQuiz({ round, back }: { round: PyRound; back: () => void }) {
           ))}
         </div>
         <motion.span key={streak} initial={{ scale: 1.4 }} animate={{ scale: 1 }} className={`min-w-[64px] text-right text-sm font-bold ${streak >= 2 ? "text-orange-300" : "text-white/40"}`}>
-          {streak >= 2 ? `🔥 ${streak}` : `${streak} streak`}
+          {streak >= 2 ? <span className="inline-flex items-center gap-1"><Art e="🔥" size={18} /> {streak}</span> : `${streak} streak`}
         </motion.span>
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div key={i} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="mt-6">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">
-            {round.emoji} {round.title} · {i + 1}/{round.puzzles.length}
+            {round.title} · {i + 1}/{round.puzzles.length}
           </p>
           <h2 className="mt-2 font-display text-4xl text-white">{pz.question}</h2>
-          <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120]">
+          <div className="keep-dark mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120]">
             <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-2">
               <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber/70" />
@@ -295,7 +292,7 @@ function PyQuiz({ round, back }: { round: PyRound; back: () => void }) {
                   }`}
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black/30 text-xs text-white/60">{n + 1}</span>
-                  {o}
+                  <ArtText text={o} />
                 </motion.button>
               );
             })}
@@ -304,11 +301,11 @@ function PyQuiz({ round, back }: { round: PyRound; back: () => void }) {
           <div aria-live="polite">
             {picked !== null ? (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`mt-5 rounded-2xl p-4 ${correct ? "bg-emerald-400/10" : "bg-orange-400/10"}`}>
-                <p className={`font-bold ${correct ? "text-emerald-300" : "text-orange-300"}`}>{correct ? "✅ Correct!" : "Not quite — try another answer."}</p>
-                {correct ? <p className="mt-1 text-sm text-white/80">{pz.explain}</p> : <p className="mt-1 text-sm text-white/70">Trace the code line by line, like the computer does.</p>}
+                <p className={`font-bold ${correct ? "text-emerald-300" : "text-orange-300"}`}>{correct ? "Correct!" : "Not quite — try another answer."}</p>
+                {correct ? <p className="mt-1 text-sm text-white/80"><ArtText text={pz.explain} /></p> : <p className="mt-1 text-sm text-white/70">Trace the code line by line, like the computer does.</p>}
                 {correct ? (
                   <button type="button" onClick={next} className="focus-ring mt-3 rounded-xl bg-amber px-5 py-2.5 font-bold text-navy">
-                    {i < round.puzzles.length - 1 ? "Next →" : "Finish 🏁"}
+                    {i < round.puzzles.length - 1 ? "Next →" : "Finish"}
                   </button>
                 ) : null}
               </motion.div>
@@ -347,7 +344,7 @@ function MaterialChip({ item }: { item: Item }) {
   const m = MATERIALS[item.material];
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[11px] font-semibold text-white/70">
-      <span aria-hidden>{m.emoji}</span> {m.label}
+      <Art e={m.emoji} size="1.2em" /> {m.label}
     </span>
   );
 }
@@ -426,9 +423,7 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
       </button>
       <div className="mt-3 grid gap-6 lg:grid-cols-[1fr_320px]">
         <div>
-          <Pill tone="pink">
-            {round.emoji} {round.concept}
-          </Pill>
+          <Pill tone="pink">{round.concept}</Pill>
           <h2 className="mt-2 font-display text-5xl leading-none text-white">{round.title}</h2>
           <p className="mt-2 max-w-2xl text-white/75">{round.brief}</p>
 
@@ -451,9 +446,7 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
                   return (
                     <motion.li key={item.id} layout className={`rounded-2xl border p-3 transition ${label || isPicked ? "border-amber/40 bg-[#26294a]" : "border-white/10 bg-[#1b1e33]"}`}>
                       <div className="flex items-center gap-3">
-                        <span className="text-4xl" aria-hidden>
-                          {item.emoji}
-                        </span>
+                        <Art e={item.emoji} size={48} />
                         <div className="min-w-0">
                           <p className="font-bold text-white">{item.name}</p>
                           <MaterialChip item={item} />
@@ -472,7 +465,7 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
                                 label === b.id ? `${b.tone} text-white` : "border-white/10 from-transparent to-transparent text-white/60 hover:text-white"
                               }`}
                             >
-                              <span aria-hidden>{b.emoji}</span> {b.label}
+                              <Art e={b.emoji} size="1.2em" /> {b.label}
                             </button>
                           ))}
                         </div>
@@ -486,7 +479,7 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
                             isPicked ? "border-amber bg-amber text-navy" : "border-white/15 text-white/80 hover:border-amber/50"
                           }`}
                         >
-                          {isPicked ? "✓ Teaching this" : `Teach: ${BINS.find((b) => b.id === item.answer)?.emoji} ${item.answer}`}
+                          {isPicked ? "Teaching this" : `Teach: ${item.answer}`}
                         </button>
                       )}
                     </motion.li>
@@ -499,7 +492,7 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
                 disabled={!ready}
                 className="focus-ring mt-6 rounded-2xl bg-amber px-8 py-3.5 font-display text-2xl text-navy shadow-[0_10px_30px_-10px_rgba(255,215,64,0.8)] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                🧪 Test the bot
+                Test the bot
               </button>
               {!ready ? <p className="mt-2 text-xs text-white/45">{round.mode === "label" ? "Label every item first." : `Pick exactly ${budget}.`}</p> : null}
             </>
@@ -522,31 +515,29 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
                     animate={{ opacity: 1, scale: 1 }}
                     className={`flex items-start gap-3 rounded-2xl border p-3 ${r.correct ? "border-emerald-400/40 bg-emerald-400/10" : "border-orange-400/40 bg-orange-400/10"}`}
                   >
-                    <span className="text-4xl" aria-hidden>
-                      {r.item.emoji}
-                    </span>
+                    <Art e={r.item.emoji} size={44} />
                     <div className="min-w-0 text-sm">
                       <p className="font-bold text-white">
-                        {r.item.name} {r.correct ? "✅" : "❌"}
+                        {r.item.name} <Art e={r.correct ? "✅" : "❌"} size="1.1em" />
                       </p>
                       <p className="text-white/75">
                         {r.guess ? (
                           <>
-                            Bot says <strong>{BINS.find((b) => b.id === r.guess)?.emoji} {r.guess}</strong> — it looks like {r.because?.emoji} {r.because?.name} ({MATERIALS[r.item.material].label}).
+                            Bot says <strong>{r.guess}</strong>. It looks like {r.because?.name} ({MATERIALS[r.item.material].label}).
                           </>
                         ) : (
-                          <>🤔 “I’ve never seen {MATERIALS[r.item.material].label} before — I can’t tell!”</>
+                          <>“I’ve never seen {MATERIALS[r.item.material].label} before — I can’t tell!”</>
                         )}
                       </p>
-                      {!r.correct ? <p className="mt-1 text-xs text-orange-200">Correct: {BINS.find((b) => b.id === r.item.answer)?.emoji} {r.item.answer}</p> : null}
+                      {!r.correct ? <p className="mt-1 text-xs text-orange-200">Correct: {r.item.answer}</p> : null}
                     </div>
                   </motion.li>
                 ))}
               </ul>
               {shown >= results.length ? (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 rounded-2xl border border-violet-400/30 bg-violet-400/10 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-300">💡 What developers learn from this</p>
-                  <p className="mt-1 text-white/85">{round.lesson}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-300">What developers learn from this</p>
+                  <p className="mt-1 text-white/85"><ArtText text={round.lesson} /></p>
                   <button type="button" onClick={retry} className="focus-ring mt-3 rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10">
                     ↺ Retrain Sortie
                   </button>
@@ -567,9 +558,9 @@ function Train({ round, back }: { round: TrainRound; back: () => void }) {
               {learned.map(([mat, label]) => (
                 <motion.li key={mat} layout initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className="flex items-center justify-between rounded-lg bg-black/30 px-3 py-1.5 text-white/85">
                   <span>
-                    {MATERIALS[mat].emoji} {mat}
+                    {mat}
                   </span>
-                  <span>→ {BINS.find((b) => b.id === label)?.emoji} {label}</span>
+                  <span>→ {label}</span>
                 </motion.li>
               ))}
             </ul>
@@ -676,13 +667,11 @@ function RuleWriter({ challenge, back }: { challenge: RuleChallenge; back: () =>
       </button>
       <div className="mt-3 grid gap-6 lg:grid-cols-[1.25fr_1fr]">
         <div>
-          <Pill tone="blue">
-            {challenge.emoji} {challenge.concept}
-          </Pill>
+          <Pill tone="blue">{challenge.concept}</Pill>
           <h2 className="mt-2 font-display text-5xl leading-none text-white">{challenge.title}</h2>
           <p className="mt-2 text-white/75">{challenge.brief}</p>
 
-          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120]">
+          <div className="keep-dark mt-5 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120]">
             <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-2">
               <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber/70" />
@@ -756,10 +745,10 @@ function RuleWriter({ challenge, back }: { challenge: RuleChallenge; back: () =>
           <p className="sr-only">{code}</p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <button type="button" onClick={runTests} className="focus-ring rounded-2xl bg-amber px-8 py-3.5 font-display text-2xl text-navy shadow-[0_10px_30px_-10px_rgba(255,215,64,0.8)]">
-              ▶ Run tests
+              Run tests
             </button>
             <span className="text-sm text-white/55">
-              ★★★ pass every test using {challenge.parRules} rules or fewer (plus else)
+              <span className="inline-flex items-center gap-0.5 align-[-0.15em]"><StarIcon /><StarIcon /><StarIcon /></span> pass every test using {challenge.parRules} rules or fewer (plus else)
             </span>
           </div>
         </div>
@@ -788,7 +777,7 @@ function RuleWriter({ challenge, back }: { challenge: RuleChallenge; back: () =>
               >
                 <span className="text-white/90">{o.label}</span>
                 <span className="font-mono text-xs">
-                  {ran ? (o.pass ? "✅ " : "❌ ") : ""}
+                  {ran ? <Art e={o.pass ? "✅" : "❌"} size="1.1em" className="mr-1" /> : null}
                   <span className="text-white/50">want</span> <span className="text-emerald-300">{fmt(o.expect)}</span>
                   {ran && !o.pass ? (
                     <>

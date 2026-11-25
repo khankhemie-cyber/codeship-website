@@ -9,5 +9,9 @@ export const metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <PromptPilot />;
+  return (
+    <div className="arcade-light">
+      <PromptPilot />
+    </div>
+  );
 }

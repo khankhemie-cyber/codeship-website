@@ -6,6 +6,7 @@ import ClassPasswordForm from "@/components/ClassPasswordForm";
 import { PROGRAMS } from "@/data/programs";
 import type { ProgramSlug } from "@/data/programs";
 import { Modal } from "./arcade-kit";
+import { Art } from "./art";
 
 /**
  * Ship It! Arcade paywall: the first FREE_LEVELS levels of every game are free
@@ -86,7 +87,7 @@ function programLabel(program: ProgramSlug) {
 export function LockBadge() {
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-amber/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber">
-      <span aria-hidden>🔑</span> Class level
+      <Art e="🔑" size="1.2em" /> Class level
     </span>
   );
 }
@@ -114,9 +115,7 @@ export function UnlockModal({
   return (
     <Modal open={open} onClose={onClose} label="Unlock more levels">
       <div className="text-center">
-        <p className="text-5xl" aria-hidden>
-          🔐
-        </p>
+        <Art e="🔐" size={64} className="mx-auto" />
         <p className="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-amber">Class levels</p>
         <h3 className="mt-1 font-display text-3xl font-extrabold">You finished the free levels!</h3>
         <p className="mt-2 text-sm text-white/70">

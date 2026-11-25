@@ -136,7 +136,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, Props>(function CodeEdito
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120] font-mono text-[13px] leading-6 md:text-sm md:leading-6">
+    <div className="keep-dark relative overflow-hidden rounded-2xl border border-white/10 bg-[#0f1120] font-mono text-[13px] leading-6 md:text-sm md:leading-6">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-y-0 left-0 w-10 select-none border-r border-white/5 bg-black/20 py-4 pr-2 text-right text-white/25"

@@ -8,5 +8,9 @@ export const metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <BotTrainer />;
+  return (
+    <div className="arcade-light">
+      <BotTrainer />
+    </div>
+  );
 }
