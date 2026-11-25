@@ -12,9 +12,7 @@ import * as THREE from "three";
 import {
   AISLES,
   BIN_POS,
-  PLOT_D,
   PLOT_H,
-  PLOT_W,
   type BeachStep,
   type BinName,
   type Block,
@@ -22,6 +20,8 @@ import {
   type HomeStep,
   type Litter,
   type MarketStep,
+  type LumberStep,
+  type Spot,
 } from "@/lib/games/port/missions";
 import {
   AISLE_X,
@@ -39,6 +39,10 @@ import {
   PARK,
   PLAZA,
   PLOT,
+  LOT2,
+  LOT2_TERMINAL,
+  SAPLING_SPOTS,
+  lot2Spot,
   PLOT_TERMINAL,
   SEA_FLOOR,
   SHELF_DEPTH,
@@ -78,7 +82,7 @@ import { Colliders, Player, box, type Box, type MoveInput } from "./physics";
 import { Interiors } from "./interiors";
 import { allowedHost } from "./guard";
 import { INTERIORS, type InteriorId } from "./layout";
-import type { BankStep, LibraryStep, MissionId, SecurityStep } from "@/lib/games/port/missions";
+import type { BankStep, LibraryStep, MissionId, PermitStep, SecurityStep } from "@/lib/games/port/missions";
 
 export type Focus = { id: string; label: string } | null;
 
@@ -88,7 +92,7 @@ export interface Hooks {
   interact(id: string): void;
   focus(f: Focus): void;
   bits(collected: number[]): void;
-  blocksChanged(blocks: Block[]): void;
+  blocksChanged(blocks: Block[], plot: "home" | "lot2"): void;
   buildMode(on: boolean): void;
   /** Mouse-look turned on (pointer locked) or off. */
   mouseLook(on: boolean): void;
@@ -116,7 +120,9 @@ const BLOCK_MATS: Record<BlockColor, THREE.Material> = {
   glass: new THREE.MeshStandardMaterial({ color: 0x9fd8ef, transparent: true, opacity: 0.45, roughness: 0.1 }),
 };
 
-const plotKey = (x: number, y: number, z: number) => `${x},${y},${z}`;
+type PlotId = "home" | "lot2";
+const PLOTS: Record<PlotId, { x: number; z: number; w: number; d: number }> = { home: PLOT, lot2: LOT2 };
+const plotKey = (plot: PlotId, x: number, y: number, z: number) => `${plot}|${x},${y},${z}`;
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
 type Tween = { t: number; dur: number; fn: (k: number) => void; done: () => void };
@@ -163,7 +169,7 @@ export class Game {
   private inside!: Interiors;
 
   // Home plot
-  private blocks = new Map<string, { b: Block; mesh: THREE.Mesh; box: Box }>();
+  private blocks = new Map<string, { b: Block; mesh: THREE.Mesh; box: Box; plot: PlotId }>();
   private builder: THREE.Group;
   private building = false;
   private buildColor: BlockColor = "brick";
@@ -172,7 +178,9 @@ export class Game {
   private ghostRemove: string | null = null;
   private raycaster = new THREE.Raycaster();
   private pointerNdc = new THREE.Vector2();
-  private plotGround!: THREE.Mesh;
+  private plotGrounds = {} as Record<PlotId, THREE.Mesh>;
+  /** Lot 2's dirt and grid, shown once it's open for building. */
+  private lot2Ready = new THREE.Group();
 
   // Market
   private ladder: THREE.Group;
@@ -200,6 +208,7 @@ export class Game {
     this.buildTerrain();
     this.buildTown();
     this.buildPlot();
+    this.buildLot2();
     this.buildMarket();
     this.buildBeach();
     this.buildLookouts();
@@ -415,6 +424,143 @@ export class Game {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Lot 2 (Maple Park): overgrown trees to clear, then a second building plot
+
+  private lot2Trees = new Map<string, { obj: THREE.Group; box: Box }>();
+  private saplings: THREE.Object3D[] = [];
+  private lumberBot!: THREE.Group;
+
+  private buildLot2() {
+    const { x, z, w, d } = LOT2;
+    // Rope fence posts round the lot, with a gap on the west side.
+    const post = mat(0x8a5a36);
+    for (let i = 0; i <= w; i += 2) {
+      this.scene.add(cube(0.15, 0.9, 0.15, post, x + i, 0.45, z - 0.6), cube(0.15, 0.9, 0.15, post, x + i, 0.45, z + d + 0.6));
+    }
+    for (let k = 0; k <= d; k += 2) this.scene.add(cube(0.15, 0.9, 0.15, post, x + w + 0.6, 0.45, z + k));
+    const sign = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.4, 2.4),
+      new THREE.MeshStandardMaterial({
+        map: textTexture(["12 × 8 blocks", "To build here:", "1. Clear the lot", "2. Get a permit at the", "    Town Hall"], { title: "LOT 2", w: 512, h: 360, font: 44, align: "left" }),
+      })
+    );
+    sign.position.set(x - 1.4, 1.9, z - 1.4);
+    sign.rotation.y = -Math.PI / 4;
+    this.scene.add(sign, cube(0.15, 1.2, 0.15, post, x - 1.4, 0.6, z - 1.4));
+    this.col.add(box(x - 1.55, 0, z - 1.55, x - 1.25, 3.1, z - 1.25, false));
+    // Ready-to-build ground: shown once the lot is open.
+    const dirt = cube(w, 0.04, d, mat(0xa77b52), x + w / 2, 0.02, z + d / 2, false);
+    const grid = new THREE.GridHelper(w, w, 0x6b4a2c, 0x6b4a2c);
+    grid.scale.z = d / w;
+    grid.position.set(x + w / 2, 0.05, z + d / 2);
+    (grid.material as THREE.Material).transparent = true;
+    (grid.material as THREE.Material).opacity = 0.35;
+    this.lot2Ready.add(dirt, grid);
+    this.lot2Ready.visible = false;
+    this.scene.add(this.lot2Ready);
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ visible: false }));
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.set(x + w / 2, 0.06, z + d / 2);
+    this.plotGrounds.lot2 = plane;
+    this.scene.add(plane);
+    // Terminal and the Lumber Bot's parking spot.
+    const term = makeTerminal();
+    term.position.set(LOT2_TERMINAL.x, 0, LOT2_TERMINAL.z);
+    term.rotation.y = -Math.PI / 2;
+    this.scene.add(term);
+    this.col.add(box(LOT2_TERMINAL.x - 0.45, 0, LOT2_TERMINAL.z - 0.45, LOT2_TERMINAL.x + 0.45, 1.6, LOT2_TERMINAL.z + 0.45, false));
+    this.interactables.push({ id: "term:lumber", x: LOT2_TERMINAL.x - 0.8, y: 0, z: LOT2_TERMINAL.z, r: 2 });
+    this.lumberBot = makeBeachBot({ wheels: "treads", color: 0xd35400, arm: "claw" });
+    this.parkLumberBot();
+    this.scene.add(this.lumberBot);
+  }
+
+  private parkLumberBot() {
+    this.lumberBot.position.set(LOT2.x - 2.6, 0, LOT2.z + LOT2.d - 1);
+    this.lumberBot.rotation.y = Math.PI / 2;
+  }
+
+  /** Puts trees on Lot 2 to match the grid (row 0 is the north edge). */
+  setLot2Grid(grid: Spot[][]) {
+    for (const [, t] of this.lot2Trees) {
+      this.scene.remove(t.obj);
+      this.col.remove(t.box);
+    }
+    this.lot2Trees.clear();
+    this.interactables = this.interactables.filter((i) => !i.id.startsWith("tree:"));
+    grid.forEach((row, r) =>
+      row.forEach((what, c) => {
+        if (what === "empty") return;
+        const { x, z } = lot2Spot(r, c);
+        const old = what === "old tree";
+        const obj = makeTree(old ? 1.45 : 0.95);
+        if (old) {
+          // A small plaque marks protected trees.
+          obj.add(cube(0.08, 0.8, 0.08, mat(0x5b4636), 0.7, 0.4, 0.7), cube(0.5, 0.35, 0.05, mat(0xf5c33d), 0.7, 0.9, 0.73, false));
+        }
+        obj.position.set(x, 0, z);
+        obj.rotation.y = (r * 5 + c) * 0.9;
+        obj.traverse((o) => ((o as THREE.Mesh).castShadow = true));
+        this.scene.add(obj);
+        const bx = this.col.add(box(x - 0.3, 0, z - 0.3, x + 0.3, 4, z + 0.3, true));
+        this.lot2Trees.set(`${r},${c}`, { obj, box: bx });
+        this.interactables.push({ id: `tree:${r}:${c}`, x, y: 0, z, r: 1.7 });
+      })
+    );
+  }
+
+  /** Fells one tree on Lot 2. */
+  async chopTree(r: number, c: number) {
+    const t = this.lot2Trees.get(`${r},${c}`);
+    if (!t) return;
+    this.lot2Trees.delete(`${r},${c}`);
+    this.col.remove(t.box);
+    this.interactables = this.interactables.filter((i) => i.id !== `tree:${r}:${c}`);
+    await this.tween(0.55, (k) => (t.obj.rotation.x = (Math.PI / 2) * k * k));
+    await this.tween(0.25, (k) => t.obj.scale.setScalar(1 - k));
+    this.scene.remove(t.obj);
+  }
+
+  /** Shows this many planted saplings in Maple Park. */
+  setSaplings(n: number) {
+    while (this.saplings.length < Math.min(n, SAPLING_SPOTS.length)) {
+      const s = SAPLING_SPOTS[this.saplings.length];
+      const tree = makeTree(0.45);
+      tree.position.set(s.x, 0, s.z);
+      tree.traverse((o) => ((o as THREE.Mesh).castShadow = true));
+      this.scene.add(tree);
+      this.saplings.push(tree);
+    }
+    while (this.saplings.length > n) this.scene.remove(this.saplings.pop()!);
+  }
+
+  async playLumber(steps: LumberStep[], startSaplings: number) {
+    const bot = this.lumberBot;
+    let planted = startSaplings;
+    for (const s of steps) {
+      if (s.t === "say") this.hooks.say("Lumber Bot", s.text, "info");
+      else if (s.t === "cut") {
+        const { x, z } = lot2Spot(s.row, s.col);
+        const from = bot.position.clone();
+        const to = new THREE.Vector3(x - 1.3, 0, z);
+        bot.rotation.y = Math.atan2(to.x - from.x, to.z - from.z);
+        await this.tween(Math.max(0.15, from.distanceTo(to) / 7), (k) => bot.position.lerpVectors(from, to, k));
+        bot.rotation.y = Math.PI / 2;
+        await this.chopTree(s.row, s.col);
+        if (!s.ok) this.hooks.say("Mr. Banda", "No! That was a protected old tree!", "bad");
+      } else if (s.t === "plant") {
+        planted++;
+        this.setSaplings(planted);
+        await this.tween(0.15, () => {});
+      }
+    }
+    const from = bot.position.clone();
+    const home = new THREE.Vector3(LOT2.x - 2.6, 0, LOT2.z + LOT2.d - 1);
+    await this.tween(Math.max(0.2, from.distanceTo(home) / 7), (k) => bot.position.lerpVectors(from, home, k));
+    this.parkLumberBot();
+  }
+
   private buildPlot() {
     // Fence posts (decor) around the plot with a gap on the west side.
     const post = mat(0xe8dcc0);
@@ -425,7 +571,7 @@ export class Game {
     const plane = new THREE.Mesh(new THREE.PlaneGeometry(PLOT.w, PLOT.d), new THREE.MeshBasicMaterial({ visible: false }));
     plane.rotation.x = -Math.PI / 2;
     plane.position.set(PLOT.x + PLOT.w / 2, 0.01, PLOT.z + PLOT.d / 2);
-    this.plotGround = plane;
+    this.plotGrounds.home = plane;
     this.scene.add(plane);
     const grid = new THREE.GridHelper(PLOT.w, PLOT.w, 0x6b4a2c, 0x6b4a2c);
     grid.scale.z = PLOT.d / PLOT.w;
@@ -1179,6 +1325,9 @@ export class Game {
   playBank(steps: BankStep[]) {
     return this.inside.playBank(steps);
   }
+  playPermit(steps: PermitStep[]) {
+    return this.inside.playPermit(steps);
+  }
   playLibrary(steps: LibraryStep[], order: number[]) {
     return this.inside.playLibrary(steps, order);
   }
@@ -1259,6 +1408,8 @@ export class Game {
       security: { tx: INTERIORS.townhall.room.ox, tz: INTERIORS.townhall.room.oz + 2, cx: INTERIORS.townhall.room.ox + 5, cy: 5, cz: INTERIORS.townhall.room.oz + 8 },
       bank: { tx: INTERIORS.bank.room.ox + 3, tz: INTERIORS.bank.room.oz - 1, cx: INTERIORS.bank.room.ox - 2, cy: 4, cz: INTERIORS.bank.room.oz + 5.5 },
       library: { tx: INTERIORS.library.room.ox, tz: INTERIORS.library.room.oz - 6.6, cx: INTERIORS.library.room.ox, cy: 3, cz: INTERIORS.library.room.oz - 1 },
+      lumber: { tx: LOT2.x + LOT2.w / 2, tz: LOT2.z + LOT2.d / 2, cx: LOT2.x - 6, cy: 12, cz: LOT2.z + LOT2.d + 9 },
+      permit: { tx: INTERIORS.townhall.room.ox - 7, tz: INTERIORS.townhall.room.oz + 1, cx: INTERIORS.townhall.room.ox - 2, cy: 4, cz: INTERIORS.townhall.room.oz + 6.5 },
     } as const;
     const s = spots[where];
     const from = this.camera.position.clone();
@@ -1279,28 +1430,36 @@ export class Game {
   }
 
   // ---------------------------------------------------------------------------
-  // Home plot: blocks, hand-building, Builder Bot
+  // Building plots: your home plot, and Lot 2 once it's cleared and permitted.
+  // Blocks, hand-building and the Builder Bot (home plot only).
 
-  private blockWorld(x: number, y: number, z: number) {
-    return new THREE.Vector3(PLOT.x + x + 0.5, y + 0.5, PLOT.z + z + 0.5);
+  private activePlot: PlotId = "home";
+  /** Lot 2 opens for building once it's cleared and has a permit. */
+  private lot2Open = false;
+
+  private blockWorld(x: number, y: number, z: number, plot: PlotId = "home") {
+    const P = PLOTS[plot];
+    return new THREE.Vector3(P.x + x + 0.5, y + 0.5, P.z + z + 0.5);
   }
 
-  private addBlock(b: Block) {
-    const k = plotKey(b.x, b.y, b.z);
+  private addBlock(b: Block, plot: PlotId = "home") {
+    const k = plotKey(plot, b.x, b.y, b.z);
     if (this.blocks.has(k)) return null;
+    const P = PLOTS[plot];
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), BLOCK_MATS[b.c] ?? BLOCK_MATS.brick);
-    mesh.position.copy(this.blockWorld(b.x, b.y, b.z));
+    mesh.position.copy(this.blockWorld(b.x, b.y, b.z, plot));
     mesh.castShadow = mesh.receiveShadow = true;
     mesh.userData.cell = { x: b.x, y: b.y, z: b.z };
+    mesh.userData.plot = plot;
     this.scene.add(mesh);
-    const bx = box(PLOT.x + b.x, b.y, PLOT.z + b.z, PLOT.x + b.x + 1, b.y + 1, PLOT.z + b.z + 1, true, "block");
+    const bx = box(P.x + b.x, b.y, P.z + b.z, P.x + b.x + 1, b.y + 1, P.z + b.z + 1, true, "block");
     this.col.add(bx);
-    this.blocks.set(k, { b, mesh, box: bx });
+    this.blocks.set(k, { b, mesh, box: bx, plot });
     return mesh;
   }
 
-  private removeBlock(x: number, y: number, z: number) {
-    const k = plotKey(x, y, z);
+  private removeBlock(x: number, y: number, z: number, plot: PlotId = "home") {
+    const k = plotKey(plot, x, y, z);
     const e = this.blocks.get(k);
     if (!e) return false;
     this.scene.remove(e.mesh);
@@ -1310,28 +1469,47 @@ export class Game {
     return true;
   }
 
-  setBlocks(list: Block[]) {
-    for (const [, e] of this.blocks) this.removeBlock(e.b.x, e.b.y, e.b.z);
-    for (const b of list) this.addBlock(b);
+  setBlocks(list: Block[], plot: PlotId = "home") {
+    for (const [, e] of [...this.blocks]) if (e.plot === plot) this.removeBlock(e.b.x, e.b.y, e.b.z, plot);
+    for (const b of list) this.addBlock(b, plot);
   }
 
-  getBlocks(): Block[] {
-    return [...this.blocks.values()].map((e) => e.b);
+  getBlocks(plot: PlotId = "home"): Block[] {
+    return [...this.blocks.values()].filter((e) => e.plot === plot).map((e) => e.b);
   }
 
-  private nearPlot() {
+  private changed(plot: PlotId) {
+    this.hooks.blocksChanged(this.getBlocks(plot), plot);
+  }
+
+  /** The plot the player is standing near (Lot 2 only once it's open). */
+  private nearPlot(): PlotId | null {
     const p = this.player;
-    return p.x > PLOT.x - 8 && p.x < PLOT.x + PLOT.w + 8 && p.z > PLOT.z - 8 && p.z < PLOT.z + PLOT.d + 8;
+    for (const id of ["home", "lot2"] as PlotId[]) {
+      if (id === "lot2" && !this.lot2Open) continue;
+      const P = PLOTS[id];
+      if (p.x > P.x - 8 && p.x < P.x + P.w + 8 && p.z > P.z - 8 && p.z < P.z + P.d + 8) return id;
+    }
+    return null;
+  }
+
+  setLot2Open(open: boolean) {
+    this.lot2Open = open;
+    this.lot2Ready.visible = open;
   }
 
   toggleBuild(force?: boolean) {
     const want = force ?? !this.building;
-    if (want && !this.nearPlot()) {
-      this.hooks.say("Rosa", "You can only build on your own plot. Head east of the Town Square.", "info");
+    const near = this.nearPlot();
+    if (want && !near) {
+      this.hooks.say("Rosa", this.lot2Open ? "You can build on your own plot or on Lot 2." : "You can only build on your own plot (east of the Town Square). Lot 2 opens once it's cleared and has a permit.", "info");
       return;
     }
     if (want && this.hooks.label("build") === null) return;
-    if (want) this.releaseMouse();
+    if (want) {
+      this.releaseMouse();
+      this.activePlot = near!;
+    }
     this.building = want;
     this.ghost.visible = false;
     this.hooks.buildMode(want);
@@ -1343,13 +1521,17 @@ export class Game {
   }
 
   private updateGhost() {
-    if (!this.nearPlot()) {
+    const near = this.nearPlot();
+    if (!near) {
       this.toggleBuild(false);
       return;
     }
+    this.activePlot = near;
+    const plot = near;
+    const P = PLOTS[plot];
     this.raycaster.setFromCamera(this.pointerNdc, this.camera);
     this.raycaster.far = 60;
-    const targets = [...[...this.blocks.values()].map((e) => e.mesh), this.plotGround];
+    const targets = [...[...this.blocks.values()].filter((e) => e.plot === plot).map((e) => e.mesh), this.plotGrounds[plot]];
     const hit = this.raycaster.intersectObjects(targets, false)[0];
     this.ghostCell = null;
     this.ghostRemove = null;
@@ -1358,31 +1540,31 @@ export class Game {
       return;
     }
     let cell: { x: number; y: number; z: number };
-    if (hit.object === this.plotGround) {
-      cell = { x: Math.floor(hit.point.x - PLOT.x), y: 0, z: Math.floor(hit.point.z - PLOT.z) };
+    if (hit.object === this.plotGrounds[plot]) {
+      cell = { x: Math.floor(hit.point.x - P.x), y: 0, z: Math.floor(hit.point.z - P.z) };
     } else {
       const c = hit.object.userData.cell as { x: number; y: number; z: number };
-      this.ghostRemove = plotKey(c.x, c.y, c.z);
+      this.ghostRemove = plotKey(plot, c.x, c.y, c.z);
       const n = hit.face!.normal;
       cell = { x: c.x + Math.round(n.x), y: c.y + Math.round(n.y), z: c.z + Math.round(n.z) };
     }
     if (this.eraser) {
       // The eraser highlights the block it would remove.
-      if (!this.ghostRemove) {
+      const e = this.ghostRemove ? this.blocks.get(this.ghostRemove) : null;
+      if (!e) {
         this.ghost.visible = false;
         return;
       }
-      const [rx, ry, rz] = this.ghostRemove.split(",").map(Number);
       this.ghost.visible = true;
-      this.ghost.position.copy(this.blockWorld(rx, ry, rz));
+      this.ghost.position.copy(this.blockWorld(e.b.x, e.b.y, e.b.z, plot));
       return;
     }
-    if (cell.x < 0 || cell.z < 0 || cell.y < 0 || cell.x >= PLOT_W || cell.z >= PLOT_D || cell.y >= PLOT_H) {
+    if (cell.x < 0 || cell.z < 0 || cell.y < 0 || cell.x >= P.w || cell.z >= P.d || cell.y >= PLOT_H) {
       this.ghost.visible = false;
       return;
     }
     // Don't place a block inside the player.
-    const w = this.blockWorld(cell.x, cell.y, cell.z);
+    const w = this.blockWorld(cell.x, cell.y, cell.z, plot);
     const p = this.player;
     const inside = Math.abs(w.x - p.x) < 0.8 && Math.abs(w.z - p.z) < 0.8 && w.y + 0.5 > p.y && w.y - 0.5 < p.y + 1.75;
     this.ghostCell = inside ? null : cell;
@@ -1394,30 +1576,31 @@ export class Game {
     if (this.eraser) return this.removeAtGhost();
     const c = this.ghostCell;
     if (!c) return;
+    const plot = this.activePlot;
     const b: Block = { ...c, c: this.buildColor };
-    const mesh = this.addBlock(b);
+    const mesh = this.addBlock(b, plot);
     if (mesh) {
       mesh.scale.setScalar(0.2);
       this.tween(0.12, (k) => mesh.scale.setScalar(0.2 + 0.8 * k));
-      this.history.push({ kind: "place", b });
-      this.hooks.blocksChanged(this.getBlocks());
+      this.history.push({ kind: "place", b, plot });
+      this.changed(plot);
     }
   }
 
   private removeAtGhost() {
     if (!this.ghostRemove) return;
     const e = this.blocks.get(this.ghostRemove);
-    if (e && this.removeBlock(e.b.x, e.b.y, e.b.z)) {
-      this.history.push({ kind: "remove", b: e.b });
-      this.hooks.blocksChanged(this.getBlocks());
+    if (e && this.removeBlock(e.b.x, e.b.y, e.b.z, e.plot)) {
+      this.history.push({ kind: "remove", b: e.b, plot: e.plot });
+      this.changed(e.plot);
     }
   }
 
   // ---- Fixing builds without starting over ----
 
   /** Hand-building steps that Undo can take back, newest last. */
-  private history: { kind: "place" | "remove"; b: Block }[] = [];
-  /** Blocks the Builder Bot placed on its last run. */
+  private history: { kind: "place" | "remove"; b: Block; plot: PlotId }[] = [];
+  /** Blocks the Builder Bot placed on its last run (home plot). */
   private lastRun: Block[] = [];
   private eraser = false;
 
@@ -1434,16 +1617,16 @@ export class Game {
   }
 
   get lastRunCount() {
-    return this.lastRun.filter((b) => this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b).length;
+    return this.lastRun.filter((b) => this.blocks.get(plotKey("home", b.x, b.y, b.z))?.b === b).length;
   }
 
   /** Takes back the last block you placed or removed by hand. */
   undoBuild() {
     const h = this.history.pop();
     if (!h) return false;
-    if (h.kind === "place") this.removeBlock(h.b.x, h.b.y, h.b.z);
-    else this.addBlock(h.b);
-    this.hooks.blocksChanged(this.getBlocks());
+    if (h.kind === "place") this.removeBlock(h.b.x, h.b.y, h.b.z, h.plot);
+    else this.addBlock(h.b, h.plot);
+    this.changed(h.plot);
     return true;
   }
 
@@ -1451,21 +1634,23 @@ export class Game {
   undoLastRun() {
     let n = 0;
     for (const b of this.lastRun) {
-      if (this.blocks.get(plotKey(b.x, b.y, b.z))?.b === b && this.removeBlock(b.x, b.y, b.z)) n++;
+      if (this.blocks.get(plotKey("home", b.x, b.y, b.z))?.b === b && this.removeBlock(b.x, b.y, b.z)) n++;
     }
     this.lastRun = [];
     this.resetBuilder();
-    this.hooks.blocksChanged(this.getBlocks());
+    this.changed("home");
     return n;
   }
 
-  /** Empties the plot. */
-  clearBlocks() {
-    this.setBlocks([]);
-    this.history = [];
-    this.lastRun = [];
-    this.resetBuilder();
-    this.hooks.blocksChanged([]);
+  /** Empties a plot (the one you're building on, or your home plot). */
+  clearBlocks(plot: PlotId = this.building ? this.activePlot : "home") {
+    this.setBlocks([], plot);
+    this.history = this.history.filter((h) => h.plot !== plot);
+    if (plot === "home") {
+      this.lastRun = [];
+      this.resetBuilder();
+    }
+    this.changed(plot);
   }
 
   /** Puts the Ladder Bot back by the counter with an empty basket. */
@@ -1531,7 +1716,7 @@ export class Game {
         this.hooks.say("Builder Bot", s.text, "info");
       }
     }
-    this.hooks.blocksChanged(this.getBlocks());
+    this.changed("home");
     // Fly home
     const from = bot.position.clone();
     const w = this.blockWorld(0, 0, 0);

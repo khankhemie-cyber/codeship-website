@@ -35,7 +35,11 @@ import {
   type BankStep,
   type LibraryStep,
   type SecurityStep,
+  type LumberStep,
+  type PermitStep,
+  type Spot,
   type MissionId,
+  LOT2_GRID,
 } from "@/lib/games/port/missions";
 import type { RunOutcome } from "@/lib/games/port/runner";
 import { blocksToJs, blocksToPy } from "@/lib/games/port/blocks";
@@ -55,8 +59,8 @@ import type { BeachBotStyle } from "./engine/models";
 import SignupGate from "./SignupGate";
 import { allowedHost } from "./engine/guard";
 import ShopPanel, { FOOD_PRICES } from "./ShopPanel";
-import { BEACH_TERMINAL, INTERIORS, LOOKOUTS, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type InteriorId, type NpcId } from "./engine/layout";
-import { HandBank, HandLibrary, HandSecurity } from "./HandChallenges";
+import { BEACH_TERMINAL, INTERIORS, LOOKOUTS, LOT2, LOT2_TERMINAL, MARKET_TERMINAL, NPCS, PLOT_TERMINAL, type InteriorId, type NpcId } from "./engine/layout";
+import { HandBank, HandLibrary, HandPermit, HandSecurity } from "./HandChallenges";
 
 // ---------------------------------------------------------------------------
 // Save data
@@ -93,6 +97,10 @@ type Save = {
   playSeconds?: number;
   /** Set once a class password (from an enrolled course) was entered on this device. */
   signedUp?: "student";
+  /** Lot 2 in Maple Park: blocks built there, its trees, and saplings planted. */
+  lot2Blocks?: Block[];
+  lot2Grid?: Spot[][];
+  saplings?: number;
 };
 
 
@@ -111,7 +119,13 @@ const CHALLENGES: { id: MissionId; where: string; how: string; unlock: string }[
   { id: "security", where: "Inside the Town Hall, north-west of the Town Square.", how: "Let in only visitors on the appointment board who show photo ID: work the gate with Officer Grant, or code the Gate Bot.", unlock: "Unlocks when your house is built." },
   { id: "bank", where: "Inside the Port Bank, on Harbour Road.", how: "Pay each customer exactly, in the fewest bills: by hand with Mr. Mensah, or code the Change Machine.", unlock: "Unlocks when your house is built." },
   { id: "library", where: "Inside the Library, on Harbour Road.", how: "Sort the returns shelf, smallest number first: swap books by hand, or code the Shelf Bot.", unlock: "Unlocks when your house is built." },
+  { id: "lumber", where: "Lot 2, at the north end of Maple Park.", how: "Cut every tree except the protected old ones, and plant a sapling for each tree you cut: chop by hand with Mr. Banda, or code the Lumber Bot.", unlock: "Unlocks after you finish 3 challenges." },
+  { id: "permit", where: "Town Hall front desk, with Ms. Joseph.", how: "Approve a building permit only if the lot is cleared, the building fits with 1 block of space all round, and the fee is paid: by hand, or code the Permit Checker.", unlock: "Unlocks after you finish 3 challenges." },
 ];
+/** Finishing this many challenges opens Lot 2 (tree cutting and permits). */
+const LOT2_UNLOCK = 3;
+const doneCount = (m: Record<MissionId, MissionState>) => (Object.keys(m) as MissionId[]).filter((k) => m[k]?.status === "done").length;
+const lot2Open = (m: Record<MissionId, MissionState>) => m.lumber?.status === "done" && m.permit?.status === "done";
 const ALI_ORDERS = ["cereal", "flour", "mangoes"];
 
 function freshSave(name: string, look: Look): Save {
@@ -125,7 +139,7 @@ function freshSave(name: string, look: Look): Save {
     editor: "blocks",
     engine: {},
     intro: false,
-    missions: { home: m(), market: m(), beach: m(), security: m(), bank: m(), library: m() },
+    missions: { home: m(), market: m(), beach: m(), security: m(), bank: m(), library: m(), lumber: m(), permit: m() },
     blocks: [],
     marketServed: 0,
     litter: makeLitter(18, 2026),
@@ -226,7 +240,7 @@ export default function PortCodeship() {
   const [shopOpen, setShopOpen] = useState(false);
   const [trackerOpen, setTrackerOpen] = useState(false);
   /** Which indoor challenge is being done by hand. */
-  const [hand, setHand] = useState<"security" | "bank" | "library" | null>(null);
+  const [hand, setHand] = useState<"security" | "bank" | "library" | "permit" | null>(null);
   /** Which building the player is inside (null outdoors), for the map. */
   const [indoorHere, setIndoorHere] = useState<InteriorId | null>(null);
   const [fade, setFade] = useState(false);
@@ -301,6 +315,13 @@ export default function PortCodeship() {
       if (carrying?.kind !== "litter") return null;
       return `Put the ${carrying.name} in ${a}`;
     }
+    if (kind === "tree") {
+      if (m.lumber.status === "locked") return null;
+      const spot = (s.lot2Grid ?? LOT2_GRID)[Number(a)]?.[Number(b)];
+      if (spot === "tree") return "Chop the tree";
+      if (spot === "old tree") return "Read the plaque";
+      return null;
+    }
     if (kind === "lookout") {
       if (gameRef.current?.getSave().lit.includes(a)) return null;
       return `Light the ${LOOKOUTS.find((l) => l.id === a)?.name} lookout`;
@@ -369,6 +390,23 @@ export default function PortCodeship() {
             : {}),
         },
       }));
+      // Finishing 3 challenges opens Lot 2: Mr. Banda's trees and the permit desk.
+      const after = saveRef.current!;
+      if (doneCount(after.missions) >= LOT2_UNLOCK && (after.missions.lumber.status === "locked" || after.missions.permit.status === "locked")) {
+        update((q) => ({
+          ...q,
+          missions: {
+            ...q.missions,
+            lumber: q.missions.lumber.status === "locked" ? { ...q.missions.lumber, status: "active" } : q.missions.lumber,
+            permit: q.missions.permit.status === "locked" ? { ...q.missions.permit, status: "active" } : q.missions.permit,
+          },
+        }));
+        window.setTimeout(() => say("Mr. Banda", "New challenges! Help me clear Lot 2 in Maple Park, and get a building permit from Ms. Joseph at the Town Hall.", "info"), 2500);
+      }
+      if ((id === "lumber" || id === "permit") && lot2Open(saveRef.current!.missions) && prev.status !== "done") {
+        gameRef.current?.setLot2Open(true);
+        window.setTimeout(() => say("Ms. Joseph", "Lot 2 is ready and your permit is approved! Go to Lot 2 in Maple Park and press B to build.", "good"), 2500);
+      }
       completeLevel("port", id, stars);
       if (stars > prev.stars) earn((stars - prev.stars) * 50, `${"★".repeat(stars)} on ${MISSION_LABELS[id].title}`);
       if (prev.status !== "done") say("Port CODEship", `Mission complete: ${MISSION_LABELS[id].title}! ${"★".repeat(stars)}${"☆".repeat(3 - stars)}`, "good");
@@ -544,7 +582,41 @@ export default function PortCodeship() {
         return;
       }
       if (id === "npc:clerk") {
-        showDialog({ who: "Ms. Joseph", text: "Welcome to the Town Hall! If you're not on today's appointment board, I can help you here at the front desk. Soon you'll be able to apply for building permits with me too.", choices: [{ label: "Thanks!", act: closeDialog }] });
+        const st = m.permit;
+        if (st.status === "locked") {
+          showDialog({ who: "Ms. Joseph", text: "Welcome to the Town Hall! If you're not on today's appointment board, I can help you here at the front desk. Finish 3 challenges and come back: I'll need help with building permits.", choices: [{ label: "Thanks!", act: closeDialog }] });
+          return;
+        }
+        showDialog({
+          who: "Ms. Joseph",
+          text: st.status === "done"
+            ? "Thanks to you, permits fly through here. You can always improve the Permit Checker at the terminal."
+            : "So many permit applications! A permit is approved only if the lot is cleared, the building fits with 1 block of space all round, and they can pay the fee: 2 coins per square of building. Check the rules board. Can you help by hand, or program the Permit Checker?",
+          choices: [
+            { label: "Do it by hand", act: () => { closeDialog(); if (requireStudent()) { g.setEnabled(false); setHand("permit"); } } },
+            { label: "Program it", act: () => { closeDialog(); openPanel("permit"); } },
+            { label: "Bye", act: closeDialog },
+          ],
+        });
+        return;
+      }
+      if (id === "npc:forester") {
+        const st = m.lumber;
+        if (st.status === "locked") {
+          showDialog({ who: "Mr. Banda", text: "I look after Maple Park. One day Lot 2 here will be cleared for building. Come back once you've finished 3 challenges!", choices: [{ label: "OK", act: closeDialog }] });
+          return;
+        }
+        showDialog({
+          who: "Mr. Banda",
+          text: st.status === "done"
+            ? "Lot 2 is clear and the saplings are growing. Thank you! You can always improve the Lumber Bot's code."
+            : "Lot 2 needs clearing so someone can build here. Cut every tree, but NOT the old trees with plaques: they're protected. And for every tree you cut, plant a sapling in the park. By hand, or program the Lumber Bot?",
+          choices: [
+            { label: "Do it by hand", act: () => { closeDialog(); say("Tip", "Walk up to a tree on Lot 2 and press E to chop it. Leave the old trees with plaques!", "info"); } },
+            { label: "Program it", act: () => { closeDialog(); openPanel("lumber"); } },
+            { label: "Bye", act: closeDialog },
+          ],
+        });
         return;
       }
       if (id === "npc:bankguard") {
@@ -565,6 +637,32 @@ export default function PortCodeship() {
         const product = AISLES[Number(a) - 1][Number(b) - 1];
         setCarry({ kind: "product", name: product });
         say("You", `Got the ${product}. Take it to Mrs. Ali.`, "info");
+        return;
+      }
+      if (kind === "tree") {
+        const r = Number(a), c = Number(b);
+        const grid = s.lot2Grid ?? LOT2_GRID;
+        const spot = grid[r]?.[c];
+        if (spot === "old tree") {
+          showDialog({ who: "Mr. Banda", text: "This old tree is over 200 years old and protected by the town. Please leave it standing!", choices: [{ label: "OK", act: closeDialog }] });
+          return;
+        }
+        if (spot !== "tree" || busyRef.current) return;
+        if (!requireStudent()) return;
+        busyRef.current = true;
+        g.setEnabled(false);
+        g.chopTree(r, c).then(() => {
+          busyRef.current = false;
+          g.setEnabled(true);
+          const next = (saveRef.current!.lot2Grid ?? LOT2_GRID).map((row, i) => row.map((v, j) => (i === r && j === c ? ("empty" as Spot) : v)));
+          const saplings = (saveRef.current!.saplings ?? 0) + 1;
+          update((q) => ({ ...q, lot2Grid: next, saplings }));
+          g.setSaplings(saplings);
+          earn(2, "clearing a tree (and planting a sapling)", `tree:${r}:${c}`);
+          const left = next.flat().filter((v) => v === "tree").length;
+          if (left === 0 && saveRef.current!.missions.lumber.status === "active") finishMission("lumber", "hand");
+          else say("Mr. Banda", `Timber! I planted a sapling in the park. ${left} tree${left === 1 ? "" : "s"} left.`, "good");
+        });
         return;
       }
       if (kind === "litter") {
@@ -667,7 +765,8 @@ export default function PortCodeship() {
     const s = saveRef.current!;
     if (id === "home") return { blocks: gameRef.current?.getBlocks() ?? s.blocks };
     if (id === "market") return { orders: ALI_ORDERS };
-    if (id === "security" || id === "bank" || id === "library") return contentRef.current?.live[id];
+    if (id === "security" || id === "bank" || id === "library" || id === "permit") return contentRef.current?.live[id];
+    if (id === "lumber") return { grid: s.lot2Grid ?? LOT2_GRID };
     return { litter: s.litter };
   }, []);
 
@@ -722,7 +821,18 @@ export default function PortCodeship() {
     else if (id === "security") await g.playSecurity(live.steps as SecurityStep[]);
     else if (id === "bank") await g.playBank(live.steps as BankStep[]);
     else if (id === "library") await g.playLibrary(live.steps as LibraryStep[], content.live.library.books);
-    else {
+    else if (id === "permit") await g.playPermit(live.steps as PermitStep[]);
+    else if (id === "lumber") {
+      const steps = live.steps as LumberStep[];
+      await g.playLumber(steps, s.saplings ?? 0);
+      // Ordinary trees stay cut. A protected old tree the bot cut is put back
+      // (Mr. Banda replants it) so the lot can be tried again.
+      const cuts = steps.filter((st): st is Extract<LumberStep, { t: "cut" }> => st.t === "cut" && st.ok);
+      const plants = steps.filter((st) => st.t === "plant").length;
+      const grid = (s.lot2Grid ?? LOT2_GRID).map((row, i) => row.map((v, j) => (cuts.some((k) => k.row === i && k.col === j) ? ("empty" as Spot) : v)));
+      update((q) => ({ ...q, lot2Grid: grid, saplings: (q.saplings ?? 0) + plants }));
+      g.setLot2Grid(grid);
+    } else {
       await g.playBeach(live.steps as BeachStep[]);
       const picked = new Set((live.steps as BeachStep[]).filter((st) => st.t === "pick").map((st) => (st as { id: number }).id));
       update((q) => ({ ...q, litter: q.litter.filter((l) => !picked.has(l.id)) }));
@@ -744,7 +854,7 @@ export default function PortCodeship() {
     } else if (failedTest) {
       const why = failedTest.error ?? failedTest.stopped ?? failedTest.check.message;
       const where =
-        id === "market" || id === "bank" ? "with a new set of customers" : id === "beach" ? "on the next tide" : id === "security" ? "with a different group of visitors" : id === "library" ? "on other shelves of books" : "on an empty plot";
+        id === "market" || id === "bank" ? "with a new set of customers" : id === "beach" ? "on the next tide" : id === "security" ? "with a different group of visitors" : id === "library" ? "on other shelves of books" : id === "lumber" ? "on other lots" : id === "permit" ? "with other applications" : "on an empty plot";
       r = { ok: false, title: "It worked here, but not everywhere", detail: `We also tested your code ${where}: ${why}`, output: live.output };
       if (id === "home") {
         finishMission("home", "mixed");
@@ -822,7 +932,11 @@ export default function PortCodeship() {
               const id = b[b.length - 1];
               if (id !== undefined) earn(10, "finding a bit", `bit:${id}`);
             },
-            blocksChanged: (blocks) => {
+            blocksChanged: (blocks, plot) => {
+              if (plot === "lot2") {
+                update((q) => ({ ...q, lot2Blocks: blocks }));
+                return;
+              }
               update((q) => ({ ...q, blocks }));
               const s = saveRef.current;
               if (s && s.missions.home.status === "active" && missingWalls(blocks).length === 0 && !busyRef.current) finishMission("home", "hand");
@@ -870,6 +984,10 @@ export default function PortCodeship() {
     const homeDone = s.missions.home.status === "done";
     for (const k of ["security", "bank", "library"] as MissionId[])
       if (!s.missions[k]) s = { ...s, missions: { ...s.missions, [k]: { status: homeDone ? "active" : "locked", stars: 0, code: { py: "", js: "" } } } };
+    // Saves from before Lot 2: tree cutting and permits open after 3 challenges.
+    const lotReady = doneCount(s.missions) >= LOT2_UNLOCK;
+    for (const k of ["lumber", "permit"] as MissionId[])
+      if (!s.missions[k]) s = { ...s, missions: { ...s.missions, [k]: { status: lotReady ? "active" : "locked", stars: 0, code: { py: "", js: "" } } } };
     if (s.coins === undefined) {
       // Saves from before coins existed: pay out what they already earned.
       const ms = Object.values(s.missions) as MissionState[];
@@ -888,6 +1006,10 @@ export default function PortCodeship() {
     g.setLook(s.look);
     g.load(s.engine);
     g.setBlocks(s.blocks);
+    g.setLot2Grid(s.lot2Grid ?? LOT2_GRID);
+    g.setSaplings(s.saplings ?? 0);
+    g.setBlocks(s.lot2Blocks ?? [], "lot2");
+    g.setLot2Open(lot2Open(s.missions));
     g.setLitter(s.litter);
     g.setBeachBotStyle(s.beachBot);
     g.setLowGraphics(s.lowGraphics);
@@ -987,6 +1109,12 @@ export default function PortCodeship() {
     ];
     const nextIndoor = indoor.find((q) => m[q.id].status !== "done");
     if (nextIndoor) return { text: nextIndoor.text, target: indoorHere === nextIndoor.place ? NPCS[nextIndoor.npc] : INTERIORS[nextIndoor.place].out };
+    if (m.lumber.status !== "done") {
+      const left = (save.lot2Grid ?? LOT2_GRID).flat().filter((v) => v === "tree").length;
+      return { text: `Help Mr. Banda clear Lot 2 in Maple Park (${left} trees to cut, leave the old ones). By hand, or code the Lumber Bot.`, target: m.lumber.status === "active" && left < 10 ? LOT2_TERMINAL : NPCS.forester };
+    }
+    if (m.permit.status !== "done") return { text: "Help Ms. Joseph check building permits at the Town Hall front desk.", target: indoorHere === "townhall" ? NPCS.clerk : INTERIORS.townhall.out };
+    if (!save.lot2Blocks?.length) return { text: "Lot 2 is yours to build on! Go to Maple Park and press B.", target: { x: LOT2.x + LOT2.w / 2, z: LOT2.z + LOT2.d / 2 } };
     const lit = gameRef.current?.getSave().lit.length ?? 0;
     return { text: `All challenges done! Light all the lookouts (${lit}/${LOOKOUTS.length}) and find every bit. More of Port CODEship opens soon.`, target: null };
   }, [save, carry, indoorHere]);
@@ -1002,6 +1130,8 @@ export default function PortCodeship() {
     g.setNpcAlert("guard", save.missions.security.status === "active");
     g.setNpcAlert("teller", save.missions.bank.status === "active");
     g.setNpcAlert("librarian", save.missions.library.status === "active");
+    g.setNpcAlert("forester", save.missions.lumber.status === "active");
+    g.setNpcAlert("clerk", save.missions.permit.status === "active");
   }, [objective, save, goalHidden]);
 
   // Minimap and big map
@@ -1148,6 +1278,12 @@ export default function PortCodeship() {
       g.resetMarket();
       update((q) => ({ ...q, marketServed: 0 }));
       say("Mrs. Ali", "Let's start again: I need cereal, flour and mangoes.", "info");
+    } else if (id === "lumber") {
+      g.setLot2Grid(LOT2_GRID);
+      update((q) => ({ ...q, lot2Grid: LOT2_GRID }));
+      say("Mr. Banda", "The trees on Lot 2 have grown back. Ready when you are!", "info");
+    } else if (id !== "beach") {
+      say(NPCS[({ security: "guard", bank: "teller", library: "librarian", permit: "clerk" } as const)[id]].name, "Fresh start! Talk to me to try it by hand, or run your code again.", "info");
     } else {
       if (carryRef.current?.kind === "litter") setCarry(null);
       const litter = makeLitter(18, (Date.now() % 100000) + 1, saveRef.current!.nextLitterId);
@@ -1381,7 +1517,7 @@ export default function PortCodeship() {
               <button onClick={() => gameRef.current?.undoBuild()} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold hover:bg-white/20">Undo (Z)</button>
               {confirming === "clear" ? (
                 <>
-                  <button onClick={() => { gameRef.current?.clearBlocks(); update((q) => ({ ...q, blocks: [] })); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 text-sm font-bold">Yes, clear all</button>
+                  <button onClick={() => { gameRef.current?.clearBlocks(); setConfirming(null); }} className="rounded-lg bg-rose-500 px-3 py-1.5 text-sm font-bold">Yes, clear all</button>
                   <button onClick={() => setConfirming(null)} className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-bold">Cancel</button>
                 </>
               ) : (
@@ -1593,6 +1729,7 @@ export default function PortCodeship() {
             if (!content) return null;
             if (hand === "security") return <HandSecurity onDone={done} onClose={close} say={say} world={content.live.security} />;
             if (hand === "bank") return <HandBank onDone={done} onClose={close} say={say} world={content.live.bank} />;
+            if (hand === "permit") return <HandPermit onDone={done} onClose={close} say={say} world={content.live.permit} />;
             return <HandLibrary onDone={done} onClose={close} say={say} world={content.live.library} onOrder={(o) => gameRef.current?.setLibraryBooks(o)} />;
           })()}
           <div className={`pointer-events-none absolute inset-0 z-50 bg-black transition-opacity duration-200 ${fade ? "opacity-100" : "opacity-0"}`} aria-hidden />

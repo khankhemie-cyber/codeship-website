@@ -9,7 +9,7 @@
  */
 
 import * as THREE from "three";
-import { APPOINTMENTS, type BankStep, type LibraryStep, type SecurityStep } from "@/lib/games/port/missions";
+import { APPOINTMENTS, type BankStep, type LibraryStep, type PermitStep, type SecurityStep } from "@/lib/games/port/missions";
 import { INTERIORS, type Interior, type InteriorId } from "./layout";
 import { cube, makeAvatar, makeTerminal, mat, textTexture, tiledBox, facadeTexture, animateAvatar, type Avatar } from "./models";
 import { box, type Box, type Colliders } from "./physics";
@@ -197,12 +197,31 @@ export class Interiors {
     this.solid(ox - w / 2, 0, oz + 1.9, ox - 1.45, 1, oz + 2.1);
     this.solid(ox + 1.45, 0, oz + 1.9, ox + w / 2, 1, oz + 2.1);
     // Front desk, benches, plants.
-    this.add(cube(3.2, 1.1, 1, mat(0x6d4c35), ox - 7, 0.55, oz + 0.6));
-    this.solid(ox - 8.6, 0, oz + 0.1, ox - 5.4, 1.1, oz + 1.1);
-    this.wallText(["Front desk"], ox - 7, 2.6, oz - 1.1, 2.2, 0.5);
+    // The front desk is on the public side of the gate, so anyone can reach it.
+    this.add(cube(3.2, 1.1, 1, mat(0x6d4c35), ox - 7, 0.55, oz + 4.4));
+    this.solid(ox - 8.6, 0, oz + 3.9, ox - 5.4, 1.1, oz + 4.9);
+    this.wallText(["Front desk · Building permits"], ox - 7, 2.7, oz + 2.4, 3.6, 0.5);
+    // Permit rules on the wall behind the desk, and the Permit Checker's terminal.
+    this.wallText(
+      ["Approve only if ALL are true:", "1. The lot is cleared", "2. Building width + 2 ≤ lot width", "   and building depth + 2 ≤ lot depth", "3. Coins ≥ fee (width × depth × 2)"],
+      ox - 6.5,
+      2.9,
+      oz + d / 2 - 0.06,
+      4.2,
+      2.4,
+      "PERMIT RULES",
+      Math.PI
+    );
+    const permitTerm = makeTerminal();
+    permitTerm.position.set(ox - 9.8, 0, oz + 2.8);
+    permitTerm.rotation.y = Math.PI / 2;
+    this.add(permitTerm);
+    this.solid(ox - 10.25, 0, oz + 2.35, ox - 9.35, 1.6, oz + 3.25);
+    this.c.interactables.push({ id: "term:permit", x: ox - 9, y: 0, z: oz + 2.8, r: 1.7 });
     for (const bx of [-6, 6]) {
-      this.add(cube(2.4, 0.5, 0.7, mat(0x8a5a36), ox + bx, 0.45, oz + 5.5));
-      this.solid(ox + bx - 1.2, 0, oz + 5.15, ox + bx + 1.2, 0.7, oz + 5.85);
+      const bz = bx < 0 ? oz - 5.5 : oz + 6.8;
+      this.add(cube(2.4, 0.5, 0.7, mat(0x8a5a36), ox + bx, 0.45, bz));
+      this.solid(ox + bx - 1.2, 0, bz - 0.35, ox + bx + 1.2, 0.7, bz + 0.35);
     }
     this.plant(ox - w / 2 + 1, oz + d / 2 - 1.2);
     this.plant(ox + w / 2 - 1, oz + d / 2 - 1.2);
@@ -381,7 +400,7 @@ export class Interiors {
           await this.c.tween(0.3, (k) => this.gateBar && (this.gateBar.rotation.y = (-Math.PI / 2) * k));
           await this.walk(av, gate, new THREE.Vector3(ox + (n % 2 ? -3 : 3), 0, oz - 4));
           await this.c.tween(0.3, (k) => this.gateBar && (this.gateBar.rotation.y = (-Math.PI / 2) * (1 - k)));
-        } else await this.walk(av, gate, new THREE.Vector3(ox - 7, 0, oz + 1.8));
+        } else await this.walk(av, gate, new THREE.Vector3(ox - 7, 0, oz + 5.7));
         if (!s.ok) this.c.say("Officer Grant", s.t === "in" ? `Wait! ${s.name} shouldn't have gone through.` : `Hold on, ${s.name} was allowed in.`, "bad");
         const leaving = av;
         await this.c.tween(0.25, (k) => leaving.root.scale.setScalar(1 - k));
@@ -389,6 +408,43 @@ export class Interiors {
         av = null;
       }
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Town Hall permit desk
+
+  async playPermit(steps: PermitStep[]) {
+    const { ox, oz, d } = INTERIORS.townhall.room;
+    const door = new THREE.Vector3(ox - 3, 0, oz + d / 2 - 0.8);
+    const desk = new THREE.Vector3(ox - 7, 0, oz + 5.7);
+    let av: Avatar | null = null;
+    let n = 0;
+    const papers: THREE.Object3D[] = [];
+    for (const s of steps) {
+      if (s.t === "say") this.c.say("Permit Checker", s.text, "info");
+      else if (s.t === "application") {
+        av = this.walker(n++ + 1);
+        av.root.position.copy(door);
+        this.c.say("Applicant", `Hello! I'd like a permit for ${s.name}.`, "info");
+        await this.walk(av, door, desk);
+        av.root.rotation.y = Math.PI;
+      } else if (s.t === "approve" || s.t === "deny") {
+        // A stamped form lands on the desk: green for approved, red for refused.
+        const paper = cube(0.5, 0.02, 0.35, mat(s.t === "approve" ? 0x27ae60 : 0xc0392b), ox - 8 + (papers.length % 4) * 0.55, 1.12, oz + 4.4, false);
+        this.add(paper);
+        papers.push(paper);
+        this.c.say("Ms. Joseph", s.t === "approve" ? `Approved: ${s.name}.` : `Refused: ${s.name} (${s.why}).`, s.ok ? "good" : "bad");
+        if (!s.ok) this.c.say("Ms. Joseph", s.t === "approve" ? "Hold on, that one breaks the rules!" : "Wait, that one met every rule.", "bad");
+        await this.c.tween(0.35, () => {});
+        if (av) {
+          const leaving = av;
+          await this.walk(leaving, desk, door);
+          this.c.scene.remove(leaving.root);
+          av = null;
+        }
+      }
+    }
+    for (const p of papers) this.c.scene.remove(p);
   }
 
   // ---------------------------------------------------------------------------
