@@ -6,11 +6,12 @@ import { MARCH_BREAK_CAMP as CAMP } from "@/config/camps";
 import { IN_PERSON_VENUE } from "@/data/locations";
 import { breadcrumbSchema, campEventSchema, faqSchema, speakableSchema } from "@/lib/schema";
 import FAQAccordion from "@/components/FAQAccordion";
+import { CampDayLink, CampPriceText, CampSignupLink, EarlyBirdNote } from "@/components/camps/CampPrice";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kids Coding Camps in Oshawa | Summer, March Break & PA Day",
   description:
-    "March Break 2027 coding camp in Oshawa, March 15–19, 9 AM–4 PM, ages 6–14. Sign up now. Summer camps and PA Day workshops too.",
+    "March Break 2027 coding camp in Oshawa, March 15–19, 9 AM–4 PM, ages 7–12. CAD $450 for the week (early bird $400 until Dec 31) or $125 a day. Sign up now.",
   path: "/programs/camps",
 });
 
@@ -32,11 +33,15 @@ const campFaqs = [
   },
   {
     question: "How much does March Break camp cost?",
-    answer: `${CAMP.priceLabel} for the full week (5 days). Sign up and pay online; your child's spot is secured once payment is complete.`,
+    answer: `${CAMP.priceLabel} for the full week (5 days). Early bird is ${CAMP.earlyBirdLabel} (save $${CAMP.earlyBirdSaving}) when you sign up by ${CAMP.earlyBirdEndsLabel}. Single days are ${CAMP.dayPriceLabel} each. Sign up and pay online; your child's spot is secured once payment is complete.`,
+  },
+  {
+    question: "Can I book single days?",
+    answer: `Yes. Single days are ${CAMP.dayPriceLabel} each, and you pick your days at checkout. For all five days, the full-week price is the better deal.`,
   },
   {
     question: "What ages is the March Break camp for?",
-    answer: "Ages 6 to 14. No coding experience is needed.",
+    answer: "Ages 7 to 12. No coding experience is needed.",
   },
   {
     question: "What will kids do at March Break camp?",
@@ -60,7 +65,7 @@ export default function CampsPage() {
           __html: JSON.stringify(
             campEventSchema({
               name: `CODEship ${CAMP.title} 2027 (Oshawa)`,
-              description: "Five days of coding, AI and robotics projects for ages 6 to 14 at Core21 in Oshawa.",
+              description: "Five days of coding, AI and robotics projects for ages 7 to 12 at Core21 in Oshawa.",
               startDate: CAMP.startISO,
               endDate: CAMP.endISO,
               price: CAMP.priceCad,
@@ -103,9 +108,10 @@ export default function CampsPage() {
                 ["Dates", `${CAMP.days}, ${CAMP.dates}`],
                 ["Hours", CAMP.hours],
                 ["Ages", CAMP.ages],
-                ["Price", `${CAMP.priceLabel} for the week`],
+                ["Price", <CampPriceText key="p" />],
+                ["Single days", `${CAMP.dayPriceLabel}/day`],
               ].map(([k, v]) => (
-                <div key={k} className="rounded-2xl bg-[#FAF8F4] p-4">
+                <div key={k as string} className="rounded-2xl bg-[#FAF8F4] p-4">
                   <dt className="text-sm font-bold uppercase tracking-wider text-gray-500">{k}</dt>
                   <dd className="text-lg font-bold text-[#001532] mt-1">{v}</dd>
                 </div>
@@ -114,12 +120,16 @@ export default function CampsPage() {
             <p className="text-base text-gray-600 mt-4">
               In person at {IN_PERSON_VENUE.building}, {IN_PERSON_VENUE.street}, {IN_PERSON_VENUE.city}. {CAMP.spots} spots.
             </p>
-            <a
-              href={CAMP.url}
+            <EarlyBirdNote className="mt-3 inline-block rounded-full bg-[#FFF4C7] px-4 py-2 text-base font-semibold text-[#001532]" />
+            <CampSignupLink
+              source="camps_page"
               className="mt-7 inline-flex items-center justify-center rounded-full bg-[#F4D734] px-8 py-4 text-lg font-bold text-[#001532] shadow-lg hover:bg-[#E6C51E] transition-colors"
             >
-              Sign up for March Break camp →
-            </a>
+              Sign up for the week →
+            </CampSignupLink>
+            <CampDayLink source="camps_page" className="mt-7 ml-4 inline-flex items-center text-lg font-semibold text-[#0F6F7C] underline underline-offset-4 hover:text-[#001532]">
+              Or book single days ({CAMP.dayPriceLabel}/day)
+            </CampDayLink>
           </div>
         </div>
       </Section>
