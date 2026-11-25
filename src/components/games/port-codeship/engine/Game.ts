@@ -74,6 +74,9 @@ import {
   type BeachBotStyle,
 } from "./models";
 import { Colliders, Player, box, type Box, type MoveInput } from "./physics";
+import { Interiors } from "./interiors";
+import { INTERIORS, type InteriorId } from "./layout";
+import type { BankStep, LibraryStep, MissionId, SecurityStep } from "@/lib/games/port/missions";
 
 export type Focus = { id: string; label: string } | null;
 
@@ -155,6 +158,7 @@ export class Game {
   private carry: THREE.Object3D | null = null;
   private buildings: Building[] = [];
   private mapCanvas: HTMLCanvasElement;
+  private inside!: Interiors;
 
   // Home plot
   private blocks = new Map<string, { b: Block; mesh: THREE.Mesh; box: Box }>();
@@ -197,6 +201,13 @@ export class Game {
     this.buildBeach();
     this.buildLookouts();
     this.buildPeople();
+    this.inside = new Interiors({
+      scene: this.scene,
+      col: this.col,
+      interactables: this.interactables,
+      tween: (d, f) => this.tween(d, f),
+      say: (who, text, tone) => this.hooks.say(who, text, tone),
+    });
     this.mapCanvas = this.paintMap();
 
     this.builder = makeBuilderBot();
@@ -604,8 +615,10 @@ export class Game {
 
   private buildPeople() {
     for (const [id, n] of Object.entries(NPCS) as [NpcId, (typeof NPCS)[NpcId]][]) {
-      const av = makeAvatar({ shirt: n.shirt, skin: n.skin, hair: n.hair, cap: id === "kofi" ? 0xe74c3c : id === "ada" ? 0x0d1b2a : undefined });
-      av.root.position.set(n.x, groundHeight(n.x, n.z) + (id === "kofi" ? 0 : 0), n.z);
+      const cap = id === "kofi" ? 0xe74c3c : id === "ada" || id === "guard" || id === "bankguard" ? 0x0d1b2a : undefined;
+      const av = makeAvatar({ shirt: n.shirt, skin: n.skin, hair: n.hair, cap, pants: id === "guard" || id === "bankguard" ? 0x0d1b2a : undefined });
+      // Indoor staff stand on their room's floor (rooms are far out at x ≈ 400).
+      av.root.position.set(n.x, n.x > 300 ? 0 : groundHeight(n.x, n.z), n.z);
       av.root.rotation.y = 0;
       if (id === "ada") av.root.rotation.y = Math.PI * 0.85;
       if (id === "rosa") av.root.rotation.y = Math.PI / 2;
@@ -1137,6 +1150,36 @@ export class Game {
     return { x: safe ? p.x : SPAWN.x, y: safe ? p.y : 0, z: safe ? p.z : SPAWN.z, yaw: p.yaw, bits: [...this.collected], lit: [...this.lit] };
   }
 
+  /** Which building the player is inside, or null when outdoors. */
+  whereAmI(): InteriorId | null {
+    return Interiors.roomAt(this.player.x, this.player.z);
+  }
+
+  /** Walk through a building's door. */
+  enterBuilding(id: InteriorId) {
+    const e = Interiors.entry(id);
+    this.teleport(e.x, e.z, 0, e.yaw);
+  }
+
+  /** Step back out of a building's door. */
+  exitBuilding(id: InteriorId) {
+    const o = INTERIORS[id].out;
+    this.teleport(o.x, o.z, 0, o.yaw);
+  }
+
+  setLibraryBooks(order: number[]) {
+    this.inside.setBooks(order);
+  }
+  playSecurity(steps: SecurityStep[]) {
+    return this.inside.playSecurity(steps);
+  }
+  playBank(steps: BankStep[]) {
+    return this.inside.playBank(steps);
+  }
+  playLibrary(steps: LibraryStep[], order: number[]) {
+    return this.inside.playLibrary(steps, order);
+  }
+
   /** Test helper: move the player (used by the automated playthrough). */
   teleport(x: number, z: number, y = 0, yaw = this.player.yaw) {
     this.player.x = x;
@@ -1201,7 +1244,7 @@ export class Game {
   }
 
   /** Point the camera at a mission while its bot works. */
-  watch(where: "home" | "market" | "beach" | null) {
+  watch(where: MissionId | null) {
     if (!where) {
       this.cinematic = null;
       return;
@@ -1210,6 +1253,9 @@ export class Game {
       home: { tx: PLOT.x + 6, tz: PLOT.z + 5, cx: PLOT.x - 6, cy: 13, cz: PLOT.z + 18 },
       market: { tx: -49, tz: 19, cx: -49, cy: 7, cz: 5 },
       beach: { tx: 0, tz: 76, cx: 0, cy: 17, cz: 52 },
+      security: { tx: INTERIORS.townhall.room.ox, tz: INTERIORS.townhall.room.oz + 2, cx: INTERIORS.townhall.room.ox + 5, cy: 5, cz: INTERIORS.townhall.room.oz + 8 },
+      bank: { tx: INTERIORS.bank.room.ox + 3, tz: INTERIORS.bank.room.oz - 1, cx: INTERIORS.bank.room.ox - 2, cy: 4, cz: INTERIORS.bank.room.oz + 5.5 },
+      library: { tx: INTERIORS.library.room.ox, tz: INTERIORS.library.room.oz - 6.6, cx: INTERIORS.library.room.ox, cy: 3, cz: INTERIORS.library.room.oz - 1 },
     } as const;
     const s = spots[where];
     const from = this.camera.position.clone();

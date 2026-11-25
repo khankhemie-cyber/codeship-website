@@ -7,7 +7,7 @@
  * Node tests check them without a browser.
  */
 
-import { AISLES, BLOCK_COLORS, LITTER_KINDS, type MissionId } from "./missions";
+import { AISLES, APPOINTMENTS, BILLS, BLOCK_COLORS, LITTER_KINDS, WALK_INS, type MissionId } from "./missions";
 
 type Json = Record<string, unknown>;
 
@@ -63,6 +63,28 @@ export const BLOCK_DEFS: Json[] = [
   { type: "port_item_is", message0: "the item is %1", args0: [dd("K", KINDS)], output: "Boolean", colour: COLOURS.sense },
   { type: "port_pick_up", message0: "pick it up", ...stmt, colour: COLOURS.beach },
   { type: "port_drop_in", message0: "put it in %1", args0: [dd("B", ["recycling", "compost", "garbage"])], ...stmt, colour: COLOURS.beach },
+
+  // Town Hall: Gate Bot
+  { type: "port_visitor_waiting", message0: "a visitor is waiting", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_next_visitor", message0: "check the next visitor", ...stmt, colour: COLOURS.shop, tooltip: "Remembers their name as 'name'." },
+  { type: "port_board", message0: "appointment board", message1: "%1", args1: [{ type: "input_statement", name: "DO", check: "appt" }], ...stmt, colour: COLOURS.shop, tooltip: "Copy today's names from the board in the lobby." },
+  { type: "port_board_name", message0: "%1", args0: [dd("N", [...APPOINTMENTS, ...WALK_INS])], previousStatement: "appt", nextStatement: "appt", colour: COLOURS.shop },
+  { type: "port_on_board", message0: "visitor is on the board", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_has_id", message0: "visitor shows photo ID", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_and", message0: "%1 and %2", args0: [{ type: "input_value", name: "A", check: "Boolean" }, { type: "input_value", name: "B", check: "Boolean" }], inputsInline: true, output: "Boolean", colour: COLOURS.sense },
+  { type: "port_let_in", message0: "open the gate", ...stmt, colour: COLOURS.shop },
+  { type: "port_to_desk", message0: "send to the front desk", ...stmt, colour: COLOURS.shop },
+
+  // Bank: Change Machine
+  { type: "port_next_customer", message0: "serve the next customer", ...stmt, colour: COLOURS.shop },
+  { type: "port_left_at_least", message0: "amount left is at least %1", args0: [num("N", 1, 1, 500)], output: "Boolean", colour: COLOURS.sense },
+  { type: "port_give", message0: "give a %1 bill", args0: [dd("B", BILLS.map(String))], ...stmt, colour: COLOURS.shop },
+
+  // Library: Shelf Bot
+  { type: "port_each_pair", message0: "for each pair of neighbours", message1: "%1", args1: [{ type: "input_statement", name: "DO" }], ...stmt, colour: COLOURS.control, tooltip: "Spots 0 and 1, then 1 and 2, and so on to the end of the shelf." },
+  { type: "port_pair_wrong", message0: "left book's number > right book's", output: "Boolean", colour: COLOURS.sense },
+  { type: "port_swap_pair", message0: "swap the pair", ...stmt, colour: COLOURS.beach },
+  { type: "port_repeat_books", message0: "repeat once for every book", message1: "%1", args1: [{ type: "input_statement", name: "DO" }], ...stmt, colour: COLOURS.control },
 ];
 
 const cat = (name: string, colour: string, types: string[]) => ({ kind: "category", name, colour, contents: types.map((type) => ({ kind: "block", type })) });
@@ -82,6 +104,28 @@ export const TOOLBOXES: Record<MissionId, object> = {
   beach: {
     kind: "categoryToolbox",
     contents: [cat("Start", COLOURS.start, ["port_start"]), cat("Beach Bot", COLOURS.beach, ["port_scan", "port_pick_up", "port_drop_in"]), cat("Check", COLOURS.sense, ["port_litter", "port_item_is"]), CONTROL],
+  },
+  security: {
+    kind: "categoryToolbox",
+    contents: [
+      cat("Start", COLOURS.start, ["port_start"]),
+      cat("Gate", COLOURS.shop, ["port_board", "port_board_name", "port_next_visitor", "port_let_in", "port_to_desk"]),
+      cat("Check", COLOURS.sense, ["port_visitor_waiting", "port_on_board", "port_has_id", "port_and", "port_not"]),
+      CONTROL,
+    ],
+  },
+  bank: {
+    kind: "categoryToolbox",
+    contents: [cat("Start", COLOURS.start, ["port_start"]), cat("Machine", COLOURS.shop, ["port_next_customer", "port_give"]), cat("Check", COLOURS.sense, ["port_customer", "port_left_at_least"]), CONTROL],
+  },
+  library: {
+    kind: "categoryToolbox",
+    contents: [
+      cat("Start", COLOURS.start, ["port_start"]),
+      cat("Shelf", COLOURS.beach, ["port_each_pair", "port_swap_pair", "port_repeat_books"]),
+      cat("Check", COLOURS.sense, ["port_pair_wrong"]),
+      CONTROL,
+    ],
   },
 };
 
@@ -120,6 +164,26 @@ export const STARTER_BLOCKS: Record<MissionId, unknown> = {
       })
     )!
   ),
+  security: ws(
+    chain(
+      blk("port_start"),
+      blk("port_board", undefined, { DO: chain(blk("port_board_name", { N: "Ms. Rivera" }), blk("port_board_name", { N: "Mr. Chen" })) }),
+      blk("port_while", undefined, {
+        COND: blk("port_visitor_waiting"),
+        DO: chain(blk("port_next_visitor"), blk("port_if_else", undefined, { COND: blk("port_on_board"), DO: blk("port_let_in"), ELSE: blk("port_to_desk") })),
+      })
+    )!
+  ),
+  bank: ws(
+    chain(
+      blk("port_start"),
+      blk("port_while", undefined, {
+        COND: blk("port_customer"),
+        DO: chain(blk("port_next_customer"), blk("port_while", undefined, { COND: blk("port_left_at_least", { N: 1 }), DO: blk("port_give", { B: "1" }) })),
+      })
+    )!
+  ),
+  library: ws(chain(blk("port_start"), blk("port_each_pair", undefined, { DO: blk("port_if", undefined, { COND: blk("port_pair_wrong"), DO: blk("port_swap_pair") }) }))!),
 };
 
 /** Exposed for the tests, which build full solutions from the same helpers. */
@@ -150,6 +214,18 @@ function cond(b: B | undefined, lang: Lang): string {
       return lang === "py" ? `item == ${q(f.K)}` : `item === ${q(f.K)}`;
     case "port_not":
       return lang === "py" ? `not (${cond(b.inputs?.A?.block, lang)})` : `!(${cond(b.inputs?.A?.block, lang)})`;
+    case "port_and":
+      return `(${cond(b.inputs?.A?.block, lang)}) ${lang === "py" ? "and" : "&&"} (${cond(b.inputs?.B?.block, lang)})`;
+    case "port_visitor_waiting":
+      return "has_visitor()";
+    case "port_on_board":
+      return lang === "py" ? "name in appointments" : "appointments.includes(name)";
+    case "port_has_id":
+      return "has_id()";
+    case "port_left_at_least":
+      return `amount_left() >= ${n(f.N, 1)}`;
+    case "port_pair_wrong":
+      return "call_number(spot) > call_number(spot + 1)";
     default:
       return lang === "py" ? "False" : "false";
   }
@@ -228,6 +304,29 @@ function statement(b: B, ind: string, lang: Lang, ctx: Ctx): string {
       return call("pick_up()");
     case "port_drop_in":
       return call(`drop_in(${q(f.B)})`);
+    case "port_board": {
+      const names: string[] = [];
+      for (let e = b.inputs?.DO?.block; e; e = e.next?.block) if (e.type === "port_board_name") names.push(q(e.fields?.N));
+      return call(`appointments = [${names.join(", ")}]`);
+    }
+    case "port_next_visitor":
+      return call("name = next_visitor()");
+    case "port_let_in":
+      return call("let_in()");
+    case "port_to_desk":
+      return call("send_to_desk()");
+    case "port_next_customer":
+      return call("amount = next_customer()");
+    case "port_give":
+      return call(`give(${n(f.B, 1)})`);
+    case "port_each_pair":
+      return block(py ? "for spot in range(book_count() - 1)" : "for (let spot = 0; spot < book_count() - 1; spot++)", "DO");
+    case "port_swap_pair":
+      return call("swap(spot, spot + 1)");
+    case "port_repeat_books": {
+      const v = `round${ctx.loop++ || ""}`;
+      return block(py ? `for ${v} in range(book_count())` : `for (let ${v} = 0; ${v} < book_count(); ${v}++)`, "DO");
+    }
     default:
       return "";
   }
@@ -241,7 +340,7 @@ function generate(workspace: unknown, lang: Lang): string {
   const body = starts.map((s) => stack(s.next?.block, "", lang, ctx)).join("\n");
   if (lang === "py") return body;
   // JavaScript needs its variables declared once, up front.
-  return `let product = null, item = null, aisle = 0, level = 0, shelf_map = {};\n${body}`;
+  return `let product = null, item = null, aisle = 0, level = 0, shelf_map = {}, name = null, amount = 0, appointments = [];\n${body}`;
 }
 
 /** The JavaScript that actually runs. "" if there is no start block. */

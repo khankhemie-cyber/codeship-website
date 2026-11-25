@@ -58,11 +58,72 @@ export const LOOKOUTS: LookoutDef[] = [
   { id: "mast", name: "Radio Mast", x: 0, z: -96, w: 5, h: 34, color: 0xd65a4a },
 ];
 
+// ---------------------------------------------------------------------------
+// Buildings you can go inside. Each room is built far out of sight (x ≈ 400);
+// walking through a door moves you there and back.
+
+export type InteriorId = "townhall" | "bank" | "library";
+export type Interior = {
+  name: string;
+  mission: "security" | "bank" | "library";
+  /** The building in town. */
+  rect: Rect;
+  h: number;
+  color: number;
+  /** Door on the outside wall, and where you stand when you come back out. */
+  door: { x: number; z: number; face: "s" | "w" | "e" };
+  out: { x: number; z: number; yaw: number };
+  /** The room: centre, size and height. Its door is in the middle of the south wall. */
+  room: { ox: number; oz: number; w: number; d: number; h: number };
+};
+
+export const INTERIORS: Record<InteriorId, Interior> = {
+  townhall: {
+    name: "Town Hall",
+    mission: "security",
+    rect: { x0: -42, z0: -46, x1: -16, z1: -32 },
+    h: 12,
+    color: 0xe8e1d0,
+    door: { x: -29, z: -32, face: "s" },
+    out: { x: -29, z: -30.4, yaw: 0 },
+    room: { ox: 400, oz: 0, w: 24, d: 18, h: 7 },
+  },
+  bank: {
+    name: "Port Bank",
+    mission: "bank",
+    rect: { x0: 6, z0: 30, x1: 20, z1: 44 },
+    h: 10,
+    color: 0x9aa7b2,
+    door: { x: 6, z: 37, face: "w" },
+    out: { x: 4.6, z: 37, yaw: -Math.PI / 2 },
+    room: { ox: 400, oz: 60, w: 20, d: 14, h: 6 },
+  },
+  library: {
+    name: "Library",
+    mission: "library",
+    rect: { x0: -24, z0: 26, x1: -8, z1: 40 },
+    h: 9,
+    color: 0xb5523b,
+    door: { x: -8, z: 33, face: "e" },
+    out: { x: -6.6, z: 33, yaw: Math.PI / 2 },
+    room: { ox: 400, oz: 120, w: 22, d: 16, h: 7 },
+  },
+};
+
+const R_TH = INTERIORS.townhall.room;
+const R_BK = INTERIORS.bank.room;
+const R_LB = INTERIORS.library.room;
+
 export const NPCS = {
   ada: { name: "Captain Ada", x: 5, z: 6, shirt: 0x1f6f8b, skin: 0x8d5524, hair: 0xe8e8e8 },
   ali: { name: "Mrs. Ali", x: -49, z: 7.5, shirt: 0xc0392b, skin: 0xc68642, hair: 0x2b1b14 },
   kofi: { name: "Kofi", x: 18, z: 76, shirt: 0xf39c12, skin: 0x5a3825, hair: 0x111111 },
   rosa: { name: "Rosa", x: 31, z: 14, shirt: 0x27ae60, skin: 0xf1c27d, hair: 0x6d3b1a },
+  guard: { name: "Officer Grant", x: R_TH.ox + 2.6, z: R_TH.oz + 2.2, shirt: 0x1c2b4a, skin: 0x5a3825, hair: 0x111111 },
+  clerk: { name: "Ms. Joseph", x: R_TH.ox - 7, z: R_TH.oz - 0.6, shirt: 0x8e44ad, skin: 0xc68642, hair: 0x2b1b14 },
+  teller: { name: "Mr. Mensah", x: R_BK.ox - 4, z: R_BK.oz - 4.6, shirt: 0x2e7d32, skin: 0x8d5524, hair: 0x111111 },
+  bankguard: { name: "Officer Diaz", x: R_BK.ox + 7.5, z: R_BK.oz + 3.5, shirt: 0x1c2b4a, skin: 0xe0ac69, hair: 0x3b2314 },
+  librarian: { name: "Mrs. Thompson", x: R_LB.ox - 6, z: R_LB.oz + 1, shirt: 0xd35400, skin: 0xf1c27d, hair: 0xb0b0b0 },
 } as const;
 export type NpcId = keyof typeof NPCS;
 
@@ -74,6 +135,7 @@ const RESERVED: Rect[] = [
   { x0: MARKET.x0 - 3, z0: MARKET.z0 - 6, x1: MARKET.x1 + 3, z1: MARKET.z1 + 3 },
   ...LOOKOUTS.map((l) => ({ x0: l.x - l.w / 2 - 4, z0: l.z - l.w / 2 - 4, x1: l.x + l.w / 2 + 4, z1: l.z + l.w / 2 + 4 })),
   { x0: 14, z0: -40, x1: 60, z1: -8 }, // Maple Park
+  ...Object.values(INTERIORS).map((i) => ({ x0: i.rect.x0 - 3, z0: i.rect.z0 - 3, x1: i.rect.x1 + 3, z1: i.rect.z1 + 3 })),
 ];
 export const PARK: Rect = { x0: 16, z0: -38, x1: 58, z1: -10 };
 

@@ -5,7 +5,7 @@
 import "../blocks/ts-resolve.mjs";
 import { loadPyodide } from "pyodide";
 const { runJs, createPythonRunner } = await import("../../src/lib/games/port/runner.ts");
-const { MISSIONS, testWorlds, makeLitter, AISLES } = await import("../../src/lib/games/port/missions.ts");
+const { MISSIONS, testWorlds, makeLitter, AISLES, APPOINTMENTS, liveWorld } = await import("../../src/lib/games/port/missions.ts");
 const { STARTER_BLOCKS, blocksToJs, blocksToPy, build } = await import("../../src/lib/games/port/blocks.ts");
 
 const runPy = createPythonRunner(await loadPyodide());
@@ -94,7 +94,50 @@ while (has_litter()) {
   },
 };
 
+const BOARD_PY = JSON.stringify(APPOINTMENTS);
+SOLUTIONS.security = {
+  py: `appointments = ${BOARD_PY}
+while has_visitor():
+    name = next_visitor()
+    if name in appointments and has_id():
+        let_in()
+    else:
+        send_to_desk()
+`,
+  js: `const appointments = ${BOARD_PY};
+while (has_visitor()) {
+  const name = next_visitor();
+  if (appointments.includes(name) && has_id()) let_in(); else send_to_desk();
+}`,
+};
+SOLUTIONS.bank = {
+  py: `bills = [50, 20, 10, 5, 1]
+while has_customer():
+    next_customer()
+    for b in bills:
+        while amount_left() >= b:
+            give(b)
+`,
+  js: `while (has_customer()) {
+  next_customer();
+  for (const b of [50, 20, 10, 5, 1]) while (amount_left() >= b) give(b);
+}`,
+};
+SOLUTIONS.library = {
+  py: `n = book_count()
+for p in range(n):
+    for i in range(n - 1):
+        if call_number(i) > call_number(i + 1):
+            swap(i, i + 1)
+`,
+  js: `const n = book_count();
+for (let p = 0; p < n; p++) for (let i = 0; i < n - 1; i++) if (call_number(i) > call_number(i + 1)) swap(i, i + 1);`,
+};
+
 const LIVE = {
+  security: liveWorld("security"),
+  bank: liveWorld("bank"),
+  library: liveWorld("library"),
   home: { blocks: [] },
   market: { orders: ["cereal", "flour", "mangoes"] },
   beach: { litter: makeLitter(18, 2026) },
@@ -162,6 +205,39 @@ const BLOCK_SOLUTIONS = {
     ) }),
   )),
 };
+BLOCK_SOLUTIONS.security = ws(chain(
+  blk("port_start"),
+  blk("port_board", undefined, { DO: chain(...APPOINTMENTS.map((N) => blk("port_board_name", { N }))) }),
+  blk("port_while", undefined, { COND: blk("port_visitor_waiting"), DO: chain(
+    blk("port_next_visitor"),
+    blk("port_if_else", undefined, { COND: blk("port_and", undefined, { A: blk("port_on_board"), B: blk("port_has_id") }), DO: blk("port_let_in"), ELSE: blk("port_to_desk") }),
+  ) }),
+));
+BLOCK_SOLUTIONS.bank = ws(chain(
+  blk("port_start"),
+  blk("port_while", undefined, { COND: blk("port_customer"), DO: chain(
+    blk("port_next_customer"),
+    ...[50, 20, 10, 5, 1].map((b) => blk("port_while", undefined, { COND: blk("port_left_at_least", { N: b }), DO: blk("port_give", { B: String(b) }) })),
+  ) }),
+));
+BLOCK_SOLUTIONS.library = ws(chain(
+  blk("port_start"),
+  blk("port_repeat_books", undefined, { DO: blk("port_each_pair", undefined, { DO: blk("port_if", undefined, { COND: blk("port_pair_wrong"), DO: blk("port_swap_pair") }) }) }),
+));
+
+test("security: a walk-in with ID is still sent to the desk", () => {
+  const r = runJs("security", "while (has_visitor()) { next_visitor(); if (has_id()) let_in(); else send_to_desk(); }", liveWorld("security"));
+  assert(!r.check.passed && /no appointment/.test(r.check.message), r.check.message);
+});
+test("bank: too many bills is explained", () => {
+  const r = runPy("bank", MISSIONS.bank.starter.py, { amounts: [87] });
+  assert(!r.check.passed && /only 6/.test(r.check.message), r.check.message);
+});
+test("library: swapping off the shelf gives a clear error", () => {
+  const r = runPy("library", "swap(0, 99)", liveWorld("library"));
+  assert(/no book there/.test(r.error ?? ""), r.error);
+});
+
 for (const id of Object.keys(MISSIONS)) {
   const worlds = [LIVE[id], ...testWorlds(id)];
   test(`${id} blocks: solution passes as JavaScript and as Python`, () => {
