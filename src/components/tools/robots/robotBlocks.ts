@@ -18,6 +18,8 @@
  * saved before the change.
  */
 
+import { WAVE_SVG_BODY } from "../shared/waveIcon";
+
 export type LabelMode = "words" | "icons";
 
 export const BLOCK_COLOURS = {
@@ -106,8 +108,11 @@ const ICON_PATHS: Record<string, string> = {
   screen: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M7 10h6M7 13h4"/>',
   chart: '<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5m4 5V8m4 8v-3"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  // Same hand as the CODEship Blocks "Wait for a Wave" block.
-  wave: '<path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V11m0-5.5V4a1.5 1.5 0 0 1 3 0v7m0-5.5a1.5 1.5 0 0 1 3 0V12m0-3a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a6.5 6.5 0 0 1-5.4-2.9L3.2 15a1.5 1.5 0 0 1 2.5-1.7L8 16"/><path d="M2.5 7.5a6 6 0 0 1 2-4M1 5a8 8 0 0 1 2-3.5" stroke-width="1.6"/>',
+  // Same picture as the CODEship Blocks "Start on Wave" block: a hand waving at the sensor.
+  wave: WAVE_SVG_BODY,
+  gripper: '<path d="M12 2.5V7"/><path d="M6.5 7h11"/><path d="M6.5 7v4.5l3.5 4.5M17.5 7v4.5L14 16"/><circle cx="12" cy="18.5" r="2.5"/>',
+  box: '<path d="M12 3 3.5 7.2v9.6L12 21l8.5-4.2V7.2z"/><path d="M3.5 7.2 12 11.4l8.5-4.2M12 11.4V21"/>',
+  until: '<path d="M14.5 6.5a6.5 6.5 0 1 0 1.5 8"/><path d="M11 6.5h3.5V3"/><path d="M20.5 7v10" stroke-width="3"/>',
   wall: '<rect x="13" y="4" width="8" height="16" rx="1"/><path d="M3 12h7m-3-3 3 3-3 3"/>',
   lineL: '<path d="M8 3v18" stroke-width="4"/><circle cx="16" cy="12" r="3"/>',
   lineR: '<path d="M16 3v18" stroke-width="4"/><circle cx="8" cy="12" r="3"/>',
@@ -142,7 +147,7 @@ const BLOCK_ICONS: Record<string, string> = {
   robot_turn_left: "left",
   robot_turn_right: "right",
   robot_speed: "speed",
-  robot_pick_up: "grab",
+  robot_pick_up: "gripper",
   robot_drop: "drop",
   robot_beep: "beep",
   robot_led: "bulb",
@@ -156,7 +161,7 @@ const BLOCK_ICONS: Record<string, string> = {
   robot_wait_wave: "wave",
   robot_repeat: "repeat",
   robot_forever: "forever",
-  robot_until: "repeat",
+  robot_until: "until",
   robot_if: "branch",
   robot_if_else: "branch",
   robot_sense: "eye",
@@ -178,7 +183,7 @@ const OPTION_ICONS: Record<string, string> = {
   temperature: "thermo",
   power: "bolt",
   "colour()": "floor",
-  "itemColour()": "grab",
+  "itemColour()": "box",
 };
 const SWATCHES: Record<string, string> = {
   red: "#E53935", green: "#43A047", blue: "#1E88E5", yellow: "#FDD835", white: "#FFFFFF", purple: "#8E24AA",
@@ -242,16 +247,36 @@ export function withIcons(defs: Json[], mode: LabelMode = "words"): Json[] {
   });
 }
 
-export const TOOLBOX = {
-  kind: "categoryToolbox",
-  contents: [
-    { kind: "category", name: "Start", colour: BLOCK_COLOURS.start, contents: [{ kind: "block", type: "robot_start" }] },
-    { kind: "category", name: "Move", colour: BLOCK_COLOURS.move, contents: ["robot_forward", "robot_backward", "robot_turn_left", "robot_turn_right", "robot_speed"].map((type) => ({ kind: "block", type })) },
-    { kind: "category", name: "Do", colour: BLOCK_COLOURS.act, contents: ["robot_pick_up", "robot_drop", "robot_beep", "robot_play", "robot_led", "robot_display", "robot_pen_down", "robot_pen_up", "robot_spray", "robot_record"].map((type) => ({ kind: "block", type })) },
-    { kind: "category", name: "Control", colour: BLOCK_COLOURS.control, contents: ["robot_wait", "robot_wait_wave", "robot_repeat", "robot_forever", "robot_until", "robot_if", "robot_if_else"].map((type) => ({ kind: "block", type })) },
-    { kind: "category", name: "Sense", colour: BLOCK_COLOURS.sense, contents: ["robot_sense", "robot_compare", "robot_colour_is", "robot_not"].map((type) => ({ kind: "block", type })) },
-  ],
-};
+const CATEGORIES: { name: string; key: string; icon: string; colour: string; types: string[] }[] = [
+  { name: "Start", key: "start", icon: "flag", colour: BLOCK_COLOURS.start, types: ["robot_start"] },
+  { name: "Move", key: "move", icon: "forward", colour: BLOCK_COLOURS.move, types: ["robot_forward", "robot_backward", "robot_turn_left", "robot_turn_right", "robot_speed"] },
+  { name: "Do", key: "do", icon: "bulb", colour: BLOCK_COLOURS.act, types: ["robot_pick_up", "robot_drop", "robot_beep", "robot_play", "robot_led", "robot_display", "robot_pen_down", "robot_pen_up", "robot_spray", "robot_record"] },
+  { name: "Control", key: "control", icon: "repeat", colour: BLOCK_COLOURS.control, types: ["robot_wait", "robot_wait_wave", "robot_repeat", "robot_forever", "robot_until", "robot_if", "robot_if_else"] },
+  { name: "Sense", key: "sense", icon: "eye", colour: BLOCK_COLOURS.sense, types: ["robot_sense", "robot_compare", "robot_colour_is", "robot_not"] },
+];
+
+/**
+ * The palette. In "pictures only" mode each category tab is a picture on its
+ * colour (the word stays for screen readers, hidden on screen).
+ */
+export function toolboxFor(mode: LabelMode = "words") {
+  return {
+    kind: "categoryToolbox",
+    contents: CATEGORIES.map((c) => ({
+      kind: "category",
+      name: c.name,
+      colour: c.colour,
+      ...(mode === "icons" ? { cssconfig: { icon: `blocklyToolboxCategoryIcon rl-cat-icon rl-cat-${c.key}`, label: "blocklyToolboxCategoryLabel rl-cat-label" } } : {}),
+      contents: c.types.map((type) => ({ kind: "block", type })),
+    })),
+  };
+}
+export const TOOLBOX = toolboxFor("words");
+
+/** CSS for the picture category tabs (pictures-only mode). */
+export const CATEGORY_ICON_CSS = CATEGORIES.map(
+  (c) => `.robot-blocks .rl-cat-${c.key} { background: ${c.colour} url("${blockIcon(c.icon, c.key === "start" ? "#010F2A" : "#FFFFFF")}") center / 24px no-repeat; }`,
+).join("\n");
 
 /** A new project: just the start block. */
 export const EMPTY_WORKSPACE = { blocks: { languageVersion: 0, blocks: [{ type: "robot_start", x: 30, y: 30 }] } };

@@ -122,5 +122,32 @@ test("saved files are cleaned: unknown tags, bad colours, sizes and file names a
   eq(M.parseProject(JSON.parse(JSON.stringify(round))), round, "round trip");
 });
 
+test("list items move between lists with up/down (tap and keyboard), and never leave a list", () => {
+  const p = M.starterProject(3);
+  let page = M.placeCard(p.pages[0], card("ul")).page;
+  page = M.placeCard(page, card("li", { text: "a" })).page;
+  page = M.placeCard(page, card("ul")).page;
+  page = M.placeCard(page, card("li", { text: "b" })).page;
+  const [l1, l2] = page.cards.filter((c) => c.kind === "ul");
+  const a = l1.items[0].id;
+  let r = M.moveCard(page, a, 1);
+  assert(r.ok, r.message);
+  eq(r.page.cards.filter((c) => c.kind === "ul").map((l) => l.items.map((x) => x.text)), [[], ["a", "b"]], "moved down into the next list");
+  r = M.moveCard(r.page, a, -1);
+  eq(r.page.cards.filter((c) => c.kind === "ul").map((l) => l.items.map((x) => x.text)), [["a"], ["b"]], "moved back up");
+  const stuck = M.moveCard(r.page, a, -1);
+  assert(!stuck.ok && /stays inside a list/.test(stuck.message), "left the list");
+  assert(l2.id, "second list");
+});
+
+test("readability: a gentle warning for colours that are hard to read on the white page", () => {
+  assert(M.readabilityWarning(card("style", { target: "p", color: "gold", fontSize: 16 })), "gold paragraph not warned");
+  assert(M.readabilityWarning(card("style", { target: "h1", color: "pink", fontSize: 40 })), "pink heading not warned");
+  assert(!M.readabilityWarning(card("style", { target: "p", color: "navy", fontSize: 16 })), "navy warned");
+  assert(!M.readabilityWarning(card("style", { target: "h1", color: "red", fontSize: 40 })), "big red heading warned (3:1 is enough for big text)");
+  assert(M.readabilityWarning(card("style", { target: "p", color: "red", fontSize: 16 })), "small red text not warned (4.5:1)");
+  assert(Math.abs(M.contrastRatio("#000000", "#FFFFFF") - 21) < 0.01, "contrast maths");
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

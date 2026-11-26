@@ -129,7 +129,7 @@ export class Engine {
   }
 
   /**
-   * Someone waved (the hand button): every Wait for a Wave stack on this page
+   * Someone waved (the hand button): every Start on Wave stack on this page
    * starts. Curriculum v1.2: the wave replaces the clap, like the Edison
    * obstacle sensor in the Robot Labs.
    */

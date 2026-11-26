@@ -357,11 +357,11 @@ test("JavaScript: every level's reference solution translates to code that parse
   }
 });
 
-// ── Curriculum v1.2: Wait for a Wave (start_wave) replaces the clap as a start trigger ──
+// ── Curriculum v1.2: Start on Wave (start_wave) replaces the clap as a start trigger ──
 const WAVE_SRC = (await import("node:fs")).readFileSync(new URL("../../src/components/tools/blocks/blockDefs.ts", import.meta.url), "utf8");
 const WAVE_I18N = await import("../../src/components/tools/blocks/i18n.ts");
 const WAVE_JS = await import("../../src/components/tools/blocks/javascript.ts");
-test("wave: Wait for a Wave runs only when someone waves (not on the green flag or a tap)", () => {
+test("wave: Start on Wave runs only when someone waves (not on the green flag or a tap)", () => {
   const p = F.helpfulRobot();
   const actor = p.pages[0].actors[0];
   for (const b of actor.scripts.blocks.blocks) if (b.type === "start_tap") b.type = "start_wave";
@@ -379,6 +379,7 @@ test("wave: the block is a start (hat) block with a picture, labels in English a
   if (!/\{ type: "start_wave", group: "start", semester: 2, icon: "wave" \}/.test(WAVE_SRC)) throw new Error("start_wave not defined in the start group");
   if (!/HAT_TYPES = new Set<string>\(\[[^\]]*"start_wave"/.test(WAVE_SRC)) throw new Error("start_wave is not a start (hat) block");
   if (!/\n  wave: \(c\) =>/.test(WAVE_SRC)) throw new Error("no wave picture");
+  if (WAVE_I18N.blockLabel("en", "start_wave") !== "Start on Wave") throw new Error("label should match Start on Tap / Bump / Message");
   for (const l of ["en", "fr"]) if (!WAVE_I18N.blockLabel(l, "start_wave") || !WAVE_I18N.blockTooltip(l, "start_wave") || !WAVE_I18N.STRINGS[l].wave) throw new Error(`no ${l} text`);
   const code = WAVE_JS.toJavaScript({ blocks: { languageVersion: 0, blocks: [{ type: "start_wave", next: { block: { type: "pop" } } }] } });
   if (code !== "whenWaved(() => {\n  pop();\n});") throw new Error(code);

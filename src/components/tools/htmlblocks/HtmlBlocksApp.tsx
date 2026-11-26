@@ -15,12 +15,13 @@ import {
   VOID,
   addPage,
   linkTargets,
+  moveCard,
   newCard,
-  nudgeCard,
   pageHtml,
   paletteFor,
   parseProject,
   placeCard,
+  readabilityWarning,
   robotDataUrl,
   starterProject,
   takeCard,
@@ -54,7 +55,7 @@ const OPEN = "#15803D";
 const CLOSE = "#B91C1C";
 const CSS_INK = "#0F6F7C";
 const focusRing = "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F0D030]";
-const btn = `inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-bold ${focusRing}`;
+const btn = `inline-flex h-11 items-center gap-2 rounded-lg px-3 text-sm font-bold ${focusRing}`;
 
 const KIND_COLOUR: Record<CardKind, string> = {
   h1: "#001432",
@@ -90,6 +91,27 @@ function KindIcon({ kind, className = "h-6 w-6" }: { kind: CardKind; className?:
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {ICONS[kind]}
+    </svg>
+  );
+}
+
+/** Empty-place picture: a dashed card with an arrow dropping in, so it reads without words. */
+function DropHere({ kind, big = false }: { kind: CardKind; big?: boolean }) {
+  return (
+    <span aria-hidden="true" className={`relative inline-flex items-center justify-center rounded-xl border-2 border-dashed ${big ? "h-20 w-28" : "h-11 w-16"}`} style={{ borderColor: KIND_COLOUR[kind], color: KIND_COLOUR[kind] }}>
+      <KindIcon kind={kind} className={big ? "h-8 w-8 opacity-60" : "h-5 w-5 opacity-60"} />
+      <svg viewBox="0 0 24 24" className={`absolute ${big ? "-top-5 h-8 w-8" : "-top-4 h-6 w-6"}`} fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v12m-5-5 5 5 5-5" />
+      </svg>
+    </span>
+  );
+}
+
+function WarnIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3 2 20h20z" />
+      <path d="M12 10v4M12 17h.01" />
     </svg>
   );
 }
@@ -300,16 +322,23 @@ export default function HtmlBlocksApp() {
 
   // ---- one card on the page
 
+  const move = (id: string, by: -1 | 1) => {
+    const r = moveCard(page, id, by);
+    setMessage(r.ok ? "" : r.message);
+    if (r.ok) setPage(r.page);
+  };
+  // Every control is at least 44 px, for small fingers and touch screens.
+  const ctl = `inline-flex h-11 w-11 items-center justify-center rounded-lg ${focusRing}`;
   const controls = (c: Card) => (
-    <span className="ml-auto flex shrink-0 items-center gap-1">
-      <button type="button" onClick={() => setPage(nudgeCard(page, c.id, -1))} aria-label="Move up" title="Move up" className={`rounded p-1 text-[#586173] hover:bg-black/5 ${focusRing}`}>
-        <Icon name="chevronUp" className="h-4 w-4" />
+    <span className="ml-auto flex shrink-0 items-center gap-0.5">
+      <button type="button" onClick={() => move(c.id, -1)} aria-label="Move up" title="Move up" data-testid="move-up" className={`${ctl} text-[#586173] hover:bg-black/5`}>
+        <Icon name="chevronUp" className="h-5 w-5" />
       </button>
-      <button type="button" onClick={() => setPage(nudgeCard(page, c.id, 1))} aria-label="Move down" title="Move down" className={`rounded p-1 text-[#586173] hover:bg-black/5 ${focusRing}`}>
-        <Icon name="chevronDown" className="h-4 w-4" />
+      <button type="button" onClick={() => move(c.id, 1)} aria-label="Move down" title="Move down" data-testid="move-down" className={`${ctl} text-[#586173] hover:bg-black/5`}>
+        <Icon name="chevronDown" className="h-5 w-5" />
       </button>
-      <button type="button" onClick={() => remove(c.id)} aria-label="Remove card" title="Remove card" className={`rounded p-1 text-[#B91C1C] hover:bg-red-50 ${focusRing}`}>
-        <Icon name="x" className="h-4 w-4" />
+      <button type="button" onClick={() => remove(c.id)} aria-label="Remove card" title="Remove card" className={`${ctl} text-[#B91C1C] hover:bg-red-50`}>
+        <Icon name="x" className="h-5 w-5" />
       </button>
     </span>
   );
@@ -321,7 +350,7 @@ export default function HtmlBlocksApp() {
       onChange={(e) => setPage(updateCard(page, c.id, { text: e.target.value }))}
       aria-label={`${CARD_LABELS[c.kind]} words`}
       data-testid={`text-${c.kind}`}
-      className={`min-w-0 flex-1 rounded-md border border-[#C9D2DE] bg-white px-2 py-1 text-[15px] text-[#001432] ${c.kind === "h1" ? "font-extrabold" : c.kind === "h2" ? "font-bold" : ""} ${focusRing}`}
+      className={`h-11 min-w-0 flex-1 rounded-md border border-[#C9D2DE] bg-white px-2 text-[15px] text-[#001432] ${c.kind === "h1" ? "font-extrabold" : c.kind === "h2" ? "font-bold" : ""} ${focusRing}`}
     />
   );
 
@@ -374,7 +403,7 @@ export default function HtmlBlocksApp() {
                 onChange={(e) => setPage(updateCard(page, c.id, { href: e.target.value }))}
                 aria-label="Where the link goes"
                 data-testid="link-href"
-                className="rounded bg-white px-1 font-mono text-[13px] text-[#001432]"
+                className="h-10 rounded bg-white px-1 font-mono text-[13px] text-[#001432]"
               >
                 {targets.map((t) => (
                   <option key={t.href} value={t.href}>
@@ -449,9 +478,20 @@ export default function HtmlBlocksApp() {
                 {line(dropAt?.zone === c.id && !dropAt.beforeId)}
                 {!(c.items ?? []).length && (
                   <p className="flex items-center gap-2 text-sm text-[#586173]">
-                    <KindIcon kind="li" className="h-5 w-5" /> {words ? "Put list items here" : ""}
+                    <DropHere kind="li" /> {words ? "Put list items here" : ""}
                   </p>
                 )}
+                <button
+                  type="button"
+                  onClick={() => put(page, newCard("li", stage), { zone: c.id })}
+                  aria-label="Add a list item to this list"
+                  title="Add a list item to this list"
+                  data-testid="add-li"
+                  className={`inline-flex h-11 items-center gap-1 rounded-lg border-2 border-dashed px-3 text-sm font-bold ${focusRing}`}
+                  style={{ borderColor: KIND_COLOUR.li, color: KIND_COLOUR.li }}
+                >
+                  + <KindIcon kind="li" className="h-5 w-5" /> {words ? "List item" : ""}
+                </button>
               </div>
               <Tag kind="ul" close />
             </div>
@@ -466,7 +506,7 @@ export default function HtmlBlocksApp() {
               onChange={(e) => setPage(updateCard(page, c.id, { target: e.target.value as StyleTarget }))}
               aria-label="Which tag to style"
               data-testid="style-target"
-              className="rounded border border-[#C9D2DE] bg-white px-1 py-0.5 font-mono font-bold"
+              className="h-11 rounded border border-[#C9D2DE] bg-white px-1 font-mono font-bold"
             >
               {styleTargets.map((t) => (
                 <option key={t} value={t}>
@@ -487,7 +527,7 @@ export default function HtmlBlocksApp() {
                     aria-label={col.name}
                     title={col.name}
                     onClick={() => setPage(updateCard(page, c.id, { color: col.name }))}
-                    className={`h-6 w-6 rounded-full border-2 ${c.color === col.name ? "border-[#001432] ring-2 ring-[#F0D030]" : "border-[#C9D2DE]"} ${focusRing}`}
+                    className={`h-11 w-11 rounded-full border-2 ${c.color === col.name ? "border-[#001432] ring-4 ring-[#F0D030]" : "border-[#C9D2DE]"} ${focusRing}`}
                     style={{ background: col.hex }}
                   />
                 ))}
@@ -501,7 +541,7 @@ export default function HtmlBlocksApp() {
                 onChange={(e) => setPage(updateCard(page, c.id, { fontSize: Number(e.target.value) }))}
                 aria-label="Font size"
                 data-testid="style-size"
-                className="rounded border border-[#C9D2DE] bg-white px-1 py-0.5 font-mono font-bold"
+                className="h-11 rounded border border-[#C9D2DE] bg-white px-1 font-mono font-bold"
               >
                 {FONT_SIZES.map((n) => (
                   <option key={n} value={n}>
@@ -512,6 +552,12 @@ export default function HtmlBlocksApp() {
               ;
             </label>
             <b>{"}"}</b>
+            {readabilityWarning(c) && (
+              <span role="note" data-testid="contrast-warning" title={readabilityWarning(c)!} className="flex basis-full items-center gap-2 rounded-lg bg-[#FFF4D6] px-2 py-1 font-sans text-sm font-semibold text-[#7A4B00]">
+                <WarnIcon />
+                {words ? readabilityWarning(c) : <span className="sr-only">{readabilityWarning(c)}</span>}
+              </span>
+            )}
           </span>,
           zone,
         );
@@ -562,7 +608,7 @@ export default function HtmlBlocksApp() {
             }}
             data-testid="set-stage"
             aria-label="Semester"
-            className="rounded-md bg-white px-2 py-1.5 text-[#001432]"
+            className="h-11 rounded-md bg-white px-2 text-[#001432]"
           >
             {STAGES.map((s) => (
               <option key={s.id} value={s.id}>
@@ -573,7 +619,7 @@ export default function HtmlBlocksApp() {
         </label>
         <label className="flex items-center gap-2 text-sm font-semibold" title="Block labels (for the adult)">
           <span className="hidden md:inline">Labels</span>
-          <select value={labels} onChange={(e) => write({ ...saved, labels: e.target.value === "icons" ? "icons" : "words" })} data-testid="set-labels" aria-label="Card labels" className="rounded-md bg-white px-2 py-1.5 text-[#001432]">
+          <select value={labels} onChange={(e) => write({ ...saved, labels: e.target.value === "icons" ? "icons" : "words" })} data-testid="set-labels" aria-label="Card labels" className="h-11 rounded-md bg-white px-2 text-[#001432]">
             <option value="words">Pictures and words</option>
             <option value="icons">Pictures only</option>
           </select>
@@ -690,13 +736,13 @@ export default function HtmlBlocksApp() {
                   aria-selected={i === pageIndex}
                   onClick={() => setPageIndex(i)}
                   data-testid={`page-tab-${i}`}
-                  className={`rounded-t-lg px-3 py-2 text-sm font-bold ${i === pageIndex ? "bg-[#F4F7FB] text-[#001432]" : "text-[#586173] hover:text-[#001432]"} ${focusRing}`}
+                  className={`min-h-11 rounded-t-lg px-3 py-2 text-sm font-bold ${i === pageIndex ? "bg-[#F4F7FB] text-[#001432]" : "text-[#586173] hover:text-[#001432]"} ${focusRing}`}
                 >
                   {p.name} <span className="font-mono text-xs font-normal text-[#586173]">{p.file}</span>
                 </button>
               ))}
               {project.pages.length < MAX_PAGES && (
-                <button type="button" onClick={() => setProject(addPage(project))} className={`ml-1 rounded-lg px-2 py-1 text-sm font-bold text-[#0F6F7C] hover:bg-[#E6F4F5] ${focusRing}`}>
+                <button type="button" onClick={() => setProject(addPage(project))} className={`ml-1 h-11 rounded-lg px-3 text-sm font-bold text-[#0F6F7C] hover:bg-[#E6F4F5] ${focusRing}`}>
                   + Page
                 </button>
               )}
@@ -714,7 +760,11 @@ export default function HtmlBlocksApp() {
                 <div className="my-2 ml-4 space-y-1">
                   {page.styles.map((s) => renderCard(s, "styles"))}
                   {line(dropAt?.zone === "styles" && !dropAt.beforeId)}
-                  {!page.styles.length && <p className="text-sm text-[#8A6D00]">{words ? "Style (CSS) cards go here" : ""}</p>}
+                  {!page.styles.length && (
+                    <p className="flex items-center gap-2 text-sm text-[#8A6D00]">
+                      <DropHere kind="style" /> {words ? "Style (CSS) cards go here" : ""}
+                    </p>
+                  )}
                 </div>
                 <Tag kind="style" close />
               </div>
@@ -729,7 +779,11 @@ export default function HtmlBlocksApp() {
               <div className="my-2 ml-4 space-y-2">
                 {page.cards.map((c) => renderCard(c, "body"))}
                 {line(dropAt?.zone === "body" && !dropAt.beforeId)}
-                {!page.cards.length && <p className="py-6 text-center text-sm text-[#586173]">{words ? "Drag a tag card here" : ""}</p>}
+                {!page.cards.length && (
+                  <p className="flex flex-col items-center gap-2 py-6 text-center text-sm text-[#586173]">
+                    <DropHere kind="p" big /> {words ? "Drag a tag card here" : ""}
+                  </p>
+                )}
               </div>
               <Tag kind="body" close />
             </div>
@@ -741,7 +795,7 @@ export default function HtmlBlocksApp() {
         <section aria-label="Preview" className="flex min-h-[420px] flex-col border-t border-[#DFE3EB] bg-white lg:min-h-0 lg:border-l lg:border-t-0">
           <div className="flex items-center gap-2 border-b border-[#DFE3EB] px-3 py-2 text-sm font-bold">
             <Icon name="monitor" className="h-4 w-4" /> {words ? "My page" : ""} <span className="font-mono text-xs font-normal text-[#586173]">{page.file}</span>
-            <button type="button" onClick={() => setShowCode((v) => !v)} aria-expanded={showCode} className={`ml-auto inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs hover:bg-black/5 ${focusRing}`}>
+            <button type="button" onClick={() => setShowCode((v) => !v)} aria-expanded={showCode} className={`ml-auto inline-flex h-11 items-center gap-1 rounded-md px-3 text-xs hover:bg-black/5 ${focusRing}`}>
               <Icon name="code" className="h-4 w-4" /> {showCode ? "Hide" : "Show"} HTML
             </button>
           </div>

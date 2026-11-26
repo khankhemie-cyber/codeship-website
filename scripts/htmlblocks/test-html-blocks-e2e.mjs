@@ -102,6 +102,31 @@ await test("S3: list items go inside a list (dragged in)", async (page) => {
   await shot(page, "html-blocks-s3");
 });
 
+await test("touch and keyboard: every card control is at least 44 px, and list items move by tapping", async (page) => {
+  await page.getByTestId("set-stage").selectOption("3");
+  await page.getByTestId("palette-ul").click();
+  await page.getByTestId("add-li").click();
+  await page.getByTestId("palette-ul").click();
+  const small = await page.evaluate(() => [...document.querySelectorAll('[data-testid="body-zone"] button, [data-testid="style-zone"] button')].map((b) => b.getBoundingClientRect()).filter((r) => r.width < 44 || r.height < 44).length);
+  assert(small === 0, `${small} buttons under 44 px`);
+  // keyboard: focus the list item's Move down and press Enter: it goes into the second list
+  await page.getByTestId("list-zone").first().getByTestId("move-down").focus();
+  await page.keyboard.press("Enter");
+  const lists = await page.evaluate(() => window.__htmlBlocks.project().pages[0].cards.filter((c) => c.kind === "ul").map((l) => l.items.length));
+  assert(JSON.stringify(lists) === "[0,1]", JSON.stringify(lists));
+  await page.getByTestId("set-labels").selectOption("icons");
+  await shot(page, "html-blocks-s3-pictures");
+});
+
+await test("S2: hard-to-read colour shows a gentle warning", async (page) => {
+  await page.getByTestId("set-stage").selectOption("2");
+  await page.getByTestId("palette-style").click();
+  await page.getByRole("radio", { name: "gold", exact: true }).click();
+  await page.getByTestId("contrast-warning").waitFor();
+  await page.getByRole("radio", { name: "navy", exact: true }).click();
+  assert(!(await page.getByTestId("contrast-warning").count()), "warning stayed for navy");
+});
+
 await test("Capstone: a link to the About page opens that page from the preview; work is kept after reload", async (page) => {
   await page.getByTestId("set-stage").selectOption("5");
   await page.getByTestId("palette-a").click();

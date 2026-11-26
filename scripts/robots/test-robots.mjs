@@ -264,7 +264,8 @@ test("wave: an old clap program still opens and runs (blocks and code are migrat
   assert(/waitForWave\(\);/.test(js) && /if \(waved\(\)\)/.test(js), js);
   assert(!/clap/.test(JSON.stringify(migrateWorkspace(old))), "workspace not migrated");
   assert(migrateCode("waitForClap();\nwait_for_clap()\nif clapped(): beep()") === "waitForWave();\nwait_for_wave()\nif waved(): beep()", "code not migrated");
-  assert(/use waitForWave/.test(runJs("waitForClap();", waveWorld([1])).error), "no hint for the old name");
+  const hint = runJs("waitForClap();", waveWorld([1])).error;
+  assert(/Did you mean waitForWave\(\)\?/.test(hint) && !/clap/i.test(hint.replace("waitForClap", "")), hint);
 });
 
 // Pictures-only labels, like CODEship Blocks.
@@ -290,6 +291,19 @@ test("pictures only: every block with a picture loses its words but keeps every 
   const led = icons.find((d) => d.type === "robot_led").args0[1];
   assert(led.options.every((o) => typeof o[0] === "object"), "light colours are not swatches");
   assert(icons.find((d) => d.type === "robot_if_else").message2 === "else", "else arm label lost");
+});
+
+const RB = await import("../../src/components/tools/robots/robotBlocks.ts");
+test("pictures: wave, pick up, object colour and repeat-until each have a different picture", () => {
+  const icons = RB.withIcons(RB.BLOCK_DEFS, "icons");
+  const pic = (type) => icons.find((d) => d.type === type).args0[0].src;
+  const pics = ["robot_wait_wave", "robot_pick_up", "robot_until", "robot_repeat"].map(pic);
+  assert(new Set(pics).size === pics.length, "two blocks share a picture");
+  const sense = icons.find((d) => d.type === "robot_colour_is").args0[0].options.map((o) => o[0].src);
+  assert(!pics.includes(sense[1]) && sense[0] !== sense[1], "object colour reuses a picture");
+  const tb = RB.toolboxFor("icons");
+  assert(tb.contents.every((c) => /rl-cat-icon/.test(c.cssconfig?.icon ?? "")), "category tabs are not pictures");
+  assert(!RB.toolboxFor("words").contents.some((c) => c.cssconfig), "words mode changed");
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

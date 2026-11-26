@@ -185,6 +185,10 @@ test("python: wait_for_wave() and waved() (curriculum v1.2 hand wave)", () => {
   assert(!error, error);
   assert(trace.log.some((l) => l.text.trim() === "3") && trace.stats.unlocks.length === 1, JSON.stringify(trace.log));
 });
+test("python: an old wait_for_clap() program is pointed at wait_for_wave()", () => {
+  const { error } = run("wait_for_clap()\n", missionById("wave-concert").world);
+  assert(/Did you mean wait_for_wave\(\)\?/.test(error ?? ""), error);
+});
 test("python: Wave-start concert passes with wait_for_wave()", () => {
   const m = missionById("wave-concert");
   const { trace, error } = run(`wait_for_wave()\nforward(55)\nplay("C")\nplay("E")\nplay("G")\n`, m.world);

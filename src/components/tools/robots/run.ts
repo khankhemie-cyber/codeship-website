@@ -12,6 +12,9 @@ export type RunOutcome = {
   error: string | null;
 };
 
+/** Names from before curriculum v1.2, and what replaced them. */
+const RENAMED_JS: Record<string, string> = { waitForClap: "waitForWave", clapped: "waved" };
+
 /** Friendly wording for the JavaScript errors students hit most. */
 function explainJs(err: unknown): string {
   if (err instanceof RobotError) return err.message;
@@ -21,9 +24,9 @@ function explainJs(err: unknown): string {
   const missing = /^(\w+) is not defined$/.exec(message);
   if (name === "ReferenceError" && missing) {
     const close = JS_NAMES.find((n) => n.toLowerCase() === missing[1].toLowerCase());
-    // Curriculum v1.2: the clap became a hand wave.
-    const wave = /clap/i.test(missing[1]) ? missing[1].replace(/clapped/i, "waved").replace(/Clap/, "Wave") : null;
-    message = wave && JS_NAMES.includes(wave as never) ? `${missing[1]} is not defined. The clap is now a hand wave: use ${wave}.` : close ? `${missing[1]} is not defined. Did you mean ${close}? Capital letters matter.` : `${missing[1]} is not defined. Check the spelling.`;
+    // Curriculum v1.2: programs written before the change get pointed at the new names.
+    const renamed = RENAMED_JS[missing[1]];
+    message = renamed ? `${missing[1]} is not defined. Did you mean ${renamed}()?` : close ? `${missing[1]} is not defined. Did you mean ${close}? Capital letters matter.` : `${missing[1]} is not defined. Check the spelling.`;
   }
   const line = lineOf(e);
   return `${name}${line ? ` on line ${line}` : ""}: ${message}`;

@@ -8,6 +8,7 @@ import type { LabelMode } from "./blockDefs";
 import type { EditorApi } from "./BlocksEditor";
 import { BACKGROUNDS, COSTUMES, costumeUrl } from "./costumes";
 import { Engine } from "./engine";
+import { WAVE_SVG_BODY } from "../shared/waveIcon";
 import { createProjectLink, downloadProject, projectFileName, readAutosave, readProjectFile, readProjectLink, writeAutosave } from "./files";
 import { STRINGS, type UiLang } from "./i18n";
 import { GRID_COLS, GRID_ROWS, newId, emptyScripts, starterProject, type Project, type Recording, type Scripts } from "./model";
@@ -539,11 +540,8 @@ export default function BlocksApp() {
             data-testid="wave"
             className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#D58401] shadow active:translate-y-px ${focusRing}`}
           >
-            {/* Same hand as the Wait for a Wave block (blockDefs.ts "wave"). */}
-            <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden="true" fill="none" stroke="#010F2A" strokeLinecap="round" strokeLinejoin="round">
-              <path strokeWidth="2" d="M8 13V6.5a1.5 1.5 0 0 1 3 0V11m0-5.5V4a1.5 1.5 0 0 1 3 0v7m0-5.5a1.5 1.5 0 0 1 3 0V12m0-3a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a6.5 6.5 0 0 1-5.4-2.9L3.2 15a1.5 1.5 0 0 1 2.5-1.7L8 16" />
-              <path strokeWidth="1.6" d="M2.5 7.5a6 6 0 0 1 2-4M1 5a8 8 0 0 1 2-3.5" />
-            </svg>
+            {/* Same picture as the Start on Wave block (shared/waveIcon.ts). */}
+            <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden="true" fill="none" stroke="#010F2A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: WAVE_SVG_BODY }} />
           </button>
         )}
         <button

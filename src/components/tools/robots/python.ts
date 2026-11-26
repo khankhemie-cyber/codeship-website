@@ -16,6 +16,9 @@ export type PyodideLike = {
   globals: { get: (name: string) => unknown };
 };
 
+/** Names from before curriculum v1.2, and what replaced them. */
+const RENAMED_PY: Record<string, string> = { wait_for_clap: "wait_for_wave", clapped: "waved" };
+
 export type PythonRunner = (code: string, world: World) => RunOutcome;
 
 const RUNNER = `
@@ -96,6 +99,8 @@ export function createPythonRunner(py: PyodideLike): PythonRunner {
     } catch (err) {
       error = String((err as Error)?.message || err);
     }
+    // Curriculum v1.2: programs written before the change get pointed at the new names.
+    if (error) error = error.replace(/NameError: name '(wait_for_clap|clapped)' is not defined[^\n]*/, (_, name: string) => `NameError: name '${name}' is not defined. Did you mean ${RENAMED_PY[name]}()?`);
     const trace = sim.trace(stopped);
     const result = { trace, error: stopped ? null : error };
     sim = null;

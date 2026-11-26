@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as Blockly from "blockly/core";
 import * as BlocklyEn from "blockly/msg/en";
-import { EMPTY_WORKSPACE, TOOLBOX, migrateWorkspace, registerRobotBlocks, type LabelMode } from "./robotBlocks";
+import { CATEGORY_ICON_CSS, EMPTY_WORKSPACE, migrateWorkspace, registerRobotBlocks, toolboxFor, type LabelMode } from "./robotBlocks";
 
 /**
  * Blockly workspace for Robot Lab. Tuned like the Explorers tool: forgiving
@@ -46,7 +46,7 @@ export default function RobotBlocksEditor({ value, dark, docKey, mode = "words",
     Blockly.setLocale(BlocklyEn as unknown as Record<string, string>);
     registerRobotBlocks(Blockly as never, mode);
     const ws = Blockly.inject(host.current, {
-      toolbox: TOOLBOX as never,
+      toolbox: toolboxFor(mode) as never,
       renderer: "zelos",
       trashcan: false,
       comments: false,
@@ -96,6 +96,9 @@ export default function RobotBlocksEditor({ value, dark, docKey, mode = "words",
         .robot-blocks .blocklyMainBackground { fill: ${dark ? "#011735" : "#FFFFFF"} !important; }
         .robot-blocks .blocklyFlyoutBackground { fill: ${dark ? "#0A2648" : "#E6ECF4"}; fill-opacity: 0.97; }
         .robot-blocks .blocklyText { font-weight: 700; }
+        .robot-blocks .rl-cat-icon { display: inline-block; visibility: visible !important; width: 36px !important; height: 36px !important; border-radius: 9px; margin: 3px 0; }
+        .robot-blocks .rl-cat-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+        ${CATEGORY_ICON_CSS}
       `}</style>
       <div ref={host} className="robot-blocks h-full w-full" data-testid="robot-blocks" />
     </>

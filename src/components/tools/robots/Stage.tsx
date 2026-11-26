@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import type { DecorKind, Scene, Theme, ZoneIcon } from "./missions";
 import type { Collectible, ColourName, Frame, Item, LedColour, Note, Rect, RobotKind, SoundEvent, Target, World } from "./sim";
 import { ROBOT_RADIUS } from "./sim";
+import { waveDataUrl } from "../shared/waveIcon";
+
+/** The wave picture (shared with the wave blocks), drawn in front of the robot. */
+const WAVE_IMG: HTMLImageElement = typeof Image === "undefined" ? ({ complete: false } as HTMLImageElement) : Object.assign(new Image(), { src: waveDataUrl("#001432", 2.2) });
 
 /**
  * Draws one moment of a run: an illustrated world for the mission (decoration
@@ -2500,14 +2504,15 @@ export default function Stage({ world, scene, frame, trail = [], frames, index =
       const reach = (ROBOT_RADIUS[world.robot] + 7) * s;
       const hx = frame.x * s + Math.cos(h) * reach;
       const hy = frame.y * s - Math.sin(h) * reach;
-      const size = Math.max(18, 8 * s);
+      const size = Math.max(22, 10 * s);
       ctx.save();
       ctx.translate(hx, hy);
       ctx.rotate(Math.sin(performance.now() / 90) * 0.35);
-      ctx.font = `${size}px system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("\u{1F44B}", 0, 0);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.62, 0, Math.PI * 2);
+      ctx.fill();
+      if (WAVE_IMG.complete) ctx.drawImage(WAVE_IMG, -size / 2, -size / 2, size, size);
       ctx.restore();
       ctx.font = `900 ${Math.max(16, 6 * s)}px system-ui, sans-serif`;
       ctx.textAlign = "left";

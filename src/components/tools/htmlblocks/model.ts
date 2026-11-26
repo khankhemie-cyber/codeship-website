@@ -239,6 +239,30 @@ export function takeCard(page: Page, id: string): { page: Page; card: Card } | n
   return null;
 }
 
+/**
+ * Move a card one place up (-1) or down (+1). A list item at the top or
+ * bottom of its list moves into the list before or after it, so items can
+ * change lists by tapping or with the keyboard, not only by dragging. A list
+ * item never leaves a list (that would not be HTML); the message says so.
+ */
+export function moveCard(page: Page, id: string, by: -1 | 1): Drop {
+  const lists = page.cards.filter((c) => c.kind === "ul");
+  const li = lists.findIndex((l) => l.items?.some((x) => x.id === id));
+  if (li >= 0) {
+    const items = lists[li].items!;
+    const i = items.findIndex((x) => x.id === id);
+    const atEdge = by < 0 ? i === 0 : i === items.length - 1;
+    if (atEdge) {
+      const other = lists[li + by];
+      if (!other) return { ok: false, page, message: "A list item stays inside a list. To take it off the page, press its x." };
+      const taken = takeCard(page, id)!;
+      const r = placeCard(taken.page, taken.card, by < 0 ? other.items?.length ?? 0 : 0, other.id);
+      return r;
+    }
+  }
+  return { ok: true, page: nudgeCard(page, id, by) };
+}
+
 /** Move a card one place up (-1) or down (+1) within its own list. */
 export function nudgeCard(page: Page, id: string, by: -1 | 1): Page {
   const move = (arr: Card[]) => {
@@ -260,6 +284,32 @@ export function nudgeCard(page: Page, id: string, by: -1 | 1): Page {
 export function updateCard(page: Page, id: string, patch: Partial<Card>): Page {
   const fix = (c: Card): Card => (c.id === id ? clean({ ...c, ...patch, id: c.id, kind: c.kind }) : c.items ? { ...c, items: c.items.map(fix) } : c);
   return { ...page, cards: page.cards.map(fix), styles: page.styles.map(fix) };
+}
+
+// ---------------------------------------------------------------- readability
+
+const luminance = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+/** WCAG contrast ratio between two #RRGGBB colours (1 to 21). */
+export function contrastRatio(a: string, b: string) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+/** The page background: Builders pages never change it, so it is always white. */
+export const PAGE_BACKGROUND = "#FFFFFF";
+
+/**
+ * A gentle note when a style card's text colour is hard to read on the page
+ * (WCAG: 4.5 to 1 for normal text, 3 to 1 for big text). Null when it reads well.
+ */
+export function readabilityWarning(card: Card): string | null {
+  const col = COLOURS.find((c) => c.name === card.color);
+  if (card.kind !== "style" || !col) return null;
+  const big = card.target === "h1" || card.target === "h2" || (card.fontSize ?? 16) >= 24;
+  if (contrastRatio(col.hex, PAGE_BACKGROUND) >= (big ? 3 : 4.5)) return null;
+  return `${col.name[0].toUpperCase()}${col.name.slice(1)} words on a white page are hard to read. Try a darker colour${big ? "" : " or bigger words"}.`;
 }
 
 // ---------------------------------------------------------------- HTML out
