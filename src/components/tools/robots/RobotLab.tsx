@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { DEFAULT_LANG, MISSIONS, SEMESTERS, labsPerSemester, type GoalResult, type Lang, type Mission, type Program } from "./missions";
 import { REFERENCE } from "./reference";
-import { EMPTY_WORKSPACE, blockIcon, blocksToJs } from "./robotBlocks";
+import { EMPTY_WORKSPACE, blockIcon, blocksToJs, migrateCode, migrateWorkspace, type LabelMode } from "./robotBlocks";
 import Stage, { FLOOR } from "./Stage";
 import type { Frame, SoundEvent, Trace } from "./sim";
 import { Sim } from "./sim";
@@ -62,17 +62,34 @@ const LANGS: { id: Lang; label: string; badge: string; badgeClass: string }[] = 
 ];
 
 const STORE = "codeship-robotlab-v1";
+const keyOf = (m: string, l: Lang) => `${m}:${l}`;
 const SHARE_KEY = "r=";
 /** Real-time limit for one run in the worker (a loop that never calls the robot). */
 const RUN_TIMEOUT_MS = 12000;
 
-type Saved = { code: Record<string, string>; blocks: Record<string, unknown>; mission: string; lang: Lang; theme: Theme; done: string[]; seen: boolean };
-const FRESH: Saved = { code: {}, blocks: {}, mission: MISSIONS[0].id, lang: "blocks", theme: "dark", done: [], seen: false };
+type Saved = { code: Record<string, string>; blocks: Record<string, unknown>; mission: string; lang: Lang; theme: Theme; done: string[]; seen: boolean; labels: LabelMode };
+const FRESH: Saved = { code: {}, blocks: {}, mission: MISSIONS[0].id, lang: "blocks", theme: "dark", done: [], seen: false, labels: "words" };
+
+/** Curriculum v1.2: the clap missions became wave missions. Old ids map to new ones. */
+const RENAMED: Record<string, string> = { "clap-concert": "wave-concert", "gym-clap": "gym-steps" };
+const renamed = (id: string) => RENAMED[id] ?? id;
+
+/** Carries work saved before v1.2 over: renamed missions, and clap blocks and calls swapped for wave ones. */
+function migrateSaved(s: Saved): Saved {
+  const code: Record<string, string> = {};
+  for (const [k, v] of Object.entries(s.code ?? {})) {
+    const [m, l] = k.split(":");
+    code[keyOf(renamed(m), l as Lang)] = typeof v === "string" ? migrateCode(v) : v;
+  }
+  const blocks: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(s.blocks ?? {})) blocks[renamed(k)] = migrateWorkspace(v);
+  return { ...s, code, blocks, mission: renamed(s.mission), done: Array.from(new Set((s.done ?? []).map(renamed))), labels: s.labels === "icons" ? "icons" : "words" };
+}
 
 function loadSaved(): Saved {
   try {
     const raw = localStorage.getItem(STORE);
-    if (raw) return { ...FRESH, ...JSON.parse(raw) };
+    if (raw) return migrateSaved({ ...FRESH, ...JSON.parse(raw) });
   } catch {}
   return { ...FRESH };
 }
@@ -81,7 +98,6 @@ function persist(s: Saved) {
     localStorage.setItem(STORE, JSON.stringify(s));
   } catch {}
 }
-const keyOf = (m: string, l: Lang) => `${m}:${l}`;
 
 const focusRing = "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D734]";
 const pillBtn = `inline-flex h-9 items-center gap-2 rounded-lg border border-[var(--rl-border)] px-3 text-sm font-semibold text-[var(--rl-text)] hover:bg-[var(--rl-hover)] ${focusRing}`;
@@ -121,8 +137,9 @@ function sound(kind: SoundEvent["kind"] | "win", note?: string) {
     const ac = audio;
     const now = ac.currentTime;
     switch (kind) {
-      case "clap":
-        return noise(ac, now, 0.12, 0.35);
+      case "wave":
+        // A soft whoosh as the hand passes the sensor.
+        return tone(ac, now, 300, 0.25, "sine", 0.06, 600);
       case "beep":
         return tone(ac, now, 880, 0.2, "square", 0.07);
       case "note":
@@ -269,7 +286,7 @@ function Player({ mission, trace, playKey, speed, setSpeed, result, onEnd, onNex
     pts.push({ x: frames[i].x, y: frames[i].y });
     return pts;
   }, [frames, i]);
-  const clapNow = Boolean(trace?.sounds.some((sd) => sd.kind === "clap" && t >= sd.t && t - sd.t < 0.8));
+  const waveNow = Boolean(trace?.sounds.some((sd) => sd.kind === "wave" && t >= sd.t && t - sd.t < 0.8));
   const sn = frame.sensors;
   const end = trace?.endTime ?? 0;
   const atEnd = trace !== null && t >= end;
@@ -283,7 +300,7 @@ function Player({ mission, trace, playKey, speed, setSpeed, result, onEnd, onNex
   return (
     <div className="flex flex-col gap-3">
       <div className="relative rounded-2xl bg-[var(--rl-stage)] p-2 sm:p-3">
-        <Stage world={mission.world} scene={mission.scene} frame={frame} trail={trail} frames={trace?.frames} index={i} sounds={trace?.sounds} clapNow={clapNow} />
+        <Stage world={mission.world} scene={mission.scene} frame={frame} trail={trail} frames={trace?.frames} index={i} sounds={trace?.sounds} waveNow={waveNow} />
         {result?.ok && atEnd && (
           <>
             <Confetti />
@@ -542,7 +559,7 @@ type Status = "idle" | "loading" | "running" | "playing" | "done";
 export default function RobotLab({ programs }: { programs: Program[] }) {
   // Each class password opens its own program's missions (plus Free build).
   const available = useMemo(() => MISSIONS.filter((m) => m.program === "Everyone" || programs.includes(m.program)), [programs]);
-  const pick = (id: string | null | undefined) => available.find((m) => m.id === id) ?? available[0];
+  const pick = (id: string | null | undefined) => available.find((m) => m.id === renamed(String(id ?? ""))) ?? available[0];
   const [saved, setSaved] = useState<Saved>(FRESH);
   const [mission, setMission] = useState<Mission>(() => MISSIONS.find((m) => programs.includes(m.program)) ?? MISSIONS[0]);
   const [lang, setLang] = useState<Lang>("blocks");
@@ -649,8 +666,8 @@ export default function RobotLab({ programs }: { programs: Program[] }) {
   function open(m: Mission, l: Lang, s: Saved = saved, override?: unknown) {
     setMission(m);
     setLang(l);
-    if (l === "blocks") setBlocks(override ?? s.blocks[m.id] ?? EMPTY_WORKSPACE);
-    else setCode(typeof override === "string" ? override : s.code[keyOf(m.id, l)] ?? m.starter[l]);
+    if (l === "blocks") setBlocks(migrateWorkspace(override ?? s.blocks[m.id] ?? EMPTY_WORKSPACE));
+    else setCode(typeof override === "string" ? migrateCode(override) : s.code[keyOf(m.id, l)] ?? m.starter[l]);
     setDocKey(`${m.id}:${l}:${Date.now()}`);
     setTrace(null);
     setError(null);
@@ -887,11 +904,26 @@ export default function RobotLab({ programs }: { programs: Program[] }) {
                 </button>
               ))}
             </div>
-            <span className="ml-auto hidden font-mono text-xs text-[var(--rl-muted)] sm:inline">{fileName}</span>
+            {lang === "blocks" && (
+              <label className="ml-auto flex items-center gap-1.5 text-xs font-semibold text-[var(--rl-muted)]" title="Block labels (for the adult): pictures only hides the words on every block">
+                <span className="hidden lg:inline">Labels</span>
+                <select
+                  value={saved.labels}
+                  onChange={(e) => update({ labels: e.target.value === "icons" ? "icons" : "words" })}
+                  data-testid="robot-labels"
+                  aria-label="Block labels"
+                  className={`rounded-md border border-[var(--rl-border)] bg-[var(--rl-editor)] px-1.5 py-1 text-xs text-[var(--rl-text)] ${focusRing}`}
+                >
+                  <option value="words">Pictures and words</option>
+                  <option value="icons">Pictures only</option>
+                </select>
+              </label>
+            )}
+            <span className={`${lang === "blocks" ? "" : "ml-auto "}hidden font-mono text-xs text-[var(--rl-muted)] sm:inline`}>{fileName}</span>
           </div>
           <div className="min-h-0 flex-1">
             {lang === "blocks" ? (
-              <RobotBlocksEditor value={blocks} docKey={`${docKey}:${theme}`} dark={dark} onChange={saveBlocks} />
+              <RobotBlocksEditor value={blocks} docKey={`${docKey}:${theme}:${saved.labels}`} dark={dark} mode={saved.labels} onChange={saveBlocks} />
             ) : (
               <RobotCodeEditor lang={lang} value={code} docKey={`${docKey}:${theme}`} dark={dark} onChange={saveCode} onRun={run} />
             )}

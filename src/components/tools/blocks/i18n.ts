@@ -11,6 +11,7 @@ export type BlockType =
   | "start_flag"
   | "start_bump"
   | "start_message"
+  | "start_wave"
   | "move_right"
   | "move_left"
   | "move_up"
@@ -34,6 +35,7 @@ const BLOCK_LABELS: Record<UiLang, Record<BlockType, string>> = {
     start_flag: "Start on Green Flag",
     start_bump: "Start on Bump",
     start_message: "Start on Message",
+    start_wave: "Wait for a Wave",
     move_right: "Move Right",
     move_left: "Move Left",
     move_up: "Move Up",
@@ -56,6 +58,7 @@ const BLOCK_LABELS: Record<UiLang, Record<BlockType, string>> = {
     start_flag: "Démarrer au drapeau vert",
     start_bump: "Démarrer au contact",
     start_message: "Démarrer au message",
+    start_wave: "Attendre un coucou de la main",
     move_right: "Aller à droite",
     move_left: "Aller à gauche",
     move_up: "Monter",
@@ -84,6 +87,7 @@ const BLOCK_TOOLTIPS: Record<UiLang, Record<BlockType, string>> = {
     start_flag: "When you press the green flag, the blocks under it run.",
     start_bump: "When this character touches another one, the blocks under it run.",
     start_message: "When a message of this colour is sent, the blocks under it run.",
+    start_wave: "Waits for a wave. When someone presses the hand button, the blocks under it run.",
     move_right: "Moves one square to the right.",
     move_left: "Moves one square to the left.",
     move_up: "Moves one square up.",
@@ -106,6 +110,7 @@ const BLOCK_TOOLTIPS: Record<UiLang, Record<BlockType, string>> = {
     start_flag: "Quand tu appuies sur le drapeau vert, les blocs en dessous se lancent.",
     start_bump: "Quand ce personnage en touche un autre, les blocs en dessous se lancent.",
     start_message: "Quand un message de cette couleur est envoyé, les blocs en dessous se lancent.",
+    start_wave: "Attend un coucou. Quand on appuie sur le bouton main, les blocs en dessous se lancent.",
     move_right: "Avance d'une case vers la droite.",
     move_left: "Avance d'une case vers la gauche.",
     move_up: "Monte d'une case.",
@@ -155,6 +160,7 @@ export const STRINGS = {
   en: {
     title: "Blocks",
     greenFlag: "Green flag: start this page",
+    wave: "Wave: start every Wait for a Wave stack",
     stop: "Stop",
     resetStage: "Reset: put everyone back where they started",
     undo: "Undo",
@@ -176,7 +182,7 @@ export const STRINGS = {
     labelsWords: "Pictures and words",
     labelsIcons: "Pictures only",
     semester: "Blocks shown",
-    semesterAll: "All twenty",
+    semesterAll: "All 21",
     semesterUpTo: (n: number) => `Semester ${n}${n > 1 ? ` (with 1–${n - 1})` : ""}`,
     micSetup: "Set up microphone",
     micReady: "Microphone ready. It won't ask again on this computer unless the browser setting changes.",
@@ -246,6 +252,7 @@ export const STRINGS = {
   fr: {
     title: "Blocs",
     greenFlag: "Drapeau vert : démarrer cette page",
+    wave: "Coucou : lance chaque pile « Attendre un coucou de la main »",
     stop: "Arrêter",
     resetStage: "Réinitialiser : tout le monde revient à sa place de départ",
     undo: "Annuler",
@@ -267,7 +274,7 @@ export const STRINGS = {
     labelsWords: "Images et mots",
     labelsIcons: "Images seulement",
     semester: "Blocs affichés",
-    semesterAll: "Les vingt",
+    semesterAll: "Les 21",
     semesterUpTo: (n: number) => `Session ${n}${n > 1 ? ` (avec 1 à ${n - 1})` : ""}`,
     micSetup: "Préparer le micro",
     micReady: "Micro prêt. Il ne redemandera pas sur cet ordinateur, sauf si le réglage du navigateur change.",

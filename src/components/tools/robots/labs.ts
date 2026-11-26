@@ -124,7 +124,7 @@ export const EXPLORER_LABS: Mission[] = [
     starter: blank("Sing hello"),
   }),
   ES2(2, {
-    id: "gym-clap",
+    id: "gym-steps",
     title: "Musical stepping stones",
     story: { who: "Coach Kim", face: "🏃‍♀️", says: "These coloured spots are magic: each one makes music! Stop on each spot and play its note. Red is C, yellow is E, blue is G." },
     goal: "Drive to each spot and play its note: C on red, E on yellow, G on blue.",
@@ -157,13 +157,13 @@ export const EXPLORER_LABS: Mission[] = [
   ES2(3, {
     id: "party-surprise",
     title: "Surprise party",
-    story: { who: "Lulu the bunny", face: "🐰", says: "Shh! It's Grandpa Bear's birthday. When he walks in, everyone claps. Then flash your lights and beep: SURPRISE!" },
-    goal: "Wait for the clap. Then flash 2 light colours and beep.",
-    hint: "wait for a clap, light, light (a different colour), beep.",
+    story: { who: "Lulu the bunny", face: "🐰", says: "Shh! It's Grandpa Bear's birthday. When he walks in, I'll wave my paw in front of your robot. Then flash your lights and beep: SURPRISE!" },
+    goal: "Wait for the wave. Then flash 2 light colours and beep.",
+    hint: "wait for a wave, light, light (a different colour), beep.",
     scene: { theme: "party", decor: [{ kind: "balloon", x: 12, y: 10, colour: "#EC407A" }, { kind: "balloon", x: 22, y: 8, colour: "#42A5F5" }, { kind: "balloon", x: 84, y: 12, colour: "#FFCA28" }, { kind: "balloon", x: 92, y: 9, colour: "#66BB6A" }] },
-    world: base({ w: 100, h: 50, robot: "scout", start: { x: 50, y: 28, heading: 90 }, claps: [2.5] }),
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 50, y: 28, heading: 90 }, waves: [2.5] }),
     check(trace) {
-      if (trace.frames.some((f) => f.t < 2.49 && f.led !== "off") || firstSoundAt(trace) < 2.49) return notYet("Oops, the surprise started too early! Wait for the clap.");
+      if (trace.frames.some((f) => f.t < 2.49 && f.led !== "off") || firstSoundAt(trace) < 2.49) return notYet("Oops, the surprise started too early! Wait for the wave.");
       const colours = new Set(trace.frames.filter((f) => f.led !== "off").map((f) => f.led));
       if (colours.size < 2) return notYet(`Flash 2 different colours. You used ${colours.size}.`);
       if (!trace.stats.beeps) return notYet("Now beep: SURPRISE!");

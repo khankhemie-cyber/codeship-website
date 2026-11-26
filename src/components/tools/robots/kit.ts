@@ -85,7 +85,7 @@ export const base = (w: Partial<World> & Pick<World, "w" | "h" | "start" | "robo
   places: [],
   light: 80,
   lightZones: [],
-  claps: [],
+  waves: [],
   distanceNoise: 0,
   grid: true,
   ...w,

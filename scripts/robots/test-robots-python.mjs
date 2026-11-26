@@ -178,5 +178,19 @@ test("runner is reusable across runs (state resets)", () => {
   assert(JSON.stringify(a.trace) === JSON.stringify(b.trace), "runs differ");
 });
 
+
+test("python: wait_for_wave() and waved() (curriculum v1.2 hand wave)", () => {
+  const world = { ...missionById("sandbox").world, waves: [1, 1.5, 2] };
+  const { trace, error } = run(`wait_for_wave()\nwait(2)\nn = 1\nwhile waved():\n    n += 1\nif n == 3:\n    unlock()\nelif n == 2:\n    beep()\nelse:\n    display("Locked")\nprint(n)\n`, world);
+  assert(!error, error);
+  assert(trace.log.some((l) => l.text.trim() === "3") && trace.stats.unlocks.length === 1, JSON.stringify(trace.log));
+});
+test("python: Wave-start concert passes with wait_for_wave()", () => {
+  const m = missionById("wave-concert");
+  const { trace, error } = run(`wait_for_wave()\nforward(55)\nplay("C")\nplay("E")\nplay("G")\n`, m.world);
+  assert(!error, error);
+  assert(m.check(trace, m.world).ok, m.check(trace, m.world).message);
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

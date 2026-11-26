@@ -124,7 +124,8 @@ type Props = {
   frames?: Frame[];
   index?: number;
   sounds?: SoundEvent[];
-  clapNow?: boolean;
+  /** A hand is waving in front of the robot (curriculum v1.2: replaces the clap). */
+  waveNow?: boolean;
   /** Show the distance beam and line-sensor dots. */
   showSensors?: boolean;
   /** Small, static (mission-card thumbnail). */
@@ -2219,7 +2220,7 @@ function label(ctx: C, text: string, x: number, y: number, s: number, dark = fal
 
 const NOTE_COLOUR: Record<Note, string> = { C: "#E53935", D: "#FB8C00", E: "#FDD835", F: "#43A047", G: "#1E88E5", A: "#5E35B1", B: "#D81B60", C2: "#E53935" };
 
-export default function Stage({ world, scene, frame, trail = [], frames, index = 0, sounds = [], clapNow = false, showSensors = true, thumbnail = false }: Props) {
+export default function Stage({ world, scene, frame, trail = [], frames, index = 0, sounds = [], waveNow = false, showSensors = true, thumbnail = false }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const wrap = useRef<HTMLDivElement>(null);
   const [, setBoxWidth] = useState(0);
@@ -2493,14 +2494,29 @@ export default function Stage({ world, scene, frame, trail = [], frames, index =
       ctx.textBaseline = "middle";
       ctx.fillText(frame.display, bx + 7, by + bh / 2 + 0.5);
     }
-    if (clapNow) {
+    if (waveNow) {
+      // A hand waves just in front of the robot, where the obstacle sensor looks.
+      const h = (frame.heading * Math.PI) / 180;
+      const reach = (ROBOT_RADIUS[world.robot] + 7) * s;
+      const hx = frame.x * s + Math.cos(h) * reach;
+      const hy = frame.y * s - Math.sin(h) * reach;
+      const size = Math.max(18, 8 * s);
+      ctx.save();
+      ctx.translate(hx, hy);
+      ctx.rotate(Math.sin(performance.now() / 90) * 0.35);
+      ctx.font = `${size}px system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("\u{1F44B}", 0, 0);
+      ctx.restore();
       ctx.font = `900 ${Math.max(16, 6 * s)}px system-ui, sans-serif`;
+      ctx.textAlign = "left";
       ctx.textBaseline = "top";
       ctx.fillStyle = "#D58401";
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 4;
-      ctx.strokeText("CLAP!", 10, 10);
-      ctx.fillText("CLAP!", 10, 10);
+      ctx.strokeText("WAVE!", 10, 10);
+      ctx.fillText("WAVE!", 10, 10);
     }
   });
 

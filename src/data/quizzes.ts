@@ -181,8 +181,8 @@ export const QUIZZES: Quiz[] = [
       {
         id: "robot-lab-2",
         type: "choice",
-        prompt: "Which Robot Lab block makes the robot wait until it hears a clap?",
-        options: ["Wait for a clap", "Forward", "Turn left"],
+        prompt: "Which Robot Lab block makes the robot wait until someone waves a hand in front of it?",
+        options: ["Wait for a wave", "Forward", "Turn left"],
         answer: 0,
       },
     ],

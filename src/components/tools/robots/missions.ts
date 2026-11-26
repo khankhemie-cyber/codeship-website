@@ -71,31 +71,31 @@ const concert: Mission = {
     zoneIcons: { spot: "star" },
   },
   skills: ["Events", "Sound"],
-  id: "clap-concert",
-  title: "Clap-start concert",
+  id: "wave-concert",
+  title: "Wave-start concert",
   program: "Explorers",
   fits: "S2 Kindness Cards",
-  story: { who: "Maestro Mo", face: "🐱", says: "It's concert night! When the crowd claps, roll into the spotlight and play your song. 3 notes, superstar!" },
-  goal: "Wait for the clap. Then drive into the spotlight and play 3 notes for your friends in the crowd.",
-  hint: "Start with wait for a clap. The clap is the event that starts the show. Then forward, then 3 play note blocks.",
+  story: { who: "Maestro Mo", face: "🐱", says: "It's concert night! When I wave my paw in front of your robot, roll into the spotlight and play your song. 3 notes, superstar!" },
+  goal: "Wait for the wave. Then drive into the spotlight and play 3 notes for your friends in the crowd.",
+  hint: "Start with wait for a wave. The wave is the event that starts the show. Then forward, then 3 play note blocks.",
   world: base({
     w: 120,
     h: 60,
     robot: "scout",
     start: { x: 20, y: 30, heading: 0 },
-    claps: [3],
+    waves: [3],
     zones: [{ id: "spot", x: 60, y: 14, w: 30, h: 30, colour: "yellow", label: "Spotlight" }],
   }),
   check(trace, world) {
     const spot = world.zones[0];
-    if (trace.stats.firstMoveAt >= 0 && trace.stats.firstMoveAt < 3) return notYet("The robot started before the clap. Wait for the clap first.");
+    if (trace.stats.firstMoveAt >= 0 && trace.stats.firstMoveAt < 3) return notYet("The robot started before the wave. Wait for the wave first.");
     if (!trace.frames.some((f) => inZone(f, spot))) return notYet("Drive into the spotlight so everyone can see you.");
     const arrived = trace.frames.find((f) => inZone(f, spot))!.t;
     const notes = trace.stats.notes.filter((n) => n.t >= arrived).length;
     if (notes < 3) return notYet(`${notes} of 3 notes played in the spotlight. Add play note blocks.`);
-    return pass("What a show! The clap started it and the crowd loved your song.");
+    return pass("What a show! The wave started it and the crowd loved your song.");
   },
-  starter: { js: "// Clap-start concert\nwaitForClap();\n", py: "# Clap-start concert\nwait_for_clap()\n" },
+  starter: { js: "// Wave-start concert\nwaitForWave();\n", py: "# Wave-start concert\nwait_for_wave()\n" },
 };
 
 const reef: Mission = {

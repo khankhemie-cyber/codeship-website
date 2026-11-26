@@ -21,7 +21,9 @@ function explainJs(err: unknown): string {
   const missing = /^(\w+) is not defined$/.exec(message);
   if (name === "ReferenceError" && missing) {
     const close = JS_NAMES.find((n) => n.toLowerCase() === missing[1].toLowerCase());
-    message = close ? `${missing[1]} is not defined. Did you mean ${close}? Capital letters matter.` : `${missing[1]} is not defined. Check the spelling.`;
+    // Curriculum v1.2: the clap became a hand wave.
+    const wave = /clap/i.test(missing[1]) ? missing[1].replace(/clapped/i, "waved").replace(/Clap/, "Wave") : null;
+    message = wave && JS_NAMES.includes(wave as never) ? `${missing[1]} is not defined. The clap is now a hand wave: use ${wave}.` : close ? `${missing[1]} is not defined. Did you mean ${close}? Capital letters matter.` : `${missing[1]} is not defined. Check the spelling.`;
   }
   const line = lineOf(e);
   return `${name}${line ? ` on line ${line}` : ""}: ${message}`;
