@@ -149,5 +149,51 @@ test("readability: a gentle warning for colours that are hard to read on the whi
   assert(Math.abs(M.contrastRatio("#000000", "#FFFFFF") - 21) < 0.01, "contrast maths");
 });
 
+// ── Non-typing path (CEO, 2026-11-27): word bank and picture bank ──
+const fs = await import("node:fs");
+test("word bank: six topics, every word has a picture that exists in public/art, and fits a card", () => {
+  eq(M.WORD_BANK.map((t) => t.name), ["About me", "Favourite things", "Animals", "Space", "Robots", "Helping"], "topics");
+  for (const t of M.WORD_BANK) {
+    for (const art of [t.art, ...t.words.map((x) => x.art)]) assert(fs.existsSync(new URL(`../../public/art/${art}.webp`, import.meta.url)), `${t.id}: no picture ${art}`);
+    for (const x of t.words) {
+      assert(x.kinds.length && x.text.length <= 60, `${x.text}: bad entry`);
+      assert(!/\d{3,}|@|street|school/i.test(x.text), `${x.text}: looks personal`);
+    }
+  }
+  for (const kind of ["h1", "h2", "p", "li", "a"]) assert(M.wordsFor(kind).reduce((n, t) => n + t.words.length, 0) >= 3, `${kind}: too few words`);
+  eq(M.wordsFor("img"), [], "no words for pictures");
+  eq(M.wordsFor("style"), [], "no words for style");
+});
+test("word bank: tapping fills a card; paragraph sentences add up (two facts), within the length limit", () => {
+  eq(M.applyWord(card("h1", { text: "My page" }), "All About Me"), "All About Me", "heading replaced");
+  const p = card("p");
+  const one = M.applyWord(p, "I love to read books.");
+  eq(one, "I love to read books.", "starter text replaced");
+  eq(M.applyWord({ ...p, text: one }, "I am kind and helpful."), "I love to read books. I am kind and helpful.", "second fact added");
+  const full = "x".repeat(M.MAX_TEXT - 3);
+  eq(M.applyWord({ ...p, text: full }, "I like to draw and paint."), full, "never over the limit");
+});
+test("a whole S4 page can be built from the banks alone, with no typing", () => {
+  const p = M.starterProject(4);
+  let page = p.pages[0];
+  const pick = (kind, topic, i = 0) => M.wordsFor(kind).find((t) => t.id === topic).words[i].text;
+  page = M.updateCard(page, page.cards[0].id, { text: M.applyWord(page.cards[0], pick("h1", "helping", 1)) });
+  const para = card("p");
+  page = M.placeCard(page, { ...para, text: M.applyWord(para, pick("p", "helping", 1)) }).page;
+  page = M.placeCard(page, card("img", { image: M.PICTURE_BANK[1].id })).page;
+  page = M.placeCard(page, card("ul")).page;
+  page = M.placeCard(page, { ...card("li"), text: pick("li", "helping", 1) }).page;
+  page = M.placeCard(page, { ...card("a"), text: pick("a", "helping", 0) }).page;
+  const html = M.pageHtml(p, page);
+  for (const want of ["<h1>Save the Bees</h1>", "<p>Bees help flowers grow.</p>", "<img src=", "<li>Plant flowers</li>", '<a href="#">Learn more</a>']) assert(html.includes(want), `${want} missing:\n${html}`);
+});
+test("picture bank: one list of built-in pictures (robots for now), no outside links, every card reads from it", () => {
+  assert(M.PICTURE_BANK.length === 4 && M.PICTURE_BANK.every((x) => x.group === "Robots"), "only the robots for now");
+  for (const x of M.PICTURE_BANK) assert(x.svg.startsWith("<svg") && !/https?:|href=/.test(x.svg.replace('xmlns="http://www.w3.org/2000/svg"', "")) && /^[a-z0-9-]+\.svg$/.test(x.file), `${x.id}: not a built-in picture`);
+  eq(new Set(M.PICTURE_BANK.map((x) => x.id)).size, M.PICTURE_BANK.length, "unique ids");
+  eq(M.ROBOTS.map((x) => x.id), M.PICTURE_BANK.map((x) => x.id), "robots alias");
+  eq(M.PICTURE_GROUPS, ["Robots"], "groups");
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

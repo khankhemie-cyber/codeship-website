@@ -907,7 +907,7 @@ const LABS = [...EXPLORER_LABS, ...BUILDER_LABS, ...DEVELOPER_LABS, ...ENGINEER_
 export const MISSIONS: Mission[] = [
   ...(["Explorers", "Builders", "Developers", "Engineers"] as Program[]).flatMap((p) =>
     SEMESTERS.flatMap((sem) => [
-      ...LABS.filter((m) => m.program === p && m.semester === sem).sort((x, y) => (x.lab ?? 0) - (y.lab ?? 0)),
+      ...LABS.filter((m) => m.program === p && m.semester === sem).sort((x, y) => (x.lab ?? 0) - (y.lab ?? 0) || Number(Boolean(x.bonus)) - Number(Boolean(y.bonus))),
       ...FULL.filter((m) => m.program === p && m.semester === sem).map((m) => ({ ...m, lab: LABS_PER_SEMESTER[p] })),
     ]),
   ),

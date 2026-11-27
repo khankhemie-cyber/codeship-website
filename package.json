@@ -19,7 +19,8 @@
     "test:port": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/port-codeship/test-missions.mjs",
     "test:bus": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/bus-buddies/test-levels.mjs",
     "test:html-blocks": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/htmlblocks/test-html-blocks.mjs",
-    "test:html-blocks:e2e": "node scripts/htmlblocks/test-html-blocks-e2e.mjs"
+    "test:html-blocks:e2e": "node scripts/htmlblocks/test-html-blocks-e2e.mjs",
+    "test:cookies:e2e": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-cookie-banner-e2e.mjs"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",

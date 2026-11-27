@@ -115,14 +115,174 @@ const robotSvg = (body: string, head: string, accent: string) =>
   `<rect x="32" y="89" width="12" height="9" rx="3" fill="#586173"/><rect x="56" y="89" width="12" height="9" rx="3" fill="#586173"/>` +
   `</svg>`;
 
-/** The only pictures a page can show: placeholder robots. File names are what the HTML text shows. */
-export const ROBOTS: { id: string; file: string; alt: string; svg: string }[] = [
-  { id: "silver", file: "robot-silver.svg", alt: "A silver robot", svg: robotSvg("#9FB0C8", "#B8C4D6", "#D58401") },
-  { id: "gold", file: "robot-gold.svg", alt: "A gold robot", svg: robotSvg("#F0D030", "#F7E37A", "#001432") },
-  { id: "teal", file: "robot-teal.svg", alt: "A teal robot", svg: robotSvg("#0F8C9A", "#5CC3CE", "#F0D030") },
-  { id: "purple", file: "robot-purple.svg", alt: "A purple robot", svg: robotSvg("#7E57C2", "#B39DDB", "#F0D030") },
+export type Picture = { id: string; file: string; alt: string; svg: string; group: string };
+
+/**
+ * The picture bank: the only pictures a page can show. File names are what
+ * the HTML text shows. Today it holds the built-in robots only. To add a
+ * built-in picture later, add it to this one list (inline SVG, no uploads,
+ * no outside links, never photos of children): every card, the saved-file
+ * check and the tests read from here.
+ */
+export const PICTURE_BANK: Picture[] = [
+  { group: "Robots", id: "silver", file: "robot-silver.svg", alt: "A silver robot", svg: robotSvg("#9FB0C8", "#B8C4D6", "#D58401") },
+  { group: "Robots", id: "gold", file: "robot-gold.svg", alt: "A gold robot", svg: robotSvg("#F0D030", "#F7E37A", "#001432") },
+  { group: "Robots", id: "teal", file: "robot-teal.svg", alt: "A teal robot", svg: robotSvg("#0F8C9A", "#5CC3CE", "#F0D030") },
+  { group: "Robots", id: "purple", file: "robot-purple.svg", alt: "A purple robot", svg: robotSvg("#7E57C2", "#B39DDB", "#F0D030") },
 ];
-export const robotById = (id: string | undefined) => ROBOTS.find((r) => r.id === id) ?? ROBOTS[0];
+/** The robots (kept for older code and saved files). */
+export const ROBOTS = PICTURE_BANK.filter((p) => p.group === "Robots");
+export const PICTURE_GROUPS = Array.from(new Set(PICTURE_BANK.map((p) => p.group)));
+export const robotById = (id: string | undefined) => PICTURE_BANK.find((r) => r.id === id) ?? PICTURE_BANK[0];
+
+// ---------------------------------------------------------------- word bank
+
+/**
+ * The word bank: a way to build a whole page without typing (CEO, 2026-11-27).
+ * Short words and sentences for Grades 2 to 3, grouped by topic. Each has a
+ * picture from the site's existing artwork (public/art, Fluent Emoji, MIT),
+ * so learners who don't read yet can choose by picture. Kinds say which
+ * cards a word fits: headings (h1, h2), sentences (p), list items (li) and
+ * link words (a). Nothing here is personal: no names, ages, schools or places.
+ */
+export type WordKind = "heading" | "sentence" | "item" | "link";
+export type Word = { text: string; art: string; kinds: WordKind[] };
+export type WordTopic = { id: string; name: string; art: string; words: Word[] };
+
+const w = (text: string, art: string, ...kinds: WordKind[]): Word => ({ text, art, kinds });
+
+export const WORD_BANK: WordTopic[] = [
+  {
+    id: "me",
+    name: "About me",
+    art: "1f642",
+    words: [
+      w("All About Me", "1f642", "heading"),
+      w("Hello!", "1f44b", "heading", "sentence"),
+      w("Things I Like", "2764", "heading"),
+      w("I like to learn new things.", "1f4a1", "sentence"),
+      w("I am kind and helpful.", "1f44d", "sentence"),
+      w("I love to read books.", "1f4da", "sentence"),
+      w("I like to draw and paint.", "1f3a8", "sentence"),
+      w("Reading", "1f4da", "item"),
+      w("Drawing", "1f58d", "item"),
+      w("Soccer", "26bd", "item"),
+      w("Music", "1f3b5", "item"),
+      w("About me", "1f642", "link"),
+    ],
+  },
+  {
+    id: "favourites",
+    name: "Favourite things",
+    art: "2b50",
+    words: [
+      w("My Favourite Things", "2b50", "heading"),
+      w("My favourite food is pizza.", "1f355", "sentence"),
+      w("I like to play games with my friends.", "1f3ae", "sentence"),
+      w("Rainbows make me happy.", "1f308", "sentence"),
+      w("Pizza", "1f355", "item"),
+      w("Apples", "1f34e", "item"),
+      w("Strawberries", "1f353", "item"),
+      w("Cookies", "1f36a", "item"),
+      w("Games", "1f3ae", "item"),
+      w("Basketball", "1f3c0", "item"),
+    ],
+  },
+  {
+    id: "animals",
+    name: "Animals",
+    art: "1f436",
+    words: [
+      w("Animals I Love", "1f436", "heading"),
+      w("Pet Care", "2764", "heading"),
+      w("Food", "1f955", "heading", "item"),
+      w("Water", "1f4a6", "heading", "item"),
+      w("Pets need food and water every day.", "1f4a6", "sentence"),
+      w("Be gentle with animals.", "2764", "sentence"),
+      w("Dog", "1f436", "item"),
+      w("Cat", "1f431", "item"),
+      w("Hamster", "1f439", "item"),
+      w("Turtle", "1f422", "item"),
+      w("Give fresh water", "1f4a6", "item"),
+      w("Clean the cage", "1f9f9", "item"),
+      w("Play together", "26bd", "item"),
+    ],
+  },
+  {
+    id: "space",
+    name: "Space",
+    art: "1f680",
+    words: [
+      w("Space Explorer", "1f680", "heading"),
+      w("The Night Sky", "1f319", "heading"),
+      w("Rockets fly into space.", "1f680", "sentence"),
+      w("The Moon goes around the Earth.", "1f319", "sentence"),
+      w("Moon", "1f319", "item"),
+      w("Stars", "1f31f", "item"),
+      w("Earth", "1f30d", "item"),
+      w("Sun", "2600", "item"),
+      w("Rocket", "1f680", "item"),
+    ],
+  },
+  {
+    id: "robots",
+    name: "Robots",
+    art: "1f916",
+    words: [
+      w("My Robot", "1f916", "heading"),
+      w("How Robots Help", "1f4a1", "heading"),
+      w("Robots follow the code we write.", "2328", "sentence"),
+      w("My robot can beep and move.", "1f50a", "sentence"),
+      w("Sensors", "1f50d", "item"),
+      w("Wheels", "1f699", "item"),
+      w("Battery", "1f50b", "item"),
+      w("Code", "2328", "item"),
+    ],
+  },
+  {
+    id: "helping",
+    name: "Helping",
+    art: "1f44d",
+    words: [
+      w("How to Help", "1f44d", "heading"),
+      w("Save the Bees", "1f33f", "heading"),
+      w("We can all help our community.", "1f44d", "sentence"),
+      w("Bees help flowers grow.", "1f33f", "sentence"),
+      w("Recycling keeps the Earth clean.", "267b", "sentence"),
+      w("Recycle", "267b", "item"),
+      w("Plant flowers", "1f331", "item"),
+      w("Save water", "1f4a6", "item"),
+      w("Be kind", "2764", "item"),
+      w("Learn more", "1f50e", "link"),
+      w("How to help", "1f44d", "link"),
+      w("Read more", "1f4da", "link"),
+    ],
+  },
+];
+
+/** Which kind of word fits a card. */
+export const wordKindFor = (kind: CardKind): WordKind | null =>
+  kind === "h1" || kind === "h2" ? "heading" : kind === "p" ? "sentence" : kind === "li" ? "item" : kind === "a" ? "link" : null;
+
+/** The topics, each with only the words that fit this card. */
+export function wordsFor(kind: CardKind): WordTopic[] {
+  const k = wordKindFor(kind);
+  if (!k) return [];
+  return WORD_BANK.map((t) => ({ ...t, words: t.words.filter((x) => x.kinds.includes(k)) })).filter((t) => t.words.length);
+}
+
+/**
+ * Put a tapped word on a card. Paragraphs add the sentence to the end (so a
+ * learner can build two facts); everything else is replaced. The starter text
+ * is always replaced. Never longer than MAX_TEXT.
+ */
+export function applyWord(card: Card, word: string): string {
+  const starter = card.kind === "p" ? newCard("p").text : null;
+  const current = (card.text ?? "").trim();
+  if (card.kind !== "p" || !current || current === starter) return word.slice(0, MAX_TEXT);
+  const joined = `${current} ${word}`;
+  return joined.length <= MAX_TEXT ? joined : current;
+}
 export const robotDataUrl = (id: string | undefined) => `data:image/svg+xml;utf8,${encodeURIComponent(robotById(id).svg)}`;
 
 // ---------------------------------------------------------------- links

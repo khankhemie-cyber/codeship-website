@@ -460,6 +460,7 @@ const SEMESTER_NAME: Record<string, string> = { S1: "Semester 1", S2: "Semester 
 /** "Semester 1 · Lab 2 of 4" for a mission. */
 export function labLabel(m: Mission) {
   if (!m.semester) return "";
+  if (m.bonus) return `${SEMESTER_NAME[m.semester]} · Bonus for lab ${m.lab}`;
   return `${SEMESTER_NAME[m.semester]} · Lab ${m.lab} of ${labsPerSemester(m.program)}`;
 }
 
@@ -510,7 +511,7 @@ function MissionGallery({ missions, current, done, onPick, onClose }: { missions
                     <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
                       {group.map((m) => {
                         const isDone = done.includes(m.id);
-                        const challenge = m.semester && m.lab === labsPerSemester(m.program);
+                        const challenge = m.semester && !m.bonus && m.lab === labsPerSemester(m.program);
                         return (
                           <button
                             key={m.id}
@@ -524,7 +525,7 @@ function MissionGallery({ missions, current, done, onPick, onClose }: { missions
                               </div>
                               {m.semester && (
                                 <span className={`absolute left-2.5 top-2.5 rounded-full px-1.5 py-0.5 text-[10px] font-extrabold shadow ${challenge ? "bg-[#F0D030] text-[#001532]" : "bg-[#001532]/85 text-white"}`}>
-                                  {challenge ? "★ Challenge" : `Lab ${m.lab}`}
+                                  {challenge ? "★ Challenge" : `Lab ${m.lab}${m.bonus ? " bonus" : ""}`}
                                 </span>
                               )}
                               {isDone && (

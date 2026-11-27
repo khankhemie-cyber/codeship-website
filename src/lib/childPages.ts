@@ -15,3 +15,14 @@ const CHILD_PATH_PATTERN = new RegExp(CHILD_PATH_PATTERN_SOURCE);
 export function isChildPath(pathname: string | null | undefined): boolean {
   return !!pathname && CHILD_PATH_PATTERN.test(pathname);
 }
+
+/**
+ * Pages with no cookie banner: the coding tools, quizzes and workbooks. No
+ * analytics run there whatever the choice (see above), so the banner only got
+ * in a child's way. It still shows everywhere else, the arcade games included.
+ */
+const NO_COOKIE_BANNER_PATTERN = /^\/(tools|quizzes|workbooks)(\/|$)/;
+
+export function hidesCookieBanner(pathname: string | null | undefined): boolean {
+  return !!pathname && NO_COOKIE_BANNER_PATTERN.test(pathname);
+}

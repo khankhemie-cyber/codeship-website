@@ -127,6 +127,30 @@ await test("S2: hard-to-read colour shows a gentle warning", async (page) => {
   assert(!(await page.getByTestId("contrast-warning").count()), "warning stayed for navy");
 });
 
+await test("no typing: build a page by tapping words and pictures, in pictures-only mode", async (page) => {
+  await page.getByTestId("set-stage").selectOption("3");
+  await page.getByTestId("set-labels").selectOption("icons");
+  await page.getByTestId("open-word-bank").first().click();
+  await page.getByTestId("topic-animals").click();
+  await page.getByTestId("word-bank").getByRole("button", { name: "Animals I Love" }).click();
+  await page.getByTestId("palette-p").click();
+  await page.getByTestId("card-p").getByTestId("open-word-bank").click();
+  await page.getByTestId("topic-animals").click();
+  await page.getByTestId("word-bank").getByRole("button", { name: "Pets need food and water every day." }).click();
+  await page.getByTestId("word-bank").getByRole("button", { name: "Be gentle with animals." }).click();
+  await shot(page, "html-blocks-word-bank-pictures");
+  await page.getByTestId("palette-ul").click();
+  await page.getByTestId("add-li").click();
+  await page.getByTestId("card-li").getByTestId("open-word-bank").click();
+  await page.getByTestId("topic-animals").click();
+  await page.getByTestId("word-bank").getByRole("button", { name: "Give fresh water" }).click();
+  await page.getByTestId("palette-img").click();
+  await page.getByRole("radio", { name: "A purple robot" }).click();
+  const c = await code(page);
+  for (const want of ["<h1>Animals I Love</h1>", "<p>Pets need food and water every day. Be gentle with animals.</p>", "<li>Give fresh water</li>", 'alt="A purple robot"']) assert(c.includes(want), `${want} missing`);
+  await shot(page, "html-blocks-no-typing");
+});
+
 await test("Capstone: a link to the About page opens that page from the preview; work is kept after reload", async (page) => {
   await page.getByTestId("set-stage").selectOption("5");
   await page.getByTestId("palette-a").click();

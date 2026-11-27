@@ -74,6 +74,7 @@ export const BLOCK_DEFS: Json[] = [
   { type: "robot_play", message0: "play note %1", args0: [{ type: "field_dropdown", name: "N", options: NOTE_OPTIONS }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Play a musical note." },
   { type: "robot_pen_down", message0: "pen down %1", args0: [{ type: "field_dropdown", name: "C", options: PEN_OPTIONS }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Paint a line wherever the robot drives." },
   { type: "robot_pen_up", message0: "pen up", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Stop painting." },
+  { type: "robot_unlock", message0: "unlock the door", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Open the locked door. Only do this for the right reason!" },
   { type: "robot_spray", message0: "spray water", previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Spray water straight ahead. It reaches about 3 squares." },
   { type: "robot_display", message0: "show %1", args0: [{ type: "field_input", name: "T", text: "Hi!" }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act },
   { type: "robot_record", message0: "record %1 reading", args0: [{ type: "field_dropdown", name: "S", options: [["light", "light"], ["distance", "distance"], ["temperature", "temperature"], ["power", "power"]] }], previousStatement: null, nextStatement: null, colour: BLOCK_COLOURS.act, tooltip: "Save a reading to the Data tab." },
@@ -111,6 +112,7 @@ const ICON_PATHS: Record<string, string> = {
   // Same picture as the CODEship Blocks "Start on Wave" block: a hand waving at the sensor.
   wave: WAVE_SVG_BODY,
   gripper: '<path d="M12 2.5V7"/><path d="M6.5 7h11"/><path d="M6.5 7v4.5l3.5 4.5M17.5 7v4.5L14 16"/><circle cx="12" cy="18.5" r="2.5"/>',
+  unlock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/><path d="M12 15v2"/>',
   box: '<path d="M12 3 3.5 7.2v9.6L12 21l8.5-4.2V7.2z"/><path d="M3.5 7.2 12 11.4l8.5-4.2M12 11.4V21"/>',
   until: '<path d="M14.5 6.5a6.5 6.5 0 1 0 1.5 8"/><path d="M11 6.5h3.5V3"/><path d="M20.5 7v10" stroke-width="3"/>',
   wall: '<rect x="13" y="4" width="8" height="16" rx="1"/><path d="M3 12h7m-3-3 3 3-3 3"/>',
@@ -156,6 +158,7 @@ const BLOCK_ICONS: Record<string, string> = {
   robot_pen_down: "pen",
   robot_pen_up: "penup",
   robot_spray: "water",
+  robot_unlock: "unlock",
   robot_record: "chart",
   robot_wait: "clock",
   robot_wait_wave: "wave",
@@ -250,7 +253,7 @@ export function withIcons(defs: Json[], mode: LabelMode = "words"): Json[] {
 const CATEGORIES: { name: string; key: string; icon: string; colour: string; types: string[] }[] = [
   { name: "Start", key: "start", icon: "flag", colour: BLOCK_COLOURS.start, types: ["robot_start"] },
   { name: "Move", key: "move", icon: "forward", colour: BLOCK_COLOURS.move, types: ["robot_forward", "robot_backward", "robot_turn_left", "robot_turn_right", "robot_speed"] },
-  { name: "Do", key: "do", icon: "bulb", colour: BLOCK_COLOURS.act, types: ["robot_pick_up", "robot_drop", "robot_beep", "robot_play", "robot_led", "robot_display", "robot_pen_down", "robot_pen_up", "robot_spray", "robot_record"] },
+  { name: "Do", key: "do", icon: "bulb", colour: BLOCK_COLOURS.act, types: ["robot_pick_up", "robot_drop", "robot_beep", "robot_play", "robot_led", "robot_display", "robot_pen_down", "robot_pen_up", "robot_spray", "robot_unlock", "robot_record"] },
   { name: "Control", key: "control", icon: "repeat", colour: BLOCK_COLOURS.control, types: ["robot_wait", "robot_wait_wave", "robot_repeat", "robot_forever", "robot_until", "robot_if", "robot_if_else"] },
   { name: "Sense", key: "sense", icon: "eye", colour: BLOCK_COLOURS.sense, types: ["robot_sense", "robot_compare", "robot_colour_is", "robot_not"] },
 ];
@@ -348,6 +351,8 @@ function statement(b: B, ind: string): string {
       return `${ind}penUp();\n`;
     case "robot_spray":
       return `${ind}spray();\n`;
+    case "robot_unlock":
+      return `${ind}unlock();\n`;
     case "robot_display":
       return `${ind}display(${str(f.T)});\n`;
     case "robot_record":

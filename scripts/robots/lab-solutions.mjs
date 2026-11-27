@@ -104,6 +104,14 @@ for (const [m, a] of best) { if (m === "forward") forward(a); if (m === "left") 
   "dock-digit": `let c = nextCode();
 while (c !== "") { if (c.length < 12) display("weak"); else if (!/[0-9]/.test(c)) display("ok"); else display("strong"); wait(1); c = nextCode(); }`,
   "beach-strong": VAULT(`c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c)`, "forward(92); turnRight(90); forward(48);"),
+  "wave-code-lock": `for (let round = 0; round < 3; round++) {
+  wait(3);
+  let waves = 0;
+  while (waved()) waves++;
+  if (waves === 3) { unlock(); forward(98); break; }
+  else if (waves < 3) { display("Too few"); beep(); }
+  else { display("Too many"); beep(); }
+}`,
   "fort-lockout": `function strong(c) { return c.length >= 12 && /[0-9]/.test(c) && /[A-Za-z]/.test(c) && /[^A-Za-z0-9]/.test(c); }
 let weak = 0; let c = nextCode();
 while (c !== "") {

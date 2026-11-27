@@ -75,6 +75,11 @@ export type Mission = {
   story?: Story;
   /** Which Robot Lab class of the semester this mission is for (1 to 4, or 1 to 6). */
   lab?: number;
+  /**
+   * A bonus mission that goes with lab `lab` (it doesn't take a class of its
+   * own, so the other labs keep their numbers).
+   */
+  bonus?: boolean;
 };
 
 export const base = (w: Partial<World> & Pick<World, "w" | "h" | "start" | "robot">): World => ({

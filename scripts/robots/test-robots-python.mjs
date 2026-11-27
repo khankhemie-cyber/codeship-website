@@ -189,6 +189,15 @@ test("python: an old wait_for_clap() program is pointed at wait_for_wave()", () 
   const { error } = run("wait_for_clap()\n", missionById("wave-concert").world);
   assert(/Did you mean wait_for_wave\(\)\?/.test(error ?? ""), error);
 });
+test("python: Wave-code lock passes with counted waves and if / elif / else", () => {
+  const m = missionById("wave-code-lock");
+  const code = `for round in range(3):\n    wait(3)\n    waves = 0\n    while waved():\n        waves += 1\n    if waves == 3:\n        unlock()\n        forward(98)\n        break\n    elif waves < 3:\n        display("Too few")\n        beep()\n    else:\n        display("Too many")\n        beep()\n`;
+  const { trace, error } = run(code, m.world);
+  assert(!error, error);
+  const r = m.check(trace, m.world);
+  assert(r.ok, r.message);
+  assert(!m.check(run(m.starter.py, m.world).trace, m.world).ok, "starter passes");
+});
 test("python: Wave-start concert passes with wait_for_wave()", () => {
   const m = missionById("wave-concert");
   const { trace, error } = run(`wait_for_wave()\nforward(55)\nplay("C")\nplay("E")\nplay("G")\n`, m.world);

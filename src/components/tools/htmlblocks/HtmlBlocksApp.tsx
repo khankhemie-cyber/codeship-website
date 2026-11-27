@@ -9,11 +9,13 @@ import {
   FONT_SIZES,
   MAX_PAGES,
   MAX_TEXT,
+  PICTURE_BANK,
+  PICTURE_GROUPS,
   PREVIEW_CSS,
-  ROBOTS,
   STAGES,
   VOID,
   addPage,
+  applyWord,
   linkTargets,
   moveCard,
   newCard,
@@ -27,6 +29,8 @@ import {
   takeCard,
   targetsFor,
   updateCard,
+  wordKindFor,
+  wordsFor,
   type Card,
   type CardKind,
   type Page,
@@ -86,6 +90,12 @@ const ICONS: Record<CardKind, ReactNode> = {
   a: <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />,
   style: <path d="M18 3a3 3 0 0 1 3 3c0 2-3 5-7 9l-3-3c4-4 7-9 7-9zM10 13l3 3c-1 3-3 5-7 5 0-3 1-7 4-8z" />,
 };
+
+/** A picture from the site's artwork (public/art), used as a cue next to words. */
+function ArtPic({ code, size = 28 }: { code: string; size?: number }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={`/art/${code}.webp`} alt="" aria-hidden="true" draggable={false} className="shrink-0 select-none" style={{ width: size, height: size }} />;
+}
 
 function KindIcon({ kind, className = "h-6 w-6" }: { kind: CardKind; className?: string }) {
   return (
@@ -159,6 +169,8 @@ export default function HtmlBlocksApp() {
   const [dropAt, setDropAt] = useState<Target | null>(null);
   const [overPalette, setOverPalette] = useState(false);
   const [showCode, setShowCode] = useState(true);
+  const [bankFor, setBankFor] = useState<string | null>(null);
+  const [topic, setTopic] = useState<string>("me");
   const dragging = useRef<Dragging | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
@@ -343,6 +355,71 @@ export default function HtmlBlocksApp() {
     </span>
   );
 
+  const bankButton = (c: Card) =>
+    wordKindFor(c.kind) && (
+      <button
+        type="button"
+        onClick={() => setBankFor((id) => (id === c.id ? null : c.id))}
+        aria-expanded={bankFor === c.id}
+        aria-label="Word bank: choose words instead of typing"
+        title="Word bank: choose words instead of typing"
+        data-testid="open-word-bank"
+        className={`${ctl} border-2 ${bankFor === c.id ? "border-[#001432] bg-[#FFF4D6]" : "border-[#C9D2DE] bg-white"} hover:bg-[#FFF4D6]`}
+      >
+        <ArtPic code="1f4da" size={28} />
+      </button>
+    );
+
+  const wordBank = (c: Card) => {
+    const topics = wordsFor(c.kind);
+    const shown = topics.find((t) => t.id === topic) ?? topics[0];
+    if (!shown) return null;
+    return (
+      <div data-testid="word-bank" className="mt-2 rounded-xl border-2 border-[#E5D27A] bg-[#FFFBEA] p-2">
+        <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Word topics">
+          {topics.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={t.id === shown.id}
+              aria-label={t.name}
+              title={t.name}
+              onClick={() => setTopic(t.id)}
+              data-testid={`topic-${t.id}`}
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-sm font-bold ${t.id === shown.id ? "bg-[#001432] text-white" : "bg-white text-[#001432] hover:bg-black/5"} ${focusRing}`}
+            >
+              <ArtPic code={t.art} size={26} />
+              {words && t.name}
+            </button>
+          ))}
+          <button type="button" onClick={() => setBankFor(null)} aria-label="Close the word bank" title="Close" className={`${ctl} ml-auto text-[#586173] hover:bg-black/5`}>
+            <Icon name="x" className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label={`${shown.name} words`}>
+          {shown.words.map((x) => (
+            <button
+              key={x.text}
+              type="button"
+              onClick={() => setPage(updateCard(page, c.id, { text: applyWord(c, x.text) }))}
+              data-testid="bank-word"
+              className={`inline-flex min-h-11 items-center gap-2 rounded-lg border-2 border-[#C9D2DE] bg-white px-2 py-1 text-left text-[15px] font-semibold text-[#001432] hover:border-[#001432] ${focusRing}`}
+            >
+              <ArtPic code={x.art} size={words ? 28 : 36} />
+              {x.text}
+            </button>
+          ))}
+          {c.kind === "p" && (
+            <button type="button" onClick={() => setPage(updateCard(page, c.id, { text: "" }))} aria-label="Clear the words" title="Clear the words" className={`${ctl} border-2 border-[#C9D2DE] bg-white text-[#B91C1C]`}>
+              <Icon name="eraser" className="h-5 w-5" />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const textInput = (c: Card) => (
     <input
       value={c.text ?? ""}
@@ -352,6 +429,12 @@ export default function HtmlBlocksApp() {
       data-testid={`text-${c.kind}`}
       className={`h-11 min-w-0 flex-1 rounded-md border border-[#C9D2DE] bg-white px-2 text-[15px] text-[#001432] ${c.kind === "h1" ? "font-extrabold" : c.kind === "h2" ? "font-bold" : ""} ${focusRing}`}
     />
+  );
+  const textWithBank = (c: Card) => (
+    <>
+      {textInput(c)}
+      {bankButton(c)}
+    </>
   );
 
   const cardShell = (c: Card, body: ReactNode, zone: Target["zone"]) => (
@@ -373,6 +456,7 @@ export default function HtmlBlocksApp() {
         {words && <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-[#586173]">{CARD_LABELS[c.kind]}</span>}
         {body}
         {controls(c)}
+        {bankFor === c.id && <div className="basis-full">{wordBank(c)}</div>}
       </div>
     </div>
   );
@@ -387,7 +471,7 @@ export default function HtmlBlocksApp() {
           c,
           <>
             <Tag kind={c.kind} />
-            {textInput(c)}
+            {textWithBank(c)}
             <Tag kind={c.kind} close />
           </>,
           zone,
@@ -413,7 +497,7 @@ export default function HtmlBlocksApp() {
               </select>
               {"\">"}
             </span>
-            {textInput(c)}
+            {textWithBank(c)}
             <Tag kind="a" close />
           </>,
           zone,
@@ -425,8 +509,9 @@ export default function HtmlBlocksApp() {
             <span className="inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 font-mono text-[13px] font-bold text-white" style={{ background: OPEN }} title="opening tag (img has no closing tag)">
               {"<img>"}
             </span>
-            <span className="flex flex-wrap gap-1" role="radiogroup" aria-label="Which robot picture">
-              {ROBOTS.map((r) => (
+            <span className="flex flex-wrap items-center gap-1" role="radiogroup" aria-label="Picture bank: which picture">
+              {PICTURE_GROUPS.length > 1 && words && <span className="sr-only">Picture bank</span>}
+              {PICTURE_BANK.map((r) => (
                 <button
                   key={r.id}
                   type="button"

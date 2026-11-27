@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { OPEN_SETTINGS_EVENT, getConsent, setConsent } from "@/lib/consent";
+import { hidesCookieBanner } from "@/lib/childPages";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!getConsent()) setVisible(true);
@@ -23,7 +26,8 @@ export default function CookieBanner() {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  // Not on the tools, quizzes or workbooks (no analytics run there). The choice is untouched.
+  if (!visible || hidesCookieBanner(pathname)) return null;
 
   return (
     <div role="region" aria-label="Cookie choices" className="fixed bottom-0 left-0 right-0 z-50 bg-[#001532] text-white p-4 shadow-lg">

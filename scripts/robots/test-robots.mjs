@@ -31,7 +31,8 @@ const PROJECTS = {
 const LABS = { Explorers: 4, Builders: 4, Developers: 6, Engineers: 6 };
 for (const [program, projects] of Object.entries(PROJECTS)) {
   test(`${program}: ${LABS[program]} Robot Lab missions in each of S1 to S4 and the capstone`, () => {
-    const list = MISSIONS.filter((m) => m.program === program);
+    // Bonus missions go with a lab and don't take a class of their own.
+    const list = MISSIONS.filter((m) => m.program === program && !m.bonus);
     assert(list.length === LABS[program] * 5, `${list.length} missions`);
     SEMESTERS.forEach((sem, i) => {
       const found = list.filter((m) => m.semester === sem);
@@ -103,6 +104,9 @@ const WRONG = [
   ["dance-party", `display("Hi"); led("red"); beep(); turnLeft(360);`, /2 different light colours/],
   ["paint-a-square", `for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } beep();`, /pen down first/],
   ["paint-a-square", `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); }`, /Beep to show it/],
+  ["wave-code-lock", `wait(3); let n = 0; while (waved()) n++; if (n >= 2) { unlock(); forward(98); }`, /wrong number of waves/],
+  ["wave-code-lock", `for (let r = 0; r < 3; r++) { wait(3); let n = 0; while (waved()) n++; if (n === 3) { unlock(); forward(98); break; } else { display("Too few"); beep(); } }`, /Too many/],
+  ["wave-code-lock", `for (let r = 0; r < 3; r++) { wait(3); let n = 0; while (waved()) n++; if (n === 3) { unlock(); break; } else if (n < 3) { display("Too few"); beep(); } else { display("Too many"); beep(); } }`, /grab the chest/],
   ["wave-concert", `forward(55); play("C"); play("E"); play("G");`, /before the wave/],
   ["egg-hunt", `forward(95); beep();`, /counted 0 of 3 eggs/],
   ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(40);`, /spray/],
@@ -304,6 +308,25 @@ test("pictures: wave, pick up, object colour and repeat-until each have a differ
   const tb = RB.toolboxFor("icons");
   assert(tb.contents.every((c) => /rl-cat-icon/.test(c.cssconfig?.icon ?? "")), "category tabs are not pictures");
   assert(!RB.toolboxFor("words").contents.some((c) => c.cssconfig), "words mode changed");
+});
+
+test("Wave-code lock: an Engineers S1 bonus to lab 2; no other lab renumbered", () => {
+  const s1 = MISSIONS.filter((m) => m.program === "Engineers" && m.semester === "S1");
+  assert(s1.map((m) => `${m.id}:${m.lab}${m.bonus ? "+" : ""}`).join(" ") === "deck-read:1 cave-length:2 wave-code-lock:2+ dock-digit:3 beach-strong:4 fort-lockout:5 treasure-vault:6", s1.map((m) => m.id + ":" + m.lab).join(" "));
+  assert(missionById("wave-code-lock").title === "Wave-code lock", "title");
+});
+test("Wave-code lock: solved with blocks alone (nested if/else on waved(), unlock block)", () => {
+  const m = missionById("wave-code-lock");
+  const no = (text) => [blk("robot_display", { T: text }), blk("robot_beep")];
+  const ifElse = (thenList, elseList) => blk("robot_if_else", null, { COND: { block: blk("robot_sense", { S: "waved()" }) }, DO: { block: chain(thenList) }, ELSE: { block: chain(elseList) } });
+  const decide = ifElse([ifElse([ifElse([ifElse(no("Too many"), [blk("robot_unlock"), blk("robot_forward", { N: 98 })])], no("Too few"))], no("Too few"))], no("Too few"));
+  const program = ws(blk("robot_repeat", { N: 3 }, { DO: { block: chain([blk("robot_wait", { N: 3 }), decide]) } }));
+  const js = blocksToJs(program);
+  assert(/unlock\(\);/.test(js), js);
+  const { trace, error } = runJs(js, m.world);
+  assert(!error, error);
+  const r = m.check(trace, m.world);
+  assert(r.ok, r.message);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
