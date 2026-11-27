@@ -124,10 +124,12 @@ export type Picture = { id: string; file: string; alt: string; group: PictureCat
 
 /**
  * The picture bank: the only pictures a page can show. File names are what
- * the HTML text shows. Today it holds the built-in robots only. To add a
- * built-in picture later, add it to this one list (inline SVG, no uploads,
- * no outside links, never photos of children): every card, the saved-file
- * check and the tests read from here.
+ * the HTML text shows. It holds the 4 built-in robots (inline SVG) plus 247
+ * Fluent Emoji pictures (MIT, 256 px WebP in public/art, listed in
+ * pictures.ts) in five categories: Objects, Animals, Toys, Structures,
+ * Places. To add a picture, add its file to public/art and one line to
+ * pictures.ts (no uploads, no outside links, never photos of children):
+ * every card, the saved-file check and the tests read from here.
  */
 export const PICTURE_BANK: Picture[] = [
   { group: "Toys", id: "silver", file: "robot-silver.svg", alt: "A silver robot", svg: robotSvg("#9FB0C8", "#B8C4D6", "#D58401") },
