@@ -60,6 +60,18 @@ for (const path of ["/", "/programs/", "/ship-it/"]) {
     await context.close();
   });
 }
+for (const path of ["/quizzes/", "/workbooks/"]) {
+  await test(`Cookie settings still opens the banner on ${path}, and the choice saves`, async () => {
+    const { context, page } = await open(path);
+    assert(!(await banner(page).count()), "banner shown before asking");
+    await page.getByRole("button", { name: /cookie settings/i }).first().click();
+    await banner(page).waitFor({ timeout: 5000 });
+    await banner(page).getByRole("button", { name: "Essential only" }).click();
+    assert((await page.evaluate(() => localStorage.getItem("codeship-cookie-consent"))) === "essential", "choice not saved");
+    assert(!(await banner(page).count()), "banner stayed open");
+    await context.close();
+  });
+}
 await test("consent unchanged elsewhere: Accept all saves the choice and the banner stays closed after reload; Cookie settings reopens it", async () => {
   const { context, page } = await open("/");
   await banner(page).getByRole("button", { name: "Accept all" }).click();

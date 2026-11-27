@@ -7,11 +7,16 @@ import { hidesCookieBanner } from "@/lib/childPages";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  // Opened from a "Cookie settings" link: show it even on the child pages.
+  const [reopened, setReopened] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     if (!getConsent()) setVisible(true);
-    const reopen = () => setVisible(true);
+    const reopen = () => {
+      setReopened(true);
+      setVisible(true);
+    };
     window.addEventListener(OPEN_SETTINGS_EVENT, reopen);
     return () => window.removeEventListener(OPEN_SETTINGS_EVENT, reopen);
   }, []);
@@ -19,15 +24,18 @@ export default function CookieBanner() {
   const accept = () => {
     setConsent("all");
     setVisible(false);
+    setReopened(false);
   };
 
   const decline = () => {
     setConsent("essential");
     setVisible(false);
+    setReopened(false);
   };
 
-  // Not on the tools, quizzes or workbooks (no analytics run there). The choice is untouched.
-  if (!visible || hidesCookieBanner(pathname)) return null;
+  // Not shown by itself on the tools, quizzes or workbooks (no analytics run
+  // there; the choice is untouched), but "Cookie settings" still opens it.
+  if (!visible || (hidesCookieBanner(pathname) && !reopened)) return null;
 
   return (
     <div role="region" aria-label="Cookie choices" className="fixed bottom-0 left-0 right-0 z-50 bg-[#001532] text-white p-4 shadow-lg">

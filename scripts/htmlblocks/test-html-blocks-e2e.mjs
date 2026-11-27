@@ -115,6 +115,9 @@ await test("touch and keyboard: every card control is at least 44 px, and list i
   const lists = await page.evaluate(() => window.__htmlBlocks.project().pages[0].cards.filter((c) => c.kind === "ul").map((l) => l.items.length));
   assert(JSON.stringify(lists) === "[0,1]", JSON.stringify(lists));
   await page.getByTestId("set-labels").selectOption("icons");
+  await page.getByTestId("open-word-bank").first().click();
+  const smallIcons = await page.evaluate(() => [...document.querySelectorAll('[data-testid="body-zone"] button, [data-testid="style-zone"] button')].map((b) => b.getBoundingClientRect()).filter((r) => r.width < 44 || r.height < 44).length);
+  assert(smallIcons === 0, `pictures only: ${smallIcons} buttons under 44 px`);
   await shot(page, "html-blocks-s3-pictures");
 });
 

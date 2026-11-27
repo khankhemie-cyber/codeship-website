@@ -366,7 +366,7 @@ export default function HtmlBlocksApp() {
         data-testid="open-word-bank"
         className={`${ctl} border-2 ${bankFor === c.id ? "border-[#001432] bg-[#FFF4D6]" : "border-[#C9D2DE] bg-white"} hover:bg-[#FFF4D6]`}
       >
-        <ArtPic code="1f4da" size={28} />
+        <ArtPic code="1f4ac" size={28} />
       </button>
     );
 
@@ -387,7 +387,7 @@ export default function HtmlBlocksApp() {
               title={t.name}
               onClick={() => setTopic(t.id)}
               data-testid={`topic-${t.id}`}
-              className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-sm font-bold ${t.id === shown.id ? "bg-[#001432] text-white" : "bg-white text-[#001432] hover:bg-black/5"} ${focusRing}`}
+              className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-lg px-2 text-sm font-bold ${t.id === shown.id ? "bg-[#001432] text-white" : "bg-white text-[#001432] hover:bg-black/5"} ${focusRing}`}
             >
               <ArtPic code={t.art} size={26} />
               {words && t.name}
@@ -427,7 +427,7 @@ export default function HtmlBlocksApp() {
       onChange={(e) => setPage(updateCard(page, c.id, { text: e.target.value }))}
       aria-label={`${CARD_LABELS[c.kind]} words`}
       data-testid={`text-${c.kind}`}
-      className={`h-11 min-w-0 flex-1 rounded-md border border-[#C9D2DE] bg-white px-2 text-[15px] text-[#001432] ${c.kind === "h1" ? "font-extrabold" : c.kind === "h2" ? "font-bold" : ""} ${focusRing}`}
+      className={`h-11 ${c.kind === "p" ? "min-w-[14rem]" : "min-w-[11rem]"} flex-1 rounded-md border border-[#C9D2DE] bg-white px-2 text-[15px] text-[#001432] ${c.kind === "h1" ? "font-extrabold" : c.kind === "h2" ? "font-bold" : ""} ${focusRing}`}
     />
   );
   const textWithBank = (c: Card) => (

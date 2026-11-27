@@ -164,6 +164,13 @@ test("word bank: six topics, every word has a picture that exists in public/art,
   eq(M.wordsFor("img"), [], "no words for pictures");
   eq(M.wordsFor("style"), [], "no words for style");
 });
+test("word bank: no two words of the same kind in one topic share a picture", () => {
+  for (const t of M.WORD_BANK) for (const kind of ["heading", "sentence", "item", "link"]) {
+    const arts = t.words.filter((x) => x.kinds.includes(kind)).map((x) => x.art);
+    const dup = arts.find((a, i) => arts.indexOf(a) !== i);
+    assert(!dup, `${t.name} ${kind}s share picture ${dup}`);
+  }
+});
 test("word bank: tapping fills a card; paragraph sentences add up (two facts), within the length limit", () => {
   eq(M.applyWord(card("h1", { text: "My page" }), "All About Me"), "All About Me", "heading replaced");
   const p = card("p");
