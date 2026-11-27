@@ -30,9 +30,9 @@ export const REFERENCE: RefEntry[] = [
   { group: "Sense", js: "itemColour()", py: "item_colour()", does: 'Colour of the object in front, or "none".' },
   { group: "Sense", js: "temperature()", py: "temperature()", does: "Temperature under the robot, in °C." },
   { group: "Sense", js: "power()", py: "power()", does: "Watts the solar farm makes right now." },
-  { group: "Sense", js: "clapped()", py: "clapped()", does: "true once for each clap that has happened." },
+  { group: "Sense", js: "waved()", py: "waved()", does: "true once for each hand wave in front of the robot. Count them!" },
   { group: "Sense", js: "nextCode()", py: "next_code()", does: 'The next passcode a visitor types, or "" when nobody is left.' },
   { group: "Sense", js: "nextMessage()", py: "next_message()", does: 'The next chat message sent to the robot, or "" at the end.' },
   { group: "Wait", js: "wait(seconds)", py: "wait(seconds)", does: "Pause." },
-  { group: "Wait", js: "waitForClap()", py: "wait_for_clap()", does: "Pause until someone claps." },
+  { group: "Wait", js: "waitForWave()", py: "wait_for_wave()", does: "Pause until someone waves a hand in front of the robot." },
 ];

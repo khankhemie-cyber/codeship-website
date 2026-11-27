@@ -6,7 +6,7 @@ import { LAB_JS } from "./lab-solutions.mjs";
 export const JS = {
   ...LAB_JS,
   "egg-hunt": `forward(20); beep(); forward(20); beep(); forward(20); beep(); forward(35);`,
-  "clap-concert": `waitForClap(); forward(55); play("C"); play("E"); play("G");`,
+  "wave-concert": `waitForWave(); forward(55); play("C"); play("E"); play("G");`,
   "coral-reef": `while (!obstacle()) { forward(2); } drop(); led("green");`,
   "snowy-igloo": `forward(50); turnLeft(90); forward(55); turnRight(90); forward(45);`,
   "paint-a-square": `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } penUp(); beep();`,

@@ -31,7 +31,8 @@ const PROJECTS = {
 const LABS = { Explorers: 4, Builders: 4, Developers: 6, Engineers: 6 };
 for (const [program, projects] of Object.entries(PROJECTS)) {
   test(`${program}: ${LABS[program]} Robot Lab missions in each of S1 to S4 and the capstone`, () => {
-    const list = MISSIONS.filter((m) => m.program === program);
+    // Bonus missions go with a lab and don't take a class of their own.
+    const list = MISSIONS.filter((m) => m.program === program && !m.bonus);
     assert(list.length === LABS[program] * 5, `${list.length} missions`);
     SEMESTERS.forEach((sem, i) => {
       const found = list.filter((m) => m.semester === sem);
@@ -103,7 +104,10 @@ const WRONG = [
   ["dance-party", `display("Hi"); led("red"); beep(); turnLeft(360);`, /2 different light colours/],
   ["paint-a-square", `for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); } beep();`, /pen down first/],
   ["paint-a-square", `penDown("red"); for (let i = 0; i < 4; i++) { forward(30); turnLeft(90); }`, /Beep to show it/],
-  ["clap-concert", `forward(55); play("C"); play("E"); play("G");`, /before the clap/],
+  ["wave-code-lock", `wait(3); let n = 0; while (waved()) n++; if (n >= 2) { unlock(); forward(98); }`, /wrong number of waves/],
+  ["wave-code-lock", `for (let r = 0; r < 3; r++) { wait(3); let n = 0; while (waved()) n++; if (n === 3) { unlock(); forward(98); break; } else { display("Too few"); beep(); } }`, /Too many/],
+  ["wave-code-lock", `for (let r = 0; r < 3; r++) { wait(3); let n = 0; while (waved()) n++; if (n === 3) { unlock(); break; } else if (n < 3) { display("Too few"); beep(); } else { display("Too many"); beep(); } }`, /grab the chest/],
+  ["wave-concert", `forward(55); play("C"); play("E"); play("G");`, /before the wave/],
   ["egg-hunt", `forward(95); beep();`, /counted 0 of 3 eggs/],
   ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(40);`, /spray/],
   ["fire-rescue", `beep(); forward(85); turnLeft(90); forward(80);`, /bumped the building/],
@@ -130,7 +134,7 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
   const f = (N) => blk("robot_forward", { N }), L = (N) => blk("robot_turn_left", { N }), R = (N) => blk("robot_turn_right", { N });
   const STACKS = {
     "egg-hunt": [f(20), blk("robot_beep"), f(20), blk("robot_beep"), f(20), blk("robot_beep"), f(35)],
-    "clap-concert": [blk("robot_wait_clap"), f(55), blk("robot_play", { N: "C" }), blk("robot_play", { N: "E" }), blk("robot_play", { N: "G" })],
+    "wave-concert": [blk("robot_wait_wave"), f(55), blk("robot_play", { N: "C" }), blk("robot_play", { N: "E" }), blk("robot_play", { N: "G" })],
     "coral-reef": [blk("robot_until", null, { COND: { block: blk("robot_sense", { S: "obstacle()" }) }, DO: { block: f(2) } }), blk("robot_drop"), blk("robot_led", { C: "green" })],
     "snowy-igloo": [f(50), L(90), f(55), R(90), f(45)],
     "paint-a-square": [blk("robot_pen_down", { C: "red" }), blk("robot_repeat", { N: 4 }, { DO: { block: chain([f(30), L(90)]) } }), blk("robot_pen_up"), blk("robot_beep")],
@@ -148,7 +152,7 @@ test("blocks: every Explorers and Builders level can be solved with blocks", () 
     assert(r.ok, `${id}: ${r.message}`);
   }
   // The other Explorers and Builders missions: their reference solution only uses what blocks can make.
-  const BLOCK_CALLS = new Set(["forward", "backward", "turnLeft", "turnRight", "setSpeed", "pickUp", "drop", "beep", "play", "led", "display", "penDown", "penUp", "spray", "record", "wait", "waitForClap", "obstacle", "lineLeft", "lineRight", "onLine", "light", "clapped", "distance", "colour", "itemColour", "temperature", "power"]);
+  const BLOCK_CALLS = new Set(["forward", "backward", "turnLeft", "turnRight", "setSpeed", "pickUp", "drop", "beep", "play", "led", "display", "penDown", "penUp", "spray", "record", "wait", "waitForWave", "obstacle", "lineLeft", "lineRight", "onLine", "light", "waved", "distance", "colour", "itemColour", "temperature", "power"]);
   for (const m of MISSIONS.filter((x) => (x.program === "Explorers" || x.program === "Builders") && !STACKS[x.id])) {
     const calls = [...JS[m.id].matchAll(/([A-Za-z_]\w*)\s*\(/g)].map((x) => x[1]).filter((n) => n !== "for" && n !== "while" && n !== "if");
     const bad = calls.filter((n) => !BLOCK_CALLS.has(n));
@@ -221,6 +225,108 @@ test("line follower goes round the Free build oval", () => {
   const f = trace.frames.at(-1);
   assert(onLineFrames / trace.frames.length > 0.9, `stayed near line ${Math.round(100 * onLineFrames / trace.frames.length)}%`);
   assert(trace.stats.distance > 150, `only drove ${trace.stats.distance}`);
+});
+
+
+// Curriculum v1.2 (CEO, 2026-11-26): the clap is replaced by a hand wave (Edison obstacle sensor).
+const { BLOCK_DEFS, withIcons, migrateWorkspace, migrateCode } = await import("../../src/components/tools/robots/robotBlocks.ts");
+const { REFERENCE } = await import("../../src/components/tools/robots/reference.ts");
+const { PYTHON_NAMES } = await import("../../src/components/tools/robots/sim.ts");
+const waveWorld = (waves) => ({ ...missionById("sandbox").world, waves });
+test("wave: waitForWave() waits for the wave, then the program carries on", () => {
+  const { trace, error } = runJs("waitForWave(); beep();", waveWorld([2]));
+  assert(!error, error);
+  const beep = trace.sounds.find((x) => x.kind === "beep");
+  assert(beep && beep.t >= 1.999, `beeped at ${beep?.t}`);
+  assert(trace.sounds.some((x) => x.kind === "wave" && x.t === 2), "wave event not on the timeline");
+});
+test("wave: waitForWave() with nobody waving gives false and does not hang", () => {
+  const { trace, error } = runJs("console.log(waitForWave());", waveWorld([]));
+  assert(!error && trace.log[0].text === "false", error ?? trace.log[0]?.text);
+});
+test("wave: waved() counts waves, so if / elif / else can act on the count (wave-count code)", () => {
+  const code = `wait(3); let n = 0; while (waved()) n++; if (n === 3) { unlock(); } else if (n === 2) { beep(); } else { display("Locked"); }`;
+  const open = runJs(code, waveWorld([0.5, 1, 1.5])).trace;
+  assert(open.stats.unlocks.length === 1, "3 waves should unlock");
+  const two = runJs(code, waveWorld([0.5, 1])).trace;
+  assert(!two.stats.unlocks.length && two.stats.beeps === 1, "2 waves should beep");
+  const one = runJs(code, waveWorld([1])).trace;
+  assert(!one.stats.unlocks.length && one.frames.some((f) => f.display === "Locked"), "1 wave should stay locked");
+});
+test("wave: JS and Python names match (waitForWave / wait_for_wave, waved / waved)", () => {
+  assert(PYTHON_NAMES.wait_for_wave === "waitForWave" && PYTHON_NAMES.waved === "waved", JSON.stringify(PYTHON_NAMES));
+  assert(!Object.keys(PYTHON_NAMES).some((k) => /clap/i.test(k)), "a clap name is still in the Python API");
+});
+test("wave: no clap left in student-facing text (missions, reference, blocks)", () => {
+  const text = JSON.stringify([MISSIONS.map((m) => [m.id, m.title, m.goal, m.hint, m.story, m.starter]), REFERENCE, BLOCK_DEFS]);
+  assert(!/clap/i.test(text), `found: ${text.match(/.{30}clap.{30}/i)?.[0]}`);
+  assert(missionById("wave-concert").title === "Wave-start concert", "Explorers S2 challenge not renamed");
+});
+test("wave: an old clap program still opens and runs (blocks and code are migrated)", () => {
+  const old = ws(blk("robot_wait_clap"), blk("robot_if", null, { COND: { block: blk("robot_sense", { S: "clapped()" }) }, DO: { block: blk("robot_beep") } }));
+  const js = blocksToJs(old);
+  assert(/waitForWave\(\);/.test(js) && /if \(waved\(\)\)/.test(js), js);
+  assert(!/clap/.test(JSON.stringify(migrateWorkspace(old))), "workspace not migrated");
+  assert(migrateCode("waitForClap();\nwait_for_clap()\nif clapped(): beep()") === "waitForWave();\nwait_for_wave()\nif waved(): beep()", "code not migrated");
+  const hint = runJs("waitForClap();", waveWorld([1])).error;
+  assert(/Did you mean waitForWave\(\)\?/.test(hint) && !/clap/i.test(hint.replace("waitForClap", "")), hint);
+});
+
+// Pictures-only labels, like CODEship Blocks.
+test("pictures only: every block with a picture loses its words but keeps every field", () => {
+  const words = withIcons(BLOCK_DEFS, "words"), icons = withIcons(BLOCK_DEFS, "icons");
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i], p = icons[i];
+    const argCount = (d) => (String(d.message0).match(/%\d+/g) ?? []).length;
+    assert(argCount(w) === argCount(p) && argCount(p) === (p.args0 ?? []).length, `${p.type}: fields changed`);
+    const fieldNames = (d) => (d.args0 ?? []).map((a) => a.name ?? a.type).join(",");
+    assert(fieldNames(w) === fieldNames(p), `${p.type}: field names differ`);
+    const firstIsPicture = p.args0?.[0]?.type === "field_image";
+    if (firstIsPicture) assert(!/[A-Za-z]/.test(String(p.message0)), `${p.type}: words left: ${p.message0}`);
+    assert(p.tooltip, `${p.type}: no tooltip for the adult`);
+    // Dropdown values never change, so saved work opens in either mode.
+    for (let k = 0; k < (w.args0 ?? []).length; k++) {
+      if (w.args0[k].type !== "field_dropdown") continue;
+      assert(JSON.stringify(w.args0[k].options.map((o) => o[1])) === JSON.stringify(p.args0[k].options.map((o) => o[1])), `${p.type}: dropdown values changed`);
+    }
+  }
+  const sense = icons.find((d) => d.type === "robot_sense").args0[1];
+  assert(sense.options.every((o) => typeof o[0] === "object" && o[0].src.startsWith("data:image/svg+xml")), "sense options are not pictures");
+  const led = icons.find((d) => d.type === "robot_led").args0[1];
+  assert(led.options.every((o) => typeof o[0] === "object"), "light colours are not swatches");
+  assert(icons.find((d) => d.type === "robot_if_else").message2 === "else", "else arm label lost");
+});
+
+const RB = await import("../../src/components/tools/robots/robotBlocks.ts");
+test("pictures: wave, pick up, object colour and repeat-until each have a different picture", () => {
+  const icons = RB.withIcons(RB.BLOCK_DEFS, "icons");
+  const pic = (type) => icons.find((d) => d.type === type).args0[0].src;
+  const pics = ["robot_wait_wave", "robot_pick_up", "robot_until", "robot_repeat"].map(pic);
+  assert(new Set(pics).size === pics.length, "two blocks share a picture");
+  const sense = icons.find((d) => d.type === "robot_colour_is").args0[0].options.map((o) => o[0].src);
+  assert(!pics.includes(sense[1]) && sense[0] !== sense[1], "object colour reuses a picture");
+  const tb = RB.toolboxFor("icons");
+  assert(tb.contents.every((c) => /rl-cat-icon/.test(c.cssconfig?.icon ?? "")), "category tabs are not pictures");
+  assert(!RB.toolboxFor("words").contents.some((c) => c.cssconfig), "words mode changed");
+});
+
+test("Wave-code lock: an Engineers S1 bonus to lab 2; no other lab renumbered", () => {
+  const s1 = MISSIONS.filter((m) => m.program === "Engineers" && m.semester === "S1");
+  assert(s1.map((m) => `${m.id}:${m.lab}${m.bonus ? "+" : ""}`).join(" ") === "deck-read:1 cave-length:2 wave-code-lock:2+ dock-digit:3 beach-strong:4 fort-lockout:5 treasure-vault:6", s1.map((m) => m.id + ":" + m.lab).join(" "));
+  assert(missionById("wave-code-lock").title === "Wave-code lock", "title");
+});
+test("Wave-code lock: solved with blocks alone (nested if/else on waved(), unlock block)", () => {
+  const m = missionById("wave-code-lock");
+  const no = (text) => [blk("robot_display", { T: text }), blk("robot_beep")];
+  const ifElse = (thenList, elseList) => blk("robot_if_else", null, { COND: { block: blk("robot_sense", { S: "waved()" }) }, DO: { block: chain(thenList) }, ELSE: { block: chain(elseList) } });
+  const decide = ifElse([ifElse([ifElse([ifElse(no("Too many"), [blk("robot_unlock"), blk("robot_forward", { N: 98 })])], no("Too few"))], no("Too few"))], no("Too few"));
+  const program = ws(blk("robot_repeat", { N: 3 }, { DO: { block: chain([blk("robot_wait", { N: 3 }), decide]) } }));
+  const js = blocksToJs(program);
+  assert(/unlock\(\);/.test(js), js);
+  const { trace, error } = runJs(js, m.world);
+  assert(!error, error);
+  const r = m.check(trace, m.world);
+  assert(r.ok, r.message);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

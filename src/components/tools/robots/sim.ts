@@ -47,8 +47,12 @@ export type World = {
   /** Room light, 0 (dark) to 100 (bright). */
   light: number;
   lightZones: LightZone[];
-  /** Seconds (from the start of the run) when a friend claps. */
-  claps: number[];
+  /**
+   * Seconds (from the start of the run) when a friend waves a hand in front
+   * of the robot. Curriculum v1.2: the wave replaces the clap, like the
+   * Edison obstacle sensor detecting a hand.
+   */
+  waves: number[];
   /** Passcodes visitors type, in order (next_code() hands them out one at a time). */
   codes?: string[];
   /** Chat messages a person sends the robot, in order (next_message()). */
@@ -109,7 +113,7 @@ export type Frame = {
 
 export type LogLine = { t: number; text: string };
 export type DataRow = { t: number; name: string; value: number | string };
-export type SoundEvent = { t: number; kind: "beep" | "clap" | "note" | "launch" | "spray" | "toss" | "photo" | "unlock" | "collect"; note?: Note };
+export type SoundEvent = { t: number; kind: "beep" | "wave" | "note" | "launch" | "spray" | "toss" | "photo" | "unlock" | "collect"; note?: Note };
 
 export type RunStats = {
   distance: number;
@@ -268,7 +272,7 @@ export class Sim {
   unlocked = false;
   photoAt = -1;
   private stillSince = 0;
-  private clapsHeard = 0;
+  private wavesSeen = 0;
   private rand: () => number;
   readonly radius: number;
 
@@ -281,7 +285,7 @@ export class Sim {
     this.radius = ROBOT_RADIUS[world.robot];
     this.rand = mulberry32(20270112);
     if (world.startCarrying) this.carrying = world.startCarrying;
-    for (const c of world.claps) this.sounds.push({ t: c, kind: "clap" });
+    for (const w of world.waves ?? []) this.sounds.push({ t: w, kind: "wave" });
     this.snap();
   }
 
@@ -653,15 +657,15 @@ export class Sim {
     this.wait(0.5);
   }
 
-  /** Wait until the next clap. Returns false (after a short wait) if nobody claps again. */
-  waitForClap(): boolean {
-    const next = this.world.claps[this.clapsHeard];
+  /** Wait until the next wave. Returns false (after a short wait) if nobody waves again. */
+  waitForWave(): boolean {
+    const next = (this.world.waves ?? [])[this.wavesSeen];
     if (next === undefined) {
       this.wait(1);
       return false;
     }
     if (next > this.t) this.wait(next - this.t);
-    this.clapsHeard++;
+    this.wavesSeen++;
     return true;
   }
 
@@ -685,12 +689,12 @@ export class Sim {
     return list[i];
   }
 
-  /** True once for each clap that has happened since the last check. */
-  clapped(): boolean {
+  /** True once for each wave that has happened since the last check (so waves can be counted). */
+  waved(): boolean {
     this.tick(0.02);
-    const next = this.world.claps[this.clapsHeard];
+    const next = (this.world.waves ?? [])[this.wavesSeen];
     if (next !== undefined && next <= this.t) {
-      this.clapsHeard++;
+      this.wavesSeen++;
       return true;
     }
     return false;
@@ -756,8 +760,8 @@ export function robotApi(sim: Sim) {
     beep: () => s.beep(),
     pickUp: () => s.pickUp(),
     drop: () => s.drop(),
-    waitForClap: () => s.waitForClap(),
-    clapped: () => s.clapped(),
+    waitForWave: () => s.waitForWave(),
+    waved: () => s.waved(),
     lineLeft: () => s.read("lineLeft"),
     lineRight: () => s.read("lineRight"),
     onLine: () => s.read("onLine"),
@@ -798,8 +802,8 @@ export const PYTHON_NAMES: Record<string, keyof RobotApi> = {
   beep: "beep",
   pick_up: "pickUp",
   drop: "drop",
-  wait_for_clap: "waitForClap",
-  clapped: "clapped",
+  wait_for_wave: "waitForWave",
+  waved: "waved",
   line_left: "lineLeft",
   line_right: "lineRight",
   on_line: "onLine",

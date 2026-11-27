@@ -124,7 +124,7 @@ export const EXPLORER_LABS: Mission[] = [
     starter: blank("Sing hello"),
   }),
   ES2(2, {
-    id: "gym-clap",
+    id: "gym-steps",
     title: "Musical stepping stones",
     story: { who: "Coach Kim", face: "🏃‍♀️", says: "These coloured spots are magic: each one makes music! Stop on each spot and play its note. Red is C, yellow is E, blue is G." },
     goal: "Drive to each spot and play its note: C on red, E on yellow, G on blue.",
@@ -157,13 +157,13 @@ export const EXPLORER_LABS: Mission[] = [
   ES2(3, {
     id: "party-surprise",
     title: "Surprise party",
-    story: { who: "Lulu the bunny", face: "🐰", says: "Shh! It's Grandpa Bear's birthday. When he walks in, everyone claps. Then flash your lights and beep: SURPRISE!" },
-    goal: "Wait for the clap. Then flash 2 light colours and beep.",
-    hint: "wait for a clap, light, light (a different colour), beep.",
+    story: { who: "Lulu the bunny", face: "🐰", says: "Shh! It's Grandpa Bear's birthday. When he walks in, I'll wave my paw in front of your robot. Then flash your lights and beep: SURPRISE!" },
+    goal: "Wait for the wave. Then flash 2 light colours and beep.",
+    hint: "wait for a wave, light, light (a different colour), beep.",
     scene: { theme: "party", decor: [{ kind: "balloon", x: 12, y: 10, colour: "#EC407A" }, { kind: "balloon", x: 22, y: 8, colour: "#42A5F5" }, { kind: "balloon", x: 84, y: 12, colour: "#FFCA28" }, { kind: "balloon", x: 92, y: 9, colour: "#66BB6A" }] },
-    world: base({ w: 100, h: 50, robot: "scout", start: { x: 50, y: 28, heading: 90 }, claps: [2.5] }),
+    world: base({ w: 100, h: 50, robot: "scout", start: { x: 50, y: 28, heading: 90 }, waves: [2.5] }),
     check(trace) {
-      if (trace.frames.some((f) => f.t < 2.49 && f.led !== "off") || firstSoundAt(trace) < 2.49) return notYet("Oops, the surprise started too early! Wait for the clap.");
+      if (trace.frames.some((f) => f.t < 2.49 && f.led !== "off") || firstSoundAt(trace) < 2.49) return notYet("Oops, the surprise started too early! Wait for the wave.");
       const colours = new Set(trace.frames.filter((f) => f.led !== "off").map((f) => f.led));
       if (colours.size < 2) return notYet(`Flash 2 different colours. You used ${colours.size}.`);
       if (!trace.stats.beeps) return notYet("Now beep: SURPRISE!");
@@ -1105,6 +1105,12 @@ const vaultCheck = (strongAt: number, win: string) => (trace: Trace) => {
   if (!trace.stats.collected.length) return notYet("The door is open. Drive in and grab the chest.");
   return pass(win);
 };
+/** Wave-code lock: when each crew member waves (2, then 4, then 3 waves), 3 seconds apart. */
+export const WAVE_ROUNDS = [
+  [0.6, 1.2],
+  [3.6, 4.2, 4.8, 5.4],
+  [7.4, 8.0, 8.6],
+];
 const vaultStarter = starter("Passcodes", "const code = nextCode();\nconsole.log(code);\n", "code = next_code()\nprint(code)\n");
 
 const crates: Zone[] = [
@@ -1158,6 +1164,32 @@ export const ENGINEER_LABS: Mission[] = [
     world: vaultWorld(["sunny", "treasure-map-key"], "far"),
     check: vaultCheck(2, "Short one rejected, long one accepted. Rule 1 works!"),
     starter: vaultStarter,
+  }),
+  GS1(2, {
+    // Curriculum v1.2 (CEO, 2026-11-27): the online match for the real-kit
+    // Edison wave-code lock (counted input + if / elif / else). A bonus to
+    // lab 2, so no other lab is renumbered.
+    id: "wave-code-lock",
+    bonus: true,
+    title: "Wave-code lock",
+    story: { who: "Captain Mira", face: "⚓", says: "New lock on the map room: no typing, just waves in front of its sensor. The secret code is exactly 3 waves. Three crew members try, one every 3 seconds. Count each one's waves. 3 opens the door. Fewer: show Too few. More: show Too many." },
+    goal: 'Every 3 seconds, count the waves with waved(). Exactly 3: unlock() and grab the chest. Fewer: display "Too few" and beep. More: display "Too many" and beep.',
+    hint: "Loop 3 times: wait(3), count with while waved(): waves += 1, then if waves == 3 ... elif waves < 3 ... else ...",
+    scene: { theme: "deck", decor: [{ kind: "barrel", x: 15, y: 10 }, { kind: "barrel", x: 22, y: 60 }, { kind: "lamp", x: 60, y: 8 }] },
+    world: { ...vaultWorld([]), waves: WAVE_ROUNDS.flat() },
+    check(trace) {
+      const un = trace.stats.unlocks;
+      const lastWave = WAVE_ROUNDS[2][WAVE_ROUNDS[2].length - 1];
+      if (un.some((u) => u.t < lastWave)) return notYet("The door opened for the wrong number of waves! Only unlock() when you count exactly 3.");
+      const shown = trace.frames.map((f) => f.display);
+      if (!shown.some((d) => /few/i.test(d))) return notYet('Crew member 1 waved 2 times. Show "Too few" and beep.');
+      if (!shown.some((d) => /many/i.test(d))) return notYet('Crew member 2 waved 4 times. Show "Too many" and beep. That needs an elif (or else if).');
+      if (trace.stats.beeps < 2) return notYet("Beep for each wrong wave code.");
+      if (!un.length) return notYet("Crew member 3 waved 3 times. That's the code: unlock() the door.");
+      if (!trace.stats.collected.length) return notYet("The door is open. Drive in and grab the chest.");
+      return pass("2 is too few, 4 is too many, 3 is just right. Your wave lock works like the real Edison one.");
+    },
+    starter: starter("Wave-code lock", "wait(3);\nlet waves = 0;\nwhile (waved()) waves++;\nconsole.log(waves);\n", "wait(3)\nwaves = 0\nwhile waved():\n    waves += 1\nprint(waves)\n"),
   }),
   GS1(3, {
     id: "dock-digit",

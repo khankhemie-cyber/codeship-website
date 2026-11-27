@@ -8,6 +8,7 @@ import type { LabelMode } from "./blockDefs";
 import type { EditorApi } from "./BlocksEditor";
 import { BACKGROUNDS, COSTUMES, costumeUrl } from "./costumes";
 import { Engine } from "./engine";
+import { WAVE_SVG_BODY } from "../shared/waveIcon";
 import { createProjectLink, downloadProject, projectFileName, readAutosave, readProjectFile, readProjectLink, writeAutosave } from "./files";
 import { STRINGS, type UiLang } from "./i18n";
 import { GRID_COLS, GRID_ROWS, newId, emptyScripts, starterProject, type Project, type Recording, type Scripts } from "./model";
@@ -21,7 +22,7 @@ import Stage from "./Stage";
  * all saving, typing and settings.
  *
  * See model.ts (project format), engine.ts (how blocks run), files.ts
- * (where work lives) and blockDefs.ts (the twenty blocks).
+ * (where work lives) and blockDefs.ts (the twenty-one blocks).
  */
 
 const BlocksEditor = dynamic(() => import("./BlocksEditor"), {
@@ -398,6 +399,10 @@ export default function BlocksApp() {
     stopAllSounds();
     engine?.greenFlag();
   };
+  const onWave = () => {
+    unlockAudio();
+    engine?.wave();
+  };
   const onStop = () => {
     stopAllSounds();
     engine?.stopAll();
@@ -526,6 +531,19 @@ export default function BlocksApp() {
             <path d="M5 3h13l-3 4.5 3 4.5H5z" fill="#fff" stroke="#010F2A" strokeWidth="1.8" strokeLinejoin="round" />
           </svg>
         </button>
+        {(settings.semester === 0 || settings.semester >= 2) && (
+          <button
+            type="button"
+            onClick={onWave}
+            title={s.wave}
+            aria-label={s.wave}
+            data-testid="wave"
+            className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#D58401] shadow active:translate-y-px ${focusRing}`}
+          >
+            {/* Same picture as the Start on Wave block (shared/waveIcon.ts). */}
+            <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden="true" fill="none" stroke="#010F2A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: WAVE_SVG_BODY }} />
+          </button>
+        )}
         <button
           type="button"
           onClick={onStop}

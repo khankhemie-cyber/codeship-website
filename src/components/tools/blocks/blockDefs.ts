@@ -1,7 +1,12 @@
 /**
- * The twenty Explorers blocks, defined for Blockly. This is the complete
+ * The twenty-one Explorers blocks, defined for Blockly. This is the complete
  * vocabulary for all four semesters: do not add blocks here without the
  * curriculum changing first.
+ *
+ * Curriculum v1.2 (CEO approved, 2026-11-26): "Start on Wave" (start_wave)
+ * was added. The hand wave replaces the clap as the start trigger, matching
+ * the Edison obstacle sensor used in the Robot Labs. On screen, the wave is
+ * the hand button next to the green flag. No camera or microphone is used.
  *
  * Every block is identified by its PICTURE and its colour group; the words
  * are an adult label and disappear in "pictures only" mode. Numbers, pages
@@ -15,6 +20,7 @@
 import * as Blockly from "blockly/core";
 import { MESSAGE_COLOURS } from "./model";
 import { blockLabel, blockTooltip, type BlockType, type UiLang } from "./i18n";
+import { WAVE_SVG_BODY } from "../shared/waveIcon";
 
 export type LabelMode = "words" | "icons";
 
@@ -47,6 +53,7 @@ export const BLOCKS: Def[] = [
   { type: "start_flag", group: "start", semester: 1, icon: "flag" },
   { type: "start_bump", group: "start", semester: 3, icon: "bump" },
   { type: "start_message", group: "start", semester: 4, icon: "envelope" },
+  { type: "start_wave", group: "start", semester: 2, icon: "wave" },
   { type: "move_right", group: "move", semester: 1, icon: "right" },
   { type: "move_left", group: "move", semester: 1, icon: "left" },
   { type: "move_up", group: "move", semester: 1, icon: "up" },
@@ -65,7 +72,7 @@ export const BLOCKS: Def[] = [
   { type: "send_message", group: "control", semester: 4, icon: "send" },
 ];
 
-export const HAT_TYPES = new Set<string>(["start_tap", "start_flag", "start_bump", "start_message"]);
+export const HAT_TYPES = new Set<string>(["start_tap", "start_flag", "start_bump", "start_message", "start_wave"]);
 
 // ── Pictures (24x24 strokes, drawn in the block's text colour) ──
 
@@ -75,6 +82,8 @@ const ICON_PATHS: Record<string, (c: string) => string> = {
   flag: () => `<path d="M5 22V3" stroke="#010F2A" stroke-width="2.4" stroke-linecap="round"/><path d="M5 3h13l-3 4.5 3 4.5H5z" fill="#2EB84B" stroke="#010F2A" stroke-width="1.8" stroke-linejoin="round"/>`,
   bump: (c) =>
     `<rect x="1.5" y="8" width="8" height="8" rx="1.5" fill="none" stroke="${c}" stroke-width="2"/><rect x="14.5" y="8" width="8" height="8" rx="1.5" fill="none" stroke="${c}" stroke-width="2"/><path d="M12 3v3M12 18v3M9.5 5l1 1.5M14.5 5l-1 1.5M9.5 19l1-1.5M14.5 19l-1-1.5" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>`,
+  // A hand waving at the sensor (shared with Robot Lab), so it never looks like Tap's pointing finger.
+  wave: (c) => `<g fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${WAVE_SVG_BODY}</g>`,
   envelope: (c) => `<rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="${c}" stroke-width="2"/><path d="m3 6 9 7 9-7" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`,
   send: (c) => `<path d="M3 11.5 21 3l-6 18-3.5-7.5z" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/><path d="M11.5 13.5 21 3" stroke="${c}" stroke-width="2"/>`,
   right: (c) => `<path d="M3 12h16m-6-6.5L19.5 12 13 18.5" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
@@ -207,7 +216,7 @@ export function blockTheme() {
 
 /**
  * The palette, in colour groups, limited to blocks taught up to `semester`
- * (0 = all twenty), or to exactly `only` (a level's palette).
+ * (0 = all of them), or to exactly `only` (a level's palette).
  */
 export function toolboxFor(semester: number, only?: readonly string[]): Blockly.utils.toolbox.ToolboxDefinition {
   const groups: Group[] = ["start", "move", "say", "fun", "control"];

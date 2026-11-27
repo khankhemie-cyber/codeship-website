@@ -32,6 +32,7 @@ const HANDLERS: Record<string, string> = {
   start_tap: "whenTapped",
   start_bump: "whenBumped",
   start_message: "whenMessageReceived",
+  start_wave: "whenWaved",
 };
 
 const LOOP_VARS = ["i", "j", "k", "m", "n"];

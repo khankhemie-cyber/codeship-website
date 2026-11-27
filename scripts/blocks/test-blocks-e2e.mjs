@@ -148,13 +148,18 @@ await test("2. Record: record, stop, play, re-record with no warning; Save → O
   await openProject(page, p);
   await page.getByTestId("page-tab-2").click();
   await page.locator(".blocklySvg .blocklyBlockCanvas").getByText("Record", { exact: true }).click();
+  // Watch the meter in the page itself (every change, not samples every 100 ms),
+  // and wait for recording to really start: on a slow CI runner the fake
+  // microphone can take more than 2 s (getUserMedia, then ~0.5 s of silence
+  // before its tone), which made a fixed 2 s window flaky. The assertion is
+  // unchanged: the meter must move while recording.
+  await page.getByTestId("rec-level").evaluate((el) => {
+    window.__maxLevel = 0;
+    new MutationObserver(() => (window.__maxLevel = Math.max(window.__maxLevel, parseFloat(el.style.width) || 0))).observe(el, { attributes: true, attributeFilter: ["style"] });
+  });
   await page.getByTestId("rec-record").click();
-  let level = 0;
-  for (let i = 0; i < 20; i++) {
-    level = Math.max(level, await page.getByTestId("rec-level").evaluate((el) => parseFloat(el.style.width)));
-    await page.waitForTimeout(100);
-  }
-  assert(level > 0, "level meter showed nothing in 2 s of recording");
+  await until(page, async () => page.getByTestId("rec-stop").isEnabled(), "recording to start", 10000);
+  await until(page, async () => (await page.evaluate(() => window.__maxLevel)) > 0, "the level meter to move while recording", 8000);
   await page.getByTestId("rec-stop").click();
   await page.getByTestId("rec-status").getByText(/Recorded/).waitFor();
   await page.getByTestId("rec-play").click();

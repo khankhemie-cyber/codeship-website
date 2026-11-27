@@ -82,7 +82,7 @@ type Thread = {
   done: boolean;
 };
 
-const HATS = new Set(["start_tap", "start_flag", "start_bump", "start_message"]);
+const HATS = new Set(["start_tap", "start_flag", "start_bump", "start_message", "start_wave"]);
 
 export class Engine {
   project: Project;
@@ -125,6 +125,16 @@ export class Engine {
   /** A child tapped a character on the stage (visible or hiding). */
   tap(actorId: string) {
     this.startHats((b) => b.type === "start_tap", actorId);
+    this.changed();
+  }
+
+  /**
+   * Someone waved (the hand button): every Start on Wave stack on this page
+   * starts. Curriculum v1.2: the wave replaces the clap, like the Edison
+   * obstacle sensor in the Robot Labs.
+   */
+  wave() {
+    this.startHats((b) => b.type === "start_wave");
     this.changed();
   }
 

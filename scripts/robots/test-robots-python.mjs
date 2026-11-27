@@ -178,5 +178,32 @@ test("runner is reusable across runs (state resets)", () => {
   assert(JSON.stringify(a.trace) === JSON.stringify(b.trace), "runs differ");
 });
 
+
+test("python: wait_for_wave() and waved() (curriculum v1.2 hand wave)", () => {
+  const world = { ...missionById("sandbox").world, waves: [1, 1.5, 2] };
+  const { trace, error } = run(`wait_for_wave()\nwait(2)\nn = 1\nwhile waved():\n    n += 1\nif n == 3:\n    unlock()\nelif n == 2:\n    beep()\nelse:\n    display("Locked")\nprint(n)\n`, world);
+  assert(!error, error);
+  assert(trace.log.some((l) => l.text.trim() === "3") && trace.stats.unlocks.length === 1, JSON.stringify(trace.log));
+});
+test("python: an old wait_for_clap() program is pointed at wait_for_wave()", () => {
+  const { error } = run("wait_for_clap()\n", missionById("wave-concert").world);
+  assert(/Did you mean wait_for_wave\(\)\?/.test(error ?? ""), error);
+});
+test("python: Wave-code lock passes with counted waves and if / elif / else", () => {
+  const m = missionById("wave-code-lock");
+  const code = `for round in range(3):\n    wait(3)\n    waves = 0\n    while waved():\n        waves += 1\n    if waves == 3:\n        unlock()\n        forward(98)\n        break\n    elif waves < 3:\n        display("Too few")\n        beep()\n    else:\n        display("Too many")\n        beep()\n`;
+  const { trace, error } = run(code, m.world);
+  assert(!error, error);
+  const r = m.check(trace, m.world);
+  assert(r.ok, r.message);
+  assert(!m.check(run(m.starter.py, m.world).trace, m.world).ok, "starter passes");
+});
+test("python: Wave-start concert passes with wait_for_wave()", () => {
+  const m = missionById("wave-concert");
+  const { trace, error } = run(`wait_for_wave()\nforward(55)\nplay("C")\nplay("E")\nplay("G")\n`, m.world);
+  assert(!error, error);
+  assert(m.check(trace, m.world).ok, m.check(trace, m.world).message);
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
