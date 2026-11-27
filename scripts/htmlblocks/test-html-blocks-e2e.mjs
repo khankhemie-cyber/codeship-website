@@ -56,6 +56,8 @@ await test("S1: tap cards to add them; the code and the live page update", async
   await page.getByTestId("palette-p").click();
   await page.getByTestId("palette-img").click();
   await page.getByTestId("text-p").fill("I like robots.");
+  await page.getByTestId("open-picture-bank").click();
+  await page.getByTestId("picture-group-Toys").click();
   await page.getByRole("radio", { name: "A teal robot" }).click();
   const c = await code(page);
   assert(c.includes("<p>I like robots.</p>") && c.includes('<img src="robot-teal.svg" alt="A teal robot">'), c);
@@ -148,10 +150,34 @@ await test("no typing: build a page by tapping words and pictures, in pictures-o
   await page.getByTestId("topic-animals").click();
   await page.getByTestId("word-bank").getByRole("button", { name: "Give fresh water" }).click();
   await page.getByTestId("palette-img").click();
-  await page.getByRole("radio", { name: "A purple robot" }).click();
+  await page.getByTestId("open-picture-bank").click();
+  await page.getByTestId("picture-group-Animals").click();
+  await page.getByRole("radio", { name: "A turtle" }).click();
+  await shot(page, "html-blocks-picture-bank");
   const c = await code(page);
-  for (const want of ["<h1>Animals I Love</h1>", "<p>Pets need food and water every day. Be gentle with animals.</p>", "<li>Give fresh water</li>", 'alt="A purple robot"']) assert(c.includes(want), `${want} missing`);
+  for (const want of ["<h1>Animals I Love</h1>", "<p>Pets need food and water every day. Be gentle with animals.</p>", "<li>Give fresh water</li>", '<img src="turtle.webp" alt="A turtle">']) assert(c.includes(want), `${want} missing`);
   await shot(page, "html-blocks-no-typing");
+});
+
+await test("picture bank: five categories, pictures first, scrollable, every target at least 44 px; the preview shows the artwork", async (page) => {
+  await page.getByTestId("palette-img").click();
+  await page.getByTestId("open-picture-bank").click();
+  for (const g of ["Objects", "Animals", "Toys", "Structures", "Places"]) {
+    await page.getByTestId(`picture-group-${g}`).click();
+    const sizes = await page.getByTestId("picture-bank").evaluate((el) => [...el.querySelectorAll("button")].map((b) => b.getBoundingClientRect()).filter((r) => r.width < 44 || r.height < 44).length);
+    assert(sizes === 0, `${g}: ${sizes} targets under 44 px`);
+  }
+  await page.getByTestId("picture-group-Objects").click();
+  const scroll = await page.getByTestId("picture-grid").evaluate((el) => el.scrollHeight > el.clientHeight && getComputedStyle(el).overflowY === "auto");
+  assert(scroll, "the Objects grid does not scroll");
+  await page.getByTestId("picture-group-Places").click();
+  await page.getByRole("radio", { name: "A beach" }).click();
+  assert((await code(page)).includes('<img src="beach-with-umbrella.webp" alt="A beach">'), await code(page));
+  const loaded = await preview(page).locator("img[alt='A beach']").evaluate((img) => img.complete && img.naturalWidth > 0);
+  assert(loaded, "artwork did not load in the preview");
+  await page.getByTestId("set-labels").selectOption("icons");
+  await page.getByTestId("picture-group-Animals").click();
+  await shot(page, "html-blocks-picture-bank-pictures-only");
 });
 
 await test("Capstone: a link to the About page opens that page from the preview; work is kept after reload", async (page) => {

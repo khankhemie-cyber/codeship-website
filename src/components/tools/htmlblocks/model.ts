@@ -18,6 +18,10 @@
  * text is escaped, so nothing a learner types becomes code.
  */
 
+import { ART_PICTURES, type PictureCategory } from "./pictures";
+import { WORD_BANK, type Word, type WordKind, type WordTopic } from "./words";
+export type { PictureCategory };
+
 export type Stage = 1 | 2 | 3 | 4 | 5;
 export const STAGES: { id: Stage; label: string; project: string }[] = [
   { id: 1, label: "Semester 1", project: "All About Me Page" },
@@ -115,7 +119,8 @@ const robotSvg = (body: string, head: string, accent: string) =>
   `<rect x="32" y="89" width="12" height="9" rx="3" fill="#586173"/><rect x="56" y="89" width="12" height="9" rx="3" fill="#586173"/>` +
   `</svg>`;
 
-export type Picture = { id: string; file: string; alt: string; svg: string; group: string };
+/** A picture is either drawn inline (svg, the robots) or an artwork file in public/art (art = its code). */
+export type Picture = { id: string; file: string; alt: string; group: PictureCategory; svg?: string; art?: string };
 
 /**
  * The picture bank: the only pictures a page can show. File names are what
@@ -125,14 +130,18 @@ export type Picture = { id: string; file: string; alt: string; svg: string; grou
  * check and the tests read from here.
  */
 export const PICTURE_BANK: Picture[] = [
-  { group: "Robots", id: "silver", file: "robot-silver.svg", alt: "A silver robot", svg: robotSvg("#9FB0C8", "#B8C4D6", "#D58401") },
-  { group: "Robots", id: "gold", file: "robot-gold.svg", alt: "A gold robot", svg: robotSvg("#F0D030", "#F7E37A", "#001432") },
-  { group: "Robots", id: "teal", file: "robot-teal.svg", alt: "A teal robot", svg: robotSvg("#0F8C9A", "#5CC3CE", "#F0D030") },
-  { group: "Robots", id: "purple", file: "robot-purple.svg", alt: "A purple robot", svg: robotSvg("#7E57C2", "#B39DDB", "#F0D030") },
+  { group: "Toys", id: "silver", file: "robot-silver.svg", alt: "A silver robot", svg: robotSvg("#9FB0C8", "#B8C4D6", "#D58401") },
+  { group: "Toys", id: "gold", file: "robot-gold.svg", alt: "A gold robot", svg: robotSvg("#F0D030", "#F7E37A", "#001432") },
+  { group: "Toys", id: "teal", file: "robot-teal.svg", alt: "A teal robot", svg: robotSvg("#0F8C9A", "#5CC3CE", "#F0D030") },
+  { group: "Toys", id: "purple", file: "robot-purple.svg", alt: "A purple robot", svg: robotSvg("#7E57C2", "#B39DDB", "#F0D030") },
+  ...ART_PICTURES.map(([group, id, art, alt]) => ({ group, id, file: `${id}.webp`, alt, art })),
 ];
 /** The robots (kept for older code and saved files). */
-export const ROBOTS = PICTURE_BANK.filter((p) => p.group === "Robots");
-export const PICTURE_GROUPS = Array.from(new Set(PICTURE_BANK.map((p) => p.group)));
+export const ROBOTS = PICTURE_BANK.filter((p) => p.svg);
+/** The chooser's categories, in order. */
+export const PICTURE_GROUPS: PictureCategory[] = ["Objects", "Animals", "Toys", "Structures", "Places"];
+/** A picture for each category tab (by picture id). */
+export const PICTURE_GROUP_ICON: Record<PictureCategory, string> = { Objects: "light-bulb", Animals: "dog", Toys: "teddy-bear", Structures: "house", Places: "national-park" };
 export const robotById = (id: string | undefined) => PICTURE_BANK.find((r) => r.id === id) ?? PICTURE_BANK[0];
 
 // ---------------------------------------------------------------- word bank
@@ -145,120 +154,8 @@ export const robotById = (id: string | undefined) => PICTURE_BANK.find((r) => r.
  * cards a word fits: headings (h1, h2), sentences (p), list items (li) and
  * link words (a). Nothing here is personal: no names, ages, schools or places.
  */
-export type WordKind = "heading" | "sentence" | "item" | "link";
-export type Word = { text: string; art: string; kinds: WordKind[] };
-export type WordTopic = { id: string; name: string; art: string; words: Word[] };
-
-const w = (text: string, art: string, ...kinds: WordKind[]): Word => ({ text, art, kinds });
-
-export const WORD_BANK: WordTopic[] = [
-  {
-    id: "me",
-    name: "About me",
-    art: "1f642",
-    words: [
-      w("All About Me", "1f642", "heading"),
-      w("Hello!", "1f44b", "heading", "sentence"),
-      w("Things I Like", "2764", "heading"),
-      w("I like to learn new things.", "1f4a1", "sentence"),
-      w("I am kind and helpful.", "1f44d", "sentence"),
-      w("I love to read books.", "1f4da", "sentence"),
-      w("I like to draw and paint.", "1f3a8", "sentence"),
-      w("Reading", "1f4da", "item"),
-      w("Drawing", "1f58d", "item"),
-      w("Soccer", "26bd", "item"),
-      w("Music", "1f3b5", "item"),
-      w("About me", "1f642", "link"),
-    ],
-  },
-  {
-    id: "favourites",
-    name: "Favourite things",
-    art: "2b50",
-    words: [
-      w("My Favourite Things", "2b50", "heading"),
-      w("My favourite food is pizza.", "1f355", "sentence"),
-      w("I like to play games with my friends.", "1f3ae", "sentence"),
-      w("Rainbows make me happy.", "1f308", "sentence"),
-      w("Pizza", "1f355", "item"),
-      w("Apples", "1f34e", "item"),
-      w("Strawberries", "1f353", "item"),
-      w("Cookies", "1f36a", "item"),
-      w("Games", "1f3ae", "item"),
-      w("Basketball", "1f3c0", "item"),
-    ],
-  },
-  {
-    id: "animals",
-    name: "Animals",
-    art: "1f436",
-    words: [
-      w("Animals I Love", "1f436", "heading"),
-      w("Pet Care", "2764", "heading"),
-      w("Food", "1f955", "heading", "item"),
-      w("Water", "1f4a6", "heading", "item"),
-      w("Pets need food and water every day.", "1f4a6", "sentence"),
-      w("Be gentle with animals.", "2764", "sentence"),
-      w("Dog", "1f436", "item"),
-      w("Cat", "1f431", "item"),
-      w("Hamster", "1f439", "item"),
-      w("Turtle", "1f422", "item"),
-      w("Give fresh water", "1f964", "item"),
-      w("Clean the cage", "1f9f9", "item"),
-      w("Play together", "26bd", "item"),
-    ],
-  },
-  {
-    id: "space",
-    name: "Space",
-    art: "1f680",
-    words: [
-      w("Space Explorer", "1f680", "heading"),
-      w("The Night Sky", "1f319", "heading"),
-      w("Rockets fly into space.", "1f680", "sentence"),
-      w("The Moon goes around the Earth.", "1f319", "sentence"),
-      w("Moon", "1f319", "item"),
-      w("Stars", "1f31f", "item"),
-      w("Earth", "1f30d", "item"),
-      w("Sun", "2600", "item"),
-      w("Rocket", "1f680", "item"),
-    ],
-  },
-  {
-    id: "robots",
-    name: "Robots",
-    art: "1f916",
-    words: [
-      w("My Robot", "1f916", "heading"),
-      w("How Robots Help", "1f4a1", "heading"),
-      w("Robots follow the code we write.", "2328", "sentence"),
-      w("My robot can beep and move.", "1f50a", "sentence"),
-      w("Sensors", "1f50d", "item"),
-      w("Wheels", "1f699", "item"),
-      w("Battery", "1f50b", "item"),
-      w("Code", "2328", "item"),
-    ],
-  },
-  {
-    id: "helping",
-    name: "Helping",
-    art: "1f44d",
-    words: [
-      w("How to Help", "1f44d", "heading"),
-      w("Save the Bees", "1f331", "heading"),
-      w("We can all help our community.", "1f44d", "sentence"),
-      w("Bees help flowers grow.", "1f331", "sentence"),
-      w("Recycling keeps the Earth clean.", "267b", "sentence"),
-      w("Recycle", "267b", "item"),
-      w("Plant flowers", "1f331", "item"),
-      w("Save water", "1f4a6", "item"),
-      w("Be kind", "2764", "item"),
-      w("Learn more", "1f50e", "link"),
-      w("How to help", "1f44d", "link"),
-      w("Read more", "1f4da", "link"),
-    ],
-  },
-];
+export { WORD_BANK };
+export type { Word, WordKind, WordTopic };
 
 /** Which kind of word fits a card. */
 export const wordKindFor = (kind: CardKind): WordKind | null =>
@@ -283,7 +180,12 @@ export function applyWord(card: Card, word: string): string {
   const joined = `${current} ${word}`;
   return joined.length <= MAX_TEXT ? joined : current;
 }
-export const robotDataUrl = (id: string | undefined) => `data:image/svg+xml;utf8,${encodeURIComponent(robotById(id).svg)}`;
+/** Where the browser loads a picture from: inline robots as data URLs, artwork from /art/. */
+export function pictureSrc(id: string | undefined) {
+  const p = robotById(id);
+  return p.svg ? `data:image/svg+xml;utf8,${encodeURIComponent(p.svg)}` : `/art/${p.art}.webp`;
+}
+export const robotDataUrl = pictureSrc;
 
 // ---------------------------------------------------------------- links
 
@@ -352,6 +254,10 @@ export const MAX_PAGES = 5;
 /** Capstone extension: "add a fourth page". */
 export function addPage(project: Project): Project {
   if (project.stage !== 5 || project.pages.length >= MAX_PAGES) return project;
+  // The first extra page is a "Thank You" page (no contact form: nothing is sent anywhere).
+  if (!project.pages.some((p) => p.file === "thank-you.html")) {
+    return { ...project, pages: [...project.pages, newPage("Thank You", "thank-you.html", [{ ...newCard("h1"), text: "Thank You!" }])] };
+  }
   const n = project.pages.length + 1;
   let file = `page${n}.html`;
   while (project.pages.some((p) => p.file === file)) file = `page${n}-${newId()}.html`;
@@ -511,7 +417,7 @@ export function pageHtml(project: Project, page: Page, opts: HtmlOptions = { ima
         break;
       case "img": {
         const r = robotById(c.image);
-        lines.push(`  <img src="${opts.images === "preview" ? robotDataUrl(r.id) : r.file}" alt="${escapeHtml(r.alt)}">`);
+        lines.push(`  <img src="${opts.images === "preview" ? pictureSrc(r.id) : r.file}" alt="${escapeHtml(r.alt)}">`);
         break;
       }
       case "a":

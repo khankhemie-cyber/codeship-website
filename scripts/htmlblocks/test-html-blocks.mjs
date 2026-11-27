@@ -71,7 +71,9 @@ test("Capstone: Home, About and How to Help pages link to each other", () => {
   const page = M.placeCard(p.pages[0], card("a", { text: "About us", href: "about.html" })).page;
   assert(M.pageHtml(p, page).includes('<a href="about.html">About us</a>'), "page link");
   const four = M.addPage(p);
-  assert(four.pages.length === 4 && four.pages[3].file === "page4.html", "add a fourth page");
+  assert(four.pages.length === 4 && four.pages[3].file === "thank-you.html" && four.pages[3].name === "Thank You", "the fourth page is a Thank You page");
+  const five = M.addPage(four);
+  assert(five.pages.length === 5 && five.pages[4].file === "page5.html", "a fifth page");
   assert(M.addPage(M.starterProject(4)).pages.length === 1, "only the capstone has several pages");
 });
 
@@ -151,18 +153,46 @@ test("readability: a gentle warning for colours that are hard to read on the whi
 
 // ── Non-typing path (CEO, 2026-11-27): word bank and picture bank ──
 const fs = await import("node:fs");
-test("word bank: six topics, every word has a picture that exists in public/art, and fits a card", () => {
-  eq(M.WORD_BANK.map((t) => t.name), ["About me", "Favourite things", "Animals", "Space", "Robots", "Helping"], "topics");
+// Pictures that must never be used as cues or page pictures: people, faces, hands.
+const NOT_ALLOWED_ART = new Set(["1f466", "1f467", "1f476", "1f9d2", "1f9d1-200d-1f680", "1f9d1-200d-2708", "1f575", "1f937", "1f600", "1f604", "1f60e", "1f621", "1f622", "1f634", "1f635-200d-1f4ab", "1f642", "1f914", "1f973", "1f9d0", "1f648", "1f44b", "1f44d", "1f44e", "1f446"]);
+const artExists = (code) => fs.existsSync(new URL(`../../public/art/${code}.webp`, import.meta.url));
+
+test("word bank: at least 12 topics (the first 6 kept), each with 5+ headings, 10+ sentences, 15+ list items and link words", () => {
+  assert(M.WORD_BANK.length >= 12, `${M.WORD_BANK.length} topics`);
+  eq(M.WORD_BANK.slice(0, 6).map((t) => t.name), ["About me", "Favourite things", "Animals", "Space", "Robots", "Helping"], "first six topics");
   for (const t of M.WORD_BANK) {
-    for (const art of [t.art, ...t.words.map((x) => x.art)]) assert(fs.existsSync(new URL(`../../public/art/${art}.webp`, import.meta.url)), `${t.id}: no picture ${art}`);
-    for (const x of t.words) {
-      assert(x.kinds.length && x.text.length <= 60, `${x.text}: bad entry`);
-      assert(!/\d{3,}|@|street|school/i.test(x.text), `${x.text}: looks personal`);
-    }
+    const n = (k) => t.words.filter((x) => x.kinds.includes(k)).length;
+    assert(n("heading") >= 5 && n("sentence") >= 10 && n("item") >= 15 && n("link") >= 2, `${t.name}: ${n("heading")} headings, ${n("sentence")} sentences, ${n("item")} items, ${n("link")} links`);
   }
-  for (const kind of ["h1", "h2", "p", "li", "a"]) assert(M.wordsFor(kind).reduce((n, t) => n + t.words.length, 0) >= 3, `${kind}: too few words`);
+});
+test("word bank: every picture exists in public/art and none shows a person, face or hand", () => {
+  for (const t of M.WORD_BANK) for (const art of [t.art, ...t.words.map((x) => x.art)]) {
+    assert(artExists(art), `${t.id}: no picture ${art}`);
+    assert(!NOT_ALLOWED_ART.has(art), `${t.id}: picture ${art} shows a person, face or hand`);
+  }
+});
+test("word bank: Grade 2-3 text, Canadian spelling, nothing personal, short sentences", () => {
+  for (const t of M.WORD_BANK) for (const x of t.words) {
+    assert(x.kinds.length === 1 && x.text.length <= 60, `${x.text}: bad entry`);
+    assert(!/\b(color|favorite|neighbor|center|theater|gray)\b/i.test(x.text), `${x.text}: not Canadian spelling`);
+    assert(!/\d|@|\bstreet\b|\broad\b|my name|years old|\bgrade\b/i.test(x.text), `${x.text}: looks personal`);
+    assert(!/clap/i.test(x.text), `${x.text}: clap`);
+    if (x.kinds[0] === "sentence") assert(x.text.split(/\s+/).length <= 10, `${x.text}: sentence too long`);
+  }
+  for (const kind of ["h1", "h2", "p", "li", "a"]) assert(M.wordsFor(kind).reduce((n, t) => n + t.words.length, 0) >= 30, `${kind}: too few words`);
   eq(M.wordsFor("img"), [], "no words for pictures");
   eq(M.wordsFor("style"), [], "no words for style");
+});
+test("word bank: the capstone page words are there (Home, About, How to Help, Thank you)", () => {
+  const site = M.WORD_BANK.find((t) => t.id === "website");
+  const has = (kind, text) => site.words.some((x) => x.kinds[0] === kind && x.text === text);
+  for (const h of ["Home", "About", "How to Help", "Thank You!"]) assert(has("heading", h), `heading ${h}`);
+  for (const l of ["Home", "About", "How to Help", "Thank you"]) assert(has("link", l), `link ${l}`);
+  assert(!site.words.some((x) => /contact|email|phone/i.test(x.text)), "contact words");
+});
+test("word bank: every topic tab has its own picture", () => {
+  const arts = M.WORD_BANK.map((t) => t.art);
+  eq(new Set(arts).size, arts.length, "topic pictures");
 });
 test("word bank: no two words of the same kind in one topic share a picture", () => {
   for (const t of M.WORD_BANK) for (const kind of ["heading", "sentence", "item", "link"]) {
@@ -192,14 +222,33 @@ test("a whole S4 page can be built from the banks alone, with no typing", () => 
   page = M.placeCard(page, { ...card("li"), text: pick("li", "helping", 1) }).page;
   page = M.placeCard(page, { ...card("a"), text: pick("a", "helping", 0) }).page;
   const html = M.pageHtml(p, page);
-  for (const want of ["<h1>Save the Bees</h1>", "<p>Bees help flowers grow.</p>", "<img src=", "<li>Plant flowers</li>", '<a href="#">Learn more</a>']) assert(html.includes(want), `${want} missing:\n${html}`);
+  for (const want of ["<h1>Plant Flowers for Bees</h1>", "<p>Flowers help bees.</p>", "<img src=", "<li>Plant flowers</li>", '<a href="#">How to help</a>']) assert(html.includes(want), `${want} missing:\n${html}`);
 });
-test("picture bank: one list of built-in pictures (robots for now), no outside links, every card reads from it", () => {
-  assert(M.PICTURE_BANK.length === 4 && M.PICTURE_BANK.every((x) => x.group === "Robots"), "only the robots for now");
-  for (const x of M.PICTURE_BANK) assert(x.svg.startsWith("<svg") && !/https?:|href=/.test(x.svg.replace('xmlns="http://www.w3.org/2000/svg"', "")) && /^[a-z0-9-]+\.svg$/.test(x.file), `${x.id}: not a built-in picture`);
+test("picture bank: 100+ built-in pictures in five categories, robots kept, every file exists, no repeats", () => {
+  assert(M.PICTURE_BANK.length >= 100, `${M.PICTURE_BANK.length} pictures`);
+  eq(M.PICTURE_GROUPS, ["Objects", "Animals", "Toys", "Structures", "Places"], "categories");
+  for (const g of M.PICTURE_GROUPS) assert(M.PICTURE_BANK.filter((x) => x.group === g).length >= 10, `${g}: too few pictures`);
+  assert(M.PICTURE_BANK.every((x) => M.PICTURE_GROUPS.includes(x.group)), "a picture outside the five categories");
+  eq(M.ROBOTS.map((x) => x.id), ["silver", "gold", "teal", "purple"], "the four robots are kept");
   eq(new Set(M.PICTURE_BANK.map((x) => x.id)).size, M.PICTURE_BANK.length, "unique ids");
-  eq(M.ROBOTS.map((x) => x.id), M.PICTURE_BANK.map((x) => x.id), "robots alias");
-  eq(M.PICTURE_GROUPS, ["Robots"], "groups");
+  const arts = M.PICTURE_BANK.filter((x) => x.art).map((x) => x.art);
+  eq(new Set(arts).size, arts.length, "each artwork file used once");
+  for (const x of M.PICTURE_BANK) {
+    assert(/^[a-z0-9-]+\.(svg|webp)$/.test(x.file) && x.alt.length > 2, `${x.id}: bad file name or alt text`);
+    if (x.svg) assert(x.svg.startsWith("<svg") && !/https?:|href=/.test(x.svg.replace('xmlns="http://www.w3.org/2000/svg"', "")), `${x.id}: not a built-in picture`);
+    else assert(artExists(x.art) && !NOT_ALLOWED_ART.has(x.art), `${x.id}: missing or not allowed (${x.art})`);
+    assert(/^(data:image\/svg\+xml|\/art\/)/.test(M.pictureSrc(x.id)), `${x.id}: loads from outside`);
+  }
+  for (const g of M.PICTURE_GROUPS) assert(M.PICTURE_BANK.some((x) => x.id === M.PICTURE_GROUP_ICON[g]), `${g}: no tab picture`);
+  const notice = fs.readFileSync(new URL("../../THIRD_PARTY_NOTICES.md", import.meta.url), "utf8");
+  assert(/fluentui-emoji/.test(notice) && /MIT License/.test(notice), "licence and source not recorded");
+});
+test("picture bank: an artwork picture makes the right HTML, and saved files keep it", () => {
+  const p = M.starterProject(1);
+  const page = M.placeCard(p.pages[0], card("img", { image: "dog" })).page;
+  assert(M.pageHtml(p, page).includes('<img src="dog.webp" alt="A dog">'), M.pageHtml(p, page));
+  assert(M.pageHtml(p, page, { images: "preview" }).includes('<img src="/art/1f415.webp" alt="A dog">'), "preview src");
+  eq(M.parseProject(JSON.parse(JSON.stringify({ ...p, pages: [page] }))).pages[0].cards[1].image, "dog", "saved picture");
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

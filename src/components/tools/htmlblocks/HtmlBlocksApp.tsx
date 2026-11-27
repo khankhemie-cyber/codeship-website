@@ -11,6 +11,7 @@ import {
   MAX_TEXT,
   PICTURE_BANK,
   PICTURE_GROUPS,
+  PICTURE_GROUP_ICON,
   PREVIEW_CSS,
   STAGES,
   VOID,
@@ -24,7 +25,8 @@ import {
   parseProject,
   placeCard,
   readabilityWarning,
-  robotDataUrl,
+  pictureSrc,
+  robotById,
   starterProject,
   takeCard,
   targetsFor,
@@ -34,6 +36,7 @@ import {
   type Card,
   type CardKind,
   type Page,
+  type PictureCategory,
   type Project,
   type Stage,
   type StyleTarget,
@@ -170,6 +173,8 @@ export default function HtmlBlocksApp() {
   const [overPalette, setOverPalette] = useState(false);
   const [showCode, setShowCode] = useState(true);
   const [bankFor, setBankFor] = useState<string | null>(null);
+  const [pictureFor, setPictureFor] = useState<string | null>(null);
+  const [pictureGroup, setPictureGroup] = useState<PictureCategory>("Objects");
   const [topic, setTopic] = useState<string>("me");
   const dragging = useRef<Dragging | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -301,7 +306,24 @@ export default function HtmlBlocksApp() {
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
-  const savePageFile = () => download(page.file, pageHtml(project, page, { images: "preview" }), "text/html");
+  /** The page as a file that works on its own: artwork pictures are put inside it (data URLs). */
+  const savePageFile = async () => {
+    let html = pageHtml(project, page, { images: "preview" });
+    for (const src of Array.from(new Set(html.match(/\/art\/[0-9a-f-]+\.webp/g) ?? []))) {
+      try {
+        const blob = await (await fetch(src)).blob();
+        const data = await new Promise<string>((ok) => {
+          const r = new FileReader();
+          r.onload = () => ok(String(r.result));
+          r.readAsDataURL(blob);
+        });
+        html = html.split(src).join(data);
+      } catch {
+        // Offline: the picture stays as a link to this site.
+      }
+    }
+    download(page.file, html, "text/html");
+  };
   const saveProjectFile = () => download(`${project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "my-website"}.htmlblocks.json`, JSON.stringify(project, null, 1), "application/json");
   const openFile = async (f: File) => {
     try {
@@ -369,6 +391,51 @@ export default function HtmlBlocksApp() {
         <ArtPic code="1f4ac" size={28} />
       </button>
     );
+
+  /** The picture bank: pictures first, by category, scrollable, 44 px+ targets. */
+  const pictureBank = (c: Card) => (
+    <div data-testid="picture-bank" className="mt-2 rounded-xl border-2 border-[#C9B6E8] bg-[#F7F2FF] p-2">
+      <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Picture categories">
+        {PICTURE_GROUPS.map((g) => (
+          <button
+            key={g}
+            type="button"
+            role="tab"
+            aria-selected={g === pictureGroup}
+            aria-label={g}
+            title={g}
+            onClick={() => setPictureGroup(g)}
+            data-testid={`picture-group-${g}`}
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-lg px-2 text-sm font-bold ${g === pictureGroup ? "bg-[#001432] text-white" : "bg-white text-[#001432] hover:bg-black/5"} ${focusRing}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={pictureSrc(PICTURE_GROUP_ICON[g])} alt="" className="h-7 w-7" />
+            {words && g}
+          </button>
+        ))}
+        <button type="button" onClick={() => setPictureFor(null)} aria-label="Close the picture bank" title="Close" className={`${ctl} ml-auto text-[#586173] hover:bg-black/5`}>
+          <Icon name="x" className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="mt-2 grid max-h-72 grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-1.5 overflow-y-auto pr-1" role="radiogroup" aria-label={`${pictureGroup} pictures`} data-testid="picture-grid">
+        {PICTURE_BANK.filter((x) => x.group === pictureGroup).map((x) => (
+          <button
+            key={x.id}
+            type="button"
+            role="radio"
+            aria-checked={c.image === x.id}
+            aria-label={x.alt}
+            title={x.alt}
+            onClick={() => setPage(updateCard(page, c.id, { image: x.id }))}
+            className={`flex h-14 w-14 items-center justify-center rounded-lg border-2 bg-white ${c.image === x.id ? "border-[#001432] ring-2 ring-[#F0D030]" : "border-transparent hover:border-[#C9D2DE]"} ${focusRing}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={pictureSrc(x.id)} alt="" loading="lazy" className="h-11 w-11" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   const wordBank = (c: Card) => {
     const topics = wordsFor(c.kind);
@@ -457,6 +524,7 @@ export default function HtmlBlocksApp() {
         {body}
         {controls(c)}
         {bankFor === c.id && <div className="basis-full">{wordBank(c)}</div>}
+        {pictureFor === c.id && <div className="basis-full">{pictureBank(c)}</div>}
       </div>
     </div>
   );
@@ -509,24 +577,22 @@ export default function HtmlBlocksApp() {
             <span className="inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 font-mono text-[13px] font-bold text-white" style={{ background: OPEN }} title="opening tag (img has no closing tag)">
               {"<img>"}
             </span>
-            <span className="flex flex-wrap items-center gap-1" role="radiogroup" aria-label="Picture bank: which picture">
-              {PICTURE_GROUPS.length > 1 && words && <span className="sr-only">Picture bank</span>}
-              {PICTURE_BANK.map((r) => (
-                <button
-                  key={r.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={c.image === r.id}
-                  aria-label={r.alt}
-                  title={r.alt}
-                  onClick={() => setPage(updateCard(page, c.id, { image: r.id }))}
-                  className={`h-11 w-11 overflow-hidden rounded-lg border-2 ${c.image === r.id ? "border-[#F0D030] ring-2 ring-[#001432]" : "border-transparent"} ${focusRing}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={robotDataUrl(r.id)} alt="" className="h-full w-full" />
-                </button>
-              ))}
-            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setPictureFor((id) => (id === c.id ? null : c.id));
+                setPictureGroup(robotById(c.image).group);
+              }}
+              aria-expanded={pictureFor === c.id}
+              aria-label={`Picture: ${robotById(c.image).alt}. Choose another picture`}
+              title="Choose a picture"
+              data-testid="open-picture-bank"
+              className={`flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 bg-white ${pictureFor === c.id ? "border-[#001432] ring-2 ring-[#F0D030]" : "border-[#C9D2DE]"} ${focusRing}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={pictureSrc(c.image)} alt="" className="h-12 w-12" />
+            </button>
+            {words && <span className="text-sm font-semibold text-[#001432]">{robotById(c.image).alt}</span>}
             {words && <span className="text-xs text-[#586173]">no closing tag</span>}
           </>,
           zone,
